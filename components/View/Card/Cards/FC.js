@@ -1,0 +1,24 @@
+import React from 'react'
+import Header from '../../../_Stateless/ViewItem/Header'
+import PotentialsView from '../PotentialsView'
+import SmartDivider from '../../../_Stateless/SmartDivider'
+
+const FC = (props) => {
+    return (
+        <>
+            <Header
+                wireColor={props.cardData?.wireColor}
+                wireGauge={props.cardData?.wireGauge}
+                title={props.cardData?.name}
+                icon={props.cardData?.type}
+                onPressEdit={props.navigateToEditSubitem} />
+            <SmartDivider depend={[props.cardData.potentials.length !== 0]} />
+            <PotentialsView
+                itemId={props.itemId}
+                potentials={props.cardData.potentials}
+                unit={props.defaultPotentialUnit}
+                referenceCellList={props.referenceCellList} />
+        </>
+    )
+}
+export default FC
