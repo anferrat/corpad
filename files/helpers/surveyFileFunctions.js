@@ -5,7 +5,6 @@ import validation from "../../components/fieldValidation"
 import { tables, fields } from "../../database/db"
 import idGen from '../../components/IdGen'
 import { getName } from "../../components/customFunctions"
-import { every } from "lodash"
 
 
 //functions that control json file output format and verify json files to be a survey
@@ -570,7 +569,7 @@ const decodeTestPoint = (string) => {
                                     data: {
                                         ...testPointData.data,
                                         cards: testPointData.data.cards.concat(
-                                            [createTableRow(fields[6].length, [0, idGen(), defaultName], [1, 2, 4], testPointData.data.cards.length)]
+                                            [createTableRow(fields[6].length, [0, idGen(), defaultName, data[0]], [1, 2, 4, 3], testPointData.data.cards.length)]
                                         ),
                                         sides: testPointData.data.sides.concat(sidesBD).concat(createSidesRows(data[2], false, testPointData.data.cards.length, testPointData.data.sides.length + sidesBD.length))
                                     }
@@ -586,7 +585,22 @@ const decodeTestPoint = (string) => {
                                     data: {
                                         ...testPointData.data,
                                         cards: testPointData.data.cards.concat(
-                                            [createTableRow(fields[6].length, [0, idGen(), defaultName], [1, 2, 4, 17, 18], testPointData.data.cards.length)]
+                                            [createTableRow(fields[6].length, [0, idGen(), defaultName, data[0], data[3], data[4]], [1, 2, 4, 3, 17, 18], testPointData.data.cards.length)]
+                                        ),
+                                        sides: testPointData.data.sides.concat(sidesIK).concat(createSidesRows(data[2], false, testPointData.data.cards.length, testPointData.data.sides.length + sidesIK.length))
+                                    }
+                                }
+                            )
+                        }
+                    case 'CN':
+                        if (data.length === 6) {
+                            return readDataType(string.slice(pointer + 1),
+                                {
+                                    ...testPointData,
+                                    data: {
+                                        ...testPointData.data,
+                                        cards: testPointData.data.cards.concat(
+                                            [createTableRow(fields[6].length, [0, idGen(), defaultName].concat(data), [1, 2, 4, 3, 13, 15, 6, 7], testPointData.data.cards.length)]
                                         ),
                                         sides: testPointData.data.sides.concat(sidesIK).concat(createSidesRows(data[2], false, testPointData.data.cards.length, testPointData.data.sides.length + sidesIK.length))
                                     }
