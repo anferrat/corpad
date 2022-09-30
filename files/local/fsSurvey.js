@@ -1,9 +1,9 @@
 // survey related function with local files (e.g. readSurvey from file, save, getMetaData )
 import RNFS from 'react-native-fs'
-import { genereateMetaData } from "../helpers/surveyFileFunctions"
 import { getFileName, getLocation, writeFile, deleteFile } from "./fs"
-import { validateSurvey, surveyZeroing } from "../helpers/surveyFileFunctions"
 import { PermissionsAndroid } from 'react-native'
+import { surveyValuesReset } from '../../json/reset'
+import { generateMetaData } from '../../json/genMetadata'
 
 export const getMetaDataFromFile = async (filePath) => {
     try {
@@ -11,7 +11,7 @@ export const getMetaDataFromFile = async (filePath) => {
         const hash = await RNFS.hash(filePath, 'md5')
         const fileName = filePath.substring(filePath.lastIndexOf('/') + 1, filePath.length)
         const stat = await RNFS.stat(filePath)
-        return genereateMetaData(fileName, fileData, stat.mtime.getTime(), filePath, hash, false, null)
+        return generateMetaData(fileName, fileData, stat.mtime.getTime(), filePath, hash, false, null)
     }
     catch (er) {
         return null
@@ -40,17 +40,13 @@ export const getLocalMetaData = async () => {
 
 export const readLocalSurvey = async (filePath) => {
     try {
-        const surveyObject = validateSurvey(JSON.parse(await RNFS.readFile(filePath)), true)
-        if (surveyObject.status === 200) {
-            const hash = await RNFS.hash(filePath, 'md5')
-            return {
-                status: 200,
-                result: surveyObject.result,
-                hash: hash,
-                corrupted: surveyObject.corrupted
-            }
+        return {
+            status: 200,
+            result: JSON.parse(await RNFS.readFile(filePath)),
+            hash: await RNFS.hash(filePath, 'md5'),
+            cloudId: null,
+            isSurveyNew: 0,
         }
-        else return surveyObject
     }
     catch (er) {
         return {
@@ -62,11 +58,19 @@ export const readLocalSurvey = async (filePath) => {
 export const readLocalSurveyTemplate = async (filePath) => {
     try {
         const surveyObject = await readLocalSurvey(filePath)
-        if (surveyObject.status === 200)
-            return {
-                status: 200,
-                result: surveyZeroing(surveyObject.result)
+        if (surveyObject.status === 200) {
+            const resettedSurvey = surveyValuesReset(surveyObject.result)
+            if (resettedSurvey.status === 200) {
+                return {
+                    status: 200,
+                    result: resettedSurvey.result,
+                    hash: null,
+                    cloudId: null,
+                    isSurveyNew: 1,
+                }
             }
+            else return resettedSurvey
+        }
         else return surveyObject
     }
     catch (er) {
@@ -129,7 +133,13 @@ export const saveLocalSurvey = async (content, fileName, isSurveyNew, originalHa
 export const readExternalSurvey = async (uriExternal) => {
     try {
         const file = await RNFS.readFile(uriExternal)
-        return validateSurvey(JSON.parse(file))
+        return {
+            status: 200,
+            result: JSON.parse(file),
+            hash: null,
+            cloudId: null,
+            isSurveyNew: 1,
+        }
     }
     catch (er) {
         return {

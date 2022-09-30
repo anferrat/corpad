@@ -14,7 +14,6 @@ const SelectField = (props) => {
     const addPlaceholder = React.useMemo(() => !!props.placeholder && !props.ignorePlaceholder, [props.placeholder, props.ignorePlaceholder])
     const selectedItem = addPlaceholder && props.selectedItem !== null ? props.selectedItem + 1 : props.selectedItem
     const itemsList = React.useMemo(() => addPlaceholder ? ['*Placeholder*'].concat(props.itemsList) : props.itemsList, [addPlaceholder, props.itemsList])
-
     const renderSelectItems = React.useCallback((item, index) => {
         if (index === 0 && addPlaceholder)
             return <SelectItem key={'SelectItem_' + props.property + '_placeholder_' + props.placeholder} title={() => <Text appearance='hint'>{props.placeholder}</Text>} />
@@ -36,7 +35,7 @@ const SelectField = (props) => {
             caption={getValidCaption(props.valid, props.property)}
             {...props}
             value={getSelectValue(selectedItem, itemsList)}
-            selectedIndex={getSelectIndex(selectedItem)}
+            selectedIndex={getSelectIndex(selectedItem, itemsList)}
             status={props.valid !== false ? 'basic' : 'danger'}
             onSelect={onSelect}>
             {selectOptions}
@@ -46,9 +45,9 @@ const SelectField = (props) => {
 
 
 
-const getSelectIndex = (item) => item === null ? '' : new IndexPath(item)
+const getSelectIndex = (selectedItem, itemsList) => (selectedItem === null || selectedItem >= itemsList.length) ? '' : new IndexPath(selectedItem)
 
-const getSelectValue = (selectedItem, itemList) => selectedItem !== null ? itemList[selectedItem] : ''
+const getSelectValue = (selectedItem, itemList) => selectedItem !== null ? (itemList[selectedItem] ?? '') : ''
 
 
 export default React.memo(SelectField)

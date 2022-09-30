@@ -13,7 +13,7 @@ export const validateSurvey = (surveyObject) => {
             // referenceCellCheck - each survey must have at least one reference cell
             const referenceCellCheck = surveyObject.data.referenceCells.length >= 1
             // potentialTypesCheck - each survey must have at least two of standard potential types
-            const potentialTypesCheck = surveyObject.data.potentialTypes >= 2
+            const potentialTypesCheck = surveyObject.data.potentialTypes.length >= 2
             return {
                 corrupted: !(fieldRowFormat && fieldValidation && referenceCellCheck && potentialTypesCheck),
                 status: 200,
@@ -38,65 +38,52 @@ export const validateSurvey = (surveyObject) => {
 
 export const recoverSurvey = (surveyObject, validation) => {
 
-    const updateTable = (tableIndex, content) => {
+    const updateTable = (tableIndex, data) => {
         switch (tableIndex) {
             case 6:
-                return content.filter(row => isCard(row))
+                return data.filter(row => isCard(row))
             case 7:
-                return content.filter(row => isPotential(row))
+                return data.filter(row => isPotential(row))
             case 1:
-                return content.filter(row => isTestPoint(row))
+                return data.filter(row => isTestPoint(row))
             case 2:
-                return content.filter(row => isRectifier(row))
+                return data.filter(row => isRectifier(row))
             case 3:
-                return content.filter(row => isPipeline(row))
+                return data.filter(row => isPipeline(row))
             case 9:
-                return content.filter(row => isSide(row))
+                return data.filter(row => isSide(row))
             case 8:
-                return content.filter(row => isCircuit(row))
+                return data.filter(row => isCircuit(row))
             case 5:
-                return content.filter(row => isReferenceCell(row))
+                return data.filter(row => isReferenceCell(row))
             case 0:
-                return content.filter(row => isSurveyTable(row))
+                return data.filter(row => isSurveyTableRow(row))
             case 4:
-                return content.every(row => isPotentialType(row))
+                return data.filter(row => isPotentialType(row))
             default:
                 return null
         }
     }
+    const convertToSurveyObject = (tableData) => (Object.assign(...tables.map((table, i) => ({ [table]: tableData[i] }))))
+    const rowCorrection = (surveyObject) => ({ ...surveyObject, data: convertToSurveyObject(tables.map((table, tableIndex) => updateTable(tableIndex, surveyObject.data[table]))) })
+    const fieldCorrection = (surveyObject) => ({ ...surveyObject, data: convertToSurveyObject(tables.map((table, tableIndex) => surveyObject.data[table].filter(row => row.every((value, fieldIndex) => validateTableField(value, fieldIndex, tableIndex))))) })
+    const refCellCorrection = (surveyObject) => ({ ...surveyObject, data: { ...surveyObject.data, referenceCells: [[1, "7affda84-58db-de22-0225-c2ca19cc223d", 0, "RC1", 1]] } })
+    const potentialTypeCorrection = (surveyObject) => ({ ...surveyObject, data: { ...surveyObject.data, potentialTypes: [[1, "079acf2a-1fc5-8b9a-2e1a-90dc191f2346", "On", 0, "PERM_ON"], [2, "cde46a48-4d64-c177-6c8e-83c6cb6ced49", "Off", 0, "PERM_OFF"], [3, "95677c6c-31d5-7856-de00-4dc9d1f36fa4", "Native", 0, "PERM_NATIVE"], [4, "d90d73d2-2144-b4ed-33b7-91aa78e83700", "Connected", 0, "PERM_CONNECTED"], [5, "a3c6edd2-90d2-f83f-1951-5f4ee3b6f4fd", "Disconnected", 0, "PERM_DISCONNECTED"]] } })
 
-    const updatedValuesObject = Object.keys(validation).reduce((updatedObject, validProperty) => {
-        if (validation[validProperty]) {
-            if (validProperty === 'fieldRowFormatPassed')
-                return tables.map((table, tableIndex) => updateTable(tableIndex, updatedObject.data[table]))
-            if (validProperty === 'fieldValidationPassed')
-                return tables.map((table, tableIndex) => table.filter(row => row.every(value, fieldIndex => validateTableField(value, fieldIndex, tableIndex))))
-        }
-        else
-            return updatedObject
-    }, surveyObject)
+    const surveyObjectRowCorrected = validation.fieldRowFormatPassed ? surveyObject : rowCorrection(surveyObject)
+    const surveyObjectFieldCorrected = validation.fieldValidationPassed ? surveyObjectRowCorrected : fieldCorrection(surveyObjectRowCorrected)
+    const surveyObjectRefCellCorrected = validation.referenceCellPassed ? surveyObjectFieldCorrected : refCellCorrection(surveyObjectFieldCorrected)
+    const surveyObjectPotentialTypesCorrected = validation.potentialTypesCheck ? surveyObjectRefCellCorrected : potentialTypeCorrection(surveyObjectRefCellCorrected)
 
-    const
+    const surveyValidation = validateSurvey(surveyObjectPotentialTypesCorrected)
 
-        {
-            return
-    }
-    try {
+    if (surveyValidation.status === 200 && !surveyValidation.corrupted)
         return {
-            version: surveyObject.version,
-            type: surveyObject.type,
-            data: Object.fromEntries(Object.keys(surveyObject.data).map((table) => [table, surveyObject.data[table].filter(row => row.every((value, valueIndex) =>
-                validateTableField(value, valueIndex, tables.indexOf(table))
-            ))]))
+            status: 200,
+            result: surveyObjectPotentialTypesCorrected
         }
-    }
-    catch (er) {
-        return {
-            version: surveyObject.version,
-            type: surveyObject.type,
-            data: []
-        }
-    }
+    else
+        return { status: 412 }
 }
 
 function isString(value) {
@@ -125,11 +112,11 @@ const isSurveyObject = (surveyObject) => {
             if (isInteger(surveyObject.version))
                 if (tables.every(table => surveyObject.data.hasOwnProperty(table)))
                     if (tables.every(table => Array.isArray(surveyObject.data[table])))
-                        return true
+                        if (surveyObject.data.survey.length > 0)
+                            if (isSurveyTableRow(surveyObject.data.survey[0]))
+                                return true
     return false
 }
-
-
 
 
 export const validateTable = (table, content) => {
@@ -151,7 +138,7 @@ export const validateTable = (table, content) => {
         case 'referenceCells':
             return content.every(row => isReferenceCell(row))
         case 'survey':
-            return isSurveyTable(content[0])
+            return isSurveyTableRow(content[0])
         case 'potentialTypes':
             return content.every(row => isPotentialType(row))
         default:
@@ -166,7 +153,7 @@ export const validateTableField = (value, fieldIndex, tableIndex) => {
 }
 
 
-const isSurveyTable = (array) => {
+const isSurveyTableRow = (array) => {
     if (array)
         if (Array.isArray(array))
             if (array.length >= 3)

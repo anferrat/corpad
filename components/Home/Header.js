@@ -3,7 +3,7 @@ import { View, StyleSheet, StatusBar } from 'react-native'
 import SingleIconButton from '../_Stateless/SingleIconButton'
 import { androidStyle, primary } from '../../styles/GlobalStyle'
 import { Icon } from '@ui-kitten/components'
-import { openSurveyExternal } from '../surveyManagement'
+import { surveyLoader } from '../surveyManagement'
 import { errorHandler } from '../errorHandler'
 import { useDispatch } from 'react-redux'
 import { updateSetting, loadSurveySettings } from '../../store/actions/settings'
@@ -14,13 +14,14 @@ const Header = ({ navigation, options }) => {
     const navigateToCreate = () => navigation.navigate('CreateSurvey')
     const dispatch = useDispatch()
 
-    const navigateToDevScreen = () => navigation.navigate('DevScreen')
+    //FOR dev purposes ONLY. Database control and test point generator
+   
 
-    const openSurveyHandler = async () => {
+    const openExternalSurveyHandler = async () => {
         try {
             const externalFile = await DocumentPicker.pickSingle({ allowMultiSelection: false, type: 'application/json' })
             dispatch(updateSetting('loader', { visible: true, title: 'Opening' }))
-            const extSurvey = await openSurveyExternal(externalFile.uri, externalFile.name)
+            const extSurvey = await surveyLoader(externalFile.uri, 'external', externalFile.name)
             if (extSurvey.status === 200)
                 dispatch(loadSurveySettings({
                     isLoaded: true,
@@ -51,7 +52,7 @@ const Header = ({ navigation, options }) => {
                 <SingleIconButton
                     color='#fff'
                     iconName='folder'
-                    onPress={openSurveyHandler} />
+                    onPress={openExternalSurveyHandler} />
                 <SingleIconButton
                     color='#fff'
                     iconName='plus'

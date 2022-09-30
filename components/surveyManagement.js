@@ -5,7 +5,7 @@ import { errorHandler, warningHandler } from "./errorHandler"
 import { potentialFields } from "../constants/constants"
 import idGen from './IdGen'
 import { fileNameGen } from "./customFunctions"
-import { validateDeep } from "../files/helpers/surveyFileFunctions"
+import { recoverSurvey, validateSurvey } from "../json/validation"
 
 
 // Functions that control survey files operations (delete, create, open, save etc...) and
@@ -114,12 +114,16 @@ export const saveSurveyHandler = async () => {
 
 }
 
-const loadSurveyHandler = async (corrupted, surveyObject) => {
+const loadSurveyHandler = async (surveyObject, valid) => {
     //handles load survey in cases when there are errors in data file
-    if (corrupted) {
+    if (valid.corrupted) {
         const ask = await warningHandler(41, 'Open survey', 'Cancel')
-        if (ask)
-            return await importWIthForceJSON(validateDeep(surveyObject))
+        if (ask) {
+            const surveyRecovered = recoverSurvey(surveyObject, valid.result.validation)
+            if (surveyRecovered.status === 200)
+                return await importWIthForceJSON(surveyRecovered.result)
+            else return surveyRecovered
+        }
         else return { status: 412 }
     }
     else {
@@ -127,89 +131,49 @@ const loadSurveyHandler = async (corrupted, surveyObject) => {
         if (load.status === 630 || load.status === 628) {
             const tryAgain = await warningHandler(load.status === 630 ? 42 : 41, 'Open survey', 'Cancel')
             if (tryAgain)
-                return await importWIthForceJSON(validateDeep(surveyObject))
+                return await importWIthForceJSON(surveyObject)
             else return load
         }
         else return load
     }
 }
 
-export const openSurveyHandler = async (fileId, isCloud, fileName) => {
-    //fileId is filePath for local survey and cloudId for cloud
+export const surveyLoader = async (fileTag, loaderType, fileName) => {
     const isLoaded = await isSurveyLoaded()
     if (isLoaded.status === 200) {
         if (isLoaded.isLoaded) {
             errorHandler(627)
-            //survey is already loaded to database, unable to open new survey, instead return status 200 and data from current survey
             return isLoaded
         }
         else {
             const currentTime = Date.now()
-            const readSurvey = !isCloud ? await readLocalSurvey(fileId) : await readCloudSurvey(fileId)
-            if (readSurvey.status === 200) {
-                const loadToDatabase = await loadSurveyHandler(readSurvey.corrupted, readSurvey.result)
-                if (loadToDatabase.status === 200) {
-                    const survey = await sendRequest('SELECT', 'SURVEY')
-                    const settings = await sendRequest('UPDATE', 'SURVEY_SETTINGS', { isSurveyNew: 0, isCloud: isCloud, originalHash: isCloud ? null : readSurvey.hash, fileName: fileName, cloudId: isCloud ? fileId : null, lastSync: currentTime })
-                    if (settings.status === 200 && survey.status === 200)
-                        return {
-                            status: 200,
-                            name: survey.result.name,
-                            fileName: fileName,
-                            syncTime: currentTime,
-                            isCloud: isCloud,
-                        }
-                    else {
-                        resetSurvey()
-                        return { status: 600 }
-                    }
-                }
-                else return loadToDatabase
-            }
-            else return readSurvey
-        }
-    }
-    else return isLoaded
-}
-
-
-export const openSurveyExternal = async (externalUri, fileName, isCloud = 0) => {
-    const isLoaded = await isSurveyLoaded()
-    if (isLoaded.status === 200) {
-        if (isLoaded.isLoaded) {
-            errorHandler(627)
-            return isLoaded
-        }
-        else {
-            const surveyObject = await readExternalSurvey(externalUri)
-            if (surveyObject.status === 200) {
-                const load = await loadSurveyHandler(surveyObject.corrupted, surveyObject.result)
-                if (load.status === 200) {
-                    const survey = await sendRequest('SELECT', 'SURVEY', {})
-                    if (survey.status === 200) {
-                        const settings = await sendRequest('UPDATE', 'SURVEY_SETTINGS', { isSurveyNew: 1, isCloud: isCloud, originalHash: null, fileName: fileName, cloudId: null, lastSync: null })
-                        if (settings.status === 200) {
+            // there are 5 loader types 'cloud', 'local', 'external', 'localTemplate', 'cloudTemplate' - each handles reading file differently but returns object with same properties
+            const loadedFile = loaderType === 'cloud' ? await readCloudSurvey(fileTag) : (loaderType === 'local' ? await readLocalSurvey(fileTag) : (loaderType === 'external' ? await readExternalSurvey(fileTag) : await readLocalSurveyTemplate(fileTag)))
+            if (loadedFile.status === 200) {
+                const valid = validateSurvey(loadedFile.result)
+                if (valid.status === 200) {
+                    const loadSurveyObject = await loadSurveyHandler(loadedFile.result, valid)
+                    if (loadSurveyObject.status === 200) {
+                        const survey = await sendRequest('SELECT', 'SURVEY')
+                        const settings = await sendRequest('UPDATE', 'SURVEY_SETTINGS', { isSurveyNew: loadedFile.isSurveyNew, isCloud: loaderType === 'cloud' || loaderType === 'cloudTemplate', originalHash: loadedFile.hash, fileName: fileName, cloudId: loadedFile.cloudId, lastSync: loadedFile.isSurveyNew ? null : currentTime })
+                        if (settings.status === 200 && survey.status === 200)
                             return {
                                 status: 200,
-                                syncTime: null,
                                 name: survey.result.name,
                                 fileName: fileName,
-                                isCloud: isCloud,
+                                syncTime: loadedFile.isSurveyNew ? null : currentTime,
+                                isCloud: loaderType === 'cloud' || loaderType === 'cloudTemplate',
                             }
-                        }
                         else {
-                            resetSurvey()
-                            return settings
+                            await resetSurvey()
+                            return { status: 600 }
                         }
                     }
-                    else {
-                        resetSurvey()
-                        return survey
-                    }
+                    else return loadSurveyObject
                 }
-                else return load
+                else return valid
             }
-            else return surveyObject
+            else return loadedFile
         }
     }
     else return isLoaded
@@ -224,7 +188,7 @@ export const createSurvey = async (name, isCloud, technician = 'Wade Watts') => 
             return isLoaded
         }
         else {
-            const survey = await sendRequest('INSERT', 'SURVEY', { name: name, technician: technician, uid: idGen() })
+            const survey = await sendRequest('INSERT', 'SURVEY', { uid: idGen(), name: name, technician: technician })
             const potentialTypes = await sendRequest('INSERT', 'POTENTIAL_TYPE', potentialFields.map(f => ({ ...f, uid: idGen() })))
             const pipeId = await sendRequest('INSERT', 'PIPELINE', { uid: idGen(), timeCreated: Date.now(), name: 'Pipeline', timeModified: Date.now() })
             const refCellId = await sendRequest('INSERT', 'REFERENCE_CELL', { uid: idGen(), mainReference: 1, name: 'RC1', rcType: 0 })
@@ -243,33 +207,6 @@ export const createSurvey = async (name, isCloud, technician = 'Wade Watts') => 
         }
     }
     else return isLoaded
-}
-
-export const createSurveyFromTemplate = async (filePath, name, isCloud) => {
-    const isLoaded = await isSurveyLoaded()
-    if (isLoaded.status === 200) {
-        if (isLoaded.isLoaded) {
-            errorHandler(627)
-            return isLoaded
-        }
-        else {
-            const surveyObject = await readLocalSurveyTemplate(filePath)
-            if (surveyObject.status === 200) {
-                const load = await importJSON(surveyObject.result)
-                const uidUpdate = await sendRequest('UPDATE', 'SURVEY_UID', { uid: idGen() })
-                const settings = await sendRequest('UPDATE', 'SURVEY_SETTINGS', { isSurveyNew: 1, isCloud: isCloud, originalHash: null, fileName: null, cloudId: null, lastSync: null })
-                if (load.status === 200 && settings.status === 200 && uidUpdate.status === 200)
-                    return {
-                        status: 200,
-                        syncTime: null,
-                        name: name,
-                        fileName: null,
-                        isCloud: isCloud,
-                    }
-            }
-        }
-    }
-    return isLoaded
 }
 
 export const deleteSurveyHandler = async (isCloud, path, hash = null) => {
