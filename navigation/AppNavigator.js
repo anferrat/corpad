@@ -5,6 +5,7 @@ import SettingsScreen from '../screens/Settings'
 import ViewItem from '../screens/ViewItem'
 import EditItem from '../screens/EditItem'
 import EditSubitem from '../screens/EditSubitem'
+import DevScreen from '../screens/DevScreen'
 import SearchBar from '../components/Survey/SearchBar/SearchBar'
 import HomeBottomTabs from './HomeBottomTabs.js'
 import SettingDetails from '../screens/SettingDetails'
@@ -109,6 +110,7 @@ export const AppNavigator = () => {
             <Stack.Group>
               <Stack.Screen name='PipelineSurvey' component={SurveyBottomTabs} />
               <Stack.Screen name='ViewItem' component={ViewItem} />
+              <Stack.Screen name='DevScreen' component={DevScreen} />
               <Stack.Screen name='ImportItem' component={ImportItem} />
               <Stack.Screen name='ImportDetails' component={ImportDetails} />
               <Stack.Screen name='EditItem' component={EditItem} />

@@ -6,7 +6,7 @@ import { shareLink, shareWith } from '../_nativeFeatures/Share'
 import { errorHandler } from '../errorHandler'
 import { refreshSurveyList, loadSurveyList, addSurveyToList, deleteSurveyFromList, resetSurveyList } from '../../store/actions/surveyList'
 import FileListItem from '../_Stateless/SurveyList/FileListItem'
-import { openSurveyHandler, deleteSurveyHandler, saveToCloud, saveToDevice, saveSurveyToDownloads } from '../surveyManagement'
+import { deleteSurveyHandler, saveToCloud, saveToDevice, saveSurveyToDownloads, surveyLoader } from '../surveyManagement'
 import { getLocalMetaData } from '../../files/local/fsSurvey'
 import { updateSetting, loadSurveySettings, loadSession } from '../../store/actions/settings'
 import { getCloudMetaData, getFileLink } from '../../files/cloud/gdSurvey'
@@ -135,18 +135,18 @@ const LoaderSurveyList = (props) => {
     const loadSurveyHandler = React.useCallback(async (path, fileName) => {
         dispatch(updateSetting('loader', { visible: true, title: 'Opening', text: !props.isCloud ? path : `/cloud/Corpad/${fileName}` }))
 
-        const loadToDataBase = await openSurveyHandler(path, props.isCloud, fileName)
-        if (loadToDataBase.status === 200) {
+        const openSurvey = await surveyLoader(path, props.isCloud ? 'cloud' : 'local', fileName)
+        if (openSurvey.status === 200) {
             dispatch(loadSurveySettings({
-                name: loadToDataBase.name,
-                fileName: loadToDataBase.fileName,
-                isCloudSurvey: loadToDataBase.isCloud,
-                syncTime: loadToDataBase.syncTime,
+                name: openSurvey.name,
+                fileName: openSurvey.fileName,
+                isCloudSurvey: openSurvey.isCloud,
+                syncTime: openSurvey.syncTime,
                 isLoaded: true,
             }))
         }
         else {
-            errorHandler(loadToDataBase.status)
+            errorHandler(openSurvey.status)
             dispatch(updateSetting('loader', { visible: false }))
         }
     }, [dispatch, props.isCloud])

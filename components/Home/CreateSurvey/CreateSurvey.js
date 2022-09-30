@@ -3,7 +3,7 @@ import { StyleSheet, ScrollView, View } from 'react-native'
 import Header from './Header'
 import MainActionButton from '../../_Stateless/MainActionButton'
 import { useDispatch, useSelector } from 'react-redux'
-import { createSurvey, createSurveyFromTemplate } from '../../surveyManagement'
+import { createSurvey, surveyLoader } from '../../surveyManagement'
 import fieldValidation from '../../fieldValidation'
 import { errorHandler } from '../../errorHandler'
 import { updateSetting, loadSurveySettings } from '../../../store/actions/settings'
@@ -26,7 +26,7 @@ const CreateSurvey = ({ navigation }) => {
         if (validation.valid) {
             const surveyName = validation.value === null ? 'New survey' : validation.value
             dispatch(updateSetting('loader', { title: 'Creating', text: `Pipeline survey: ${surveyName}`, visible: true }))
-            const newSurvey = (!notBlank || filePath === null) ? await createSurvey(surveyName, isCloud) : await createSurveyFromTemplate(filePath, surveyName, isCloud)
+            const newSurvey = (!notBlank || filePath === null) ? await createSurvey(surveyName, isCloud) : await surveyLoader(filePath, isCloud ? 'cloudTemplate' : 'localTemplate', surveyName)
             if (newSurvey.status === 200) {
                 dispatch(loadSurveySettings({
                     isLoaded: true,

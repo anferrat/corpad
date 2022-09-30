@@ -14,6 +14,7 @@ import CloudButton from './CloudButton'
 const Header = (props) => {
     const bottomSheet = useContext(BS)
     const dispatch = useDispatch()
+    const navigateToDevScreen = () => props.navigation.navigate('DevScreen')
     const openMenuHandler = () => {
         if (bottomSheet.current.snapToIndex)
             bottomSheet.current.snapToIndex(2)
@@ -40,6 +41,9 @@ const Header = (props) => {
                 <SingleIconButton
                     iconName='search'
                     onPress={navigateToSearch} />
+                    <SingleIconButton
+                    iconName='eye'
+                    onPress={navigateToDevScreen} />
                 <SingleIconButton
                     iconName='more-vertical-outline'
                     onPress={openMenuHandler} />

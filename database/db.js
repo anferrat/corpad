@@ -576,6 +576,8 @@ export const sendRequest = async (QUERY_TYPE, DATA_TYPE, payload = {}) => {
     }
 }
 
+//functions below needs to be reformatted, through sendRequest or sendMultipleRequest functions and moved to json folder. 
+
 export const importJSON = async (content) => {
     // fast import - should work in 99% of cases
     const versionMatch = content?.version <= surveyFileVersion

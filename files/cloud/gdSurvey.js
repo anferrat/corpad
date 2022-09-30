@@ -1,10 +1,7 @@
 import { gdrive, getAppFolderId, isFileExist, updateFile, createFile, deleteFile } from './gd'
 import { ListQueryBuilder } from "@robinbobin/react-native-google-drive-api-wrapper"
-import { genereateMetaData } from '../helpers/surveyFileFunctions'
-import { validateSurvey } from '../helpers/surveyFileFunctions'
 import { checkConnection, authHandler } from './auth'
-
-
+import { generateMetaData } from '../../json/genMetadata'
 
 export const saveCloudSurvey = async (content, fileName, cloudId) => {
     const verifyConnection = await checkConnection()
@@ -61,7 +58,7 @@ export const getMetaDataFromCloudFile = async (cloudId) => {
         const meta = await gdrive.files.getMetadata(cloudId, {
             fields: 'modifiedTime,name'
         })
-        return genereateMetaData(meta.name, fileData, new Date(meta.modifiedTime).getTime(), null, null, true, cloudId)
+        return generateMetaData(meta.name, fileData, new Date(meta.modifiedTime).getTime(), null, null, true, cloudId)
     }
     catch (er) {
         return null
@@ -72,8 +69,13 @@ export const readCloudSurvey = async (cloudId) => {
     const verifyConnection = await checkConnection()
     if (verifyConnection.status === 200) {
         try {
-            const fileObject = await authHandler(async () => await gdrive.files.getJson(cloudId), 706)
-            return validateSurvey(fileObject, true)
+            return {
+                status: 200,
+                result: await authHandler(async () => await gdrive.files.getJson(cloudId), 706),
+                hash: null,
+                cloudId: cloudId,
+                isSurveyNew: 0,
+            }
         }
         catch (er) {
             if (er?.corpadErrorStatus)
