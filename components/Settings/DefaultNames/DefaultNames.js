@@ -133,7 +133,7 @@ const DefaultNames = (props) => {
                             cp
                             large
                             iconName={activeIconName}
-                            title={(displayCheckBox && !!pipeNameAsDefault) ? 'MyPipeline' : defaultNames[nameIndex].name + '187'}
+                            title={(displayCheckBox && !!pipeNameAsDefault) ? 'MyPipeline' : (defaultNames[nameIndex].name + '1')}
                             subtitle={activeOptionName} />
                     </View>
                     <Text appearance='hint' category='s2'><Icon name='alert-circle-outline' style={styles.textIcon} fill={basic} />Default names are used when creating new survey item (e.g. test point, rectifier or pipeline) or new reading. You can manually declare names in edit screen, or you can customize default names here, and they will be used automatically.</Text>
