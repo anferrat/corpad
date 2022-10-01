@@ -18,17 +18,16 @@ const LocationView = (props) => {
     const getLocationAsync = React.useCallback(async () => {
         setIsLoading(true)
         const loc = await requestLocationAsync()
-        if (loc.status === 200) {
-            const latitude = fieldValidation(loc.location.coords.latitude, 'latitude')
-            const longitude = fieldValidation(loc.location.coords.longitude, 'longitude')
-            if (componentMounted.current) {
+        if (componentMounted.current) {
+            if (loc.status === 200) {
+                const latitude = fieldValidation(loc.location.coords.latitude, 'latitude')
+                const longitude = fieldValidation(loc.location.coords.longitude, 'longitude')
                 dispatch(updateProperty(latitude.value, 'latitude', true))
                 dispatch(updateProperty(longitude.value, 'longitude', true))
             }
-        }
-        else errorHandler(loc.status)
-        if (componentMounted.current)
+            else errorHandler(loc.status)
             setIsLoading(false)
+        }
     }, [dispatch])
 
     useEffect(() => () => { componentMounted.current = false }, [])
