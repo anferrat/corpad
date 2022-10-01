@@ -41,9 +41,6 @@ const Header = (props) => {
                 <SingleIconButton
                     iconName='search'
                     onPress={navigateToSearch} />
-                    <SingleIconButton
-                    iconName='eye'
-                    onPress={navigateToDevScreen} />
                 <SingleIconButton
                     iconName='more-vertical-outline'
                     onPress={openMenuHandler} />
