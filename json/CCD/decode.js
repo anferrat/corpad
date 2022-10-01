@@ -2,7 +2,7 @@
 export const decodeTestPoint = (string) => {
     const initialTestPoint = {
         version: 1,
-        type: 'tpdo',
+        type: 'ccd',
         data: {
             testPoint: fields[1].map(() => null),
             pipelines: [],

@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react'
 import { View } from 'react-native'
 import { Animated, StyleSheet, PermissionsAndroid, ActivityIndicator } from 'react-native'
-import { Text, Icon } from '@ui-kitten/components'
+import { Text } from '@ui-kitten/components'
 import Geolocation from 'react-native-geolocation-service'
 import { useSelector } from 'react-redux'
 import { useFocusEffect } from '@react-navigation/core'
@@ -49,12 +49,11 @@ export default NavigationWidget = () => {
 
     useEffect(() => () => componentMounted.current = false, [])
 
-
     useFocusEffect(React.useCallback(() => {
         try {
             if (enableWidget && active) {
                 if (permissionGranted === true) {
-                    const watchId = Geolocation.watchPosition(updateLocation, null, { enableHighAccuracy: true, distanceFilter: 1, interval: 500, })
+                    const watchId = Geolocation.watchPosition(updateLocation, errorHandler.bind(this, 800, setActive.bind(this, false)), { enableHighAccuracy: true, distanceFilter: 1, interval: 500, })
                     //const headingSubscription = magnetometer.subscribe(updateHeading) //figure this out! hopefully they'll release update soon
                     return () => {
                         // headingSubscription.unsubscribe()
@@ -73,7 +72,7 @@ export default NavigationWidget = () => {
         }
     }, [active, enableWidget, permissionGranted]))
 
-    /* Heading calculation 
+    /* Heading calculation - !!!CURRENTLY NOT IN USE, need to update formula for more accurate heading calculation with z-axis!!!
     1. Create array wihth headingData (pointBearing minus phoneBearing) of a fixed size. (headingData) (from 0 to 2Pi)
     2. On each heading update that changes bearingData more than a minStep value (in degrees), we updating the array pushing a new value to the begining of the array, and deleteing the last value from array keeping its size fixed
     */

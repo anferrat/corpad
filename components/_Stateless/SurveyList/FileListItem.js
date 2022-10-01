@@ -1,4 +1,4 @@
-import React, { useRef } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { View, StyleSheet, Pressable, Animated } from 'react-native'
 import { Text, Icon } from '@ui-kitten/components'
 import { basic, basic200, basic300 } from '../../../styles/GlobalStyle'
@@ -6,21 +6,36 @@ import { getFormattedDate } from '../../customFunctions'
 import FileListItemMenu from './FileListItemMenu'
 import * as Progress from 'react-native-progress'
 import { success } from '../../../styles/GlobalStyle'
+import { warningHandler } from '../../errorHandler'
+
 
 const FileListItem = (props) => {
-    //Heavy... maybe change in future
     const progress = props.tpCount !== 0 ? props.good / props.tpCount : 0
     const scale = useRef(new Animated.Value(1))
+    const [deleting, setDeleting] = useState(false)
 
-    const onDeleteHandler = () => {
-        //there are ways to improve - delete data first - run animation next - remove item from state. but it works for me for now
-        props.onDeleteHandler()
-        Animated.timing(scale.current, {
-            toValue: 0,
-            duration: 400,
-            useNativeDriver: false
-        }).start()
-    }
+    const onDeleteHandler = React.useCallback(async () => {
+        const confirmDelete = await warningHandler(43, 'Delete')
+        if (confirmDelete) {
+            setDeleting(true)
+        }
+    }, [setDeleting])
+
+    useEffect(() => {
+        const deleteResult = async () => {
+            const delRes = await props.onDeleteHandler()
+            if (delRes.status !== 200) {
+                setDeleting(false)
+                scale.current.setValue(1)
+            }
+        }
+        if (deleting)
+            Animated.timing(scale.current, {
+                toValue: 0,
+                duration: 400,
+                useNativeDriver: false
+            }).start(deleteResult)
+    }, [deleting])
 
     return (
         <Animated.View style={{
@@ -46,7 +61,10 @@ const FileListItem = (props) => {
                             endAngle={0.7}
                             showsText={true} />
                         <View style={styles.titleData}>
-                            <Text category='h5' numberOfLines={1} ellipsizeMode={'tail'}>{props.title}</Text>
+                            <View style={styles.titleRow}>
+                                <Text category='h5' numberOfLines={1} ellipsizeMode={'tail'}>{props.title}</Text>
+                                {props.isCloud ? <Icon name='cloud-download-outline' style={styles.titleIcon} fill={basic} /> : null}
+                            </View>
                             <Text appearance='hint' category='p2'>Pipeline survey</Text>
                             <View style={styles.time}>
                                 <Icon name='clock-outline' style={styles.smallIcon} fill={basic} />
@@ -82,6 +100,10 @@ const styles = StyleSheet.create({
         paddingHorizontal: 12,
         paddingTop: 6
     },
+    titleRow: {
+        flexDirection: 'row',
+        alignItems: 'center'
+    },
     pressable: {
         elevation: 5,
         backgroundColor: '#fff',
@@ -101,6 +123,12 @@ const styles = StyleSheet.create({
         width: 18,
         height: 18,
         marginRight: 2,
+    },
+    titleIcon: {
+        width: 20,
+        height: 20,
+        marginLeft: 6,
+        marginTop: 4
     },
     time: {
         marginTop: 4,

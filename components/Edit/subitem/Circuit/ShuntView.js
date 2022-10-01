@@ -14,6 +14,7 @@ const ShuntView = (props) => {
                     keyboardType='numeric'
                     property='ratioVoltage'
                     maxLength={5}
+                    calculations={props.updateCurrent.bind(this, props.voltageDrop, props.ratioCurrent, props.ratioVoltage)}
                     value={props.ratioVoltage}
                     valid={props.valid.ratioVoltage}
                     unit='mV' />
@@ -23,6 +24,7 @@ const ShuntView = (props) => {
                     keyboardType='numeric'
                     property='ratioCurrent'
                     maxLength={5}
+                    calculations={props.updateCurrent.bind(this, props.voltageDrop, props.ratioCurrent, props.ratioVoltage)}
                     value={props.ratioCurrent}
                     valid={props.valid.ratioCurrent}
                     unit='A' />

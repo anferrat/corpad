@@ -25,6 +25,7 @@ const warningCodes = {
     40: 'File with the same name already exists in exports folder. Do you want to override it?',
     41: 'Survey file is corrupted. Some data may be lost if you try to open this survey file. Make sure you have a copy of this survey before proceeding',
     42: 'Survey file version is higher than the app version. You should update your app. Opening survey may cause some data to be lost.',
+    43: 'Are you sure you want to delete this survey file?'
 }
 
 const errorCodes = {
@@ -89,13 +90,13 @@ const errorCodes = {
     627: 'Another survey is already opened. Save old survey to continue.',
     628: 'Import error.',
     629: 'Export error.',
-    630: `File version doesn't match`,
+    630: `File version doesn't match.`,
     631: 'Unable to delete main reference cell.',
     701: `Unable to access app folder in cloud storage.`,
     702: `Unable to obtain metadata of a file.`,
-    703: `Unable to update file, check your connection and try again later.`,
-    704: `Unable to create file, check your connection and try again later.`,
-    705: `Unable to get file list in cloud storage.`,
+    703: `Unable to update remote file.`,
+    704: `Unable to create file at the remote storage.`,
+    705: `Unable to get file list from remote storage.`,
     706: `Unable to read survey file.`,
     707: 'Unable to sign in to Google account.',
     708: 'Unable to log out from cloud storage account.',
@@ -103,7 +104,7 @@ const errorCodes = {
     710: 'Unable to create link, try again later',
     800: 'Location service is not available. Check if your GPS is turned on.',
     801: 'Unable create item with these coordinates.',
-    803: 'Your gps takes a long time to obtain coordinates. Try again after few seconds. ',
+    803: 'Your device takes long time to obtain location data.',
     802: 'Please enter latitude and longitude to view item on the map.',
     900: 'You need to grant location permission to activate this feature.',
     901: 'Need permission to write to Downloads folder.',

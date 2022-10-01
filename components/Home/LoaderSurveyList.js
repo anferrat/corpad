@@ -48,13 +48,14 @@ const LoaderSurveyList = (props) => {
     }, [refreshing])
 
     const onDeleteHandler = React.useCallback(async (isCloud, path, hash = null) => {
-        dispatch(updateSetting('loader', { visible: true, title: 'Deleting' }))
+
+        isCloud ? dispatch(updateSetting('loader', { visible: true, title: 'Deleting' })) : null
         const delAction = await deleteSurveyHandler(isCloud, path, hash)
-        dispatch(updateSetting('loader', { visible: false }))
+        isCloud ? dispatch(updateSetting('loader', { visible: false })) : null
         if (delAction.status === 200)
-            //cheat move for animations to run
-            setTimeout(() => dispatch(deleteSurveyFromList(isCloud ? 'CLOUD' : 'LOCAL', path)), 500)
+            dispatch(deleteSurveyFromList(isCloud ? 'CLOUD' : 'LOCAL', path))
         else errorHandler(delAction.status)
+        return delAction
     }, [dispatch])
 
     const saveToDownloadsHandler = React.useCallback(async (isCloud, path) => {
@@ -119,6 +120,7 @@ const LoaderSurveyList = (props) => {
             onPress={loadSurveyHandler.bind(this, path, item.fileName, item.name)}
             title={item.name}
             path={path}
+            isCloud={props.isCloud}
             tpCount={item.tpCount}
             rectifierCount={item.rectifierCount}
             pipelineCount={item.pipelineCount}
