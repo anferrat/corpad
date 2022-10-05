@@ -15,6 +15,8 @@ const getTitleBySettingType = (setting) => {
             return 'Reference cells'
         case 'export':
             return 'Export as CSV'
+        case 'exportedFiles':
+            return 'Exported files'
         case 'info':
             return 'Survey information'
         default:

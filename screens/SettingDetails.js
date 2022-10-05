@@ -7,6 +7,7 @@ import Potentials from '../components/Settings/PotentialFields/Potentials'
 import ExportSurvey from '../components/Settings/ExportSurvey/ExportSurvey'
 import SurveyInfo from '../components/Settings/SurveyInfo/SurveyInfo'
 import OnboardingOverlay from '../components/Modals/Onboarding/OnboardingOverlay'
+import ExportedFilesList from '../components/Settings/ExportedFiles/ExportedFilesList'
 
 const Setting = (props) => {
     switch (props.setting) {
@@ -20,6 +21,8 @@ const Setting = (props) => {
             return <ExportSurvey {...props} />
         case 'info':
             return <SurveyInfo {...props} />
+        case 'exportedFiles':
+            return <ExportedFilesList />
         default:
             return null
     }
