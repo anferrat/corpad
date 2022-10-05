@@ -22,6 +22,7 @@ const settingsParams = [
         settings: [
             { title: 'Default names', screen: 'defaultNames', icon: 'people-outline', description: 'Manage default names for new test points, rectifiers, readings and etc.' },
             { title: 'Export as CSV', screen: 'export', icon: 'file-text-outline', description: 'Export data from survey to a spreadsheet file and save it to your device' },
+            { title: 'Exported files', screen: 'exportedFiles', icon: 'code-download-outline', description: 'View exported CSV and KML files, delete or share them with different apps' },
         ],
     }
 ]
