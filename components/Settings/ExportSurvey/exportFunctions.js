@@ -1,6 +1,6 @@
 import { sendRequest } from "../../../database/db"
 import { labels, pipeDiameterList, pipeMaterials, pipeProducts, statusInfo, testPointTypes } from "../../../constants/constants"
-import { getFormattedDate, getTapSettings } from "../../customFunctions"
+import { getFullDate, getTapSettings } from "../../customFunctions"
 
 export const exportPipelinePotentials = async (testPointList, potentialTypes, pipelineList, referenceCellId, readingTypes) => {
     //Generates matrix to export as CSV file in a format of array of same length arrays. first element is array of titles which <PIPE_NAME>_<PIPE_INDEX>_<POTERNTIAL_TYPE> 
@@ -128,7 +128,7 @@ const propertyHandler = (resItem, property) => {
         case 'material':
             return pipeMaterials[resItem.material] ?? null
         case 'timeModified':
-            return getFormattedDate(resItem.timeModified)
+            return getFullDate(resItem.timeModified)
         case 'nps':
             return pipeDiameterList[resItem.nps] ?? null
         case 'product':

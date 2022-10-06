@@ -8,6 +8,7 @@ import { Alert } from 'react-native'
 import { fileNameGen } from '../customFunctions'
 import { errorHandler } from '../errorHandler'
 import { updateSetting } from '../../store/actions/settings'
+import { useNavigation } from '@react-navigation/native'
 
 
 const ExportKmlButton = () => {
@@ -16,6 +17,7 @@ const ExportKmlButton = () => {
     const refreshing = useSelector(state => state.map.refreshing)
     const surveyName = useSelector(state => state.settings.currentSurvey.name)
     const componentMounted = useRef(true)
+    const navigation = useNavigation()
 
     useEffect(() => {
         componentMounted.current = true
@@ -30,10 +32,10 @@ const ExportKmlButton = () => {
         if (markers.status === 200) {
             const kml = genKml(markers.result)
             const fileName = fileNameGen(name, 'kml')
-            const writeFs = await writeFile(kml, fileName, 'exports', true)
+            const writeFs = await writeFile(kml, fileName, 'exports', false)
             if (writeFs.status === 200) {
                 if (componentMounted.current)
-                    dispatch(updateSetting('exportModal', { visible: true, fileUrl: writeFs.filePath, mimeType: 'application/vnd' }))
+                    dispatch(updateSetting('exportModal', { visible: true, fileUrl: writeFs.filePath, mimeType: 'application/vnd.google-earth.kml+xml', navigateToExportedFiles: navigation.navigate.bind(this, 'SettingDetails', { setting: 'exportedFiles' }) }))
             }
             else errorHandler(writeFs.status)
         }

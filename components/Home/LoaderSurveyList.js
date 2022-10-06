@@ -85,16 +85,16 @@ const LoaderSurveyList = (props) => {
     const genMenuItems = React.useCallback((isCloud, path) => {
         if (!isCloud) {
             return [
-                { title: 'Copy to Cloud', onPress: saveToHandler.bind(this, path, true) },
-                { title: 'Save to Downloads', onPress: saveToDownloadsHandler.bind(this, isCloud, path) },
-                { title: 'Share', onPress: shareWith.bind(this, path, 'application/json') },
+                { title: 'Copy to Cloud', onPress: saveToHandler.bind(this, path, true), icon: 'cloud-download-outline' },
+                { title: 'Save to Downloads', onPress: saveToDownloadsHandler.bind(this, isCloud, path), icon: 'download-outline' },
+                { title: 'Share', onPress: shareWith.bind(this, path, 'application/json'), icon: 'share-outline' },
             ]
         }
         else return [
-            { title: 'Copy to Device', onPress: saveToHandler.bind(this, path, false) },
-            { title: 'Save to Downloads', onPress: saveToDownloadsHandler.bind(this, isCloud, path) },
-            { title: 'Share link', onPress: getLink.bind(this, path, true) },
-            { title: 'Copy link', onPress: getLink.bind(this, path, false) },
+            { title: 'Copy to Device', onPress: saveToHandler.bind(this, path, false), icon: 'smartphone-outline' },
+            { title: 'Save to Downloads', onPress: saveToDownloadsHandler.bind(this, isCloud, path), icon: 'download-outline' },
+            { title: 'Share link', onPress: getLink.bind(this, path, true), icon: 'share-outline' },
+            { title: 'Copy link', onPress: getLink.bind(this, path, false), icon: 'copy-outline' },
         ]
     }, [saveToHandler])
 

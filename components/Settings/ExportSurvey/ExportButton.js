@@ -9,11 +9,11 @@ import { writeFile } from '../../../files/local/fs'
 import { fileNameGen } from '../../customFunctions'
 import { errorHandler } from '../../errorHandler'
 import { updateSetting } from '../../../store/actions/settings'
+import { useNavigation } from '@react-navigation/native'
 
-
-
-const ExportButton = (props) => {
+const ExportButton = () => {
     const settings = useSelector(state => state.exportSurvey)
+    const navigation = useNavigation()
     const surveyName = useSelector(state => state.settings.currentSurvey.name)
     const dispatch = useDispatch()
     const componentMounted = useRef(true)
@@ -80,9 +80,9 @@ const ExportButton = (props) => {
             dispatch(updateSetting('loader', { visible: true, title: 'Exporting', text: 'Creating CSV file' }))
             const fileName = fileNameGen(surveyName, 'csv')
             if (componentMounted.current) {
-                const writeFs = await writeFile(genCsv(result), fileName, 'exports', true)
+                const writeFs = await writeFile(genCsv(result), fileName, 'exports', false)
                 if (writeFs.status === 200 && componentMounted.current)
-                    dispatch(updateSetting('exportModal', { visible: true, fileUrl: writeFs.filePath, mimeType: 'text/csv' }))
+                    dispatch(updateSetting('exportModal', { visible: true, fileUrl: writeFs.filePath, mimeType: 'text/csv', navigateToExportedFiles: navigation.navigate.bind(this, 'SettingDetails', { setting: 'exportedFiles' }) }))
                 else errorHandler(writeFs.status)
             }
         }

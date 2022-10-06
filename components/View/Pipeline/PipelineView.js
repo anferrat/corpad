@@ -4,7 +4,7 @@ import { Divider } from '@ui-kitten/components'
 import { pipeMaterials, pipeDiameterList, pipeProducts } from '../../../constants/constants'
 import IconLine from '../../_Stateless/IconLine'
 import TextLine from '../../_Stateless/TextLine'
-import { getFormattedDate } from '../../customFunctions'
+import { getFullDate } from '../../customFunctions'
 import TopBarTitle from '../../_Stateless/TopBarTitle'
 import { danger, success } from '../../../styles/GlobalStyle'
 
@@ -32,7 +32,7 @@ const PipelineView = (props) => {
                     title={props.pipelineData.name}
                     large={true} />
             </View>
-            <IconLine icon='calendar-outline' value={getFormattedDate(props.pipelineData.timeModified)} hideEmpty />
+            <IconLine icon='calendar-outline' value={getFullDate(props.pipelineData.timeModified)} hideEmpty />
             <IconLine icon='hash-outline' value={props.pipelineData.licenseNumber} hideEmpty />
             <IconLine icon='TSS' pack='cp' value={getTestPointCount(props.pipelineData.tpCount)} hideEmpty />
             <IconLine icon='message-square-outline' value={props.pipelineData.comment} hideEmpty />

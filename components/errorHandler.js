@@ -22,10 +22,12 @@ const warningCodes = {
     21: 'Deleting this potential type will cause deleting ALL of the potential readings of this type in ALL test points. This action cannot be undone, proceed with caution.',
     22: 'Deleting reference cell will also delete ALL potential fields and readings that uses this reference. This action cannot be undone.',
     31: 'You are not signed in with your cloud storage account. You can save survey to your device or sign in with Google Drive account and try again.',
-    40: 'File with the same name already exists in exports folder. Do you want to override it?',
+    40: 'File with the same name already exists in exports folder. Do you want to overwrite it?',
     41: 'Survey file is corrupted. Some data may be lost if you try to open this survey file. Make sure you have a copy of this survey before proceeding',
     42: 'Survey file version is higher than the app version. You should update your app. Opening survey may cause some data to be lost.',
-    43: 'Are you sure you want to delete this survey file?'
+    43: 'Are you sure you want to delete this survey file?',
+    44: 'Are you sure you want to delete this file?',
+    45: 'Are you sure you want to delete all exported files?'
 }
 
 const errorCodes = {

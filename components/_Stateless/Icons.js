@@ -4,6 +4,7 @@ import { Icon } from '@ui-kitten/components'
 export const saveIcon = (props) => <Icon name='save' {...props} />
 export const addIcon = (props) => <Icon name='plus-circle-outline' {...props} />
 export const delIcon = (props) => <Icon name='trash-outline' {...props} />
+export const trashIcon = (props) => <Icon name='trash' {...props} />
 export const rightArrow = (props) => <Icon name='arrow-ios-forward-outline'  {...props} />
 export const pipelineIcon = (props) => <Icon pack='cp' name='PL' {...props} />
 export const plus = (props) => <Icon {...props} name='plus-outline' />
@@ -31,4 +32,7 @@ export const person = (props) => <Icon {...props} name='person' />
 export const edit = (props) => <Icon {...props} name='edit' />
 export const file = (props) => <Icon {...props} name='file-text-outline' />
 export const importIcon = (props) => <Icon {...props} name='download-outline' />
+export const exportedFilesIcon = (props) => <Icon {...props} name='code-download-outline' />
+export const openInIcon = (props) => <Icon {...props} name='external-link' />
+export const shareIcon = (props) => <Icon {...props} name='share' />
 

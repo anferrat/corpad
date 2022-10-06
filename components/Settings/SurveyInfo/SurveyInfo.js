@@ -7,7 +7,7 @@ import NumberDisplay from "../../_Stateless/Info/NumberDisplay"
 import InfoListItem from "../../_Stateless/Info/InfoListItem"
 import ProgressDisplay from "./ProgressDisplay"
 import SurveyName from "./SurveyName"
-import { calculateRegionCorners, getFormattedDate } from "../../customFunctions"
+import { calculateRegionCorners } from "../../customFunctions"
 import { ScrollView } from "react-native-gesture-handler"
 import { referenceCellCodes } from "../../../constants/constants"
 import { coordTransform, getDistance } from "../../View/NavigationWidget" //maybe move it to separate file for distance calculations
