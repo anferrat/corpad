@@ -6,7 +6,7 @@ const DataLoaderFlatList = (props) => {
         {...props}
         StickyHeaderComponent={props.StickyHeaderComponent}
         ListHeaderComponent={props.ListHeaderComponent}
-        contentContainerStyle={styles.container}
+        contentContainerStyle={{...styles.container, ...props.contentContainerStyle}}
         keyExtractor={props.keyExtractor}
         initialNumToRender={18}
         ListEmptyComponent={props.ListEmptyComponent}

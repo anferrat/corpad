@@ -72,7 +72,7 @@ const FileListItem = (props) => {
                             </View>
                         </View>
                     </View>
-                    <FileListItemMenu menuItems={[...props.menuItems, { title: 'Delete', onPress: onDeleteHandler }]} />
+                    <FileListItemMenu menuItems={[...props.menuItems, { title: 'Delete', onPress: onDeleteHandler, icon: 'trash-outline' }]} />
                 </View>
                 <View style={styles.iconBar}>
                     <Icon name={'TSS'} pack='cp' style={styles.barIcon} fill={basic} />

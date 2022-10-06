@@ -4,7 +4,7 @@ import StatusIcon from '../StatusIcon'
 import { powerSourceList, tapSettings } from '../../../constants/constants'
 import IconLine from '../../_Stateless/IconLine'
 import TextLine from '../../_Stateless/TextLine'
-import { getFormattedDate, toString, getValue } from '../../customFunctions'
+import { toString, getValue, getFullDate } from '../../customFunctions'
 import TopBarTitle from '../../_Stateless/TopBarTitle'
 import SmartDivider from '../../_Stateless/SmartDivider'
 import TapView from './TapView'
@@ -26,7 +26,7 @@ const RectifierView = (props) => { // I know parts just copied from TestPointVie
                     dataType={props.dataType}
                     itemId={props.itemId} />
             </View>
-            <IconLine icon='calendar-outline' value={getFormattedDate(props.rectifierData.timeModified)} hideEmpty />
+            <IconLine icon='calendar-outline' value={getFullDate(props.rectifierData.timeModified)} hideEmpty />
             <IconLine icon='pin-outline' value={combineLatLon(toString(props.rectifierData.latitude), toString(props.rectifierData.longitude))} hideEmpty />
             <IconLine icon='map-outline' value={props.rectifierData.location} hideEmpty />
             <IconLine icon='message-square-outline' value={props.rectifierData.comment} hideEmpty />

@@ -378,8 +378,25 @@ export const getValidCaption = (valid, type) => {
     if (!valid && caption !== null)
         return <Layout><Text category='label' status='danger'>{caption}</Text></Layout>
 }
-
+const monthList = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
 export const getFormattedDate = (timestamp) => { //formats date. date stored across the app in a format of Date.now()
+    const t = new Date(timestamp)
+    if (timestamp && !isNaN(timestamp) && timestamp > 0 && t) {
+        const currentTimestamp = Date.now()
+        const recent = Math.abs(currentTimestamp - timestamp) < 864000000 && new Date(currentTimestamp).getDate() === t.getDate()
+        const withinYear = new Date(currentTimestamp).getFullYear() === t.getFullYear()
+        const time = ("0" + t.getHours()).slice(-2) + ':' + ("0" + t.getMinutes()).slice(-2)
+        if (recent)
+            return 'Today, ' + time
+        else if (withinYear)
+            return `${monthList[t.getMonth()]} ${t.getDate()}, ${time}`
+        else
+            return `${monthList[t.getMonth()]} ${t.getDate()}, ${t.getFullYear()} ${time}`
+    }
+    else return 'Time error'
+}
+
+export const getFullDate = (timestamp) => { //formats date. date stored across the app in a format of Date.now()
     const t = new Date(timestamp)
     if (timestamp && !isNaN(timestamp) && timestamp > 0 && t) {
         return t.getFullYear() + '/'
@@ -390,6 +407,34 @@ export const getFormattedDate = (timestamp) => { //formats date. date stored acr
     }
     else return 'Time error'
 }
+
+export const getFileSize = (bytes) => {
+    if (bytes >= 0 && bytes < 1024)
+        return {
+            value: bytes,
+            unit: 'B'
+        }
+    else if (bytes >= 1024 && bytes < 1048576)
+        return {
+            value: (bytes / 1024).toFixed(2),
+            unit: 'KB',
+        }
+    else if (bytes >= 1048576 && bytes < 1073741824)
+        return {
+            value: (bytes / 1048576).toFixed(2),
+            unit: 'MB'
+        }
+    else if (bytes >= 1073741824)
+        return {
+            value: (bytes / 1073741824).toFixed(2),
+            unit: 'GB'
+        }
+    else return {
+        value: '??',
+        unit: 'B'
+    }
+}
+
 
 export const getIconByFieldType = (type) => { // used in Display card DataRow. 
     switch (type) {

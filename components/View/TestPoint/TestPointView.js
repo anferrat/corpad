@@ -3,7 +3,7 @@ import { View, StyleSheet } from 'react-native'
 import StatusIcon from '../StatusIcon'
 import { testPointTypeCodes, testPointTypes } from '../../../constants/constants'
 import IconLine from '../../_Stateless/IconLine'
-import { getFormattedDate, toString } from '../../customFunctions'
+import { toString, getFullDate } from '../../customFunctions'
 import TopBarTitle from '../../_Stateless/TopBarTitle'
 
 const combineLatLon = (lat, lon) => lat === '' && lon === '' ? '' : lat + ', ' + lon
@@ -22,7 +22,7 @@ const TestPointView = (props) => {
                     dataType={props.dataType}
                     itemId={props.itemId} />
             </View>
-            <IconLine icon='calendar-outline' value={getFormattedDate(props.tpData.timeModified)} hideEmpty />
+            <IconLine icon='calendar-outline' value={getFullDate(props.tpData.timeModified)} hideEmpty />
             <IconLine icon='pin-outline' value={combineLatLon(toString(props.tpData.latitude), toString(props.tpData.longitude))} hideEmpty />
             <IconLine icon='map-outline' value={props.tpData.location} hideEmpty />
             <IconLine icon='message-square-outline' value={props.tpData.comment} hideEmpty />

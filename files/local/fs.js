@@ -62,7 +62,7 @@ export const writeFile = async (content, name, location, overwrite = true) => {
     }
 }
 
-export const copyFile = async (filePath, destination) => {
+export const copyFile = async (fileName, filePath, destinationLocation) => {
     try {
         //check if there is enough free space
         const freeSpace = (await RNFS.getFSInfo()).freeSpace
@@ -71,10 +71,15 @@ export const copyFile = async (filePath, destination) => {
                 status: 402
             }
         //write file
-        await RNFS.copyFile(filePath, destination)
+        const location = await getLocation(destinationLocation)
+        if (location.status !== 200)
+            return location
+        const fileNameCorrected = await getFileName(fileName, 'downloads')
+        if (fileNameCorrected.status !== 200)
+            return fileNameCorrected
+        await RNFS.copyFile(filePath, location.location + '/' + fileNameCorrected.fileName)
         return {
             status: 200,
-            filePath: destination
         }
     }
     catch (er) {
@@ -174,18 +179,6 @@ export const deleteFile = async (location, fileName) => {
         }
     }
     else return directory
-}
-
-
-export const clearExported = async () => {
-    try {
-        const directory = await getLocation('exports')
-        await RNFS.unlink(directory.location)
-        return { status: 200 }
-    }
-    catch (er) {
-        return { status: 410 }
-    }
 }
 
 //below for dev use only

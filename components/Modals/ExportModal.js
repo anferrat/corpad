@@ -3,30 +3,36 @@ import { Pressable, StyleSheet, View } from 'react-native'
 import { useDispatch, useSelector } from 'react-redux'
 import { Button, Divider, Icon, Text } from '@ui-kitten/components'
 import { success } from '../../styles/GlobalStyle'
-import { shareWith } from '../_nativeFeatures/Share'
-import { openIn } from '../_nativeFeatures/OpenIn'
 import { updateSetting } from '../../store/actions/settings'
+import { openInIcon, shareIcon } from '../_Stateless/Icons'
+import { openIn } from '../_nativeFeatures/OpenIn'
+import { shareWith } from '../_nativeFeatures/Share'
 
 const ExportModal = () => {
     const dispatch = useDispatch()
-    const exportModal = useSelector(state=>state.settings.exportModal)
+    const exportModal = useSelector(state => state.settings.exportModal)
     const hideModal = React.useCallback(() => dispatch(updateSetting('exportModal', { visible: false })), [dispatch])
-
-    const buttonHandler = React.useCallback((fileUrl, mimeType, action) => {
-        hideModal()
-        action(fileUrl, mimeType)
-    }, [hideModal])
     const fileName = exportModal.fileUrl ? exportModal.fileUrl.substring(exportModal.fileUrl.lastIndexOf('/') + 1, exportModal.fileUrl.length) : ''
+    const navigateToExportedFiles = React.useCallback(() => {
+        hideModal()
+        if (exportModal.navigateToExportedFiles)
+            exportModal.navigateToExportedFiles()
+    }, [exportModal.navigateToExportedFiles])
     return (
         <Pressable style={exportModal.visible ? styles.mainView : styles.hidden} onPress={hideModal}>
             <View style={styles.infoView}>
                 <Icon name='checkmark-circle-outline' style={styles.icon} fill={success} />
                 <Text style={styles.bold} category={'h3'}>Success!</Text>
-                <Text appearance='hint' category='p2' style={styles.text}>File {fileName} is successfully exported. Choose what you want to do with the file.</Text>
+                <Text appearance='hint' category='p2' style={styles.text}>File {fileName} was created. Choose what you want to do with the file.</Text>
                 <Divider />
                 <View style={styles.buttons}>
-                    <Button style={styles.button} onPress={buttonHandler.bind(this, exportModal.fileUrl ?? '', exportModal.mimeType ?? '', openIn)} appearance='ghost'>Open in ...</Button>
-                    <Button style={styles.button} onPress={buttonHandler.bind(this, exportModal.fileUrl ?? '', exportModal.mimeType ?? '', shareWith)} appearance='ghost'>Share</Button>
+                    <Button style={styles.button} onPress={navigateToExportedFiles} appearance='ghost'>View exported files</Button>
+
+                </View>
+                <Text>or</Text>
+                <View style={styles.buttons}>
+                    <Button style={styles.button} onPress={openIn.bind(this, exportModal.fileUrl ?? '', exportModal.mimeType ?? '')} accessoryLeft={openInIcon} appearance='ghost'>Open in...</Button>
+                    <Button style={styles.button} onPress={shareWith.bind(this, exportModal.fileUrl ?? '', exportModal.mimeType ?? '')} accessoryLeft={shareIcon} appearance='ghost'>Share</Button>
                 </View>
             </View>
         </Pressable>

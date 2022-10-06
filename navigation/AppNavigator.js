@@ -22,7 +22,6 @@ import NetInfo from '@react-native-community/netinfo'
 import { initDataBase, sendRequest } from '../database/db.js'
 import ImportItem from '../screens/ImportItem.js'
 import ImportDetails from '../screens/ImportDetails.js'
-import { clearExported } from '../files/local/fs'
 
 const Stack = createNativeStackNavigator()
 
@@ -47,8 +46,6 @@ export const AppNavigator = () => {
     })
 
     const initialLoad = async () => {
-      // clears exported folder. In future need to change it and allow user to go through exported files and not to delete them
-      await clearExported()
       //initialize db and get onboarding values
       const onBoard = await initDataBase()
       if (onBoard !== null) {

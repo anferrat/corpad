@@ -22,7 +22,7 @@ const Setting = (props) => {
         case 'info':
             return <SurveyInfo {...props} />
         case 'exportedFiles':
-            return <ExportedFilesList />
+            return <ExportedFilesList {...props}/>
         default:
             return null
     }

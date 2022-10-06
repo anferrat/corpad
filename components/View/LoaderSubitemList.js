@@ -73,7 +73,7 @@ const LoaderSubitemList = (props) => {
     else
         return (
             <>
-                {[...data?.data].reverse().map((subitemData, index) => {
+                {[...data?.data].reverse().map((subitemData) => {
                     switch (props.dataTypeItem) {
                         case 'TEST_POINT':
                             return <CardView
