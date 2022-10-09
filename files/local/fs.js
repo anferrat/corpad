@@ -181,10 +181,9 @@ export const deleteFile = async (location, fileName) => {
     else return directory
 }
 
-//below for dev use only
 
 export const test = async () => {
-    console.log((await RNFS.readDir(myFolder + '/surveys')).map(d => d.name))
+    console.log((await RNFS.readDir(myFolder)).map(d => d.name))
 }
 
 export const resetFolder = async () => {

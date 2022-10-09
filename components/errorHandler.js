@@ -19,6 +19,7 @@ const warningCodes = {
     10: 'Are you sure you want to proceed?',
     11: `Unable to save survey to cloud. Your device isn't connected to the internet. You can try again later or you can save a copy of a survey to your device`,
     12: 'Are you sure you want to exit to the main screen? Any changes that you have made to the survey will be lost.',
+    13: 'Another survey is active. It will be closed and changes will be saved. Would you like to proceed?',
     21: 'Deleting this potential type will cause deleting ALL of the potential readings of this type in ALL test points. This action cannot be undone, proceed with caution.',
     22: 'Deleting reference cell will also delete ALL potential fields and readings that uses this reference. This action cannot be undone.',
     31: 'You are not signed in with your cloud storage account. You can save survey to your device or sign in with Google Drive account and try again.',

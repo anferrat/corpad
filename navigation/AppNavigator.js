@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react'
+import { Linking } from 'react-native'
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
 import SurveyBottomTabs from './SurveyBottomTabs'
 import SettingsScreen from '../screens/Settings'
@@ -13,8 +14,8 @@ import TopBar from '../components/Settings/TopBar'
 import OnboardingScreen from '../screens/Onboarding'
 import CreateSurvey from '../components/Home/CreateSurvey/CreateSurvey.js'
 import { useDispatch, useSelector } from 'react-redux'
-import { isSurveyLoaded } from '../components/surveyManagement.js'
-import { loadSession, loadSurveySettings, updateOnboarding } from '../store/actions/settings.js'
+import { isSurveyLoaded, surveyLoader, saveSurveyHandler } from '../components/surveyManagement.js'
+import { loadSession, loadSurveySettings, updateOnboarding, resetCurrentSurveySettings, updateSetting } from '../store/actions/settings.js'
 import SplashScreen from '../components/_Stateless/SplashScreen.js'
 import { getSession, signInSilently, checkConnection } from '../files/cloud/auth.js'
 import { gdrive } from '../files/cloud/gd.js'
@@ -22,6 +23,8 @@ import NetInfo from '@react-native-community/netinfo'
 import { initDataBase, sendRequest } from '../database/db.js'
 import ImportItem from '../screens/ImportItem.js'
 import ImportDetails from '../screens/ImportDetails.js'
+import { ONBOARDING_VERSION } from '../components/Modals/Onboarding/onboardingRequests'
+import { errorHandler, warningHandler } from '../components/errorHandler'
 
 const Stack = createNativeStackNavigator()
 
@@ -29,29 +32,81 @@ export const AppNavigator = () => {
   const dispatch = useDispatch()
   //surveyLoaded - indicates what sets of screen needed to be presented - either home screens with survey lists or survey screens
   const surveyLoaded = useSelector(state => state.settings.currentSurvey.isLoaded)
+  const surveyFileName = useSelector(state => state.settings.currentSurvey.fileName)
 
   //homeScreenCloud - used to determine what type of survey was previously handled. based on that app determines what home screen list to display
   const homeScreenCloud = useSelector(state => state.settings.currentSurvey.homeScreenCloud)
 
   //OnboardingMain - defines if onboarding screen needs to be presented
-  const showOnboarding = useSelector(state => state.settings.onboarding.main)
+  const showOnboarding = useSelector(state => state.settings.onboarding.main || (state.settings.onboarding.versionOnboarding !== ONBOARDING_VERSION))
   const [screenReady, setScreenReady] = useState(false)
   const componentMounted = useRef(true)
 
+  const openExternalFile = async (uri) => {
+    const externalSurveyOpening = await surveyLoader(uri, 'external', null)
+    if (externalSurveyOpening.status === 200) {
+      dispatch(loadSurveySettings({
+        isLoaded: true,
+        name: externalSurveyOpening.name,
+        fileName: externalSurveyOpening.fileName,
+        isCloudSurvey: externalSurveyOpening.isCloud,
+        syncTime: externalSurveyOpening.syncTime
+      }))
+    }
+    else errorHandler(externalSurveyOpening.status)
+  }
+
+  const loadExternalSurvey = React.useCallback(async (uri) => {
+    // Loads external survey into the app, saves old survey to the memory
+
+    if (uri !== null) {
+      dispatch(updateSetting('loader', { title: 'Loading external file', visible: true }))
+      const isLoaded = await isSurveyLoaded()
+      if (isLoaded.status === 200)
+        if (isLoaded.isLoaded) {
+          const confirm = await warningHandler(13, 'Proceed', 'Cancel')
+          if (confirm) {
+            dispatch(updateSetting('loader', { title: 'Saving', visible: true, text: isLoaded.fileName }))
+            const currentSurveySaving = await saveSurveyHandler()
+            if (currentSurveySaving.status === 200) {
+              dispatch(resetCurrentSurveySettings())
+              dispatch(updateSetting('loader', { title: 'Opening', visible: true }))
+              await openExternalFile(uri)
+            }
+            else errorHandler(currentSurveySaving.status)
+            dispatch(updateSetting('loader', { visible: false }))
+          }
+        }
+        else {
+          dispatch(updateSetting('loader', { title: 'Opening', visible: true }))
+          await openExternalFile(uri)
+        }
+      else errorHandler(isLoaded.status)
+      dispatch(updateSetting('loader', { visible: false }))
+    }
+  }, [])
+
   //First useEffect to get all app pre-settings - renders once on app launch!
   useEffect(() => {
+
     //listener if internet is on
     const netStatus = NetInfo.addEventListener(state => {
       dispatch(loadSession({ isInternetOn: state.isInternetReachable }))
     })
+    const recievedUrl = Linking.addEventListener('url', (url) => loadExternalSurvey(url.url))
 
     const initialLoad = async () => {
+      const initialUrl = await Linking.getInitialURL()
+      //console.log('Link ', initialUrl)
+
       //initialize db and get onboarding values
       const onBoard = await initDataBase()
       if (onBoard !== null) {
         dispatch(updateOnboarding(JSON.parse(onBoard)))
       }
       // check if survey is loaded and dispatch state
+      if (initialUrl !== null)
+        await loadExternalSurvey(initialUrl)
       const isLoaded = await isSurveyLoaded()
       if (isLoaded.status === 200)
         if (isLoaded.isLoaded) {
@@ -64,6 +119,7 @@ export const AppNavigator = () => {
             syncTime: isLoaded.syncTime,
           }))
         }
+
       const isInternetOn = (await checkConnection()).status === 200
       //try to get info from current session if user is signed in, or try to sign in silently
       const session = await getSession()
@@ -90,6 +146,7 @@ export const AppNavigator = () => {
     return () => {
       netStatus()
       componentMounted.current = false
+      recievedUrl.remove()
     }
   }, [])
 
@@ -102,6 +159,7 @@ export const AppNavigator = () => {
           headerShown: false,
           animation: 'fade'
         }}>
+        {showOnboarding ? <Stack.Screen name='Onboarding' component={OnboardingScreen} /> : null}
         {surveyLoaded ? (
           <>
             <Stack.Group>
@@ -122,13 +180,11 @@ export const AppNavigator = () => {
               header: props => <TopBar {...props} />
             }}>
               <Stack.Screen name='Settings' component={SettingsScreen} />
-              <Stack.Screen name='SettingDetails' component={SettingDetails} />
             </Stack.Group>
           </>
         ) : (
           <>
             <Stack.Group>
-              {showOnboarding ? <Stack.Screen name='Onboarding' component={OnboardingScreen} /> : null}
               <Stack.Screen name='Home' component={HomeBottomTabs} initialParams={{ homeScreenCloud: homeScreenCloud }} />
             </Stack.Group>
             <Stack.Group screenOptions={{ presentation: 'modal' }}>
@@ -136,6 +192,13 @@ export const AppNavigator = () => {
             </Stack.Group>
           </>
         )}
+        <Stack.Group screenOptions={{
+          headerShown: true,
+          animation: 'fade_from_bottom',
+          header: props => <TopBar {...props} />
+        }}>
+          <Stack.Screen name='SettingDetails' component={SettingDetails} />
+        </Stack.Group>
       </Stack.Navigator >
     )
 }

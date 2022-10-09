@@ -8,18 +8,19 @@ import { errorHandler } from '../errorHandler'
 import { useDispatch } from 'react-redux'
 import { updateSetting, loadSurveySettings } from '../../store/actions/settings'
 import DocumentPicker from 'react-native-document-picker'
+import FileListItemMenu from '../_Stateless/SurveyList/FileListItemMenu'
+import HeaderOverflowMenu from '../_Stateless/SurveyList/HeaderOverflowMenu'
 
 
 const Header = ({ navigation, options }) => {
     const navigateToCreate = () => navigation.navigate('CreateSurvey')
+    const navigateToExportedFiles = () => navigation.navigate('SettingDetails', { setting: 'exportedFiles' })
     const dispatch = useDispatch()
-
-    //FOR dev purposes ONLY. Database control and test point generator
-   
 
     const openExternalSurveyHandler = async () => {
         try {
             const externalFile = await DocumentPicker.pickSingle({ allowMultiSelection: false, type: 'application/json' })
+            console.log(externalFile)
             dispatch(updateSetting('loader', { visible: true, title: 'Opening' }))
             const extSurvey = await surveyLoader(externalFile.uri, 'external', externalFile.name)
             if (extSurvey.status === 200)
@@ -49,10 +50,10 @@ const Header = ({ navigation, options }) => {
                 barStyle='light-content' />
             <Icon pack='cp' name='logo-text' style={styles.logo} fill={'#fff'} />
             <View style={styles.icons}>
-                <SingleIconButton
-                    color='#fff'
-                    iconName='folder'
-                    onPress={openExternalSurveyHandler} />
+                <HeaderOverflowMenu
+                    menuItems={[
+                        { title: 'Open ...', icon: 'folder', onPress: openExternalSurveyHandler },
+                        { title: 'Exported files', icon: 'code-download', onPress: navigateToExportedFiles }]} />
                 <SingleIconButton
                     color='#fff'
                     iconName='plus'

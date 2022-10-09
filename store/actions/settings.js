@@ -31,5 +31,5 @@ export const loadSession = (session) => {
 }
 
 export const updateOnboarding = (onboarding) => {
-    return { type: UPDATE_ONBOARDING, main: onboarding.main, map: onboarding.map, editTestPoint: onboarding.editTestPoint, editBond: onboarding.editBond, editReferenceCell: onboarding.editReferenceCell, potentialTypes: onboarding.potentialTypes }
+    return { type: UPDATE_ONBOARDING, main: onboarding.main, map: onboarding.map, editTestPoint: onboarding.editTestPoint, editBond: onboarding.editBond, editReferenceCell: onboarding.editReferenceCell, potentialTypes: onboarding.potentialTypes, versionOnboarding: onboarding.versionOnboarding }
 }

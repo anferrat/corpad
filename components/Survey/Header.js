@@ -39,6 +39,9 @@ const Header = (props) => {
             <View style={styles.rightSide}>
                 <CloudButton />
                 <SingleIconButton
+                    iconName='eye'
+                    onPress={navigateToDevScreen} />
+                <SingleIconButton
                     iconName='search'
                     onPress={navigateToSearch} />
                 <SingleIconButton
