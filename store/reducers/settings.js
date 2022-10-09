@@ -30,6 +30,7 @@ const initialState = {
         editBond: false,
         editReferenceCell: false,
         potentialTypes: false,
+        versionOnboarding: null, // displays onboarding screen after updates
     },
     //all currentSurvey props are only for DISPLAY purposes. don't use it for operations with data
     currentSurvey: {
@@ -109,6 +110,7 @@ const settings = (state = initialState, action) => {
                     editBond: action.editBond ?? state.onboarding.editBond,
                     editReferenceCell: action.editReferenceCell ?? state.onboarding.editReferenceCell,
                     potentialTypes: action.potentialTypes ?? state.onboarding.potentialTypes,
+                    versionOnboarding: action.versionOnboarding ?? state.onboarding.versionOnboarding
                 }
             }
         default:

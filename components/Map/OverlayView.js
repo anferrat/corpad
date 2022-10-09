@@ -13,7 +13,7 @@ const OverlayView = (props) => {
             <SearchField
                 insets={insets}
                 zoomToTestPoint={props.zoomToTestPoint} />
-            <View style={{ ...styles.buttonBar, top: 75 + insets.top }}>
+            <View style={{ ...styles.buttonBar, top: 70 + insets.top }}>
                 <MyLocationButton
                     zoomToMyLocation={props.zoomToMyLocation} />
                 <SatelliteButton />

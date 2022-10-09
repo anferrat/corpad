@@ -757,7 +757,7 @@ export const initDataBase = async () => {
     }
 
     const settings = await sendRequest('SELECT', 'SETTINGS')
-    const defaultOnboarding = JSON.stringify({ main: true, editTestPoint: true, map: true, editBond: true, editReferenceCell: true, potentialTypes: true })
+    const defaultOnboarding = JSON.stringify({ main: true, editTestPoint: true, map: true, editBond: true, editReferenceCell: true, potentialTypes: true, versionUpdating: null })
     if (settings.status !== 200) {
         const update = await sendRequest('INSERT', 'SETTINGS', { pipelineNameAsDefault: true, defaultPotentialUnit: 0, autoCreatePotentials: 1, onboarding: defaultOnboarding })
         if (update.status === 200)

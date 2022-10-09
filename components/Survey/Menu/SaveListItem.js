@@ -54,7 +54,6 @@ const SaveListItem = (props) => {
 
     return (
         <ListItem
-        
             disabled={savingInProgress}
             style={styles.listItem}
             title='Save changes and exit'

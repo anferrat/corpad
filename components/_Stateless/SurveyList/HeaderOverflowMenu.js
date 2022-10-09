@@ -1,19 +1,15 @@
 import React, { useState } from 'react'
-import { OverflowMenu, MenuItem, Icon, Button } from '@ui-kitten/components'
+import { OverflowMenu, MenuItem, Icon, Text } from '@ui-kitten/components'
 import { View, StyleSheet } from 'react-native'
-import { basic, basic300 } from '../../../styles/GlobalStyle'
+import { basic300, primary } from '../../../styles/GlobalStyle'
 import SingleIconButton from '../SingleIconButton'
 
 
 const renderIcon = (iconName) => iconName ? (props) => (
-    <Icon {...props} name={iconName} />
+    <Icon {...props} fill={primary} name={iconName} />
 ) : undefined
 
-const MoreItemsIcon = (props) => (
-    <Icon {...props} name='more-vertical' />
-)
-
-const FileListItemMenu = (props) => {
+const HeaderOverflowMenu = (props) => {
     const [visible, setVisible] = useState(false)
     const onPressAction = React.useCallback((onPress) => {
         setVisible(false)
@@ -25,14 +21,15 @@ const FileListItemMenu = (props) => {
     const renderAnchor = React.useCallback(() =>
         <View>
             <SingleIconButton
-                color={basic}
-                iconName='more-vertical'
+                color='#fff'
+                iconName='settings'
                 onPress={setVisible.bind(this, true)} />
         </View>, [setVisible])
+
     return (
         <View>
             <OverflowMenu
-                placement={props.placement ?? 'left start'}
+                placement='bottom end'
                 appearance='noDivider'
                 visible={visible}
                 anchor={renderAnchor}
@@ -44,7 +41,7 @@ const FileListItemMenu = (props) => {
     )
 }
 
-export default FileListItemMenu
+export default HeaderOverflowMenu
 
 const styles = StyleSheet.create({
     button: {

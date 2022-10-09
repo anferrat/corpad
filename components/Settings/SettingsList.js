@@ -4,7 +4,7 @@ import { StyleSheet } from 'react-native'
 import ListItem from '../_Stateless/ListItemSettings'
 import { Text } from '@ui-kitten/components'
 import { useDispatch } from 'react-redux'
-import { loadSettings } from '../../store/actions/settings'
+import { loadSettings, updateSetting } from '../../store/actions/settings'
 import { warningHandler } from '../errorHandler'
 import { resetSurvey } from '../../database/db'
 
@@ -36,8 +36,10 @@ const SettingsList = (props) => {
     const emergencyExit = async () => {
         const confirm = await warningHandler(12, 'Exit', 'Cancel')
         if (confirm) {
-            resetSurvey()
+            dispatch(updateSetting('loader', { visible: true, title: 'Exiting' }))
+            await resetSurvey()
             dispatch(loadSettings({
+                loader: { visible: false, title: null, text: null },
                 currentSurvey: {
                     name: null,
                     fileName: null,
@@ -66,8 +68,8 @@ const SettingsList = (props) => {
             <Text style={styles.title} appearance='hint'>Other</Text>
             <ListItem
                 iconName='log-out'
-                title='Emergency exit'
-                subtitle='Exit to the main screen without saving changes to the file'
+                title='Exit without saving'
+                subtitle='Exit to the main screen. All changes made after last sync will not be saved in file. Use with caution.'
                 onPress={emergencyExit}
             />
         </ScrollView>

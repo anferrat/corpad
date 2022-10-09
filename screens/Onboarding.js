@@ -1,19 +1,63 @@
 import React from 'react'
 import { Icon } from '@ui-kitten/components'
 import { View, StyleSheet, StatusBar } from 'react-native'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { updateOnboarding } from '../store/actions/settings'
 import Onboarding from 'react-native-onboarding-swiper'
 import { basic300, primary } from '../styles/GlobalStyle'
 import SingleIconButton from '../components/_Stateless/SingleIconButton'
 import { markAsVisited } from '../components/Modals/Onboarding/onboardingRequests'
+import { ONBOARDING_VERSION } from '../components/Modals/Onboarding/onboardingRequests'
+import { onboardingCompleted } from '../components/Modals/Onboarding/onboardingRequests'
 
+// onBoarding screen can display either mainPages when app runs for the first time, or astVersionPages when new big update has been released
 
 const OnboardingScreen = () => {
+    const displayMain = useSelector(state => state.settings.onboarding.main)
     const dispatch = useDispatch()
+    // Shows upon firts app launch
+    const mainPages = [
+        {
+            backgroundColor: basic300,
+            image: <Icon name='corpad-logo' fill={primary} pack='cp' style={styles.icon} />,
+            title: 'Welcome to Corpad',
+            subtitle: 'Application for corrosion professionals that allows you to create and manage pipeline surveys with your mobile device'
+        },
+        {
+            backgroundColor: basic300,
+            image: <Icon name='onboarding-create' pack='cp' fill={primary} style={styles.icon} />,
+            title: 'Create',
+            subtitle: 'Create new surveys "on the go" or import your data from spreadsheets'
+        },
+        {
+            backgroundColor: basic300,
+            image: <Icon name='onboarding-navigate' pack='cp' fill={primary} style={styles.icon} />,
+            title: 'Navigate',
+            subtitle: `Display test points on the map and import its location to other apps for navigation`
+        },
+        {
+            backgroundColor: basic300,
+            image: <Icon name='onboarding-export' pack='cp' fill={primary} style={styles.icon} />,
+            title: 'Export',
+            subtitle: 'Export your data to spreadsheets or store them as JSON files on your device and cloud storage'
+        }
+    ]
+    // Shows after onboarding version update changes
+    const lastVersionPages = [
+        {
+            backgroundColor: basic300,
+            image: <Icon name='corpad-logo' fill={primary} pack='cp' style={styles.icon} />,
+            title: '1.1 update is live',
+            subtitle: 'Enjoy extra fetaures and more stability'
+        },
+    ]
+
+
     const finishOnboarding = async () => {
-        dispatch(updateOnboarding({ main: false }))
-        await markAsVisited('main')
+        dispatch(updateOnboarding({ main: false, versionOnboarding: ONBOARDING_VERSION }))
+        if (displayMain)
+            await markAsVisited('main')
+        await onboardingCompleted()
     }
     return (
         <>
@@ -23,32 +67,7 @@ const OnboardingScreen = () => {
                 controlStatusBar={false}
                 onSkip={finishOnboarding}
                 onDone={finishOnboarding}
-                pages={[
-                    {
-                        backgroundColor: basic300,
-                        image: <Icon name='corpad-logo' fill={primary} pack='cp' style={styles.icon} />,
-                        title: 'Welcome to Corpad',
-                        subtitle: 'Application for corrosion professionals that allows you to create and manage pipeline surveys with your mobile device'
-                    },
-                    {
-                        backgroundColor: basic300,
-                        image: <Icon name='onboarding-create' pack='cp' fill={primary} style={styles.icon} />,
-                        title: 'Create',
-                        subtitle: 'Create new surveys "on the go" or import your data from spreadsheets'
-                    },
-                    {
-                        backgroundColor: basic300,
-                        image: <Icon name='onboarding-navigate' pack='cp' fill={primary} style={styles.icon} />,
-                        title: 'Navigate',
-                        subtitle: `Display test points on the map and import its location to other apps for navigation`
-                    },
-                    {
-                        backgroundColor: basic300,
-                        image: <Icon name='onboarding-export' pack='cp' fill={primary} style={styles.icon} />,
-                        title: 'Export',
-                        subtitle: 'Export your data to spreadsheets or store them as JSON files on your device and cloud storage'
-                    }
-                ]}
+                pages={displayMain ? mainPages : lastVersionPages}
             />
         </>
     )

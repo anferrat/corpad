@@ -1,6 +1,7 @@
-import React, { useState, useRef, useEffect } from 'react'
+import React, { useState, useRef, useEffect, useContext } from 'react'
 import { Autocomplete, AutocompleteItem, Spinner, Icon } from '@ui-kitten/components'
 import { StyleSheet, View, Pressable, StatusBar, ActivityIndicator } from 'react-native'
+import { BS } from '../../App'
 import { search } from '../_Stateless/Icons'
 import { sendRequest } from '../../database/db'
 import { useDispatch } from 'react-redux'
@@ -8,6 +9,8 @@ import { setActiveMarker } from '../../store/actions/map'
 import { iconHandlerItem, getStatusProps } from '../customFunctions'
 import { basic, primary } from '../../styles/GlobalStyle'
 import { errorHandler } from '../errorHandler'
+import SingleIconButton from '../_Stateless/SingleIconButton'
+import { updateSetting } from '../../store/actions/settings'
 
 const getMapIconSVG = (icon, status) => <Icon name={'map-' + icon} pack='cp' style={styles.icon} fill={getStatusProps(status).color} />
 
@@ -18,7 +21,15 @@ const searchMarkerRequest = async (string) => {
 }
 
 const SearchField = (props) => {
+    const bottomSheet = useContext(BS)
     const dispatch = useDispatch()
+
+    const openMenuHandler = () => {
+        if (bottomSheet.current.snapToIndex)
+            bottomSheet.current.snapToIndex(2)
+        else errorHandler(503)
+        dispatch(updateSetting('bottomSheetContent', { itemType: null, content: 'menu' }))
+    }
     const [searchString, setSearchString] = useState('')
     const [searching, setSearching] = useState(false)
     const [foundMarkers, setFoundMarkers] = useState([])
@@ -32,11 +43,25 @@ const SearchField = (props) => {
         dispatch(setActiveMarker(null))
     }, [setSearchString, searchInput, dispatch])
 
-    const resetIcon = React.useCallback(() =>
-        <Pressable onPress={resetSearch} hitSlop={20} style={styles.resetIconPressable}>
-            <Icon style={styles.resetIcon} fill={primary} name='close-outline' />
+
+    const resetIcon = React.useCallback((props) =>
+        <Pressable onPress={resetSearch}>
+            <Icon {...props} fill={primary} name='close-outline' />
         </Pressable>
         , [resetSearch])
+
+    const accessoryIcon = React.useCallback((props) => (
+        <View style={styles.accessory}>
+            {searchString === '' ? search(props) : resetIcon(props)}
+            <SingleIconButton
+                style={styles.menuIcon}
+                iconName='more-vertical'
+                onPress={openMenuHandler}
+                size='small'
+            />
+        </View>
+    ), [searchString === ''])
+
 
     useEffect(() => {
         componentMounted.current = true
@@ -127,11 +152,10 @@ const SearchField = (props) => {
                 placeholder='Search by name'
                 accessoryLeft={logoIcon}
                 style={styles.autocompleteField}
-                accessoryRight={searchString === '' ? search : null}
+                accessoryRight={accessoryIcon}
                 size='large'>
                 {renderOptions}
             </Autocomplete>
-            {searchString !== '' ? resetIcon() : null}
         </View>
     )
 }
@@ -146,21 +170,18 @@ const styles = StyleSheet.create({
     },
     autocompleteField: {
         elevation: 5,
+        borderRadius: 15
     },
     icon: {
         width: 25,
         height: 25
     },
-    resetIconPressable:
-    {
-        position: 'absolute',
-        right: 28,
-        top: 12,
-        zIndex: 10
+    menuIcon: {
+        marginVertical: -10
     },
-    resetIcon: {
-        width: 24,
-        height: 24,
+    accessory: {
+        flexDirection: 'row',
+        alignItems: 'center'
     }
 })
 

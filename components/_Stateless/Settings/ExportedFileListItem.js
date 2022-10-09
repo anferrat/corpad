@@ -45,7 +45,7 @@ const ExportedFileListItem = (props) => {
         }}>
             <Pressable style={{ ...androidStyle.ConnectionCard, marginVertical: 0 }} onPress={props.menuItems[0].onPress} android_ripple={{ color: basic200 }}>
                 <View style={styles.topView}>
-                    <Icon name={props.type === 'kml' ? 'pin-outline' : 'file-text-outline'} style={styles.fileIcon} fill={basic} />
+                    <Icon name={props.type === 'kml' ? 'kml-file' : 'file-text-outline'} pack={props.type === 'kml' ? 'cp' : undefined} style={styles.fileIcon} fill={basic} />
                     <View style={styles.titleView}>
                         <Text category="p1">{props.fileName}</Text>
                         <Text category="c1" appearance="hint">{fileSize.value} {fileSize.unit}, {getFormattedDate(props.mtime.getTime())}</Text>

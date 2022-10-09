@@ -13,7 +13,7 @@ const timeToString = (time) => time < 10 ? '0' + time : time.toString()
 
 export const fileNameGen = (base, type) => {
     const d = new Date()
-    return `${base}_${d.getFullYear()}-${monthToString(d.getMonth())}-${timeToString(d.getDate())}_${timeToString(d.getHours())}-${timeToString(d.getMinutes())}.${type}`
+    return `${base}_${d.getFullYear()}-${monthToString(d.getMonth())}-${timeToString(d.getDate())}_${timeToString(d.getHours())}-${timeToString(d.getMinutes())}-${timeToString(d.getSeconds())}.${type}`
 }
 
 export const getTapSettings = (tapSetting, tapCoarse, tapFine, tapValue) => {
