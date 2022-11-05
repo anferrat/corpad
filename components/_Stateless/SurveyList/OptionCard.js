@@ -2,11 +2,11 @@
 import React from 'react'
 import { View, StyleSheet, Pressable } from 'react-native'
 import { Icon, Text } from '@ui-kitten/components'
-import { basic, basic200, primary, success } from '../../../styles/GlobalStyle'
+import { androidRipple, basic, basic200, primary, success } from '../../../styles/GlobalStyle'
 
 const OptionCard = (props) => {
     return (
-        <Pressable style={{ ...styles.mainView, backgroundColor: props.selected ? basic200 : '#fff' }} android_ripple={{ color: basic200 }} onPress={props.onPress} disabled={props.disabled}>
+        <Pressable style={{ ...styles.mainView, backgroundColor: props.selected ? basic200 : '#fff' }} android_ripple={androidRipple} onPress={props.onPress.bind(this, props.isCloudValue)} disabled={props.disabled}>
             <View style={styles.topRow}>
                 {props.selected ?
                     <Icon name={'checkmark-circle-2'} style={styles.checkIcon} fill={success} />
@@ -21,7 +21,7 @@ const OptionCard = (props) => {
     )
 }
 
-export default OptionCard
+export default React.memo(OptionCard)
 
 const styles = StyleSheet.create({
     mainView: {

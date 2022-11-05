@@ -38,7 +38,7 @@ const ListHeader = (props) => {
                 <View style={styles.reading}>
                     <ReadingsHeaderButton
                         dataType={props.dataType}
-                        openSheet={openSheetHandler.bind(this, 'readings', props.dataType === 'RECTIFIER' ? 0 : 4)} />
+                        openSheet={openSheetHandler.bind(this, 'readings', props.dataType === 'RECTIFIER' ? 1 : 4)} />
                 </View>
             </View>
         )

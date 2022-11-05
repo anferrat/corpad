@@ -35,8 +35,9 @@ const Filter = (props) => {
                 dataType={props.dataType}
                 filterViewIndex={i + 1}
                 filter={filter[i].property} />)}
-
-            <FilterButtons dataType={props.dataType} closeSheet={props.closeSheet} />
+            <FilterButtons
+                dataType={props.dataType}
+                closeSheet={props.closeSheet} />
         </>
     else
         return null

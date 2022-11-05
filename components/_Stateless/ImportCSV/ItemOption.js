@@ -1,12 +1,12 @@
 import React from 'react'
 import { Text, Icon } from '@ui-kitten/components'
 import { StyleSheet, Pressable, View } from 'react-native'
-import { basic200, primary, basic, success } from '../../../styles/GlobalStyle'
+import { primary, basic, success, androidRipple } from '../../../styles/GlobalStyle'
 
 const ItemOption = (props) => {
     return (
         <Pressable
-            android_ripple={{ color: basic200 }}
+            android_ripple={androidRipple}
             style={styles.pressable}
             onPress={props.onPress}>
             <Icon name={'checkmark-circle-2'} style={props.selected ? styles.checkIcon : styles.hidden} fill={success} />

@@ -1,5 +1,5 @@
 
-import { UPDATE_SETTING, LOAD_SETTINGS, SET_SURVEY_SAVING_STATUS, LOAD_SURVEY_SETTINGS, RESET_CURRENT_SURVEY_SETTINGS, LOAD_SESSION_STATE, UPDATE_ONBOARDING } from "../actions/settings"
+import { UPDATE_SETTING, LOAD_SETTINGS, SET_SURVEY_SAVING_STATUS, LOAD_SURVEY_SETTINGS, RESET_CURRENT_SURVEY_SETTINGS, LOAD_SESSION_STATE, UPDATE_ONBOARDING, SET_EXPORT_MODAL } from "../actions/settings"
 
 const initialState = {
     bottomSheetContent: {  //BottomSheet component
@@ -14,7 +14,7 @@ const initialState = {
     exportModal: { // ExportModalComponent
         visible: false,
         fileUrl: undefined,
-        mimeType: undefined
+        mimeType: undefined,
     },
     session: {
         userName: null,
@@ -113,6 +113,15 @@ const settings = (state = initialState, action) => {
                     versionOnboarding: action.versionOnboarding ?? state.onboarding.versionOnboarding
                 }
             }
+        case SET_EXPORT_MODAL: 
+            return {
+                ...state,
+                exportModal: {
+                    visible: action.visible ?? state.exportModal.visible,
+                    fileUrl: action.fileUrl ?? state.exportModal.fileUrl,
+                    mimeType: action.mimeType ?? state.exportModal.mimeType,
+                }
+        }
         default:
             return state
     }

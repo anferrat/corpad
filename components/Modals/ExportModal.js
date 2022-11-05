@@ -8,15 +8,15 @@ import { openInIcon, shareIcon } from '../_Stateless/Icons'
 import { openIn } from '../_nativeFeatures/OpenIn'
 import { shareWith } from '../_nativeFeatures/Share'
 
-const ExportModal = () => {
+const ExportModal = (props) => {
     const dispatch = useDispatch()
     const exportModal = useSelector(state => state.settings.exportModal)
     const hideModal = React.useCallback(() => dispatch(updateSetting('exportModal', { visible: false })), [dispatch])
     const fileName = exportModal.fileUrl ? exportModal.fileUrl.substring(exportModal.fileUrl.lastIndexOf('/') + 1, exportModal.fileUrl.length) : ''
+
     const navigateToExportedFiles = React.useCallback(() => {
         hideModal()
-        if (exportModal.navigateToExportedFiles)
-            exportModal.navigateToExportedFiles()
+        props.navigationRef.navigate('SettingDetails', { setting: 'exportedFiles' })
     }, [exportModal.navigateToExportedFiles])
     return (
         <Pressable style={exportModal.visible ? styles.mainView : styles.hidden} onPress={hideModal}>

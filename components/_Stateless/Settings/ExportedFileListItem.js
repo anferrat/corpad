@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from "react"
 import { StyleSheet, Pressable, View, Animated } from "react-native"
 import { Text, Icon } from "@ui-kitten/components"
-import { basic200, basic } from "../../../styles/GlobalStyle"
+import { basic, androidRipple } from "../../../styles/GlobalStyle"
 import FileListItemMenu from "../SurveyList/FileListItemMenu"
 import { androidStyle } from "../../../styles/GlobalStyle"
 import { warningHandler } from "../../errorHandler"
@@ -43,21 +43,30 @@ const ExportedFileListItem = (props) => {
             }),
             transform: [{ scale: scale.current }]
         }}>
-            <Pressable style={{ ...androidStyle.ConnectionCard, marginVertical: 0 }} onPress={props.menuItems[0].onPress} android_ripple={{ color: basic200 }}>
+            <Pressable
+                style={{ ...androidStyle.ConnectionCard, marginVertical: 0 }}
+                onPress={props.menuItems[0].onPress}
+                android_ripple={androidRipple}>
                 <View style={styles.topView}>
-                    <Icon name={props.type === 'kml' ? 'kml-file' : 'file-text-outline'} pack={props.type === 'kml' ? 'cp' : undefined} style={styles.fileIcon} fill={basic} />
-                    <View style={styles.titleView}>
-                        <Text category="p1">{props.fileName}</Text>
-                        <Text category="c1" appearance="hint">{fileSize.value} {fileSize.unit}, {getFormattedDate(props.mtime.getTime())}</Text>
+                    <Icon name={props.type === 'kml' ? 'kml-file' : 'file-text-outline'}
+                        pack={props.type === 'kml' ? 'cp' : undefined}
+                        style={styles.fileIcon}
+                        fill={basic} />
+                    <View
+                        style={styles.titleView}>
+                        <Text category="p1" numberOfLines={1} ellipsizeMode={'tail'}>{props.fileName}</Text>
+                        <Text
+                            category="c1" appearance="hint">{fileSize.value} {fileSize.unit}, {getFormattedDate(props.mtime.getTime())}</Text>
                     </View>
-                    <FileListItemMenu menuItems={[...props.menuItems, { title: 'Delete', onPress: onDeleteHandler, icon: 'trash-outline' }]} />
+                    <FileListItemMenu
+                        menuItems={[...props.menuItems, { title: 'Delete', onPress: onDeleteHandler, icon: 'trash-outline' }]} />
                 </View>
             </Pressable>
         </Animated.View>
     )
 }
 
-export default ExportedFileListItem
+export default React.memo(ExportedFileListItem, (prev, next) => prev.path === next.path)
 
 const styles = StyleSheet.create({
     plusIcon: {

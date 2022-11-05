@@ -113,7 +113,7 @@ const map = (state = initialState, action) => {
                 ...state,
                 updating: null,
                 activeMarker: state.activeMarker.id === action.id && state.activeMarker.dataType === action.dataType ? initialState.activeMarker : state.activeMarker,
-                markers: state.markers.filter(marker => (marker.id !== action.id && marker.dataType === action.dataType)),
+                markers: state.markers.filter(marker => (marker.id !== action.id || marker.dataType !== action.dataType)),
             }
         case LOAD_MARKERS:
             return (

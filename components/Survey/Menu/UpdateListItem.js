@@ -1,6 +1,5 @@
 import React from 'react'
-import { ListItem } from '@ui-kitten/components'
-import { styles } from './MenuSheet'
+import ListItem from '../../_Stateless/ListItemMenu'
 import { cloud, drive } from '../../_Stateless/Icons'
 import { errorHandler } from '../../errorHandler'
 import { useDispatch, useSelector } from 'react-redux'
@@ -35,11 +34,10 @@ const UpdateListItem = (props) => {
     return (
         <ListItem
             disabled={currentSurvey.savingInProgress}
-            style={styles.listItem}
             title='Save changes'
-            description={currentSurvey.savingInProgress ? 'Saving...' : (currentSurvey.lastSyncTime === null ? 'Never synced' : `Last synced: ${getFormattedDate(currentSurvey.lastSyncTime)}`)}
+            subtitle={currentSurvey.savingInProgress ? 'Saving...' : (currentSurvey.lastSyncTime === null ? 'Never saved' : `Last synced: ${getFormattedDate(currentSurvey.lastSyncTime)}`)}
             onPress={onSaveHandler}
-            accessoryLeft={currentSurvey.savingInProgress ? <ActivityIndicator color={primary} /> : currentSurvey.isCloudSurvey ? cloud : drive} />
+            icon={currentSurvey.savingInProgress ? 'activityIndicator' : 'save-outline'} />
     )
 }
 

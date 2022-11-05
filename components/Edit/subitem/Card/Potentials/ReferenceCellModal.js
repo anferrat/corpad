@@ -30,6 +30,7 @@ const ReferenceCellModal = (props) => {
         <Modal
             style={styles.modal}
             animationType="slide"
+            statusBarTranslucent={true}
             onRequestClose={props.dismiss}
             visible={props.visible}>
             <HeaderTitle

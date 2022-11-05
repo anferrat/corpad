@@ -1,5 +1,5 @@
 import React from 'react'
-import { ToastAndroid, View } from 'react-native'
+import { ToastAndroid, StyleSheet } from 'react-native'
 import ExportedFileListItem from '../../_Stateless/Settings/ExportedFileListItem'
 import { clearExported, getExportedFilesMetadata } from '../../../files/local/fsExportedFiles'
 import { useState } from 'react'
@@ -42,18 +42,20 @@ const ExportedFilesList = (props) => {
     }, [setFiles])
 
     const deleteAllHandler = React.useCallback(async () => {
-        const confirm = await warningHandler(45, 'Delete all')
-        if (confirm) {
-            const deleteAll = await clearExported()
-            if (deleteAll.status === 200) {
-                ToastAndroid.show('All files were deleted', ToastAndroid.SHORT)
-                setFiles(initFiles)
+        if (!refreshing) {
+            const confirm = await warningHandler(45, 'Delete all')
+            if (confirm) {
+                const deleteAll = await clearExported()
+                if (deleteAll.status === 200) {
+                    ToastAndroid.show('All files were deleted', ToastAndroid.SHORT)
+                    setFiles(initFiles)
 
+                }
+                else
+                    errorHandler(deleteAll.status)
             }
-            else
-                errorHandler(deleteAll.status)
         }
-    }, [setFiles])
+    }, [setFiles, refreshing])
 
     const renderItem = React.useCallback(({ item }) => (
         <ExportedFileListItem
@@ -84,16 +86,22 @@ const ExportedFilesList = (props) => {
     useEffect(() => {
         fetchFiles()
     }, [])
+
+    const keyExtractor = React.useCallback(item => item.path, [])
+
     return (
         <>
-            {refreshing ? <LoadingView /> : (files.length > 0 ? <FlatList
-                contentContainerStyle={{ paddingBottom: 76 }}
-                onRefresh={fetchFiles}
-                refreshing={refreshing}
-                data={files}
-                renderItem={renderItem}
-                keyExtractor={item => item.path}
-            /> : <EmptyExportedFilesList />)}
+            <LoadingView loading={refreshing}>
+                <FlatList
+                    contentContainerStyle={styles.list}
+                    onRefresh={fetchFiles}
+                    refreshing={refreshing}
+                    data={files}
+                    renderItem={renderItem}
+                    ListEmptyComponent={EmptyExportedFilesList}
+                    keyExtractor={keyExtractor}
+                />
+            </LoadingView>
             <MainActionButton
                 title='Delete all'
                 disabled={(refreshing && files.length === 0) || files.length === 0}
@@ -106,3 +114,9 @@ const ExportedFilesList = (props) => {
 }
 
 export default ExportedFilesList
+
+const styles = StyleSheet.create({
+    list: {
+        paddingBottom: 76
+    }
+})

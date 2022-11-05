@@ -1,21 +1,20 @@
 import React from 'react'
 import { View, StyleSheet } from 'react-native'
-import { Divider, Text } from '@ui-kitten/components'
-import { basic1000 } from '../../../styles/GlobalStyle'
+import { Text } from '@ui-kitten/components'
 import { useSelector } from 'react-redux'
 import EditNameButton from './EditNameButton'
 
 
-const SurveyName = (props) => {
+const SurveyName = () => {
     const surveyName = useSelector(state => state.settings.currentSurvey.name)
     return (
-        <>
-            <View style={styles.surveyTitle}>
-                <Text category='h3' ellipsizeMode='tail' numberOfLines={1} style={styles.title}>{surveyName}</Text>
-                <EditNameButton surveyName={surveyName} />
+        <View style={styles.surveyTitle}>
+            <View style={styles.titleView}>
+                <Text appearance='hint' category='label'>Survey name</Text>
+                <Text category='h5' ellipsizeMode='tail' numberOfLines={1} style={styles.title}>{surveyName}</Text>
             </View>
-            <Divider style={styles.divider} />
-        </>
+            <EditNameButton surveyName={surveyName} />
+        </View>
     )
 }
 
@@ -24,14 +23,17 @@ export default SurveyName
 const styles = StyleSheet.create({
     surveyTitle: {
         flexDirection: 'row',
+        alignItems: 'flex-end',
         justifyContent: 'space-between',
         paddingLeft: 6,
-    },
-    divider: {
-        marginVertical: 12
+        paddingBottom: 24,
     },
     title: {
         flex: 1,
-        marginRight: 24
+        marginRight: 24,
+        marginLeft: 12,
     },
+    titleView: {
+        flex: 1
+    }
 })

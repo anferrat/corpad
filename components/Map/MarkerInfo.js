@@ -2,14 +2,25 @@ import React, { useEffect, useRef } from 'react'
 import { Text, Icon } from '@ui-kitten/components'
 import { Pressable, View, StyleSheet, Animated, Linking } from 'react-native'
 import { iconHandlerItem, subtitleHandlerItem, getStatusProps } from '../customFunctions.js'
-import { basic200, basic } from '../../styles/GlobalStyle.js'
+import { basic, androidRipple } from '../../styles/GlobalStyle.js'
 import MapButton from '../_Stateless/Map/MapButton.js'
 
 const getMapIconSVG = (icon, status) => <Icon name={'map-' + icon} pack='cp' style={styles.mainIcon} fill={getStatusProps(status).color} />
 
+//Android only
+const extMapHandler = async (lat, lng) => {
+    if (lat !== null && lng !== null) {
+        const url = 'geo:' + lat + ',' + lng + '?q=' + lat + ',' + lng
+        const supported = await Linking.canOpenURL(url)
+        if (supported)
+            await Linking.openURL(url)
+    }
+}
+
 const MarkerInfo = (props) => {
     const transY = useRef(new Animated.Value(props.uid === null ? 140 : 0))
     const hidden = props.uid === null || props.latitude === null || props.longitude === null || props.id === null || props.dataType === null
+
     useEffect(() => {
         if (hidden)
             Animated.timing(
@@ -32,15 +43,6 @@ const MarkerInfo = (props) => {
         }
     }, [props])
 
-    //Android only
-    const extMapHandler = async (lat, lng) => {
-        if (lat !== null && lng !== null) {
-            const url = 'geo:' + lat + ',' + lng + '?q=' + lat + ',' + lng
-            const supported = await Linking.canOpenURL(url)
-            if (supported)
-                await Linking.openURL(url)
-        }
-    }
     return (
         <>
             <Animated.View style={{
@@ -68,7 +70,7 @@ const MarkerInfo = (props) => {
                     outputRange: [1, 0]
                 })
             }}>
-                <Pressable android_ripple={{ color: basic200 }} style={styles.pressable} onPress={hidden ? null : props.navigateToView.bind(this, props.id, props.dataType)} onLongPress={props.zoomToTestPoint.bind(this, props.latitude, props.longitude)} disabled={hidden}>
+                <Pressable android_ripple={androidRipple} style={styles.pressable} onPress={hidden ? null : props.navigateToView.bind(this, props.id, props.dataType)} onLongPress={props.zoomToTestPoint.bind(this, props.latitude, props.longitude)} disabled={hidden}>
                     <View style={styles.subView}>
                         {getMapIconSVG(iconHandlerItem(props.dataType, props.testPointType), props.status)}
                         <View style={styles.titleView}>
@@ -91,7 +93,7 @@ const MarkerInfo = (props) => {
     )
 }
 
-export default MarkerInfo
+export default React.memo(MarkerInfo)
 
 const styles = StyleSheet.create({
     pressable: {

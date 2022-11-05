@@ -5,6 +5,7 @@ export const LOAD_SURVEY_SETTINGS = 'LOAD_SURVEY_SETTINGS'
 export const RESET_CURRENT_SURVEY_SETTINGS = 'RESET_CURRENT_SURVEY_SETTINGS'
 export const LOAD_SESSION_STATE = 'LOAD_SESSION_STATE'
 export const UPDATE_ONBOARDING = 'UPDATE_ONBOARDING'
+export const SET_EXPORT_MODAL = 'SET_EXPORT_MODAL'
 
 export const updateSetting = (setting, value) => {
     return { type: UPDATE_SETTING, setting: setting, value: value }
@@ -32,4 +33,8 @@ export const loadSession = (session) => {
 
 export const updateOnboarding = (onboarding) => {
     return { type: UPDATE_ONBOARDING, main: onboarding.main, map: onboarding.map, editTestPoint: onboarding.editTestPoint, editBond: onboarding.editBond, editReferenceCell: onboarding.editReferenceCell, potentialTypes: onboarding.potentialTypes, versionOnboarding: onboarding.versionOnboarding }
+}
+
+export const setExportModal = ({ visible, fileUrl, mimeType }) => {
+    return { type: SET_EXPORT_MODAL, visible: visible, fileUrl: fileUrl, mimeType: mimeType }
 }

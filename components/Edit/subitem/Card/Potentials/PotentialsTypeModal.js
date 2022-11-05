@@ -21,6 +21,7 @@ const PotentialTypesModal = (props) => {
     return (
         <Modal
             animationType="slide"
+            statusBarTranslucent={true}
             style={styles.modal}
             onRequestClose={props.dismiss}
             visible={props.visible}>

@@ -1,16 +1,17 @@
 import React from 'react'
 import { View, StyleSheet, ActivityIndicator } from 'react-native'
+import { Text } from '@ui-kitten/components'
 import { primary } from '../../../styles/GlobalStyle'
 
 const FooterLoader = (props) => {
-    if (props.visible)
+    if (props.count === 0)
+        return null
+    else
         return (
-            <View
-                style={props.visible ? styles.main : styles.hidden}>
-                <ActivityIndicator color={primary} size='large'/>
+            <View style={styles.main}>
+                {props.loadingMore ? <ActivityIndicator color={primary} size='large' /> : (!props.refreshing ? <Text style={styles.textStyle} appearance='hint' category='s1'>Total: {props.count}</Text> : null)}
             </View>
         )
-    else return null
 }
 
 export default FooterLoader
@@ -18,12 +19,11 @@ export default FooterLoader
 const styles = StyleSheet.create({
     main: {
         flex: 1,
-        justifyContent: 'center',
         alignItems: 'center',
-        flexDirection: 'row',
-        height: 50,
+        paddingHorizontal: 12,
+        paddingTop: 8
     },
-    hidden: {
-        display: 'none',
+    textStyle: {
+        alignSelf: 'flex-end',
     }
 })

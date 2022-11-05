@@ -69,6 +69,8 @@ const generateQuery = (QUERY_TYPE, DATA_TYPE, data) => {
             switch (data.table) {
                 case 'survey':
                     return { query: 'CREATE TABLE IF NOT EXISTS survey (id INTEGER PRIMARY KEY NOT NULL, uid TEXT, name TEXT, technician TEXT)', varArray: [] }
+                case 'calculators':
+                    return { query: 'CREATE TABLE IF NOT EXISTS calculators (id INTEGER PRIMARY KEY NOT NULL, timeCreated INTEGER, calculatorType TEXT, data TEXT, name TEXT, latitude REAL, longitude REAL)', varArray: [] }
                 case 'settings':
                     return { query: 'CREATE TABLE IF NOT EXISTS settings (id INTEGER PRIMARY KEY NOT NULL, pipelineNameAsDefault BOOLEAN, defaultPotentialUnit INTEGER, autoCreatePotentials BOOLEAN, isSurveyNew BOOLEAN, isCloud BOOLEAN, originalHash TEXT, fileName TEXT, cloudId TEXT, lastSync INTEGER, onboarding TEXT)', varArray: [] }
                 case 'defaultNames':
@@ -106,7 +108,9 @@ const generateQuery = (QUERY_TYPE, DATA_TYPE, data) => {
         case 'SELECT':
             switch (DATA_TYPE) {
                 case 'SURVEY':
-                    return { query: 'SELECT * FROM survey LIMIT 1' }
+                    return { query: 'SELECT * FROM survey LIMIT 1', varArray: [] }
+                case 'CALCULATOR':
+                    return { query: "SELECT * FROM calculators WHERE calculatorType=? ORDER BY timeCreated DESC", varArray: [data.calculatorType] }
                 case 'SURVEY_INFO_TEST_POINTS':
                     return { query: "SELECT COUNT(id) AS count, COUNT(CASE WHEN status = 0 THEN 1 END) AS good, COUNT(CASE WHEN status = 1 THEN 1 END) AS warning, COUNT(CASE WHEN status = 2 THEN 1 END) AS danger, COUNT(CASE WHEN status = 3 THEN 1 END) AS unknown FROM testPoints", varArray: [] }
                 case 'SURVEY_INFO_RECTIFIERS':
@@ -276,6 +280,8 @@ const generateQuery = (QUERY_TYPE, DATA_TYPE, data) => {
             switch (DATA_TYPE) {
                 case 'SURVEY':
                     return { query: 'INSERT INTO survey (uid, name, technician) VALUES (?,?,?)', varArray: [data.uid, data.name, data.technician] }
+                case 'CALCULATOR':
+                    return { query: 'INSERT INTO calculators (timeCreated, calculatorType, data, name, latitude, longitude) VALUES (?,?,?,?,?,?)', varArray: [data.timeCreated, data.calculatorType, data.data, data.name, data.latitude, data.longitude] }
                 case 'SETTINGS':
                     return { query: "INSERT INTO settings (pipelineNameAsDefault, defaultPotentialUnit, autoCreatePotentials, onboarding) VALUES (?,?,?,?)", varArray: [data.pipelineNameAsDefault, data.defaultPotentialUnit, data.autoCreatePotentials, data.onboarding] }
                 case 'DEFAULT_NAME':
@@ -379,6 +385,8 @@ const generateQuery = (QUERY_TYPE, DATA_TYPE, data) => {
             switch (DATA_TYPE) {
                 case 'SURVEY':
                     return { query: 'DELETE FROM surveys WHERE id=1', varArray: [] }
+                case 'CALCULATOR':
+                    return { query: 'DELETE FROM calculators WHERE id=?', varArray: [data.calculatorId] }
                 case 'EMPTY':
                     return { query: 'DELETE FROM testPoints WHERE name IS NULL; DELETE FROM rectifiers WHERE name IS NULL; DELETE FROM pipelines WHERE name IS NULL; DELETE FROM potentials WHERE name IS NULL; DELETE FROM cards WHERE name IS NULL; DELETE FROM circuits WHERE name IS NULL;', varArray: [] }
                 case 'RECTIFIER':
@@ -742,6 +750,7 @@ export const initDataBase = async () => {
         { table: 'rectifiers' },
         { table: 'defaultNames' },
         { table: 'settings' },
+        { table: 'calculators' },
         { table: 'potentialTypes' },
         { table: 'sides' }])
 

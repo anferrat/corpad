@@ -8,6 +8,7 @@ import Filter from '../../List/Filter/Filter'
 import CreateItemSheet from '../../Survey/Create/CreateItemSheet'
 import { useNavigation } from '@react-navigation/native'
 import MenuSheet from '../../Survey/Menu/MenuSheet'
+import MoreOptionsSheet from '../../Home/MoreOptionsSheet'
 import { errorHandler } from '../../errorHandler'
 
 const BottomSheetContent = () => {
@@ -20,11 +21,18 @@ const BottomSheetContent = () => {
         else errorHandler(503)
     }, [bottomSheet])
 
+
+
+    const isVisible = (itemType, content, bottomSheetContent) =>
+        (bottomSheetContent.itemType === itemType && content === bottomSheetContent.content) ? styles.visible : styles.hidden
+
     const navigateToImport = React.useCallback(() => {
         closeSheet()
         navigation.navigate('ImportItem')
     }, [navigation])
+
     const navigateToEdit = React.useCallback((id, dataType) => navigation.navigate('EditItem', { itemId: id, isNew: true, dataTypeItem: dataType }), [navigation])
+
     const navigateToSettings = React.useCallback(() => {
         navigation.navigate('Settings')
         closeSheet()
@@ -35,26 +43,43 @@ const BottomSheetContent = () => {
         closeSheet()
     }, [navigation, closeSheet])
 
+    const navigateToExportedFiles = React.useCallback(() => {
+        navigation.navigate('SettingDetails', { setting: 'exportedFiles' })
+        closeSheet()
+    }, [navigation, closeSheet])
+
+    const navigateToCalculatorList = React.useCallback(() => {
+        navigation.navigate('CalculatorList')
+        closeSheet()
+    }, [navigation, closeSheet])
+
     return <>
-        <View style={isVisible('TEST_POINT', 'sorting', bottomSheetContent) ? styles.visible : styles.hidden}>
+        <View style={isVisible('TEST_POINT', 'sorting', bottomSheetContent)}>
             <Sorting dataType={'TEST_POINT'} closeSheet={closeSheet} />
         </View>
-        <View style={isVisible('TEST_POINT', 'filter', bottomSheetContent) ? styles.visible : styles.hidden}>
+        <View style={isVisible('TEST_POINT', 'filter', bottomSheetContent)}>
             <Filter dataType={'TEST_POINT'} closeSheet={closeSheet} />
         </View>
-        <View style={isVisible('TEST_POINT', 'readings', bottomSheetContent) ? styles.visible : styles.hidden}>
+        <View style={isVisible('TEST_POINT', 'readings', bottomSheetContent)}>
             <Readings dataType='TEST_POINT' closeSheet={closeSheet} />
         </View>
-        <View style={isVisible('RECTIFIER', 'readings', bottomSheetContent) ? styles.visible : styles.hidden}>
+        <View style={isVisible('RECTIFIER', 'readings', bottomSheetContent)}>
             <Readings dataType='RECTIFIER' closeSheet={closeSheet} />
         </View>
-        <View style={isVisible(null, 'create', bottomSheetContent) ? styles.visible : styles.hidden}>
+        <View style={isVisible(null, 'create', bottomSheetContent)}>
             <CreateItemSheet navigateToEdit={navigateToEdit} closeSheet={closeSheet} navigateToImport={navigateToImport} />
         </View>
-        <View style={isVisible(null, 'menu', bottomSheetContent) ? styles.visible : styles.hidden}>
+        <View style={isVisible(null, 'menu', bottomSheetContent)}>
             <MenuSheet
                 navigateToExport={navigateToExport}
+                navigateToCalculatorList={navigateToCalculatorList}
                 navigateToSettings={navigateToSettings}
+                closeSheet={closeSheet} />
+        </View>
+        <View style={isVisible(null, 'moreOptions', bottomSheetContent)}>
+            <MoreOptionsSheet
+                navigateToExportedFiles={navigateToExportedFiles}
+                navigateToCalculatorList={navigateToCalculatorList}
                 closeSheet={closeSheet} />
         </View>
     </>

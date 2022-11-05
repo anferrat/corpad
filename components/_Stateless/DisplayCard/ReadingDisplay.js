@@ -1,6 +1,6 @@
 import React from 'react'
 import { Pressable, View } from 'react-native'
-import { displayCard } from '../../../styles/GlobalStyle'
+import { androidRipple, displayCard } from '../../../styles/GlobalStyle'
 import DataRow from './DataRow'
 import { displayedReadingsValues } from '../../List/ListFunctions'
 
@@ -29,7 +29,7 @@ const ReadingDisplay = (props) => {
                 <View style={displayCard.ReadingDisplayRoundBorder}>
                     <Pressable
                         style={displayCard.ReadingDisplayPressable}
-                        android_ripple={{ color: '#f1f4fc' }}
+                        android_ripple={androidRipple}
                         onPress={props.onPress}>
                         {renderDataRows(props.readingList[props.readingIndex]?.readings, props.uid, props.dataType, props.displayedReading)}
                     </Pressable>

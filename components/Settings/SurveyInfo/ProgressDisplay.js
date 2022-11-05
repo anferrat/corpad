@@ -3,7 +3,7 @@ import { View, StyleSheet } from 'react-native'
 import * as Progress from 'react-native-progress'
 import { basic, danger, success, warning } from '../../../styles/GlobalStyle'
 import LegendItem from '../../_Stateless/Info/LegendItem'
-import TabButton from '../../_Stateless/Info/TabButton'
+import ButtonSelector from '../../_Stateless/ButtonSelector'
 
 const ProgressDisplay = (props) => {
     const [activeItem, setActiveItem] = useState(0)
@@ -22,10 +22,14 @@ const ProgressDisplay = (props) => {
 
     return (
         <View style={styles.mainView}>
-            <View style={styles.tabView}>
-                <TabButton title='Test points' active={!activeItem} onPress={updateActive.bind(this, activeItem, 0)} />
-                <TabButton title='Rectifiers' active={activeItem} onPress={updateActive.bind(this, activeItem, 1)} />
-            </View>
+            <ButtonSelector
+                selectedIndex={activeItem}
+                setSelected={setActiveItem}
+                buttons={[
+                    { title: 'Test points' },
+                    { title: 'Rectifiers' }
+                ]}
+            />
             <View style={styles.progress}>
                 <Progress.Circle
                     fill="none"
@@ -54,7 +58,7 @@ export default ProgressDisplay
 
 const styles = StyleSheet.create({
     mainView: {
-        paddingVertical: 12,
+        paddingBottom: 12,
         flexBasis: 230,
     },
     circle: {
@@ -62,7 +66,7 @@ const styles = StyleSheet.create({
     },
     progress: {
         flex: 1,
-        marginTop: 12,
+        marginTop: 24,
         justifyContent: 'space-evenly',
         alignItems: 'center',
         flexDirection: 'row',

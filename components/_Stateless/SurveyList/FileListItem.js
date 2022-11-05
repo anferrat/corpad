@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { View, StyleSheet, Pressable, Animated } from 'react-native'
 import { Text, Icon } from '@ui-kitten/components'
-import { basic, basic200, basic300 } from '../../../styles/GlobalStyle'
+import { androidRipple, basic, basic200, basic300 } from '../../../styles/GlobalStyle'
 import { getFormattedDate } from '../../customFunctions'
 import FileListItemMenu from './FileListItemMenu'
 import * as Progress from 'react-native-progress'
@@ -45,7 +45,7 @@ const FileListItem = (props) => {
             }),
             transform: [{ scale: scale.current }]
         }}>
-            <Pressable style={styles.pressable} android_ripple={{ color: basic200 }} onPress={props.onPress}>
+            <Pressable style={styles.pressable} android_ripple={androidRipple} onPress={props.onPress}>
                 <View style={styles.mainView} >
                     <View style={styles.titleView}>
                         <Progress.Circle

@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useRef } from "react"
-import { View, StyleSheet, ScrollView, ActivityIndicator } from "react-native"
-import { Text } from "@ui-kitten/components"
+import { View, StyleSheet, ScrollView } from "react-native"
 import PotentialListItem from "../../_Stateless/Settings/PoitentialListItem"
 import { sendRequest } from "../../../database/db"
 import NewPotentialInput from "./NewPotentialInput"
@@ -10,6 +9,7 @@ import MainActionButton from '../../_Stateless/MainActionButton'
 import { errorHandler, warningHandler } from "../../errorHandler"
 import IdGen from '../../IdGen'
 import fieldValidation from '../../fieldValidation'
+import LoadingView from "../../_Stateless/Settings/LoadingView"
 
 const Potentials = (props) => {
     const [defaultUnit, setDefaultUnit] = useState(null)
@@ -77,33 +77,29 @@ const Potentials = (props) => {
 
     const potentialsDisplay = React.useMemo(() => potentialFields.map(f => <PotentialListItem title={f.name} key={f.uid} permanent={!f.custom} onDelete={removeField.bind(this, f.id)} />), [potentialFields, removeField])
 
-    if (isLoading)
-        return <View style={styles.empty}><ActivityIndicator /></View>
-    else
-        return (
-            <>
-                <View style={styles.mainView}>
-                    <DefaultUnit
-                        defaultUnit={defaultUnit} />
-                    <AutoCreatePotentials
-                        checked={autoCreate} />
-                    <NewPotentialInput
-                        addPotentialField={addPotentialField}
-                        setPotentialFields={setPotentialFields} />
-                    <ScrollView
-                        style={styles.list}
-                        contentContainerStyle={styles.listContainer}
-                        StickyHeaderComponent={() => <Text category='label' appearance='hint'>Potential types</Text>}>
-                        {potentialsDisplay}
-                    </ScrollView>
-                </View>
-                <MainActionButton
-                    title='Back'
-                    valid={true}
-                    onPress={props.goBack}
-                />
-            </>
-        )
+    return (
+        <LoadingView loading={isLoading}>
+            <View style={styles.mainView}>
+                <DefaultUnit
+                    defaultUnit={defaultUnit} />
+                <AutoCreatePotentials
+                    checked={autoCreate} />
+                <NewPotentialInput
+                    addPotentialField={addPotentialField}
+                    setPotentialFields={setPotentialFields} />
+                <ScrollView
+                    style={styles.list}
+                    contentContainerStyle={styles.listContainer}>
+                    {potentialsDisplay}
+                </ScrollView>
+            </View>
+            <MainActionButton
+                title='Back'
+                valid={true}
+                onPress={props.goBack}
+            />
+        </LoadingView>
+    )
 }
 
 export default Potentials
@@ -120,9 +116,4 @@ const styles = StyleSheet.create({
     listContainer: {
         paddingBottom: 80
     },
-    empty: {
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center'
-    }
 })

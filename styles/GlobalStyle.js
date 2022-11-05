@@ -1,4 +1,4 @@
-import { StyleSheet } from "react-native";
+import { StyleSheet, StatusBar } from "react-native";
 
 export const primary = "#7186C7" // basic colors copied to avoid using useTheme and withStyles in heavly reusable parts. If theme changes needs to be updated
 export const success = "#43C150"
@@ -11,6 +11,10 @@ export const basic300 = '#e1e5ef'
 export const basic400 = '#d4d9ea'
 export const basic700 = '#888892'
 export const primary100 = '#E6EDFC'
+export const success100 = "#E3FBDB"
+
+export const androidRipple = { color: basic200 }
+
 export const androidStyle = StyleSheet.create({
   AndroidSafeArea: {
     alignItems: 'stretch',
@@ -56,7 +60,8 @@ export const androidStyle = StyleSheet.create({
     borderRadius: 6,
     margin: 6,
     marginTop: 12,
-    backgroundColor: '#fff'
+    backgroundColor: '#fff',
+    overflow: 'hidden',
   },
   EmptyCard: {
     shadowOffset: { width: 0, height: 1 },
@@ -102,12 +107,11 @@ export const androidStyle = StyleSheet.create({
     elevation: 5
   },
   TopBar: {
-    height: 90,
+    height: StatusBar.currentHeight + 60,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
     paddingHorizontal: 12,
-    paddingBottom: 3,
     backgroundColor: '#fff',
   },
   TopBarItem: {

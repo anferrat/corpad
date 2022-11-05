@@ -18,8 +18,8 @@ const SurveyNameModal = (props) => {
             setSurveyName(props.surveyName)
     }, [props.surveyName, props.isVisible])
 
-    const updateSurveyName = React.useCallback(async (name) => {
-        const validation = fieldValidation(name, 'surveyName')
+    const updateSurveyName = React.useCallback(async () => {
+        const validation = fieldValidation(surveyName, 'surveyName')
         if (validation.valid) {
             const update = await sendRequest('UPDATE', 'SURVEY', { name: validation.value, technician: 'Wade Watts' })
             if (update.status === 200)
@@ -28,7 +28,7 @@ const SurveyNameModal = (props) => {
         }
         else errorHandler(506)
         props.dismiss()
-    }, [dispatch, props.dismiss])
+    }, [dispatch, props.dismiss, surveyName])
 
 
     return (
@@ -46,14 +46,15 @@ const SurveyNameModal = (props) => {
                     label='Survey name'
                     maxLength={25}
                     property={'surveyName'}
-                    placeholder='My awesome survey'
+                    placeholder='My survey'
                     style={styles.input}
                     value={surveyName}
+                    valid={true}
                     onChangeText={setSurveyName} />
                 <Button
                     accessoryLeft={saveIcon}
                     style={styles.button}
-                    onPress={updateSurveyName.bind(this, surveyName)}>
+                    onPress={updateSurveyName}>
                     Save
                 </Button>
             </ScrollView>
@@ -80,7 +81,6 @@ const styles = StyleSheet.create({
         flex: 1
     },
     button: {
-        marginTop: 18,
         flex: 1
     }
 })

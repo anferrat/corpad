@@ -1,6 +1,6 @@
 import React, { useRef, createContext } from 'react'
 import * as eva from '@eva-design/eva'
-import { NavigationContainer } from '@react-navigation/native'
+import { NavigationContainer, useNavigationContainerRef } from '@react-navigation/native'
 import { ApplicationProvider, IconRegistry } from '@ui-kitten/components'
 import { EvaIconsPack } from '@ui-kitten/eva-icons'
 import { ModalService } from '@ui-kitten/components'
@@ -52,6 +52,7 @@ ModalService.setShouldUseTopInsets = true
 
 const App = () => {
   const bottomSheet = useRef()
+  const navigationRef = useNavigationContainerRef()
   return (
     <Provider store={store}>
       <IconRegistry icons={[EvaIconsPack, CPIconsPack]} />
@@ -59,11 +60,11 @@ const App = () => {
         <ApplicationProvider {...eva} theme={{ ...eva.light, ...theme }} customMapping={mapping}>
           <GestureHandlerRootView style={{ flex: 1 }}>
             <BS.Provider value={bottomSheet}>
-              <NavigationContainer onReady={SplashScreen.hide}>
+              <NavigationContainer onReady={SplashScreen.hide} ref={navigationRef}>
                 <AppNavigator />
                 <Sheet ref={bottomSheet} />
                 <FullScreenLoader />
-                <ExportModal />
+                <ExportModal navigationRef={navigationRef} />
                 <SessionModal />
               </NavigationContainer>
             </BS.Provider>

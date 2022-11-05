@@ -41,7 +41,8 @@ const styles = StyleSheet.create({
         paddingVertical: 12
     },
     text: {
-        paddingBottom: 12
+        paddingBottom: 12,
+        textAlign: 'center'
     },
     hidden: {
         display: 'none'

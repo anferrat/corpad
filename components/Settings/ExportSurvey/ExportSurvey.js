@@ -11,6 +11,7 @@ import CardProperties from "./CardProperties"
 import CircuitProperties from "./CircuitProperties"
 import ExportButton from "./ExportButton"
 import { errorHandler } from "../../errorHandler"
+import LoadingView from "../../_Stateless/Settings/LoadingView"
 
 
 const ExportSurvey = (props) => {
@@ -41,11 +42,8 @@ const ExportSurvey = (props) => {
         test()
         return () => dispatch(resetExport())
     }, [])
-    if (extraData.isLoading)
-        return <View style={styles.emptyView}><ActivityIndicator color={primary} /></View>
-    else
         return (
-            <>
+            <LoadingView loading={extraData.isLoading}>
                 <ScrollView
                     contentContainerStyle={styles.container}
                     style={styles.mainView}>
@@ -67,7 +65,7 @@ const ExportSurvey = (props) => {
                         updateSetting={updateSetting} />
                 </ScrollView>
                 <ExportButton />
-            </>
+            </LoadingView>
         )
 }
 

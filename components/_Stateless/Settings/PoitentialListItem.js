@@ -1,13 +1,13 @@
 import React from "react"
 import { View, StyleSheet, Pressable } from "react-native"
 import { Icon, Text } from "@ui-kitten/components"
-import { basic, basic200, basic300, primary, success } from '../../../styles/GlobalStyle'
+import { androidRipple, basic, basic200, basic300, primary } from '../../../styles/GlobalStyle'
 import SingleIconButton from '../SingleIconButton'
 
 
 const PotentialListItem = (props) => {
     return (
-        <Pressable style={props.checked ? styles.mainViewChecked : styles.mainView} android_ripple={{ color: basic200 }} onPress={props.onPress}>
+        <Pressable style={props.checked ? styles.mainViewChecked : styles.mainView} android_ripple={androidRipple} onPress={props.onPress}>
             <View style={styles.titleView}>
                 <Icon name={props.icon ?? 'grid'} pack={props.pack ?? null} fill={primary} style={styles.icon} />
                 <View>

@@ -9,15 +9,17 @@ const SurveyType = (props) => {
     return (
         <View style={styles.mainView}>
             <OptionCard
-                onPress={props.setIsCloud.bind(this, false)}
+                isCloudValue={false}
+                onPress={props.setIsCloud}
                 icon='smartphone'
                 title='Device-based'
                 subtitle={`Survey is stored on your device inside app folder. Doesn't require internet.`}
                 selected={!props.isCloud} />
             <OptionCard
+                isCloudValue={true}
                 disabled={!isSigned}
                 hint={!isSigned ? '(Sign in required)' : null}
-                onPress={props.setIsCloud.bind(this, true)}
+                onPress={props.setIsCloud}
                 icon='cloud'
                 pack='cp'
                 title='Cloud-based'

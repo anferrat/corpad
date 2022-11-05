@@ -2,12 +2,21 @@ import React from "react"
 import { View, StyleSheet } from "react-native"
 import { Text } from "@ui-kitten/components"
 
+/*
+{ //--- cm2 ---
+    main: 'cm',
+    script: '2',
+    format: 'super'
+} 
+*/
+
+
 const Unit = (props) => {
     if (props.unit === null || props.unit === undefined)
         return null
     else
         if (typeof props.unit === 'string')
-            return <Text style={styles.unitMain}>{props.unit}</Text>
+            return <Text style={styles.unitMainBase}>{props.unit}</Text>
         else {
             const mainStart = props.unit?.position ? props.unit.main.substr(0, props.unit.position) : props.unit.main
             const mainEnd = props.unit?.position ? props.unit.main.substr(props.unit.position) : ''
@@ -32,6 +41,10 @@ export default Unit
 const styles = StyleSheet.create({
     unitMain: {
         fontSize: 14,
+    },
+    unitMainBase: {
+        fontSize: 14,
+        paddingLeft: 6,
     },
     mainViewSuper: {
         paddingLeft: 6,

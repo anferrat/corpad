@@ -56,7 +56,6 @@ export const unitConverter = (value, originalUnit, targetUnit) => {
 
 
 export const displayReadingValue = (a, unit) => {
-    //be aware only works for V as output unit, change in future if needed
     if (a === undefined || a === null)
         return null
     else
@@ -75,6 +74,30 @@ export const displayReadingValue = (a, unit) => {
         }
 }
 
+export const fixRealValue = (a) => {
+    if (a === undefined || a === null || isNaN(a))
+        return null
+    else {
+        const abs = Math.abs(a)
+        if (abs >= 1000)
+            return Math.floor(a)
+        else if (abs < 1000 && abs >= 100)
+            return a.toFixed(1)
+        else if (abs < 100 && abs > 1) {
+            return a.toFixed(2).replace(/\.?0*$/, '')
+        }
+        else if (abs <= 1 && abs >= 0.01) {
+            return a.toFixed(3).replace(/\.?0*$/, '')
+        }
+        else if (abs < 0.01 && abs > 0.0001) {
+            return a.toFixed(5).replace(/\.?0*$/, '')
+        }
+        else return 0
+    }
+}
+
+export const largeNumberHandler = (a, order) => a > Math.pow(10, order) ? a.toExponential() : a
+
 
 export const genValidObject = (object) => {
     // valid object for Edit Screens. used validate entered data. copies props of original object to object named 'valid: {}', with values true (initially)
@@ -82,6 +105,15 @@ export const genValidObject = (object) => {
     for (const property in object)
         Object.assign(validObject, { [property]: true })
     return validObject
+}
+
+export const numberWithSpaces = (x) => {
+    if (!isNaN(x) && x !== null && x !== undefined) {
+        var parts = x.toString().split(".")
+        parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, " ")
+        return parts.join(".")
+    }
+    else return x
 }
 
 export const genMarker = (dataType, item) => ({

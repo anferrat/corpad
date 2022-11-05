@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { Pressable, View, StyleSheet } from 'react-native'
-import { basic200 } from '../../../styles/GlobalStyle'
+import { androidRipple} from '../../../styles/GlobalStyle'
 import { nextReading } from '../../List/ListFunctions'
 import { basic300, success, warning, danger, basic, primary } from '../../../styles/GlobalStyle'
 import { Text, Icon } from '@ui-kitten/components'
@@ -23,7 +23,7 @@ const DisplayCard = (props) => {
     return (
         <Pressable
             style={styles.pressable}
-            android_ripple={{ color: basic200 }}
+            android_ripple={androidRipple}
             onPress={props.onPress}>
             <View style={hideStatus ? styles.cardDataWithoutStatus : styles.cardDataWithStatus}>
                 <View style={hideStatus ?
@@ -55,7 +55,7 @@ const DisplayCard = (props) => {
                 <View style={props.readingList[readingIndex]?.readings === 'none' || props.readingList[readingIndex] === 'none' ? styles.hidden : styles.rightSide}>
                     <Pressable
                         style={styles.readingPressable}
-                        android_ripple={{ color: basic200 }}
+                        android_ripple={androidRipple}
                         onPress={toggleReading}>
                         <Text style={props.readingList[readingIndex]?.readings[0] === null || props.readingList[readingIndex]?.readings[0] === undefined ? styles.hidden : styles.dataText} appearance='hint'>
                             <Icon

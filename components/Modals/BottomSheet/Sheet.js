@@ -14,7 +14,7 @@ const Sheet = React.forwardRef((props, bsRef) => {
         enableContentPanningGesture={false}
         enableHandlePanningGesture={false}
         index={-1}
-        snapPoints={[297, 297, 306, 371, 419]}>
+        snapPoints={[176, 297, 376, 371, 419]}>
         <BottomSheetContent />
     </BottomSheet>
 })

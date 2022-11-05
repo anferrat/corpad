@@ -14,7 +14,7 @@ const getTitleBySettingType = (setting) => {
         case 'refCells':
             return 'Reference cells'
         case 'export':
-            return 'Export as CSV'
+            return 'Export to spreadsheet'
         case 'exportedFiles':
             return 'Exported files'
         case 'info':
@@ -49,7 +49,7 @@ const styles = StyleSheet.create({
         elevation: 5
     },
     title: {
-        paddingLeft: 24,
+        paddingLeft: 12,
         paddingBottom: 5,
         color: '#fff'
     },

@@ -6,6 +6,7 @@ import StatusIndicator from './StatusIndicator'
 import ReadingBar from './ReadingBar'
 import ReadingDisplay from './ReadingDisplay'
 import { nextReading } from '../../List/ListFunctions'
+import { androidRipple } from '../../../styles/GlobalStyle'
 
 
 
@@ -21,7 +22,7 @@ const DisplayCard = (props) => {
     return (
         <Pressable
             style={displayCard.pressable}
-            android_ripple={{ color: '#f1f4fc' }}
+            android_ripple={androidRipple}
             onPress={props.onPress}>
             <View style={displayCard.Card}>
                 <View style={displayCard.StatusAndTitleView}>

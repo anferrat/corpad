@@ -46,7 +46,6 @@ export const writeFile = async (content, name, location, overwrite = true) => {
                 }
             }
             catch (er) {
-                console.log(er)
                 return {
                     status: 401
                 }

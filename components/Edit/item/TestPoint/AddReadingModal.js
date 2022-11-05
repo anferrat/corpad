@@ -6,6 +6,7 @@ const AddReadingModal = (props) => (
     <Modal
         style={styles.modal}
         animationType="slide"
+        statusBarTranslucent={true}
         hardwareAccelerated={true}
         onRequestClose={props.closeModal}
         visible={props.visible}>
@@ -17,7 +18,7 @@ const AddReadingModal = (props) => (
     </Modal>
 )
 
-export default AddReadingModal
+export default React.memo(AddReadingModal)
 
 const styles = StyleSheet.create({
     modal:

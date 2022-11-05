@@ -1,11 +1,11 @@
 import React from 'react'
 import { Icon, Text } from '@ui-kitten/components'
 import { Pressable, StyleSheet } from 'react-native'
-import { basic, primary, primary100 } from '../../styles/GlobalStyle'
+import { basic, primary, primary100, androidRipple } from '../../styles/GlobalStyle'
 
 const BottomBarItem = (props) => {
     return (
-        <Pressable style={styles.pressable} android_ripple={{ color: primary100 }} onPress={props.onPress}>
+        <Pressable style={styles.pressable} android_ripple={androidRipple} onPress={props.onPress}>
             <Icon name={props.icon} pack={props.pack} fill={props.focused ? primary : basic} style={props.focused ? styles.iconFocused : styles.icon} />
             <Text category='label' style={props.focused ? styles.titleFocused : styles.title}>{props.title}</Text>
         </Pressable>
