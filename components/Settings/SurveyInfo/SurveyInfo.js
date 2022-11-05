@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useRef } from "react"
-import { ActivityIndicator, StyleSheet, View } from "react-native"
-import { Text, Divider } from "@ui-kitten/components"
+import { StyleSheet, View } from "react-native"
+import { Divider } from "@ui-kitten/components"
 import { sendRequest } from "../../../database/db"
-import { primary, basic200 } from "../../../styles/GlobalStyle"
+import { primary, basic200, androidStyle, basic300 } from "../../../styles/GlobalStyle"
 import NumberDisplay from "../../_Stateless/Info/NumberDisplay"
 import InfoListItem from "../../_Stateless/Info/InfoListItem"
 import ProgressDisplay from "./ProgressDisplay"
@@ -12,6 +12,7 @@ import { ScrollView } from "react-native-gesture-handler"
 import { referenceCellCodes } from "../../../constants/constants"
 import { coordTransform, getDistance } from "../../View/NavigationWidget" //maybe move it to separate file for distance calculations
 import { errorHandler } from "../../errorHandler"
+import LoadingView from "../../_Stateless/Settings/LoadingView"
 
 const getMainRefCellType = (refCellList) => {
     const mainRc = refCellList.filter(rc => rc.mainReference)
@@ -93,31 +94,36 @@ const SurveyInfo = () => {
         return () => componentMounted.current = false
     }, [setSurveydata, componentMounted])
 
-    if (surveyData.loaded)
-        return (
-            <ScrollView contentContainerStyle={styles.mainView}>
-                <SurveyName surveyName={surveyData.surveyName} />
-                <ProgressDisplay
-                    data={surveyData.progress} />
-                <View style={styles.dataLine}>
-                    <NumberDisplay number={surveyData.tpCount} title='Test points' icon='TS-filled' />
-                    <NumberDisplay number={surveyData.rectifierCount} title='Rectifiers' icon='RT-filled' />
-                    <NumberDisplay number={surveyData.pipelineCount} title='Pipelines' icon='PL-filled' />
+    return (
+        <LoadingView loading={!surveyData.loaded}>
+            <ScrollView>
+                <View style={androidStyle.ConnectionCard}>
+                    <SurveyName surveyName={surveyData.surveyName} />
+                    <ProgressDisplay
+                        data={surveyData.progress} />
+                    <View style={styles.dataLine}>
+                        <NumberDisplay number={surveyData.tpCount} title='Test points' icon='TS-filled' />
+                        <NumberDisplay number={surveyData.rectifierCount} title='Rectifiers' icon='RT-filled' />
+                        <NumberDisplay number={surveyData.pipelineCount} title='Pipelines' icon='PL-filled' />
+                    </View>
                 </View>
-                <View style={styles.moreInfo}>
-                    {surveyData.moreInfo.map((item, index) => <React.Fragment key={item.title + item.index}>
-                        <InfoListItem
-                            title={item.title}
-                            subtitle={item.subtitle}
-                            icon={item.icon}
-                            pack={item.pack}
-                            value={item.value} />
-                        {index !== surveyData.moreInfo.length - 1 ? <Divider style={styles.divider} /> : null}
-                    </React.Fragment>)}
+                <View style={{ ...androidStyle.ConnectionCard, ...styles.moreInfo }} >
+                    {
+                        surveyData.moreInfo.map((item, index) => <React.Fragment key={item.title + item.index}>
+                            <InfoListItem
+                                title={item.title}
+                                subtitle={item.subtitle}
+                                icon={item.icon}
+                                pack={item.pack}
+                                value={item.value} />
+                            {index !== surveyData.moreInfo.length - 1 ? <Divider style={styles.divider} /> : null}
+                        </React.Fragment>)
+                    }
                 </View>
             </ScrollView>
-        )
-    else return <View style={styles.emptyView}><ActivityIndicator color={primary} size='large' /></View>
+        </LoadingView >
+    )
+
 }
 
 export default SurveyInfo
@@ -125,22 +131,16 @@ export default SurveyInfo
 const styles = StyleSheet.create({
     dataLine: {
         flexBasis: 80,
-        backgroundColor: primary,
+        marginHorizontal: -12,
+        marginBottom: -12,
+        marginTop: 12,
+        backgroundColor: basic300,
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'space-evenly',
         paddingVertical: 6,
-        borderRadius: 12,
-        elevation: 5
-    },
-    mainView: {
-        backgroundColor: basic200,
-        padding: 12
-    },
-    emptyView: {
-        flex: 1,
-        alignItems: 'center',
-        justifyContent: 'center'
+        borderRadius: 0,
+
     },
     tabButtons: {
         flexDirection: 'row',
@@ -160,10 +160,8 @@ const styles = StyleSheet.create({
         flexDirection: 'row'
     },
     moreInfo: {
-        flex: 1,
-        marginTop: 24,
-        elevation: 5,
-        backgroundColor: '#fff',
+        marginBottom: 12,
         borderRadius: 12,
+        padding: 0
     }
 })

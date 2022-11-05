@@ -1,7 +1,7 @@
 import React from 'react'
 import { Pressable, StyleSheet, View } from 'react-native'
-import { basic, basic200, primary } from '../../../styles/GlobalStyle'
-import { Text, Icon, Divider } from '@ui-kitten/components'
+import { androidRipple, basic, primary } from '../../../styles/GlobalStyle'
+import { Icon, Divider } from '@ui-kitten/components'
 
 
 const FilterListItem = (props) => {
@@ -10,10 +10,10 @@ const FilterListItem = (props) => {
             <Pressable
                 onPress={props.onPress.bind(this, props.value)}
                 style={styles.listItem}
-                android_ripple={{ color: basic200 }}
+                android_ripple={androidRipple}
                 disabled={props.disabled}>
                 <View style={styles.leftSide}>
-                    <Icon name='layers' style={styles.iconLeft} fill={primary} />
+                    <Icon name='funnel-outline' style={styles.iconLeft} fill={primary} />
                     {props.title}
                 </View>
                 <Icon
@@ -38,7 +38,7 @@ const styles = StyleSheet.create({
     iconLeft: {
         width: 20,
         height: 20,
-        marginRight: 6
+        marginRight: 12
     },
     listItem: {
         flexDirection: 'row',

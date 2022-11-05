@@ -57,7 +57,7 @@ export const decodeTestPoint = (string) => {
     }
 
     const readDataType = (string, testPointData = initialTestPoint) => {
-        //reads string from the start and generates tpdo formatted values as result. Outputs object
+        //reads string from the start and generates ccd formatted values as result. Outputs object
         if (string === '')
             return testPointData
         else {
@@ -242,7 +242,10 @@ export const decodeTestPoint = (string) => {
     }
 
     if (string.search('[**]') !== -1) {
-        return readDataType(string)
+        return {
+            status: 200,
+            result: readDataType(string)
+        }
     }
     else return {
         status: 508

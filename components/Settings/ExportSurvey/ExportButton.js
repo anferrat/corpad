@@ -8,12 +8,10 @@ import { genCsv } from '../../../files/helpers/genCsv'
 import { writeFile } from '../../../files/local/fs'
 import { fileNameGen } from '../../customFunctions'
 import { errorHandler } from '../../errorHandler'
-import { updateSetting } from '../../../store/actions/settings'
-import { useNavigation } from '@react-navigation/native'
+import { setExportModal, updateSetting } from '../../../store/actions/settings'
 
 const ExportButton = () => {
     const settings = useSelector(state => state.exportSurvey)
-    const navigation = useNavigation()
     const surveyName = useSelector(state => state.settings.currentSurvey.name)
     const dispatch = useDispatch()
     const componentMounted = useRef(true)
@@ -82,7 +80,7 @@ const ExportButton = () => {
             if (componentMounted.current) {
                 const writeFs = await writeFile(genCsv(result), fileName, 'exports', false)
                 if (writeFs.status === 200 && componentMounted.current)
-                    dispatch(updateSetting('exportModal', { visible: true, fileUrl: writeFs.filePath, mimeType: 'text/csv', navigateToExportedFiles: navigation.navigate.bind(this, 'SettingDetails', { setting: 'exportedFiles' }) }))
+                    dispatch(setExportModal({ visible: true, fileUrl: writeFs.filePath, mimeType: 'text/csv' }))
                 else errorHandler(writeFs.status)
             }
         }

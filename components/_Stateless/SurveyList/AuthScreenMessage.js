@@ -12,7 +12,7 @@ const AuthScreenMessage = () => {
     )
 }
 
-export default AuthScreenMessage
+export default React.memo(AuthScreenMessage, () => true)
 
 const styles = StyleSheet.create({
     mainView: {

@@ -60,15 +60,20 @@ const validate = (v, type) => {
             return !isNull(v)
         case 'timeCreated':
         case 'timeModified':
-            return v > 0
+            return v > 0 && !isNaN(v)
+        case 'resistance':
+        case 'spacing':
+        case 'resistivity':
+        case 'distance':
+            return v > 0 && !isNaN(v) && v !== null
         default:
             return true
     }
 }
 
-const validation = (value, type) => {
+const validation = (value, type, nullChecker = false) => {
     const v = valueConverter(value)
-    const valid = validate(v, type)
+    const valid = validate(v, type) && (nullChecker ? !isNull(v) : true)
     return {
         valid: valid,
         value: v

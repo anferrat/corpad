@@ -7,7 +7,7 @@ import { SafeAreaView } from 'react-native-safe-area-context'
 
 const Header = (props) => {
     return (
-        <SafeAreaView style={{ ...androidStyle.TopBar, ...styles.mainView }}>
+        <SafeAreaView style={{ ...androidStyle.TopBar, ...styles.mainView,}}>
             <SingleIconButton
                 color='#fff'
                 iconName='arrow-back-outline'
@@ -23,8 +23,6 @@ const styles = StyleSheet.create({
     mainView: {
         backgroundColor: primary,
         justifyContent: 'flex-start',
-        paddingVertical: 3,
-        elevation: 5
     },
     title: {
         marginLeft: 12

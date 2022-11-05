@@ -8,6 +8,7 @@ import ListItem from '../../../_Stateless/ListItem'
 import { verifyTypes } from '../../../customFunctions'
 import { errorHandler } from '../../../errorHandler'
 import SingleIconButton from '../../../_Stateless/SingleIconButton'
+import { androidStyle, primary } from '../../../../styles/GlobalStyle'
 
 const ModalContent = (props) => {
     const addReadingAction = async (cardType) => {
@@ -33,16 +34,16 @@ const ModalContent = (props) => {
             pack='cp'
             onPress={addReadingAction.bind(this, cardCode)}
             iconName={cardCode + '-filled'} />)
-
     return (
         <View style={styles.mainView}>
-            <View style={styles.header}>
+            <View style={{ ...androidStyle.TopBarItem, ...styles.header }}>
                 <SingleIconButton
                     onPress={props.closeModal}
-                    iconName='arrow-back-outline'/>
-                 <Text category='h5' style={styles.mainTitle}>Select reading:</Text>
+                    color='#fff'
+                    iconName='arrow-back-outline' />
+                <Text category='h5' style={styles.mainTitle} status='control'>Select reading:</Text>
             </View>
-           
+
             <Divider />
             <ScrollView>
                 <Text category='h6' style={styles.sectionTitle} appearance='hint'>{testPointTypes[props.testPointType]}</Text>
@@ -59,14 +60,14 @@ const styles = StyleSheet.create({
     {
         flex: 1
     },
-    mainTitle: {
-        padding: 12
-    },
     sectionTitle: {
         padding: 6,
     },
+    mainTitle: {
+        paddingLeft: 12
+    },
     header: {
-        flexDirection: 'row',
-        marginHorizontal: 12
+        backgroundColor: primary,
+        justifyContent: 'flex-start',
     }
 })

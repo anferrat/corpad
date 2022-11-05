@@ -1,7 +1,7 @@
 import React, { useContext } from 'react'
-import { View, StyleSheet, StatusBar } from 'react-native'
+import { View, StyleSheet, StatusBar, Pressable } from 'react-native'
 import { Icon } from '@ui-kitten/components'
-import { androidStyle, primary } from '../../styles/GlobalStyle'
+import { androidRipple, androidStyle, primary } from '../../styles/GlobalStyle'
 import SingleIconButton from '../_Stateless/SingleIconButton'
 import SurveyTitle from './SurveyTitle'
 import { BS } from '../../App'
@@ -15,6 +15,7 @@ const Header = (props) => {
     const bottomSheet = useContext(BS)
     const dispatch = useDispatch()
     const navigateToDevScreen = () => props.navigation.navigate('DevScreen')
+    const navigateToSurveyInfo = () => props.navigation.navigate('SettingDetails', { setting: 'info' })
     const openMenuHandler = () => {
         if (bottomSheet.current.snapToIndex)
             bottomSheet.current.snapToIndex(2)
@@ -22,7 +23,6 @@ const Header = (props) => {
         dispatch(updateSetting('bottomSheetContent', { itemType: null, content: 'menu' }))
     }
     const navigateToSearch = () => props.navigation.navigate('Search')
-
     return (
         <View style={{ ...androidStyle.TopBar, ...styles.mainView, paddingTop: props.options.headerStatusBarHeight }} >
             <StatusBar
@@ -30,17 +30,18 @@ const Header = (props) => {
                 translucent={true}
                 barStyle='dark-content' />
             <View style={styles.leftSide}>
-                <Icon pack='cp'
-                    name='corpad-logo'
-                    style={styles.logo}
-                    fill={primary} />
-                <SurveyTitle />
+                <View style={styles.pressableWrapper}>
+                    <Pressable onPress={navigateToSurveyInfo} android_ripple={androidRipple} style={styles.pressable}>
+                        <Icon pack='cp'
+                            name='corpad-logo'
+                            style={styles.logo}
+                            fill={primary} />
+                        <SurveyTitle />
+                    </Pressable>
+                </View>
             </View>
             <View style={styles.rightSide}>
                 <CloudButton />
-                <SingleIconButton
-                    iconName='eye'
-                    onPress={navigateToDevScreen} />
                 <SingleIconButton
                     iconName='search'
                     onPress={navigateToSearch} />
@@ -62,15 +63,28 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         flexDirection: 'row',
         flex: 1,
+        flexGrow: 1
     },
     rightSide: {
+        flexBasis: 120,
         alignItems: 'center',
         flexDirection: 'row',
-        justifyContent: 'flex-end'
+        justifyContent: 'flex-end',
+        flexShrink: 0
     },
     logo: {
         height: 25,
         width: 25,
         marginRight: 6
+    },
+    pressable: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        padding: 6,
+    },
+    pressableWrapper: {
+        flexDirection: 'row',
+        overflow: 'hidden',
+        borderRadius: 10,
     }
 })

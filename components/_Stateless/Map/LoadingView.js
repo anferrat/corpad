@@ -9,7 +9,6 @@ const LoadingView = (props) => {
     const componentMounted = useRef(true)
     const insets = useSafeAreaInsets()
     const [displayed, setDisplayed] = useState(props.refreshing)
-
     useEffect(() => {
         componentMounted.current = true
         return () => {
@@ -39,7 +38,7 @@ const LoadingView = (props) => {
     </Animated.View>
 }
 
-export default LoadingView
+export default React.memo(LoadingView)
 
 const styles = StyleSheet.create({
     mainView: {

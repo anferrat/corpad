@@ -1,7 +1,7 @@
 import React from "react"
 import { View, StyleSheet, Pressable } from "react-native"
 import { Text, Toggle } from "@ui-kitten/components"
-import { basic200 } from '../../../styles/GlobalStyle'
+import { androidRipple } from '../../../styles/GlobalStyle'
 
 const SettingToggle = (props) => {
 
@@ -10,7 +10,7 @@ const SettingToggle = (props) => {
     }, [props.setChecked])
 
     return (
-        <Pressable style={props.hidden ? styles.hidden : styles.mainView} android_ripple={{ color: basic200 }} onPress={onChange.bind(this, !props.checked)}>
+        <Pressable style={props.hidden ? styles.hidden : styles.mainView} android_ripple={androidRipple} onPress={onChange.bind(this, !props.checked)}>
             <View style={styles.titleView}>
                 <Text category='p1'>{props.title}</Text>
                 <Text category='s2' appearance='hint' style={styles.subtitle}>{props.subtitle}</Text>

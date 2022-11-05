@@ -1,13 +1,13 @@
 import React from "react"
 import { StyleSheet, Pressable } from "react-native"
 import { Text, Divider, Icon } from "@ui-kitten/components"
-import { basic200, basic } from "../../../styles/GlobalStyle"
+import { basic, androidRipple } from "../../../styles/GlobalStyle"
 
 const CreateButton = (props) => {
     return (
         <>
             <Divider />
-            <Pressable style={styles.pressable} android_ripple={{ color: basic200 }} onPress={props.onPress}>
+            <Pressable style={styles.pressable} android_ripple={androidRipple} onPress={props.onPress}>
                 <Icon name='plus-outline' fill={basic} style={styles.plusIcon} />
                 <Text category='p1'>{props.title}</Text>
             </Pressable>

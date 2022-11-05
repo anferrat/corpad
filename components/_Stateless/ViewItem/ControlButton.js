@@ -25,7 +25,7 @@ const ControlButton = (props) => {
     )
 }
 
-export default ControlButton
+export default React.memo(ControlButton)
 
 const styles = StyleSheet.create({
     pressable: {

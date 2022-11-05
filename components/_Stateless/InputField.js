@@ -41,23 +41,26 @@ export const Unit = (props) => {
 }
 
 const InputField = (props) => {
+    const styleObject = React.useMemo(() => ({ ...props.style, paddingBottom: 12, borderWidth: props.disabled ? 0 : 1 }), [props.style, props.disabled])
+    const caption = React.useMemo(() => getValidCaption(props.valid, props.property), [props.valid, props.property])
+    const value = React.useMemo(() => toString(props.value), [props.value])
+    const accessory = React.useMemo(() => <>
+        <Unit unit={props.unit} disabled={props.disabled} />
+        <InfoHint displayHint={props.displayHint} icon={props.hintIcon} title={props.hintTitle} />
+    </>, [props.unit, props.disabled, props.displayHint, props.hintIcon, props.hintTitle])
     return (
         <Input
             {...props}
             selectTextOnFocus={true}
-            accessoryRight={
-                <>
-                    <Unit unit={props.unit} disabled={props.disabled} />
-                    <InfoHint displayHint={props.displayHint} icon={props.hintIcon} title={props.hintTitle} />
-                </>}
-            value={toString(props.value)}
-            style={{ ...props.style, paddingBottom: 12, borderWidth: props.disabled ? 0 : 1 }}
-            status={props.valid !== false ? 'basic' : 'danger'}
-            caption={getValidCaption(props.valid, props.property)} />
+            accessoryRight={accessory}
+            value={value}
+            style={styleObject}
+            status={props.valid ? 'basic' : 'danger'}
+            caption={caption} />
     )
 }
 
-export default InputField
+export default React.memo(InputField)
 
 // InfoHint - adds an pressable item to input field to view additional info. Used to display info about reference cells in potentials entry fields
 

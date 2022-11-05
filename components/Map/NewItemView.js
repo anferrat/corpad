@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { Animated, StyleSheet } from 'react-native'
 import { sendRequest } from '../../database/db'
 import IdGen from '../IdGen'
@@ -6,15 +6,17 @@ import { genRequestObject } from '../customFunctions'
 import fieldValidation from '../fieldValidation'
 import { useDispatch } from 'react-redux'
 import { setNewItemMarker } from '../../store/actions/map'
-import MapActionButton from '../_Stateless/Map/MapActionButton'
+import MapButton from '../_Stateless/Map/MapButton'
 import { errorHandler } from '../errorHandler'
 
 const NewItemView = (props) => {
     const dispatch = useDispatch()
+    const [loading, setLoading] = useState(false)
     const active = props.latitude !== null && props.longitude !== null
     const transY = useRef(new Animated.Value(!active ? 160 : 0))
-
+    const componentMounted = useRef(true)
     const createNewItem = React.useCallback(async (dataType, latitude, longitude) => {
+        setLoading(dataType)
         const lat = fieldValidation(latitude, 'latitude')
         const lon = fieldValidation(longitude, 'longitude')
         if (lat.valid && lon.valid && latitude !== null && longitude !== null) {
@@ -33,6 +35,17 @@ const NewItemView = (props) => {
         }
         else errorHandler(801)
         dispatch(setNewItemMarker())
+        setTimeout(() => { //to account for animation
+            if (componentMounted.current)
+                setLoading(false)
+        }, 300)
+    }, [])
+
+    useEffect(() => {
+        componentMounted.current = true
+        return () => {
+            componentMounted.current = false
+        }
     }, [])
 
     useEffect(() => {
@@ -61,20 +74,21 @@ const NewItemView = (props) => {
             ...styles.mainView,
             transform: [{ translateY: transY.current }]
         }}>
-            <MapActionButton icon='TS-filled' pack='cp' onPress={createNewItem.bind(this, 'TEST_POINT', props.latitude, props.longitude)} />
-            <MapActionButton icon='RT-filled' pack='cp' onPress={createNewItem.bind(this, 'RECTIFIER', props.latitude, props.longitude)} />
+            <MapButton icon={loading === 'TEST_POINT' ? 'spinner' : 'TS-filled'} pack='cp' onPress={createNewItem.bind(this, 'TEST_POINT', props.latitude, props.longitude)} status='primary' disabled={!!loading} />
+            <MapButton icon={loading === 'RECTIFIER' ? 'spinner' : 'RT-filled'} pack='cp' onPress={createNewItem.bind(this, 'RECTIFIER', props.latitude, props.longitude)} status='primary' disabled={!!loading} />
         </Animated.View>
     )
 
 }
 
 
-export default NewItemView
+export default React.memo(NewItemView)
 
 const styles = StyleSheet.create({
     mainView: {
         position: 'absolute',
-        bottom: 25,
+        bottom: 37,
+        height: 112,
         left: '5%',
         justifyContent: 'space-between',
     },

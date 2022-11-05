@@ -1,7 +1,5 @@
 import React from 'react'
-import { ListItem } from '@ui-kitten/components'
-import { styles } from './MenuSheet'
-import { diagBack } from '../../_Stateless/Icons'
+import ListItem from '../../_Stateless/ListItemMenu'
 import { saveSurveyHandler } from '../../surveyManagement'
 import { errorHandler, warningHandler } from '../../errorHandler'
 import { useDispatch, useSelector } from 'react-redux'
@@ -55,10 +53,11 @@ const SaveListItem = (props) => {
     return (
         <ListItem
             disabled={savingInProgress}
-            style={styles.listItem}
             title='Save changes and exit'
             onPress={onSaveHandler.bind(this, fileName)}
-            accessoryLeft={diagBack} />
+            status='danger'
+            
+            icon='log-out' />
     )
 }
 

@@ -1,7 +1,7 @@
 import { Icon } from '@ui-kitten/components'
 import React from 'react'
 import { Pressable, StyleSheet } from 'react-native'
-import { primary, basic } from '../../styles/GlobalStyle'
+import { primary, basic300 } from '../../styles/GlobalStyle'
 
 const SingleIconButton = (props) => {
     const size = props.size === 'small' ? 20 : props.size === 'large' ? 30 : 25
@@ -9,11 +9,12 @@ const SingleIconButton = (props) => {
     const color = props.color ?? primary
     return (
         <Pressable
+            disabled={props.disabled}
             onPress={props.onPress}
             hitSlop={5}
             android_ripple={{
                 radius: (size + 15) / 2,
-                color: basic
+                color: basic300
             }}
             style={{ ...styles.pressable, ...props.style }}>
             <Icon

@@ -1,21 +1,23 @@
 import React from 'react'
-import { ListItem, Divider } from '@ui-kitten/components'
+import { Divider } from '@ui-kitten/components'
 import { View, StyleSheet } from 'react-native'
-import { exportIcon, settings } from '../../_Stateless/Icons'
+import { exportIcon, settings, calculator } from '../../_Stateless/Icons'
 import SaveListItem from './SaveListItem'
 import UpdateListItem from './UpdateListItem'
+import ListItem from '../../_Stateless/ListItemMenu'
 
 
 const MenuSheet = (props) => {
     return (
         <View style={styles.mainView}>
-            <ListItem title='Export to CSV' accessoryLeft={exportIcon} style={styles.listItem} onPress={props.navigateToExport} />
+            <ListItem title='Corrosion calculator' icon='calculator' pack='cp' onPress={props.navigateToCalculatorList} />
+            <ListItem title='Export survey' icon='download-outline' onPress={props.navigateToExport} />
             <UpdateListItem
                 closeSheet={props.closeSheet} />
             <SaveListItem
                 closeSheet={props.closeSheet} />
             <Divider />
-            <ListItem title='Settings' accessoryLeft={settings} onPress={props.navigateToSettings} style={styles.listItem} />
+            <ListItem title='Settings' icon='settings-outline' onPress={props.navigateToSettings} />
         </View>
     )
 }

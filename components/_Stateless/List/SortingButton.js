@@ -1,14 +1,14 @@
 import React from 'react'
 import { Pressable, StyleSheet } from 'react-native'
 import { Text, Icon } from '@ui-kitten/components'
-import { primary, basic200 } from '../../../styles/GlobalStyle'
+import { primary, androidRipple } from '../../../styles/GlobalStyle'
 
 const SortingButton = (props) => {
     return (
         <Pressable
             style={styles.pressable}
             onPress={props.onPress}
-            android_ripple={{ color: basic200 }}>
+            android_ripple={androidRipple}>
             <Text style={styles.buttonText} status='primary' category='p2'>Sort:</Text>
             {props.iconText !== null ? <Text style={styles.iconText} status='primary' category='p2'>{props.iconText}</Text> : null}
             {props.icon !== null ? <Icon name={props.icon} fill={primary} style={styles.icon} /> : null}

@@ -28,7 +28,8 @@ const warningCodes = {
     42: 'Survey file version is higher than the app version. You should update your app. Opening survey may cause some data to be lost.',
     43: 'Are you sure you want to delete this survey file?',
     44: 'Are you sure you want to delete this file?',
-    45: 'Are you sure you want to delete all exported files?'
+    45: 'Are you sure you want to delete all exported files?',
+    46: 'Are you sure you want to delete this calculation?'
 }
 
 const errorCodes = {
@@ -63,6 +64,7 @@ const errorCodes = {
     506: 'Name must only contain following characters: A-z, 0-9, -._() and be at least 2 characters long',
     507: 'Please refresh survey list to see changes.',
     508: 'Invalid data string. Unable to read.',
+    509: 'Some value that you have entered are invalid.',
     600: 'Invalid request. Unable to make changes in database. Please try again later.',
     601: 'Unable to delete item.',
     602: `There was an error while loading readings, ${tip}`,

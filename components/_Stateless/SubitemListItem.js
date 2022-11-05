@@ -1,7 +1,7 @@
 import React from 'react'
 import { StyleSheet, Pressable } from 'react-native'
 import { Layout, Icon, Text } from '@ui-kitten/components'
-import { basic, basic200 } from '../../styles/GlobalStyle'
+import { basic, androidRipple } from '../../styles/GlobalStyle'
 
 
 const SubitemListItem = (props) => {
@@ -10,7 +10,7 @@ const SubitemListItem = (props) => {
             <Pressable
                 style={styles.pressable}
                 onPress={props.onPress}
-                android_ripple={{ color: basic200 }}>
+                android_ripple={androidRipple}>
                 <Layout style={styles.leftSide}>
                     <Icon name={props.iconName} pack='cp' style={styles.icon} fill={basic} />
                     <Layout style={styles.textView}>

@@ -1,10 +1,9 @@
 import React from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { View, StyleSheet } from 'react-native'
-import { Button, Divider } from '@ui-kitten/components'
+import { Button } from '@ui-kitten/components'
 import { filterHandler, resetFilters } from '../../../store/actions/list'
 import { getListStateByType } from '../../customFunctions'
-import { basic300 } from '../../../styles/GlobalStyle'
 
 
 const FilterButtons = (props) => {

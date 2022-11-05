@@ -32,7 +32,9 @@ export const person = (props) => <Icon {...props} name='person' />
 export const edit = (props) => <Icon {...props} name='edit' />
 export const file = (props) => <Icon {...props} name='file-text-outline' />
 export const importIcon = (props) => <Icon {...props} name='download-outline' />
-export const exportedFilesIcon = (props) => <Icon {...props} name='code-download-outline' />
+export const exportedFilesIcon = (props) => <Icon {...props} name='download' />
 export const openInIcon = (props) => <Icon {...props} name='external-link' />
 export const shareIcon = (props) => <Icon {...props} name='share' />
-
+export const refresh = (props) => <Icon {...props} name='refresh-outline' />
+export const checkmark = (props) => <Icon {...props} name='checkmark-outline' />
+export const calculator = (props) => <Icon name='calculator-filled' pack='cp' {...props}  />

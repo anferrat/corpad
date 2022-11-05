@@ -251,6 +251,6 @@ export const create_db_tables2 = async () => {
 
 
 export const create_db_tables = async () => {
-    await sendRequestResult('DROP', '', [{ table: 'testPoints' }, { table: 'survey' }, { table: 'pipelines' }, { table: 'cards' }, { table: 'potentials' }, { table: 'referenceCells' }, { table: 'circuits' }, { table: 'rectifiers' }, { table: 'defaultNames' }, { table: 'settings' }, { table: 'potentialTypes' }, { table: 'sides' }])
+    await sendRequestResult('DROP', '', [{ table: 'testPoints' }, { table: 'survey' }, { table: 'pipelines' }, { table: 'cards' }, { table: 'potentials' }, { table: 'referenceCells' }, { table: 'circuits' }, { table: 'rectifiers' }, { table: 'defaultNames' }, { table: 'settings' }, { table: 'potentialTypes' }, { table: 'sides' }, { table: 'calculators' }])
     console.log('tables deleted')
 }

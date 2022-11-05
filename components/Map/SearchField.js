@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect, useContext } from 'react'
-import { Autocomplete, AutocompleteItem, Spinner, Icon } from '@ui-kitten/components'
-import { StyleSheet, View, Pressable, StatusBar, ActivityIndicator } from 'react-native'
+import { Autocomplete, AutocompleteItem, Icon } from '@ui-kitten/components'
+import { StyleSheet, View, Pressable, ActivityIndicator } from 'react-native'
 import { BS } from '../../App'
 import { search } from '../_Stateless/Icons'
 import { sendRequest } from '../../database/db'

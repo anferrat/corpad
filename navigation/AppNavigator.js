@@ -11,7 +11,10 @@ import SearchBar from '../components/Survey/SearchBar/SearchBar'
 import HomeBottomTabs from './HomeBottomTabs.js'
 import SettingDetails from '../screens/SettingDetails'
 import TopBar from '../components/Settings/TopBar'
+import TopBarCalculator from '../components/Calculator/TopBar'
 import OnboardingScreen from '../screens/Onboarding'
+import CalculatorList from '../screens/CalculatorList'
+import Calculator from '../screens/Calculator'
 import CreateSurvey from '../components/Home/CreateSurvey/CreateSurvey.js'
 import { useDispatch, useSelector } from 'react-redux'
 import { isSurveyLoaded, surveyLoader, saveSurveyHandler } from '../components/surveyManagement.js'
@@ -32,7 +35,6 @@ export const AppNavigator = () => {
   const dispatch = useDispatch()
   //surveyLoaded - indicates what sets of screen needed to be presented - either home screens with survey lists or survey screens
   const surveyLoaded = useSelector(state => state.settings.currentSurvey.isLoaded)
-  const surveyFileName = useSelector(state => state.settings.currentSurvey.fileName)
 
   //homeScreenCloud - used to determine what type of survey was previously handled. based on that app determines what home screen list to display
   const homeScreenCloud = useSelector(state => state.settings.currentSurvey.homeScreenCloud)
@@ -198,6 +200,14 @@ export const AppNavigator = () => {
           header: props => <TopBar {...props} />
         }}>
           <Stack.Screen name='SettingDetails' component={SettingDetails} />
+        </Stack.Group>
+        <Stack.Group screenOptions={{
+          headerShown: true,
+          animation: 'fade_from_bottom',
+          header: props => <TopBarCalculator {...props} />
+        }}>
+          <Stack.Screen name='CalculatorList' component={CalculatorList} />
+          <Stack.Screen name='Calculator' component={Calculator} />
         </Stack.Group>
       </Stack.Navigator >
     )

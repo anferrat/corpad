@@ -15,14 +15,14 @@ const settingsParams = [
             { title: 'Survey information', screen: 'info', icon: 'info-outline', description: 'See general stats of your survey, and status of completion' },
             { title: 'Reference cells', screen: 'refCells', icon: 'RE', pack: 'cp', description: 'Add and remove portable reference cells' },
             { title: 'Potentials', screen: 'potentials', icon: 'grid-outline', description: 'Control default units for potential readings, add and remove potential reading types' },
+            { title: 'Export to spreadsheet', screen: 'export', icon: 'download', description: 'Export data from survey to a spreadsheet file and save it to your device' },
         ]
     },
     {
         title: 'App',
         settings: [
             { title: 'Default names', screen: 'defaultNames', icon: 'people-outline', description: 'Manage default names for new test points, rectifiers, readings and etc.' },
-            { title: 'Export as CSV', screen: 'export', icon: 'file-text-outline', description: 'Export data from survey to a spreadsheet file and save it to your device' },
-            { title: 'Exported files', screen: 'exportedFiles', icon: 'code-download-outline', description: 'View exported CSV and KML files, delete or share them with different apps' },
+            { title: 'Exported files', screen: 'exportedFiles', icon: 'file-text-outline', description: 'View exported CSV and KML files, delete or share them with different apps' },
         ],
     }
 ]

@@ -1,6 +1,6 @@
 import React from 'react'
 import { Pressable, StyleSheet } from 'react-native'
-import { basic200 } from '../../../styles/GlobalStyle'
+import { androidRipple } from '../../../styles/GlobalStyle'
 import ReadingTitle from './ReadingTitle'
 
 const ReadingButton = (props) => {
@@ -8,7 +8,7 @@ const ReadingButton = (props) => {
         <Pressable
             style={styles.pressable}
             onPress={props.onPress}
-            android_ripple={{ color: basic200 }}>
+            android_ripple={androidRipple}>
             <ReadingTitle
                 dataType={props.dataType}
                 reading={props.reading} />

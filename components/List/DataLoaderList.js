@@ -110,8 +110,10 @@ const ItemList = (props) => {
         , [t.settings.displayedReading, props.navigateToView])
 
     const renderFooter = React.useCallback(() => { //spinner when next page is loading
-        return <FooterLoader visible={!t.settings.endReached && t.idList.length !== 0} />
-    }, [t.settings.endReached, t.idList.length])
+        return <FooterLoader loadingMore={!t.settings.endReached && t.idList.length !== 0}
+            count={t.idList.length}
+            refreshing={t.settings.refreshing} />
+    }, [t.settings.endReached, t.idList.length, t.settings.refreshing])
 
     const renderEmptyListComponent = React.useCallback(() =>
         <EmptyListComponent

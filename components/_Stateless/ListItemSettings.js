@@ -1,13 +1,13 @@
 import React from 'react'
-import { Text, Icon, Divider } from '@ui-kitten/components'
+import { Text, Icon } from '@ui-kitten/components'
 import { StyleSheet, Pressable, View } from 'react-native'
-import { basic, basic1000, basic300, primary } from '../../styles/GlobalStyle'
+import { primary, androidRipple } from '../../styles/GlobalStyle'
 
 const ListItem = (props) => {
     return (
         <>
             <Pressable
-                android_ripple={{ color: basic300 }}
+                android_ripple={androidRipple}
                 style={styles.pressable}
                 onPress={props.onPress}>
                 <Icon name={props.iconName} pack={props.pack} style={styles.icon} fill={primary} />
