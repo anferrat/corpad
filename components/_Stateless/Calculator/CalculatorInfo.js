@@ -80,7 +80,7 @@ const getHints = (calculatorType) => {
             return [
                 'For more details refer to NACE TM0102 Measurement of Protective Coating Electrical Conductance on Underground Pipelines.',
                 'Attenuation method is not implemented in this calculator. If there is a significant difference in IR drop between two locations, calculated result may be imprecise. Refer to NACE TM0102 for details.',
-                'Choose access points that are remote from grounded and other sources of interference.',
+                'Choose access points that are remote from ground bed and other sources of interference.',
                 'Soil resistivity can be calculated using Wenner method (Layer resistivity calculator)'
             ]
         case 'current4Wire':

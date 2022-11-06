@@ -1,5 +1,5 @@
 import React from 'react'
-import { ScrollView, StyleSheet, View } from 'react-native'
+import { ScrollView, StatusBar, StyleSheet, View } from 'react-native'
 import { Text, Divider } from '@ui-kitten/components'
 import { labels, potentialFields, potentialUnits, testPointTypes, testPointReadingOptions, testPointReadingsWithPotentials } from '../../../../constants/constants'
 import { sendRequest } from '../../../../database/db'
@@ -36,7 +36,7 @@ const ModalContent = (props) => {
             iconName={cardCode + '-filled'} />)
     return (
         <View style={styles.mainView}>
-            <View style={{ ...androidStyle.TopBarItem, ...styles.header }}>
+            <View style={{ ...androidStyle.TopBar, ...styles.header }}>
                 <SingleIconButton
                     onPress={props.closeModal}
                     color='#fff'
@@ -69,5 +69,6 @@ const styles = StyleSheet.create({
     header: {
         backgroundColor: primary,
         justifyContent: 'flex-start',
+        paddingTop: StatusBar.currentHeight
     }
 })

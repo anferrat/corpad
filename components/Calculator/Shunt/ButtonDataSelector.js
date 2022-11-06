@@ -24,6 +24,6 @@ export default React.memo(ButtonDataSelector)
 
 const styles = StyleSheet.create({
     mainView: {
-        paddingVertical: 12
+        paddingVertical: 6
     }
 })

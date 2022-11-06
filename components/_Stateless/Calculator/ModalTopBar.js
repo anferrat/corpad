@@ -1,5 +1,5 @@
 import React from 'react'
-import { View, StyleSheet } from 'react-native'
+import { View, StyleSheet, StatusBar } from 'react-native'
 import { androidStyle, primary } from '../../../styles/GlobalStyle'
 import SingleIconButton from '../SingleIconButton'
 import { Text } from '@ui-kitten/components'

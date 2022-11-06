@@ -112,7 +112,8 @@ export const AppNavigator = () => {
       const isLoaded = await isSurveyLoaded()
       if (isLoaded.status === 200)
         if (isLoaded.isLoaded) {
-          await sendRequest('DELETE', 'EMPTY') // deletes values with name == NULL. They can appear if exited app in a middle of creating new test item
+          // deletes values with name == NULL. They can appear if exited app in a middle of creating new test item, need to re-work this
+          await sendRequest('DELETE', 'EMPTY', [{ table: 'testPoints' }, { table: 'rectifiers' }, { table: 'pipelines' }, { table: 'cards' }, { table: 'circuits' }]) 
           dispatch(loadSurveySettings({
             isLoaded: true,
             name: isLoaded.name,

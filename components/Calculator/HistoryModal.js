@@ -36,10 +36,11 @@ const HistoryModal = (props) => {
         setLoading(true)
     }, [setVisible, setLoading])
 
-    const loadCalculatorHandler = React.useCallback((data, id) => {
-        props.loadHandler(data, id)
-        hideModal()
-    }, [props.loadHandler, hideModal])
+    const loadCalculatorHandler = React.useCallback(async (data, id) => {
+        setLoading(true)
+        setTimeout(() => { props.loadHandler(data, id) }, 20)
+        setVisible(false)
+    }, [props.loadHandler, setLoading, setVisible])
 
     const renderItem = React.useCallback(({ item, index }) => {
         return (
@@ -62,7 +63,7 @@ const HistoryModal = (props) => {
 
     return (
         <>
-            <Button appearance='ghost' onPress={displayModal}>History...</Button>
+            <Button appearance='ghost' onPress={displayModal} style={styles.button}>History...</Button>
             <Modal
                 animationType="slide"
                 visible={visible}
@@ -109,6 +110,10 @@ const styles = StyleSheet.create({
     },
     flatList: {
         flex: 1,
-        backgroundColor: basic200
+        backgroundColor: basic200,
+        paddingTop: 6
+    },
+    button: {
+        marginVertical: 6
     }
 })

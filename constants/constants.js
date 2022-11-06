@@ -314,7 +314,7 @@ export const calculatorTypes = {
         fileName: 'Shunt_current'
     },
     current2Wire: {
-        title: 'Current span (two-wire)',
+        title: 'Current span (2-wire)',
         historyTitle: 'Сurrent span',
         icon: '2pin',
         pack: 'cp',
@@ -322,7 +322,7 @@ export const calculatorTypes = {
         fileName: 'Current_span_two_wire'
     },
     current4Wire: {
-        title: 'Current span (four-wire)',
+        title: 'Current span (4-wire)',
         historyTitle: 'Current span',
         icon: '4pin',
         pack: 'cp',
@@ -338,7 +338,7 @@ export const calculatorTypes = {
         fileName: 'Coating_conductance'
     },
     refCell: {
-        title: 'Reference cell converter',
+        title: 'Reference converter',
         historyTitle: 'Reference',
         icon: 'swap',
         pack: null,

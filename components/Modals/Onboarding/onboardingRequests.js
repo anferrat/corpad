@@ -1,7 +1,7 @@
 import { sendRequest } from "../../../database/db"
 
 // after big updates displays onboarding with the features, in order to request new onboarding - change version to +1 and change the onboarding Screen
-export const ONBOARDING_VERSION = null
+export const ONBOARDING_VERSION = 1
 
 export const markAsVisited = async (onboarding) => {
     const settings = await sendRequest('SELECT', 'SETTINGS')

@@ -23,7 +23,7 @@ const HistoryListItem = (props) => {
         <Animated.View style={{
             height: scale.current.interpolate({
                 inputRange: [0, 1],
-                outputRange: [0, 78],
+                outputRange: [0, 72],
             }),
             transform: [{ scale: scale.current }]
         }}>
@@ -56,7 +56,8 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
-        flex: 1
+        flex: 1,
+        marginTop: 6
     },
     titleView: {
         flexDirection: 'row',

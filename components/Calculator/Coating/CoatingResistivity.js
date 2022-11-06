@@ -54,7 +54,7 @@ const CoatingResistivity = (props) => {
             })
         })
         if (validation.valid)
-            setValue(point, property, status, value)
+            setValue(point, property, status, validation.value)
     }, [props.setValid, setValue])
     return (
         <>
