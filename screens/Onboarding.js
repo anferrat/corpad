@@ -37,6 +37,12 @@ const OnboardingScreen = () => {
         },
         {
             backgroundColor: basic300,
+            image: <Icon name='onboarding-calculator' fill={primary} pack='cp' style={styles.icon} />,
+            title: 'Calculate',
+            subtitle: 'Calculate resistivity, current and other properties with your phone. Save results or/and export them to spreadsheets.'
+        },
+        {
+            backgroundColor: basic300,
             image: <Icon name='onboarding-export' pack='cp' fill={primary} style={styles.icon} />,
             title: 'Export',
             subtitle: 'Export your data to spreadsheets or store them as JSON files on your device and cloud storage'
@@ -47,8 +53,26 @@ const OnboardingScreen = () => {
         {
             backgroundColor: basic300,
             image: <Icon name='corpad-logo' fill={primary} pack='cp' style={styles.icon} />,
-            title: '1.1 update is live',
-            subtitle: 'Enjoy extra fetaures and more stability'
+            title: 'Corpad was updated to version 1.1',
+            subtitle: 'Check out awesome features that come with this update'
+        },
+        {
+            backgroundColor: basic300,
+            image: <Icon name='calculator' fill={primary} pack='cp' style={styles.icon} />,
+            title: 'Corrosion calculator',
+            subtitle: 'Soil resistivity, current span and other useful calculation tools are now available. Save results and export them to CSV.'
+        },
+        {
+            backgroundColor: basic300,
+            image: <Icon name='file-text-outline' fill={primary} style={styles.icon} />,
+            title: 'Exported files',
+            subtitle: 'Now you can manage your CSV and KML files, share and delete them when you want.'
+        },
+        {
+            backgroundColor: basic300,
+            image: <Icon name='smiling-face' fill={primary} style={styles.icon} />,
+            title: 'Lots of small things',
+            subtitle: 'Check https://www.corpad.ca/updates for more info. If you encounter a bug, having issues or have great ideas on how to improve this app, please let me know at andrei@corpad.ca.'
         },
     ]
 

@@ -388,7 +388,7 @@ const generateQuery = (QUERY_TYPE, DATA_TYPE, data) => {
                 case 'CALCULATOR':
                     return { query: 'DELETE FROM calculators WHERE id=?', varArray: [data.calculatorId] }
                 case 'EMPTY':
-                    return { query: 'DELETE FROM testPoints WHERE name IS NULL; DELETE FROM rectifiers WHERE name IS NULL; DELETE FROM pipelines WHERE name IS NULL; DELETE FROM potentials WHERE name IS NULL; DELETE FROM cards WHERE name IS NULL; DELETE FROM circuits WHERE name IS NULL;', varArray: [] }
+                    return { query: `DELETE FROM ${data.table} WHERE name IS NULL`, varArray: [] }
                 case 'RECTIFIER':
                     return { query: 'DELETE FROM rectifiers WHERE id=?', varArray: [data.rectifierId] }
                 case 'POTENTIAL_TYPE':

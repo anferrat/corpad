@@ -1016,6 +1016,23 @@ const OnboardingInfo = (props) => (
   </Svg>
 )
 
+const OnboardingCalculator = (props) => (
+  <Svg
+    id="Capa_1"
+    xmlns="http://www.w3.org/2000/svg"
+    x={0}
+    y={0}
+    viewBox="0 0 29.8 32"
+    style={{
+      enableBackground: "new 0 0 29.8 32",
+    }}
+    xmlSpace="preserve"
+    {...props}
+  >
+    <Path d="M26.3 18.5S27.4 1 26.6.2C25.5-.9.5 2.2 0 3.1c-.4.9 4.4 17.8 4.4 17.8l-2.3 9s1.1 2.1 2 2.1c.9 0 24.5-1.9 25.2-2.4.7-.5.4-1.8.5-2.5.1-.7-3.5-8.6-3.5-8.6zM2.6 4.8c.5-.7 21.7-3 22.1-2.4.4.5-.2 13.2-.4 13.8-.2.6-17.8 2.5-18.6 2C5 17.7 2 5.4 2.6 4.8zm22.3 13.4s-8.8 3.3-18.6 1.7l18.6-1.7zm-5 9.2c-.3.3-7.4.7-7.5.5-.1-.1 0-.6.2-1.2 0-.1 0-.2.1-.2 0-.1 0-.1.1-.2 0-.1 0-.1.1-.2V26c0-.1 0-.1.1-.1v-.1s0-.1.1-.1v-.1s0-.1.1-.1c0 0 0-.1.1-.1 0 0 .1 0 .1-.1.4-.1 5.2-.8 5.5-.5l.1.1.1.1v.1c.2.3.4.7.6 1.1.2.4.4 1 .2 1.2zm7-1.5c-.2.1-2.8.5-6.1.9l-.3-.9c2.6-.3 4.6-.6 4.8-.7.6-.3-1.4-3.5-1.9-3.7-.5-.1-15.5.9-15.7 1.5-.2.5-1.8 3.5-1.4 4 .2.2 2.4.1 5.2-.2-.1.4-.2.7-.2 1-3.6.3-6.5.5-6.7.3-.5-.7 1.4-4.8 1.6-5.5s17.9-2.1 18.3-1.9c.7.3 3 4.7 2.4 5.2z" />
+  </Svg>
+)
+
 const KmlFile = (props) => (
   <Svg
     xmlns="http://www.w3.org/2000/svg"
@@ -1295,6 +1312,8 @@ export const Icon = (props) => {
       return <OnboardingSettings {...props} />
     case 'onboarding-stars':
       return <OnboardingStars {...props} />
+      case 'onboarding-calculator':
+      return <OnboardingCalculator {...props} />
     case 'onboarding-comment':
       return <OnboardingComment {...props} />
     case 'kml-file':

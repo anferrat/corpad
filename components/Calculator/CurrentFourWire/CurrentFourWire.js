@@ -14,7 +14,7 @@ const CurrentFourWire = (props) => {
         const validation = fieldValidation(value, property, true)
         props.setValid(old => ({ ...old, [property]: status === null ? validation.valid : { ...old[property], [status]: validation.valid } }))
         if (validation.valid)
-            setValue(property, status, value)
+            setValue(property, status, validation.value)
     }, [props.setValid, setValue])
 
     return (
@@ -67,7 +67,6 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         flex: 1,
         alignItems: 'center',
-        paddingTop: 16
     },
     inputLeft: {
         flex: 1,

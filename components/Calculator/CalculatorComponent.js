@@ -7,6 +7,7 @@ import { View } from 'react-native'
 import { androidStyle } from '../../styles/GlobalStyle'
 import CoatingResistivity from './Coating/CoatingResistivity'
 import ReferenceConverter from './RefCell/ReferenceConverter'
+import { StyleSheet } from 'react-native'
 
 const MyComponent = (props) => {
     switch (props.calculatorType) {
@@ -28,9 +29,16 @@ const MyComponent = (props) => {
 }
 
 const CalculatorComponent = (props) => {
-    return <View style={androidStyle.ConnectionCard}>
+    return <View style={styles.maiView}>
         <MyComponent {...props} />
     </View>
 }
 
 export default React.memo(CalculatorComponent)
+
+const styles = StyleSheet.create({
+    maiView: {
+        ...androidStyle.ConnectionCard,
+        marginTop: 0
+    }
+})
