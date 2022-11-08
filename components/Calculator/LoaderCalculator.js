@@ -120,6 +120,17 @@ const LoaderCalculator = (props) => {
         }
     }, [])
 
+    const deleteAllHistory = React.useCallback(async () => {
+        const deleteAction = await sendRequest('DELETE', 'CALCULATOR_ALL', { calculatorType: props.calculatorType })
+        if (deleteAction.status === 200) {
+            return true
+        }
+        else {
+            errorHandler(deleteAction.status)
+            return false
+        }
+    }, [props.calculatorType])
+
     return <>
         <ScrollView contentContainerStyle={data.disabled ? styles.scrollViewEmpty : styles.scrollViewNormal}>
             <View style={styles.topRow}>
@@ -131,6 +142,8 @@ const LoaderCalculator = (props) => {
                 <HistoryModal
                     activeCalculatorId={data.calculatorId}
                     onDeleteHandler={deleteCalculatorFromDataBase}
+                    onDeleteAllHandler={deleteAllHistory}
+                    resetCalculator={resetCalculator}
                     loadHandler={loadCalculatorFromDataBase}
                     calculatorType={props.calculatorType} />
             </View>

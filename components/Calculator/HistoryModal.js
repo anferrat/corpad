@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { sendRequest } from '../../database/db'
 import { ActivityIndicator, Modal, View, StyleSheet } from 'react-native'
 import { Button, Text } from '@ui-kitten/components'
-import { errorHandler } from '../errorHandler'
+import { errorHandler, warningHandler } from '../errorHandler'
 import { androidStyle, basic200, primary } from '../../styles/GlobalStyle'
 import FlatList from '../_Stateless/List/FlatList'
 import SingleIconButton from '../_Stateless/SingleIconButton'
@@ -12,6 +12,8 @@ import { calculatorTypes } from '../../constants/constants'
 import EmptyListComponent from '../_Stateless/EmptyListComponent'
 import ModalTopBar from '../_Stateless/Calculator/ModalTopBar'
 import LoadingView from '../_Stateless/Settings/LoadingView'
+import MainActionButton from '../_Stateless/MainActionButton'
+import { trashIcon } from '../_Stateless/Icons'
 
 
 const HistoryModal = (props) => {
@@ -61,6 +63,22 @@ const HistoryModal = (props) => {
         props.onDeleteHandler(id)
     }, [setHistoryList])
 
+    const deleteAllHandler = React.useCallback(async () => {
+        const confirm = await warningHandler(47, 'Delete all', 'Cancel')
+        if (confirm) {
+            setLoading(true)
+            const deleteConfirm = await props.onDeleteAllHandler()
+            if (deleteConfirm) {
+                setVisible(false)
+                props.resetCalculator()
+            }
+            else {
+                errorHandler(601)
+                setLoading(false)
+            }
+        }
+    }, [setLoading, props.resetCalculator, props.onDeleteAllHandler, setVisible])
+
     return (
         <>
             <Button appearance='ghost' onPress={displayModal} style={styles.button}>History...</Button>
@@ -75,11 +93,22 @@ const HistoryModal = (props) => {
                     <FlatList
                         ListEmptyComponent={<EmptyListComponent title={'No calculations found'} description={'After completing a calculation press save button to find it here.'} icon='list-outline' />}
                         style={styles.flatList}
+                        contentContainerStyle={styles.container}
                         data={historyList}
                         renderItem={renderItem}
                         keyExtractor={item => item.id}
                     />
                 </LoadingView>
+                {historyList.length > 0 ?
+                    <Button
+                        accessoryLeft={trashIcon}
+                        style={androidStyle.SaveButton}
+                        onPress={deleteAllHandler}
+                        disabled={loading}
+
+
+                    >Delete all</Button> : null
+                }
             </Modal>
         </>
     )
@@ -115,5 +144,8 @@ const styles = StyleSheet.create({
     },
     button: {
         marginVertical: 6
+    },
+    container: {
+        paddingBottom: 72
     }
 })
