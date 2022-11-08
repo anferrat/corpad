@@ -32,4 +32,4 @@ const DisplayCardTitle = (props) => {
     )
 }
 
-export default DisplayCardTitle
+export default React.memo(DisplayCardTitle)
