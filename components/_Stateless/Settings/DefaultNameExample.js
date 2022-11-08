@@ -12,7 +12,7 @@ const DefaultNameExample = (props) => {
                 cp
                 large
                 iconName={labels[props.selectedType].icon}
-                title={props.displayPipelineName ? '<MyPipeline>' : `${defaultName} 1`}
+                title={props.displayPipelineName ? '<MyPipeline>' : `${defaultName}1`}
                 subtitle={labels[props.selectedType].label} />
         </View>
     )

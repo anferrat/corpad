@@ -29,7 +29,8 @@ const warningCodes = {
     43: 'Are you sure you want to delete this survey file?',
     44: 'Are you sure you want to delete this file?',
     45: 'Are you sure you want to delete all exported files?',
-    46: 'Are you sure you want to delete this calculation?'
+    46: 'Are you sure you want to delete this calculation?',
+    47: 'You will delete all saved calculations of this type including the one currently opened. Do you want to continue?'
 }
 
 const errorCodes = {

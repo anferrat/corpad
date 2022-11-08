@@ -1,14 +1,14 @@
 import React from 'react'
 import { Text, Icon } from '@ui-kitten/components'
-import { View, StyleSheet, Pressable } from 'react-native'
-import { basic200, primary } from '../../styles/GlobalStyle'
+import { StyleSheet, Pressable } from 'react-native'
+import { primary } from '../../styles/GlobalStyle'
 import { copyToClipboard } from '../_nativeFeatures/clipboard'
 
 const IconLine = (props) => {
     if (props.hideEmpty && (props.value === '' || props.value === null || props.value === undefined))
         return null
     else
-        return <Pressable style={styles.mainView} android_ripple={{ color: basic200 }} onLongPress={copyToClipboard.bind(this, props.value, true)}>
+        return <Pressable style={styles.mainView} onLongPress={copyToClipboard.bind(this, props.value, true)}>
             <Icon name={props?.icon ?? 'question-mark-circle-outline'}
                 style={styles.icon}
                 fill={primary}
