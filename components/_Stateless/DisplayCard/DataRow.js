@@ -7,7 +7,7 @@ const DataRow = (props) => {
         return null
     else
         return (
-            <Text style={displayCard.dataText} appearance='hint'>
+            <Text style={displayCard.dataText} appearance='hint' numberOfLines={1} ellipsizeMode={'tail'}>
                 <Icon
                     pack={props.pack}
                     name={props.iconName}

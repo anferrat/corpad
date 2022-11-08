@@ -497,6 +497,7 @@ export const getIconByFieldType = (type) => { // used in Display card DataRow.
                 pack: 'cp'
             }
         case 'location':
+        case 'map-outline':
             return {
                 icon: 'map-outline',
                 pack: null
