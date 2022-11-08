@@ -3,7 +3,7 @@ import { useSelector, useDispatch } from 'react-redux'
 import { loadListState, setOffset, setRefresh, deleteItemFromList, addItemToList, updateList, resetListState } from '../../store/actions/list'
 import { ActivityIndicator, StyleSheet, View } from 'react-native'
 import { getListStateByType } from '../customFunctions'
-import DisplayCard from '../_Stateless/DisplayCard/DisplayCard2'
+import DisplayCard from '../_Stateless/DisplayCard/DisplayCard'
 import FooterLoader from '../_Stateless/List/FooterLoader'
 import EmptyListComponent from '../_Stateless/List/EmptyListComponent'
 import { getLocationAsync, fetchData, fetchIdList } from './ListFunctions'
@@ -111,9 +111,9 @@ const ItemList = (props) => {
 
     const renderFooter = React.useCallback(() => { //spinner when next page is loading
         return <FooterLoader loadingMore={!t.settings.endReached && t.idList.length !== 0}
-            count={t.idList.length}
+            count={t.itemList.length}
             refreshing={t.settings.refreshing} />
-    }, [t.settings.endReached, t.idList.length, t.settings.refreshing])
+    }, [t.settings.endReached, t.idList.length, t.settings.refreshing, t.itemList.length])
 
     const renderEmptyListComponent = React.useCallback(() =>
         <EmptyListComponent
