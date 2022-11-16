@@ -71,7 +71,6 @@ const dataListHandler = (dataType, itemData) => {
     return [{ type: 'timeModified', value: getFormattedDate(itemData.timeModified) }, ...typeSpecificDataHandler(dataType, itemData)]
 }
 
-
 const readingListHandler = (readings, dataType, displayedReading) => {
     if (readings.length === 0)
         return 'none'

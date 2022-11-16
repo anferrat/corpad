@@ -109,7 +109,7 @@ const ItemList = (props) => {
         readingList={item.readingList} />
         , [t.settings.displayedReading, props.navigateToView])
 
-    const renderFooter = React.useCallback(() => { //spinner when next page is loading
+    const renderFooter = React.useCallback(() => { //spinner when next page is loading and counter
         return <FooterLoader loadingMore={!t.settings.endReached && t.idList.length !== 0}
             count={t.itemList.length}
             refreshing={t.settings.refreshing} />

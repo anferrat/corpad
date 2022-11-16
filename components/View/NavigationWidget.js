@@ -8,17 +8,16 @@ import SingleIconButton from '../_Stateless/SingleIconButton'
 import * as Sensors from "react-native-sensors"
 import { errorHandler } from '../errorHandler'
 import { basic200, primary } from '../../styles/GlobalStyle'
-//leave it in case of manual calculation of tilt-compensated heading
+//import NavigationWidgetModal from '../_Stateless/ViewItem/NavigationWidgetModal'
+
 
 const twoPi = Math.PI * 2
 const R = 6371e3
 const PiOver180 = Math.PI / 180
 
 
-//Sensors.setUpdateIntervalForType(Sensors.SensorTypes['orientation'], 50)
+Sensors.setUpdateIntervalForType(Sensors.SensorTypes['orientation'], 50)
 
-
-//Sensors.setUpdateIntervalForType(Sensors.orientation, 200)
 
 export default NavigationWidget = () => {
     const latitude = useSelector(state => state.item.view?.latitude)
@@ -28,6 +27,7 @@ export default NavigationWidget = () => {
     const [distance, setDistance] = useState(null)
     const [direction, setDirection] = useState(null)
     const [permissionGranted, setPermissionGranted] = useState(null)
+    const [modalVisible, setModalVisible] = useState(false)
 
     //Holds animated value for arrow angle turning
     const arrowAngle = useRef(new Animated.Value(0))
@@ -37,6 +37,12 @@ export default NavigationWidget = () => {
 
     //heading of the test point location in Rad
     const pointHeading = useRef(0)
+
+    //Holds animated value for pointHeadingAngle
+    const pointHeadingAngle = useRef(new Animated.Value(0))
+
+    //Holds animated value for compassHeadingAngle
+    const compassHeadingAngle = useRef(new Animated.Value(0))
 
     //holds last average bearing value
     const displacementAngle = useRef({
@@ -50,6 +56,19 @@ export default NavigationWidget = () => {
         inputRange: [-twoPi, 0],
         outputRange: ['-360deg', '0deg']
     })
+
+    const compassPosition = compassHeadingAngle.current.interpolate({
+        inputRange: [-twoPi, 0],
+        outputRange: ['-180deg', '180deg']
+    })
+
+    const headingPoisition = pointHeadingAngle.current.interpolate({
+        inputRange: [-twoPi, 0],
+        outputRange: ['-180deg', '180deg']
+    })
+
+    const showModal = React.useCallback(() => setModalVisible(true), [setModalVisible])
+    const hideModal = React.useCallback(() => setModalVisible(false), [setModalVisible])
 
     useEffect(() => {
         if (active) {
@@ -69,9 +88,9 @@ export default NavigationWidget = () => {
         if (enableWidget && active) {
             if (permissionGranted === true) {
                 const watchId = Geolocation.watchPosition(updateLocation, errorHandler.bind(this, 800, setActive.bind(this, false)), { enableHighAccuracy: true, interval: 200, distanceFilter: 0 })
-                //const subscribe = Sensors.orientation.subscribe(updateHeading)
+                const subscribe = Sensors.orientation.subscribe(updateHeading)
                 return () => {
-                    //subscribe.unsubscribe()
+                    subscribe.unsubscribe()
                     Geolocation.clearWatch(watchId)
                 }
             }
@@ -84,8 +103,8 @@ export default NavigationWidget = () => {
 
 
     const updateHeading = React.useCallback((orientation) => {
-        const arraySize = 3 // 
-        const minStep = .02 //in Radians
+        const arraySize = 2 // 
+        const minStep = .0001 //in Radians
         const bearing = bearingCalculator(pointHeading.current, orientation.yaw) // from -Pi to Pi
 
         //adding new heading to the array, removing the oldest one and finding average
@@ -109,6 +128,12 @@ export default NavigationWidget = () => {
                 duration: 100,
                 useNativeDriver: true
             }).start()
+            Animated.timing(compassHeadingAngle.current, {
+                toValue: displacementAngle.current.prev - pointHeading.current,
+                duration: 100,
+                useNativeDriver: true
+            }).start()
+
         }
     }, [arrowAngle, pointHeading, bearingData])
 
@@ -116,6 +141,11 @@ export default NavigationWidget = () => {
         if (enableWidget) {
             const data = coordTransform(latitude, longitude, locationObject.coords.latitude, locationObject.coords.longitude)
             pointHeading.current = data.heading
+            Animated.timing(pointHeadingAngle.current, {
+                toValue: data.heading,
+                duration: 100,
+                useNativeDriver: true
+            }).start()
             setDirection(getDirection(Math.round(data.heading / Math.PI * 180) + 180))
             setDistance(getDistance(data.distance))
         }
@@ -129,20 +159,29 @@ export default NavigationWidget = () => {
                 return <ActivityIndicator style={styles.activity} color={primary} />
             else
                 return (
-                    <Pressable style={styles.main} android_ripple={{ color: basic200 }}>
+                    <>
+                        <Pressable style={styles.main}>
+                            <Animated.View style={{ ...styles.arrow, transform: [{ rotate: rotation }] }}>
+                                <Icon name='navigation' fill={primary} style={{ height: 20, width: 20 }} />
+                            </Animated.View>
+                            <Text appearance='hint' style={styles.direction}>{direction}</Text>
+                            <Text appearance='hint'>{distance}</Text>
+                        </Pressable>
                         {/*
-                        <Animated.View style={{ ...styles.arrow, transform: [{ rotate: rotation }] }}>
-                            <Icon name='navigation' fill={primary} style={{ height: 20, width: 20 }} />
-                        </Animated.View>
+                        //Modal needs more work, doesn't seem necessary 
+                        <NavigationWidgetModal
+                            rotation={compassPosition}
+                            heading={headingPoisition}
+                            visible={modalVisible}
+                            hideModal={hideModal}
+                        />
                 */}
-                        <Text appearance='hint' style={styles.direction}>{direction}</Text>
-                        <Text appearance='hint'>{distance}</Text>
-                    </Pressable>
+                    </>
                 )
         else
             return (
                 <SingleIconButton
-                    iconName='navigation'
+                    iconName='compass'
                     onPress={setActive.bind(this, true)} />
             )
 }

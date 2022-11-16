@@ -4,7 +4,7 @@ import { basic, primary, displayCard } from '../../../styles/GlobalStyle'
 import { View } from 'react-native'
 
 
-const MAX_ICONS_IN_BAR = 3
+const MAX_ICONS_IN_BAR = 3 //it's actually +1
 
 const renderReadingIcons = (iconsArray, readingIndex) =>
     <View style={displayCard.readingBarIcons}>
