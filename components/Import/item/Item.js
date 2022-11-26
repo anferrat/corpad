@@ -1,9 +1,9 @@
 import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { resetImportItem } from '../../../../store/actions/importData'
-import PipelineView from './PipelineView'
-import RectifierView from './RectifierView'
-import TestPointView from './TestPointView'
+import { resetImportItem } from '../../../store/actions/importData'
+import Pipeline from './Pipeline'
+import Rectifier from './Rectifier'
+import TestPoint from './TestPoint'
 
 const ItemView = () => {
     const itemType = useSelector(state => state.importData.itemType)
@@ -13,11 +13,11 @@ const ItemView = () => {
     }, [])
     switch (itemType) {
         case 'TEST_POINT':
-            return <TestPointView />
+            return <TestPoint  />
         case 'RECTIFIER':
-            return <RectifierView />
+            return <Rectifier />
         case 'PIPELINE':
-            return <PipelineView />
+            return <Pipeline />
         default:
             return null
     }

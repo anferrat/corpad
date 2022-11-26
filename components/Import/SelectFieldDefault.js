@@ -1,7 +1,7 @@
 import React from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { setImportItemProperty } from '../../../store/actions/importData'
-import SelectField from '../../_Stateless/SelectField'
+import { setImportItemProperty } from '../../store/actions/importData'
+import SelectField from '../_Stateless/SelectField'
 
 const SelectFieldDefault = (props) => {
     const selectedIndex = useSelector(state => state.importData.item[props.property] ?? null)

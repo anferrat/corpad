@@ -1,13 +1,13 @@
 import React, { useEffect, useMemo, useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
-import { setRefresh } from "../../../../store/actions/list"
-import { refreshMarkers } from "../../../../store/actions/map"
-import { updateSetting } from "../../../../store/actions/settings"
-import { errorHandler } from "../../../errorHandler"
-import { importIcon } from "../../../_Stateless/Icons"
-import ImportModal from "../../../_Stateless/ImportCSV/ImportModal"
-import MainActionButton from "../../../_Stateless/MainActionButton"
-import { genRequestObject, importData } from "../../importFunctions"
+import { setRefresh } from "../../store/actions/list"
+import { refreshMarkers } from "../../store/actions/map"
+import { updateSetting } from "../../store/actions/settings"
+import { errorHandler } from "../errorHandler"
+import { importIcon } from "../_Stateless/Icons"
+import ImportModal from "../_Stateless/ImportCSV/ImportModal"
+import MainActionButton from "../_Stateless/MainActionButton"
+import { genRequestObject, importData } from "./importFunctions"
 
 
 const ImportButton = (props) => {

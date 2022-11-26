@@ -1,27 +1,25 @@
 import React from 'react'
 import { androidStyle } from '../styles/GlobalStyle'
-import { View, ScrollView } from 'react-native'
+import { View } from 'react-native'
 import TopBar from '../components/Import/TopBar'
-import SelectItem from '../components/Import/SelectItem'
-import SelectFile from '../components/Import/SelectFile'
-import NextButton from '../components/Import/NextButton'
+import ItemView from '../components/Import/item/Item'
+import ImportButton from '../components/Import/ImportButton'
+import { ScrollView } from 'react-native-gesture-handler'
 
 
-
-export default ImportItem = ({ route, navigation }) => {
-    const goBack = () => navigation.goBack()
-    const navigateToDetails = () => navigation.navigate('ImportDetails')
+export default ImportDetails = ({ route, navigation }) => {
+    const navigateToList = (itemType) => {
+        navigation.navigate('PipelineSurvey', { screen: itemType === 'TEST_POINT' ? 'TestPoints' : (itemType === 'RECTIFIER' ? 'Rectifiers' : 'Pipelines') })
+    }
+   
     return (
         <View style={androidStyle.AndroidSafeArea}>
-            <TopBar goBack={goBack} />
-            <ScrollView contentContainerStyle={{paddingBottom: 72}}>
-                <SelectItem />
-                <SelectFile />
-
+            <TopBar goBack={navigation.goBack} />
+            <ScrollView contentContainerStyle={{ paddingBottom: 72 }}>
+                <ItemView />
             </ScrollView>
-            <NextButton
-                onPress={navigateToDetails}
-            />
+            <ImportButton
+                navigateToList={navigateToList} />
         </View>
     )
 }

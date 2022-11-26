@@ -1,9 +1,9 @@
 import React from 'react'
 import SelectField from '../SelectField'
 import SelectFieldDefault from '../SelectFieldDefault'
-import { powerSourceList } from '../../../../constants/constants'
+import { powerSourceList } from '../../../constants/constants'
 import { Layout } from '@ui-kitten/components'
-import { androidStyle } from '../../../../styles/GlobalStyle'
+import { androidStyle } from '../../../styles/GlobalStyle'
 import { View, StyleSheet } from 'react-native'
 
 const RectifierView = () => {

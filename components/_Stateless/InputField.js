@@ -40,7 +40,7 @@ export const Unit = (props) => {
     else return null
 }
 
-const InputField = (props) => {
+const InputField = React.forwardRef((props, ref) => {
     const styleObject = React.useMemo(() => ({ ...props.style, paddingBottom: 12, borderWidth: props.disabled ? 0 : 1 }), [props.style, props.disabled])
     const caption = React.useMemo(() => getValidCaption(props.valid, props.property), [props.valid, props.property])
     const value = React.useMemo(() => toString(props.value), [props.value])
@@ -50,17 +50,19 @@ const InputField = (props) => {
     </>, [props.unit, props.disabled, props.displayHint, props.hintIcon, props.hintTitle])
     return (
         <Input
+            caption={caption}
             {...props}
+            ref={ref}
             selectTextOnFocus={true}
             accessoryRight={accessory}
             value={value}
             style={styleObject}
             status={props.valid ? 'basic' : 'danger'}
-            caption={caption} />
+        />
     )
-}
+})
 
-export default React.memo(InputField)
+export default InputField
 
 // InfoHint - adds an pressable item to input field to view additional info. Used to display info about reference cells in potentials entry fields
 

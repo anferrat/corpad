@@ -18,7 +18,7 @@ const SaveListItem = (props) => {
             dispatch(loadSurveySettings({ isCloudSurvey: false }))
             await onSaveHandler(fileName)
         }
-        else return errorHandler(updateIsCloud)
+        else return errorHandler(updateIsCloud.status)
     }, [dispatch])
 
     const onSaveHandler = React.useCallback(async (fileName) => {

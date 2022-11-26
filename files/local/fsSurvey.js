@@ -49,6 +49,7 @@ export const readLocalSurvey = async (filePath) => {
         }
     }
     catch (er) {
+        console.log(er)
         return {
             status: 411
         }
