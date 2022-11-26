@@ -25,9 +25,10 @@ import { gdrive } from '../files/cloud/gd.js'
 import NetInfo from '@react-native-community/netinfo'
 import { initDataBase, sendRequest } from '../database/db.js'
 import ImportItem from '../screens/ImportItem.js'
-import ImportDetails from '../screens/ImportDetails.js'
+import ImportFile from '../screens/ImportFile.js'
 import { ONBOARDING_VERSION } from '../components/Modals/Onboarding/onboardingRequests'
 import { errorHandler, warningHandler } from '../components/errorHandler'
+import ImportParameters from '../screens/ImportParameters'
 
 const Stack = createNativeStackNavigator()
 
@@ -36,7 +37,7 @@ export const AppNavigator = () => {
   //surveyLoaded - indicates what sets of screen needed to be presented - either home screens with survey lists or survey screens
   const surveyLoaded = useSelector(state => state.settings.currentSurvey.isLoaded)
 
-  //homeScreenCloud - used to determine what type of survey was previously handled. based on that app determines what home screen list to display
+  //homeScreenCloud - used to determine what type of survey was previously handled. based on that, app determines what home screen list to display
   const homeScreenCloud = useSelector(state => state.settings.currentSurvey.homeScreenCloud)
 
   //OnboardingMain - defines if onboarding screen needs to be presented
@@ -86,7 +87,7 @@ export const AppNavigator = () => {
       else errorHandler(isLoaded.status)
       dispatch(updateSetting('loader', { visible: false }))
     }
-  }, [])
+  }, [dispatch])
 
   //First useEffect to get all app pre-settings - renders once on app launch!
   useEffect(() => {
@@ -113,7 +114,7 @@ export const AppNavigator = () => {
       if (isLoaded.status === 200)
         if (isLoaded.isLoaded) {
           // deletes values with name == NULL. They can appear if exited app in a middle of creating new test item, need to re-work this
-          await sendRequest('DELETE', 'EMPTY', [{ table: 'testPoints' }, { table: 'rectifiers' }, { table: 'pipelines' }, { table: 'cards' }, { table: 'circuits' }]) 
+          await sendRequest('DELETE', 'EMPTY', [{ table: 'testPoints' }, { table: 'rectifiers' }, { table: 'pipelines' }, { table: 'cards' }, { table: 'circuits' }])
           dispatch(loadSurveySettings({
             isLoaded: true,
             name: isLoaded.name,
@@ -170,7 +171,8 @@ export const AppNavigator = () => {
               <Stack.Screen name='ViewItem' component={ViewItem} />
               <Stack.Screen name='DevScreen' component={DevScreen} />
               <Stack.Screen name='ImportItem' component={ImportItem} />
-              <Stack.Screen name='ImportDetails' component={ImportDetails} />
+              <Stack.Screen name='ImportFile' component={ImportFile} />
+              <Stack.Screen name='ImportParameters' component={ImportParameters} />
               <Stack.Screen name='EditItem' component={EditItem} />
               <Stack.Screen name='EditSubitem' component={EditSubitem} />
             </Stack.Group>

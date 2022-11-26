@@ -4,11 +4,13 @@ import { Button, ListItem, Icon, Text } from '@ui-kitten/components'
 import { useDispatch, useSelector } from 'react-redux'
 import DocumentPicker from 'react-native-document-picker'
 import RNFS from 'react-native-fs'
-import { parseCSV } from '../../files/helpers/genCsv'
-import { errorHandler } from '../errorHandler'
-import { setImportData } from '../../store/actions/importData'
-import { file, plusCircle } from '../_Stateless/Icons'
-import { basic400, danger, primary } from '../../styles/GlobalStyle'
+import { parseCSV } from '../../../files/helpers/genCsv'
+import { errorHandler } from '../../errorHandler'
+import { setImportData } from '../../../store/actions/importData'
+import { file, plusCircle } from '../../_Stateless/Icons'
+import { androidRipple, basic400, danger, primary } from '../../../styles/GlobalStyle'
+import { sendRequest } from '../../../database/db'
+
 
 const SelectFile = () => {
     const dispatch = useDispatch()
@@ -23,20 +25,29 @@ const SelectFile = () => {
 
     useEffect(() => () => resetFile(), [])
 
-    const ResetIcon = (props) => <Pressable onPress={resetFile}><Icon {...props} fill={danger} name='close' /></Pressable>
+    const ResetIcon = (props) => <Pressable onPress={resetFile} android_ripple={{ color: androidRipple, radius: 20 }}>
+        <Icon {...props}
+            style={{ ...props.style, ...styles.deleteIcon }}
+            fill={danger}
+            name='close' />
+    </Pressable>
 
     const selectFile = async () => {
         setLoading(true)
         try {
             const externalFile = await DocumentPicker.pickSingle({ allowMultiSelection: false, type: 'text/*' })
             const fileData = await RNFS.readFile(externalFile.uri)
+            const defaultNames = await sendRequest('SELECT', 'DEFAULT_NAMES', {})
             const data = parseCSV(fileData)
             if (data.data.length === 0)
                 errorHandler(415)
             else if (data.meta.fields.length === 0)
                 errorHandler(416)
             else
-                dispatch(setImportData(data.meta.fields, data.data, externalFile.name))
+                if (defaultNames.status !== 200)
+                    errorHandler(defaultNames.status)
+                else
+                    dispatch(setImportData(data.meta.fields, data.data, externalFile.name, defaultNames.result))
         }
         catch (er) {
             if (er.code !== 'DOCUMENT_PICKER_CANCELED')
@@ -48,20 +59,39 @@ const SelectFile = () => {
         <>
             <Text category='h6' style={styles.title}>2. Select file</Text>
             <View style={styles.mainView}>
-                <Icon style={styles.icon} fill={primary} name='download-outline' />
-                <Text appearance={'hint'} style={styles.text} category='s1'>Only comma-separated text files (.csv) are supported. First row should be headers. Check corpad.ca to learn more.</Text>
+                <Icon
+                    style={styles.icon}
+                    fill={primary}
+                    name='download-outline' />
+                <Text
+                    appearance={'hint'}
+                    style={styles.text}
+                    category='s1'>
+                    Only comma-separated text files (.csv) are supported. First row should be headers. Check corpad.ca to learn more.</Text>
                 {fileName === null ? (
-                    <Button style={styles.button} onPress={selectFile} accessoryLeft={loading ? <ActivityIndicator color={'#fff'} /> : plusCircle} disabled={loading} >Select file</Button>
+                    <Button
+                        style={styles.button}
+                        onPress={selectFile}
+                        accessoryLeft={loading ?
+                            <ActivityIndicator color={'#fff'} /> :
+                            plusCircle}
+                        disabled={loading}>
+                        Select file
+                    </Button>
                 )
                     :
-                    <ListItem title={fileName} description={`Rows: ${rows}, Columns: ${columns}`} accessoryLeft={file} accessoryRight={ResetIcon} />
+                    <ListItem
+                        title={fileName}
+                        description={`Rows: ${rows}, Columns: ${columns}`}
+                        accessoryLeft={file}
+                        accessoryRight={ResetIcon} />
                 }
             </View>
         </>
     )
 }
 
-export default React.memo(SelectFile)
+export default SelectFile
 
 const styles = StyleSheet.create({
     mainView: {
@@ -95,5 +125,8 @@ const styles = StyleSheet.create({
     icon: {
         width: 50,
         height: 50,
+    },
+    deleteIcon: {
+        marginVertical: 8,
     }
 })

@@ -32,7 +32,7 @@ const ResultViewWrapper = (props) => {
     }
     const activityIndicator = React.useCallback((isPrime = true) => <ActivityIndicator color={!isPrime ? danger : primary} size='small' />, [])
     if (props.display) {
-        return <View style={androidStyle.ConnectionCard}>
+        return <View style={{...androidStyle.ConnectionCard, ...styles.mainView}}>
             {props.children}
             <Divider />
             <View style={styles.buttonView}>
@@ -51,6 +51,7 @@ export default React.memo(ResultViewWrapper)
 
 const styles = StyleSheet.create({
     mainView: {
+        marginBottom: 12
     },
     button: {
         flex: 1,

@@ -2,8 +2,8 @@ import React from 'react'
 import SelectFieldDefault from '../SelectFieldDefault'
 import SelectField from '../SelectField'
 import { Layout } from '@ui-kitten/components'
-import { androidStyle } from '../../../../styles/GlobalStyle'
-import { pipeMaterials, pipeProducts, pipeCoating, pipeDiameterList } from '../../../../constants/constants'
+import { androidStyle } from '../../../styles/GlobalStyle'
+import { pipeMaterials, pipeProducts, pipeCoating, pipeDiameterList } from '../../../constants/constants'
 
 const PipelineView = () => {
     return (

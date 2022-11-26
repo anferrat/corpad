@@ -1,8 +1,8 @@
 import React from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { setImportItemProperty } from '../../../store/actions/importData'
-import { basic } from '../../../styles/GlobalStyle'
-import SelectField from '../../_Stateless/SelectField'
+import { setImportItemProperty } from '../../store/actions/importData'
+import { basic } from '../../styles/GlobalStyle'
+import SelectField from '../_Stateless/SelectField'
 import { Icon } from '@ui-kitten/components'
 
 const ImportItemSelectField = (props) => {
