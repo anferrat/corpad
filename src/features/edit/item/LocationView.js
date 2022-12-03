@@ -1,0 +1,94 @@
+import React, { useState, useRef, useEffect } from 'react'
+import { ActivityIndicator, StyleSheet, View } from 'react-native'
+import { useDispatch } from 'react-redux'
+import InputField from './InputField'
+import fieldValidation from '../../../helpers/validation'
+import { updateProperty } from '../../../store/actions/item'
+import { primary } from '../../../styles/colors'
+import SingleIconButton from '../../../components/IconButton'
+import { requestLocationAsync } from '../../../native_libs/location'
+import { errorHandler } from '../../../helpers/error_handler'
+
+
+const LocationView = (props) => {
+    const dispatch = useDispatch()
+    const [isLoading, setIsLoading] = useState(false)
+    const componentMounted = useRef(true)
+
+    const getLocationAsync = React.useCallback(async () => {
+        setIsLoading(true)
+        const loc = await requestLocationAsync()
+        if (componentMounted.current) {
+            if (loc.status === 200) {
+                const latitude = fieldValidation(loc.location.coords.latitude, 'latitude')
+                const longitude = fieldValidation(loc.location.coords.longitude, 'longitude')
+                dispatch(updateProperty(latitude.value, 'latitude', true))
+                dispatch(updateProperty(longitude.value, 'longitude', true))
+            }
+            else errorHandler(loc.status)
+            setIsLoading(false)
+        }
+    }, [dispatch])
+
+    useEffect(() => () => { componentMounted.current = false }, [])
+
+    return (
+        <View style={styles.GPSInputs}>
+            <InputField
+                style={styles.inputField}
+                property='latitude'
+                keyboardType='numeric'
+                maxLength={13}
+                value={props.latitude}
+                valid={props.latValid}
+                label='Latitude' />
+            <View style={styles.inter} />
+            <InputField
+                style={styles.inputField}
+                keyboardType='numeric'
+                maxLength={13}
+                property='longitude'
+                value={props.longitude}
+                valid={props.lonValid}
+                label='Longitude' />
+            <View style={styles.button}>
+                {isLoading ? <ActivityIndicator color={primary} /> : <SingleIconButton
+                    iconName='navigation'
+                    onPress={getLocationAsync}
+                />}
+            </View>
+        </View>
+    )
+}
+
+const styles = StyleSheet.create({
+    inputField: {
+        flex: 1,
+    },
+    inter: {
+        paddingHorizontal: 6,
+    },
+    input: {
+        marginTop: 10,
+        flexBasis: 50,
+        borderRadius: 30,
+        justifyContent: 'center',
+        alignItems: 'center',
+        paddingLeft: 6
+    },
+    GPSInputs: {
+        backgroundColor: 'rgba(0, 0, 0, 0)',
+        justifyContent: 'space-between',
+        flexDirection: 'row',
+    },
+    button:
+    {
+        flexBasis: 50,
+        paddingTop: 10,
+        paddingLeft: 6,
+        alignItems: 'center',
+        justifyContent: 'center'
+    }
+});
+
+export default React.memo(LocationView)
