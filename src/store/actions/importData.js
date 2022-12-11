@@ -8,13 +8,13 @@ export const RESET_IMPORT_ITEM = 'RESET_IMPORT_ITEM'
 export const setImportItemType = (value) =>
     ({ type: SET_IMPORT_ITEM_TYPE, itemType: value })
 
-export const setImportData = (fields, data, fileName, defaultNames) =>
-    ({ type: SET_IMPORT_DATA, fields: fields, data: data, fileName: fileName, defaultNames: defaultNames })
+export const setImportData = (fields, data, fileName, defaultNames, uri) =>
+    ({ type: SET_IMPORT_DATA, fields: fields, data: data, fileName: fileName, defaultNames: defaultNames, uri: uri })
 
 export const setImportItemProperty = (property, value) =>
     ({ type: SET_IMPORT_ITEM_PROPERTY, property: property, value: value })
 
-    export const setImportItemPropertyFieldIndex = (property, index) =>
+export const setImportItemPropertyFieldIndex = (property, index) =>
     ({ type: SET_IMPORT_ITEM_PROPERTY_FIELD_INDEX, property: property, index: index })
 
 export const resetImportItem = () =>

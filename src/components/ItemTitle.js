@@ -1,7 +1,7 @@
 import React from 'react'
 import { Text, Icon } from '@ui-kitten/components'
 import { StyleSheet, View } from 'react-native'
-import { basic } from '../styles/colors'
+import { basic, control } from '../styles/colors'
 
 const TopBarTitle = (props) => {
     const titleSize = props.large ? 'h4' : props.mid ? 'h5' : 'h6'
@@ -9,13 +9,13 @@ const TopBarTitle = (props) => {
     const iconStyle = props.large || props.mid ? styles.iconLarge : styles.iconSmall
     return (
         <View style={styles.mainView}>
-            <Text category={titleSize} numberOfLines={1} ellipsizeMode='tail' >{props.title}</Text>
+            <Text category={titleSize} numberOfLines={1} ellipsizeMode='tail' status={props.control ? 'control' : 'basic'}>{props.title}</Text>
             <View style={styles.subtitleView}>
-                <Text category={subtitleSize} appearance='hint'>
+                <Text category={subtitleSize} appearance='hint' status={props.control ? 'control' : null}>
                     {props.subtitle}</Text>
                 {props.iconName ?
                     <Icon
-                        fill={basic}
+                        fill={props.control ? control : basic}
                         style={iconStyle}
                         pack={props.cp ? 'cp' : undefined}
                         name={props.iconName} /> : null}

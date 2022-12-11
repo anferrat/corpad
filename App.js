@@ -12,7 +12,6 @@ import { ModalService } from '@ui-kitten/components'
 import { AppNavigator } from './src/navigation/AppNavigator'
 import { CPIconsPack } from './assets/CPIcons'
 import { default as theme } from './src/styles/theme.json'
-import { default as mapping } from './src/styles/mapping.json'
 import item from './src/store/reducers/item'
 import potentials from './src/store/reducers/potentials'
 import testPointList from './src/store/reducers/testPointList'
@@ -50,6 +49,8 @@ export const BS = createContext()
 
 ModalService.setShouldUseTopInsets = true
 
+export const version = '1.1'
+
 const App = () => {
   const bottomSheet = useRef()
   const navigationRef = useNavigationContainerRef()
@@ -57,7 +58,7 @@ const App = () => {
     <Provider store={store}>
       <IconRegistry icons={[EvaIconsPack, CPIconsPack]} />
       <SafeAreaProvider>
-        <ApplicationProvider {...eva} theme={{ ...eva.light, ...theme }} customMapping={mapping}>
+        <ApplicationProvider {...eva} theme={{ ...eva.light, ...theme }}>
           <GestureHandlerRootView style={{ flex: 1 }}>
             <BS.Provider value={bottomSheet}>
               <NavigationContainer onReady={SplashScreen.hide} ref={navigationRef}>

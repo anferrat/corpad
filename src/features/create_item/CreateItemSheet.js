@@ -33,7 +33,7 @@ const CreateItemSheet = (props) => {
                         pack='cp' />
                 </View>)}
             <Divider />
-            <ListItem title='Import CSV' iconName='file-add' onPress={props.navigateToImport} />
+            <ListItem title='Import from .csv' iconName='file-add' onPress={props.navigateToImport} />
         </>
     )
 }

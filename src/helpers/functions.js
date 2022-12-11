@@ -45,8 +45,14 @@ export const unitConverter = (value, originalUnit, targetUnit) => {
         const combinedUnit = originalUnit + targetUnit
         const negativeMultiplier = (combinedUnit.match(/-/g) || []).length % 2 === 1 ? -1 : 1
         const multiplyBy = (combinedUnit.replace('-', '').match(/m/g) || []).length % 2 === 1 ? combinedUnit.replace('-', '').indexOf('m') === 0 ? 0.001 : 1000 : 1
-        if (value !== undefined && value !== null && !isNaN(value))
-            return (value * negativeMultiplier * multiplyBy).toFixed(targetUnit[0] === 'm' || targetUnit[0] === '-' && targetUnit[1] === 'm' ? 0 : 3)
+        if (value !== undefined && value !== null && !isNaN(value)) {
+            const result = value * negativeMultiplier * multiplyBy
+            if (targetUnit[0] === 'm' || (targetUnit[0] === '-' && targetUnit[1] === 'm'))
+                return result.toFixed(0)
+            else if (originalUnit[0] === 'm' || (originalUnit[0] === '-' && originalUnit[1] === 'm'))
+                return result.toFixed(3)
+            else return result
+        }
         else return null
     }
     else

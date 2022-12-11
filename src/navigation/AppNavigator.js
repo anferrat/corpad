@@ -19,9 +19,12 @@ import CreateSurvey from '../screens/CreateSurvey'
 import ImportItem from '../screens/import/Item'
 import ImportFile from '../screens/import/File'
 import ImportParameters from '../screens/import/Parameters'
+import Spreadsheet from '../screens/Spreadsheet'
+import SpreadsheetHeader from '../features/navigation/spreadsheet/SpreadsheetHeader'
 import TopBar from '../features/settings/TopBar'
 import TopBarCalculator from '../features/calculator/TopBar'
 import TopBarCreateSurvey from '../features/navigation/create_survey_header/Header'
+import TopBarImport from '../features/navigation/import/TopBar'
 import { isSurveyLoaded, surveyLoader, saveSurveyHandler } from '../features/survey_manager/manager'
 import { loadSession, loadSurveySettings, updateOnboarding, resetCurrentSurveySettings, updateSetting } from '../store/actions/settings'
 import SplashScreen from '../features/navigation/components/SplashScreen'
@@ -30,6 +33,7 @@ import { gdrive } from '../api/cloud_drive/gd'
 import { initDataBase, sendRequest } from '../api/database/index'
 import { ONBOARDING_VERSION } from '../features/overlays/onboarding/onboardingRequests'
 import { errorHandler, warningHandler } from '../helpers/error_handler'
+import Licenses from '../screens/settings/Licenses'
 
 
 const Stack = createNativeStackNavigator()
@@ -172,9 +176,15 @@ export const AppNavigator = () => {
               <Stack.Screen name='PipelineSurvey' component={SurveyBottomTabs} />
               <Stack.Screen name='ViewItem' component={ViewItem} />
               <Stack.Screen name='DevScreen' component={DevScreen} />
-              <Stack.Screen name='ImportItem' component={ImportItem} />
-              <Stack.Screen name='ImportFile' component={ImportFile} />
-              <Stack.Screen name='ImportParameters' component={ImportParameters} />
+              <Stack.Group screenOptions={{
+                headerShown: true,
+                animation: 'fade_from_bottom',
+                header: props => <TopBarImport {...props} />
+              }}>
+                <Stack.Screen name='ImportItem' component={ImportItem} />
+                <Stack.Screen name='ImportFile' component={ImportFile} />
+                <Stack.Screen name='ImportParameters' component={ImportParameters} />
+              </Stack.Group >
               <Stack.Screen name='EditItem' component={EditItem} />
               <Stack.Screen name='EditSubitem' component={EditSubitem} />
             </Stack.Group>
@@ -209,6 +219,14 @@ export const AppNavigator = () => {
           header: props => <TopBar {...props} />
         }}>
           <Stack.Screen name='SettingDetails' component={SettingDetails} />
+          <Stack.Screen name='Licenses' component={Licenses} initialParams={{ setting: 'licenses' }} />
+        </Stack.Group>
+        <Stack.Group screenOptions={{
+          presentation: 'modal',
+          headerShown: true,
+          header: props => <SpreadsheetHeader {...props} />
+        }}>
+          <Stack.Screen name='Spreadsheet' component={Spreadsheet} initialParams={{ uri: null, title: null }} />
         </Stack.Group>
         <Stack.Group screenOptions={{
           headerShown: true,

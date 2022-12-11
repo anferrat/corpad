@@ -9,8 +9,7 @@ const WarningDisplay = (props) => {
     const renderWarningElement = ({ item }) => (
         <WarningElement
             row={item.row}
-            failedProperties={item.failedProperties}
-        />
+            failedProperties={item.failedProperties} />
     )
     if (props.warnings.length === 0)
         return null

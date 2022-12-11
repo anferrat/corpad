@@ -1,6 +1,6 @@
-import React, { useContext } from 'react'
+import React, { useContext, useEffect, useRef } from 'react'
 import { useSelector } from 'react-redux'
-import { View, StyleSheet } from 'react-native'
+import { View, StyleSheet, AppState, BackHandler } from 'react-native'
 import { BS } from '../../App'
 import { useNavigation } from '@react-navigation/native'
 import Sorting from '../features/list/header/sorting/Sorting'
@@ -14,6 +14,7 @@ import { errorHandler } from '../helpers/error_handler'
 //implemented as single screen, possible to have embeded navigator inside
 
 const BottomSheetContent = () => {
+    const appState = useRef(AppState.currentState)
     const bottomSheetContent = useSelector(state => state.settings.bottomSheetContent)
     const bottomSheet = useContext(BS)
     const navigation = useNavigation()
@@ -23,7 +24,24 @@ const BottomSheetContent = () => {
         else errorHandler(503)
     }, [bottomSheet])
 
-
+    useEffect(() => {
+        const subscribeBack = BackHandler.addEventListener('hardwareBackPress', () => {
+            closeSheet()
+            return false
+        })
+        const subscribeBlur = AppState.addEventListener("blur", () => {
+            closeSheet()
+        })
+        const subscribeBackground = AppState.addEventListener("change", (nextState) => {
+            if (nextState === 'background')
+                closeSheet()
+        })
+        return () => {
+            subscribeBack.remove()
+            subscribeBackground.remove()
+            subscribeBlur.remove()
+        }
+    }, [appState])
 
     const isVisible = (itemType, content, bottomSheetContent) =>
         (bottomSheetContent.itemType === itemType && content === bottomSheetContent.content) ? styles.visible : styles.hidden

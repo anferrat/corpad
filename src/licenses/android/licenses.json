@@ -1,0 +1,226 @@
+{
+    "eva-design/eva": {
+        "licenses": "MIT",
+        "copyright": "Copyright (c) 2019 Akveo.",
+        "repository": "https://github.com/eva-design/eva",
+        "licenseUrl": "https://github.com/eva-design/eva",
+        "parents": "corpad"
+    },
+    "gorhom/bottom-sheet": {
+        "licenses": "MIT",
+        "copyright": "Copyright (c) 2020 Mo Gorhom",
+        "repository": "https://github.com/gorhom/react-native-bottom-sheet",
+        "licenseUrl": "https://github.com/gorhom/react-native-bottom-sheet/raw/master/LICENSE",
+        "parents": "corpad"
+    },
+    "react-native-clipboard/clipboard": {
+        "licenses": "MIT",
+        "copyright": "Copyright (c) 2015-present, Facebook, Inc.",
+        "repository": "https://github.com/react-native-clipboard/clipboard",
+        "licenseUrl": "https://github.com/react-native-clipboard/clipboard/raw/master/LICENSE",
+        "parents": "corpad"
+    },
+    "react-native-community/netinfo": {
+        "licenses": "MIT",
+        "copyright": "Copyright (c) 2015-present, Facebook, Inc.",
+        "repository": "https://github.com/react-native-netinfo/react-native-netinfo",
+        "licenseUrl": "https://github.com/react-native-netinfo/react-native-netinfo/raw/master/LICENSE",
+        "parents": "corpad"
+    },
+    "react-navigation": {
+        "licenses": "MIT",
+        "copyright": "Copyright (c) 2017 React Navigation Contributors",
+        "repository": "https://github.com/react-navigation/react-navigation",
+        "licenseUrl": "https://github.com/react-navigation/react-navigation/raw/master/LICENSE",
+        "parents": "corpad"
+    },
+    "ui-kitten/components": {
+        "licenses": "MIT",
+        "copyright": "Copyright (c) 2016 akveo.com",
+        "repository": "https://github.com/akveo/react-native-ui-kitten",
+        "licenseUrl": "https://github.com/akveo/react-native-ui-kitten",
+        "parents": "corpad"
+    },
+    "ui-kitten/eva-icons": {
+        "licenses": "MIT",
+        "copyright": "Copyright (c) 2016 akveo.com",
+        "repository": "https://github.com/akveo/react-native-ui-kitten",
+        "licenseUrl": "https://github.com/akveo/react-native-ui-kitten",
+        "parents": "corpad"
+    },
+    "lodash.debounce": {
+        "licenses": "MIT",
+        "copyright": "Copyright JS Foundation and other contributors",
+        "repository": "https://github.com/lodash/lodash",
+        "licenseUrl": "https://github.com/lodash/lodash/raw/master/LICENSE",
+        "parents": "corpad"
+    },
+    "papaparse": {
+        "licenses": "MIT",
+        "copyright": "Copyright (c) 2015 Matthew Holt",
+        "repository": "https://github.com/mholt/PapaParse",
+        "licenseUrl": "https://github.com/mholt/PapaParse/raw/master/LICENSE",
+        "parents": "corpad"
+    },
+    "react-native-document-picker": {
+        "licenses": "MIT",
+        "copyright": "Copyright (c) 2016 Elyx0",
+        "repository": "https://github.com/rnmods/react-native-document-picker",
+        "licenseUrl": "https://github.com/rnmods/react-native-document-picker/raw/master/LICENSE.md",
+        "parents": "corpad"
+    },
+    "react-native-fs": {
+        "licenses": "MIT",
+        "copyright": "Copyright (c) 2015 Johannes Lumpe",
+        "repository": "https://github.com/itinance/react-native-fs",
+        "licenseUrl": "https://github.com/itinance/react-native-fs/raw/master/LICENSE",
+        "parents": "corpad"
+    },
+    "react-native-geolocation-service": {
+        "licenses": "MIT",
+        "copyright": "Copyright (c) 2018 Iftekhar Rifat",
+        "repository": "https://github.com/Agontuk/react-native-geolocation-service",
+        "licenseUrl": "https://github.com/Agontuk/react-native-geolocation-service/raw/master/LICENSE",
+        "parents": "corpad"
+    },
+    "react-native-gesture-handler": {
+        "licenses": "MIT",
+        "copyright": "Copyright (c) 2016 Software Mansion <swmansion.com>",
+        "repository": "https://github.com/software-mansion/react-native-gesture-handler",
+        "licenseUrl": "https://github.com/software-mansion/react-native-gesture-handler/raw/master/LICENSE",
+        "parents": "corpad"
+    },
+    "react-native-google-signin": {
+        "licenses": "MIT",
+        "copyright": "Copyright (c) 2015 Apptailor",
+        "repository": "https://github.com/react-native-community/react-native-google-signin",
+        "licenseUrl": "https://github.com/react-native-community/react-native-google-signin/raw/master/LICENSE",
+        "parents": "corpad"
+    },
+    "react-native-haptic-feedback": {
+        "licenses": "MIT",
+        "copyright": "Copyright (c) 2018 Michael Kuczera",
+        "repository": "https://github.com/mkuczera/react-native-haptic-feedback",
+        "licenseUrl": "https://github.com/mkuczera/react-native-haptic-feedback/raw/master/LICENSE",
+        "parents": "corpad"
+    },
+    "react-native-maps": {
+        "licenses": "MIT",
+        "copyright": "Copyright (c) 2015 Airbnb",
+        "repository": "https://github.com/react-native-maps/react-native-maps",
+        "licenseUrl": "https://github.com/react-native-maps/react-native-maps/raw/master/LICENSE",
+        "parents": "corpad"
+    },
+    "react-native-modal": {
+        "licenses": "MIT",
+        "copyright": "Copyright (c) 2017 React Native Community",
+        "repository": "https://github.com/react-native-community/react-native-modal",
+        "licenseUrl": "https://github.com/react-native-community/react-native-modal/raw/master/LICENSE.md",
+        "parents": "corpad"
+    },
+    "react-native-onboarding-swiper": {
+        "licenses": "MIT",
+        "copyright": "Copyright for portions of react-native-onboarding-swiper are held by Gosha Arinich, 2016 as part of react-native-simple-onboarding. All other copyright for react-native-onboarding-swiper are held by Johannes Filter, 2017.",
+        "repository": "https://github.com/jfilter/react-native-onboarding-swiper",
+        "licenseUrl": "https://github.com/jfilter/react-native-onboarding-swiper/raw/master/LICENSE",
+        "parents": "corpad"
+    },
+    "react-native-progress": {
+        "licenses": "MIT",
+        "copyright": "Copyright (c) 2015 Joel Arvidsson",
+        "repository": "https://github.com/oblador/react-native-progress",
+        "licenseUrl": "https://github.com/oblador/react-native-progress/raw/master/LICENSE",
+        "parents": "corpad"
+    },
+    "react-native-reanimated": {
+        "licenses": "MIT",
+        "copyright": "Copyright (c) 2016 Software Mansion <swmansion.com>",
+        "repository": "https://github.com/software-mansion/react-native-reanimated",
+        "licenseUrl": "https://github.com/software-mansion/react-native-reanimated/raw/master/LICENSE",
+        "parents": "corpad"
+    },
+    "react-native-safe-area-context": {
+        "licenses": "MIT",
+        "copyright": "Copyright (c) 2019 Th3rd Wave",
+        "repository": "https://github.com/th3rdwave/react-native-safe-area-context",
+        "licenseUrl": "https://github.com/th3rdwave/react-native-safe-area-context/raw/master/LICENSE",
+        "parents": "corpad"
+    },
+    "react-native-screens": {
+        "licenses": "MIT",
+        "copyright": "Copyright (c) 2018 Software Mansion <swmansion.com>",
+        "repository": "https://github.com/software-mansion/react-native-screens",
+        "licenseUrl": "https://github.com/software-mansion/react-native-screens/raw/master/LICENSE",
+        "parents": "corpad"
+    },
+    "react-native-send-intent": {
+        "licenses": "MIT",
+        "copyright": "Copyright (c) 2016 Lucas Ferreira",
+        "repository": "https://github.com/lucasferreira/react-native-send-intent",
+        "licenseUrl": "https://github.com/lucasferreira/react-native-send-intent",
+        "parents": "corpad"
+    },
+    "react-native-sensors": {
+        "licenses": "MIT",
+        "copyright": "Copyright (c) 2017 Daniel Schmidt",
+        "repository": "https://github.com/react-native-sensors/react-native-sensors",
+        "licenseUrl": "https://github.com/react-native-sensors/react-native-sensors/raw/master/LICENSE",
+        "parents": "corpad"
+    },
+    "react-native-share": {
+        "licenses": "MIT",
+        "copyright": "Copyright (c) 2015 Esteban Fuentealba 🇨🇱, Mateus Andrade 🇧🇷, Mike Hardy 🇪🇨, João Marins 🇧🇷",
+        "repository": "https://github.com/react-native-community/react-native-share",
+        "licenseUrl": "https://github.com/react-native-community/react-native-share/raw/master/LICENSE",
+        "parents": "corpad"
+    },
+    "react-native-splash-screen": {
+        "licenses": "MIT",
+        "copyright": "Copyright (c) 2016 Jia PengHui",
+        "repository": "https://github.com/crazycodeboy/react-native-splash-screen",
+        "licenseUrl": "https://github.com/crazycodeboy/react-native-splash-screen/raw/master/LICENSE",
+        "parents": "corpad"
+    },
+    "react-native-sqlite-storage": {
+        "licenses": "MIT",
+        "copyright": "Copyright (c) 2015 andpor",
+        "repository": "https://github.com/andpor/react-native-sqlite-storage",
+        "licenseUrl": "https://github.com/andpor/react-native-sqlite-storage/raw/master/LICENSE",
+        "parents": "corpad"
+    },
+    "react-native-svg": {
+        "licenses": "MIT",
+        "copyright": "Copyright (c) 2015-present, Facebook, Inc.",
+        "repository": "https://github.com/react-native-community/react-native-svg",
+        "licenseUrl": "https://github.com/react-native-community/react-native-svg/raw/master/LICENSE",
+        "parents": "corpad"
+    },
+    "react-native": {
+        "licenses": "MIT",
+        "copyright": "Copyright (c) [2015-2016] [Horcrux]",
+        "repository": "github:facebook/react-native",
+        "licenseUrl": "github:facebook/react-native",
+        "parents": "corpad"
+    },
+    "react-redux": {
+        "licenses": "MIT",
+        "copyright": "Copyright (c) 2015-present Dan Abramov",
+        "repository": "github:reduxjs/react-redux",
+        "licenseUrl": "github:reduxjs/react-redux",
+        "parents": "corpad"
+    },
+    "react": {
+        "licenses": "MIT",
+        "copyright": "Copyright (c) Meta Platforms, Inc. and affiliates.",
+        "repository": "https://github.com/facebook/react",
+        "licenseUrl": "https://github.com/facebook/react/raw/master/LICENSE",
+        "parents": "corpad"
+    },
+    "redux": {
+        "licenses": "MIT",
+        "copyright": "Copyright (c) 2015-present Dan Abramov",
+        "repository": "github:reduxjs/redux",
+        "licenseUrl": "github:reduxjs/redux",
+        "parents": "corpad"
+    }
+}

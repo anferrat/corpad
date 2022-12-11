@@ -41,7 +41,6 @@ const SurveyNameModal = (props) => {
                 keyboardShouldPersistTaps='handled'
                 style={styles.inputView}>
                 <InputField
-                    selectTextOnFocus={true}
                     autoFocus={true}
                     label='Survey name'
                     maxLength={25}

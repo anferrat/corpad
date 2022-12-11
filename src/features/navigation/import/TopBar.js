@@ -1,19 +1,23 @@
 import React from 'react'
 import { View, StyleSheet, StatusBar } from 'react-native'
 import { Text } from '@ui-kitten/components'
-import SingleIconButton from '../../components/IconButton'
-import { basic200 } from '../../styles/colors'
+import SingleIconButton from '../../../components/IconButton'
+import { basic200, control, primary } from '../../../styles/colors'
 import { SafeAreaView } from 'react-native-safe-area-context'
+import TopBarLabel from './TopBarLabel'
 
-const TopBar = (props) => {
+const TopBar = ({ navigation, route }) => {
     return (
         <SafeAreaView style={styles.mainView} edges={['top']}>
             <View style={styles.leftView}>
                 <SingleIconButton
                     style={styles.icon}
-                    onPress={props.goBack}
+                    onPress={navigation.goBack}
+                    color={control}
                     iconName='arrow-back-outline' />
-                <Text category='h5'>Import CSV</Text>
+                <TopBarLabel
+                    params={route.params}
+                />
             </View>
         </SafeAreaView>
     )
@@ -37,7 +41,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'space-between',
         paddingHorizontal: 12,
-        backgroundColor: '#fff',
+        backgroundColor: primary,
         paddingBottom: 6,
         elevation: 5,
         borderBottomWidth: 1,

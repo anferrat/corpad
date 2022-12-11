@@ -1,5 +1,5 @@
 import React from 'react'
-import { View, StyleSheet, StatusBar } from 'react-native'
+import { View, StyleSheet, StatusBar, Pressable } from 'react-native'
 import { useDispatch } from 'react-redux'
 import { Icon } from '@ui-kitten/components'
 import SingleIconButton from '../../../components/IconButton'
@@ -8,9 +8,11 @@ import { surveyLoader } from '../../survey_manager/manager' // again, maybe surv
 import { errorHandler } from '../../../helpers/error_handler'
 import { updateSetting, loadSurveySettings } from '../../../store/actions/settings'
 import DocumentPicker from 'react-native-document-picker'
+import { hapticKeyboardPress } from '../../../native_libs/haptics'
 
 const Header = ({ navigation, options }) => {
     const navigateToCreate = () => navigation.navigate('CreateSurvey')
+    const navigateToAbout = () => navigation.navigate('SettingDetails', { setting: 'about' })
     const dispatch = useDispatch()
 
     const openExternalSurveyHandler = async () => {
@@ -36,6 +38,11 @@ const Header = ({ navigation, options }) => {
         }
     }
 
+    const goToAbout = () => {
+        hapticKeyboardPress()
+        navigateToAbout()
+    }
+
     return (
         <View style={{ ...styles.mainView, paddingTop: options.headerStatusBarHeight }}>
             <StatusBar
@@ -43,7 +50,9 @@ const Header = ({ navigation, options }) => {
                 backgroundColor={'transparent'}
                 translucent={true}
                 barStyle='light-content' />
-            <Icon pack='cp' name='logo-text' style={styles.logo} fill={'#fff'} />
+            <Pressable onPress={goToAbout}>
+                <Icon pack='cp' name='logo-text' style={styles.logo} fill={'#fff'} />
+            </Pressable>
             <View style={styles.icons}>
                 <SingleIconButton
                     color='#fff'
@@ -77,5 +86,5 @@ const styles = StyleSheet.create({
     logo: {
         width: 100,
         height: 30,
-    }
+    },
 })

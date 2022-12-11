@@ -3,8 +3,8 @@ import { View, StyleSheet } from 'react-native'
 import { Text } from '@ui-kitten/components'
 import ItemOption from './components/ItemOption'
 import { useDispatch, useSelector } from 'react-redux'
-import { items } from '../../constants/constants'
-import { setImportItemType } from '../../store/actions/importData'
+import { items } from '../../../constants/constants'
+import { setImportItemType } from '../../../store/actions/importData'
 
 const SelectItem = () => {
     const itemType = useSelector(state => state.importData.itemType)

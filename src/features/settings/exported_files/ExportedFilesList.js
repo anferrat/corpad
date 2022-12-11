@@ -62,10 +62,10 @@ const ExportedFilesList = (props) => {
             type={item.type}
             mtime={item.mtime}
             onDeleteHandler={onDeleteHandler.bind(this, item.name, item.path)}
-            menuItems={[
-                { title: 'Share', onPress: shareWith.bind(this, item.path, getMimeType(item.type)), icon: 'share-outline' },
-                { title: 'Open in...', onPress: openIn.bind(this, item.path, getMimeType(item.type)), icon: 'external-link-outline' },
-                { title: 'Save to Downloads', onPress: saveToDownloads.bind(this, item.name, item.path), icon: 'download-outline' },
+            menuItems={[...(item.type === 'csv' ? [{ title: 'Preview', onPress: props.navigateToSpreadsheet.bind(this, item.path, item.name), icon: 'eye-outline' }] : []),
+            { title: 'Share', onPress: shareWith.bind(this, item.path, getMimeType(item.type)), icon: 'share-outline' },
+            { title: 'Open in...', onPress: openIn.bind(this, item.path, getMimeType(item.type)), icon: 'external-link-outline' },
+            { title: 'Save to Downloads', onPress: saveToDownloads.bind(this, item.name, item.path), icon: 'download-outline' },
             ]} />
     ), [onDeleteHandler, saveToDownloads])
 

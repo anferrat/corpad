@@ -6,22 +6,23 @@ import DocumentPicker from 'react-native-document-picker'
 import RNFS from 'react-native-fs'
 import { parseCSV } from '../../../helpers/csv_generator'
 import { errorHandler } from '../../../helpers/error_handler'
-import { setImportData } from '../../../store/actions/importData'
+import { setImportData, resetImportItem } from '../../../store/actions/importData'
 import { file, plusCircle } from '../../../components/Icons'
 import { basic400, danger, primary } from '../../../styles/colors'
 import { androidRipple } from '../../../styles/styles'
 import { sendRequest } from '../../../api/database/index'
 
 
-const SelectFile = () => {
+const SelectFile = ({ navigateToSpreadsheet }) => {
     const dispatch = useDispatch()
     const [loading, setLoading] = useState(false)
     const fileName = useSelector(state => state.importData.fileName)
-    const rows = useSelector(state => state.importData.data?.length ?? null)
+    const uri = useSelector(state => state.importData.uri)
+    const rows = useSelector(state => state.importData.data.length ?? null)
     const columns = useSelector(state => state.importData.fields.length)
 
     const resetFile = () => {
-        dispatch(setImportData([], [], null))
+        dispatch(resetImportItem())
     }
 
     useEffect(() => () => resetFile(), [])
@@ -48,7 +49,7 @@ const SelectFile = () => {
                 if (defaultNames.status !== 200)
                     errorHandler(defaultNames.status)
                 else
-                    dispatch(setImportData(data.meta.fields, data.data, externalFile.name, defaultNames.result))
+                    dispatch(setImportData(data.meta.fields, data.data, externalFile.name, defaultNames.result, externalFile.uri))
         }
         catch (er) {
             if (er.code !== 'DOCUMENT_PICKER_CANCELED')
@@ -83,6 +84,7 @@ const SelectFile = () => {
                     :
                     <ListItem
                         title={fileName}
+                        onPress={navigateToSpreadsheet.bind(this, uri, fileName)}
                         description={`Rows: ${rows}, Columns: ${columns}`}
                         accessoryLeft={file}
                         accessoryRight={ResetIcon} />

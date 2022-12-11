@@ -1,27 +1,24 @@
 import React from 'react'
 import { globalStyle } from '../../styles/styles'
-import { View, ScrollView } from 'react-native'
-import TopBar from '../../features/import/TopBar'
-import SelectItem from '../../features/import/SelectItem'
+import { View, ScrollView, StatusBar } from 'react-native'
+import SelectItem from '../../features/import/file/SelectItem'
 import SelectFile from '../../features/import/file/SelectFile'
-import MainActionButton from '../../components/ActionButton'
-
-
+import NextButton from '../../features/import/file/NextButton'
 
 export default ImportItem = ({ route, navigation }) => {
-    const goBack = () => navigation.goBack()
-    const navigateToImportItem = () => navigation.navigate('ImportItem')
+    const navigateToImportItem = (itemType) => navigation.navigate('ImportItem', { itemType: itemType })
+    const navigateToSpreadsheet = (uri, title) => navigation.navigate('Spreadsheet', { uri: uri, title: title })
     return (
         <View style={globalStyle.screen}>
-            <TopBar goBack={goBack} />
-            <ScrollView contentContainerStyle={{ paddingBottom: 72 }}>
+            <StatusBar barStyle={'light-content'} />
+            <ScrollView contentContainerStyle={{ paddingBottom: 72, flex: 1 }}>
                 <SelectItem />
-                <SelectFile />
-                <MainActionButton
-                    disabled={false}
-                    title='Next'
-                    valid={true}
-                    onPress={navigateToImportItem} />
+                <SelectFile
+                    navigateToSpreadsheet={navigateToSpreadsheet}
+                />
+                <NextButton
+                    onPress={navigateToImportItem}
+                />
             </ScrollView>
         </View>
     )

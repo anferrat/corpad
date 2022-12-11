@@ -1,5 +1,5 @@
 import { SET_IMPORT_ITEM_TYPE, SET_IMPORT_DATA, SET_IMPORT_ITEM_PROPERTY_FIELD_INDEX, SET_IMPORT_ITEM_PROPERTY, RESET_IMPORT_ITEM } from "../actions/importData"
-import { Input, ITEM, Select } from '../../features/import/models/models' //change it
+import { getItem } from "../../features/import/models/models"
 
 const initialItemType = 'TEST_POINT'
 
@@ -8,7 +8,8 @@ const initialState = {
     fields: [],
     defaultNames: [],
     fileName: null,
-    item: new ITEM(initialItemType),
+    uri: null,
+    item: getItem(initialItemType),
     subitems: [],
     itemType: initialItemType,
 }
@@ -20,7 +21,7 @@ const importData = (state = initialState, action) => {
             return {
                 ...state,
                 itemType: action.itemType,
-                item: new ITEM(action.itemType)
+                item: getItem(action.itemType)
             }
         case SET_IMPORT_DATA:
             return {
@@ -28,17 +29,31 @@ const importData = (state = initialState, action) => {
                 fields: action.fields,
                 data: action.data,
                 fileName: action.fileName,
+                uri: action.uri,
                 defaultNames: action.defaultNames,
             }
         case SET_IMPORT_ITEM_PROPERTY_FIELD_INDEX:
             return {
                 ...state,
-                item: state.item.setPropertyFieldIndex(action.property, action.index)
+                item: {
+                    ...state.item,
+                    [action.property]: {
+                        ...state.item[action.property],
+                        fieldIndex: action.index
+                    }
+                }
             }
         case SET_IMPORT_ITEM_PROPERTY: {
             return {
                 ...state,
-                item: state.item[action.property] instanceof Select ? state.item.setSelectProperty(action.property, action.value) : state.item.setProperty(action.property, action.value),
+                item: {
+                    ...state.item,
+                    [action.property]:
+                    {
+                        ...state.item[action.property],
+                        ...action.value
+                    }
+                },
             }
         }
 
