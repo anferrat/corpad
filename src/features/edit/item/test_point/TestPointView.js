@@ -7,7 +7,7 @@ import StatusView from '../StatusView'
 import InputField from '../InputField'
 import SelectField from '../SelectField'
 import LocationView from '../LocationView'
-import AddReadingButton from './AddReadingButton'
+import AddButton from '../AddButton'
 
 
 const TestPointView = (props) => {
@@ -60,10 +60,11 @@ const TestPointView = (props) => {
                         property='comment'
                         placeholder='Type your comments here' />
                 </View>
-                <AddReadingButton
-                    testPointType={props.tpData.testPointType}
-                    navigateToCard={props.navigateToSubitem}
-                    testPointId={props.testPointId} />
+                <AddButton
+                    itemId={props.testPointId}
+                    navigateToSubitem={props.navigateToSubitem}
+                    itemType={'TEST_POINT'}
+                />
             </Layout>
         </>
     )

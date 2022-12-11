@@ -47,9 +47,8 @@ const ControlBar = React.forwardRef((props, ref) => {
             /> : null}
             <AddSubitemButton
                 itemId={props.itemId}
-                testPointType={props.testPointType}
                 navigateToSubitem={props.navigateToEditSubitem}
-                dataType={props.dataType} />
+                itemType={props.dataType} />
             <ControlButton
                 label='Edit'
                 icon='edit'

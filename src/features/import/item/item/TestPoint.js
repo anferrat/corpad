@@ -2,6 +2,7 @@ import React from 'react'
 import { View, StyleSheet } from 'react-native'
 import Parameter from '../Parameter'
 import { globalStyle } from '../../../../styles/styles'
+import AddSubitemButton from './AddSubitemButton'
 
 const TestPointView = (props) => {
     return (
@@ -43,6 +44,11 @@ const TestPointView = (props) => {
                         navigateToParameters={props.navigateToParameters.bind(this, 'comment', null)}
                         property='comment' />
                 </View>
+                <View style={styles.button}>
+                    <AddSubitemButton
+                        itemType={'TEST_POINT'}
+                    />
+                </View>
             </View>
         </>
     )
@@ -65,6 +71,10 @@ const styles = StyleSheet.create({
     locationField: {
         flex: 1,
         marginHorizontal: 6,
+    },
+    button: {
+        marginHorizontal: -12,
+        marginBottom: -12
     }
 })
 

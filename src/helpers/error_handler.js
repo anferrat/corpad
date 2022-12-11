@@ -78,7 +78,7 @@ const errorCodes = {
     603: `An error occured while loading data, ${tip}`,
     604: `An error occured while trying to save the data, ${tip}`,
     605: `Unable to create new circuit, ${tip}`,
-    606: `An error occured while creating new reading, ${tip}`,
+    606: `An error occured while creating new item, ${tip}`,
     607: `There was an error while loading reading data, ${tip}`,
     608: `There was an error while saving reading data, ${tip}`,
     609: `There was an error while adding new potential reading, ${tip}`,
