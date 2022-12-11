@@ -59,7 +59,7 @@ export default TopBar
 
 const styles = StyleSheet.create({
     icon: {
-        paddingRight: 12,
+        marginRight: 12,
     },
     leftView:
     {

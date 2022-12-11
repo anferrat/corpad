@@ -6,8 +6,8 @@ import StatusView from '../StatusView'
 import LocationView from '../LocationView'
 import SelectField from '../SelectField'
 import { powerSourceList } from '../../../../constants/constants'
-import AddCircuitButton from './AddCircuitButton'
 import TapView from './TapView'
+import AddButton from '../AddButton'
 
 
 const RectifierView = (props) => {
@@ -90,9 +90,10 @@ const RectifierView = (props) => {
                         property='comment'
                         value={props.rectifierData.comment} />
                 </View>
-                <AddCircuitButton
-                    navigateToCircuit={props.navigateToSubitem}
-                    rectifierId={props.rectifierId} />
+                <AddButton
+                    itemType={'RECTIFIER'}
+                    navigateToSubitem={props.navigateToSubitem}
+                    itemId={props.rectifierId} />
             </Layout>
         </>
     )
