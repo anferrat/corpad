@@ -9,6 +9,7 @@ import * as Sensors from "react-native-sensors"
 import { errorHandler } from '../../helpers/error_handler'
 import { coordTransform, getDistance } from '../../helpers/functions'
 import { primary } from '../../styles/colors'
+import { hapticKeyboardPress } from '../../native_libs/haptics'
 //import NavigationWidgetModal from '../../components/NavigationWidgetModal'
 
 
@@ -86,7 +87,8 @@ export default NavigationWidget = () => {
     useEffect(() => () => componentMounted.current = false, [])
 
     useFocusEffect(React.useCallback(() => {
-        if (enableWidget && active) {
+        if (enableWidget && active) { 
+            hapticKeyboardPress()
             if (permissionGranted === true) {
                 const watchId = Geolocation.watchPosition(updateLocation, errorHandler.bind(this, 800, setActive.bind(this, false)), { enableHighAccuracy: true, interval: 200, distanceFilter: 0 })
                 const subscribe = Sensors.orientation.subscribe(updateHeading)
@@ -138,6 +140,10 @@ export default NavigationWidget = () => {
         }
     }, [arrowAngle, pointHeading, bearingData])
 
+    const activateNavigation = React.useCallback(() => {
+        setActive(true)
+    }, [setActive])
+
     const updateLocation = React.useCallback((locationObject) => {
         if (enableWidget) {
             const data = coordTransform(latitude, longitude, locationObject.coords.latitude, locationObject.coords.longitude)
@@ -183,7 +189,7 @@ export default NavigationWidget = () => {
             return (
                 <SingleIconButton
                     iconName='compass'
-                    onPress={setActive.bind(this, true)} />
+                    onPress={activateNavigation} />
             )
 }
 

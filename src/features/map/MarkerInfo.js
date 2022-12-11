@@ -5,18 +5,9 @@ import { iconHandlerItem, subtitleHandlerItem, getStatusProps } from '../../help
 import { basic } from '../../styles/colors'
 import { androidRipple } from '../../styles/styles'
 import MapButton from './components/MapButton'
+import { extMapHandler } from './helpers/linking'
 
 const getMapIconSVG = (icon, status) => <Icon name={'map-' + icon} pack='cp' style={styles.mainIcon} fill={getStatusProps(status).color} />
-
-//Android only
-const extMapHandler = async (lat, lng) => {
-    if (lat !== null && lng !== null) {
-        const url = 'geo:' + lat + ',' + lng + '?q=' + lat + ',' + lng
-        const supported = await Linking.canOpenURL(url)
-        if (supported)
-            await Linking.openURL(url)
-    }
-}
 
 const MarkerInfo = (props) => {
     const transY = useRef(new Animated.Value(props.uid === null ? 140 : 0))

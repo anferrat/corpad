@@ -1,8 +1,8 @@
 import React from 'react'
 import { Text, Icon } from '@ui-kitten/components'
 import { StyleSheet, Pressable, View } from 'react-native'
-import { primary, basic, success } from '../../../styles/colors'
-import { androidRipple } from '../../../styles/styles'
+import { primary, basic, success } from '../../../../styles/colors'
+import { androidRipple } from '../../../../styles/styles'
 
 const ItemOption = (props) => {
     return (

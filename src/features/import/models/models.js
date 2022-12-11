@@ -25,6 +25,54 @@ class Attribute {
     }
 }
 
+export const getAttribute = ({ index, mappedIndexes }) => ({
+    index,
+    mappedIndexes,
+})
+
+export const getParameter = ({
+    //hahaha
+    parameterType = 0,
+    importType = 1,
+    fieldIndex = null,
+    mergeAllowed = false,
+    itemList = [],
+    defaultValue = null,
+    fieldIndexList = [],
+    valid = true,
+    unit = null,
+    unitList = [],
+    attributeMap = [],
+}) => ({
+    parameterType: parameterType,
+    importType: importType,
+    itemList: itemList,
+    unit: unit,
+    unitList: unitList,
+    defaultValue: defaultValue,
+    fieldIndex: fieldIndex,
+    fieldIndexList: fieldIndexList,
+    valid: valid,
+    attributeMap: attributeMap,
+    mergeAllowed: mergeAllowed,
+})
+
+export const getItem = (itemType) => {
+    switch (itemType) {
+        case 'TEST_POINT':
+            return {
+                name: getParameter({ importType: 2 }),
+                testPointType: getParameter({ parameterType: 1, itemList: testPointTypes }),
+                location: getParameter({ mergeAllowed: true }),
+                latitude: getParameter({}),
+                longitude: getParameter({}),
+                comment: getParameter({ mergeAllowed: true }),
+                status: getParameter({ parameterType: 1, itemList: statusInfo.map(s => s.title) })
+            }
+        default: return null
+    }
+}
+
 export class Input {
     constructor(importType = 1, unit = null, unitList = [], defaultValue = null, fieldIndex = null, valid = true) {
         this.importType = importType
@@ -75,10 +123,10 @@ export class ITEM {
         this.name = new Input(2)
         if (itemType === 'TEST_POINT') {
             this.testPointType = new Select({ itemList: testPointTypes })
-            this.location = new Input()
+            this.location = new Input({ mergeAllowed: true })
             this.latitude = new Input()
             this.longitude = new Input()
-            this.comment = new Input()
+            this.comment = new Input({ mergeAllowed: true })
             this.status = new Select({ itemList: statusInfo.map(s => s.title) })
         }
         else if (itemType === 'RECTIFIER') {

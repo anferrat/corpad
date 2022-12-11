@@ -1,6 +1,7 @@
 import React from 'react'
 import { StyleSheet } from 'react-native'
 import { Icon } from './svgIcons'
+import { primary, basic, warning, danger, success, control } from '../src/styles/colors'
 
 export const CPIconsPack = {
   name: 'cp',
@@ -13,6 +14,23 @@ function createIconsMap() {
       return IconProvider(name);
     },
   });
+}
+
+//never mind this
+function getColor(color) {
+  if (color === 'basic')
+    return basic
+  else if (color === 'primary')
+    return primary
+  else if (color === 'control')
+    return control
+  else if (color === 'warning')
+    return warning
+  else if (color === 'danger')
+    return danger
+  else if (color === 'success')
+    return success
+  else return color
 }
 
 const IconProvider = (name) => ({

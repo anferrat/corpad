@@ -5,7 +5,6 @@ import LayerTitle from './LayerTitle'
 
 const WennerLayer = (props) => {
     const removeLayerHandler = React.useCallback(() => { props.removeLayerHandler(props.index) }, [props.removeLayerHandler, props.index])
-    console.log(props, 'hdhdh')
     if (props.data.length > props.index)
         return (
             <>

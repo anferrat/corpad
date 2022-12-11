@@ -8,6 +8,7 @@ import ExportSurvey from '../../features/settings/export/ExportSurvey'
 import SurveyInfo from '../../features/settings/info/SurveyInfo'
 import OnboardingOverlay from '../../features/overlays/onboarding/OnboardingOverlay'
 import ExportedFilesList from '../../features/settings/exported_files/ExportedFilesList'
+import About from '../../features/settings/about/About'
 
 const Setting = (props) => {
     switch (props.setting) {
@@ -23,6 +24,8 @@ const Setting = (props) => {
             return <SurveyInfo {...props} />
         case 'exportedFiles':
             return <ExportedFilesList {...props} />
+        case 'about':
+            return <About {...props} />
         default:
             return null
     }
@@ -32,10 +35,14 @@ const Setting = (props) => {
 export default SettingDetails = ({ navigation, route }) => {
     const { setting } = route.params
     const goBack = () => navigation.goBack()
+    const navigateToLicenses = () => navigation.navigate('Licenses')
+    const navigateToSpreadsheet = (uri, title) => navigation.navigate('Spreadsheet', { title: title, uri: uri })
     return (
         <SafeAreaView style={globalStyle.screen}>
             {setting === 'potentials' ? <OnboardingOverlay onboarding='potentialTypes' icon={'onboarding-stars'} pack='cp' /> : null}
             <Setting
+                navigateToSpreadsheet={navigateToSpreadsheet}
+                navigateToLicenses={navigateToLicenses}
                 goBack={goBack}
                 setting={setting} />
         </SafeAreaView>

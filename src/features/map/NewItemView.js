@@ -8,6 +8,7 @@ import fieldValidation from '../../helpers/validation'
 import { setNewItemMarker } from '../../store/actions/map'
 import MapButton from './components/MapButton'
 import { errorHandler } from '../../helpers/error_handler'
+import { extMapHandler } from './helpers/linking'
 
 const NewItemView = (props) => {
     const dispatch = useDispatch()
@@ -53,8 +54,8 @@ const NewItemView = (props) => {
             Animated.timing(
                 transY.current,
                 {
-                    toValue: 160,
-                    duration: 300,
+                    toValue: 240,
+                    duration: 450,
                     useNativeDriver: true
                 }
             ).start()
@@ -63,7 +64,7 @@ const NewItemView = (props) => {
                 transY.current,
                 {
                     toValue: 0,
-                    duration: 300,
+                    duration: 450,
                     useNativeDriver: true
                 }
             ).start()
@@ -74,6 +75,7 @@ const NewItemView = (props) => {
             ...styles.mainView,
             transform: [{ translateY: transY.current }]
         }}>
+            <MapButton icon='share' onPress={extMapHandler.bind(this, props.latitude, props.longitude)} />
             <MapButton icon={loading === 'TEST_POINT' ? 'spinner' : 'TS-filled'} pack='cp' onPress={createNewItem.bind(this, 'TEST_POINT', props.latitude, props.longitude)} status='primary' disabled={!!loading} />
             <MapButton icon={loading === 'RECTIFIER' ? 'spinner' : 'RT-filled'} pack='cp' onPress={createNewItem.bind(this, 'RECTIFIER', props.latitude, props.longitude)} status='primary' disabled={!!loading} />
         </Animated.View>
@@ -88,7 +90,7 @@ const styles = StyleSheet.create({
     mainView: {
         position: 'absolute',
         bottom: 37,
-        height: 112,
+        height: 178,
         left: '5%',
         justifyContent: 'space-between',
     },

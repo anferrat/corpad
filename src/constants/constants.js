@@ -83,6 +83,7 @@ export const pipeProducts = ['Gaseous hydrocarbons', 'Liquid hydrocarbons', 'Wat
 export const powerSourceList = ['AC power line', 'TEG', 'Wind turbine', 'Solar panels']
 export const tapSettings = ['Coarse - Fine', 'VA %', 'Automatic']
 export const tapOptions = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', '0', '1', '2', '3', '4', '5', '6', '7', '8', '9']
+export const statuses = ['Pass', 'Attention', 'Issue', 'Unknown']
 export const potentialFields = [{
     name: 'On',
     custom: 0,

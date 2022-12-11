@@ -180,6 +180,19 @@ export const deleteFile = async (location, fileName) => {
     else return directory
 }
 
+export const readFile = async (uri) => {
+    try {
+        return ({
+            status: 200,
+            result: await RNFS.readFile(uri)
+        })
+    }
+    catch (er) {
+        return ({
+            status: 418
+        })
+    }
+}
 
 export const test = async () => {
     console.log((await RNFS.readDir(myFolder)).map(d => d.name))

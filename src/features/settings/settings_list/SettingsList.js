@@ -7,12 +7,13 @@ import ListItem from './components/ListItemSettings'
 import { loadSettings, updateSetting } from '../../../store/actions/settings'
 import { warningHandler } from '../../../helpers/error_handler'
 import { resetSurvey } from '../../../api/database/index'
+import { hapticMedium } from '../../../native_libs/haptics'
 
 const settingsParams = [
     {
         title: 'Survey',
         settings: [
-            { title: 'Survey information', screen: 'info', icon: 'info-outline', description: 'See general stats of your survey, and status of completion' },
+            { title: 'Survey overview', screen: 'info', icon: 'home-outline', description: 'See general stats of your survey, and status of completion' },
             { title: 'Reference cells', screen: 'refCells', icon: 'RE', pack: 'cp', description: 'Add and remove portable reference cells' },
             { title: 'Potentials', screen: 'potentials', icon: 'grid-outline', description: 'Control default units for potential readings, add and remove potential reading types' },
             { title: 'Export to spreadsheet', screen: 'export', icon: 'download', description: 'Export data from survey to a spreadsheet file and save it to your device' },
@@ -21,6 +22,7 @@ const settingsParams = [
     {
         title: 'App',
         settings: [
+            { title: 'About', screen: 'about', icon: 'info-outline', description: 'Check app version, legal information and support contact' },
             { title: 'Default names', screen: 'defaultNames', icon: 'people-outline', description: 'Manage default names for new test points, rectifiers, readings and etc.' },
             { title: 'Exported files', screen: 'exportedFiles', icon: 'file-text-outline', description: 'View exported CSV and KML files, delete or share them with different apps' },
         ],
@@ -34,6 +36,7 @@ const settingsParams = [
 const SettingsList = (props) => {
     const dispatch = useDispatch()
     const emergencyExit = async () => {
+        hapticMedium()
         const confirm = await warningHandler(12, 'Exit', 'Cancel')
         if (confirm) {
             dispatch(updateSetting('loader', { visible: true, title: 'Exiting' }))

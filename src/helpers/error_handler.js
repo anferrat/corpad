@@ -30,7 +30,9 @@ const warningCodes = {
     44: 'Are you sure you want to delete this file?',
     45: 'Are you sure you want to delete all exported files?',
     46: 'Are you sure you want to delete this calculation?',
-    47: 'You will delete all saved calculations of this type including the one currently opened. Do you want to continue?'
+    47: 'You will delete all saved calculations of this type including the one currently opened. Do you want to continue?',
+    51: 'All mapped values will be deleted. Do you wish to proceed?',
+    52: 'You have no mapped attributes for this property, therefore property will have no value for all imported items. Do you want to continue?',
 }
 
 const errorCodes = {
@@ -51,12 +53,13 @@ const errorCodes = {
     409: `There are 10 copies of one survey file with the same name. Please change survey name if you wish to continue.`,
     410: `An error occured while deleting the file, try again later.`,
     411: `Unable to read survey file.`,
-    412: 'File has unsupported format',
-    413: 'Unable create survey from this template',
-    414: 'Survey loading was cancelled',
-    415: 'File has no rows, make sure the file is formatted as csv',
-    416: 'File has no colums, make sure the file is formatted as csv',
-    417: 'Unable to read file, make sure the file is formatted as csv',
+    412: 'File has unsupported format.',
+    413: 'Unable create survey from this template.',
+    414: 'Survey loading was cancelled.',
+    415: 'File has no rows, make sure the file is formatted as csv.',
+    416: 'File has no colums, make sure the file is formatted as csv.',
+    417: 'Unable to read file, make sure the file is formatted as csv.',
+    418: 'Unable to read file. Make sure the file is available.',
     501: `Avoid special characters and spaces in names. Try this format: 'MY_POTENTIAL_IRF'.`,
     502: `Please select a different survey name.`,
     503: 'Bottom sheet error, please restart the app.',
@@ -65,7 +68,10 @@ const errorCodes = {
     506: 'Name must only contain following characters: A-z, 0-9, -._() and be at least 2 characters long',
     507: 'Please refresh survey list to see changes.',
     508: 'Invalid data string. Unable to read.',
-    509: 'Some value that you have entered are invalid.',
+    509: 'Eneterd data has invalid formtat for this property.',
+    510: 'Select values from the list to add map.',
+    511: 'All property values were mapped. Remove existing mapped values from the list to add more.',
+    512: 'Name property must not contain special characters or be empty.',
     600: 'Invalid request. Unable to make changes in database. Please try again later.',
     601: 'Unable to delete item.',
     602: `There was an error while loading readings, ${tip}`,
@@ -130,7 +136,7 @@ export const erroHandlerAsync = async (error, action = false) => await new Promi
 })
 
 export const errorHandler = (error, action = false) => {
-    Alert.alert(getErrorTitle(error), getErrorMessage(error) + `\n\nCode: ${error}`, [
+    Alert.alert(getErrorTitle(error), getErrorMessage(error) + ((error - (error % 100)) !== 500 ? `\n\nCode: ${error}` : ''), [
         {
             style: 'default',
             text: 'OK',

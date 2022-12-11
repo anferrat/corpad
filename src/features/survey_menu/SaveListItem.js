@@ -6,6 +6,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { loadSurveyList } from '../../store/actions/surveyList'
 import { updateSetting, resetCurrentSurveySettings, loadSurveySettings, loadSession } from '../../store/actions/settings'
 import { sendRequest } from '../../api/database/index'
+import { hapticMedium } from '../../native_libs/haptics'
 
 const SaveListItem = (props) => {
     const dispatch = useDispatch()
@@ -22,6 +23,7 @@ const SaveListItem = (props) => {
     }, [dispatch])
 
     const onSaveHandler = React.useCallback(async (fileName) => {
+        hapticMedium()
         props.closeSheet()
         dispatch(updateSetting('loader', { visible: true, title: 'Saving', text: fileName }))
         const saveToFile = await saveSurveyHandler()

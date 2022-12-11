@@ -1,7 +1,7 @@
 import React from 'react'
 import { View } from 'react-native'
 import { globalStyle } from '../../styles/styles'
-import ImportParameters from '../../features/import/parameters/ImportParameters'
+import ImportParameters from '../../features/import/parameters/Parameters'
 
 
 export default ImportParametersScreen = ({ route, navigation }) => {
@@ -9,7 +9,6 @@ export default ImportParametersScreen = ({ route, navigation }) => {
         navigation.goBack()
     }
     const { property, subitemIndex } = route.params
-    console.log('HAHAHAHAHAH')
     return (
         <View style={globalStyle.screen}>
             <ImportParameters

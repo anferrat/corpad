@@ -19,7 +19,11 @@ const getTitleBySettingType = (setting) => {
         case 'exportedFiles':
             return 'Exported files'
         case 'info':
-            return 'Survey information'
+            return 'Survey overview'
+        case 'about':
+            return 'About'
+        case 'licenses':
+            return 'Licenses'
         default:
             return 'Settings'
     }

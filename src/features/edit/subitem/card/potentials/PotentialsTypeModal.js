@@ -1,7 +1,9 @@
 import React from 'react'
-import { ScrollView, Modal, StyleSheet } from 'react-native'
+import { ScrollView, Modal, StyleSheet, View } from 'react-native'
+import { Text, Icon } from '@ui-kitten/components'
 import HeaderTitle from '../../components/HeaderTitle'
 import PoitentialListItem from '../../components/PoitentialListItem'
+import { basic } from '../../../../../styles/colors'
 
 const PotentialTypesModal = (props) => {
     const onTypeSelect = React.useCallback((typeIndex) => {
@@ -30,6 +32,10 @@ const PotentialTypesModal = (props) => {
                 backAction={props.dismiss} />
             <ScrollView style={styles.mainView}>
                 {genTitleOptions()}
+                <View style={styles.hint}>
+                    <Icon name='info-outline' fill={basic} style={styles.hintIcon} />
+                    <Text category='s2' appearance='hint'>Create custom potentials types in Settings {`->`} Potentials</Text>
+                </View>
             </ScrollView>
         </Modal>
     )
@@ -65,5 +71,15 @@ const styles = StyleSheet.create({
         height: 40,
         marginLeft: 16,
         alignItems: 'center'
+    },
+    hint: {
+        paddingTop: 6,
+        flexDirection: 'row',
+        alignItems: 'center'
+    },
+    hintIcon: {
+        width: 20,
+        height: 20,
+        marginRight: 12
     }
 })

@@ -4,12 +4,17 @@ import { useDispatch } from 'react-redux'
 import { Radio, Button } from '@ui-kitten/components'
 import { globalStyle } from '../../../styles/styles'
 import InputField from '../../../components/Input'
-import SelectField from '../../../components/Select'
+import SelectField from './components/Select'
 import { saveIcon } from '../../../components/Icons'
 import { setImportItemProperty } from '../../../store/actions/importData'
-import { fieldProperties } from '../../../constants/fieldProperties'
 import fieldValidation from '../../../helpers/validation'
+import { errorHandler } from '../../../helpers/error_handler'
+import MultiSelect from './components/MultiSelect'
 
+const fileIcon = {
+    name: 'file-text-outline',
+    pack: null
+}
 
 const InputFieldParamaters = (props) => {
     const [fieldIndex, setFieldIndex] = useState(props.value.fieldIndex)
@@ -18,6 +23,7 @@ const InputFieldParamaters = (props) => {
     const [valid, setValid] = useState(props.value.valid)
     const [unit, setUnit] = useState(props.value.unit)
     const [unitList, setUnitList] = useState(props.value.unitList)
+    const [fieldIndexList, setFieldIndexList] = useState(props.value.fieldIndexList)
 
     const defaultValueImportType = React.useCallback(() => {
         setImportType(0)
@@ -37,6 +43,13 @@ const InputFieldParamaters = (props) => {
         setFieldIndex(null)
     }, [])
 
+    const fieldIndexMergedImportType = React.useCallback(() => {
+        setImportType(3)
+        setValid(true)
+        setDefaultValue(null)
+        setFieldIndex(null)
+    }, [])
+
     const validateDefaultValue = React.useCallback(() => {
         if (importType === 0) {
             const validation = fieldValidation(defaultValue, props.property, props.property === 'name')
@@ -48,8 +61,20 @@ const InputFieldParamaters = (props) => {
     const dispatch = useDispatch()
 
     const onSaveHandler = () => {
-        dispatch(setImportItemProperty(props.property, { importType, unit, unitList, defaultValue, fieldIndex, valid }))
-        props.goBack()
+        const validation = fieldValidation(defaultValue, props.property, props.property === 'name')
+        if (!validation.valid && importType === 0 && props.property !== 'name') {
+            setValid(validation.valid)
+            errorHandler(509)
+        }
+        else if (props.property === 'name' && ((importType === 1 && fieldIndex === null) || (!validation.valid && importType === 0))) {
+            if (importType === 0)
+                setValid(validation.valid)
+            errorHandler(512)
+        }
+        else {
+            dispatch(setImportItemProperty(props.property, { importType, unit, unitList, defaultValue, fieldIndex, valid, fieldIndexList }))
+            props.goBack()
+        }
     }
 
     return (
@@ -58,23 +83,9 @@ const InputFieldParamaters = (props) => {
                 <View style={globalStyle.card}>
                     <Radio
                         style={styles.radio}
-                        onChange={fieldIndexImportType}
-                        checked={importType === 1}>
-                        Use values from a column in data file
-                    </Radio>
-                    <SelectField
-                        style={styles.field}
-                        disabled={importType !== 1}
-                        placeholder={fieldProperties[props.property].placeholder}
-                        itemsList={props.fields}
-                        selectedItem={fieldIndex}
-                        selectAction={setFieldIndex}
-                    />
-                    <Radio
-                        style={styles.radio}
                         onChange={defaultValueImportType}
                         checked={importType === 0}>
-                        Use same value for each item
+                        Use fixed value for each imported item
                     </Radio>
                     <InputField
                         style={styles.field}
@@ -84,6 +95,21 @@ const InputFieldParamaters = (props) => {
                         onEndEditing={validateDefaultValue}
                         valid={valid}
                     />
+                    <Radio
+                        style={styles.radio}
+                        onChange={fieldIndexImportType}
+                        checked={importType === 1}>
+                        Use values from a column in data file
+                    </Radio>
+                    <SelectField
+                        style={styles.field}
+                        disabled={importType !== 1}
+                        placeholder={'Select data column'}
+                        itemList={props.fields}
+                        selectedIndex={fieldIndex}
+                        onSelect={setFieldIndex}
+                        accessory={fileIcon}
+                    />
                     {props.property === 'name' ?
                         <Radio
                             style={styles.radio}
@@ -91,6 +117,23 @@ const InputFieldParamaters = (props) => {
                             checked={importType === 2}>
                             Use default name values
                         </Radio> : null}
+                    {props.value.mergeAllowed ?
+                        <>
+                            <Radio
+                                style={styles.radio}
+                                onChange={fieldIndexMergedImportType}
+                                checked={importType === 3}>
+                                Merge values from two or more columns in data file
+                            </Radio>
+                            <MultiSelect
+                                disabled={importType !== 3}
+                                placeholder={'Select data columns'}
+                                style={styles.field}
+                                itemList={props.fields}
+                                selectedItems={fieldIndexList}
+                                onSelect={setFieldIndexList}
+                            />
+                        </> : null}
 
                 </View>
             </ScrollView>
