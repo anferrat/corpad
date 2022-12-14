@@ -5,7 +5,7 @@ import { pipeMaterials, pipeDiameterList, pipeProducts } from '../../../constant
 import IconLine from '../components/IconLine'
 import TextLine from '../components/TextLine'
 import { getFullDate } from '../../../helpers/functions'
-import TopBarTitle from '../../../components/ItemTitle'
+import TopBarTitle from '../components/ItemTitle'
 import { danger, success } from '../../../styles/colors'
 
 const getValue = (index, array) => {

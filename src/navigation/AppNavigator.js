@@ -20,18 +20,15 @@ import ImportItem from '../screens/import/Item'
 import ImportFile from '../screens/import/File'
 import ImportParameters from '../screens/import/Parameters'
 import Spreadsheet from '../screens/Spreadsheet'
-import SpreadsheetHeader from '../features/navigation/spreadsheet/SpreadsheetHeader'
-import TopBar from '../features/settings/TopBar'
-import TopBarCalculator from '../features/calculator/TopBar'
-import TopBarCreateSurvey from '../features/navigation/create_survey_header/Header'
-import TopBarImport from '../features/navigation/import/TopBar'
-import { isSurveyLoaded, surveyLoader, saveSurveyHandler } from '../features/survey_manager/manager'
+import CalculatorDescription from '../screens/calculator/Description'
+import { TopBar } from '../features/top_bar'
+import { isSurveyLoaded, surveyLoader, saveSurveyHandler } from '../services/survey/manager'
 import { loadSession, loadSurveySettings, updateOnboarding, resetCurrentSurveySettings, updateSetting } from '../store/actions/settings'
 import SplashScreen from '../features/navigation/components/SplashScreen'
-import { getSession, signInSilently, checkConnection } from '../api/cloud_drive/auth'
-import { gdrive } from '../api/cloud_drive/gd'
+import { getSession, signInSilently } from '../api/cloud_drive/auth'
+import { checkConnection } from '../api/cloud_drive/netinfo'
 import { initDataBase, sendRequest } from '../api/database/index'
-import { ONBOARDING_VERSION } from '../features/overlays/onboarding/onboardingRequests'
+import { Onboarding, ONBOARDING_VERSION } from '../features/overlays/onboarding/'
 import { errorHandler, warningHandler } from '../helpers/error_handler'
 import Licenses from '../screens/settings/Licenses'
 
@@ -136,14 +133,12 @@ export const AppNavigator = () => {
       if (session.status === 200)
         if (session.isSigned) {
           dispatch(loadSession({ isSigned: true, userName: session.userName, isInternetOn: isInternetOn }))
-          gdrive.accessToken = session.driveToken
         }
         else {
           dispatch(loadSession({ signing: true, isInternetOn: isInternetOn }))
           const silentSignIn = await signInSilently()
           if (silentSignIn.status === 200) {
             dispatch(loadSession({ signing: false, isSigned: true, userName: session.userName }))
-            gdrive.accessToken = silentSignIn.driveToken
           }
           else
             dispatch(loadSession({ signing: false, isSigned: false }))
@@ -159,82 +154,61 @@ export const AppNavigator = () => {
       recievedUrl.remove()
     }
   }, [])
-
   if (!screenReady)
     return <SplashScreen />
   else
     return (
       <Stack.Navigator
         screenOptions={{
-          headerShown: false,
-          animation: 'fade'
+          headerShown: true,
+          animation: 'fade',
+          headerStyle: {
+            backgroundColor: 'red',
+          },
+          header: ({ route, navigation }) => <>
+            <Onboarding screen={route.name} params={route.params} />
+            <TopBar screen={route.name} params={route.params} navigation={navigation} />
+          </>,
         }}>
         {showOnboarding ? <Stack.Screen name='Onboarding' component={OnboardingScreen} /> : null}
-        {surveyLoaded ? (
-          <>
-            <Stack.Group>
-              <Stack.Screen name='PipelineSurvey' component={SurveyBottomTabs} />
+        {
+          surveyLoaded ? (
+            <>
+              <Stack.Screen name='PipelineSurvey' component={SurveyBottomTabs} options={{ headerShown: false }} />
               <Stack.Screen name='ViewItem' component={ViewItem} />
               <Stack.Screen name='DevScreen' component={DevScreen} />
+              <Stack.Screen name='EditItem' component={EditItem} />
+              <Stack.Screen name='EditSubitem' component={EditSubitem} />
               <Stack.Group screenOptions={{
-                headerShown: true,
                 animation: 'fade_from_bottom',
-                header: props => <TopBarImport {...props} />
               }}>
                 <Stack.Screen name='ImportItem' component={ImportItem} />
                 <Stack.Screen name='ImportFile' component={ImportFile} />
                 <Stack.Screen name='ImportParameters' component={ImportParameters} />
+                <Stack.Screen name='Settings' component={SettingsScreen} />
               </Stack.Group >
-              <Stack.Screen name='EditItem' component={EditItem} />
-              <Stack.Screen name='EditSubitem' component={EditSubitem} />
-            </Stack.Group>
-            <Stack.Group screenOptions={{ presentation: 'modal' }}>
-              <Stack.Screen name='Search' component={SearchBar} />
-            </Stack.Group>
-            <Stack.Group screenOptions={{
-              headerShown: true,
-              animation: 'fade_from_bottom',
-              header: props => <TopBar {...props} />
-            }}>
-              <Stack.Screen name='Settings' component={SettingsScreen} />
-            </Stack.Group>
-          </>
-        ) : (
-          <>
-            <Stack.Group>
+              <Stack.Group screenOptions={{ presentation: 'modal' }}>
+                <Stack.Screen name='Search' component={SearchBar} />
+              </Stack.Group>
+            </>
+          ) : (
+            <>
               <Stack.Screen name='Home' component={HomeBottomTabs} initialParams={{ homeScreenCloud: homeScreenCloud }} />
-            </Stack.Group>
-            <Stack.Group screenOptions={{
-              presentation: 'modal',
-              headerShown: true,
-              header: props => <TopBarCreateSurvey {...props} />
-            }}>
-              <Stack.Screen name='CreateSurvey' component={CreateSurvey} />
-            </Stack.Group>
-          </>
-        )}
-        <Stack.Group screenOptions={{
-          headerShown: true,
-          animation: 'fade_from_bottom',
-          header: props => <TopBar {...props} />
-        }}>
-          <Stack.Screen name='SettingDetails' component={SettingDetails} />
-          <Stack.Screen name='Licenses' component={Licenses} initialParams={{ setting: 'licenses' }} />
-        </Stack.Group>
-        <Stack.Group screenOptions={{
-          presentation: 'modal',
-          headerShown: true,
-          header: props => <SpreadsheetHeader {...props} />
-        }}>
+              <Stack.Group screenOptions={{ presentation: 'modal' }}>
+                <Stack.Screen name='CreateSurvey' component={CreateSurvey} />
+              </Stack.Group>
+            </>
+          )
+        }
+        <Stack.Group screenOptions={{ presentation: 'modal' }}>
           <Stack.Screen name='Spreadsheet' component={Spreadsheet} initialParams={{ uri: null, title: null }} />
         </Stack.Group>
-        <Stack.Group screenOptions={{
-          headerShown: true,
-          animation: 'fade_from_bottom',
-          header: props => <TopBarCalculator {...props} />
-        }}>
+        <Stack.Group screenOptions={{ animation: 'fade_from_bottom' }}>
           <Stack.Screen name='CalculatorList' component={CalculatorList} />
           <Stack.Screen name='Calculator' component={Calculator} />
+          <Stack.Screen name='CalculatorDescription' component={CalculatorDescription} />
+          <Stack.Screen name='SettingDetails' component={SettingDetails} />
+          <Stack.Screen name='Licenses' component={Licenses} initialParams={{ setting: 'licenses' }} />
         </Stack.Group>
       </Stack.Navigator >
     )

@@ -1,9 +1,8 @@
 import React from 'react'
-import { StyleSheet, StatusBar, View, ScrollView } from 'react-native'
+import { StyleSheet, View, ScrollView } from 'react-native'
 import { Text } from '@ui-kitten/components'
-import { primary } from '../../../styles/colors'
 import { testPointTypes, testPointReadingOptions, labels } from '../../../constants/constants'
-import Header from './Header'
+import Header from '../../Header'
 import ListItem from './ListItem'
 
 const ModalContent = ({ onSelect, hideModal }) => {
@@ -37,6 +36,7 @@ const ModalContent = ({ onSelect, hideModal }) => {
     return (
         <>
             <Header
+                title='Select reading'
                 onBackPress={hideModal} />
             <ScrollView>
                 {renderSection()}
@@ -48,25 +48,7 @@ const ModalContent = ({ onSelect, hideModal }) => {
 export default React.memo(ModalContent)
 
 const styles = StyleSheet.create({
-    mainView:
-    {
-        flex: 1
-    },
     sectionTitle: {
         padding: 6,
     },
-    mainTitle: {
-        paddingLeft: 12
-    },
-    header: {
-        height: StatusBar.currentHeight + 60,
-        flexDirection: 'row',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-        paddingHorizontal: 12,
-        backgroundColor: '#fff',
-        backgroundColor: primary,
-        justifyContent: 'flex-start',
-        paddingTop: StatusBar.currentHeight
-    }
 })

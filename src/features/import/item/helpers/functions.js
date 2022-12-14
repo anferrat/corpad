@@ -131,7 +131,7 @@ export const getPreviewList = (data, fields, fieldIndex, fieldIndexList, importT
 
 export const genKey = (item, index) => `${item}_${Date.now()}${index}`
 
-export const showItemValue = (item) => item === undefined || item === '' ? '<Empty>' : item
+export const showItemValue = (item) => (item === undefined || item === '' || item === null) ? '<Empty>' : item.trim()
 
 export const getButtonTitle = (itemType) => {
     switch (itemType) {

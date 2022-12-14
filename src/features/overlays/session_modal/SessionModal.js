@@ -5,7 +5,6 @@ import { Button, Icon, Text, Modal, ListItem } from '@ui-kitten/components'
 import { loadSession } from '../../../store/actions/settings'
 import { basic400, success, primary, basic200 } from '../../../styles/colors'
 import { signIn, signOut } from '../../../api/cloud_drive/auth'
-import { gdrive } from '../../../api/cloud_drive/gd'
 import { errorHandler } from '../../../helpers/error_handler'
 import { google, person } from '../../../components/Icons'
 
@@ -24,7 +23,6 @@ const SessionModal = () => {
         hideModal()
         const onSignIn = await signIn()
         if (onSignIn.status === 200) {
-            gdrive.accessToken = onSignIn.driveToken
             dispatch(loadSession({ userName: onSignIn.userName, signing: false, isSigned: true }))
             ToastAndroid.show(`Signed as ${onSignIn.userName}`, ToastAndroid.SHORT)
         }
@@ -36,7 +34,6 @@ const SessionModal = () => {
         const onSignOut = await signOut()
         if (onSignOut.status === 200) {
             dispatch(loadSession({ signing: false, isSigned: false, userName: null }))
-            gdrive.accessToken = null
         }
         else errorHandler(onSignOut.status)
     }, [dispatch])

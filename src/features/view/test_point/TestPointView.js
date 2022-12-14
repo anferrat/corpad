@@ -4,7 +4,7 @@ import StatusIcon from '../StatusIcon'
 import { testPointTypeCodes, testPointTypes } from '../../../constants/constants'
 import IconLine from '../components/IconLine'
 import { toString, getFullDate } from '../../../helpers/functions'
-import TopBarTitle from '../../../components/ItemTitle'
+import TopBarTitle from '../components/ItemTitle'
 
 const combineLatLon = (lat, lon) => lat === '' && lon === '' ? '' : lat + ', ' + lon
 

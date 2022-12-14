@@ -152,8 +152,6 @@ const generateQuery = (QUERY_TYPE, DATA_TYPE, data) => {
                     return { query: 'SELECT * FROM rectifiers WHERE id = ?', varArray: [data.rectifierId] }
                 case 'PIPELINE':
                     return { query: 'SELECT * FROM pipelines WHERE id = ?', varArray: [data.pipelineId] }
-                //Case ON_OFF_LIST needs SQL request to be rewritten. Result must match format of DisplayCard readings property. Right now it's processed in UI layer, what increases DisplayCard render time. Learn some SQL dude! 
-                //Ha-ha not anymore, its all done in sql now
                 case 'ON_OFF_LIST':
                     return { query: "SELECT potentials.value, cards.uid, potentials.unit, potentialTypes.permType AS title, cards.name AS cardName, cards.type as cardType, cards.id as cardId FROM ((potentials INNER JOIN potentialTypes ON potentials.type = potentialTypes.id) INNER JOIN cards ON cards.id = potentials.cardId) WHERE ((potentials.cardId IN ( SELECT id FROM cards WHERE testPointId = ? )) AND potentials.portableReferenceId IN (SELECT id from referenceCells WHERE mainReference = 1 LIMIT 1) AND potentialTypes.permType IS NOT NULL)", varArray: [data.testPointId] }
                 case 'PIPELINE_TEST_POINT_COUNT':
@@ -475,7 +473,9 @@ const runQuery = async (transaction, query, params) => {
     return await new Promise((resolve, reject) => {
         transaction.executeSql(query,
             params,
-            (_, result) => resolve(result),
+            (_, result) => {
+                resolve(result)
+            },
             (_, err) => {
                 reject(err)
             }
@@ -496,17 +496,10 @@ const resultAsArray = (index, item, array = []) => {
     else return array
 }
 
-
-
 const runTransaction = async (query, db, multiple) => await new Promise((resolve, reject) => {
-    let result = multiple ? [] : null
+    let result
     db.transaction((tx) => {
-        if (multiple)
-            query.forEach(async q => {
-                const r = await runQuery(tx, q.query, q.varArray)
-                result.push(r)
-            })
-        else result = runQuery(tx, query.query, query.varArray)
+        result = multiple ? Promise.all(query.map(q => runQuery(tx, q.query, q.varArray))) : runQuery(tx, query.query, query.varArray)
     },
         er => {
             reject(er)
@@ -515,8 +508,8 @@ const runTransaction = async (query, db, multiple) => await new Promise((resolve
     )
 })
 
-const generateResult = (result, DATA_TYPE, singleObject) => {
-    switch (DATA_TYPE) {
+const generateResult = (result, QUERY_TYPE, singleObject) => {
+    switch (QUERY_TYPE) {
         case 'INSERT':
             return result.insertId
         case 'SELECT':
@@ -560,6 +553,11 @@ const getResult = (multiple, result, QUERY_TYPE, singleObject) => {
 }
 
 export const sendRequest = async (QUERY_TYPE, DATA_TYPE, payload = {}) => {
+
+    /*
+        Function to send request to DB. supports multiple request in one transaction of same type if payload is array.
+    */
+
     const multiple = Array.isArray(payload)
     const query = multiple ? payload.map(p => generateQuery(QUERY_TYPE, DATA_TYPE, p)).filter(p => p) : generateQuery(QUERY_TYPE, DATA_TYPE, payload)
     //console.log(query)
@@ -583,6 +581,41 @@ export const sendRequest = async (QUERY_TYPE, DATA_TYPE, payload = {}) => {
             }
         }
 
+    }
+}
+
+export const sendCombinedRequest = async (arrayOfRequests) => {
+
+    /*
+        Function to send multiple db requests in one transaction, if one request fails, changes from other requests won't be made
+    */
+
+    if (Array.isArray(arrayOfRequests)) {
+        const query = arrayOfRequests.map(request => generateQuery(request[0], request[1], request[2])).filter(q => q)
+        if (query.length !== arrayOfRequests.length) {
+            console.log(`Number of queries (${query.length}) doesn't macth with number of requests (${arrayOfRequests.length}). Some queries are invalid`)
+            return {
+                status: 600,
+            }
+        }
+        else {
+            try {
+                const result = await runTransaction(query, db, true)
+                return {
+                    status: 200,
+                    result: result.map((r, i) => generateResult(r, arrayOfRequests[i][0], SINGLE_OBJECT_TYPES.indexOf(arrayOfRequests[i][1]) !== -1))
+                }
+            }
+            catch (er) {
+                console.log(er)
+                return {
+                    status: 600
+                }
+            }
+        }
+    }
+    else return {
+        status: 600
     }
 }
 

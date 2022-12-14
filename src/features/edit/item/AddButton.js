@@ -22,8 +22,10 @@ const AddButton = ({ itemType, navigateToSubitem, itemId }) => {
             if (!!settings.result.autoCreatePotentials && itemType === 'TEST_POINT')
                 if (verifyTypes(cardType, testPointReadingsWithPotentials)) {
                     //if unable to insert default potentials - fail silently
-                    await sendRequest('INSERT', 'POTENTIAL_BY_TYPE', { cardId: subitemId.result, uid: idGen(), permType: potentialFields[0].permType, unit: potentialUnits[settings.result.defaultPotentialUnit] })
-                    await sendRequest('INSERT', 'POTENTIAL_BY_TYPE', { cardId: subitemId.result, uid: idGen(), permType: potentialFields[1].permType, unit: potentialUnits[settings.result.defaultPotentialUnit] })
+                    await sendRequest('INSERT', 'POTENTIAL_BY_TYPE', [
+                        { cardId: subitemId.result, uid: idGen(), permType: potentialFields[0].permType, unit: potentialUnits[settings.result.defaultPotentialUnit] },
+                        { cardId: subitemId.result, uid: idGen(), permType: potentialFields[1].permType, unit: potentialUnits[settings.result.defaultPotentialUnit] }
+                    ])
                 }
             navigateToSubitem(subitemId.result, true, itemType === 'TEST_POINT' ? cardType : 'CT')
         }

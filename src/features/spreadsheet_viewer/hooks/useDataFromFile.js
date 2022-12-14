@@ -3,12 +3,14 @@ import { parseCSV, parseSimple } from '../../../helpers/csv_generator'
 import { readFile } from '../../../api/files/fs'
 import { errorHandler } from '../../../helpers/error_handler'
 import { getData } from '../helpers/function'
+import { useNavigation } from '@react-navigation/native'
 
 
 export const useDataFromFile = (uri) => {
     const [data, setData] = useState([])
     const [loading, setLoading] = useState(true)
     const [fields, setFields] = useState([])
+    const navigation = useNavigation()
 
     useEffect(() => {
         const loadData = async () => {
@@ -22,7 +24,7 @@ export const useDataFromFile = (uri) => {
                 setLoading(false)
                 return
             }
-            else errorHandler(fileData.status)
+            else errorHandler(fileData.status, navigation.goBack)
             setLoading(false)
         }
         loadData()

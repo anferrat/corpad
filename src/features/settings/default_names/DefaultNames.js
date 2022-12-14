@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react'
-import { Icon } from '@ui-kitten/components'
 import { ScrollView, StyleSheet, View } from 'react-native'
-import { sendRequest } from '../../../api/database/index'
+import { sendCombinedRequest } from '../../../api/database/index'
 import MainActionButton from '../../../components/ActionButton'
 import { globalStyle } from '../../../styles/styles'
 import { basic300, primary } from '../../../styles/colors'
@@ -12,11 +11,6 @@ import CheckBoxData from './CheckBoxData'
 import DefaultNameExample from './components/DefaultNameExample'
 import Hint from './components/Hint'
 import LoadingView from '../../../components/LoadingView'
-
-const convertIndex = (index) => index.section * 3 + index.row
-
-const renderIcon = (name) => (props) => <Icon {...props} pack='cp' name={name} fill={primary} />
-
 
 const DefaultNames = (props) => {
     const [data, setData] = useState({
@@ -32,16 +26,15 @@ const DefaultNames = (props) => {
 
     useEffect(() => {
         const fetchData = async () => {
-            const defNamesFromDb = await sendRequest('SELECT', 'DEFAULT_NAMES', {})
-            const settings = await sendRequest('SELECT', 'SETTINGS', {})
-            if (defNamesFromDb.status == 200 && settings.status === 200) {
+            const data = await sendCombinedRequest([['SELECT', 'DEFAULT_NAMES', {}], ['SELECT', 'SETTINGS', {}]])
+            if (data.status === 200) {
                 if (componentMounted.current) {
                     setData(old => ({
                         ...old,
                         loaded: true,
-                        defaultNamesList: defNamesFromDb.result,
-                        value: defNamesFromDb.result[old.selectedIndex].name,
-                        pipeNameSelected: settings.result.pipelineNameAsDefault
+                        defaultNamesList: data.result[0],
+                        value: data.result[0][old.selectedIndex].name,
+                        pipeNameSelected: data.result[1].pipelineNameAsDefault
                     }))
 
                 }
@@ -57,9 +50,11 @@ const DefaultNames = (props) => {
     }, [])
 
     const onSaveHandler = React.useCallback(async () => {
-        const updateDefaultNamesRequest = await sendRequest('UPDATE', 'DEFAULT_NAME', data.defaultNamesList)
-        const updateSettingsRequest = await sendRequest('UPDATE', 'SETTING', { setting: 'pipelineNameAsDefault', value: data.pipeNameSelected })
-        if (updateDefaultNamesRequest.status === 200 && updateSettingsRequest.status === 200)
+        const update = await sendCombinedRequest([
+            ['UPDATE', 'SETTING', { setting: 'pipelineNameAsDefault', value: data.pipeNameSelected }],
+            ...(data.defaultNamesList.map(dn => ['UPDATE', 'DEFAULT_NAME', dn]))
+        ])
+        if (update.status === 200)
             props.goBack()
         else errorHandler(623)
     }, [data, props.goBack])

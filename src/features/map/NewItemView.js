@@ -29,6 +29,7 @@ const NewItemView = (props) => {
                 }
                 else {
                     errorHandler(617)
+                    //will likely fail since updaterequest failed, but why not
                     await sendRequest('DELETE', dataType, genRequestObject(dataType, itemId.result))
                 }
             }

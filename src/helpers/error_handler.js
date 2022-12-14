@@ -33,6 +33,12 @@ const warningCodes = {
     47: 'You will delete all saved calculations of this type including the one currently opened. Do you want to continue?',
     51: 'All mapped values will be deleted. Do you wish to proceed?',
     52: 'You have no mapped attributes for this property, therefore property will have no value for all imported items. Do you want to continue?',
+    53: 'Are you sure you want to delete this rectifier?',
+    54: 'Are you sure you want to delete this pipeline?',
+    55: 'Are you sure you want to delete this test point?',
+    56: 'Are you sure you want to delete this reading?',
+    57: 'Are you sure you want to delete this circuit?',
+    58: 'Are you sure you want to delete this item?',
 }
 
 const errorCodes = {
@@ -60,6 +66,11 @@ const errorCodes = {
     416: 'File has no colums, make sure the file is formatted as csv.',
     417: 'Unable to read file, make sure the file is formatted as csv.',
     418: 'Unable to read file. Make sure the file is available.',
+    419: 'Unable to get file hash.',
+    420: 'Unable to get file stats.',
+    421: 'Unable to read directory',
+    422: 'Unable to scan file',
+    423: 'Unable to pick a file',
     501: `Avoid special characters and spaces in names. Try this format: 'MY_POTENTIAL_IRF'.`,
     502: `Please select a different survey name.`,
     503: 'Bottom sheet error, please restart the app.',
@@ -109,7 +120,7 @@ const errorCodes = {
     703: `Unable to update remote file.`,
     704: `Unable to create file at the remote storage.`,
     705: `Unable to get file list from remote storage.`,
-    706: `Unable to read survey file.`,
+    706: `Unable to read file from cloud storage.`,
     707: 'Unable to sign in to Google account.',
     708: 'Unable to log out from cloud storage account.',
     709: 'Unable to delete a file from cloud storage.',

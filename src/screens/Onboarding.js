@@ -1,3 +1,3 @@
-import OnboardingScreen from '../features/overlays/onboarding/OnboardingScreen'
+import { OnboardingScreen } from '../features/overlays/onboarding/'
 
 export default OnboardingScreen

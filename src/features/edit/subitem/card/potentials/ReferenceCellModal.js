@@ -1,7 +1,7 @@
 import React from 'react'
 import { ScrollView, Modal, StyleSheet } from 'react-native'
 import { Text } from '@ui-kitten/components'
-import HeaderTitle from '../../components/HeaderTitle'
+import Header from '../../../../../components/Header'
 import PoitentialListItem from '../../components/PoitentialListItem'
 import { genRefCellDescription } from '../../../../../helpers/functions'
 
@@ -33,9 +33,9 @@ const ReferenceCellModal = (props) => {
             statusBarTranslucent={true}
             onRequestClose={props.dismiss}
             visible={props.visible}>
-            <HeaderTitle
+            <Header
                 title='Select reference cell'
-                backAction={props.dismiss} />
+                onBackPress={props.dismiss} />
             <ScrollView style={styles.mainView}>
                 <Text style={styles.title} appearance='hint'>
                     Portable

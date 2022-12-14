@@ -2,7 +2,7 @@ import React, { useEffect, useRef } from 'react'
 import { ActivityIndicator, View, StyleSheet } from 'react-native'
 import { useDispatch, useSelector } from 'react-redux'
 import { loadSubitemState, resetSubitemState } from '../../../store/actions/subitem'
-import { sendRequest } from '../../../api/database/index'
+import { sendCombinedRequest, sendRequest } from '../../../api/database/index'
 import { getCardDefaultName, getCircuitDefaultName, genValidObject, verifyTypes, genRequestObject } from '../../../helpers/functions'
 import CardView from './card/CardView'
 import CircuitView from './circuit/CircuitView'
@@ -14,51 +14,63 @@ import { primary } from '../../../styles/colors'
 
 const fetchData = async (dataDtype, subitemId, itemId, cardType = undefined) => {
     try {
-        const defaultPrefix = (await sendRequest('SELECT', 'DEFAULT_NAME', { type: cardType }))
+        //const defaultPrefix = (await sendRequest('SELECT', 'DEFAULT_NAME', { type: cardType }))
+        const defaultNameRequest = ['SELECT', 'DEFAULT_NAME', { type: cardType }]
         switch (dataDtype) {
             case 'CARD':
-                const cardData = (await sendRequest('SELECT', 'CARD', { cardId: subitemId, cardType: cardType }))
-                const cardList = (await sendRequest('SELECT', 'CARD_LIST', { testPointId: itemId }))
-                const defaultName = getCardDefaultName(cardList.result, cardType, subitemId, defaultPrefix.result)
-                const pipelineList = verifyTypes(cardType, ['PL', 'RS']) ? (await sendRequest('SELECT', 'PIPELINE_LIST_DATA', {})) : { status: 200, result: [] }
-                const settings = verifyTypes(cardType, ['PL', 'RS']) ? (await sendRequest('SELECT', 'SETTINGS', {})) : { status: 200, result: {} }
-                const referenceCellList = verifyTypes(cardType, ['PL', 'AN', 'CN', 'FC', 'OT', 'RE', 'RS']) ? (await sendRequest('SELECT', 'REFERENCE_CELL_LIST', { testPointId: itemId })) : { status: 200, result: [] }
-                const sides = verifyTypes(cardType, ['SH', 'BD', 'IK']) ? (await sendRequest('SELECT', 'SIDES', { cardId: subitemId })) : { status: 200, result: [] }
-                if (cardData.status === 200 && cardList.status === 200 && pipelineList.status === 200 && settings.status === 200 && referenceCellList.status === 200 && sides.status === 200)
-                    return {
-                        status: 200,
-                        result: {
-                            ...cardData.result,
-                            valid: genValidObject(cardData.result),
-                            sideA: sides.result.filter(s => s.sideAId !== null).map(s => s.sideAId),
-                            sideB: sides.result.filter(s => s.sideBId !== null).map(s => s.sideBId),
-                            pipelineList: pipelineList.result,
-                            cardList: cardList.result,
-                            referenceCellList: referenceCellList.result,
-                            defaultName: defaultName,
-                            defaultPrefix: defaultPrefix.result,
-                            pipelineNameAsDefault: settings.result?.pipelineNameAsDefault ?? false
+                {
+                    const requests = [
+                        defaultNameRequest,
+                        ['SELECT', 'CARD', { cardId: subitemId, cardType: cardType }],
+                        ['SELECT', 'CARD_LIST', { testPointId: itemId }],
+                        ['SELECT', 'PIPELINE_LIST_DATA', {}],
+                        ['SELECT', 'SETTINGS', {}],
+                        ['SELECT', 'REFERENCE_CELL_LIST', { testPointId: itemId }],
+                        ['SELECT', 'SIDES', { cardId: subitemId }],
+                    ]
+                    const data = await sendCombinedRequest(requests)
+                    if (data.status === 200)
+                        return {
+                            status: 200,
+                            result: {
+                                ...data.result[1],
+                                defaultPrefix: data.result[0],
+                                cardList: data.result[2],
+                                valid: genValidObject(data.result[1]),
+                                sideA: verifyTypes(cardType, ['SH', 'BD', 'IK']) ? data.result[6].filter(s => s.sideAId !== null).map(s => s.sideAId) : [],
+                                sideB: verifyTypes(cardType, ['SH', 'BD', 'IK']) ? data.result[6].filter(s => s.sideBId !== null).map(s => s.sideBId) : [],
+                                pipelineList: verifyTypes(cardType, ['PL', 'RS']) ? data.result[3] : [],
+                                referenceCellList: verifyTypes(cardType, ['PL', 'AN', 'CN', 'FC', 'OT', 'RE', 'RS']) ? data.result[5] : [],
+                                defaultName: getCardDefaultName(data.result[2], cardType, subitemId, data.result[0]),
+                                pipelineNameAsDefault: verifyTypes(cardType, ['PL', 'RS']) ? data.result[4]?.pipelineNameAsDefault : false
+                            }
                         }
+                    else return {
+                        status: 607
                     }
-                else return {
-                    status: 607
                 }
-            case 'CIRCUIT':
-                const circuitData = (await sendRequest('SELECT', 'CIRCUIT', { circuitId: subitemId }))
-                const circuitList = (await sendRequest('SELECT', 'CIRCUITS', { rectifierId: itemId }))
-                if (circuitData.status === 200 && circuitList.status === 200)
+            case 'CIRCUIT': {
+                const requests = [
+                    defaultNameRequest,
+                    ['SELECT', 'CIRCUIT', { circuitId: subitemId }],
+                    ['SELECT', 'CIRCUITS', { rectifierId: itemId }]
+                ]
+                const data = await sendCombinedRequest(requests)
+
+                if (data.status === 200)
                     return {
                         status: 200,
                         result: {
-                            ...circuitData.result,
+                            ...data.result[1],
                             voltageDrop: null, // we don't record voltage drop - it's for calculation purposes only
-                            valid: genValidObject(circuitData.result),
-                            defaultName: getCircuitDefaultName(circuitList.result, subitemId, defaultPrefix.result)
+                            valid: genValidObject(data.result[1]),
+                            defaultName: getCircuitDefaultName(data.result[2], subitemId, data.result[0])
                         }
                     }
                 else return {
                     status: 607
                 }
+            }
             default:
                 return {
                     status: 200,
@@ -93,20 +105,21 @@ const LoaderSubItem = (props) => {
         if (runSaveEffect) {
             deleteOnExit.current = false
             const saveData = async () => {
-                const updateRequest = await sendRequest('UPDATE', props.dataType, genRequestObject(props.dataType, props.subitemId, data))
-                //sides table update used in Shunt, Bond and Isolation
-                if (props.dataType === 'CARD')
-                    if (verifyTypes(data.type, ['SH', 'BD', 'IK'])) {
-                        await sendRequest('DELETE', 'SIDES', genRequestObject(props.dataType, props.subitemId))
-                        await sendRequest('INSERT', 'SIDE', data.sideA.map(side => {
-                            return { side: 'sideA', value: side, cardId: props.subitemId }
-                        }).concat(data.sideB.map(side => {
-                            return { side: 'sideB', value: side, cardId: props.subitemId }
-                        })))
-                    }
                 const newTime = Date.now()
-                const updateTime = await sendRequest('UPDATE', props.dataTypeItem + '_PROPERTY', { property: 'timeModified', value: newTime, ...genRequestObject(props.dataTypeItem, props.itemId) })
-                if (updateRequest.status === 200 && updateTime.status === 200) {
+                const updateRequest = ['UPDATE', props.dataType, genRequestObject(props.dataType, props.subitemId, data)]
+                //sides table update used in Shunt, Bond and Isolation in Cards
+                const sidesUpdateRequest =
+                    (props.dataType === 'CARD') && verifyTypes(data.type, ['SH', 'BD', 'IK']) ?
+                        [
+                            ['DELETE', 'SIDES', genRequestObject(props.dataType, props.subitemId)],
+                        ].concat(data.sideA.map(side => {
+                            return ['INSERT', 'SIDE', { side: 'sideA', value: side, cardId: props.subitemId }]
+                        }).concat(data.sideB.map(side => {
+                            return ['INSERT', 'SIDE', { side: 'sideB', value: side, cardId: props.subitemId }]
+                        }))) : []
+                const updateTimeRequest = ['UPDATE', props.dataTypeItem + '_PROPERTY', { property: 'timeModified', value: newTime, ...genRequestObject(props.dataTypeItem, props.itemId) }]
+                const update = await sendCombinedRequest([updateRequest].concat(sidesUpdateRequest).concat([updateTimeRequest]))
+                if (update.status === 200) {
                     props.goBack()
                     dispatch(updateViewProperty(newTime, 'timeModified'))
                 }
@@ -130,7 +143,7 @@ const LoaderSubItem = (props) => {
         fetchDataFromDatabase()
         return () => {
             componentMounted.current = false
-            if (deleteOnExit.current) {
+            if (deleteOnExit.current) { //why in ref? but sure
                 // fail silently
                 sendRequest('DELETE', props.dataType, genRequestObject(props.dataType, props.subitemId)) //change if more subitems added
             }

@@ -6,10 +6,11 @@ import { shareLink, shareWith } from '../../native_libs/share'
 import { errorHandler } from '../../helpers/error_handler'
 import { refreshSurveyList, loadSurveyList, addSurveyToList, deleteSurveyFromList, resetSurveyList } from '../../store/actions/surveyList'
 import FileListItem from './components/FileListItem'
-import { deleteSurveyHandler, saveToCloud, saveToDevice, saveSurveyToDownloads, surveyLoader } from '../survey_manager/manager' //change it
-import { getLocalMetaData } from '../survey_manager/fsSurvey'
+import { deleteSurveyHandler, saveToCloud, saveToDevice, saveSurveyToDownloads, surveyLoader } from '../../services/survey/manager'
+import { getLocalMetaData } from '../../services/files/survey'
 import { updateSetting, loadSurveySettings, loadSession } from '../../store/actions/settings'
-import { getCloudMetaData, getFileLink } from '../survey_manager/gdSurvey'
+import { getCloudMetaData } from '../../services/cloud_drive/survey'
+import { getWebLink } from '../../api/cloud_drive/gd'
 import SignOutRow from './SignOutRow'
 import EmptySurveyListComponent from './components/EmptySurveyListComponent'
 import { copyToClipboard } from '../../native_libs/clipboard'
@@ -101,7 +102,7 @@ const LoaderSurveyList = (props) => {
     const getLink = React.useCallback(async (cloudId, toShare) => {
         if (props.isCloud) {
             dispatch(updateSetting('loader', { visible: true, title: 'Creating link' }))
-            const link = await getFileLink(cloudId)
+            const link = await getWebLink(cloudId)
             if (link.status === 200) {
                 if (toShare)
                     shareLink(link.result, 'Share survey link')

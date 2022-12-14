@@ -68,7 +68,7 @@ const Map = (props) => {
     const markers = useSelector(state => state.map.markers) //markers data
     const showMarker = useSelector(state => state.map.showMarker)
     const newItemMarker = useSelector(state => state.map.newItemMarker) // when longPress on Map new marker apperas and offers to create an item at that coordinate
-    const isFocused = useIsFocused() // used for map statusBar. statusbar color changed 
+    const isFocused = useIsFocused() // used for map statusBar. statusbar color changed bases on satellite/regular view. 
     const locationActive = useRef(false)
     const ref = useRef()
     const region = useRef()
@@ -168,7 +168,10 @@ const Map = (props) => {
         const lat = fieldValidation(newLat, 'latitude')
         const lon = fieldValidation(newLon, 'longitude')
         if (lat.valid && lon.valid) {
-            const updateRequest = await sendRequest('UPDATE', marker.dataType + '_PROPERTY', [{ ...genRequestObject(marker.dataType, marker.id), property: 'latitude', value: lat.value }, { ...genRequestObject(marker.dataType, marker.id), property: 'longitude', value: lon.value }])
+            const updateRequest = await sendRequest('UPDATE', marker.dataType + '_PROPERTY', [
+                { ...genRequestObject(marker.dataType, marker.id), property: 'latitude', value: lat.value },
+                { ...genRequestObject(marker.dataType, marker.id), property: 'longitude', value: lon.value }
+            ])
             if (updateRequest.status === 200) {
                 dispatch(updateMarker({
                     dataType: marker.dataType,

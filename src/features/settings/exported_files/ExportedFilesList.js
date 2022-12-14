@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { ToastAndroid, StyleSheet } from 'react-native'
 import ExportedFileListItem from './components/ExportedFileListItem'
-import { clearExported, getExportedFilesMetadata } from './api/fs'
+import { clearExported, getExportedFilesMetadata } from '../../../services/files/exportedFiles'
 import FlatList from './components/FlatList'
 import { errorHandler, warningHandler } from '../../../helpers/error_handler'
 import { shareWith } from '../../../native_libs/share'

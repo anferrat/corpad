@@ -6,11 +6,13 @@ import { useDispatch } from 'react-redux'
 import { BS } from '../../App'
 import MapScreen from '../screens/Map'
 import List from '../screens/List'
-import Header from '../features/navigation/survey_header/SurveyHeader'
+//import Header from '../features/navigation/survey_header/SurveyHeader'
+import { TopBar } from '../features/top_bar/index'
 import BottomBarItem from '../features/navigation/components/BottomBarItem'
 import { updateSetting } from '../store/actions/settings'
 import { basic300 } from '../styles/colors'
 import { errorHandler } from '../helpers/error_handler'
+import { Onboarding } from '../features/overlays/onboarding'
 
 
 const { Navigator, Screen } = createBottomTabNavigator()
@@ -59,11 +61,14 @@ export default TabNavigator = (props) => {
                 headerStyle: {
                     height: 80,
                 },
-                header: props => <Header {...props} />
+                header: ({ route, navigation }) => <>
+                    <Onboarding screen={route.name} params={route.params} />
+                    <TopBar screen={route.name} params={route.params} navigation={navigation} />
+                </>
             }}>
             <Screen name='TestPoints' component={List} initialParams={{ dataType: 'TEST_POINT' }} />
             <Screen name='Pipelines' component={List} initialParams={{ dataType: 'PIPELINE' }} />
-            <Screen name='Map' component={MapScreen} options={{ headerShown: false }} />
+            <Screen name='Map' component={MapScreen} />
             <Screen name='Rectifiers' component={List} initialParams={{ dataType: 'RECTIFIER' }} options={{ headerStyle: { height: 80 } }} />
         </Navigator>
     )

@@ -2,7 +2,7 @@ import React, { useEffect } from "react"
 import { ScrollView } from "react-native"
 import { useDispatch, useSelector } from "react-redux"
 import { Text, Icon } from "@ui-kitten/components"
-import { sendRequest } from "../../../api/database/index"
+import { sendCombinedRequest } from "../../../api/database/index"
 import { basic } from "../../../styles/colors"
 import { resetExport, setExportSetting } from "../../../store/actions/exportSurvey"
 import ItemProperties from "./ItemProperties"
@@ -24,16 +24,14 @@ const ExportSurvey = (props) => {
 
     useEffect(() => {
         const test = async () => {
-            const potentialTypes = await sendRequest('SELECT', 'POTENTIAL_TYPES')
-            const referenceCells = await sendRequest('SELECT', 'REFERENCE_CELL_LIST')
-            const pipelineList = await sendRequest('SELECT', 'PIPELINE_LIST_DATA')
-            if (potentialTypes.status === 200 && referenceCells.status === 200 && pipelineList.status === 200)
+            const data = await sendCombinedRequest([['SELECT', 'POTENTIAL_TYPES', {}], ['SELECT', 'REFERENCE_CELL_LIST', {}], ['SELECT', 'PIPELINE_LIST_DATA', {}]])
+            if (data.status === 200)
                 updateSetting('extraData',
                     {
                         isLoading: false,
-                        pipelineList: pipelineList.result,
-                        referenceCellList: referenceCells.result,
-                        potentialTypes: potentialTypes.result
+                        pipelineList: data.result[2],
+                        referenceCellList: data.result[1],
+                        potentialTypes: data.result[0],
                     }
                 )
             else

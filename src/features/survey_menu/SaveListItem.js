@@ -1,6 +1,6 @@
 import React from 'react'
 import ListItem from './components/ListItemMenu'
-import { saveSurveyHandler } from '../survey_manager/manager' // Cannot reference feature from the feature
+import { saveSurveyHandler } from '../../services/survey/manager'
 import { errorHandler, warningHandler } from '../../helpers/error_handler'
 import { useDispatch, useSelector } from 'react-redux'
 import { loadSurveyList } from '../../store/actions/surveyList'

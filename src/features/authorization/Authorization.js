@@ -2,7 +2,6 @@ import React from 'react'
 import { View, StyleSheet } from 'react-native'
 import { useDispatch } from 'react-redux'
 import { loadSession } from '../../store/actions/settings'
-import { gdrive } from '../../api/cloud_drive/gd'
 import { errorHandler } from '../../helpers/error_handler'
 import { signIn } from '../../api/cloud_drive/auth'
 import Button from './Button'
@@ -18,7 +17,6 @@ const Authorization = () => {
         const signInRequest = await signIn()
         if (signInRequest.status === 200) {
             dispatch(loadSession({ signing: false, isSigned: true, userName: signInRequest.userName }))
-            gdrive.accessToken = signInRequest.driveToken
         }
         else {
             errorHandler(signInRequest.status)

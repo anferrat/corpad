@@ -6,28 +6,27 @@ import { sendRequest } from '../../api/database/index'
 import { genRequestObject } from '../../helpers/functions'
 import { setUpdating } from '../../store/actions/list'
 import { setMarkerUpdate, setShowMarker } from '../../store/actions/map'
-import { confirmDelete } from '../../helpers/functions'
+import { getWarningCode } from '../../helpers/functions'
 import { hapticDelete } from '../../native_libs/haptics'
 import AddSubitemButton from './AddSubitemButton'
-import { errorHandler } from '../../helpers/error_handler'
+import { errorHandler, warningHandler } from '../../helpers/error_handler'
 
 const ControlBar = React.forwardRef((props, ref) => {
     const dispatch = useDispatch()
 
-    const onDeleteHandler = () => {
-        hapticDelete()
-        confirmDelete(deleteHandler, props.dataType)
-    }
-
     const deleteHandler = async () => {
-        const deleteRequest = await sendRequest('DELETE', props.dataType, genRequestObject(props.dataType, props.itemId))
-        if (deleteRequest.status === 200) {
-            dispatch(setUpdating(props.dataType, props.itemId, 'DELETE'))
-            dispatch(setMarkerUpdate('DELETE', props.dataType, props.itemId))
-            props.goBack()
-            ref.current = false //Check why the hell i need that
+        hapticDelete()
+        const confirm = await warningHandler(getWarningCode(props.dataType), 'Delete', 'Cancel')
+        if (confirm) {
+            const deleteRequest = await sendRequest('DELETE', props.dataType, genRequestObject(props.dataType, props.itemId))
+            if (deleteRequest.status === 200) {
+                dispatch(setUpdating(props.dataType, props.itemId, 'DELETE'))
+                dispatch(setMarkerUpdate('DELETE', props.dataType, props.itemId))
+                props.goBack()
+                ref.current = false //Check why the hell i need that
+            }
+            else errorHandler(601)
         }
-        else errorHandler(601)
     }
 
     const navigateToMapHandler = () => {
@@ -57,7 +56,7 @@ const ControlBar = React.forwardRef((props, ref) => {
                 label='Delete'
                 icon='trash'
                 danger
-                onPress={onDeleteHandler} />
+                onPress={deleteHandler} />
         </ExpandedBar>
     )
 })

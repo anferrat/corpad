@@ -6,7 +6,6 @@ import RefCells from '../../features/settings/reference_cells/RefCells'
 import Potentials from '../../features/settings/potentials/Potentials'
 import ExportSurvey from '../../features/settings/export/ExportSurvey'
 import SurveyInfo from '../../features/settings/info/SurveyInfo'
-import OnboardingOverlay from '../../features/overlays/onboarding/OnboardingOverlay'
 import ExportedFilesList from '../../features/settings/exported_files/ExportedFilesList'
 import About from '../../features/settings/about/About'
 
@@ -39,7 +38,6 @@ export default SettingDetails = ({ navigation, route }) => {
     const navigateToSpreadsheet = (uri, title) => navigation.navigate('Spreadsheet', { title: title, uri: uri })
     return (
         <SafeAreaView style={globalStyle.screen}>
-            {setting === 'potentials' ? <OnboardingOverlay onboarding='potentialTypes' icon={'onboarding-stars'} pack='cp' /> : null}
             <Setting
                 navigateToSpreadsheet={navigateToSpreadsheet}
                 navigateToLicenses={navigateToLicenses}
