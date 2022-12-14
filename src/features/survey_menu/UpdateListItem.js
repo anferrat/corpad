@@ -4,7 +4,7 @@ import ListItem from './components/ListItemMenu'
 import { errorHandler } from '../../helpers/error_handler'
 import { loadSession, loadSurveySettings, setSurveySaving } from '../../store/actions/settings'
 import { getFormattedDate } from '../../helpers/functions'
-import { saveSurveyToFile } from '../survey_manager/manager' // change it! cannot refer feature from another feature
+import { saveSurveyToFile } from '../../services/survey/manager'
 
 const UpdateListItem = (props) => {
     const dispatch = useDispatch()

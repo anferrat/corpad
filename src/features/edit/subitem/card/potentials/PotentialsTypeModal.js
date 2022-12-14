@@ -1,7 +1,7 @@
 import React from 'react'
 import { ScrollView, Modal, StyleSheet, View } from 'react-native'
 import { Text, Icon } from '@ui-kitten/components'
-import HeaderTitle from '../../components/HeaderTitle'
+import Header from '../../../../../components/Header'
 import PoitentialListItem from '../../components/PoitentialListItem'
 import { basic } from '../../../../../styles/colors'
 
@@ -27,9 +27,9 @@ const PotentialTypesModal = (props) => {
             style={styles.modal}
             onRequestClose={props.dismiss}
             visible={props.visible}>
-            <HeaderTitle
+            <Header
                 title='Select potential type'
-                backAction={props.dismiss} />
+                onBackPress={props.dismiss} />
             <ScrollView style={styles.mainView}>
                 {genTitleOptions()}
                 <View style={styles.hint}>

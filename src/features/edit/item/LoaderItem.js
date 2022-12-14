@@ -2,7 +2,7 @@ import React, { useEffect, useRef } from 'react'
 import { View, ActivityIndicator, StyleSheet } from 'react-native'
 import { useDispatch, useSelector } from 'react-redux'
 import { loadEditState, resetState, resetRunSafeEffect } from '../../../store/actions/item'
-import { sendRequest } from '../../../api/database/index'
+import { sendCombinedRequest, sendRequest } from '../../../api/database/index'
 import { genValidObject, getName, genRequestObject } from '../../../helpers/functions'
 import { setUpdating } from '../../../store/actions/list'
 import TestPointView from './test_point/TestPointView'
@@ -40,11 +40,10 @@ const LoaderItem = (props) => {
     useEffect(() => {
         componentMounted.current = true
         const fetchData = async () => {
-            const dataObject = await sendRequest('SELECT', props.dataType, genRequestObject(props.dataType, props.itemId))
-            const defaultPrefix = (await sendRequest('SELECT', 'DEFAULT_NAME', { type: props.dataType }))
-            if (dataObject.status === 200 && defaultPrefix.status === 200) {
+            const data = await sendCombinedRequest([['SELECT', props.dataType, genRequestObject(props.dataType, props.itemId)], ['SELECT', 'DEFAULT_NAME', { type: props.dataType }]])
+            if (data.status === 200) {
                 if (componentMounted.current)
-                    dispatch(loadEditState({ ...dataObject.result, valid: genValidObject(dataObject.result), defaultName: getName(props.itemId, props.dataType, defaultPrefix.result) }))
+                    dispatch(loadEditState({ ...data.result[0], valid: genValidObject(data.result[0]), defaultName: getName(props.itemId, props.dataType, data.result[1]) }))
             }
             else errorHandler(603, props.goBack)
         }

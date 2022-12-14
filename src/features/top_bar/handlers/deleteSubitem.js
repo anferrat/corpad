@@ -1,0 +1,19 @@
+import { sendRequest } from "../../../api/database"
+import { updateViewProperty } from "../../../store/actions/item"
+import { genRequestObject, getWarningCode } from "../../../helpers/functions"
+import { errorHandler, warningHandler } from "../../../helpers/error_handler"
+
+export const deleteSubitem = async (dispatch, dataType, itemId, dataTypeItem, subitemId, navigation) => {
+    const confirm = await warningHandler(getWarningCode(dataType), 'Delete', 'Cancel')
+    if (confirm) {
+        const deleteRequest = await sendRequest('DELETE', dataType, genRequestObject(dataType, subitemId))
+        const newTime = Date.now()
+        const updateTime = await sendRequest('UPDATE', dataTypeItem + '_PROPERTY', { ...genRequestObject(dataTypeItem, itemId), property: 'timeModified', value: newTime })
+        if (deleteRequest.status === 200 && updateTime.status === 200) {
+            navigation.goBack()
+            dispatch(updateViewProperty(newTime, 'timeModified'))
+        }
+        else
+            errorHandler(601)
+    }
+}

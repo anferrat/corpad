@@ -1,6 +1,5 @@
 import React from 'react'
 import { Layout, Text } from '@ui-kitten/components'
-import { Alert } from 'react-native'
 import fieldValidation from './validation'
 import { testPointTypeCodes, labels, referenceCellCodes, referenceCellTypes, potentialUnits, tapOptions } from '../constants/constants'
 import { success, basic, warning, danger } from '../styles/colors'
@@ -312,21 +311,6 @@ export const getName = (index, type, prefix = undefined) => {
         }
 }
 
-const text = (dataType) => { // wtf is that? i hope not used, to be deleted
-    switch (dataType) {
-        case 'TEST_POINT':
-            return 'test point'
-        case 'RECTIFIER':
-            return 'rectifier'
-        case 'PIPELINE':
-            return 'pipeline'
-        case 'CARD':
-            return 'reading'
-        case 'CIRCUIT':
-            return 'circuit'
-    }
-}
-
 export const getListStateByType = (dataType, state) => {
     switch (dataType) {
         case 'TEST_POINT':
@@ -338,19 +322,21 @@ export const getListStateByType = (dataType, state) => {
     }
 }
 
-export const confirmDelete = (deleteAction, dataType) => { //Depritiated - to be deleted
-    Alert.alert(
-        "Attention",
-        "Do you want to remove this " + text(dataType) + "?",
-        [
-            {
-                text: "No",
-                onPress: null,
-                style: "cancel"
-            },
-            { text: "Yes", onPress: deleteAction }
-        ]
-    )
+export const getWarningCode = (dataType) => {
+    switch (dataType) {
+        case 'TEST_POINT':
+            return 55
+        case 'RECTIFIER':
+            return 53
+        case 'PIPELINE':
+            return 54
+        case 'CARD':
+            return 56
+        case 'CIRCUIT':
+            return 57
+        default:
+            return 58
+    }
 }
 
 export const getPipelineNameById = (pipelineId, pipelineList) => {

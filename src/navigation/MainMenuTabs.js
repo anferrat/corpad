@@ -5,7 +5,8 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import { BS } from '../../App'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import Home from '../screens/SurveyList'
-import Header from '../features/navigation/survey_list_header/SurveyListHeader'
+//import Header from '../features/navigation/survey_list_header/SurveyListHeader'
+import { TopBar } from '../features/top_bar'
 import CloudAuth from '../screens/Authorization'
 import NoInternetEmptyComponent from '../features/navigation/components/NoConnectionEmptyScreen'
 import BottomBarItem from '../features/navigation/components/BottomBarItem'
@@ -55,7 +56,7 @@ export default TabNavigator = ({ route }) => {
             tabBar={props => <BottomBar {...props} />}
             screenOptions={{
                 headerStatusBarHeight: insets.top,
-                header: props => <Header {...props} />
+                header: ({ route, navigation }) => <TopBar screen={route.name} params={route.params} navigation={navigation} />
             }}>
 
             {isInternetOn ? (

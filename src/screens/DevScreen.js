@@ -2,7 +2,7 @@ import React from 'react'
 import { globalStyle } from '../styles/styles'
 import { SafeAreaView, StatusBar } from 'react-native'
 import { Button, Text } from '@ui-kitten/components'
-import { sendRequest } from '../api/database/index'
+import { sendRequest, sendCombinedRequest } from '../api/database/index'
 import { genPoints, create_db_tables } from '../helpers/dev_test_point_generator'
 import { resetFolder, test } from '../api/files/fs'
 
@@ -25,7 +25,7 @@ export default DevScreen = ({ navigation }) => {
 
 const sqlTest = async () => {
   try {
-    const test = await sendRequest('INSERT', 'TEST_POINT', { uid: 'bla-bla' })
+    const test = await sendCombinedRequest([['SELECT', 'TEST_POINT', { testPointId: 1 }], ['SELECT', 'SETTINGS', { }]])
     console.log(test)
   }
   catch (er) {

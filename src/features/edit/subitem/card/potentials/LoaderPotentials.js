@@ -4,7 +4,7 @@ import { View, StyleSheet, ActivityIndicator } from 'react-native'
 import PotentialField from './PotentialField'
 import { loadPotentialsState, addPotential, deletePotential, updatePotentials } from '../../../../../store/actions/potentials'
 import { useSelector, useDispatch } from 'react-redux'
-import { sendRequest } from '../../../../../api/database/index'
+import { sendCombinedRequest, sendRequest } from '../../../../../api/database/index'
 import AddPotentialsButton from './AddPotentialsButton'
 import idGen from '../../../../../helpers/id_generator'
 import fieldValidation from '../../../../../helpers/validation'
@@ -44,12 +44,11 @@ const PotentialsView = (props) => {
 
     const addPotentialHandler = React.useCallback(async (name, referenceCellId, isPortable, potentialType) => {
         const uid = idGen()
-        const index = await sendRequest('INSERT', 'POTENTIAL', { isPortable: isPortable, referenceCellId: referenceCellId, unit: null, cardId: props.cardId, uid: uid, potentialType: potentialType })
-        const settings = await sendRequest('SELECT', 'SETTINGS')
-        if (index.status === 200 && settings.status === 200) {
-            const potentialUnit = potentialUnits[settings.result?.defaultPotentialUnit ?? 0]
+        const data = await sendCombinedRequest(['INSERT', 'POTENTIAL', { isPortable: isPortable, referenceCellId: referenceCellId, unit: null, cardId: props.cardId, uid: uid, potentialType: potentialType }, ['SELECT', 'SETTINGS', {}]])
+        if (data.status === 200) {
+            const potentialUnit = potentialUnits[data[1]?.defaultPotentialUnit ?? 0]
             dispatch(addPotential({
-                id: index.result,
+                id: data.result[0],
                 isPortable: isPortable,
                 name: name,
                 referenceCellId: referenceCellId,
@@ -104,13 +103,11 @@ const PotentialsView = (props) => {
     useEffect(() => {
         componentMounted.current = true
         const getPotentials = async () => {
-            const potentialsData = await sendRequest('SELECT', 'POTENTIALS', { cardId: props.cardId })
-            const potentialTypes = await sendRequest('SELECT', 'POTENTIAL_TYPES', {})
-            const settings = await sendRequest('SELECT', 'SETTINGS')
-            if (potentialsData.status === 200 && potentialTypes.status === 200 && settings.status === 200) {
+            const data = await sendCombinedRequest([['SELECT', 'POTENTIALS', { cardId: props.cardId }], ['SELECT', 'POTENTIAL_TYPES', {}], ['SELECT', 'SETTINGS', {}]])
+            if (data.status === 200) {
                 if (componentMounted.current) {
-                    const potentialUnit = potentialUnits[settings.result?.defaultPotentialUnit ?? 0]
-                    dispatch(loadPotentialsState(potentialsData.result.map(data => {
+                    const potentialUnit = potentialUnits[data.result[2]?.defaultPotentialUnit ?? 0]
+                    dispatch(loadPotentialsState(data.result[0].map(data => {
                         return {
                             id: data.id,
                             uid: data.uid,
@@ -124,7 +121,7 @@ const PotentialsView = (props) => {
                         }
                     })))
                     setExtraData({
-                        potentialTypes: potentialTypes.result,
+                        potentialTypes: data.result[1],
                     })
                     setIsLoaded(true)
                 }

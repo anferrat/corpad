@@ -194,6 +194,76 @@ export const readFile = async (uri) => {
     }
 }
 
+export const getHash = async (filepath, algorithm = 'md5') => {
+    try {
+        return ({
+            status: 200,
+            result: await RNFS.hash(filepath, algorithm)
+        })
+    }
+    catch (er) {
+        return ({
+            status: 419
+        })
+    }
+}
+
+export const getStat = async (filepath) => {
+    try {
+        return ({
+            status: 200,
+            result: await RNFS.stat(filepath),
+        })
+    }
+    catch (er) {
+        return ({
+            status: 419
+        })
+    }
+}
+
+export const readDir = async (location) => {
+    try {
+        const dir = await getLocation(location)
+        if (dir.status === 200)
+            return ({
+                status: 200,
+                result: await RNFS.readDir(dir.location)
+            })
+        else return dir
+    }
+    catch (er) {
+        return ({
+            status: 421
+        })
+    }
+}
+
+export const unlink = async (filepath) => {
+    try {
+        await RNFS.unlink(filepath)
+        return ({
+            status: 200,
+        })
+    }
+    catch (er) {
+        return ({
+            status: 410
+        })
+    }
+}
+
+export const scanFile = async (filepath) => {
+    try {
+        await RNFS.scanFile(filepath)
+        return ({ status: 200 })
+    }
+    catch (er) {
+        return ({ status: 422 })
+    }
+}
+
+
 export const test = async () => {
     console.log((await RNFS.readDir(myFolder)).map(d => d.name))
 }

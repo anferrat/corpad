@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { StyleSheet, ScrollView } from 'react-native'
 import MainActionButton from '../../components/ActionButton'
 import { useDispatch, useSelector } from 'react-redux'
-import { createSurvey, surveyLoader } from '../survey_manager/manager' //referencing another feature is prohibited
+import { createSurvey, surveyLoader } from '../../services/survey/manager'
 import fieldValidation from '../../helpers/validation'
 import { errorHandler } from '../../helpers/error_handler'
 import { updateSetting, loadSurveySettings } from '../../store/actions/settings'

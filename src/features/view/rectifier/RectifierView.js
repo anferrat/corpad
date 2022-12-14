@@ -5,7 +5,7 @@ import { powerSourceList } from '../../../constants/constants'
 import IconLine from '../components/IconLine'
 import TextLine from '../components/TextLine'
 import { toString, getValue, getFullDate } from '../../../helpers/functions'
-import TopBarTitle from '../../../components/ItemTitle'
+import TopBarTitle from '../components/ItemTitle'
 import SmartDivider from '../components/SmartDivider'
 import TapView from './TapView'
 

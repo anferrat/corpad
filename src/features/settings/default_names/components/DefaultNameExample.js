@@ -1,6 +1,6 @@
 import React from 'react'
 import { View, StyleSheet } from 'react-native'
-import TopBarTitle from '../../../../components/ItemTitle'
+import TopBarTitle from './ItemTitle'
 import { labels } from '../../../../constants/constants'
 import { basic300 } from '../../../../styles/colors'
 

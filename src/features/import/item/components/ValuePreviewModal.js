@@ -45,9 +45,10 @@ const ValuePreviewModal = ({ data, fields, fieldIndex, fieldIndexList, importTyp
                         key={genKey(item, index)}>
                         {showItemValue(item)}
                     </Text>)}
-                <Text
-                    style={styles.textLine}
-                >...</Text>
+                {data.length > previewDataList.length ?
+                    <Text
+                        style={styles.textLine}
+                    >...</Text> : null}
             </View>
         </Popover>
     )

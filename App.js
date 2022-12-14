@@ -27,6 +27,7 @@ import Sheet from './src/bottom_sheet/Sheet'
 import FullScreenLoader from './src/features/overlays/loader/Loader'
 import ExportModal from './src/features/overlays/export_modal/ExportModal'
 import SessionModal from './src/features/overlays/session_modal/SessionModal'
+import { Animated } from 'react-native'
 
 
 
@@ -46,29 +47,41 @@ const rootReducer = combineReducers({
 
 const store = createStore(rootReducer)
 export const BS = createContext()
+export const ScrollRef = createContext()
 
 ModalService.setShouldUseTopInsets = true
 
 export const version = '1.1'
+export const DEVELOPER_MODE_ON = true
 
 const App = () => {
+  /*
+bottom sheet ref - used to access bottomsheet via imperative methods, passed as ref to BottomSheet component
+navigation ref - used to acces navigation methods outside Screens (e.g. global modals, bottom sheet) 
+scrolling ref - used to implement title scrolling animation inside View screen. had to bring it all the way up...
+
+  */
+
   const bottomSheet = useRef()
   const navigationRef = useNavigationContainerRef()
+  const scrollingRef = useRef(new Animated.Value(0))
   return (
     <Provider store={store}>
       <IconRegistry icons={[EvaIconsPack, CPIconsPack]} />
       <SafeAreaProvider>
         <ApplicationProvider {...eva} theme={{ ...eva.light, ...theme }}>
           <GestureHandlerRootView style={{ flex: 1 }}>
-            <BS.Provider value={bottomSheet}>
-              <NavigationContainer onReady={SplashScreen.hide} ref={navigationRef}>
-                <AppNavigator />
-                <Sheet ref={bottomSheet} />
-                <FullScreenLoader />
-                <ExportModal navigationRef={navigationRef} />
-                <SessionModal />
-              </NavigationContainer>
-            </BS.Provider>
+            <ScrollRef.Provider value={scrollingRef}>
+              <BS.Provider value={bottomSheet}>
+                <NavigationContainer onReady={SplashScreen.hide} ref={navigationRef}>
+                  <AppNavigator />
+                  <Sheet ref={bottomSheet} />
+                  <FullScreenLoader />
+                  <ExportModal navigationRef={navigationRef} />
+                  <SessionModal />
+                </NavigationContainer>
+              </BS.Provider>
+            </ScrollRef.Provider>
           </GestureHandlerRootView>
         </ApplicationProvider>
       </SafeAreaProvider>

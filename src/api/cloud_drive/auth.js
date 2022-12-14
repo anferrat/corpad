@@ -1,7 +1,7 @@
 // google signIn functions here
 import { GoogleSignin } from "react-native-google-signin"
-import NetInfo from '@react-native-community/netinfo'
 import { gdrive } from './gd'
+import { checkConnection } from "./netinfo"
 
 GoogleSignin.configure({
     scopes: ['https://www.googleapis.com/auth/drive.file', 'https://www.googleapis.com/auth/drive.appdata'],
@@ -10,10 +10,12 @@ GoogleSignin.configure({
 })
 
 export const signIn = async () => {
+    //Attempt to sign in 
     try {
         await GoogleSignin.hasPlayServices()
         const userInfo = await GoogleSignin.signIn()
         const token = (await GoogleSignin.getTokens()).accessToken
+        gdrive.accessToken = token
         return {
             status: 200,
             driveToken: token,
@@ -31,6 +33,7 @@ export const signInSilently = async () => {
         await GoogleSignin.hasPlayServices()
         const userInfo = await GoogleSignin.signInSilently()
         const token = (await GoogleSignin.getTokens()).accessToken
+        gdrive.accessToken = token
         return {
             status: 200,
             driveToken: token,
@@ -44,12 +47,13 @@ export const signInSilently = async () => {
 }
 
 export const getSession = async () => {
-    const netStatus = await NetInfo.fetch()
-    if (netStatus.isInternetReachable) {
+    const netStatus = await checkConnection()
+    if (netStatus.status === 200) {
         const isSignedIn = await GoogleSignin.isSignedIn()
         if (isSignedIn) {
             const userInfo = await GoogleSignin.getCurrentUser()
             const token = (await GoogleSignin.getTokens()).accessToken
+            gdrive.accessToken = token
             return {
                 status: 200,
                 isSigned: true,
@@ -62,14 +66,13 @@ export const getSession = async () => {
             isSigned: false,
         }
     }
-    else {
-        return { status: 102 }
-    }
+    else netStatus
 }
 
 export const signOut = async () => {
     try {
         await GoogleSignin.signOut()
+        gdrive.accessToken = null
         return {
             status: 200
         }
@@ -81,8 +84,13 @@ export const signOut = async () => {
     }
 }
 
-export const authHandler = async (driveRequest, errorCode) => {
-    //wrapper for gdrive functions to handle 401 unathorized error. Attemts to get new token if old token is no longer valid
+export const authHandler = async (driveRequest) => {
+    /*
+    wrapper for gdrive functions to handle 401 unathorized error. 
+    Attemts to get new token if old token is no longer valid and resubmits the request,
+    throws error if request failed the second time with {status: <errorCode>}.
+    For use only within gd API, do not use outside to prevent mess
+    */
     try {
         return await driveRequest()
     }
@@ -92,32 +100,19 @@ export const authHandler = async (driveRequest, errorCode) => {
                 const newSession = await getSession()
                 if (newSession.status === 200) {
                     if (!newSession.isSigned)
-                        throw { corpadErrorStatus: 302 }
-                    else {
-                        gdrive.accessToken = newSession.driveToken
+                        throw { status: 302 }
+                    else
                         return await driveRequest()
-                    }
                 }
-                else throw { corpadErrorStatus: newSession.status }
+                else throw newSession
             }
-            else throw { corpadErrorStatus: errorCode }
-        else throw { corpadErrorStatus: errorCode }
-    }
-}
-
-export const checkConnection = async () => {
-    try {
-        const netStatus = await NetInfo.fetch()
-        if (netStatus.isInternetReachable)
-            return {
-                status: 200
+            else {
+                const verifyConnection = await checkConnection()
+                if (verifyConnection.status !== 200)
+                    throw verifyConnection
+                else
+                    throw 'Unknown auth handler error'
             }
-        else
-            return { status: 102 }
-    }
-    catch (er) {
-        return {
-            status: 301
-        }
+        else throw 'Unknown auth handler error'
     }
 }
