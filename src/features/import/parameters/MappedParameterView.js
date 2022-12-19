@@ -5,7 +5,7 @@ import { Radio, Button, Icon, Text } from '@ui-kitten/components'
 import { globalStyle } from '../../../styles/styles'
 import Select from './components/Select'
 import { saveIcon } from '../../../components/Icons'
-import { setImportItemProperty } from '../../../store/actions/importData'
+import { setImportProperty } from '../../../store/actions/importData'
 import { fieldProperties } from '../../../constants/fieldProperties'
 import AddMapComponent from './AddMapComponent'
 import AttributeMapper from './AttributeMapper'
@@ -15,7 +15,7 @@ import { getFieldValues } from './helpers/functions'
 import MappingHint from './components/MappingHint'
 
 const fileIcon = {
-    name: 'file-text-outline',
+    icon: 'file-text-outline',
     pack: null
 }
 
@@ -57,7 +57,7 @@ const SelectFieldParamaters = (props) => {
     const onSaveHandler = async () => {
         const confirm = (attributeMap.length === 0 && importType === 1 && fieldIndex !== null) ? await warningHandler(52) : true
         if (confirm) {
-            dispatch(setImportItemProperty(props.property, { fieldIndex, defaultValue, importType, attributeMap }))
+            dispatch(setImportProperty(props.property, props.subitemIndex, props.potentialIndex, { fieldIndex, defaultValue, importType, attributeMap }))
             props.goBack()
         }
     }
@@ -131,7 +131,7 @@ const SelectFieldParamaters = (props) => {
     )
 }
 
-export default SelectFieldParamaters
+export default React.memo(SelectFieldParamaters, () => true)
 
 const styles = StyleSheet.create({
     field: {

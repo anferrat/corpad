@@ -4,7 +4,6 @@ import { Layout, Icon, Text } from '@ui-kitten/components'
 import { basic } from '../../../../styles/colors'
 import { androidRipple } from '../../../../styles/styles'
 
-
 const SubitemListItem = (props) => {
     return (
         <Layout style={styles.card}>
@@ -29,7 +28,6 @@ export default React.memo(SubitemListItem)
 
 const styles = StyleSheet.create({
     card: {
-
         borderRadius: 6,
         borderWidth: 0,
         margin: 6,

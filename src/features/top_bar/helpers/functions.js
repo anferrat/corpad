@@ -5,6 +5,8 @@ import { deleteSubitem } from '../handlers/deleteSubitem'
 import { launchMenu } from '../handlers/launchMenu'
 import { openExternalSurvey } from '../handlers/openExternalFile'
 import { DEVELOPER_MODE_ON } from '../../../../App'
+import { deleteImportSubitem } from '../../../store/actions/importData'
+import { warningHandler } from '../../../helpers/error_handler'
 
 export const subtitleHandler = (dataType, subType = undefined) => {
     switch (dataType) {
@@ -112,7 +114,9 @@ export const getHeader = (screen, params, navigation, dispatch, bottomSheet) => 
                         viewTitle: true,
                         dataType: params.dataTypeItem
                     },
-                    right: null,
+                    right: [
+                        { navigationWidget: true }
+                    ],
                     isPrimary: false
                 }
             case 'DevScreen':
@@ -166,6 +170,30 @@ export const getHeader = (screen, params, navigation, dispatch, bottomSheet) => 
                     },
                     right: null
                 }
+            case 'ImportSubitem':
+                return {
+                    display: true,
+                    isPrimary: true,
+                    left: 'back',
+                    title: {
+                        title: labels[params.subitemType]?.label ?? '',
+                        subtitle: 'Import settings',
+                        icon: false,
+                        pack: null,
+                    },
+                    right: [
+                        {
+                            icon: 'trash',
+                            onPress: async () => {
+                                const confirm = await warningHandler(59, 'Delete', 'Cancel')
+                                if (confirm) {
+                                    navigation.goBack()
+                                    dispatch(deleteImportSubitem(params.subitemIndex, params.isNewSubitem))
+                                }
+                            }
+                        }
+                    ]
+                }
             case 'ImportFile':
                 return {
                     display: true,
@@ -180,7 +208,7 @@ export const getHeader = (screen, params, navigation, dispatch, bottomSheet) => 
                     isPrimary: true,
                     left: 'back',
                     title: {
-                        title: `Property: "${fieldProperties[params.property]?.label ?? null}"`,
+                        title: `Property: "${params.property === 'potential' ? 'Potentials' : fieldProperties[params.property]?.label ?? null}"`,
                         subtitle: 'Import from .csv',
                         icon: false,
                         pack: null,

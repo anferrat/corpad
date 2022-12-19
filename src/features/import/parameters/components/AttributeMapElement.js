@@ -12,7 +12,7 @@ const AttributeMapElement = (props) => {
                 <View style={styles.leftBlock}>
                     <View style={styles.standardValue}>
                         {props.icon ?
-                            <Icon name={props.icon.name} fill={props.icon.fill} style={styles.icon} pack={props.icon.pack} />
+                            <Icon name={props.icon.icon} fill={props.icon?.fill ?? basic} style={styles.icon} pack={props.icon.pack} />
                             : null}
                         <Text style={styles.standardValueText}>{props.standardValue}</Text>
                     </View>

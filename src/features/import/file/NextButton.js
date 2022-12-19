@@ -3,13 +3,14 @@ import { useSelector } from 'react-redux'
 import ActionButton from '../../../components/ActionButton'
 
 
-const NextButton = (props) => {
+const NextButton = ({ onPress }) => {
+    const disabled = useSelector(state => state.importData.uri !== null)
     const itemType = useSelector(state => state.importData.itemType)
     return <ActionButton
-        disabled={false}
+        disabled={!disabled}
         title='Next'
         valid={true}
-        onPress={props.onPress.bind(this, itemType)} />
+        onPress={onPress.bind(this, itemType)} />
 }
 
 export default NextButton

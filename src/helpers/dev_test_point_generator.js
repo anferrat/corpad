@@ -172,7 +172,7 @@ export const genNewTestPoint = async (referenceCellId, MAX_CARDS_IN_TEST_POINT, 
         await genSidesForCards(cardList)
     }
     catch (er) {
-        console.log(er)
+        //console.log(er)
     }
 }
 
@@ -181,32 +181,32 @@ export const genPoints = async (number) => {
     const POTENTIALS_CONFIG = 'ON_OFF'
     const CARD_TYPES = ['PL', 'RS', 'AN', 'BD', 'SH']
 
-    console.log('Test points are being created. Wait...')
+    //console.log('Test points are being created. Wait...')
     const referenceCells = await sendRequestResult('SELECT', 'REFERENCE_CELL_LIST', {})
     const referenceCellId = referenceCells.find(rc => !!rc.mainReference).id
     for (i = 0; i < number; i++) {
         await genNewTestPoint(referenceCellId, MAX_CARDS_IN_TEST_POINT, POTENTIALS_CONFIG, CARD_TYPES)
     }
-    console.log(number, 'test points created')
+    //console.log(number, 'test points created')
 }
 
 
 export const create_db_tables2 = async () => {
     await sendRequestResult('DROP', '', [{ table: 'testPoints' }, { table: 'survey' }, { table: 'pipelines' }, { table: 'cards' }, { table: 'potentials' }, { table: 'referenceCells' }, { table: 'circuits' }, { table: 'rectifiers' }, { table: 'defaultNames' }, { table: 'settings' }, { table: 'potentialTypes' }, { table: 'sides' }])
-    console.log('tables deleted')
+    //console.log('tables deleted')
     await sendRequestResult('INIT', '', [{ table: 'testPoints' }, { table: 'survey' }, { table: 'pipelines' }, { table: 'cards' }, { table: 'potentials' }, { table: 'referenceCells' }, { table: 'circuits' }, { table: 'rectifiers' }, { table: 'defaultNames' }, { table: 'settings' }, { table: 'potentialTypes' }, { table: 'sides' }])
-    console.log('tables Crerated')
+    //console.log('tables Crerated')
     const id1 = await sendRequestResult('INSERT', 'PIPELINE', { uid: idGen(), timeCreated: Date.now() })
     await sendRequestResult('UPDATE', 'PIPELINE', { pipelineObject: { name: 'Pipeline1', nps: 2, material: 2, timeModified: Date.now() }, pipelineId: id1 })
 
     const id2 = await sendRequestResult('INSERT', 'PIPELINE', { uid: idGen(), timeCreated: Date.now() })
     await sendRequestResult('UPDATE', 'PIPELINE', { pipelineObject: { name: 'Pipeline2', nps: 4, material: 1, timeModified: Date.now() }, pipelineId: id2 })
-    console.log('pipelines crerated')
+    //console.log('pipelines crerated')
 
 
     const rc1 = await sendRequestResult('INSERT', 'REFERENCE_CELL', { uid: idGen(), mainReference: 1 })
     await sendRequestResult('UPDATE', 'REFERENCE_CELL', { referenceCellObject: { name: 'RC1', rcType: 0, mainReference: true }, referenceCellId: rc1 })
-    console.log('refcells crerated')
+    //console.log('refcells crerated')
 
     const rectId = await sendRequestResult('INSERT', 'RECTIFIER', { uid: idGen(), timeCreated: Date.now() })
     await sendRequestResult('UPDATE', 'RECTIFIER', {
@@ -231,26 +231,26 @@ export const create_db_tables2 = async () => {
             tapFine: 3,
         }, rectifierId: rectId
     })
-    console.log('rectefier crerated')
+    //console.log('rectefier crerated')
 
     const cirId1 = await sendRequestResult('INSERT', 'CIRCUIT', { uid: '1234321', rectifierId: rectId })
     await sendRequestResult('UPDATE', 'CIRCUIT', { circuitId: cirId1, circuitObject: { name: 'Circ-1', ratioCurrent: 50, ratioVoltage: 100, current: 10, voltage: 23.3, voltageDrop: 12, target: 2.2 } })
     const cirId2 = await sendRequestResult('INSERT', 'CIRCUIT', { uid: '123454321', rectifierId: rectId })
 
     await sendRequestResult('UPDATE', 'CIRCUIT', { circuitId: cirId2, circuitObject: { name: 'Circ-2', ratioCurrent: 10, ratioVoltage: 200, current: 1, voltage: 9.9, voltageDrop: 1, target: null } })
-    console.log('circuits crerated')
+    //console.log('circuits crerated')
     await sendRequestResult('INSERT', 'DEFAULT_NAME', defaultNames.map(d => ({ type: d.property, name: d.name })))
-    console.log('defaultNames difined')
+    //console.log('defaultNames difined')
 
     await sendRequestResult('INSERT', 'SETTINGS', { pipelineNameAsDefault: false, defaultPotentialUnit: 0, autoCreatePotentials: 1 })
-    console.log('settings difined')
+    //console.log('settings difined')
 
     await sendRequestResult('INSERT', 'POTENTIAL_TYPE', potentialFields.map(f => ({ ...f, uid: idGen() })))
-    console.log('potential fields defined')
+    //console.log('potential fields defined')
 }
 
 
 export const create_db_tables = async () => {
     await sendRequestResult('DROP', '', [{ table: 'testPoints' }, { table: 'survey' }, { table: 'pipelines' }, { table: 'cards' }, { table: 'potentials' }, { table: 'referenceCells' }, { table: 'circuits' }, { table: 'rectifiers' }, { table: 'defaultNames' }, { table: 'settings' }, { table: 'potentialTypes' }, { table: 'sides' }, { table: 'calculators' }])
-    console.log('tables deleted')
+    //console.log('tables deleted')
 }

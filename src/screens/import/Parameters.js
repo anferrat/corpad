@@ -5,17 +5,15 @@ import ImportParameters from '../../features/import/parameters/Parameters'
 
 
 export default ImportParametersScreen = ({ route, navigation }) => {
-    const goBack = () => {
-        navigation.goBack()
-    }
-    const { property, subitemIndex } = route.params
+    const { property, subitemIndex, potentialIndex } = route.params
     return (
         <View style={globalStyle.screen}>
+
             <ImportParameters
                 property={property}
                 subitemIndex={subitemIndex}
-                goBack={goBack}
-            />
+                potentialIndex={potentialIndex}
+                goBack={navigation.goBack} />
         </View>
     )
 }

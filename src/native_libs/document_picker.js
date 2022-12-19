@@ -4,12 +4,16 @@ export const pickFile = async (type) => {
     try {
         return ({
             status: 200,
-            result: await DocumentPicker.pickSingle({ allowMultiSelection: false, type: type === 'json' ? 'application/json' : 'text/csv' })
+            result: await DocumentPicker.pickSingle({ allowMultiSelection: false, type: type === 'json' ? 'application/json' : 'text/*' })
         })
     }
     catch (er) {
-        return {
-            status: 423
-        }
+        if (er.code !== 'DOCUMENT_PICKER_CANCELED')
+            return {
+                status: 423
+            }
+        else return ({
+            status: 201
+        })
     }
 }

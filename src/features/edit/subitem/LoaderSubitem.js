@@ -14,7 +14,6 @@ import { primary } from '../../../styles/colors'
 
 const fetchData = async (dataDtype, subitemId, itemId, cardType = undefined) => {
     try {
-        //const defaultPrefix = (await sendRequest('SELECT', 'DEFAULT_NAME', { type: cardType }))
         const defaultNameRequest = ['SELECT', 'DEFAULT_NAME', { type: cardType }]
         switch (dataDtype) {
             case 'CARD':

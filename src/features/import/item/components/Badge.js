@@ -6,7 +6,7 @@ import { basic, primary } from '../../../../styles/colors'
 
 const Badge = (props) => (
     <View style={styles.badge}>
-        <Text category='label' status='control'>{props.title}</Text>
+        <Text category='label' status='control' numberOfLines={1} ellipsizeMode={'tail'}>{props.title}</Text>
     </View>
 )
 

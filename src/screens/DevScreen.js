@@ -26,10 +26,10 @@ export default DevScreen = ({ navigation }) => {
 const sqlTest = async () => {
   try {
     const test = await sendCombinedRequest([['SELECT', 'TEST_POINT', { testPointId: 1 }], ['SELECT', 'SETTINGS', { }]])
-    console.log(test)
+    //console.log(test)
   }
   catch (er) {
-    console.log(er)
+    //console.log(er)
   }
 }
 

@@ -35,14 +35,20 @@ const RefCells = (props) => {
                     if (list.result.length === 0) {
                         const rc = { uid: idGen(), mainReference: 1, rcType: 0, name: 'RC1' }
                         const id = await sendRequest('INSERT', 'REFRENCE_CELL', rc)
-                        setReferenceList([{ ...rc, id: id }])
-                        setMainReference({ ...rc, id: id })
+                        if (id.status === 200) {
+                            setReferenceList([{ ...rc, id: id }])
+                            setMainReference({ ...rc, id: id })
+                        }
+                        else errorHandler(id.status, props.goBack)
                         setIsLoading(false)
                     }
                     else {
                         const update = await sendRequest('UPDATE', 'REFERENCE_CELL', { referenceCellId: list.result[0].id, referenceCellObject: { name: list.result[0].name, rcType: list.result[0].rcType, mainReference: 1 } })
-                        setReferenceList([...list.result.filter((_, i) => i !== 0), { ...list.result[0], mainReference: 1 }])
-                        setMainReference({ ...list.result[0], mainReference: 1 })
+                        if (update.status === 200) {
+                            setReferenceList([...list.result.filter((_, i) => i !== 0), { ...list.result[0], mainReference: 1 }])
+                            setMainReference({ ...list.result[0], mainReference: 1 })
+                        }
+                        else errorHandler(update.status, props.goBack)
                         setIsLoading(false)
                     }
                 }
@@ -84,7 +90,7 @@ const RefCells = (props) => {
     }, [setReferenceList, componentMounted])
 
     const deleteRefCell = React.useCallback(async (id) => {
-        const confirm = await warningHandler(22, 'I understand', 'Cancel')
+        const confirm = await warningHandler(22, 'Delete', 'Cancel')
         if (confirm) {
             const selectRef = await sendRequest('SELECT', 'REFERENCE_CELL_LIST', {})
             if (selectRef.status === 200) {

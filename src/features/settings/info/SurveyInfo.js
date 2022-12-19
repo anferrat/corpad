@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from "react"
 import { StyleSheet, View } from "react-native"
 import { ScrollView } from "react-native-gesture-handler"
 import { Divider } from "@ui-kitten/components"
-import { sendRequest } from "../../../api/database/index"
+import { sendCombinedRequest, sendRequest } from "../../../api/database/index"
 import { basic300 } from "../../../styles/colors"
 import { globalStyle } from "../../../styles/styles"
 import NumberDisplay from "./components/NumberDisplay"
@@ -34,7 +34,7 @@ const calculateRadius = (markers) => {
 }
 
 
-const SurveyInfo = () => {
+const SurveyInfo = ({goBack}) => {
     const componentMounted = useRef(true)
     const [surveyData, setSurveydata] = useState({
         loaded: false,
@@ -48,47 +48,49 @@ const SurveyInfo = () => {
 
     useEffect(() => {
         const fetchData = async () => {
-            const settings = (await sendRequest('SELECT', 'SETTINGS', {}))
-            const tpInfo = (await sendRequest('SELECT', 'SURVEY_INFO_TEST_POINTS', {}))
-            const rectifierInfo = (await sendRequest('SELECT', 'SURVEY_INFO_RECTIFIERS', {}))
-            const pipelineList = await sendRequest('SELECT', 'PIPELINE_LIST', {})
-            const refCellList = await sendRequest('SELECT', 'REFERENCE_CELL_LIST', {})
-            const markers = await sendRequest('SELECT', 'MARKERS', {})
-            const lastModified = await sendRequest('SELECT', 'SURVEY_INFO_LAST_MODIFIED', {})
-            const potentials = await sendRequest('SELECT', 'SURVEY_INFO_POTENTIALS', {})
-            if (potentials.status === 200 && settings.status === 200 && tpInfo.status === 200 && rectifierInfo.status === 200 && pipelineList.status === 200 && refCellList.status === 200 && markers.status === 200 && lastModified.status === 200) {
+            const data = await sendCombinedRequest([
+                ['SELECT', 'SETTINGS', {}],
+                ['SELECT', 'SURVEY_INFO_TEST_POINTS', {}],
+                ['SELECT', 'SURVEY_INFO_RECTIFIERS', {}],
+                ['SELECT', 'PIPELINE_LIST', {}],
+                ['SELECT', 'REFERENCE_CELL_LIST', {}],
+                ['SELECT', 'MARKERS', {}],
+                ['SELECT', 'SURVEY_INFO_LAST_MODIFIED', {}],
+                ['SELECT', 'SURVEY_INFO_POTENTIALS', {}]
+            ])
+            if (data.status === 200) {
                 if (componentMounted.current)
                     setSurveydata({
                         loaded: true,
-                        surveyName: settings.result.surveyName,
+                        surveyName: data.result[0].surveyName,
                         progress: [
                             {
-                                pass: tpInfo.result.good,
-                                attention: tpInfo.result.warning,
-                                issue: tpInfo.result.danger,
-                                unknown: tpInfo.result.unknown,
-                                total: tpInfo.result.count
+                                pass: data.result[1].good,
+                                attention: data.result[1].warning,
+                                issue: data.result[1].danger,
+                                unknown: data.result[1].unknown,
+                                total: data.result[1].count
                             },
                             {
-                                pass: rectifierInfo.result.good,
-                                attention: rectifierInfo.result.warning,
-                                issue: rectifierInfo.result.danger,
-                                unknown: rectifierInfo.result.unknown,
-                                total: rectifierInfo.result.count
+                                pass: data.result[2].good,
+                                attention: data.result[2].warning,
+                                issue: data.result[2].danger,
+                                unknown: data.result[2].unknown,
+                                total: data.result[2].count
                             }],
-                        tpCount: tpInfo.result.count,
-                        pipelineCount: pipelineList.result.length,
-                        rectifierCount: rectifierInfo.result.count,
+                        tpCount: data.result[1].count,
+                        pipelineCount: data.result[3].length,
+                        rectifierCount: data.result[2].count,
                         moreInfo: [
-                            { title: 'Main reference', subtitle: 'Portable', icon: 'RE', pack: 'cp', value: getMainRefCellType(refCellList.result) },
-                            { title: 'Last updated', subtitle: 'Test point', icon: 'TS', pack: 'cp', value: lastModified.result.count ? lastModified.result.name : 'N/A' },
-                            { title: 'Survey area', subtitle: 'Radius', icon: 'map-outline', pack: null, value: calculateRadius(markers.result) },
-                            { title: 'Potentials', subtitle: 'Total number of readings', icon: 'grid', pack: null, value: potentials.result }
+                            { title: 'Main reference', subtitle: 'Portable', icon: 'RE', pack: 'cp', value: getMainRefCellType(data.result[4]) },
+                            { title: 'Last updated', subtitle: 'Test point', icon: 'TS', pack: 'cp', value: data.result[6].count ? data.result[6].name : 'N/A' },
+                            { title: 'Survey area', subtitle: 'Radius', icon: 'map-outline', pack: null, value: calculateRadius(data.result[5]) },
+                            { title: 'Potentials', subtitle: 'Total number of readings', icon: 'grid', pack: null, value: data.result[7] }
                         ]
                     })
 
             }
-            else errorHandler(626)
+            else errorHandler(626, goBack)
         }
         componentMounted.current = true
         fetchData()

@@ -1,29 +1,28 @@
 import React from 'react'
 import { Text, Icon } from '@ui-kitten/components'
 import { StyleSheet, Pressable, View } from 'react-native'
-import { primary, basic, success } from '../../../../styles/colors'
+import { primary, basic, success, control, primary100, basic300 } from '../../../../styles/colors'
 import { androidRipple } from '../../../../styles/styles'
 
 const ItemOption = (props) => {
     return (
         <Pressable
             android_ripple={androidRipple}
-            style={styles.pressable}
-            onPress={props.onPress}>
+            style={{ ...styles.pressable, backgroundColor: props.selected ? primary100 : control }}
+            onPress={props.onPress.bind(this, props.index)}>
             <Icon name={'checkmark-circle-2'} style={props.selected ? styles.checkIcon : styles.hidden} fill={success} />
-            <Pressable onPress={props.onPress}
+            <View
                 style={styles.innerPressable}>
-
                 <View style={{ ...styles.iconLayout, backgroundColor: props.selected ? primary : basic }}>
-                    <Icon name={props.iconName} pack={props.pack} style={styles.icon} fill={'#fff'} />
+                    <Icon name={props.iconName} pack={props.pack} style={styles.icon} fill={control} />
                 </View>
-            </Pressable>
+            </View>
             <Text style={styles.text} appearance={props.selected ? 'default' : 'hint'}>{props.title}</Text>
         </Pressable>
     )
 }
 
-export default ItemOption
+export default React.memo(ItemOption)
 
 const styles = StyleSheet.create({
     pressable: {
@@ -31,9 +30,10 @@ const styles = StyleSheet.create({
         padding: 12,
         marginHorizontal: 6,
         elevation: 5,
-        backgroundColor: '#fff',
         borderRadius: 6,
-        maxWidth: '33%'
+        maxWidth: '33%',
+        borderColor: basic300,
+        borderWidth: 1
     },
     innerPressable: {
         alignItems: 'center',

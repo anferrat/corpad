@@ -1,11 +1,50 @@
 import React from 'react'
-import { StyleSheet } from 'react-native'
-
+import { View, StyleSheet } from 'react-native'
+import Parameter from '../Parameter'
 
 const RectifierView = () => {
     return (
         <>
-
+            <Parameter
+                property='name' />
+            <Parameter
+                property='status' />
+            <View style={styles.location}>
+                <Parameter
+                    style={styles.locationField}
+                    property='latitude' />
+                <Parameter
+                    style={styles.locationField}
+                    property='longitude' />
+            </View>
+            <Parameter
+                property='location' />
+            <Parameter
+                property='model' />
+            <Parameter
+                property='serialNumber' />
+            <Parameter
+                property='powerSource' />
+            <View style={styles.location}>
+                <Parameter
+                    style={styles.locationField}
+                    property='maxVoltage' />
+                <Parameter
+                    style={styles.locationField}
+                    property='maxCurrent' />
+            </View>
+            <Parameter
+                property='tapValue' />
+            <View style={styles.location}>
+                <Parameter
+                    style={styles.locationField}
+                    property='tapCoarse' />
+                <Parameter
+                    style={styles.locationField}
+                    property='tapFine' />
+            </View>
+            <Parameter
+                property='comment' />
         </>
     )
 }
@@ -13,16 +52,14 @@ const RectifierView = () => {
 export default RectifierView
 
 const styles = StyleSheet.create({
-    mainView: {
-        padding: 12
-    },
     location: {
         flexDirection: 'row',
         marginHorizontal: -6,
-        paddingBottom: 12
     },
     locationField: {
         flex: 1,
-        marginHorizontal: 6
-    }
+        marginHorizontal: 6,
+    },
+
 })
+

@@ -4,11 +4,11 @@ import { Button } from '@ui-kitten/components'
 import { addIcon } from '../../../../components/Icons'
 import { getButtonTitle } from '../../helpers/functions'
 
-const AddButton = ({ showModal, itemType, onSelect }) => {
+const AddButton = ({ itemType, onPress }) => {
     if (itemType === 'TEST_POINT' || itemType === 'RECTIFIER')
         return (
             <Button
-                onPress={itemType === 'TEST_POINT' ? showModal : onSelect}
+                onPress={onPress}
                 appearance='ghost'
                 style={styles.button}
                 size='medium'

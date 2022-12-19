@@ -27,7 +27,8 @@ import { loadSession, loadSurveySettings, updateOnboarding, resetCurrentSurveySe
 import SplashScreen from '../features/navigation/components/SplashScreen'
 import { getSession, signInSilently } from '../api/cloud_drive/auth'
 import { checkConnection } from '../api/cloud_drive/netinfo'
-import { initDataBase, sendRequest } from '../api/database/index'
+import { sendRequest } from '../api/database/index'
+import { initDataBase } from '../services/database/initDataBase'
 import { Onboarding, ONBOARDING_VERSION } from '../features/overlays/onboarding/'
 import { errorHandler, warningHandler } from '../helpers/error_handler'
 import Licenses from '../screens/settings/Licenses'
@@ -183,6 +184,7 @@ export const AppNavigator = () => {
                 animation: 'fade_from_bottom',
               }}>
                 <Stack.Screen name='ImportItem' component={ImportItem} />
+                <Stack.Screen name='ImportSubitem' component={ImportItem} />
                 <Stack.Screen name='ImportFile' component={ImportFile} />
                 <Stack.Screen name='ImportParameters' component={ImportParameters} />
                 <Stack.Screen name='Settings' component={SettingsScreen} />

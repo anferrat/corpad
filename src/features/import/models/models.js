@@ -1,60 +1,63 @@
 import { testPointTypes, statusInfo, powerSourceList, tapOptions, pipeCoating, pipeDiameterList, pipeMaterials, pipeProducts, wireColorList, wireGaugesList, anodeMaterialList, isolationAssemblyTypes, referenceCellTypes, areaUnits, currentUnits, currentDensityUnits, potentialUnits } from '../../../constants/constants'
-import fieldValidation from '../../../helpers/validation'
+import { npsList } from '../../../constants/thicknessTable'
+import IdGen from '../../../helpers/id_generator'
+
 /*
-class Input - describes item property parameters when importing text data from csv file.
-    importType: 1 - use default value, 0 - use falue from data with corresponding fieldIndex, 2 (name fields only) - use default field name
-    defaultValue - value used when importType is 0. Static value for all items. Contains index of itemlist in case of class Select
-    fieldIndex - index of field in fields array if importType is 1. In this case values will be populated from csv data from corresponding field
-    unit - index of unit of UnitList. Indicates what is the unit of imported values for conversion purposes. Values stored in DB in standard units.
-    unitList - list of available units for the property
-
-class Select - describes item property parameters when importing data that must be converted to index the list of values. (eg. status, testPointType)
-    same props as Input class
-    itemList - array of available result values. 
-    attributeList - list of attributes.
-
-class Attribute - matches index value of an item in itemList with the one or many indexes of the values of selected field from csv
-index - index value from itemList
-mappedIndexes - indexes of values from field
+getParameter - storing import data parameters for importing a single property. 
 */
-
-class Attribute {
-    constructor(index, mappedIndexes) {
-        this.index = index
-        this.mappedIndexes = mappedIndexes
-    }
-}
-
-export const getAttribute = ({ index, mappedIndexes }) => ({
-    index,
-    mappedIndexes,
-})
-
-export const getParameter = ({
-    //hahaha
-    parameterType = 0,
-    importType = 1,
-    fieldIndex = null,
-    mergeAllowed = false,
-    itemList = [],
-    defaultValue = null,
-    fieldIndexList = [],
-    valid = true,
-    unit = null,
-    unitList = [],
-    attributeMap = [],
+const getParameter = ({
+    parameterType = 0, //0 - result value is text string, 1- result value is integer that corresponds to a value from predifined array (itemList) for this property
+    importType = 1, // - 0 - defaultValue is used for this property (index of itemList in case of parameterType 1 and string if parameterType 0), 1 - use values from a field in csv file, 2 - use default name (name property only), 3 - use multiple field data from csv combined into single string (mergeAllowed flag must be true)
+    fieldIndex = null, // - index of fields array from csv data to import from when importType 1
+    mergeAllowed = false, // indicates in importType 3 is allowed for this property
+    itemList = [], // list of items to select from, when parameterType 1
+    defaultValue = null, // default value when importType 0, stores string when parametertype 0, or index when parameterType 1
+    fieldIndexList = [], //list of field indexes from csb file when mergeAllowed and importType 3
+    valid = true, // flag to check if defaultValue passed validation for this prop (importType 0)
+    unit = 0, // unitIndex from unitList when importType 1, in order to convert values to correct units
+    unitList = [], //unitList that can be used for this property
+    defaultUnitIndex = 0, //shows which unit from the unitList is the one used to store data in DB
+    attributeMap = [], //list of mapped attributes. Attribute matches index from itemList to indexes of values from a field in csv file. when importing value indexes will be converted to index from itemlist. (parameterType 1, importType 1)
 }) => ({
     parameterType: parameterType,
     importType: importType,
     itemList: itemList,
     unit: unit,
     unitList: unitList,
+    defaultUnitIndex: defaultUnitIndex,
     defaultValue: defaultValue,
     fieldIndex: fieldIndex,
     fieldIndexList: fieldIndexList,
     valid: valid,
     attributeMap: attributeMap,
     mergeAllowed: mergeAllowed,
+})
+
+const getWireProps = () => ({
+    wireColor: getParameter({ parameterType: 1, itemList: wireColorList.map(w => w.title) }),
+    wireGauge: getParameter({ parameterType: 1, itemList: wireGaugesList }),
+})
+
+const getNameProps = (type) => ({
+    type: type,
+    key: IdGen(),
+    name: getParameter({ importType: 2 }),
+})
+
+const getPotentials = (autoCreate = false, initialPotentials = []) => {
+    if (autoCreate)
+        return {
+            potentials: initialPotentials.map(init => getPotentialParameter(init[0], init[1]))
+        }
+    else return {
+        potentials: []
+    }
+}
+
+const getSides = () => ({
+    sideA: [],
+    sideB: [],
+    fromAtoB: true,
 })
 
 export const getItem = (itemType) => {
@@ -69,188 +72,130 @@ export const getItem = (itemType) => {
                 comment: getParameter({ mergeAllowed: true }),
                 status: getParameter({ parameterType: 1, itemList: statusInfo.map(s => s.title) })
             }
+        case 'RECTIFIER':
+            return {
+                name: getParameter({ importType: 2 }),
+                location: getParameter({ mergeAllowed: true }),
+                latitude: getParameter({}),
+                longitude: getParameter({}),
+                comment: getParameter({ mergeAllowed: true }),
+                status: getParameter({ parameterType: 1, itemList: statusInfo.map(s => s.title) }),
+                model: getParameter({ mergeAllowed: true }),
+                serialNumber: getParameter({}),
+                powerSource: getParameter({ parameterType: 1, itemList: powerSourceList }),
+                tapValue: getParameter({}),
+                tapCoarse: getParameter({ parameterType: 1, itemList: tapOptions }),
+                tapFine: getParameter({ parameterType: 1, itemList: tapOptions }),
+                maxVoltage: getParameter({}),
+                maxCurrent: getParameter({}),
+            }
+        case 'PIPELINE':
+            return {
+                name: getParameter({ importType: 2 }),
+                nps: getParameter({ parameterType: 1, itemList: npsList }),
+                licenseNumber: getParameter({}),
+                material: getParameter({ parameterType: 1, itemList: pipeMaterials }),
+                coating: getParameter({ parameterType: 1, itemList: pipeCoating }),
+                product: getParameter({ parameterType: 1, itemList: pipeProducts }),
+                comment: getParameter({ mergeAllowed: true }),
+            }
         default: return null
     }
 }
 
-export class Input {
-    constructor(importType = 1, unit = null, unitList = [], defaultValue = null, fieldIndex = null, valid = true) {
-        this.importType = importType
-        this.defaultValue = defaultValue
-        this.fieldIndex = fieldIndex
-        this.unit = unit
-        this.unitList = unitList
-        this.valid = valid
-    }
+export const getSubitem = (type, autoCreatePotentials = false, initialPotentials = []) => {
+    switch (type) {
+        case 'PL':
+            return {
+                ...getNameProps(type),
+                ...getWireProps(),
+                ...getPotentials(autoCreatePotentials, initialPotentials),
+                pipelineId: null
 
-    setImportType(type) {
-        if (type === 0 || type === 1 || type === 2)
-            if (type === 0)
-                return new Input(type, this.unit, this.unitList, this.defaultValue, null, true)
-            else if (type === 1)
-                return new Input(type, this.unit, this.unitList, null, this.fieldIndex, true)
-            else
-                return new Input(type, this.unit, this.unitList, null, null, true)
-        else return this
-    }
-
-    setFieldIndex(index) {
-        if (!isNaN(index) || index === null)
-            return new Input(this.importType, this.unit, this.unitList, this.defaultValue, index, this.valid)
-        else return this
-    }
-
-    setDefaultValue(value) {
-        this.defaultValue = value
-        return this
-    }
-
-    validate(value, property) {
-        return fieldValidation(value, property, property === 'name')
+            }
+        case 'AN':
+            return {
+                ...getNameProps(type),
+                ...getWireProps(),
+                ...getPotentials(autoCreatePotentials, initialPotentials),
+                anodeMaterial: getParameter({ parameterType: 1, itemList: anodeMaterialList }),
+            }
+        case 'BD':
+            return {
+                ...getNameProps(type),
+                ...getSides(),
+                current: getParameter({ unitList: [currentUnits[1], currentUnits[2]], defaultUnitIndex: 1, unit: 1 })
+            }
+        case 'CN':
+            return {
+                ...getNameProps(type),
+                area: getParameter({ unitList: areaUnits, defaultUnitIndex: 0 }),
+                current: getParameter({ unitList: [currentUnits[0], currentUnits[1]], defaultUnitIndex: 0 }),
+                density: getParameter({ unitList: currentDensityUnits, defaultUnitIndex: 2 }),
+                ...getWireProps(),
+                ...getPotentials(autoCreatePotentials, initialPotentials)
+            }
+        case 'FC':
+            return {
+                ...getNameProps(type),
+                ...getPotentials(autoCreatePotentials, initialPotentials),
+            }
+        case 'IK':
+            return {
+                ...getNameProps(type),
+                ...getSides(),
+                current: getParameter({ unitList: [currentUnits[2]] }),
+                shorted: getParameter({ parameterType: 1, itemList: ['No', 'Yes'] }),
+                isolationType: getParameter({ parameterType: 1, itemList: isolationAssemblyTypes })
+            }
+        case 'OT':
+            return {
+                ...getNameProps(type),
+                ...getPotentials(autoCreatePotentials, initialPotentials)
+            }
+        case 'RS':
+            return {
+                ...getNameProps(type),
+                nps: getParameter({ parameterType: 1, itemList: pipeDiameterList }),
+                ...getPotentials(autoCreatePotentials, initialPotentials),
+                pipelineId: null
+            }
+        case 'RE':
+            return {
+                ...getNameProps(type),
+                rcType: getParameter({ parameterType: 1, itemList: referenceCellTypes }),
+                ...getWireProps(),
+                ...getPotentials(autoCreatePotentials, initialPotentials),
+            }
+        case 'SH':
+            return {
+                ...getNameProps(type),
+                ...getSides(),
+                ratioCurrent: null,
+                ratioVoltage: null,
+                voltageDrop: getParameter({ unitList: [potentialUnits[1]] }),
+                factor: null,
+                factorSelected: false,
+                current: getParameter({ unitList: [currentUnits[1], currentUnits[2]], defaultUnitIndex: 1, unit: 1 }),
+            }
+        case 'CT':
+            return {
+                ...getNameProps(type),
+                current: getParameter({ unitList: [currentUnits[2]] }),
+                targetMin: getParameter({ unitList: [currentUnits[2]] }),
+                targetMax: getParameter({ unitList: [currentUnits[2]] }),
+                voltage: getParameter({ unitList: [potentialUnits[3]] })
+            }
     }
 }
 
-export class Select extends Input {
-    constructor({ itemList = [], attributeMap = [], importType = 0, unit = null, unitList = [], defaultValue = null, fieldIndex = null, valid = true }) {
-        super(importType, unit, unitList, defaultValue, fieldIndex, valid)
-        this.itemList = itemList
-        this.attributeMap = attributeMap
-    }
-}
+export const getAttribute = ({ index, mappedIndexes }) => ({
+    index,
+    mappedIndexes,
+})
 
-export class ITEM {
-    constructor(itemType) {
-        this.name = new Input(2)
-        if (itemType === 'TEST_POINT') {
-            this.testPointType = new Select({ itemList: testPointTypes })
-            this.location = new Input({ mergeAllowed: true })
-            this.latitude = new Input()
-            this.longitude = new Input()
-            this.comment = new Input({ mergeAllowed: true })
-            this.status = new Select({ itemList: statusInfo.map(s => s.title) })
-        }
-        else if (itemType === 'RECTIFIER') {
-            this.location = new Input()
-            this.latitude = new Input()
-            this.longitude = new Input()
-            this.comment = new Input()
-            this.status = new Select({ itemList: statusInfo.map(s => s.title) })
-            this.model = new Input()
-            this.serialNumber = new Input()
-            this.powerSource = new Select({ itemList: powerSourceList })
-            this.acVoltage = new Input()
-            this.acCurrent = new Input()
-            this.tapSetting = null
-            this.tapValue = new Input()
-            this.tapCoarse = new Select({ itemList: tapOptions })
-            this.tapFine = new Select({ itemList: tapOptions })
-            this.maxVoltage = new Input()
-            this.maxCurrent = new Input()
-        }
-        else if (itemType === 'PIPELINE') {
-            this.nps = new Select({ itemList: pipeDiameterList })
-            this.material = new Select({ itemList: pipeMaterials })
-            this.coating = new Select({ itemList: pipeCoating })
-            this.licenseNumber = new Input()
-            this.product = new Select({ itemList: pipeProducts })
-            this.comment = new Input()
-        }
-    }
-
-    setPropertyFieldIndex(property, newIndex) {
-        this[property] = this[property].setFieldIndex(newIndex)
-        return this
-    }
-
-    setProperty(property, { importType, defaultValue, fieldIndex, unit, unitList }) {
-        if (importType === 0)
-            this[property] = new Input(importType, unit, unitList, defaultValue, null, true)
-        else if (importType === 1)
-            this[property] = new Input(importType, unit, unitList, null, fieldIndex, true)
-        else if (importType === 2 && property === 'name')
-            this[property] = new Input(importType, unit, unitList)
-        return this
-    }
-
-    setSelectProperty(property, selectObject) {
-        if (selectObject.importType === 0)
-            this[property] = new Select({ ...selectObject, attributeMap: [], fieldIndex: null, valid: true })
-        else if (selectObject.importType === 1)
-            this[property] = new Select({ ...selectObject, defaultValue: null, valid: true })
-        return this
-    }
-}
-
-export class POTENTIAL {
-    constructor(type, referenceCellId, isPortable) {
-        this.type = type
-        this.referenceCellId = referenceCellId
-        this.isPortable = isPortable
-        this.value = new Input(0, 0, potentialUnits)
-    }
-}
-
-export class SUBITEM {
-    constructor(subitemType, autoPotentials = false, onType = null, offType = null, referenceCellId = null) {
-        this.name = new Input(2)
-        this.subitemType = subitemType
-        const potentials = autoPotentials ? [new POTENTIAL(onType, referenceCellId, false), new POTENTIAL(offType, referenceCellId, false)] : []
-        if (subitemType === 'PL') {
-            this.pipelineId = new Select()
-            this.wireColor = new Select({ itemList: wireColorList })
-            this.wireGauge = new Select({ itemList: wireGaugesList })
-            this.potentials = potentials
-        }
-        else if (subitemType === 'AN') {
-            this.anodeMaterial = new Select({ itemList: anodeMaterialList })
-            this.wireColor = new Select({ itemList: wireColorList })
-            this.wireGauge = new Select({ itemList: wireGaugesList })
-            this.potentials = potentials
-        }
-        else if (subitemType === 'BD') {
-            this.sideA = []
-            this.sideB = []
-            this.fromAtoB = true
-            this.current = new Input(0, 2, currentUnits)
-        }
-        else if (subitemType = 'CN') {
-            this.area = new Input(0, 0, areaUnits)
-            this.current = new Input(0, 2, currentUnits)
-            this.density = new Input(0, 0, currentDensityUnits)
-            this.wireColor = new Select({ itemList: wireColorList })
-            this.wireGauge = new Select({ itemList: wireGaugesList })
-            this.potentials = potentials
-        }
-        else if (subitemType = 'FC') {
-            this.potentials = potentials
-        }
-        else if (subitemType = 'IK') {
-            this.sideA = []
-            this.sideB = []
-            this.fromAtoB = true
-            this.current = new Input()
-            this.isolationType = new Select({ itemList: isolationAssemblyTypes })
-        }
-        else if (subitemType = 'OT') {
-            this.potentials = potentials
-        }
-        else if (subitemType = 'RE') {
-            this.rcType = new Select({ itemList: referenceCellTypes })
-            this.wireColor = new Select({ itemList: wireColorList })
-            this.wireGauge = new Select({ itemList: wireGaugesList })
-            this.potentials = potentials
-        }
-        else if (subitemType = 'RS') {
-            this.pipelineId = new Select()
-            this.nps = new Select({ itemList: pipeDiameterList })
-            this.potentials = potentials
-        }
-        else if (subitemType = 'SH') {
-            this.fromAtoB = true
-            this.sideA = []
-            this.sideB = []
-            this.voltageDrop = new Input()
-            this.factor = new Input()
-        }
-    }
-}
+export const getPotentialParameter = (potentialTypeIndex, referenceCellIndex) => ({
+    ...getParameter({ unitList: potentialUnits, defaultUnitIndex: 3 }),
+    potentialTypeIndex,
+    referenceCellIndex
+})

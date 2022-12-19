@@ -6,7 +6,7 @@ import { primary } from '../../../../styles/colors'
 
 const DefaultBadge = () => (
     <View style={styles.badge}>
-        <Text category='label' status='control'>Default name</Text>
+        <Text category='label' status='control' numberOfLines={1} ellipsizeMode={'tail'}>Default name</Text>
     </View>
 )
 

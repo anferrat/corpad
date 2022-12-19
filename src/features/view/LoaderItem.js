@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from 'react'
 import { StyleSheet, View, ActivityIndicator } from 'react-native'
 import { Layout } from '@ui-kitten/components'
-import { sendRequest } from '../../api/database/index'
+import { sendCombinedRequest } from '../../api/database/index'
 import { useDispatch, useSelector } from 'react-redux'
 import { loadViewState, resetState } from '../../store/actions/item'
 import { setUpdating } from '../../store/actions/list'
@@ -28,13 +28,21 @@ const LoaderItem = (props) => {
         //When component mounts it obtains data from DB and loads it to state
         componentMounted.current = true
         const getDataFromDB = async () => {
-
-            const dataObject = await sendRequest('SELECT', props.dataType, genRequestObject(props.dataType, props.itemId))
-            const tpCount = props.dataType === 'PIPELINE' ? (await sendRequest('SELECT', 'PIPELINE_TEST_POINT_COUNT', genRequestObject(props.dataType, props.itemId))) : { status: 200, result: null }
-            if (dataObject.status === 200 && tpCount.status === 200) {
-                initialStatus.current = dataObject.result?.status ?? null
+            const data = await sendCombinedRequest([
+                ['SELECT', props.dataType, genRequestObject(props.dataType, props.itemId)],
+            ].concat(
+                props.dataType === 'PIPELINE' ? //Test_point count only applicable for pipelines
+                    [['SELECT', 'PIPELINE_TEST_POINT_COUNT', genRequestObject(props.dataType, props.itemId)]] :
+                    []))
+            if (data.status === 200) {
+                initialStatus.current = data.result[0]?.status ?? null
                 if (componentMounted.current)
-                    dispatch(loadViewState({ ...dataObject.result, valid: genValidObject(dataObject.result), defaultName: getName(props.itemId, props.dataType), tpCount: tpCount.result }))
+                    dispatch(loadViewState({
+                        ...data.result[0],
+                        valid: genValidObject(data.result[0]),
+                        defaultName: getName(props.itemId, props.dataType), //why do I have this?
+                        tpCount: data.result[1] ?? null
+                    }))
             }
             else errorHandler(603, props.goBack)
         }

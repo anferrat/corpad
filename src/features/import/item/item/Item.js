@@ -1,39 +1,68 @@
-import React, { useEffect } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
-import { resetImportItem } from '../../../../store/actions/importData'
-import { useNavigation } from '@react-navigation/native'
+import React, { useContext, useEffect, useRef } from 'react'
+import { StyleSheet, View } from 'react-native'
+import { useSelector, useDispatch } from 'react-redux'
+import { globalStyle } from '../../../../styles/styles'
 import Pipeline from './Pipeline'
 import Rectifier from './Rectifier'
 import TestPoint from './TestPoint'
+import AddSubitemButton from './AddSubitemButton'
+import { addSubitem } from '../../../../store/actions/importData'
+import { ImportData } from '..'
+import { getPotentialsData } from '../helpers/functions'
+import SubitemList from './SubitemList'
 
-const ItemView = () => {
-    const navigation = useNavigation()
-    const navigateToParameters = (property, subitemIndex = null) =>
-        navigation.navigate('ImportParameters',
-            {
-                property: property,
-                subitemIndex: subitemIndex
-            })
+const ItemView = ({ pushToSubitem }) => {
+    const importData = useContext(ImportData)
     const itemType = useSelector(state => state.importData.itemType)
-    const fields = useSelector(state => state.importData.fields)
-    const data = useSelector(state => state.importData.data)
     const dispatch = useDispatch()
-    useEffect(() => () => {
-        dispatch(resetImportItem())
-    }, [])
+    const subitems = useSelector(state => state.importData.subitems)
+
+    const addSubitemHandler = React.useCallback((type) => {
+
+            const potentialsData = getPotentialsData(importData.extraData.autoCreatePotentials, importData.extraData.potentialTypes, importData.extraData.referenceCellList)
+            dispatch(addSubitem(type, potentialsData.autoCreate, potentialsData.init))
+            pushToSubitem(null, true, type)
+
+    }, [importData.extraData.autoCreatePotentials, importData.extraData.potentialTypes, importData.extraData.referenceCellList, pushToSubitem, dispatch])
+
+
+
+    return (
+        <>
+            <View style={globalStyle.card}>
+                <ItemSelector itemType={itemType} />
+                <View style={styles.button}>
+                    <AddSubitemButton
+                        onSelect={addSubitemHandler}
+                        itemType={itemType} />
+                </View>
+            </View>
+            <SubitemList
+                subitems={subitems}
+                pushToSubitem={pushToSubitem} />
+        </>
+    )
+}
+
+export default ItemView
+
+const ItemSelector = ({ itemType }) => {
     switch (itemType) {
         case 'TEST_POINT':
-            return <TestPoint
-                navigateToParameters={navigateToParameters}
-                fields={fields}
-                data={data} />
+            return <TestPoint />
         case 'RECTIFIER':
-            return null
+            return <Rectifier />
         case 'PIPELINE':
-            return null
+            return <Pipeline />
         default:
             return null
     }
 }
 
-export default ItemView
+const styles = StyleSheet.create({
+    button: {
+        marginHorizontal: -12,
+        marginBottom: -12
+    }
+})
+

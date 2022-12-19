@@ -1,5 +1,5 @@
-import { SET_IMPORT_ITEM_TYPE, SET_IMPORT_DATA, SET_IMPORT_ITEM_PROPERTY_FIELD_INDEX, SET_IMPORT_ITEM_PROPERTY, RESET_IMPORT_ITEM } from "../actions/importData"
-import { getItem } from "../../features/import/models/models"
+import { SET_IMPORT_ITEM_TYPE, SET_IMPORT_DATA, ADD_IMPORT_SUBITEM, SET_IMPORT_PROPERTY, RESET_IMPORT_ITEM, SET_IMPORT_SUBITEM_SETTING, ADD_IMPORT_SUBITEM_POTENTIAL, REMOVE_IMPORT_SUBITEM_POTENTAIL, REMOVE_IMPORT_SUBITEM } from "../actions/importData"
+import { getItem, getSubitem, getPotentialParameter } from "../../features/import/models/models"
 
 const initialItemType = 'TEST_POINT'
 
@@ -12,6 +12,7 @@ const initialState = {
     item: getItem(initialItemType),
     subitems: [],
     itemType: initialItemType,
+    extraData: {}
 }
 
 
@@ -21,7 +22,8 @@ const importData = (state = initialState, action) => {
             return {
                 ...state,
                 itemType: action.itemType,
-                item: getItem(action.itemType)
+                item: getItem(action.itemType),
+                subitems: initialState.subitems
             }
         case SET_IMPORT_DATA:
             return {
@@ -31,32 +33,98 @@ const importData = (state = initialState, action) => {
                 fileName: action.fileName,
                 uri: action.uri,
                 defaultNames: action.defaultNames,
+                extraData: action.extraData
             }
-        case SET_IMPORT_ITEM_PROPERTY_FIELD_INDEX:
-            return {
-                ...state,
-                item: {
-                    ...state.item,
-                    [action.property]: {
-                        ...state.item[action.property],
-                        fieldIndex: action.index
-                    }
+        case SET_IMPORT_PROPERTY: {
+            if (action.subitemIndex === null && action.potentialIndex === null)
+                return {
+                    ...state,
+                    item: {
+                        ...state.item,
+                        [action.property]:
+                        {
+                            ...state.item[action.property],
+                            ...action.value
+                        }
+                    },
                 }
-            }
-        case SET_IMPORT_ITEM_PROPERTY: {
-            return {
+            else if (action.potentialIndex === null)
+                return {
+                    ...state,
+                    subitems: Object.assign([], state.subitems, {
+                        [action.subitemIndex]: {
+                            ...state.subitems[action.subitemIndex],
+                            [action.property]: {
+                                ...state.subitems[action.subitemIndex][action.property],
+                                ...action.value,
+                            }
+                        }
+                    })
+                }
+            else return {
                 ...state,
-                item: {
-                    ...state.item,
-                    [action.property]:
-                    {
-                        ...state.item[action.property],
-                        ...action.value
+                subitems: Object.assign([], state.subitems, {
+                    [action.subitemIndex]: {
+                        ...state.subitems[action.subitemIndex],
+                        potentials: Object.assign([], state.subitems[action.subitemIndex].potentials, {
+                            [action.potentialIndex]: {
+                                ...state.subitems[action.subitemIndex].potentials[action.potentialIndex],
+                                ...action.value,
+                            }
+                        })
                     }
-                },
+                })
+            }
+        }
+        case SET_IMPORT_SUBITEM_SETTING: {
+            if (action.subitemIndex === null || action.property === null)
+                return state
+            else return {
+                ...state,
+                subitems: Object.assign([], state.subitems, {
+                    [action.subitemIndex]: {
+                        ...state.subitems[action.subitemIndex],
+                        [action.property]: action.value
+                    }
+                })
             }
         }
 
+        case ADD_IMPORT_SUBITEM_POTENTIAL:
+            return {
+                ...state,
+                subitems: Object.assign([], state.subitems, {
+                    [action.subitemIndex]: {
+                        ...state.subitems[action.subitemIndex],
+                        potentials: state.subitems[action.subitemIndex].potentials.concat(getPotentialParameter(action.potentialTypeIndex, action.referenceCellIndex))
+                    }
+                })
+            }
+        case REMOVE_IMPORT_SUBITEM_POTENTAIL:
+            return {
+                ...state,
+                subitems: Object.assign([], state.subitems, {
+                    [action.subitemIndex]: {
+                        ...state.subitems[action.subitemIndex],
+                        potentials: state.subitems[action.subitemIndex].potentials.filter((_, i) => i !== action.potentialIndex)
+                    }
+                })
+            }
+        case ADD_IMPORT_SUBITEM:
+            return {
+                ...state,
+                subitems: state.subitems.concat(getSubitem(action.subitemType, action.autoCreatePotentials, action.initialPotentials))
+            }
+        case REMOVE_IMPORT_SUBITEM:
+            if (action.isNewSubitem)
+                return {
+                    ...state,
+                    subitems: state.subitems.slice(0, state.subitems.length - 2)
+                }
+            return {
+                ...state,
+                subitems: state.subitems.filter((_, i) => action.subitemIndex !== i)
+            }
         case RESET_IMPORT_ITEM:
             return initialState
 
