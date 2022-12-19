@@ -142,7 +142,6 @@ export const saveLocalSurvey = async (content, fileName, isSurveyNew, originalHa
     else return metaData
 }
 
-//readExternalSurvey can also read files from cloud storage, but it uses RNFS so i placed it here
 export const readExternalSurvey = async (uriExternal) => {
     try {
         const file = await readFile(uriExternal)

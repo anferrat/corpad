@@ -7,30 +7,48 @@ import LoadingView from '../../components/LoadingView'
 import { basic200, basic300, control } from '../../styles/colors'
 
 export const SpreadsheetViewer = ({ uri }) => {
-    const { loading, data, fields } = useDataFromFile(uri)
-    const renderItem = ({ item }) => (
-        <View style={styles.cell}>
-            <Text numberOfLines={1} ellipsizeMode={'tail'}>{item}</Text>
-        </View>
+    const { loading, data, fields, limitReached } = useDataFromFile(uri)
+
+    const renderItem = ({ item, index }) => (
+        <>
+            <View style={index % (fields.length + 1) === 0 ? styles.rowHeader : styles.cell}>
+                <Text numberOfLines={1} ellipsizeMode={'tail'}>{item}</Text>
+            </View>
+        </>
     )
     const Header = () => (
         <View style={styles.header}>
-            {fields.map((field, i) => <View style={styles.columnHeader} key={`${i + 1}_column`}><Text numberOfLines={1} ellipsizeMode={'tail'}>{field}</Text></View>)}
+            <View style={styles.rowHeader} />
+            {fields.map((field, i) =>
+                <View style={styles.columnHeader}
+                    key={`${i + 1}_column`}>
+                    <Text numberOfLines={1} ellipsizeMode={'tail'}>
+                        {field}
+                    </Text>
+                </View>)}
+            {limitReached.field ? <View style={styles.columnHeader}>
+                <Text numberOfLines={1} ellipsizeMode={'tail'}>...</Text>
+            </View> : null}
         </View>
     )
+
+    const Footer = () => {
+        if (limitReached.row || limitReached.field)
+            return <View style={styles.hint}>
+                <Text category='s2' status='danger'>* This is a preview feature, unabled to process large csv files.{`\n`}Please use third party apps to view this file in full.</Text>
+            </View>
+        else return null
+    }
     return (
         <LoadingView loading={loading}>
-            <ScrollView horizontal={true} >
-                <View>
-                    <View style={styles.rowHeader}></View>
-                    {data.map((_, i) => <View style={styles.rowHeader} key={`${i + 1}_row`}><Text numberOfLines={1} ellipsizeMode={'tail'}>{i + 1}</Text></View>)}
-                </View>
+            <ScrollView horizontal={true}>
                 <FlatList
                     ListHeaderComponent={Header}
+                    ListFooterComponent={Footer}
                     contentContainerStyle={styles.mainView}
-                    data={data.flat()}
+                    data={data.flat().concat(limitReached.row ? '...' : [])}
                     renderItem={renderItem}
-                    numColumns={fields.length}
+                    numColumns={fields.length + 1}
                 />
             </ScrollView>
         </LoadingView >
@@ -75,6 +93,9 @@ const styles = StyleSheet.create({
     },
     header: {
         flexDirection: 'row'
+    },
+    hint: {
+        padding: 12
     }
 })
 

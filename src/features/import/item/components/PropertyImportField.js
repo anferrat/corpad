@@ -1,14 +1,16 @@
 import React from 'react'
 import { StyleSheet, View, Pressable } from 'react-native'
 import { Text, Icon } from '@ui-kitten/components'
-import { basic400, control, primary200, basic, warning } from '../../../../styles/colors'
+import { basic400, control, primary200, basic, warning, primary } from '../../../../styles/colors'
 import Badge from './Badge'
-import FileBadge from './FileBadge'
 import { fieldProperties } from '../../../../constants/fieldProperties'
 import { getAccessory, getDisplayValue } from '../helpers/functions'
 import ValuePreviewModal from './ValuePreviewModal'
+import Unit from '../../../../components/Unit'
 
 const PropertyImportField = ({
+    subitemIndex,
+    potentialIndex = null,
     onPress,
     defaultValue,
     itemList,
@@ -20,18 +22,19 @@ const PropertyImportField = ({
     defaultName,
     attributeCount,
     fields,
+    defaultUnit,
     data }) => {
     const propertyValues = fieldProperties[property]
-    const displayValue = getDisplayValue(parameterType, importType, { itemList, defaultValue, fieldIndex, fieldIndexList, fields, defaultName })
-    const accessory = getAccessory(parameterType, importType, propertyValues.accessoryList, defaultValue)
-    const attributeMapCount = (parameterType === 1 && importType === 1 && !displayValue.empty) ? attributeCount : null
-    const fileAccessoryDisplay = !displayValue.empty && (importType === 1 || importType === 3)
-    if (propertyValues)
+    if (propertyValues) {
+        const displayValue = getDisplayValue(parameterType, importType, { itemList, defaultValue, fieldIndex, fieldIndexList, fields, defaultName })
+        const accessory = getAccessory(parameterType, importType, propertyValues.accessoryList, defaultValue)
+        const attributeMapCount = (parameterType === 1 && importType === 1 && !displayValue.empty) ? attributeCount : null
+        const fileAccessoryDisplay = !displayValue.empty && (importType === 1 || importType === 3)
         return (
             <View>
-                <Text appearance='hint' category='label'>{propertyValues.label}</Text>
+                {propertyValues.label ? <Text appearance='hint' category='label'>{propertyValues.label}</Text> : null}
                 <View style={styles.pressableWrapper}>
-                    <Pressable style={styles.pressable} onPress={onPress} android_ripple={{ color: primary200 }}>
+                    <Pressable style={styles.pressable} onPress={onPress.bind(this, property, subitemIndex, potentialIndex)} android_ripple={{ color: primary200 }}>
                         <View style={styles.textViewWrapper}>
                             <View style={styles.textView}>
                                 <Accessory
@@ -48,6 +51,10 @@ const PropertyImportField = ({
                                 count={attributeMapCount} />
                         </View>
                         <View style={styles.badge}>
+                            <UnitField
+                                unit={defaultUnit}
+                                importType={importType}
+                                empty={displayValue.empty} />
                             <BadgeComponent
                                 data={data}
                                 fields={fields}
@@ -60,6 +67,7 @@ const PropertyImportField = ({
                 </View>
             </View>
         )
+    }
     else return null
 }
 
@@ -69,6 +77,12 @@ const FileAccessory = ({ display }) => {
             <Text appearance='hint' category='s2' style={styles.fileAccessory}>file:</Text>
         )
     else return null
+}
+
+const UnitField = ({ unit, empty, importType }) => {
+    if (empty || importType !== 0)
+        return null
+    else return <View style={styles.unitView}><Unit unit={unit} style={styles.unitText} /></View>
 }
 
 const MapCounter = ({ count }) => {
@@ -84,7 +98,7 @@ const MapCounter = ({ count }) => {
 const Accessory = ({ accessory }) => {
     if (accessory)
         return (
-            <Icon name={accessory.name} pack={accessory.pack} fill={accessory.fill} style={styles.icon} />
+            <Icon name={accessory?.icon} pack={accessory?.icon ? accessory?.pack : 'cp'} fill={accessory?.fill ?? basic} style={styles.icon} />
         )
     else
         return null
@@ -133,6 +147,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
         marginRight: 12,
+        flexDirection: 'row'
     },
     textView: {
         flex: -1,
@@ -150,6 +165,7 @@ const styles = StyleSheet.create({
         flex: -1,
         marginTop: 4,
         height: 14,
+        flexBasis: 60,
         borderRadius: 5,
         justifyContent: 'center',
         alignItems: 'center',
@@ -170,5 +186,12 @@ const styles = StyleSheet.create({
     },
     fileAccessory: {
         marginRight: 6
+    },
+    unitView: {
+        marginRight: 12
+    },
+    unitText: {
+        fontWeight: 'bold',
+        color: primary
     }
 })

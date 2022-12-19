@@ -2,6 +2,8 @@ import React from "react"
 import { Icon } from "@ui-kitten/components"
 import { wireColorList } from "../constants/constants"
 
+//move to edit feature
+
 const WireColorIcon = (props) => {
     const color = wireColorList[props.colorIndex]
     if (color)

@@ -5,7 +5,6 @@ import { Text, Button, Icon } from '@ui-kitten/components'
 import { signOut } from '../../api/cloud_drive/auth'
 import { loadSession } from '../../store/actions/settings'
 import { primary, danger } from '../../styles/colors'
-import { gdrive } from '../../api/cloud_drive/gd'
 
 const SignOutRow = () => {
     const userName = useSelector(state => state.settings.session.userName)
@@ -17,7 +16,6 @@ const SignOutRow = () => {
         const signOutRequest = await signOut()
         if (signOutRequest.status === 200) {
             dispatch(loadSession({ signing: false, isSigned: false, userName: null }))
-            gdrive.accessToken = null
         }
         else errorHandler(signOutRequest.status)
     }, [dispatch])

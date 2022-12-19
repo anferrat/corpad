@@ -6,13 +6,15 @@ import { globalStyle } from '../../../styles/styles'
 import InputField from '../../../components/Input'
 import SelectField from './components/Select'
 import { saveIcon } from '../../../components/Icons'
-import { setImportItemProperty } from '../../../store/actions/importData'
+import { setImportProperty } from '../../../store/actions/importData'
 import fieldValidation from '../../../helpers/validation'
 import { errorHandler } from '../../../helpers/error_handler'
 import MultiSelect from './components/MultiSelect'
+import { fieldProperties } from '../../../constants/fieldProperties'
+import Hint from '../../../components/Hint'
 
 const fileIcon = {
-    name: 'file-text-outline',
+    icon: 'file-text-outline',
     pack: null
 }
 
@@ -24,7 +26,6 @@ const InputFieldParamaters = (props) => {
     const [unit, setUnit] = useState(props.value.unit)
     const [unitList, setUnitList] = useState(props.value.unitList)
     const [fieldIndexList, setFieldIndexList] = useState(props.value.fieldIndexList)
-
     const defaultValueImportType = React.useCallback(() => {
         setImportType(0)
         setFieldIndex(null)
@@ -72,7 +73,7 @@ const InputFieldParamaters = (props) => {
             errorHandler(512)
         }
         else {
-            dispatch(setImportItemProperty(props.property, { importType, unit, unitList, defaultValue, fieldIndex, valid, fieldIndexList }))
+            dispatch(setImportProperty(props.property, props.subitemIndex, props.potentialIndex, { importType, unit, defaultValue, fieldIndex, valid, fieldIndexList }))
             props.goBack()
         }
     }
@@ -89,27 +90,41 @@ const InputFieldParamaters = (props) => {
                     </Radio>
                     <InputField
                         style={styles.field}
+                        unit={props.defaultUnit}
+                        placeholder={fieldProperties[props.property].placeholder}
+                        keyboardType={fieldProperties[props.property].keyboardType}
                         disabled={importType !== 0}
                         value={defaultValue}
                         onChangeText={setDefaultValue}
                         onEndEditing={validateDefaultValue}
-                        valid={valid}
-                    />
+                        valid={valid} />
                     <Radio
                         style={styles.radio}
                         onChange={fieldIndexImportType}
                         checked={importType === 1}>
                         Use values from a column in data file
                     </Radio>
-                    <SelectField
-                        style={styles.field}
-                        disabled={importType !== 1}
-                        placeholder={'Select data column'}
-                        itemList={props.fields}
-                        selectedIndex={fieldIndex}
-                        onSelect={setFieldIndex}
-                        accessory={fileIcon}
-                    />
+                    <View style={styles.selectView}>
+                        <SelectField
+                            style={styles.field}
+                            disabled={importType !== 1}
+                            placeholder={'Select data column'}
+                            itemList={props.fields}
+                            selectedIndex={fieldIndex}
+                            onSelect={setFieldIndex}
+                            accessory={fileIcon}
+                        />
+                        {unitList.length > 0 ?
+                            <SelectField
+                                style={styles.unitSelect}
+                                disabled={importType !== 1 || unitList.length === 1}
+                                placeholder={'Unit'}
+                                selectedIndex={unit}
+                                itemList={unitList}
+                                onSelect={setUnit}
+                            /> : null}
+                    </View>
+                    <Hint hidden={unitList.length === 0 || importType !== 1} text='Unit must match the one used in spreadsheet' />
                     {props.property === 'name' ?
                         <Radio
                             style={styles.radio}
@@ -145,11 +160,12 @@ const InputFieldParamaters = (props) => {
     )
 }
 
-export default InputFieldParamaters
+export default React.memo(InputFieldParamaters, () => true)
 
 const styles = StyleSheet.create({
     field: {
-        paddingBottom: 12
+        paddingBottom: 12,
+        flex: 1
     },
     optionView: {
         backgroundColor: 'red',
@@ -173,6 +189,13 @@ const styles = StyleSheet.create({
         shadowOpacity: 0.8,
         shadowRadius: 2,
         elevation: 5,
+    },
+    selectView: {
+        flexDirection: 'row'
+    },
+    unitSelect: {
+        flexBasis: 120,
+        paddingLeft: 12
     }
 })
 

@@ -7,10 +7,10 @@ const sortingDisplayIcons = [
     {
         iconText: 'A-Z',
         icon: null,
-        direction: 'up'
+        direction: 'down'
     },
     {
-        iconText: 'A-Z',
+        iconText: 'Z-A',
         icon: null,
         direction: 'down'
     },

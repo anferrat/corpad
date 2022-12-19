@@ -1,4 +1,4 @@
-import { sendRequest, resetSurvey, exportJSON, importJSON, importWIthForceJSON } from "../../api/database/index"
+import { sendRequest, resetSurvey, exportJSON, importJSON, importWIthForceJSON, sendCombinedRequest } from "../../api/database/index"
 import { getLocalMetaData, readLocalSurvey, saveLocalSurvey, readExternalSurvey, deleteLocalSurvey, getMetaDataFromFile, saveToDownloads, readLocalSurveyTemplate } from "../files/survey"
 import { saveCloudSurvey, getCloudMetaData, readCloudSurvey, deleteCloudSurvey, getMetaDataFromCloudFile } from "../cloud_drive/survey"
 import { errorHandler, warningHandler } from "../../helpers/error_handler"
@@ -15,16 +15,15 @@ export const isSurveyLoaded = async () => {
     const isLoaded = await sendRequest('SELECT', 'IS_LOADED', {})
     if (isLoaded.status === 200) {
         if (isLoaded.result) {
-            const settings = await sendRequest('SELECT', 'SETTINGS')
-            const survey = await sendRequest('SELECT', 'SURVEY')
-            if (settings.status === 200 && survey.status === 200)
+            const data = await sendCombinedRequest([['SELECT', 'SETTINGS', {}], ['SELECT', 'SURVEY', {}]])
+            if (data.status === 200)
                 return {
                     status: 200,
                     isLoaded: true,
-                    syncTime: settings.result.lastSync,
-                    name: survey.result.name,
-                    fileName: settings.result.fileName,
-                    isCloud: settings.result.isCloud
+                    syncTime: data.result[0].lastSync,
+                    name: data.result[1].name,
+                    fileName: data.result[0].fileName,
+                    isCloud: data.result[0].isCloud
                 }
             else return { status: 600 }
         }
@@ -154,12 +153,14 @@ export const surveyLoader = async (fileTag, loaderType, fileName) => {
                 if (valid.status === 200) {
                     const loadSurveyObject = await loadSurveyHandler(loadedFile.result, valid)
                     if (loadSurveyObject.status === 200) {
-                        const survey = await sendRequest('SELECT', 'SURVEY')
-                        const settings = await sendRequest('UPDATE', 'SURVEY_SETTINGS', { isSurveyNew: loadedFile.isSurveyNew, isCloud: loaderType === 'cloud' || loaderType === 'cloudTemplate', originalHash: loadedFile.hash, fileName: fileName, cloudId: loadedFile.cloudId, lastSync: loadedFile.isSurveyNew ? null : currentTime })
-                        if (settings.status === 200 && survey.status === 200)
+                        const request = await sendCombinedRequest([
+                            ['SELECT', 'SURVEY', {}],
+                            ['UPDATE', 'SURVEY_SETTINGS', { isSurveyNew: loadedFile.isSurveyNew, isCloud: loaderType === 'cloud' || loaderType === 'cloudTemplate', originalHash: loadedFile.hash, fileName: fileName, cloudId: loadedFile.cloudId, lastSync: loadedFile.isSurveyNew ? null : currentTime }]
+                        ])
+                        if (request.status === 200)
                             return {
                                 status: 200,
-                                name: survey.result.name,
+                                name: request.result[0].name,
                                 fileName: fileName,
                                 syncTime: loadedFile.isSurveyNew ? null : currentTime,
                                 isCloud: loaderType === 'cloud' || loaderType === 'cloudTemplate',
@@ -188,12 +189,14 @@ export const createSurvey = async (name, isCloud, technician = 'Wade Watts') => 
             return isLoaded
         }
         else {
-            const survey = await sendRequest('INSERT', 'SURVEY', { uid: idGen(), name: name, technician: technician })
-            const potentialTypes = await sendRequest('INSERT', 'POTENTIAL_TYPE', potentialFields.map(f => ({ ...f, uid: idGen() })))
-            const pipeId = await sendRequest('INSERT', 'PIPELINE', { uid: idGen(), timeCreated: Date.now(), name: 'Pipeline', timeModified: Date.now() })
-            const refCellId = await sendRequest('INSERT', 'REFERENCE_CELL', { uid: idGen(), mainReference: 1, name: 'RC1', rcType: 0 })
-            const settings = await sendRequest('UPDATE', 'SURVEY_SETTINGS', { isSurveyNew: 1, isCloud: isCloud, originalHash: null, fileName: null, cloudId: null, lastSync: null })
-            if (survey.status === 200 && pipeId.status === 200 && refCellId.status === 200 && settings.status === 200 && potentialTypes.status === 200)
+            const request = await sendCombinedRequest([
+                ['INSERT', 'SURVEY', { uid: idGen(), name: name, technician: technician }],
+                ...potentialFields.map(f => (['INSERT', 'POTENTIAL_TYPE', { ...f, uid: idGen() }])),
+                ['INSERT', 'PIPELINE', { uid: idGen(), timeCreated: Date.now(), name: 'Pipeline', timeModified: Date.now() }],
+                ['INSERT', 'REFERENCE_CELL', { uid: idGen(), mainReference: 1, name: 'RC1', rcType: 0 }],
+                ['UPDATE', 'SURVEY_SETTINGS', { isSurveyNew: 1, isCloud: isCloud, originalHash: null, fileName: null, cloudId: null, lastSync: null }]
+            ])
+            if (request.status === 200)
                 return {
                     status: 200,
                     syncTime: null,

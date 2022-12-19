@@ -6,7 +6,7 @@ import { updateViewProperty } from '../../store/actions/item'
 import fieldValidation from '../../helpers/validation'
 import Input from '../../components/Input'
 import { genRequestObject, parseToFloat, unitConverter } from '../../helpers/functions'
-import { sendRequest } from '../../api/database/index'
+import { sendCombinedRequest } from '../../api/database/index'
 import { primary } from '../../styles/colors'
 import { errorHandler } from '../../helpers/error_handler'
 
@@ -25,23 +25,19 @@ const InputField = (props) => {
         setValid(validate.valid)
         if (validate.valid) {
             const newTime = Date.now()
-            if (property === 'potential') {
-                const updatePotRequest = await sendRequest('UPDATE', 'POTENTIAL', [{ potentialId: potentialId, potentialObject: { value: unitConverter(value, potentialUnit.main, 'V'), unit: potentialUnit.main } }])
-                if (updatePotRequest.status === 200 && componentMounted.current)
-                    setText(validate.value)
-                else errorHandler(623)
+            const request = [
+                ['UPDATE', dataTypeItem + '_PROPERTY', { ...genRequestObject(dataTypeItem, itemId), property: 'timeModified', value: newTime }],
+                property === 'potential' ?
+                    ['UPDATE', 'POTENTIAL', { potentialId: potentialId, potentialObject: { value: unitConverter(value, potentialUnit.main, 'V'), unit: potentialUnit.main } }] :
+                    //Important! input field only works for float values, if need TEXT change stuff
+                    ['UPDATE', dataTypeSubitem + '_PROPERTY', { ...genRequestObject(dataTypeSubitem, subitemId), property: property, value: parseToFloat(validate.value) }]
+            ]
+            const update = await sendCombinedRequest(request)
+            if (update.status === 200) {
+                setText(validate.value)
+                dispatch(updateViewProperty(newTime, 'timeModified'))
             }
-            else {
-                const updatePropRequest = await sendRequest('UPDATE', dataTypeSubitem + '_PROPERTY', { ...genRequestObject(dataTypeSubitem, subitemId), property: property, value: parseToFloat(validate.value) }) //Important! input field only works for float values, if need TEXT change stuff
-                if (updatePropRequest.status === 200) {
-                    if (componentMounted.current)
-                        setText(validate.value)
-                }
-                else errorHandler(623)
-            }
-            await sendRequest('UPDATE', dataTypeItem + '_PROPERTY', { ...genRequestObject(dataTypeItem, itemId), property: 'timeModified', value: newTime })
-            //fail silently
-            dispatch(updateViewProperty(newTime, 'timeModified'))
+            else errorHandler(623)
             if (onEndEditing)
                 onEndEditing(validate.value)
         }

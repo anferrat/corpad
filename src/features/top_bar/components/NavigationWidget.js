@@ -4,19 +4,16 @@ import { Text, Icon } from '@ui-kitten/components'
 import Geolocation from 'react-native-geolocation-service'
 import { useSelector } from 'react-redux'
 import { useFocusEffect } from '@react-navigation/core'
-import SingleIconButton from '../../components/IconButton'
+import SingleIconButton from '../../../components/IconButton'
 import * as Sensors from "react-native-sensors"
-import { errorHandler } from '../../helpers/error_handler'
-import { coordTransform, getDistance } from '../../helpers/functions'
-import { primary } from '../../styles/colors'
-import { hapticKeyboardPress } from '../../native_libs/haptics'
+import { errorHandler } from '../../../helpers/error_handler'
+import { coordTransform, getDistance } from '../../../helpers/functions'
+import { primary } from '../../../styles/colors'
+import { hapticKeyboardPress } from '../../../native_libs/haptics'
 //import NavigationWidgetModal from '../../components/NavigationWidgetModal'
 
 
 const twoPi = Math.PI * 2
-const R = 6371e3
-const PiOver180 = Math.PI / 180
-
 
 Sensors.setUpdateIntervalForType(Sensors.SensorTypes['orientation'], 50)
 

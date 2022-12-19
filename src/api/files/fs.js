@@ -265,9 +265,9 @@ export const scanFile = async (filepath) => {
 
 
 export const test = async () => {
-    console.log((await RNFS.readDir(myFolder)).map(d => d.name))
+    //console.log((await RNFS.readDir(myFolder)).map(d => d.name))
 }
 
 export const resetFolder = async () => {
-    console.log((await RNFS.unlink(myFolder + '/surveys')))
+    //console.log((await RNFS.unlink(myFolder + '/surveys')))
 }

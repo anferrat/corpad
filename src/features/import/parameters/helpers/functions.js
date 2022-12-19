@@ -1,7 +1,10 @@
-export const getData = (state, property, subitemIndex) => {
-    const isItem = subitemIndex === null || !subitemIndex
+export const getData = (state, property, subitemIndex, potentialIndex) => {
+    const isItem = subitemIndex === null || subitemIndex === undefined
+    const isPotential = potentialIndex !== null
     if (isItem)
         return state.importData.item[property]
+    if (isPotential)
+        return state.importData.subitems[subitemIndex].potentials[potentialIndex]
     else return state.importData.subitems[subitemIndex][property]
 }
 

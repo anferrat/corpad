@@ -15,7 +15,6 @@ const displayTitle = (title) => <Text
 
 const PotentialField = (props) => {
     const [text, setText] = useState(props.value)
-
     useEffect(() => {
         if (text !== props.value)
             setText(props.value)
@@ -23,7 +22,7 @@ const PotentialField = (props) => {
 
     const unit = React.useMemo(() => ({
         main: props.unit,
-        script: referenceCellCodes[props.refCell?.rcType]
+        script: referenceCellCodes[props.referenceCellType]
     }), [])
 
     const removeButton = React.useMemo(() => <View style={styles.button}>
@@ -43,7 +42,7 @@ const PotentialField = (props) => {
                 selectTextOnFocus={true}
                 maxLength={7}
                 textAlign='center'
-                hintTitle={props.refCell.name ?? 'Error'}
+                hintTitle={props.referenceCellName}
                 hintIcon='RE'
                 value={text}
                 valid={props.valid}

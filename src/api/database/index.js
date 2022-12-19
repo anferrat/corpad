@@ -1,6 +1,4 @@
 import SQLite from 'react-native-sqlite-storage'
-import { defaultNames } from '../../constants/constants'
-
 
 //TABLES AND FIELDS ARE USED FOR EXPORTING DATABASE. MAKE SURE TO UPDATE THEM WHEN ADDING MORE FIELDS TO THE TABLE. ORDER MATTERS!
 export const tables = ['survey', 'testPoints', 'rectifiers', 'pipelines', 'potentialTypes', 'referenceCells', 'cards', 'potentials', 'circuits', 'sides']
@@ -43,20 +41,71 @@ const convertArrayToColumList = (array) => array.length === 0 ? "()" : ',' + arr
 
 const rowToArray = (object, fields) => fields.map(f => object[f] ?? null)
 
+//yeah I know... works like magic though up to 1000000 index
+const natSortASC = ` ORDER BY 
+(CASE
+WHEN (CAST(name AS INTEGER)==0 AND substr(name, 1) <> '0') THEN NULL
+ELSE CAST(name AS INTEGER)
+END) ASC NULLS LAST,
+(CASE
+WHEN (name IS NULL) OR (length(name)==1) OR ((CAST(substr(name, -1) AS INTEGER)==0) AND substr(name, -1) <> '0' ) THEN NULL
+WHEN ((CAST(substr(name, -2) AS INTEGER)==0) AND (substr(name, -2) <>'00')) THEN substr(name, 1, length(name)-1) COLLATE NOCASE
+WHEN ((CAST(substr(name, -3) AS INTEGER)==0) AND (substr(name, -3) <>'000')) THEN substr(name, 1, length(name)-2) COLLATE NOCASE
+WHEN ((CAST(substr(name, -4) AS INTEGER)==0) AND (substr(name, -4) <>'0000')) THEN substr(name, 1, length(name)-3) COLLATE NOCASE
+WHEN ((CAST(substr(name, -5) AS INTEGER)==0) AND (substr(name, -5) <>'00000')) THEN substr(name, 1, length(name)-4) COLLATE NOCASE
+WHEN ((CAST(substr(name, -6) AS INTEGER)==0) AND (substr(name, -6) <>'000000')) THEN substr(name, 1, length(name)-5) COLLATE NOCASE
+ELSE substr(name, 1, length(name)-6) COLLATE NOCASE
+END),
+(CASE
+WHEN ((CAST(substr(name, -1) AS INTEGER)==0) AND substr(name, -1) <> '0' ) THEN NULL
+WHEN ((CAST(substr(name, -2) AS INTEGER)==0) AND (substr(name, -2) <>'00')) THEN CAST(substr(name, -1) AS INTEGER)
+WHEN ((CAST(substr(name, -3) AS INTEGER)==0) AND (substr(name, -3) <>'00')) THEN CAST(substr(name, -2) AS INTEGER)
+WHEN ((CAST(substr(name, -4) AS INTEGER)==0) AND (substr(name, -4) <>'00')) THEN CAST(substr(name, -3) AS INTEGER)
+WHEN ((CAST(substr(name, -5) AS INTEGER)==0) AND (substr(name, -5) <>'00')) THEN CAST(substr(name, -4) AS INTEGER)
+WHEN ((CAST(substr(name, -6) AS INTEGER)==0) AND (substr(name, -6) <>'00')) THEN CAST(substr(name, -5) AS INTEGER)
+ELSE CAST(substr(name, -6) AS INTEGER)
+END) NULLS FIRST,
+name
+`
+const natSortDESC = ` ORDER BY 
+(CASE
+    WHEN (CAST(name AS INTEGER)==0 AND substr(name, 1) <> '0') THEN NULL
+    ELSE CAST(name AS INTEGER)
+    END) DESC NULLS FIRST, 
+(CASE
+WHEN (name IS NULL) OR (length(name)==1) OR ((CAST(substr(name, -1) AS INTEGER)==0) AND substr(name, -1) <> '0' ) THEN NULL
+WHEN ((CAST(substr(name, -2) AS INTEGER)==0) AND (substr(name, -2) <>'00')) THEN substr(name, 1, length(name)-1) COLLATE NOCASE 
+WHEN ((CAST(substr(name, -3) AS INTEGER)==0) AND (substr(name, -3) <>'000')) THEN substr(name, 1, length(name)-2) COLLATE NOCASE
+WHEN ((CAST(substr(name, -4) AS INTEGER)==0) AND (substr(name, -4) <>'0000')) THEN substr(name, 1, length(name)-3) COLLATE NOCASE
+WHEN ((CAST(substr(name, -5) AS INTEGER)==0) AND (substr(name, -5) <>'00000')) THEN substr(name, 1, length(name)-4) COLLATE NOCASE
+WHEN ((CAST(substr(name, -6) AS INTEGER)==0) AND (substr(name, -6) <>'000000')) THEN substr(name, 1, length(name)-5) COLLATE NOCASE
+ELSE substr(name, 1, length(name)-6) COLLATE NOCASE
+END) DESC,
+(CASE
+WHEN ((CAST(substr(name, -1) AS INTEGER)==0) AND substr(name, -1) <> '0' ) THEN NULL
+WHEN ((CAST(substr(name, -2) AS INTEGER)==0) AND (substr(name, -2) <>'00')) THEN CAST(substr(name, -1) AS INTEGER)
+WHEN ((CAST(substr(name, -3) AS INTEGER)==0) AND (substr(name, -3) <>'00')) THEN CAST(substr(name, -2) AS INTEGER)
+WHEN ((CAST(substr(name, -4) AS INTEGER)==0) AND (substr(name, -4) <>'00')) THEN CAST(substr(name, -3) AS INTEGER)
+WHEN ((CAST(substr(name, -5) AS INTEGER)==0) AND (substr(name, -5) <>'00')) THEN CAST(substr(name, -4) AS INTEGER)
+WHEN ((CAST(substr(name, -6) AS INTEGER)==0) AND (substr(name, -6) <>'00')) THEN CAST(substr(name, -5) AS INTEGER)
+ELSE CAST(substr(name, -6) AS INTEGER)
+END) DESC,
+name DESC
+`
+
 
 const getTestPointSortingQuery = (sorting, lat, lon) => {
     switch (sorting) {
-        //somewhat natsort. couldn't manage to find a better way
         case 0:
-            return ' ORDER BY CAST(trim(substr(name, 1, 4)) AS INTEGER), CAST(trim(substr(name, 1, 3)) AS INTEGER), CAST(trim(substr(name, 1, 2)) AS INTEGER), CAST(substr(name, 1, 1) AS INTEGER), substr(name, 1, 1), substr(name, 2, 1), CAST(trim(substr(name, - 4, 4)) AS INTEGER), CAST(trim(substr(name, - 3, 3)) AS INTEGER), CAST(trim(substr(name, - 2, 2)) AS INTEGER), CAST(substr(name, - 1, 1) AS INTEGER)'
+            return natSortASC //'ORDER BY CAST(name AS INTEGER), CAST(trim(substr(name, 1, 4)) AS INTEGER), CAST(trim(substr(name, 1, 3)) AS INTEGER), CAST(trim(substr(name, 1, 2)) AS INTEGER), CAST(substr(name, 1, 1) AS INTEGER), substr(name, 1, 1), substr(name, 2, 1), CAST(trim(substr(name, - 4, 4)) AS INTEGER), CAST(trim(substr(name, - 3, 3)) AS INTEGER), CAST(trim(substr(name, - 2, 2)) AS INTEGER), CAST(substr(name, - 1, 1) AS INTEGER)'
         case 1:
-            return ' ORDER BY CAST(trim(substr(name, 1, 4)) AS INTEGER) DESC, CAST(trim(substr(name, 1, 3)) AS INTEGER) DESC, CAST(trim(substr(name, 1, 2)) AS INTEGER) DESC, CAST(substr(name, 1, 1) AS INTEGER) DESC, substr(name, 1, 1) DESC, substr(name, 2, 1) DESC, CAST(trim(substr(name, - 4, 4)) AS INTEGER) DESC, CAST(trim(substr(name, - 3, 3)) AS INTEGER) DESC, CAST(trim(substr(name, - 2, 2)) AS INTEGER) DESC, CAST(substr(name, - 1, 1) AS INTEGER) DESC'
+            return natSortDESC //' ORDER BY name COLLATE NATURALNOCASE ASC'//' ORDER BY CAST(name AS INTEGER), CAST(trim(substr(name, 1, 4)) AS INTEGER) DESC, CAST(trim(substr(name, 1, 3)) AS INTEGER) DESC, CAST(trim(substr(name, 1, 2)) AS INTEGER) DESC, CAST(substr(name, 1, 1) AS INTEGER) DESC, substr(name, 1, 1) DESC, substr(name, 2, 1) DESC, CAST(trim(substr(name, - 4, 4)) AS INTEGER) DESC, CAST(trim(substr(name, - 3, 3)) AS INTEGER) DESC, CAST(trim(substr(name, - 2, 2)) AS INTEGER) DESC, CAST(substr(name, - 1, 1) AS INTEGER) DESC'
         case 2:
             return ' ORDER BY timeModified DESC'
         case 3:
             return ' ORDER BY timeModified ASC'
         case 4:
-            return ' ORDER BY IFNULL(((latitude-' + lat + ')*(latitude-' + lat + ')) + ((longitude - ' + lon + ')*(longitude - ' + lon + ')),100000) ASC'
+            return ' ORDER BY ((latitude-' + lat + ')*(latitude-' + lat + ')) + ((longitude - ' + lon + ')*(longitude - ' + lon + ')) ASC NULLS LAST'
         default: ''
     }
 }
@@ -247,7 +296,7 @@ const generateQuery = (QUERY_TYPE, DATA_TYPE, data) => {
                         }
                     }
                 case 'POTENTIALS':
-                    return { query: 'SELECT potentials.id, potentials.uid, potentials.value, potentials.type, potentials.unit, potentials.portableReferenceId, potentials.permanentReferenceId, potentialTypes.name FROM potentials LEFT JOIN potentialTypes ON potentials.type = potentialTypes.id WHERE potentials.cardId = ?', varArray: [data.cardId] }
+                    return { query: 'SELECT potentials.id, potentials.uid, potentials.value, potentials.type AS potentialTypeId, potentials.unit, potentials.portableReferenceId, potentials.permanentReferenceId, potentialTypes.name FROM potentials LEFT JOIN potentialTypes ON potentials.type = potentialTypes.id WHERE potentials.cardId = ?', varArray: [data.cardId] }
                 case 'CARDS':
                     return { query: 'SELECT * FROM cards WHERE testPointId = ?', varArray: [data.testPointId] }
                 case 'CARD_LIST':
@@ -478,6 +527,7 @@ const runQuery = async (transaction, query, params) => {
             },
             (_, err) => {
                 reject(err)
+
             }
         )
     })
@@ -576,6 +626,7 @@ export const sendRequest = async (QUERY_TYPE, DATA_TYPE, payload = {}) => {
             }
         }
         catch (er) {
+            //console.log(er)
             return {
                 status: 600
             }
@@ -593,7 +644,7 @@ export const sendCombinedRequest = async (arrayOfRequests) => {
     if (Array.isArray(arrayOfRequests)) {
         const query = arrayOfRequests.map(request => generateQuery(request[0], request[1], request[2])).filter(q => q)
         if (query.length !== arrayOfRequests.length) {
-            console.log(`Number of queries (${query.length}) doesn't macth with number of requests (${arrayOfRequests.length}). Some queries are invalid`)
+            //console.log(`Number of queries (${query.length}) doesn't macth with number of requests (${arrayOfRequests.length}). Some queries are invalid`)
             return {
                 status: 600,
             }
@@ -607,7 +658,7 @@ export const sendCombinedRequest = async (arrayOfRequests) => {
                 }
             }
             catch (er) {
-                console.log(er)
+                //console.log(er)
                 return {
                     status: 600
                 }
@@ -619,7 +670,7 @@ export const sendCombinedRequest = async (arrayOfRequests) => {
     }
 }
 
-//functions below needs to be reformatted, through sendRequest or sendMultipleRequest functions and moved to json folder. 
+//functions below needs to be reformatted, through sendRequest or sendCombinedRequest functions and moved to json folder. 
 
 export const importJSON = async (content) => {
     // fast import - should work in 99% of cases
@@ -769,49 +820,6 @@ export const exportJSON = async () => {
         }
     }
 }
-
-
-// for use on app load
-export const initDataBase = async () => {
-    //create tables if not exists
-    await sendRequest('INIT', '', [
-        { table: 'testPoints' },
-        { table: 'survey' },
-        { table: 'pipelines' },
-        { table: 'cards' },
-        { table: 'potentials' },
-        { table: 'referenceCells' },
-        { table: 'circuits' },
-        { table: 'rectifiers' },
-        { table: 'defaultNames' },
-        { table: 'settings' },
-        { table: 'calculators' },
-        { table: 'potentialTypes' },
-        { table: 'sides' }])
-
-    //check if defaults names are presented and 
-    const defaultNamesFromDb = await sendRequest('SELECT', 'DEFAULT_NAME_TYPES')
-    if (defaultNamesFromDb.status === 200) {
-        const isRefreshNeeded = defaultNames.some(defName => defaultNamesFromDb.result.indexOf(defName.property) === -1)
-        if (isRefreshNeeded) {
-            await sendRequest('DROP', '', { table: 'defaultNames' })
-            await sendRequest('INIT', '', { table: 'defaultNames' })
-            await sendRequest('INSERT', 'DEFAULT_NAME', defaultNames.map(d => ({ type: d.property, name: d.name })))
-        }
-    }
-
-    const settings = await sendRequest('SELECT', 'SETTINGS')
-    const defaultOnboarding = JSON.stringify({ main: true, editTestPoint: true, map: true, editBond: true, editReferenceCell: true, potentialTypes: true, versionUpdating: null })
-    if (settings.status !== 200) {
-        const update = await sendRequest('INSERT', 'SETTINGS', { pipelineNameAsDefault: true, defaultPotentialUnit: 0, autoCreatePotentials: 1, onboarding: defaultOnboarding })
-        if (update.status === 200)
-            return defaultOnboarding
-        else return null
-    }
-    return settings.result.onboarding
-}
-
-
 
 /*
 

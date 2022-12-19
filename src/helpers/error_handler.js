@@ -39,6 +39,7 @@ const warningCodes = {
     56: 'Are you sure you want to delete this reading?',
     57: 'Are you sure you want to delete this circuit?',
     58: 'Are you sure you want to delete this item?',
+    59: 'Are you sure you want to delete this import setting?',
 }
 
 const errorCodes = {
@@ -83,6 +84,7 @@ const errorCodes = {
     510: 'Select values from the list to add map.',
     511: 'All property values were mapped. Remove existing mapped values from the list to add more.',
     512: 'Name property must not contain special characters or be empty.',
+    513: 'Error while parsing csv file. Make sure your csv file formatted correctly.',
     600: 'Invalid request. Unable to make changes in database. Please try again later.',
     601: 'Unable to delete item.',
     602: `There was an error while loading readings, ${tip}`,

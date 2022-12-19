@@ -9,50 +9,53 @@ import MainMenuTitle from './MainMenuTitle'
 import ViewTitle from './ViewTitle'
 import EditTitle from './EditTitle'
 import CloudButton from './CloudButton'
+import NavigationWidget from './NavigationWidget'
 
 const TopBarBase = ({ left, right, title, isPrimary, navigation, noBorder }) => {
     const topBarStyle = isPrimary ? styles.primaryStyle : styles.defaultStyle
     const borderStyle = noBorder ? {} : styles.borderStyle
     return (
-            <View style={{ ...styles.topBar, ...topBarStyle, ...borderStyle }} >
-                <StatusBar
-                    barStyle={isPrimary ? 'light-content' : 'dark-content'}
-                    translucent={true}
-                    backgroundColor='transparent' />
-                <View style={styles.leftRow}>
-                    <LeftSide
-                        navigation={navigation}
-                        left={left}
-                        isPrimary={isPrimary} />
-                    <Title
-                        isPrimary={isPrimary}
-                        title={title} />
-                </View>
-                <View style={styles.rightRow}>
-                    <RightSide
-                        right={right}
-                        isPrimary={isPrimary} />
-                </View>
+        <View style={{ ...styles.topBar, ...topBarStyle, ...borderStyle }} >
+            <StatusBar
+                barStyle={isPrimary ? 'light-content' : 'dark-content'}
+                translucent={true}
+                backgroundColor='transparent' />
+            <View style={styles.leftRow}>
+                <LeftSide
+                    navigation={navigation}
+                    left={left}
+                    isPrimary={isPrimary} />
+                <Title
+                    isPrimary={isPrimary}
+                    title={title} />
             </View>
+            <View style={styles.rightRow}>
+                <RightSide
+                    right={right}
+                    isPrimary={isPrimary} />
+            </View>
+        </View>
     )
 }
 const RightSide = ({ right, isPrimary }) => {
     if (right !== null && Array.isArray(right) && right?.length > 0)
         return right.map((icon, index) => {
             if (icon?.cloudButton)
-                return (
-                    <CloudButton
-                        key={`Left_side_icon_${index}`} />
-                )
+                return <CloudButton
+                    key={`Left_side_icon_${index}`} />
             else
-                return (
-                    <IconButton
-                        key={`Left_side_icon_${index}`}
-                        iconName={icon.icon}
-                        pack={icon?.pack}
-                        onPress={icon.onPress}
-                        color={isPrimary ? control : primary}
-                    />)
+                if (icon?.navigationWidget)
+                    return <NavigationWidget
+                        key={`Left_side_icon_${index}`} />
+                else
+                    return (
+                        <IconButton
+                            key={`Left_side_icon_${index}`}
+                            iconName={icon.icon}
+                            pack={icon?.pack}
+                            onPress={icon.onPress}
+                            color={isPrimary ? control : primary}
+                        />)
         })
     else
         return null

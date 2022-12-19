@@ -8,7 +8,7 @@ const AddButton = ({ showModal, itemType, onSelect }) => {
     if (itemType === 'TEST_POINT' || itemType === 'RECTIFIER')
         return (
             <Button
-                onPress={itemType === 'TEST_POINT' ? showModal : onSelect}
+                onPress={itemType === 'TEST_POINT' ? showModal : onSelect.bind(this, 'CT')}
                 appearance='ghost'
                 style={styles.button}
                 size='medium'

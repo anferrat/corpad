@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from "react"
 import { View, StyleSheet, ScrollView } from "react-native"
 import PotentialListItem from "./components/PoitentialListItem"
-import { sendRequest } from "../../../api/database/index"
+import { sendCombinedRequest, sendRequest } from "../../../api/database/index"
 import NewPotentialInput from "./NewPotentialInput"
 import DefaultUnit from "./DefaultUnit"
 import AutoCreatePotentials from "./AutoCreatePotentials"
@@ -22,14 +22,13 @@ const Potentials = (props) => {
     const fetchFields = React.useCallback(async () => {
         setIsLoading(true)
         componentMounted.current = true
-        const data = await sendRequest('SELECT', 'POTENTIAL_TYPES', {})
-        const settings = (await sendRequest('SELECT', 'SETTINGS', {}))
-        if (data.status === 200 && settings.status === 200) {
+        const data = await sendCombinedRequest([['SELECT', 'POTENTIAL_TYPES', {}], ['SELECT', 'SETTINGS', {}]])
+        if (data.status === 200) {
             if (componentMounted.current) {
-                setPotentialFields(data.result)
-                setDefaultUnit(settings.result?.defaultPotentialUnit ?? 0)
+                setPotentialFields(data.result[0])
+                setDefaultUnit(data.result[1]?.defaultPotentialUnit ?? 0)
                 setIsLoading(false)
-                setAutoCreate(settings.result?.autoCreatePotentials ?? 0)
+                setAutoCreate(data.result[1]?.autoCreatePotentials ?? 0)
             }
         }
         else

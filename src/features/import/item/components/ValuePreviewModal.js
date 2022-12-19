@@ -1,10 +1,10 @@
 import React, { useState } from 'react'
 import { Popover, Text } from '@ui-kitten/components'
 import { View, StyleSheet } from 'react-native'
-import { genKey, getPreviewList, showItemValue } from '../helpers/functions'
+import { getPreviewList, showItemValue } from '../helpers/functions'
 import IconButton from '../../../../components/IconButton'
 import FileBadge from './FileBadge'
-import { basic, basic200 } from '../../../../styles/colors'
+import { basic200 } from '../../../../styles/colors'
 
 
 const ValuePreviewModal = ({ data, fields, fieldIndex, fieldIndexList, importType }) => {
@@ -42,7 +42,7 @@ const ValuePreviewModal = ({ data, fields, fieldIndex, fieldIndexList, importTyp
                         ellipsizeMode={'tail'}
                         category='s2'
                         appearance='hint'
-                        key={genKey(item, index)}>
+                        key={index}>
                         {showItemValue(item)}
                     </Text>)}
                 {data.length > previewDataList.length ?

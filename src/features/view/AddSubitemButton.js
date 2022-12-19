@@ -1,11 +1,8 @@
 import React, { useState } from 'react'
 import { AddReadingModal } from '../../components/AddReadingModal'
 import ControlButton from './components/ControlButton'
-import idGen from '../../helpers/id_generator'
-import { sendRequest } from '../../api/database/index'
 import { errorHandler } from '../../helpers/error_handler'
-import { testPointReadingsWithPotentials, potentialFields, potentialUnits } from '../../constants/constants'
-import { verifyTypes } from '../../helpers/functions'
+import { addSubitem } from '../../services/database/addSubitem'
 
 
 const AddSubitemButton = ({ itemId, itemType, navigateToSubitem }) => {
@@ -14,21 +11,10 @@ const AddSubitemButton = ({ itemId, itemType, navigateToSubitem }) => {
     const hideModal = React.useCallback(() => setVisible(false), [])
 
     const onSelectHandler = React.useCallback(async (cardType) => {
-        const settings = await sendRequest('SELECT', 'SETTINGS', {})
-        const subitemId = (itemType === 'TEST_POINT') ?
-            await sendRequest('INSERT', 'CARD', { uid: idGen(), testPointId: itemId, type: cardType })
-            :
-            await sendRequest('INSERT', 'CIRCUIT', { uid: idGen(), rectifierId: itemId })
-        if (settings.status === 200 && subitemId.status === 200) {
-            if (!!settings.result.autoCreatePotentials && itemType === 'TEST_POINT')
-                if (verifyTypes(cardType, testPointReadingsWithPotentials)) {
-                    //if unable to insert default potentials - fail silently
-                    await sendRequest('INSERT', 'POTENTIAL_BY_TYPE', { cardId: subitemId.result, uid: idGen(), permType: potentialFields[0].permType, unit: potentialUnits[settings.result.defaultPotentialUnit] })
-                    await sendRequest('INSERT', 'POTENTIAL_BY_TYPE', { cardId: subitemId.result, uid: idGen(), permType: potentialFields[1].permType, unit: potentialUnits[settings.result.defaultPotentialUnit] })
-                }
-            navigateToSubitem(subitemId.result, true, itemType === 'TEST_POINT' ? cardType : 'CT')
-        }
-        else errorHandler(606)
+        const request = await addSubitem(itemType, itemId, cardType)
+        if (request.status === 200)
+            navigateToSubitem(request.result.subitemId, true, request.result.subitemType)
+        else errorHandler(request.status)
     }, [itemType, itemId])
 
     if (itemType === 'TEST_POINT' || itemType === 'RECTIFIER')
@@ -37,7 +23,7 @@ const AddSubitemButton = ({ itemId, itemType, navigateToSubitem }) => {
                 <ControlButton
                     label='Add'
                     icon='plus-circle'
-                    onPress={itemType === 'TEST_POINT' ? showModal : onSelectHandler} />
+                    onPress={itemType === 'TEST_POINT' ? showModal : onSelectHandler.bind(this, 'CT')} />
                 <AddReadingModal
                     visible={visible}
                     hideModal={hideModal}

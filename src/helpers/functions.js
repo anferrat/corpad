@@ -614,3 +614,33 @@ export const getDistance = (d) => {
     else if (dR > 100000)
         return '> 100 km'
 }
+
+export const getDefaultUnit = (unitList, defaultUnitIndex, extraData=[], referenceCellIndex = undefined) => {
+    if (unitList.length === 0)
+        return null
+    else
+        if (referenceCellIndex !== undefined) {
+            const base = unitList[extraData?.defaultPotentialUnit] ?? unitList[0]
+            const rcType = extraData.referenceCellList[referenceCellIndex]?.rcType ?? 0
+            const sub = referenceCellCodes[rcType]
+            return {
+                main: base,
+                script: sub,
+                format: 'sub'
+            }
+        }
+        else {
+            // convertion last digit to superscript for display purposes, not ideal, but it's just easy
+            const unit = unitList[defaultUnitIndex]
+            if (unit) {
+                if (!isNaN(unit[unit.length - 1]))
+                    return {
+                        main: unit.slice(unit.length - 1),
+                        format: 'super',
+                        script: unit[unit.length - 1]
+                    }
+                else return unit
+            }
+            else return null
+        }
+}

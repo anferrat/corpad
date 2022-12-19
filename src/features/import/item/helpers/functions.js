@@ -5,12 +5,12 @@ export const emptyValueCheck = (value) => {
 }
 
 export const getDefaultNames = (state, property, subitemIndex) => {
-    const isItem = subitemIndex === null || !subitemIndex
+    const isItem = subitemIndex === null || subitemIndex === undefined
     if (state.importData.defaultNames.length !== 0) {
         if (isItem && property === 'name')
             return state.importData.defaultNames.find((n) => n.type === state.importData.itemType).name
         else if (!isItem && property === 'name')
-            return state.importData.defaultNames.find((n) => n.type === state.importData.subitems[subitemIndex].subitemType).name
+            return state.importData.defaultNames.find((n) => n.type === state.importData.subitems[subitemIndex].type).name
         else return null
     }
     else return null
@@ -18,22 +18,22 @@ export const getDefaultNames = (state, property, subitemIndex) => {
 
 const getParametersData = (parameter) => {
     return {
-        fieldIndex: parameter.fieldIndex,
-        itemList: parameter.itemList,
-        unit: parameter.unit,
-        unitList: parameter.unitList,
-        importType: parameter.importType,
-        parameterType: parameter.parameterType,
-        defaultValue: parameter.defaultValue,
-        fieldIndexList: parameter.fieldIndexList,
-        attributeCount: parameter.attributeMap?.length,
+        fieldIndex: parameter?.fieldIndex,
+        itemList: parameter?.itemList,
+        unit: parameter?.unit,
+        defaultUnitIndex: parameter?.defaultUnitIndex,
+        unitList: parameter?.unitList,
+        importType: parameter?.importType,
+        parameterType: parameter?.parameterType,
+        defaultValue: parameter?.defaultValue,
+        fieldIndexList: parameter?.fieldIndexList,
+        attributeCount: parameter?.attributeMap?.length,
     }
 }
 
 export const parameterComparison = (prev, next) => {
     return (
         prev.fieldIndex === next.fieldIndex &&
-        prev.unit === next.unit &&
         prev.importType === next.importType &&
         prev.defaultValue === next.defaultValue &&
         prev.fieldIndexList.every((f, i) => f === next.fieldIndexList[i]) &&
@@ -43,7 +43,7 @@ export const parameterComparison = (prev, next) => {
 }
 
 export const getData = (state, property, subitemIndex) => {
-    const isItem = subitemIndex === null || !subitemIndex
+    const isItem = subitemIndex === null || subitemIndex === undefined
     if (isItem)
         return getParametersData(state.importData.item[property])
     else return getParametersData(state.importData.subitems[subitemIndex][property])
@@ -129,8 +129,6 @@ export const getPreviewList = (data, fields, fieldIndex, fieldIndexList, importT
     else return []
 }
 
-export const genKey = (item, index) => `${item}_${Date.now()}${index}`
-
 export const showItemValue = (item) => (item === undefined || item === '' || item === null) ? '<Empty>' : item.trim()
 
 export const getButtonTitle = (itemType) => {
@@ -143,3 +141,42 @@ export const getButtonTitle = (itemType) => {
             return 'Add'
     }
 }
+
+
+export const getPotentialsData = (autoCreate, potentialTypes, referenceCellTypes) => {
+    const autoTypes = ['PERM_ON', 'PERM_OFF']
+    if (!autoCreate)
+        return {
+            autoCreate: autoCreate,
+            init: []
+        }
+    else {
+        return {
+            autoCreate: autoCreate,
+            init: autoTypes.map(type => [potentialTypes.findIndex(pt => pt.permType === type), referenceCellTypes.findIndex(rc => rc.mainReference)])
+                .filter(p => p[0] !== -1 && p[1] !== -1)
+        }
+    }
+}
+
+export const getSubitemType = (state, index, isNew) => {
+    if (isNew)
+        return state.importData.subitems[state.importData.subitems.length - 1]?.type
+    else return state.importData.subitems[index]?.type
+}
+
+export const getSubitemIndex = (state, index, isNew) => {
+    if (isNew)
+        return state.importData.subitems.length - 1
+    else return index
+}
+
+export const getSubitemProperty = (state, subitemIndex, property) => {
+    const errorValue = (property === 'potentials' ? [] : null)
+    if (subitemIndex !== null)
+        if (state.importData.subitems[subitemIndex])
+            return state.importData.subitems[subitemIndex][property] ?? errorValue
+        else return errorValue
+    else return errorValue
+
+} 
