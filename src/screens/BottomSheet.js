@@ -29,9 +29,9 @@ const BottomSheetContent = () => {
             closeSheet()
             return false
         })
-        const subscribeBlur = AppState.addEventListener("blur", () => {
+      /*  const subscribeBlur = AppState.addEventListener("blur", () => {
             closeSheet()
-        })
+        })*/
         const subscribeBackground = AppState.addEventListener("change", (nextState) => {
             if (nextState === 'background')
                 closeSheet()
@@ -39,7 +39,7 @@ const BottomSheetContent = () => {
         return () => {
             subscribeBack.remove()
             subscribeBackground.remove()
-            subscribeBlur.remove()
+           // subscribeBlur.remove()
         }
     }, [appState])
 
