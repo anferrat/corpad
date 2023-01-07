@@ -66,7 +66,7 @@ export const getSession = async () => {
             isSigned: false,
         }
     }
-    else netStatus
+    else return netStatus
 }
 
 export const signOut = async () => {
