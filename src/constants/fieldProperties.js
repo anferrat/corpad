@@ -1,5 +1,5 @@
 
-import { potentialUnits, currentUnits, statuses, testPointTypes, testPointTypeCodes, wireColorList, tapOptions, powerSourceList, pipeMaterials, pipeCoating, pipeProducts, wireGaugesList, anodeMaterialList, referenceCellTypes } from "./constants"
+import { potentialUnits, currentUnits, statuses, testPointTypes, testPointTypeCodes, wireColorList, tapOptions, powerSourceList, pipeMaterials, pipeCoating, pipeProducts, wireGaugesList, anodeMaterialList, referenceCellTypes, couponTypes } from "./constants"
 import { getColor } from "../styles/colors"
 import { npsList } from "./thicknessTable"
 
@@ -42,14 +42,21 @@ export const fieldProperties = {
     tapFine: new FieldProperty('Fine', '#', null, 'default', tapOptions, tapOptions.map(() => ({ icon: 'hash' }))),
     tapCoarse: new FieldProperty('Coarse', '#', null, 'default', tapOptions, tapOptions.map(() => ({ icon: 'hash' }))),
     powerSource: new FieldProperty('Power source', 'Select source', null, 'default', powerSourceList, []),
-    maxVoltage: new FieldProperty('DC Volts', '', 4, 'numeric', [], null),
-    maxCurrent: new FieldProperty('DC Apms', '', 4, 'numeric', [], null),
+    maxVoltage: new FieldProperty('DC Volts', null, 4, 'numeric', [], null),
+    maxCurrent: new FieldProperty('DC Apms', null, 4, 'numeric', [], null),
     current: new FieldProperty('Current', null, 4, 'numeric', [], null),
+    area: new FieldProperty('Area', null, 4, 'numeric', [], null),
+    couponType: new FieldProperty('Coupon type', 'Select type', null, 'default', couponTypes, []),
     voltageDrop: new FieldProperty('Voltage drop', null, 4, 'numeric', [], null),
+    factor: new FieldProperty('Shunt factor', null, 4, 'numeric', [], null),
     material: new FieldProperty('Material', 'Select material', null, 'default', pipeMaterials, []),
     coating: new FieldProperty('Coating', 'Select coating', null, 'default', pipeCoating, []),
     product: new FieldProperty('Product', 'Select product', null, 'default', pipeProducts, []),
     nps: new FieldProperty('NPS', 'Select pipe size', null, 'default', npsList, []),
     anodeMaterial: new FieldProperty('Anode material', 'Select material', null, 'default', anodeMaterialList, []),
-    rcType: new FieldProperty('Reference cell type', 'Select type', null, 'default', referenceCellTypes, [])
+    rcType: new FieldProperty('Reference cell type', 'Select type', null, 'default', referenceCellTypes, []),
+    shorted: new FieldProperty('Shorted', 'Select status', null, 'default', ['No', 'Yes'], []),
+    voltage: new FieldProperty('Voltage', null, 4, 'numeric', [], null),
+    targetMin: new FieldProperty('Current target (Min)', 'Min', 4, 'numeric', [], null),
+    targetMax: new FieldProperty('Current target (Max)', 'Max', 4, 'numeric', [], null),
 }

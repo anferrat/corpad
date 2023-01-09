@@ -35,7 +35,7 @@ const CNCard = (props) => {
                         itemsList={itemsList}
                         selectedItem={selectedItem}
                         placeholder="Disconnected"
-                        label='Pipeline lead' />
+                        label='Connected to' />
                 </View>
                 <View style={styles.rightSide}>
                     <SelectField

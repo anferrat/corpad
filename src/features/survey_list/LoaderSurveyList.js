@@ -160,16 +160,15 @@ const LoaderSurveyList = (props) => {
 
 
     return (
-        <>
-            {props.isCloud ? <SignOutRow /> : null}
-            <SectionList
-                ListEmptyComponent={refreshing ? <View /> : EmtyComponent}
-                keyExtractor={keyExtractor}
-                sections={data[0].data.length === 0 && data[1].data.length === 0 ? [] : data}
-                refreshing={refreshing}
-                onRefresh={refreshHandler}
-                renderItem={renderItem} />
-        </>)
+        <SectionList
+            ListHeaderComponent={props.isCloud ? <SignOutRow /> : null}
+            ListEmptyComponent={refreshing ? <View /> : EmtyComponent}
+            keyExtractor={keyExtractor}
+            sections={data[0].data.length === 0 && data[1].data.length === 0 ? [] : data}
+            refreshing={refreshing}
+            onRefresh={refreshHandler}
+            renderItem={renderItem} />
+    )
 }
 
 export default LoaderSurveyList

@@ -1,4 +1,4 @@
-import { testPointTypes, statusInfo, powerSourceList, tapOptions, pipeCoating, pipeDiameterList, pipeMaterials, pipeProducts, wireColorList, wireGaugesList, anodeMaterialList, isolationAssemblyTypes, referenceCellTypes, areaUnits, currentUnits, currentDensityUnits, potentialUnits } from '../../../constants/constants'
+import { testPointTypes, statusInfo, powerSourceList, tapOptions, pipeCoating, pipeDiameterList, pipeMaterials, pipeProducts, wireColorList, wireGaugesList, anodeMaterialList, isolationAssemblyTypes, referenceCellTypes, areaUnits, currentUnits, currentDensityUnits, potentialUnits, couponTypes, factorUnits } from '../../../constants/constants'
 import { npsList } from '../../../constants/thicknessTable'
 import IdGen from '../../../helpers/id_generator'
 
@@ -54,10 +54,10 @@ const getPotentials = (autoCreate = false, initialPotentials = []) => {
     }
 }
 
-const getSides = () => ({
+const getSides = (fromAtoB = true) => ({
     sideA: [],
     sideB: [],
-    fromAtoB: true,
+    fromAtoB: fromAtoB,
 })
 
 export const getItem = (itemType) => {
@@ -86,8 +86,8 @@ export const getItem = (itemType) => {
                 tapValue: getParameter({}),
                 tapCoarse: getParameter({ parameterType: 1, itemList: tapOptions }),
                 tapFine: getParameter({ parameterType: 1, itemList: tapOptions }),
-                maxVoltage: getParameter({}),
-                maxCurrent: getParameter({}),
+                maxVoltage: getParameter({ unitList: [potentialUnits[3]] }),
+                maxCurrent: getParameter({ unitList: [currentUnits[1]] }),
             }
         case 'PIPELINE':
             return {
@@ -95,7 +95,7 @@ export const getItem = (itemType) => {
                 nps: getParameter({ parameterType: 1, itemList: npsList }),
                 licenseNumber: getParameter({}),
                 material: getParameter({ parameterType: 1, itemList: pipeMaterials }),
-                coating: getParameter({ parameterType: 1, itemList: pipeCoating }),
+                coating: getParameter({ parameterType: 1, itemList: pipeCoating, defaultValue: 0, importType: 0 }),
                 product: getParameter({ parameterType: 1, itemList: pipeProducts }),
                 comment: getParameter({ mergeAllowed: true }),
             }
@@ -129,8 +129,10 @@ export const getSubitem = (type, autoCreatePotentials = false, initialPotentials
         case 'CN':
             return {
                 ...getNameProps(type),
+                pipelineCardKey: null,
+                couponType: getParameter({ parameterType: 1, itemList: couponTypes }),
                 area: getParameter({ unitList: areaUnits, defaultUnitIndex: 0 }),
-                current: getParameter({ unitList: [currentUnits[0], currentUnits[1]], defaultUnitIndex: 0 }),
+                current: getParameter({ unitList: [currentUnits[0], currentUnits[1]], defaultUnitIndex: 0, unit: 0 }),
                 density: getParameter({ unitList: currentDensityUnits, defaultUnitIndex: 2 }),
                 ...getWireProps(),
                 ...getPotentials(autoCreatePotentials, initialPotentials)
@@ -143,15 +145,16 @@ export const getSubitem = (type, autoCreatePotentials = false, initialPotentials
         case 'IK':
             return {
                 ...getNameProps(type),
-                ...getSides(),
-                current: getParameter({ unitList: [currentUnits[2]] }),
+                ...getSides(null),
+                current: getParameter({ unitList: [currentUnits[2], currentUnits[1]], defaultUnitIndex: 0, unit: 0 }),
                 shorted: getParameter({ parameterType: 1, itemList: ['No', 'Yes'] }),
-                isolationType: getParameter({ parameterType: 1, itemList: isolationAssemblyTypes })
+                isolationType: getParameter({ parameterType: 1, itemList: isolationAssemblyTypes }),
             }
         case 'OT':
             return {
                 ...getNameProps(type),
-                ...getPotentials(autoCreatePotentials, initialPotentials)
+                ...getPotentials(autoCreatePotentials, initialPotentials),
+                ...getWireProps(),
             }
         case 'RS':
             return {
@@ -171,11 +174,8 @@ export const getSubitem = (type, autoCreatePotentials = false, initialPotentials
             return {
                 ...getNameProps(type),
                 ...getSides(),
-                ratioCurrent: null,
-                ratioVoltage: null,
+                factor: getParameter({ unitList: factorUnits, defaultUnitIndex: 0, unit: 0 }),
                 voltageDrop: getParameter({ unitList: [potentialUnits[1]] }),
-                factor: null,
-                factorSelected: false,
                 current: getParameter({ unitList: [currentUnits[1], currentUnits[2]], defaultUnitIndex: 1, unit: 1 }),
             }
         case 'CT':

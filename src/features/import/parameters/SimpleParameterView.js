@@ -88,43 +88,45 @@ const InputFieldParamaters = (props) => {
                         checked={importType === 0}>
                         Use fixed value for each imported item
                     </Radio>
-                    <InputField
-                        style={styles.field}
-                        unit={props.defaultUnit}
-                        placeholder={fieldProperties[props.property].placeholder}
-                        keyboardType={fieldProperties[props.property].keyboardType}
-                        disabled={importType !== 0}
-                        value={defaultValue}
-                        onChangeText={setDefaultValue}
-                        onEndEditing={validateDefaultValue}
-                        valid={valid} />
+                    <View style={importType !== 0 ? styles.hidden : styles.visible}>
+                        <InputField
+                            style={styles.field}
+                            unit={props.defaultUnit}
+                            placeholder={fieldProperties[props.property].placeholder}
+                            keyboardType={fieldProperties[props.property].keyboardType}
+                            disabled={importType !== 0}
+                            value={defaultValue}
+                            onChangeText={setDefaultValue}
+                            onEndEditing={validateDefaultValue}
+                            valid={valid} />
+                    </View>
                     <Radio
                         style={styles.radio}
                         onChange={fieldIndexImportType}
                         checked={importType === 1}>
                         Use values from a column in data file
                     </Radio>
-                    <View style={styles.selectView}>
-                        <SelectField
-                            style={styles.field}
-                            disabled={importType !== 1}
-                            placeholder={'Select data column'}
-                            itemList={props.fields}
-                            selectedIndex={fieldIndex}
-                            onSelect={setFieldIndex}
-                            accessory={fileIcon}
-                        />
-                        {unitList.length > 0 ?
+                    <View style={importType !== 1 ? styles.hidden : styles.visible}>
+                        <View style={styles.selectView}>
                             <SelectField
-                                style={styles.unitSelect}
-                                disabled={importType !== 1 || unitList.length === 1}
-                                placeholder={'Unit'}
-                                selectedIndex={unit}
-                                itemList={unitList}
-                                onSelect={setUnit}
-                            /> : null}
+                                style={styles.field}
+                                disabled={importType !== 1}
+                                placeholder={'Select data column'}
+                                itemList={props.fields}
+                                selectedIndex={fieldIndex}
+                                onSelect={setFieldIndex}
+                                accessory={fileIcon} />
+                            {unitList.length > 0 ?
+                                <SelectField
+                                    style={styles.unitSelect}
+                                    disabled={importType !== 1 || unitList.length === 1}
+                                    placeholder={'Unit'}
+                                    selectedIndex={unit}
+                                    itemList={unitList}
+                                    onSelect={setUnit} /> : null}
+                        </View>
+                        <Hint hidden={unitList.length === 0 || importType !== 1} text='Unit must match the one used in spreadsheet' />
                     </View>
-                    <Hint hidden={unitList.length === 0 || importType !== 1} text='Unit must match the one used in spreadsheet' />
                     {props.property === 'name' ?
                         <Radio
                             style={styles.radio}
@@ -140,14 +142,16 @@ const InputFieldParamaters = (props) => {
                                 checked={importType === 3}>
                                 Merge values from two or more columns in data file
                             </Radio>
-                            <MultiSelect
-                                disabled={importType !== 3}
-                                placeholder={'Select data columns'}
-                                style={styles.field}
-                                itemList={props.fields}
-                                selectedItems={fieldIndexList}
-                                onSelect={setFieldIndexList}
-                            />
+                            <View style={importType !== 3 ? styles.hidden : styles.visible}>
+                                <MultiSelect
+                                    disabled={importType !== 3}
+                                    placeholder={'Select data columns'}
+                                    style={styles.field}
+                                    itemList={props.fields}
+                                    selectedItems={fieldIndexList}
+                                    onSelect={setFieldIndexList}
+                                />
+                            </View>
                         </> : null}
 
                 </View>
@@ -163,6 +167,12 @@ const InputFieldParamaters = (props) => {
 export default React.memo(InputFieldParamaters, () => true)
 
 const styles = StyleSheet.create({
+    hidden: {
+        display: 'none'
+    },
+    visible: {
+        display: 'flex'
+    },
     field: {
         paddingBottom: 12,
         flex: 1
@@ -194,7 +204,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row'
     },
     unitSelect: {
-        flexBasis: 120,
+        flexBasis: 130,
         paddingLeft: 12
     }
 })

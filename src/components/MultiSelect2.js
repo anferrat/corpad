@@ -5,28 +5,36 @@ import { Select, SelectItem, IndexPath, Icon } from '@ui-kitten/components'
 
 const accessoryRender = (name, pack) => (props) => <Icon {...props} name={name} pack={pack} />
 
-const MultiSelectField = (props) => {
-    const selectList = React.useMemo(() => props.itemList.map((item, i) =>
+const MultiSelect = (props) => {
+    const {
+        itemList,
+        accessory,
+        accessoryList,
+        onSelect,
+        valid,
+        selectedItems,
+    } = props
+    const selectList = React.useMemo(() => itemList.map((item, i) =>
         <SelectItem
-            key={`${item.item  ?? item}-SelectItem`}
+            key={`${item.item ?? item}-SelectItem`}
             title={item.item ?? item}
-            accessoryRight={props.accessory ?
-                accessoryRender(props.accessory.name, props.accessory.pack) :
-                (props.accessoryList ?
-                    accessoryRender(props.accessoryList[i].name, props.accessoryList[i].pack) :
-                    null)} />), [props.itemList, props.accessoryList])
+            accessoryRight={accessory ?
+                accessoryRender(accessory.name, accessory.pack) :
+                (accessoryList ?
+                    accessoryRender(accessoryList[i].name, accessoryList[i].pack) :
+                    null)} />), [itemList, accessoryList])
 
-    const onSelect = React.useCallback((index) =>
-        props.onSelect(index.map(i => i.row)), [props.onSelect])
+    const onSelectAction = React.useCallback((index) =>
+        onSelect(index.map(i => i.row)), [onSelect])
 
     return (
         <Select
             multiSelect={true}
-            status={(props.valid ?? true) ? 'basic' : 'danger'}
+            status={(valid ?? true) ? 'basic' : 'danger'}
             {...props}
-            onSelect={onSelect}
-            value={getSelectedValue(props.selectedItems, props.itemList)}
-            selectedIndex={getSelectedIndex(props.selectedItems, props.itemList)}>
+            onSelect={onSelectAction}
+            value={getSelectedValue(selectedItems, itemList)}
+            selectedIndex={getSelectedIndex(selectedItems, itemList)}>
             {selectList}
         </Select>
     )
@@ -41,4 +49,4 @@ const getSelectedValue = (selectedItems, itemList) => (
     selectedItems.filter(selected => selected < itemList.length).map(selected => itemList[selected].item ?? itemList[selected]).join(', ')
 )
 
-export default React.memo(MultiSelectField)
+export default React.memo(MultiSelect)

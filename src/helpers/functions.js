@@ -635,9 +635,9 @@ export const getDefaultUnit = (unitList, defaultUnitIndex, extraData=[], referen
             if (unit) {
                 if (!isNaN(unit[unit.length - 1]))
                     return {
-                        main: unit.slice(unit.length - 1),
+                        main: unit.slice(0,unit.length - 1),
                         format: 'super',
-                        script: unit[unit.length - 1]
+                        script: unit.slice(-1)
                     }
                 else return unit
             }

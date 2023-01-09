@@ -3,9 +3,9 @@ import { StyleSheet, Pressable } from 'react-native'
 import { Layout, Icon, Text } from '@ui-kitten/components'
 import { basic } from '../../../../styles/colors'
 import { androidRipple } from '../../../../styles/styles'
-import { labels } from '../../../../constants/constants'
+import { getSubitemName } from '../helpers/functions'
 
-const SubitemListItem = ({ onPress, index, type }) => {
+const SubitemListItem = ({ onPress, index, type, typedIndex }) => {
     return (
         <Layout style={styles.card}>
             <Pressable
@@ -15,7 +15,7 @@ const SubitemListItem = ({ onPress, index, type }) => {
                 <Layout style={styles.leftSide}>
                     <Icon name={type} pack={'cp'} style={styles.icon} fill={basic} />
                     <Layout style={styles.textView}>
-                        <Text category='p1'>{labels[type].label ?? 'Error'}</Text>
+                        <Text category='p1'>{getSubitemName(type, typedIndex)}</Text>
                         <Text category='s2' appearance='hint'>{'Import settings'}</Text>
                     </Layout>
                 </Layout>
