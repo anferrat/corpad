@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useRef } from 'react'
+import React, { useContext } from 'react'
 import { StyleSheet, View } from 'react-native'
 import { useSelector, useDispatch } from 'react-redux'
 import { globalStyle } from '../../../../styles/styles'
@@ -19,9 +19,12 @@ const ItemView = ({ pushToSubitem }) => {
 
     const addSubitemHandler = React.useCallback((type) => {
 
-            const potentialsData = getPotentialsData(importData.extraData.autoCreatePotentials, importData.extraData.potentialTypes, importData.extraData.referenceCellList)
-            dispatch(addSubitem(type, potentialsData.autoCreate, potentialsData.init))
-            pushToSubitem(null, true, type)
+        const { autoCreate, init } = getPotentialsData(
+            importData.extraData.autoCreatePotentials,
+            importData.extraData.potentialTypes,
+            importData.extraData.referenceCellList)
+        dispatch(addSubitem(type, autoCreate, init))
+        pushToSubitem(null, true, type)
 
     }, [importData.extraData.autoCreatePotentials, importData.extraData.potentialTypes, importData.extraData.referenceCellList, pushToSubitem, dispatch])
 

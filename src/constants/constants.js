@@ -68,6 +68,7 @@ export const currentUnits = ['\u00B5A', 'mA', "A"];
 export const areaUnits = ['cm2', 'm2']
 export const currentDensityUnits = ['A/cm2', 'mA/cm2', 'A/m2', 'mA/m2']
 export const potentialUnits = ['-mV', 'mV', '-V', 'V'];
+export const factorUnits = ['A/mV', 'A/V', 'V/A', 'mV/A']
 export const potentialUnitDescription = ['Neg. milivolts', 'Milivolts', 'Neg. volts', 'Volts'];
 export const potentialsTitles = ['On', 'Off', 'Depol', 'Connected', 'Disconnected']
 export const anodeMaterialList = ['Magnesium', 'Aluminum', 'Zinc', 'Other']

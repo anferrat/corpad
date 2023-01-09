@@ -44,8 +44,7 @@ const CurrentTwoWire = (props) => {
                     style={styles.inputLeft}
                     selectedItem={props.data.npsIndex}
                     itemsList={npsList}
-                    selectAction={selectAction}
-                />
+                    selectAction={selectAction} />
                 <SelectDataField
                     disabled={props.disabled || !props.valid.npsIndex || scheduleList.length === 0}
                     label={'Pipe schedule'}
@@ -55,8 +54,7 @@ const CurrentTwoWire = (props) => {
                     selectedItem={props.data.scheduleIndex}
                     itemsList={scheduleList}
                     valid={props.valid.scheduleIndex}
-                    selectAction={selectAction}
-                />
+                    selectAction={selectAction} />
             </View>
             <View style={styles.inputRow}>
                 <InputDataField
@@ -68,8 +66,7 @@ const CurrentTwoWire = (props) => {
                     label='Voltage drop'
                     value={props.data.voltageDrop}
                     valid={props.valid.voltageDrop}
-                    unit='mV'
-                />
+                    unit='mV' />
                 <InputDataField
                     style={styles.inputRight}
                     disabled={props.disabled}
@@ -79,8 +76,7 @@ const CurrentTwoWire = (props) => {
                     label='Segment length'
                     value={props.data.distance}
                     valid={props.valid.distance}
-                    unit={props.isMetric ? 'm' : 'ft'}
-                />
+                    unit={props.isMetric ? 'm' : 'ft'} />
             </View>
         </>
     )

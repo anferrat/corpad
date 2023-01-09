@@ -7,11 +7,21 @@ const accessoryRender = (name, pack, fill, fill2 = undefined) => (props) => <Ico
 
 const placeholderRender = (placeholder) => <Text appearance='hint'>{placeholder}</Text>
 
-const displayAccessory = (accessory, accessoryList, i) => accessory ?
-    accessoryRender(accessory?.icon, accessory?.pack, accessory?.fill, accessory?.fill2) :
-    (accessoryList[i] ?
-        accessoryRender(accessoryList[i].icon, accessoryList[i]?.pack, accessoryList[i]?.fill, accessoryList[i]?.fill2) :
-        null)
+const displayAccessory = (accessory, accessoryList, i) => {
+    if (accessory === undefined || accessory === null)
+        if (accessoryList === undefined || accessoryList === null)
+            return null
+        else if (accessoryList[i] === undefined)
+            return null
+        else if (accessoryList[i]?.icon === undefined || accessoryList[i]?.icon === null)
+            return null
+        else return accessoryRender(accessoryList[i].icon, accessoryList[i]?.pack, accessoryList[i]?.fill, accessoryList[i]?.fill2)
+    else if (accessory?.icon === null || accessory?.icon === undefined)
+        return null
+    else
+        return accessoryRender(accessory.icon, accessory?.pack, accessory?.fill, accessory?.fill2)
+
+}
 
 const checkSelectedIndex = (selectedIndex, maxLength) => (selectedIndex !== null && selectedIndex < maxLength)
 

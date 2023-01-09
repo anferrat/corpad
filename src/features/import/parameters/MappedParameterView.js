@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { View, StyleSheet, ScrollView } from 'react-native'
 import { useDispatch } from 'react-redux'
-import { Radio, Button, Icon, Text } from '@ui-kitten/components'
+import { Radio, Button, Text } from '@ui-kitten/components'
 import { globalStyle } from '../../../styles/styles'
 import Select from './components/Select'
 import { saveIcon } from '../../../components/Icons'
@@ -81,32 +81,36 @@ const SelectFieldParamaters = (props) => {
                         checked={importType === 0}>
                         Use fixed value for each item
                     </Radio>
-                    <Select
-                        style={styles.field}
-                        disabled={importType !== 0}
-                        placeholder={fieldProperties[props.property].placeholder}
-                        accessoryList={fieldProperties[props.property].accessoryList}
-                        itemList={props.value.itemList}
-                        selectedIndex={defaultValue}
-                        onSelect={setDefaultValue} />
+                    <View style={importType !== 0 ? styles.hidden : styles.visible} >
+                        <Select
+                            style={styles.field}
+                            disabled={importType !== 0}
+                            placeholder={fieldProperties[props.property].placeholder}
+                            accessoryList={fieldProperties[props.property].accessoryList}
+                            itemList={props.value.itemList}
+                            selectedIndex={defaultValue}
+                            onSelect={setDefaultValue} />
+                    </View>
                     <Radio
                         style={styles.radio}
                         onChange={fieldIndexImportType}
                         checked={importType === 1}>
                         Use values from a column in data file
                     </Radio>
-                    <Select
-                        style={styles.field}
-                        disabled={importType !== 1}
-                        placeholder={'Select data column'}
-                        accessory={fileIcon}
-                        itemList={props.fields}
-                        selectedIndex={fieldIndex}
-                        onSelect={fieldIndexHandler} />
-                    <MappingHint
-                        visible={importType === 1} />
+                    <View style={importType === 0 ? styles.hidden : styles.visible}>
+                        <Select
+                            style={styles.field}
+                            disabled={importType !== 1}
+                            placeholder={'Select data column'}
+                            accessory={fileIcon}
+                            itemList={props.fields}
+                            selectedIndex={fieldIndex}
+                            onSelect={fieldIndexHandler} />
+                        <MappingHint
+                            visible={importType === 1} />
+                    </View>
                 </View>
-                <View style={importType === 0 ? styles.hidden : globalStyle.card}>
+                <View style={importType === 0 || fieldIndex === null ? styles.hidden : globalStyle.card}>
                     <AddMapComponent
                         property={props.property}
                         fieldIndex={fieldIndex}
@@ -162,6 +166,9 @@ const styles = StyleSheet.create({
     },
     hidden: {
         display: 'none'
+    },
+    visible: {
+        display: 'flex'
     }
 })
 

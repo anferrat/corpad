@@ -1,3 +1,4 @@
+import { labels } from "../../../../constants/constants"
 export const emptyValueCheck = (value) => {
     if (!value || value === null || value === undefined)
         return '<Empty>'
@@ -142,7 +143,6 @@ export const getButtonTitle = (itemType) => {
     }
 }
 
-
 export const getPotentialsData = (autoCreate, potentialTypes, referenceCellTypes) => {
     const autoTypes = ['PERM_ON', 'PERM_OFF']
     if (!autoCreate)
@@ -179,4 +179,39 @@ export const getSubitemProperty = (state, subitemIndex, property) => {
         else return errorValue
     else return errorValue
 
-} 
+}
+
+export const getTypedIndex = (subitems, subitemIndex) => {
+    //finds index of subitem within subitems of the same type
+    const subitemType = subitems[subitemIndex]?.type
+    const subitemKey = subitems[subitemIndex]?.key
+    if (subitemType && subitemKey) {
+        const subIndex = subitems
+            .filter(s => s.type === subitemType)
+            .findIndex(s => s.key === subitemKey)
+        return subIndex === -1 ? null : subIndex + 1
+    }
+    else return null
+}
+
+export const getSubitemName = (subitemType, typedIndex) => {
+    if (labels[subitemType])
+        return `${labels[subitemType].label} ${typedIndex}`
+    else return 'Error'
+}
+
+export const getSideIcon = (fromAtoB) => {
+    if (fromAtoB === null)
+        return {
+            name: 'IK',
+            pack: 'cp'
+        }
+    else if (fromAtoB)
+        return {
+            name: 'arrow-forward-outline'
+        }
+    else
+        return {
+            name: 'arrow-back-outline'
+        }
+}

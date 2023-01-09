@@ -13,8 +13,7 @@ const InputDataField = (props) => {
         style={props.style}
         value={props.value}
         unit={props.unit}
-        label={props.label}
-    />
+        label={props.label} />
 }
 
 export default React.memo(InputDataField)

@@ -61,11 +61,11 @@ const FileListItem = (props) => {
                             endAngle={0.7}
                             showsText={true} />
                         <View style={styles.titleData}>
+                            <Text category='h5' numberOfLines={1} ellipsizeMode={'tail'}>{props.title}</Text>
                             <View style={styles.titleRow}>
-                                <Text category='h5' numberOfLines={1} ellipsizeMode={'tail'}>{props.title}</Text>
-                                {props.isCloud ? <Icon name='cloud-download-outline' style={styles.titleIcon} fill={basic} /> : null}
+                                <Text appearance='hint' category='p2'>Pipeline survey</Text>
+                                {props.isCloud ? <Icon name='cloud' style={styles.cloudIcon} fill={basic} pack='cp' /> : null}
                             </View>
-                            <Text appearance='hint' category='p2'>Pipeline survey</Text>
                             <View style={styles.time}>
                                 <Icon name='clock-outline' style={styles.smallIcon} fill={basic} />
                                 <Text appearance='hint' category='p2' > {getFormattedDate(props.timeModified)}</Text>
@@ -129,6 +129,12 @@ const styles = StyleSheet.create({
         height: 20,
         marginLeft: 6,
         marginTop: 4
+    },
+    cloudIcon: {
+        width: 16,
+        height: 16,
+        marginTop: 4,
+        marginLeft: 6,
     },
     time: {
         marginTop: 4,

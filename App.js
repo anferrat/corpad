@@ -52,7 +52,7 @@ export const ScrollRef = createContext()
 ModalService.setShouldUseTopInsets = true
 
 export const version = '1.1'
-export const DEVELOPER_MODE_ON = true
+export const DEVELOPER_MODE_ON = false
 
 const App = () => {
   /*

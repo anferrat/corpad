@@ -1,7 +1,7 @@
 import React from 'react'
 import { View, StyleSheet } from 'react-native'
 import { Text } from '@ui-kitten/components'
-import { basic, primary } from '../../../../styles/colors'
+import { basic } from '../../../../styles/colors'
 
 
 const Badge = (props) => (

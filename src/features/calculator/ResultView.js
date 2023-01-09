@@ -17,16 +17,14 @@ const ResultComponent = (props) => {
                 icon={calculatorTypes[props.calculatorType].icon}
                 pack={calculatorTypes[props.calculatorType].pack}
                 title={props.result.title}
-                results={props.result.values}
-            />
+                results={props.result.values} />
         case 'coating':
             return <>
                 <ResultRow
                     icon={calculatorTypes[props.calculatorType].icon}
                     pack={calculatorTypes[props.calculatorType].pack}
                     title={props.result.title}
-                    results={props.result.values}
-                />
+                    results={props.result.values} />
                 <CoatingQuality coatingQuality={props.result.coatingQuality} />
             </>
         default:
