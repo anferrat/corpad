@@ -4,7 +4,7 @@ import { SafeAreaView } from 'react-native'
 import { FilePickerImport } from '../../features/import/file'
 
 export default ImportFilePicker = ({ navigation, route }) => {
-    const navigateToImportItem = (itemType) => navigation.navigate('ImportItem', { itemType: itemType, subitemIndex: null, isNewSubitem: false, subitemType: null }) // itemtype for header 
+    const navigateToImportItem = (itemType) => navigation.navigate('ImportItem', { itemType: itemType, subitemIndex: null, subitemType: null }) // itemtype for header 
     const navigateToSpreadsheet = (uri, title) => navigation.navigate('Spreadsheet', { uri: uri, title: title })
     
     return (

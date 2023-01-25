@@ -30,7 +30,6 @@ import SessionModal from './src/features/overlays/session_modal/SessionModal'
 import { Animated } from 'react-native'
 
 
-
 const rootReducer = combineReducers({
   subitem: subitem,
   potentials: potentials,
@@ -52,7 +51,7 @@ export const ScrollRef = createContext()
 ModalService.setShouldUseTopInsets = true
 
 export const version = '1.1'
-export const DEVELOPER_MODE_ON = false
+export const DEVELOPER_MODE_ON = true
 
 const App = () => {
   /*

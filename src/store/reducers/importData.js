@@ -116,11 +116,6 @@ const importData = (state = initialState, action) => {
                 subitems: state.subitems.concat(getSubitem(action.subitemType, action.autoCreatePotentials, action.initialPotentials))
             }
         case REMOVE_IMPORT_SUBITEM:
-            if (action.isNewSubitem)
-                return {
-                    ...state,
-                    subitems: state.subitems.slice(0, state.subitems.length - 2)
-                }
             return {
                 ...state,
                 subitems: state.subitems.filter((_, i) => action.subitemIndex !== i)

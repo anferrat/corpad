@@ -1,7 +1,7 @@
 import React, { useContext } from 'react'
 import { View, StyleSheet } from 'react-native'
 import { useSelector, useDispatch } from 'react-redux'
-import { ImportData } from '..'
+import { ImportData } from '../ImportDataProvider'
 import { AddPotentials } from '../../../../components/AddPotentialModal'
 import { addPotential, removePotential } from '../../../../store/actions/importData'
 import { getSubitemProperty } from '../helpers/functions'

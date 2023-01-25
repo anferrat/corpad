@@ -25,8 +25,7 @@ const SelectFieldParamaters = (props) => {
     const [defaultValue, setDefaultValue] = useState(props.value.defaultValue)
     const [importType, setImportType] = useState(props.value.importType)
     const [attributeMap, setAttributeMap] = useState(props.value.attributeMap)
-    const fieldValues = React.useMemo(() => getFieldValues(props.data, fieldIndex, props.fields).map(item => item === "" ? '<Empty>' : item), [fieldIndex])
-
+    const fieldValues = React.useMemo(() => getFieldValues(props.data, fieldIndex, props.fields), [fieldIndex])
     const defaultValueImportType = React.useCallback(async () => {
         const confirm = attributeMap.length > 0 ? await warningHandler(51) : true
         if (confirm) {
@@ -36,18 +35,18 @@ const SelectFieldParamaters = (props) => {
         }
     }, [attributeMap.length])
 
-    const addAttribute = (index, mappedIndexes) => setAttributeMap(old => {
+    const addAttribute = React.useCallback((index, mappedIndexes, mappedValues) => setAttributeMap(old => {
         const indexChecked = old.findIndex(a => a.index === index) === -1
         if (indexChecked && index !== null && mappedIndexes.length !== 0) {
-            return [...old, getAttribute({ index, mappedIndexes })]
+            return [...old, getAttribute({ index, mappedIndexes, mappedValues })]
         }
         else return old
-    })
+    }), [setAttributeMap])
 
-    const removeAttribute = (index) => {
+    const removeAttribute = React.useCallback((index) => {
         //index - is the index of property value from itemList
         setAttributeMap(old => old.filter(item => item.index !== index))
-    }
+    }, [])
 
     const fieldIndexImportType = React.useCallback(() => {
         setImportType(1)
@@ -62,7 +61,7 @@ const SelectFieldParamaters = (props) => {
         }
     }
 
-    const fieldIndexHandler = async (index) => {
+    const fieldIndexHandler = React.useCallback(async (index) => {
         if (index !== fieldIndex) {
             const confirm = attributeMap.length > 0 ? await warningHandler(51) : true
             if (confirm) {
@@ -70,7 +69,8 @@ const SelectFieldParamaters = (props) => {
                 setAttributeMap([])
             }
         }
-    }
+    }, [fieldIndex, attributeMap.length])
+
     return (
         <>
             <ScrollView contentContainerStyle={styles.mainView}>

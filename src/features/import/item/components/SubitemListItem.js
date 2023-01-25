@@ -10,7 +10,7 @@ const SubitemListItem = ({ onPress, index, type, typedIndex }) => {
         <Layout style={styles.card}>
             <Pressable
                 style={styles.pressable}
-                onPress={onPress.bind(this, index, false, type)}
+                onPress={onPress.bind(this, index, type)}
                 android_ripple={androidRipple}>
                 <Layout style={styles.leftSide}>
                     <Icon name={type} pack={'cp'} style={styles.icon} fill={basic} />

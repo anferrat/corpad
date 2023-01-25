@@ -11,7 +11,7 @@ const getParameter = ({
     fieldIndex = null, // - index of fields array from csv data to import from when importType 1
     mergeAllowed = false, // indicates in importType 3 is allowed for this property
     itemList = [], // list of items to select from, when parameterType 1
-    defaultValue = null, // default value when importType 0, stores string when parametertype 0, or index when parameterType 1
+    defaultValue = null, // default value when importType 0, stores string when parametertype 0, or index when parameterType 1. When parameterType 2 - stores first index for default name values
     fieldIndexList = [], //list of field indexes from csb file when mergeAllowed and importType 3
     valid = true, // flag to check if defaultValue passed validation for this prop (importType 0)
     unit = 0, // unitIndex from unitList when importType 1, in order to convert values to correct units
@@ -189,13 +189,15 @@ export const getSubitem = (type, autoCreatePotentials = false, initialPotentials
     }
 }
 
-export const getAttribute = ({ index, mappedIndexes }) => ({
+export const getAttribute = ({ index, mappedIndexes, mappedValues }) => ({
     index,
     mappedIndexes,
+    mappedValues,
 })
 
 export const getPotentialParameter = (potentialTypeIndex, referenceCellIndex) => ({
     ...getParameter({ unitList: potentialUnits, defaultUnitIndex: 3 }),
+    createIfEmpty: true, // when false, potential will not be created if value is null. Not implemented for now
     potentialTypeIndex,
     referenceCellIndex
 })

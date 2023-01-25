@@ -35,3 +35,8 @@ export const getFieldValues = (data, fieldIndex, fields) => {
     }
     else return []
 }
+
+export const parseIndex = (value) => {
+    const r = parseInt(value)
+    return isNaN(r) || r < 0 ? null : r
+}

@@ -2,7 +2,7 @@ import React, { useContext } from 'react'
 import { StyleSheet } from 'react-native'
 import MultiSelect from '../../../../components/MultiSelect2'
 import { useDispatch, useSelector } from 'react-redux'
-import { ImportData } from '..'
+import { ImportData } from '../ImportDataProvider'
 import { getCardList, getSideSelectedIndexes } from '../helpers/selectors'
 import { setImportSubitemSetting } from '../../../../store/actions/importData'
 

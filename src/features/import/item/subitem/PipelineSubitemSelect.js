@@ -5,7 +5,7 @@ import Select from '../../../../components/Select2'
 import { getCardList, getSelectedConnectionIndex } from '../helpers/selectors'
 import { useDispatch } from 'react-redux'
 import { setImportSubitemSetting } from '../../../../store/actions/importData'
-import { ImportData } from '..'
+import { ImportData } from '../ImportDataProvider'
 
 const COUPON_CONNECTION_TYPES = ['PL', 'RS']
 
