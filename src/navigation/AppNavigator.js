@@ -17,6 +17,7 @@ import CalculatorList from '../screens/calculator/List'
 import Calculator from '../screens/calculator/Calculator'
 import CreateSurvey from '../screens/CreateSurvey'
 import ImportItem from '../screens/import/Item'
+import ImportSubitem from '../screens/import/Subitem'
 import ImportFile from '../screens/import/File'
 import ImportParameters from '../screens/import/Parameters'
 import Spreadsheet from '../screens/Spreadsheet'
@@ -184,7 +185,7 @@ export const AppNavigator = () => {
                 animation: 'fade_from_bottom',
               }}>
                 <Stack.Screen name='ImportItem' component={ImportItem} />
-                <Stack.Screen name='ImportSubitem' component={ImportItem} />
+                <Stack.Screen name='ImportSubitem' component={ImportSubitem} />
                 <Stack.Screen name='ImportFile' component={ImportFile} />
                 <Stack.Screen name='ImportParameters' component={ImportParameters} />
                 <Stack.Screen name='Settings' component={SettingsScreen} />

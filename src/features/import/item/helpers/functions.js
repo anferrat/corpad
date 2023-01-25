@@ -143,6 +143,13 @@ export const getButtonTitle = (itemType) => {
     }
 }
 
+export const getItemName = (itemType, count = null) => {
+    const name = labels[itemType].label.toLowerCase()
+    if (count !== null)
+        return count === 1 ? name : name + 's'
+    else return name
+}
+
 export const getPotentialsData = (autoCreate, potentialTypes, referenceCellTypes) => {
     const autoTypes = ['PERM_ON', 'PERM_OFF']
     if (!autoCreate)
@@ -163,12 +170,6 @@ export const getSubitemType = (state, index, isNew) => {
     if (isNew)
         return state.importData.subitems[state.importData.subitems.length - 1]?.type
     else return state.importData.subitems[index]?.type
-}
-
-export const getSubitemIndex = (state, index, isNew) => {
-    if (isNew)
-        return state.importData.subitems.length - 1
-    else return index
 }
 
 export const getSubitemProperty = (state, subitemIndex, property) => {

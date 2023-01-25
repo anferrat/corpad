@@ -15,7 +15,7 @@ const AttributeMapper = (props) => {
                     standardValue={props.itemList[item.index] ?? 'Error'}
                     icon={fieldProperties[props.property].accessoryList[item.index]}
                     onDelete={props.removeAttribute.bind(this, item.index)}
-                    mappedValues={item.mappedIndexes.map(index => props.fieldValues[index])}
+                    mappedValues={item.mappedValues.map(v => v === '' ? '<Empty>' : v)}
                 />
             </View>
         )
@@ -30,7 +30,7 @@ const AttributeMapper = (props) => {
     </View>
 }
 
-export default AttributeMapper
+export default React.memo(AttributeMapper)
 
 const styles = StyleSheet.create({
     mainView: {

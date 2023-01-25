@@ -1,14 +1,37 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { globalStyle } from '../styles/styles'
 import { SafeAreaView, StatusBar } from 'react-native'
 import { Button, Text } from '@ui-kitten/components'
 import { sendRequest, sendCombinedRequest } from '../api/database/index'
 import { genPoints, create_db_tables } from '../helpers/dev_test_point_generator'
 import { resetFolder, test } from '../api/files/fs'
+import { getReferenceCellList, updateMainReference, createReferenceCell, deleteReferenceCell } from '../app/controllers/survey/other/ReferenceCellController'
+import { ItemController } from '../app/controllers/survey/items/ItemController'
+import { EventRegister } from 'react-native-event-listeners'
 
 export default DevScreen = ({ navigation }) => {
   const navigate = () =>
     navigation.goBack()
+
+  const jaja = async () => {
+    try {
+      const repo = new ItemController()
+      console.log(!!global.HermesInternal)
+      //console.log(await repo.getIdList({ itemType: 'TEST_POINT', sorting: 1, filters: { readingTypeFilter: ['PL'], statusFilter: [], testPointTypeFilter: [], hideEmptyTestPoints: false } }))
+    }
+    catch (err) {
+      console.log('Error', err)
+    }
+  }
+
+  useEffect(() => {
+    const listener = EventRegister.addEventListener('mainReferenceCellChanged', data => console.log('New UPDATE!!!', data))
+    jaja()
+    return () => {
+      EventRegister.removeEventListener(listener)
+    }
+  }, [])
+
 
   return (
     <SafeAreaView style={{ ...globalStyle.screen, paddingTop: StatusBar.currentHeight }}>
@@ -25,7 +48,7 @@ export default DevScreen = ({ navigation }) => {
 
 const sqlTest = async () => {
   try {
-    const test = await sendCombinedRequest([['SELECT', 'TEST_POINT', { testPointId: 1 }], ['SELECT', 'SETTINGS', { }]])
+    const test = await sendCombinedRequest([['SELECT', 'TEST_POINT', { testPointId: 1 }], ['SELECT', 'SETTINGS', {}]])
     //console.log(test)
   }
   catch (er) {

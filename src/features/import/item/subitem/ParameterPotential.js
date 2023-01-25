@@ -2,7 +2,7 @@ import React, { useContext } from 'react'
 import { View, StyleSheet } from 'react-native'
 import IconButton from '../../../../components/IconButton'
 import PropertyImportField from '../components/PropertyImportField'
-import { ImportData } from '..'
+import { ImportData } from '../ImportDataProvider'
 import PotentialLabel from '../components/PotentialLabel'
 import { getDefaultUnit } from '../../../../helpers/functions'
 

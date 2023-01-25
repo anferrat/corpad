@@ -1,8 +1,27 @@
-import React, { useState } from 'react'
+import React, { useState, useContext } from 'react'
 import { AddReadingModal } from "../../../../components/AddReadingModal"
 import Button from '../components/Button'
+import { ImportData } from '../ImportDataProvider'
+import { useDispatch, useSelector } from 'react-redux'
+import { getPotentialsData } from '../helpers/functions'
+import { addSubitem } from '../../../../store/actions/importData'
 
-const AddSubitemButton = ({ itemType, onSelect }) => {
+const AddSubitemButton = () => {
+    const { extraData, pushToSubitem } = useContext(ImportData)
+    const itemType = useSelector(state => state.importData.itemType)
+    const dispatch = useDispatch()
+    const subitemCount = useSelector(state => state.importData.subitems.length)
+
+    const addSubitemHandler = React.useCallback((type) => {
+        const { autoCreate, init } = getPotentialsData(
+            extraData.autoCreatePotentials,
+            extraData.potentialTypes,
+            extraData.referenceCellList)
+        const newIndex = subitemCount
+        dispatch(addSubitem(type, autoCreate, init))
+        pushToSubitem(newIndex, type)
+
+    }, [extraData, pushToSubitem, dispatch, subitemCount])
     const [visible, setVisible] = useState(false)
     const showModal = React.useCallback(() => setVisible(true), [])
     const hideModal = React.useCallback(() => setVisible(false), [])
@@ -12,14 +31,14 @@ const AddSubitemButton = ({ itemType, onSelect }) => {
             <Button
                 showModal={showModal}
                 itemType={itemType}
-                onSelect={onSelect} />
+                onSelect={addSubitemHandler} />
             <AddReadingModal
                 visible={visible}
                 hideModal={hideModal}
-                onSelect={onSelect}
+                onSelect={addSubitemHandler}
             />
         </>
     )
 }
 
-export default AddSubitemButton
+export default React.memo(AddSubitemButton)

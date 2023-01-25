@@ -14,9 +14,12 @@ import RS from './RS'
 import FC from './FC'
 import IK from './IK'
 import CT from './CT'
+import { useContext } from 'react'
+import { ImportData } from '../ImportDataProvider'
 
 
-const SubitemView = ({ subitemIndex }) => {
+const SubitemView = () => {
+    const { subitemIndex } = useContext(ImportData)
     const subitemType = useSelector(state => state.importData.subitems[subitemIndex]?.type)
     return (
         <View style={globalStyle.card}>

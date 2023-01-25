@@ -1,0 +1,4 @@
+/*
+two methods get simplelist and fullList
+
+*/

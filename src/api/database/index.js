@@ -17,7 +17,7 @@ export const fields = [
 
 const surveyFileVersion = 1 //current version of JSON file format
 
-const db = SQLite.openDatabase('SURVEY_PIPELINE_CURRENT.db')
+export const db = SQLite.openDatabase('SURVEY_PIPELINE_CURRENT.db')
 
 db.executeSql('PRAGMA foreign_keys = ON;')
 
@@ -527,7 +527,6 @@ const runQuery = async (transaction, query, params) => {
             },
             (_, err) => {
                 reject(err)
-
             }
         )
     })

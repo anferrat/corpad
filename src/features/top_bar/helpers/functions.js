@@ -188,7 +188,7 @@ export const getHeader = (screen, params, navigation, dispatch, bottomSheet) => 
                                 const confirm = await warningHandler(59, 'Delete', 'Cancel')
                                 if (confirm) {
                                     navigation.goBack()
-                                    dispatch(deleteImportSubitem(params.subitemIndex, params.isNewSubitem))
+                                    dispatch(deleteImportSubitem(params.subitemIndex))
                                 }
                             }
                         }

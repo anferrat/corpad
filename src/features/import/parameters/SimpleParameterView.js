@@ -9,25 +9,28 @@ import { saveIcon } from '../../../components/Icons'
 import { setImportProperty } from '../../../store/actions/importData'
 import fieldValidation from '../../../helpers/validation'
 import { errorHandler } from '../../../helpers/error_handler'
-import MultiSelect from './components/MultiSelect'
+import MultiSelect from '../../../components/MultiSelect2'
 import { fieldProperties } from '../../../constants/fieldProperties'
 import Hint from '../../../components/Hint'
+import { parseIndex } from './helpers/functions'
 
 const fileIcon = {
     icon: 'file-text-outline',
     pack: null
 }
 
-const InputFieldParamaters = (props) => {
-    const [fieldIndex, setFieldIndex] = useState(props.value.fieldIndex)
-    const [defaultValue, setDefaultValue] = useState(props.value.defaultValue)
-    const [importType, setImportType] = useState(props.value.importType)
-    const [valid, setValid] = useState(props.value.valid)
-    const [unit, setUnit] = useState(props.value.unit)
-    const [unitList, setUnitList] = useState(props.value.unitList)
-    const [fieldIndexList, setFieldIndexList] = useState(props.value.fieldIndexList)
+const InputFieldParamaters = ({ value, property, subitemIndex, potentialIndex, goBack, defaultUnit, fields }) => {
+    const { unitList } = value
+    const [fieldIndex, setFieldIndex] = useState(value.fieldIndex)
+    const [defaultValue, setDefaultValue] = useState(value.defaultValue)
+    const [importType, setImportType] = useState(value.importType)
+    const [valid, setValid] = useState(value.valid)
+    const [unit, setUnit] = useState(value.unit)
+    const [fieldIndexList, setFieldIndexList] = useState(value.fieldIndexList)
     const defaultValueImportType = React.useCallback(() => {
         setImportType(0)
+        setDefaultValue(null)
+        setValid(true)
         setFieldIndex(null)
     }, [])
 
@@ -53,30 +56,34 @@ const InputFieldParamaters = (props) => {
 
     const validateDefaultValue = React.useCallback(() => {
         if (importType === 0) {
-            const validation = fieldValidation(defaultValue, props.property, props.property === 'name')
+            const validation = fieldValidation(defaultValue, property, property === 'name')
             setDefaultValue(validation.value)
             setValid(validation.valid)
         }
-    }, [props.property, importType, defaultValue])
+    }, [property, importType, defaultValue])
 
     const dispatch = useDispatch()
 
     const onSaveHandler = () => {
-        const validation = fieldValidation(defaultValue, props.property, props.property === 'name')
-        if (!validation.valid && importType === 0 && props.property !== 'name') {
+        const validation = fieldValidation(defaultValue, property, property === 'name')
+        if (!validation.valid && importType === 0 && property !== 'name') {
             setValid(validation.valid)
             errorHandler(509)
         }
-        else if (props.property === 'name' && ((importType === 1 && fieldIndex === null) || (!validation.valid && importType === 0))) {
+        else if (property === 'name' && ((importType === 1 && fieldIndex === null) || (!validation.valid && importType === 0))) {
             if (importType === 0)
                 setValid(validation.valid)
             errorHandler(512)
         }
         else {
-            dispatch(setImportProperty(props.property, props.subitemIndex, props.potentialIndex, { importType, unit, defaultValue, fieldIndex, valid, fieldIndexList }))
-            props.goBack()
+            dispatch(setImportProperty(property, subitemIndex, potentialIndex, { importType, unit, defaultValue, fieldIndex, valid, fieldIndexList }))
+            goBack()
         }
     }
+
+    const setIndex = React.useCallback(() => {
+        setDefaultValue(parseIndex(defaultValue))
+    }, [defaultValue])
 
     return (
         <>
@@ -91,9 +98,9 @@ const InputFieldParamaters = (props) => {
                     <View style={importType !== 0 ? styles.hidden : styles.visible}>
                         <InputField
                             style={styles.field}
-                            unit={props.defaultUnit}
-                            placeholder={fieldProperties[props.property].placeholder}
-                            keyboardType={fieldProperties[props.property].keyboardType}
+                            unit={defaultUnit}
+                            placeholder={fieldProperties[property].placeholder}
+                            keyboardType={fieldProperties[property].keyboardType}
                             disabled={importType !== 0}
                             value={defaultValue}
                             onChangeText={setDefaultValue}
@@ -112,7 +119,7 @@ const InputFieldParamaters = (props) => {
                                 style={styles.field}
                                 disabled={importType !== 1}
                                 placeholder={'Select data column'}
-                                itemList={props.fields}
+                                itemList={fields}
                                 selectedIndex={fieldIndex}
                                 onSelect={setFieldIndex}
                                 accessory={fileIcon} />
@@ -127,14 +134,30 @@ const InputFieldParamaters = (props) => {
                         </View>
                         <Hint hidden={unitList.length === 0 || importType !== 1} text='Unit must match the one used in spreadsheet' />
                     </View>
-                    {props.property === 'name' ?
-                        <Radio
-                            style={styles.radio}
-                            onChange={defaultNameImportType}
-                            checked={importType === 2}>
-                            Use default name values
-                        </Radio> : null}
-                    {props.value.mergeAllowed ?
+                    {property === 'name' ?
+                        <>
+                            <Radio
+                                style={styles.radio}
+                                onChange={defaultNameImportType}
+                                checked={importType === 2}>
+                                Use default name values
+                            </Radio>
+                            <View style={importType !== 2 ? styles.hidden : styles.visible}>
+                                <InputField
+                                    style={styles.field}
+                                    placeholder={'1'}
+                                    keyboardType='numeric'
+                                    label='Start with index'
+                                    disabled={importType !== 2}
+                                    value={defaultValue}
+                                    onChangeText={setDefaultValue}
+                                    onEndEditing={setIndex}
+                                    valid={true} />
+                            </View>
+                        </>
+                        : null}
+
+                    {value.mergeAllowed ?
                         <>
                             <Radio
                                 style={styles.radio}
@@ -147,7 +170,7 @@ const InputFieldParamaters = (props) => {
                                     disabled={importType !== 3}
                                     placeholder={'Select data columns'}
                                     style={styles.field}
-                                    itemList={props.fields}
+                                    itemList={fields}
                                     selectedItems={fieldIndexList}
                                     onSelect={setFieldIndexList}
                                 />

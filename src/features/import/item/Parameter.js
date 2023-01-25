@@ -3,7 +3,7 @@ import { View, StyleSheet } from 'react-native'
 import { useSelector } from 'react-redux'
 import { getData, getDefaultNames, parameterComparison } from './helpers/functions'
 import PropertyImportField from './components/PropertyImportField'
-import { ImportData } from '.'
+import { ImportData } from './ImportDataProvider'
 import { getDefaultUnit } from '../../../helpers/functions'
 
 const Parameter = (props) => {

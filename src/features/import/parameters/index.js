@@ -6,7 +6,7 @@ import { getData } from './helpers/functions'
 import { getDefaultUnit } from '../../../helpers/functions'
 
 
-const ImportParameters = (props) => {
+export const ImportParameters = (props) => {
     const initValue = useSelector(state => getData(state, props.property, props.subitemIndex, props.potentialIndex))
     const extraData = useSelector(state => state.importData.extraData)
     const fields = useSelector(state => state.importData.fields)
@@ -32,5 +32,3 @@ const ImportParameters = (props) => {
             data={data} />
     else return null
 }
-
-export default ImportParameters

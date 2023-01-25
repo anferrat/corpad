@@ -24,8 +24,8 @@ export const resetImportItem = () =>
 export const addSubitem = (subitemType, autoCreatePotentials, initialPotentials) =>
     ({ type: ADD_IMPORT_SUBITEM, subitemType: subitemType, autoCreatePotentials: autoCreatePotentials, initialPotentials })
 
-export const deleteImportSubitem = (subitemIndex, isNewSubitem) =>
-    ({ type: REMOVE_IMPORT_SUBITEM, subitemIndex: subitemIndex, isNewSubitem: isNewSubitem })
+export const deleteImportSubitem = (subitemIndex) =>
+    ({ type: REMOVE_IMPORT_SUBITEM, subitemIndex: subitemIndex })
 
 export const setImportSubitemSetting = (property, subitemIndex, value) =>
     ({ type: SET_IMPORT_SUBITEM_SETTING, property: property, subitemIndex: subitemIndex, value: value })

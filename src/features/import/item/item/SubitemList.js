@@ -1,8 +1,13 @@
 import React from 'react'
+import { useSelector } from 'react-redux'
 import SubitemListItem from '../components/SubitemListItem'
 import { getTypedIndex } from '../helpers/functions'
+import { ImportData } from '../ImportDataProvider'
+import { useContext } from 'react'
 
-const SubitemList = ({ subitems, pushToSubitem }) => {
+const SubitemList = () => {
+    const { pushToSubitem } = useContext(ImportData)
+    const subitems = useSelector(state => state.importData.subitems)
     return (
         <>
             {subitems.map((subitem, index) => (

@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react'
 import { View, StyleSheet } from 'react-native'
 import Select from './components/Select'
-import MultiSelect from './components/MultiSelect'
-import { Icon, Text } from '@ui-kitten/components'
+import MultiSelect from '../../../components/MultiSelect3'
+import { Icon } from '@ui-kitten/components'
 import { basic, primary } from '../../../styles/colors'
 import { getFieldIndexes, getPropertyIndexes } from './helpers/functions'
 import { fieldProperties } from '../../../constants/fieldProperties'
@@ -22,6 +22,7 @@ const AddMapComponent = (props) => {
     const [selectedMap, setSelectedMap] = useState([])
     const [valid, setValid] = useState([true, true])
     const fieldValues = React.useMemo(() => getFieldIndexes(props.fieldValues, props.attributeMap), [props.fieldValues, props.attributeMap])
+    const fieldValuesDisplay = React.useMemo(() => fieldValues.map(v => v.item === "" ? { ...v, item: '<Empty>' } : v), [fieldValues])
     const propertyList = React.useMemo(() => getPropertyIndexes(props.itemList, props.attributeMap), [props.itemList, props.attributeMap])
     const accessoryList = React.useMemo(() => {
         if (fieldProperties[props.property].accessoryList)
@@ -32,7 +33,6 @@ const AddMapComponent = (props) => {
     const fieldValuesEmpty = fieldValues.length === 0
     const propertyListEmpty = propertyList.length === 0
     const fieldIndexNull = props.fieldIndex === null
-
     const addAttribute = React.useCallback((selectedIndex, selectedMap) => {
         if (propertyList.length === 0)
             errorHandler(511)
@@ -42,21 +42,21 @@ const AddMapComponent = (props) => {
                 setValid([selectedIndex !== null, selectedMap.length !== 0])
             }
             else {
-                props.addAttribute(propertyList[selectedIndex]?.index, selectedMap.map(i => fieldValues[i].index))
+                props.addAttribute(propertyList[selectedIndex]?.index, selectedMap.map(i => fieldValues[i].index), selectedMap.map(i => fieldValues[i].item))
                 setSelectedMap([])
                 setSelectedIndex(null)
             }
     }, [propertyList, fieldValues])
 
-    const setSelectedIndexhandler = (index) => {
+    const setSelectedIndexhandler = React.useCallback((index) => {
         setSelectedIndex(index)
         setValid(old => [index !== null, old[1]])
-    }
+    }, [])
 
-    const setSelectedMapHandler = (indexMap) => {
+    const setSelectedMapHandler = React.useCallback((indexMap) => {
         setSelectedMap(indexMap)
         setValid(old => [old[0], indexMap.length !== 0])
-    }
+    }, [])
 
     useEffect(() => {
         if (selectedMap.length !== 0)
@@ -90,10 +90,9 @@ const AddMapComponent = (props) => {
                     label={'Values from .csv'}
                     placeholder={'Select values'}
                     style={styles.select}
-                    itemList={fieldValues}
+                    itemList={fieldValuesDisplay}
                     selectedItems={selectedMap}
-                    onSelect={setSelectedMapHandler}
-                />
+                    onSelect={setSelectedMapHandler} />
                 <View style={styles.add}>
                     <IconButton
                         color={fieldValuesEmpty || propertyListEmpty ? basic : primary}
@@ -105,14 +104,13 @@ const AddMapComponent = (props) => {
             <MapperStatusHint
                 fieldValuesEmpty={fieldValuesEmpty}
                 propertyListEmpty={propertyListEmpty}
-                fieldIndexNull={fieldIndexNull}
-            />
+                fieldIndexNull={fieldIndexNull} />
         </View>
 
     )
 }
 
-export default AddMapComponent
+export default React.memo(AddMapComponent)
 
 const styles = StyleSheet.create({
     mainView: {
