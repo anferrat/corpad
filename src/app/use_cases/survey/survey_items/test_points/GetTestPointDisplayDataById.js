@@ -25,7 +25,7 @@ export class GetTestPointDisplayDataById {
         }
     }
 
-    async execute(id, displayedReading, readingTypeFilter) {
+    async execute(id, displayedReading, readingTypeFilter) { //slow?
         const testPoint = await this.testPointRepo.getById(id)
         const subitemList = await this.getSubitemList(id, readingTypeFilter, displayedReading)
         return testPoint.setSubitemList(subitemList)

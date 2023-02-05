@@ -1,6 +1,5 @@
 import { SQLiteRepository } from "../../utils/SQLite"
 import { ReferenceCell } from "../../entities/survey/other/ReferenceCell"
-import { guid } from "../../utils/guid"
 import { Error } from "../../utils/Error"
 
 export class ReferenceCellRepository extends SQLiteRepository {
@@ -13,7 +12,7 @@ export class ReferenceCellRepository extends SQLiteRepository {
         try {
             const result = await super.runSingleQueryTransaction(`SELECT * from ${this.tableName}`, [])
             return super.generateArray(result.rows.length, result.rows.item)
-                .map(row => new ReferenceCell(row.id, row.uid, row.rcType, row.name, Boolean(row.mainReference)))
+                .map(({ id, uid, rcType, name, mainReference }) => new ReferenceCell(id, uid, rcType, name, Boolean(mainReference)))
         }
         catch (err) {
             throw new Error('DatabaseError', 'Unable to get list of reference cells.', err)
@@ -21,12 +20,12 @@ export class ReferenceCellRepository extends SQLiteRepository {
     }
 
     async create(referenceCell) {
+        const { rcType, name, uid, isMainReference } = referenceCell
         try {
-            const uid = guid()
             const result = await super.runSingleQueryTransaction(
                 `INSERT INTO ${this.tableName} (uid, mainReference, rcType, name) VALUES (?,?,?,?)`,
-                [uid, 0, referenceCell.rcType, referenceCell.name])
-            return new ReferenceCell(result.insertId, uid, referenceCell.rcType, referenceCell.name, false)
+                [uid, isMainReference, rcType, name])
+            return new ReferenceCell(result.insertId, uid, rcType, name, isMainReference)
         }
         catch (err) {
             throw new Error('DatabaseError', 'Unable to create reference cell.', err)

@@ -21,14 +21,15 @@ export class PotentialTypeRepository extends SQLiteRepository {
         }
     }
 
-    async create(uid, name) {
+    async create(potentialType) {
+        const { uid, name, permType } = potentialType
         try {
-            const result = await super.runSingleQueryTransaction(`INSERT INTO ${this.tableName} (uid, name) VALUES (?,?)`,
-                [uid, name])
-            return new PotentialType(result.insertId, uid, name, null)
+            const result = await super.runSingleQueryTransaction(`INSERT INTO ${this.tableName} (uid, name, permType, custom) VALUES (?,?,?,?)`,
+                [uid, name, permType, !permType])
+            return new PotentialType(result.insertId, uid, name, permType)
         }
         catch (er) {
-            throw new Error('DatabseError', `Unable to create potentialType with uid ${uid} and name ${name}`, er)
+            throw new Error('DatabseError', `Unable to create potentialType with uid ${uid} and name ${name} and permType ${permType}`, er)
         }
     }
 

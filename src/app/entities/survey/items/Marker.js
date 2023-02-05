@@ -7,7 +7,4 @@ export class Marker extends SurveyItem {
         this.latitude = latitude
         this.longitude = longitude
     }
-    get marker() {
-        return this
-    }
 }

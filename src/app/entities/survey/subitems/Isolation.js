@@ -1,9 +1,10 @@
+import { ItemTypes } from "../items/SurveyItem";
 import { CurrentUnits } from "../other/properties";
-import { Subitem } from "./Subitem";
+import { Subitem, SubitemTypes } from "./Subitem";
 
 export class Isolation extends Subitem {
-    constructor(id, parentId, uid, type, name, timeCreated, timeModified, fromAtoB, isolationType, shorted, current, sideA, sideB) {
-        super(id, parentId, uid, type, name, timeCreated, timeModified)
+    constructor(id, parentId, uid, name, fromAtoB, isolationType, shorted, current, sideA, sideB) {
+        super(id, parentId, uid, SubitemTypes.ISOLATION, ItemTypes.TEST_POINT, name)
         this.fromAtoB = fromAtoB
         this.isolationType = isolationType
         this.shorted = shorted

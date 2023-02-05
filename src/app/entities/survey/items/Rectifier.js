@@ -2,7 +2,7 @@ import { Marker } from "./Marker"
 import { ItemStatuses, ItemTypes } from "./SurveyItem"
 
 export class Rectifier extends Marker {
-    constructor(id, uid, name = null, status = ItemStatuses.UNKNOWN, timeCreated, timeModified, comment = null, location = null, latitude = null, longitude = null, model = null, serialNumber = null, powerSource = null, acVoltage = null, acCurrent = null, tapSetting = TapOptions.COARSE_FINE, tapValue = null, tapCoarse = null, tapFine = null, maxVoltage = null, maxCurrent = null) {
+    constructor(id, uid, name, status, timeCreated, timeModified, comment, location, latitude, longitude, model, serialNumber, powerSource, acVoltage, acCurrent, tapSetting, tapValue, tapCoarse, tapFine, maxVoltage, maxCurrent) {
         super(id, uid, name, status, timeCreated, timeModified, comment, ItemTypes.RECTIFIER, undefined, location, latitude, longitude)
         this.model = model
         this.serialNumber = serialNumber

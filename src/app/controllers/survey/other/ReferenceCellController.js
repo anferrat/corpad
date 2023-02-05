@@ -2,62 +2,42 @@ import { GetReferenceCellList } from "../../../use_cases/survey/other/reference_
 import { UpdateMainReference } from "../../../use_cases/survey/other/reference_cells/UpdateMainReference"
 import { CreateReferenceCell } from "../../../use_cases/survey/other/reference_cells/CreateReferenceCell"
 import { DeleteReferenceCell } from "../../../use_cases/survey/other/reference_cells/DeleteReferenceCell"
-import { Validation } from "../../../utils/Validation"
+import { Controller } from "../../../utils/Controller"
+import { ReferenceCellValidation } from "../../../validation/survey/ReferenceCellValidation"
 
-
-const validation = new Validation()
-const referenceCellListService = new GetReferenceCellList()
-const updateMainReferenceService = new UpdateMainReference()
-const createReferenceCellService = new CreateReferenceCell()
-const deleteReferenceCellService = new DeleteReferenceCell()
-
-async function controllerHandler(onSuccess, onError, controller) {
-    try {
-        const response = await controller()
-        if (onSuccess)
-            onSuccess()
-        if (response)
-            return {
-                status: 200,
-                response: response
-            }
-        else return {
-            status: 200
-        }
+export class ReferenceCellController extends Controller {
+    constructor() {
+        this.referenceCellListService = new GetReferenceCellList()
+        this.updateMainReferenceService = new UpdateMainReference()
+        this.createReferenceCellService = new CreateReferenceCell()
+        this.deleteReferenceCellService = new DeleteReferenceCell()
+        this.validation = new ReferenceCellValidation()
     }
-    catch (er) {
-        if (onError)
-            onError()
-        return {
-            status: 600,
-            errorMessage: er.message
-        }
+
+    getList(onError = null, onSuccess = null) {
+        return super.controllerHandler(onSuccess, onError, 600, async () => {
+            return this.referenceCellListService.execute()
+        })
     }
-}
 
-export async function getReferenceCellList(onError = undefined, onSuccess = undefined) {
-    return controllerHandler(onSuccess, onError, async function () {
-        return referenceCellListService.execute()
-    })
-}
+    updateMain(params, onSuccess = null, onError = null) {
+        return super.controllerHandler(onSuccess, onError, 600, async () => {
+            const { id } = this.validation.updateMain(params)
+            return this.updateMainReferenceService.execute(id)
+        })
+    }
 
-export async function updateMainReference(params, onError = undefined, onSuccess = undefined,) {
-    return controllerHandler(onSuccess, onError, async function () {
-        const id = validation.property('id', params.id)
-        return await updateMainReferenceService.execute(id)
-    })
-}
+    create(params, onSuccess = null, onError = null) {
+        return super.controllerHandler(onSuccess, onError, 600, async () => {
+            const { name, rcType } = this.validation.create(params)
+            return this.createReferenceCellService.execute(rcType, name)
+        })
+    }
 
-export async function createReferenceCell(params, onError = undefined, onSuccess = undefined) {
-    return controllerHandler(onSuccess, onError, async function () {
-        const requestObject = validation.referenceCellRequest(params)
-        return await createReferenceCellService.execute(requestObject)
-    })
-}
-
-export async function deleteReferenceCell(params, onError = undefined, onSuccess = undefined) {
-    return controllerHandler(onSuccess, onError, async function () {
-        const id = validation.property('id', params.id)
-        return await deleteReferenceCellService.execute(id)
-    })
+    delete(params, onSuccess = null, onError = null) {
+        return super.controllerHandler(onSuccess, onError, 600, async () => {
+            const { id } = this.validation.updateMain(params)
+            return this.deleteReferenceCellService.execute(id)
+        })
+    }
 }

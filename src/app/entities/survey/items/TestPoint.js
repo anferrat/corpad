@@ -1,8 +1,19 @@
 import { Marker } from "./Marker"
-import { ItemStatuses, ItemTypes, TestPointTypes } from "./SurveyItem"
+import { ItemTypes } from "./SurveyItem"
 
 export class TestPoint extends Marker {
-    constructor(id, uid, name = null, status = ItemStatuses.UNKNOWN, timeCreated, timeModified, comment = null, location = null, latitude = null, longitude = null, testPointType = TestPointTypes.TEST_STATION) {
+    constructor(
+        id,
+        uid,
+        name,
+        status,
+        timeCreated,
+        timeModified,
+        comment,
+        location,
+        latitude,
+        longitude,
+        testPointType) {
         super(id, uid, name, status, timeCreated, timeModified, comment, ItemTypes.TEST_POINT, testPointType, location, latitude, longitude)
         this.testPointType = testPointType
     }

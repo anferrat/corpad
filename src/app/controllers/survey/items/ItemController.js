@@ -16,15 +16,19 @@ import { UpdateRectifierProperty } from "../../../use_cases/survey/survey_items/
 import { CreateTestPoint } from "../../../use_cases/survey/survey_items/test_points/CreateTestPoint"
 import { DeleteTestPoint } from "../../../use_cases/survey/survey_items/test_points/DeleteTestPoint"
 import { GetTestPointById } from "../../../use_cases/survey/survey_items/test_points/GetTestPointById"
-import { GetTestPointDisplayData, GetTestPointDisplayDataById } from "../../../use_cases/survey/survey_items/test_points/GetTestPointDisplayDataById"
+import { GetTestPointDisplayDataById } from "../../../use_cases/survey/survey_items/test_points/GetTestPointDisplayDataById"
 import { GetTestPointIdList } from "../../../use_cases/survey/survey_items/test_points/GetTestPointIdList"
 import { UpdateTestPoint } from "../../../use_cases/survey/survey_items/test_points/UpdateTestPoint"
 import { UpdateTestPointProperty } from "../../../use_cases/survey/survey_items/test_points/UpdateTestPointProperty"
 import { Controller } from "../../../utils/Controller"
+import { ItemValidation } from "../../../validation/survey/ItemValidation"
 
 export class ItemController extends Controller {
     constructor() {
         super()
+
+        this.validation = new ItemValidation()
+
         this.createTestPointService = new CreateTestPoint()
         this.createRectifierService = new CreateRectifier()
         this.createPipelineService = new CreatePipeline()
@@ -54,9 +58,9 @@ export class ItemController extends Controller {
         this.updatePipelinePropertyService = new UpdatePipelineProperty()
     }
 
-    createItem(itemType, onError = null, onSuccess = null) {
+    createItem(params, onError = null, onSuccess = null) {
         return super.controllerHandler(onSuccess, onError, 600, async () => {
-            this.validation.property('itemType', itemType)
+            const { itemType } = this.validation.createItem(params)
             switch (itemType) {
                 case ItemTypes.TEST_POINT:
                     return this.createTestPointService.execute()
@@ -69,10 +73,9 @@ export class ItemController extends Controller {
         )
     }
 
-    deleteItem({ itemType, id }, onError = null, onSuccess = null) {
+    deleteItem(params, onError = null, onSuccess = null) {
         return super.controllerHandler(onSuccess, onError, 600, async () => {
-            this.validation.property('itemType', itemType)
-            this.validation.property('id', id)
+            const { id, itemType } = this.validation.deleteItem(params)
             switch (itemType) {
                 case ItemTypes.TEST_POINT:
                     return this.deleteTestPointService.execute(id)
@@ -85,10 +88,9 @@ export class ItemController extends Controller {
         )
     }
 
-    getById({ itemType, id }, onError = null, onSuccess = null) {
+    getById(params, onError = null, onSuccess = null) {
         return super.controllerHandler(onSuccess, onError, 600, async () => {
-            this.validation.property('itemType', itemType)
-            this.validation.property('id', id)
+            const { id, itemType } = this.validation.getById(params)
             switch (itemType) {
                 case ItemTypes.TEST_POINT:
                     return this.getTestPointService.execute(id)
@@ -103,30 +105,24 @@ export class ItemController extends Controller {
 
     updateItem(params, onError = null, onSuccess = null) {
         return super.controllerHandler(onSuccess, onError, 600, async () => {
-            this.validation.property('itemType', params.itemType)
-            let newParams
+            const data = this.validation.updateItem(params)
             switch (params.itemType) {
                 case ItemTypes.TEST_POINT:
-                    newParams = this.validation.testPointRequest(params)
-                    return this.updateTestPointService.execute(newParams)
+                    return this.updateTestPointService.execute(data)
                 case ItemTypes.RECTIFIER:
-                    newParams = this.validation.rectifierRequest(params)
-                    return this.updateRectifierService.execute(newParams)
+                    return this.updateRectifierService.execute(data)
                 case ItemTypes.PIPELINE:
-                    newParams = this.validation.pipelineRequest(params)
-                    return this.updatePipelineService.execute(newParams)
+                    return this.updatePipelineService.execute(data)
             }
         }
         )
     }
 
-    getIdList({ itemType, filters, sorting, latitude = null, longitude = null }, onSuccess = null, onError = null) {
+    getIdList(params, onSuccess = null, onError = null) {
         return super.controllerHandler(onSuccess, onError, 600, async () => {
-            this.validation.property('itemType', itemType)
-            this.validation.property('sorting', sorting)
+            const { itemType, filters, sorting, latitude = null, longitude = null } = this.validation.getIdList(params)
             switch (itemType) {
                 case ItemTypes.TEST_POINT:
-                    this.validation.property('filters', filters)
                     return this.getTestPointIdListService.execute({ sorting, filters, latitude, longitude })
                 case ItemTypes.RECTIFIER:
                     return this.getRectifierIdListSrvice.execute({ sorting, latitude, longitude })
@@ -137,17 +133,13 @@ export class ItemController extends Controller {
         )
     }
 
-    getDisplayData({ itemType, displayedReading, id, filters }, onSuccess = null, onError = null) {
+    getDisplayData(params, onSuccess = null, onError = null) {
         return super.controllerHandler(onSuccess, onError, 600, async () => {
-            this.validation.property('itemType', itemType)
-            this.validation.property('id', id)
+            const { itemType, displayedReading, id, readingTypeFilter } = this.validation.getDisplayData(params)
             switch (itemType) {
                 case ItemTypes.TEST_POINT:
-                    this.validation.property('filters', filters)
-                    this.validation.property('displayedReadingTestPoint', displayedReading)
-                    return this.getTestPointDisplayDataService.execute(id, displayedReading, filters.readingTypeFilter)
+                    return this.getTestPointDisplayDataService.execute(id, displayedReading, readingTypeFilter)
                 case ItemTypes.RECTIFIER:
-                    this.validation.property('displayedReadingRectifier', displayedReading)
                     return this.getRectifierDisplayDataService.execute(id, displayedReading)
                 case ItemTypes.PIPELINE:
                     return this.getPipelineDisplayDataService.execute(id)
@@ -155,11 +147,9 @@ export class ItemController extends Controller {
         })
     }
 
-    updateProperty({ itemType, id, property, value }, onSuccess = null, onError = null) {
+    updateProperty(params, onSuccess = null, onError = null) {
         return super.controllerHandler(onSuccess, onError, 600, async () => {
-            this.validation.property('itemType', itemType)
-            this.validation.property('id', id)
-            this.validation.property(property, value)
+            const { itemType, id, property, value } = this.validation.updateProperty(params)
             switch (itemType) {
                 case ItemTypes.TEST_POINT:
                     return this.updateTestPointPropertyService.execute(id, property, value)

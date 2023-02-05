@@ -1,10 +1,9 @@
-import { Subitem } from "./Subitem";
+import { ItemTypes } from "../items/SurveyItem";
+import { Subitem, SubitemTypes } from "./Subitem";
 
 export class Riser extends Subitem {
-    constructor(id, parentId, uid, type, name, timeCreated, timeModified, pipelineId, wireGauge, wireColor, nps) {
-        super(id, parentId, uid, type, name, timeCreated, timeModified)
-        this.wireGauge = wireGauge
-        this.wireColor = wireColor
+    constructor(id, parentId, uid, name, pipelineId, nps) {
+        super(id, parentId, uid, SubitemTypes.RISER, ItemTypes.TEST_POINT, name)
         this.pipelineId = pipelineId
         this.nps = nps
     }

@@ -123,3 +123,34 @@ export const PermanentPotentialTypes = Object.freeze({
     CONNECTED: 'PERM_CONNECTED',
     DISCONNECTED: 'PERM_DISCONNECTED'
 })
+
+export const AnodeMaterials = Object.freeze({
+    MAGNEZIUM: 0,
+    ALUMINUM: 1,
+    ZINC: 2,
+    OTHER: 3
+})
+
+export const WireGauges = Object.freeze({
+    AVG0_PLUS: 0,
+    AVG0: 1,
+    AVG1: 2,
+    AVG2: 3,
+    AVG3: 4,
+    AVG4: 5,
+    AVG5: 6,
+    AVG6: 7,
+    AVG7: 8,
+    AVG8: 9,
+    AVG9: 10,
+    AVG10: 11,
+    AVG11: 12,
+    AVG12: 13,
+    AVG13: 14,
+    AVG14: 15,
+    AVG15: 16,
+    AVG16: 17,
+    AVG17: 18,
+    AVG17_MINUS: 19,
+
+})

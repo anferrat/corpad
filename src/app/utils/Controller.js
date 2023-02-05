@@ -1,8 +1,5 @@
-import { Validation } from "./Validation";
-
 export class Controller {
     constructor() {
-        this.validation = new Validation()
     }
 
     async controllerHandler(onSuccess, onError, errorCode, controller) {

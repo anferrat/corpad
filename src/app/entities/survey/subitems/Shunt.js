@@ -1,8 +1,9 @@
-import { Subitem } from "./Subitem";
+import { ItemTypes } from "../items/SurveyItem";
+import { Subitem, SubitemTypes } from "./Subitem";
 
 export class Shunt extends Subitem {
-    constructor(id, parentId, uid, type, name, timeCreated, timeModified, factor, ratioVoltage, ratioCurrent, factorSelected, current, voltageDrop, fromAtoB, sideA, sideB) {
-        super(id, parentId, uid, type, name, timeCreated, timeModified)
+    constructor(id, parentId, uid, name, factor, ratioVoltage, ratioCurrent, factorSelected, current, voltageDrop, fromAtoB, sideA, sideB) {
+        super(id, parentId, uid, SubitemTypes.SHUNT, ItemTypes.TEST_POINT, name)
         this.factor = factor
         this.ratioVoltage = ratioVoltage
         this.ratioCurrent = ratioCurrent
