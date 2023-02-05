@@ -1,8 +1,9 @@
-import { Subitem } from "./Subitem"
+import { ItemTypes } from "../items/SurveyItem"
+import { Subitem, SubitemTypes } from "./Subitem"
 
 export class TestLead extends Subitem {
-    constructor(id, parentId, uid, type, name, timeCreated, timeModified, wireGauge, wireColor) {
-        super(id, parentId, uid, type, name, timeCreated, timeModified)
+    constructor(id, parentId, uid,name, wireGauge, wireColor) {
+        super(id, parentId, uid, SubitemTypes.TEST_LEAD, ItemTypes.TEST_POINT, name)
         this.wireGauge = wireGauge
         this.wireColor = wireColor
     }

@@ -8,15 +8,30 @@ import { resetFolder, test } from '../api/files/fs'
 import { getReferenceCellList, updateMainReference, createReferenceCell, deleteReferenceCell } from '../app/controllers/survey/other/ReferenceCellController'
 import { ItemController } from '../app/controllers/survey/items/ItemController'
 import { EventRegister } from 'react-native-event-listeners'
+import { ValidateSurveyFile } from '../app/validation/survey_file/ValidateSurveyFile'
+import { SurveyRepository } from '../app/repository/sqlite/SurveyRepository'
+import { PipelineSurveyFile } from '../app/entities/survey/survey/PipelineSurveyFile'
+import { BondRepository } from '../app/repository/sqlite/SubitemRepository/BondRepository'
+import { SubitemRepository } from '../app/repository/sqlite/SubitemRepository'
+import { TestPointRepository } from '../app/repository/sqlite/TestPointRepository'
+import { PipelineRepository } from '../app/repository/sqlite/PipelineRepository'
+import { RectifierRepository } from '../app/repository/sqlite/RectifierRepository'
+import { PotentialRepository } from '../app/repository/sqlite/PotentialRepository'
 
-export default DevScreen = ({ navigation }) => {
+
+const testObj = JSON.parse(`{"version":1,"type":"plsv","data":{"survey":[["8003dcd1-d70a-ca6f-bf31-9a458ee3a686","Yry","Wade Watts"]],"testPoints":[[1, "a5ea8b-e1b6-0ac0-7db5-e32784054ab7","TP1",null,"Bugagag",-122.090987,null,0,0,1674791569082,1674791571299],[2,"9ea4c6e2-1f2c-2f1f-3455-1d75acda7536","TP2",null,null,null,null,0,0,1675042971190,1675042974118]],"rectifiers":[],"pipelines":[[1,"bbd98ab1-7790-3383-ee44-ca7501fb4ee8","Pipeline",null,null,null,null,null,1674635057466,null,null]],"potentialTypes":[[1,"0ed1e078-0961-4a03-f505-9a9f5bde1861","On",0,"PERM_ON"],[2,"0c57b36f-5dab-f1e8-7761-e9d34c2d77d9","Off",0,"PERM_OFF"],[3,"ec798b88-dc41-45a5-bd81-bbb3e5d023e0","Native",0,"PERM_NATIVE"],[4,"64e035af-5074-d1f4-b554-d88f0e7ba640","Connected",0,"PERM_CONNECTED"],[5,"9941c9d6-87da-1b5f-dbf7-c4171303f427","Disconnected",0,"PERM_DISCONNECTED"]],"referenceCells":[[1,"75d921a8-54d7-cb64-8a70-231b47793a06",0,"RC1",1]],"cards":[],"potentials":[],"circuits":[],"sides":[]}}`)
+
+export default DevScreen = ({ navigation, route }) => {
   const navigate = () =>
     navigation.goBack()
-
+  const { smst } = route
   const jaja = async () => {
     try {
-      const repo = new ItemController()
-      console.log(!!global.HermesInternal)
+      const repo = new PotentialRepository()
+      //const dataFile = new PipelineSurveyFile(testObj.data.survey, testObj.data.testPoints, testObj.data.rectifiers, testObj.data.pipelines, testObj.data.potentialTypes, testObj.data.referenceCells, testObj.data.cards, testObj.data.potentials, testObj.data.circuits, testObj.data.sides)
+      //const res = await repo.getDisplayListWithPotentials({ readingTypeFilter: [], idList: [11,12,13,14,24,42,17,18], permTypes: ['PERM_OFF', 'PERM_NATIVE'] }) //{ readingTypeFilter: [], idList: [11,12,13,14,24,42,17,18], permTypes: ['PERM_OFF', 'PERM_NATIVE'] }
+      const res2 = await repo.getByItemId({idList: [43,44,45,46,47,37,39], permTypes: ['PERM_ON']})
+      console.log(res2)
       //console.log(await repo.getIdList({ itemType: 'TEST_POINT', sorting: 1, filters: { readingTypeFilter: ['PL'], statusFilter: [], testPointTypeFilter: [], hideEmptyTestPoints: false } }))
     }
     catch (err) {
@@ -48,7 +63,7 @@ export default DevScreen = ({ navigation }) => {
 
 const sqlTest = async () => {
   try {
-    const test = await sendCombinedRequest([['SELECT', 'TEST_POINT', { testPointId: 1 }], ['SELECT', 'SETTINGS', {}]])
+    const test = await sendRequest('')
     //console.log(test)
   }
   catch (er) {

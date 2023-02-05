@@ -2,7 +2,7 @@ import { ItemStatuses, SurveyItem } from "./SurveyItem"
 import { ItemTypes } from "./SurveyItem"
 
 export class Pipeline extends SurveyItem {
-    constructor(id, uid, name = null, timeCreated, timeModified, comment = null, nps = null, material = null, coating = true, licenseNumber = null, product = null, tpCount = 0) {
+    constructor(id, uid, name , timeCreated, timeModified, comment, nps, material, coating, licenseNumber, product, tpCount) {
         super(id, uid, name, ItemStatuses.NO_STATUS, timeCreated, timeModified, comment, ItemTypes.PIPELINE)
         this.nps = nps
         this.material = material

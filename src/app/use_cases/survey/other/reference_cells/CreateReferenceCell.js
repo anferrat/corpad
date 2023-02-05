@@ -1,15 +1,13 @@
+import { ReferenceCell } from "../../../../entities/survey/other/ReferenceCell"
 import { ReferenceCellRepository } from "../../../../repository/sqlite/ReferenceCellRepository"
-import { ReferenceCellTypes } from "../../../../entities/survey/other/properties"
-import { Error } from "../../../../utils/Error"
+import { guid } from "../../../../utils/guid"
 
 export class CreateReferenceCell {
     constructor() {
         this.refCellRepo = new ReferenceCellRepository()
     }
-    async execute(createReferenceCellRequestObject) {
-        const rcTypeCheck = Object.values(ReferenceCellTypes).indexOf(createReferenceCellRequestObject.rcType) !== -1
-        if (rcTypeCheck)
-            return await this.refCellRepo.create(createReferenceCellRequestObject)
-        else throw new Error('CorpadError', 'Reference cell type is out of range')
+    execute(rcType, name) {
+        const referenceCell = new ReferenceCell(null, guid(), rcType, name, false)
+        return this.refCellRepo.create(referenceCell)
     }
 }

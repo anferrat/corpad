@@ -7,13 +7,15 @@ import { androidRipple } from '../../../styles/styles'
 
 const OptionCard = (props) => {
     return (
-        <Pressable style={{ ...styles.mainView, backgroundColor: props.selected ? basic200 : '#fff' }} android_ripple={androidRipple} onPress={props.onPress.bind(this, props.isCloudValue)} disabled={props.disabled}>
+        <Pressable style={{ ...styles.mainView, backgroundColor: props.selected ? basic200 : '#fff' }}
+            android_ripple={androidRipple}
+            onPress={props.onPress.bind(this, props.isCloudValue)}
+            disabled={props.disabled}>
             <View style={styles.topRow}>
                 {props.selected ?
                     <Icon name={'checkmark-circle-2'} style={styles.checkIcon} fill={success} />
                     : null}
             </View>
-
             <Icon name={props.icon} pack={props.pack} style={styles.icon} fill={props.selected ? primary : basic} />
             <Text category={'h6'} appearance={props.disabled ? 'hint' : 'default'}>{props.title}</Text>
             {props.hint ? <Text appearance={'hint'} category='s2'>{props.hint}</Text> : null}

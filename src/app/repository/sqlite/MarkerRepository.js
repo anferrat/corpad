@@ -8,7 +8,7 @@ export class MarkerRepository extends SQLiteRepository {
         super()
     }
 
-    async getAllMarkers() {
+    async getAll() {
         try {
             const result = await super.runSingleQueryTransaction(
                 `SELECT id, '${ItemTypes.TEST_POINT}' AS itemType, uid, status, testPointType, latitude, longitude, name, location, comment, timeCreated, timeModified FROM testPoints UNION ALL SELECT id, '${ItemTypes.RECTIFIER}' AS itemType, uid, status, NULL AS testPointType, latitude, longitude, name, location, comment, timeCreated, timeModified FROM rectifiers`, [])
@@ -21,7 +21,7 @@ export class MarkerRepository extends SQLiteRepository {
         }
     }
 
-    async serachMarker(string, limit) {
+    async serach(string, limit) {
         try {
             const searchQuery = `WHERE latitude IS NOT NULL AND longitude IS NOT NULL AND name LIKE '%${string}%'`
             const result = await super.runSingleQueryTransaction(

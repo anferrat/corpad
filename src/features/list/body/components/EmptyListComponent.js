@@ -7,11 +7,26 @@ const EmptyListComponent = (props) => {
     return (
         <View
             style={props.visible ? styles.main : styles.hidden}>
-            <Icon style={styles.icon} name='clipboard' fill={basic} />
+            <Icon style={styles.icon} name='list-outline' fill={basic} />
             <Text category='h3' appearance='hint' style={styles.mainText}>No Items</Text>
-            <Text category='p1' appearance='hint' style={props.filtered ? styles.hidden : styles.text}>To add new item press <Icon name='plus-square' style={styles.iconText} fill={basic} /> and select type</Text>
-            <Text category='p1' appearance='hint' style={!props.filtered ? styles.hidden : styles.text}>Seems like you filtered all the results. Select <Icon name='funnel' style={styles.iconText} fill={basic} /> and clear filters</Text>
+            {props.filtered ? <FilteredItemsHint /> : <EmptyListHint />}
         </View>
+    )
+}
+
+const FilteredItemsHint = () => {
+    return (
+        <Text category='p1' appearance='hint' style={styles.text}>
+            Seems like you filtered all the results. Select <Icon name='funnel-outline' style={styles.iconText} fill={basic} /> and clear filters
+        </Text>
+    )
+}
+
+const EmptyListHint = () => {
+    return (
+        <Text category='p1' appearance='hint' style={styles.text}>
+            To add new item press <Icon name='plus-square' style={styles.iconText} fill={basic} /> and select type
+        </Text>
     )
 }
 

@@ -1,9 +1,10 @@
+import { ItemTypes } from "../items/SurveyItem"
 import { CurrentUnits, PotentialUnits } from "../other/properties"
-import { Subitem } from "./Subitem"
+import { Subitem, SubitemTypes } from "./Subitem"
 
 export class Circuit extends Subitem {
-    constructor(id, parentId, uid, type, name, timeCreated, timeModified, ratioCurrent, ratioVoltage, targetMin, targetMax, current, voltage) {
-        super(id, parentId, uid, type, name, timeCreated, timeModified)
+    constructor(id, parentId, uid, name, ratioCurrent, ratioVoltage, targetMin, targetMax, current, voltage) {
+        super(id, parentId, uid, SubitemTypes.CIRCUIT, ItemTypes.RECTIFIER, name)
         this.ratioCurrent = ratioCurrent
         this.ratioVoltage = ratioVoltage
         this.current = current

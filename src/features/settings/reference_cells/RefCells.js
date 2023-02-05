@@ -132,12 +132,17 @@ const RefCells = (props) => {
                         checked={rc.id === mainReference.id} />)}
                 </ScrollView>
                 <Divider />
-                <Text style={styles.text} category='s2' appearance='hint'><Icon name='alert-circle-outline' style={styles.textIcon} fill={basic} />You can add multiple portable references in one survey. Potentials with active reference cell will be displayed with the test point info in the list. If you use more than one reference, you will have to indicate which one you want to use, when creating potential readings.</Text>
+                <Text style={styles.text} category='s2' appearance='hint'>
+                    <Icon
+                        name='alert-circle-outline'
+                        style={styles.textIcon}
+                        fill={basic} />
+                    You can add multiple portable references in one survey. Potentials with active reference cell will be displayed with the test point info in the list. If you use more than one reference, you will have to indicate which one you want to use, when creating potential readings.
+                </Text>
                 <MainActionButton
                     title='Back'
                     valid={true}
-                    onPress={props.goBack}
-                />
+                    onPress={props.goBack} />
             </View>
         )
 }

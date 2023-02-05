@@ -11,7 +11,10 @@ const ListItem = (props) => {
             style={styles.pressable}
             onPress={props.onPress}>
             <View style={styles.iconLayout}>
-                <Icon name={props.iconName} pack={props.pack} style={styles.icon} fill={'#fff'} />
+                <Icon name={props.iconName}
+                    pack={props.pack}
+                    style={styles.icon}
+                    fill={'#fff'} />
             </View>
             <Text style={styles.text}>{props.title}</Text>
         </Pressable>

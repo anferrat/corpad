@@ -1,24 +1,36 @@
 import { SQLiteRepository } from "../../utils/SQLite"
 import { Error } from "../../utils/Error"
 import { ItemTypes, SurveyItem } from "../../entities/survey/items/SurveyItem"
+import { Survey } from "../../entities/survey/other/Survey"
+import { PipelineSurveyFile, SurveyFileDataFields } from "../../entities/survey/survey/PipelineSurveyFile"
+import { SurveyElement } from "../../entities/survey/survey/Elements/SurveyElement"
+import { TestPointElement } from "../../entities/survey/survey/Elements/TestPointElement"
+import { RectifierElement } from "../../entities/survey/survey/Elements/RectifierElement"
+import { PipelineElement } from "../../entities/survey/survey/Elements/PipelineElement"
+import { PotentialTypeElement } from "../../entities/survey/survey/Elements/PotentialTypeElement"
+import { ReferenceCellElement } from "../../entities/survey/survey/Elements/ReferenceCellElement"
+import { CardElement } from "../../entities/survey/survey/Elements/CardElement"
+import { PotentialElement } from "../../entities/survey/survey/Elements/PotentialElement"
+import { CircuitElement } from "../../entities/survey/survey/Elements/CircuitElement"
+import { SideElement } from "../../entities/survey/survey/Elements/SideElement"
 
 export class SurveyRepository extends SQLiteRepository {
     constructor() {
         super()
     }
 
+
     async serachItem(string, limit) {
         try {
             const searchQuery = `WHERE name LIKE '%${string}%'`
             const fieldsQuery = `SELECT id, uid, name, status, timeCreated, timeModified, comment,`
-            const result = await super.runSingleQueryTransaction(
-                `${fieldsQuery} ${ItemTypes.TEST_POINT} AS itemType, testPointType FROM testPoints ${searchQuery} UNION ALL
-                ${fieldsQuery} ${ItemTypes.RECTIFIER} AS itemType, NULL AS testPointType FROM rectifiers ${searchQuery} UNION ALL
-                ${fieldsQuery} ${ItemTypes.PIPELINE} AS itemType, NULL AS testPointType FROM pipelines ${searchQuery}
-                ORDER BY length(name) ASC LIMIT ${limit}`
-                    `SELECT id, uid, name, status timeModified, testPointType AS type, 'TEST_POINT' as dataType, length(name) AS nameLength FROM testPoints WHERE name LIKE '%" + data.searchString + "%' UNION ALL SELECT id, uid, name, timeModified, 'RT' AS type, 'RECTIFIER' as dataType, length(name) AS nameLength FROM rectifiers WHERE name LIKE '%" + data.searchString + "%' UNION ALL SELECT id, uid, name, timeModified, 'PL' AS type, 'PIPELINE' as dataType, length(name) AS nameLength FROM pipelines WHERE name LIKE '%" + data.searchString + "%' ORDER BY nameLength ASC LIMIT 20`
-                    `SELECT id, '${ItemTypes.TEST_POINT}' AS itemType, uid, status, testPointType, latitude, longitude, name, location, comment, timeCreated, timeModified FROM testPoints ${searchQuery} UNION ALL SELECT id, '${ItemTypes.RECTIFIER}' AS itemType, uid, status, NULL AS testPointType, latitude, longitude, name, location, comment, timeCreated, timeModified FROM rectifiers ${searchQuery} ORDER BY length(name) ASC LIMIT ${limit}`,
-                [])
+
+            const query = `${fieldsQuery} ${ItemTypes.TEST_POINT} AS itemType, testPointType FROM testPoints ${searchQuery} UNION ALL
+            ${fieldsQuery} ${ItemTypes.RECTIFIER} AS itemType, NULL AS testPointType FROM rectifiers ${searchQuery} UNION ALL
+            ${fieldsQuery} ${ItemTypes.PIPELINE} AS itemType, NULL AS testPointType FROM pipelines ${searchQuery}
+            ORDER BY length(name) ASC LIMIT ${limit}`
+
+            const result = await super.runSingleQueryTransaction(query, [])
 
             return super.generateArray(result.rows.length, result.rows.item)
                 .map(({ id, uid, itemType, status, testPointType, name, comment, timeCreated, timeModifed }) =>
@@ -96,13 +108,108 @@ export class SurveyRepository extends SQLiteRepository {
             throw new Error('DatabaseError', 'Unable to reset database tables', er)
         }
     }
-
-    async export() {
-
+    async getSurvey() {
+        try {
+            const result = await this.runSingleQueryTransaction('SELECT * FROM survey LIMIT 1')
+            const { uid, name, technician } = result.rows.item(0)
+            return new Survey(uid, name, technician)
+        }
+        catch (err) {
+            throw new Error('DatabaseError', 'Unable to get survey information', err)
+        }
     }
 
-    async import() {
+    async export() {
+        try {
+            const tables = ['survey', 'testPoints', 'rectifiers', 'pipelines', 'potentialTypes', 'referenceCells', 'cards', 'potentials', 'circuits', 'sides']
 
+            const [survey, testPoints, rectifiers, pipelines, potentialTypes, referenceCells, cards, potentials, circuits, sides] =
+                await this.runMultiQueryTransaction(tx =>
+                    tables.map(table => this.runQuery(tx, `SELECT * FROM ${table}`, []))
+                )
+            return new PipelineSurveyFile(
+                super.generateArray(survey.rows.length, survey.rows.item)
+                    .map(({ uid, name, technician }) =>
+                        new SurveyElement(uid, name, technician)),
+
+                super.generateArray(testPoints.rows.length, testPoints.rows.item)
+                    .map(({ id, uid, name, location, latitude, longitude, comment, testPointType, status, timeCreated, timeModified }) =>
+                        new TestPointElement(id, uid, name, location, latitude, longitude, comment, testPointType, status, timeCreated, timeModified)),
+
+                super.generateArray(rectifiers.rows.length, rectifiers.rows.item)
+                    .map(({ id, uid, name, status, timeCreated, timeModified, comment, location, latitude, longitude, model, serialNumber, powerSource, acVoltage, acCurrent, tapSetting, tapValue, tapCoarse, tapFine, maxVoltage, maxCurrent }) =>
+                        new RectifierElement(id, uid, name, status, timeCreated, timeModified, comment, location, latitude, longitude, model, serialNumber, powerSource, acVoltage, acCurrent, tapSetting, tapValue, tapCoarse, tapFine, maxVoltage, maxCurrent)),
+
+                super.generateArray(pipelines.rows.length, pipelines.rows.item)
+                    .map(({ id, uid, name, nps, material, coating, licenseNumber, timeCreated, timeModified, product, comment }) =>
+                        new PipelineElement(id, uid, name, nps, material, coating, licenseNumber, timeCreated, timeModified, product, comment)),
+
+                super.generateArray(potentialTypes.rows.length, potentialTypes.rows.item)
+                    .map(({ id, uid, name, custom, permType }) =>
+                        new PotentialTypeElement(id, uid, name, custom, permType)),
+
+                super.generateArray(referenceCells.rows.length, referenceCells.rows.item)
+                    .map(({ id, uid, rcType, name, mainReference }) =>
+                        new ReferenceCellElement(id, uid, rcType, name, mainReference)),
+
+                super.generateArray(cards.rows.length, cards.rows.item)
+                    .map(({ id, parentId, uid, type, name, anodeMaterial, wireColor, wireGauge, fromAtoB, current, currentUnit, pipelineId, pipelineCardId, couponType, density, area, description, isolationType, shorted, rcType, nps, ratioCurrent, ratioVoltage, factorSelected, factor, voltageDrop }) =>
+                        new CardElement(id, parentId, uid, type, name, anodeMaterial, wireColor, wireGauge, fromAtoB, current, currentUnit, pipelineId, pipelineCardId, couponType, density, area, description, isolationType, shorted, rcType, nps, ratioCurrent, ratioVoltage, factorSelected, factor, voltageDrop)),
+
+                super.generateArray(potentials.rows.length, potentials.rows.item)
+                    .map(({ id, cardId, uid, value, type, unit, portableReferenceId, permanentReferenceId }) =>
+                        new PotentialElement(id, cardId, uid, value, type, unit, portableReferenceId, permanentReferenceId)),
+
+                super.generateArray(circuits.rows.length, circuits.rows.item)
+                    .map(({ id, uid, name, rectifierId, ratioCurrent, ratioVoltage, voltageDrop, current, voltage, targetMin, targetMax }) =>
+                        new CircuitElement(id, uid, name, rectifierId, ratioCurrent, ratioVoltage, voltageDrop, current, voltage, targetMin, targetMax)),
+
+                super.generateArray(sides.rows.length, sides.rows.item)
+                    .map(({ id, sideAId, sideBId, parentCardId }) =>
+                        new SideElement(id, sideAId, sideBId, parentCardId))
+            )
+        }
+        catch (err) {
+            throw new Error('DatabaseError', 'Export failed', err)
+        }
+    }
+
+    async import(surveyFile) {
+        try {
+
+            await this.runMultiQueryTransaction(async tx => {
+                try {
+                    const [testPoints, rectifiers, pipelines, potentialTypes, referenceCells, survey] = await Promise.all([
+                        this.runQuery(tx, `INSERT INTO testPoints(uid, name, location, latitude, longitude, comment, testPointType, status, timeCreated, timeModified) VALUES 
+            ${surveyFile.data[SurveyFileDataFields.TEST_POINTS].map(e => `(${e.uid}, ${e.name}, ${e.location}, ${e.latitide}, ${e.longitude}, ${e.comment}, ${e.testPointType}, ${e.status}, ${e.timeCreated}, ${e.timeModified})`).join()}`),
+
+                        this.runQuery(tx, `INSERT INTO rectifiers(uid, name, status, timeCreated, timeModified, comment, location, latitude, longitude, model, serialNumber, powerSource, acVoltage, acCurrent, tapSetting, tapValue, tapCoarse, tapFine, maxVoltage, maxCurrent) VALUES 
+            ${surveyFile.data[SurveyFileDataFields.RECTIFIERS].map(e => `(${e.uid}, ${e.name}, ${e.status}, ${e.timeCreated}, ${e.timeModified}, ${e.comment}, ${e.location}, ${e.latitude}, ${e.longitude}, ${e.model}, ${e.serialNumber}, ${e.powerSource}, ${e.acVoltage}, ${e.acCurrent}, ${e.tapSetting}, ${e.tapValue}, ${e.tapCoarse}, ${e.tapFine}, ${e.maxVoltage}, ${e.maxCurrent})`).join()} `),
+
+                        this.runQuery(tx, `INSERT INTO pipelines(uid, name, nps, material, coating, licenseNumber, timeCreated, timeModified, product, comment) VALUES 
+            ${surveyFile.data[SurveyFileDataFields.PIPELINES].map(e => `(${e.uid}, ${e.name}, ${e.nps}, ${e.material}, ${e.coating}, ${e.licenseNumber}, ${e.timeCreated}, ${e.timeModified}, ${e.product}, ${e.comment})`).join()} `),
+
+                        this.runQuery(tx, `INSERT INTO potentialTypes (uid, name, custom, permType) VALUES 
+            ${surveyFile.data[SurveyFileDataFields.POTENTIAL_TYPES].map(e => `(${e.uid}, ${e.name}, ${e.custom}, ${e.permType})`).join()} `),
+
+                        this.runQuery(tx, `INSERT INTO referenceCells (uid, rcType, name, mainReference) VALUES 
+            ${surveyFile.data[SurveyFileDataFields.REFERENCE_CELLS].map(e => `(${e.uid}, ${e.rcType}, ${e.name}, ${e.mainReference})`).join()} `),
+
+                        this.runQuery(tx, `INSERT INTO survey (uid, name, technician) VALUES 
+            ${surveyFile.data[SurveyFileDataFields.REFERENCE_CELLS].map(e => `(${e.uid}, ${e.name}, ${e.technician})`).join()} `),
+                    ])
+                    return {
+                        status: 'jajajajaj'
+                    }
+                }
+                catch (er) {
+                    throw er
+                }
+            })
+        }
+        catch (err) {
+            throw new Error('DatabaseError', `Unable to import survey file`, err)
+        }
     }
 
     async exportToSpreadsheet() {

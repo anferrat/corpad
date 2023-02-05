@@ -2,8 +2,8 @@ import { object, string, number, boolean, array, mixed } from 'yup'
 import { PipelineMaterials, PipelineProducts } from '../entities/survey/items/Pipeline'
 import { CoarseFineOptions, PowerSources, TapOptions } from '../entities/survey/items/Rectifier'
 import { ItemStatuses, ItemTypes, TestPointTypes } from '../entities/survey/items/SurveyItem'
-import { DisplayedReadingOptions, PipeDiameters, SortingOptions } from '../entities/survey/other/properties'
-import { SubitemTypes } from '../entities/survey/subitems/SubitemData'
+import { AnodeMaterials, CouponTypes, DisplayedReadingOptions, IsolationTypes, PermanentPotentialTypes, PipeDiameters, ReferenceCellTypes, SortingOptions, WireColors, WireGauges } from '../entities/survey/other/properties'
+import { SubitemTypes } from '../entities/survey/subitems/Subitem'
 import { Error } from "./Error"
 
 export class Validation {
@@ -11,35 +11,39 @@ export class Validation {
     id = number('Id must be a number').positive('Id must be a positive number').integer('Id must be integer value')
     index = number('Index must be a number').positive('Index must be a positive number').integer('Index must be integer value')
     uid = string('uid must be a string').min(10, 'uid must have at least 10 characters')
-    bool = boolean()
+    bool = boolean().nullable()
     longitude = number('Longitude must be a number').min(-180, 'longitude must larger than -180').max(180, 'Longitude must be smaller than 180').nullable()
     latitude = number().min(-90).max(90).nullable()
-    number = number()
+    number = number().nullable()
     positiveNumber = number().positive()
     timestamp = number().positive().integer()
     location = string().max(80).nullable()
     smallText = string().max(80).nullable()
     comment = string().max(300).nullable()
     testPointType = mixed().oneOf(Object.values(TestPointTypes))
-    status = mixed().oneOf(Object.values(ItemStatuses))
+    status = mixed().oneOf(Object.values(ItemStatuses)).nullable()
     itemType = mixed().oneOf(Object.values(ItemTypes))
     powerSource = mixed().oneOf(Object.values(PowerSources))
     tapSetting = mixed().oneOf(Object.values(TapOptions))
-    tapValue = number().min(0).max(100)
+    tapValue = number().min(0).max(100).nullable()
     coarseFineValue = mixed().oneOf(Object.values(CoarseFineOptions))
     pipelineProduct = mixed().oneOf(Object.values(PipelineProducts))
     nps = mixed().oneOf(Object.values(PipeDiameters))
     pipeMaterial = mixed().oneOf(Object.values(PipelineMaterials))
     sorting = mixed().oneOf(Object.values(SortingOptions))
+    rcType = mixed().oneOf(Object.values(ReferenceCellTypes))
     rectifierDisplayedReading = mixed().oneOf(Object.values(DisplayedReadingOptions[ItemTypes.RECTIFIER]))
     testPointDisplayedreading = mixed().oneOf(Object.values(DisplayedReadingOptions[ItemTypes.TEST_POINT]))
-    filters = object({
-        statusFilter: array().of(this.status).required(),
-        testPointTypeFilter: array().of(this.testPointType).required(),
-        hideEmptyTestPoints: this.bool.required(),
-        readingTypeFilter: array().of(mixed().oneOf(Object.values(SubitemTypes))).required()
-    })
-
+    statusFilter = array().of(this.status)
+    testPointTypeFilter = array().of(this.testPointType)
+    subitemType = mixed().oneOf(Object.values(SubitemTypes))
+    readingTypeFilter = array().of(this.subitemType)
+    permTypes = mixed().oneOf(Object.values(PermanentPotentialTypes)).nullable()
+    anodeMaterial = mixed().oneOf(Object.values(AnodeMaterials))
+    wireColor = mixed().oneOf(Object.values(WireColors))
+    wireGauge = mixed().oneOf(Object.values(WireGauges))
+    couponType = mixed().oneOf(Object.values(CouponTypes))
+    isolationType = mixed().oneOf(Object.values(IsolationTypes))
     validate(value, schema) {
         try {
             return schema.validateSync(value)
@@ -54,61 +58,6 @@ export class Validation {
             object({
                 name: this.name.required(),
                 rcType: this.index.required()
-            }))
-    }
-
-    testPointRequest(obj) {
-        return this.validate(obj,
-            object({
-                id: this.id.required(),
-                name: this.name.nullable().required(),
-                location: this.location,
-                latitude: this.latitude,
-                longitude: this.longitude,
-                comment: this.comment,
-                testPointType: this.testPointType.required(),
-                status: this.status,
-                defaultName: this.name.required('Default name is required'),
-            }))
-    }
-
-    rectifierRequest(obj) {
-        return this.validate(obj,
-            object({
-                id: this.id.required(),
-                name: this.name.nullable().required(),
-                location: this.location,
-                latitude: this.latitude,
-                longitude: this.longitude,
-                comment: this.comment,
-                status: this.status,
-                defaultName: this.name.required('Default name is required'),
-                model: this.smallText,
-                serialNumber: this.smallText,
-                powerSource: this.powerSource,
-                acVoltage: this.number,
-                acCurrent: this.number,
-                tapSetting: this.tapSetting,
-                tapValue: this.tapValue,
-                tapCoarse: this.coarseFineValue,
-                tapFine: this.coarseFineValue,
-                maxVoltage: this.number,
-                maxCurrent: this.number
-            }))
-    }
-
-    pipelineRequest(obj) {
-        return this.validate(obj,
-            object({
-                id: this.id.required(),
-                name: this.name.nullable().required(),
-                comment: this.comment,
-                defaultName: this.name.required('Default name is required'),
-                coating: this.bool,
-                licenseNumber: this.smallText,
-                product: this.pipelineProduct,
-                nps: this.nps,
-                material: this.pipeMaterial
             }))
     }
 

@@ -1,9 +1,10 @@
+import { ItemTypes } from "../items/SurveyItem";
 import { CurrentUnits } from "../other/properties";
-import { Subitem } from "./Subitem";
+import { Subitem, SubitemTypes } from "./Subitem";
 
 export class Coupon extends Subitem {
-    constructor(id, parentId, uid, type, name, timeCreated, timeModified, pipelineCardId, wireGauge, wireColor, couponType, current, density, area) {
-        super(id, parentId, uid, type, name, timeCreated, timeModified)
+    constructor(id, parentId, uid, name, pipelineCardId, wireGauge, wireColor, couponType, current, density, area) {
+        super(id, parentId, uid, SubitemTypes.COUPON, ItemTypes.TEST_POINT, name)
         this.pipelineCardId = pipelineCardId
         this.wireColor = wireColor
         this.wireGauge = wireGauge

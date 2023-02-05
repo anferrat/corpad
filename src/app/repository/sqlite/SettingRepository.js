@@ -3,7 +3,7 @@ import { Error } from "../../utils/Error"
 import { AppSettings } from "../../entities/survey/other/Settings"
 import { defaultSettings } from "../../entities/survey/other/Settings"
 
-export class PotentialRepository extends SQLiteRepository {
+export class SettingRepository extends SQLiteRepository {
     constructor() {
         super()
         this.tableName = 'settings'
@@ -34,11 +34,12 @@ export class PotentialRepository extends SQLiteRepository {
     async reset() {
         try {
             const { pipelineNameAsDefault, defaultPotentialUnit, autoCreatePotentials, isSurveyNew, isCloud, originalHash, fileName, cloudId, lastSync, onboarding } = defaultSettings
-            const result = await this.runMultiQueryTransaction(tx => [
+            await this.runMultiQueryTransaction(tx => [
                 this.runQuery(tx, `DELETE * FROM ${this.tableName}`, []),
                 this.runQuery(`INSERT INTO settings (pipelineNameAsDefault, defaultPotentialUnit, autoCreatePotentials, onboarding, isSurveyNew, isCloud, originalHash, fileName, cloudId, lastSync) VALUES (?,?,?,?,?,?,?,?,?,?)`,
                     [pipelineNameAsDefault, defaultPotentialUnit, autoCreatePotentials, onboarding, isSurveyNew, isCloud, originalHash, fileName, cloudId, lastSync])
             ])
+            return defaultSettings
         }
         catch (er) {
             throw new Error('DatabaseError', `Unable to reset app settings`, er)
