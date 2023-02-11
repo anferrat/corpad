@@ -1,15 +1,18 @@
-import { mixed, object } from "yup";
+import { mixed, object, array, ref } from "yup";
 import { ItemTypes } from "../../entities/survey/items/SurveyItem";
+import { ItemPropertyUpdateTypes } from "../../entities/survey/other/properties";
 import { Validation } from "../../utils/Validation";
 
 export class ItemValidation extends Validation {
-    constructor() {
+    constructor () {
         super()
     }
     createItem(obj) {
         return this.validate(obj,
             object({
-                itemType: this.itemType.required()
+                itemType: this.itemType.required(),
+                latitude: this.latitude,
+                longitude: this.longitude,
             }))
     }
 
@@ -28,7 +31,7 @@ export class ItemValidation extends Validation {
                         comment: this.comment,
                         testPointType: this.testPointType.required(),
                         status: this.status,
-                        defaultName: this.name.required('Default name is required'),
+                        defaultName: this.name,
                     }))
             case ItemTypes.RECTIFIER:
                 return this.validate(obj,
@@ -41,7 +44,7 @@ export class ItemValidation extends Validation {
                         longitude: this.longitude,
                         comment: this.comment,
                         status: this.status,
-                        defaultName: this.name.required('Default name is required'),
+                        defaultName: this.name,
                         model: this.smallText,
                         serialNumber: this.smallText,
                         powerSource: this.powerSource,
@@ -61,7 +64,7 @@ export class ItemValidation extends Validation {
                         id: this.id.required(),
                         name: this.name.nullable().required(),
                         comment: this.comment,
-                        defaultName: this.name.required('Default name is required'),
+                        defaultName: this.name,
                         coating: this.bool,
                         licenseNumber: this.smallText,
                         product: this.pipelineProduct,
@@ -80,7 +83,7 @@ export class ItemValidation extends Validation {
         )
     }
 
-    getItemById(obj) {
+    getById(obj) {
         return this.validate(obj,
             object({
                 id: this.id.required(),
@@ -127,18 +130,25 @@ export class ItemValidation extends Validation {
     }
 
     updateProperty(obj) {
-        const basic = this.validate(obj,
-            object({
-                itemType: this.itemType.required(),
-                id: this.id.required(),
-                property: mixed().required(),
-                value: mixed().required()
-            })
-        )
-        return {
-            ...basic,
-            value: this.property(obj.property, obj.value)
+        const getSchemaByProperty = (propertyType) => {
+            switch (propertyType) {
+                case ItemPropertyUpdateTypes.STATUS:
+                    return this.status
+                case ItemPropertyUpdateTypes.TAP_VALUE:
+                    return this.tapValue
+                case ItemPropertyUpdateTypes.TAP_FINE:
+                case ItemPropertyUpdateTypes.TAP_COARSE:
+                    return this.tapSetting
+                default: return mixed()
+            }
         }
+
+        return this.validate(obj, object({
+            itemType: this.itemType.required(),
+            propertyType: this.itemPropertyUpdateType.required(),
+            id: this.id.required(),
+            value: getSchemaByProperty(ref('propertyType')).required()
+        }))
     }
 
     getDisplayData(obj) {
@@ -149,7 +159,7 @@ export class ItemValidation extends Validation {
                     object({
                         itemType: this.itemType.required(),
                         displayedReading: this.testPointDisplayedreading.required(),
-                        id: this.id.required(),
+                        idList: array().of(this.id).required(),
                         readingTypeFilter: this.readingTypeFilter.required()
                     }))
             case ItemTypes.RECTIFIER:
@@ -157,13 +167,13 @@ export class ItemValidation extends Validation {
                     object({
                         itemType: this.itemType.required(),
                         displayedReading: this.rectifierDisplayedReading.required(),
-                        id: this.id.required(),
+                        idList: array().of(this.id).required(),
                     }))
             case ItemTypes.PIPELINE:
                 return this.validate(obj,
                     object({
                         itemType: this.itemType.required(),
-                        id: this.id.required(),
+                        idList: array().of(this.id).required(),
                     }))
         }
     }

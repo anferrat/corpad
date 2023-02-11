@@ -5,9 +5,10 @@ import { ItemResponseProcessor } from "./utils/ItemResponseProcessor"
 import { ItemTypes } from "../../entities/survey/items/SurveyItem"
 import { SubitemTypes } from "../../entities/survey/subitems/Subitem"
 import { SubitemResponseProcessor } from "./utils/SubitemResponseProcessor"
+import { ItemPropertyUpdateTypes } from "../../entities/survey/other/properties"
 
 export class TestPointRepository extends SQLiteRepository {
-    constructor() {
+    constructor () {
         super()
         this.responseProcessor = new ItemResponseProcessor()
         this.subitemProcessor = new SubitemResponseProcessor()
@@ -32,12 +33,13 @@ export class TestPointRepository extends SQLiteRepository {
 
     async getById(idList) {
         try {
-            const result = await super.runSingleQueryTransaction(`SELECT * from ${this.tableName} WHERE id IN ${this.convertArrayToInStatement(idList)}`)
-            return super.generateArray(result.rows.length, result.length.item).map(({ uid, name, location, latitude, longitude, comment, testPointType, status, timeCreated, timeModified }) =>
+            const result = await super.runSingleQueryTransaction(`SELECT * from testPoints WHERE id IN ${this.convertArrayToInStatement(idList)}`)
+            return super.generateArray(result.rows.length, result.rows.item).map(({ id, uid, name, location, latitude, longitude, comment, testPointType, status, timeCreated, timeModified }) =>
                 new TestPoint(id, uid, name, status, timeCreated, timeModified, comment, location, latitude, longitude, testPointType))
         }
         catch (err) {
-            throw new Error('DatabaseError', `Unable to get test point with ids ${idList.join()}`, err)
+            console.log(err)
+            throw new Error('DatabaseError', `Unable to get test point with id ${idList.join()}`, err)
         }
     }
 
@@ -83,18 +85,14 @@ export class TestPointRepository extends SQLiteRepository {
         }
     }
 
-    async updateProperty({ id, property, value, currentTime }) { //breaks architecture to be removed
+    async updateProperty(id, propertyType, value, currentTime) {
         try {
-            const result = await super.runSingleQueryTransaction(
-                `UPDATE ${this.tableName} SET ${property}=?, timeModified=? WHERE id=?`,
-                [value, currentTime, id]
-            )
-            if (result.rowsAffected === 0) {
-                throw 'Test point not found'
-            }
+            if (propertyType !== ItemPropertyUpdateTypes.STATUS)
+                throw 'Unsupported property update'
+            await super.runSingleQueryTransaction(`UPDATE testPoints SET status=?, timeModified=? WHERE id=?`, [value, currentTime, id])
         }
         catch (err) {
-            throw new Error('DatabaseError', `Unable to update property ${property} for test point with id ${id}`)
+            throw new Error('DatabaseError', `Unable to update property ${propertyType} for test point with id ${id}`)
         }
     }
 
@@ -113,10 +111,9 @@ export class TestPointRepository extends SQLiteRepository {
         }
     }
 
-    async getSubitems(idList) {
+    async getSubitemsById(id) {
         try {
-            const whereQuery = idList ? `WHERE testPointId IN ${super.convertArrayToInStatement(idList)}` : ''
-            const result = await super.runSingleQueryTransaction(`SELECT cards.*, sides.sideAId, sides.sideBId FROM cards LEFT JOIN sides ON cards.id = sides.parentCardId ${whereQuery} ORDER BY cards.id DESC`)
+            const result = await super.runSingleQueryTransaction(`SELECT cards.*, sides.sideAId, sides.sideBId FROM cards LEFT JOIN sides ON cards.id = sides.parentCardId WHERE cards.testPointId = ? ORDER BY cards.id DESC`, [id])
             return this.subitemProcessor.generateArrayWithSides(result.rows.length, result.rows.item).map(this.subitemProcessor.getSubitemFromTableData)
         }
         catch (err) {
@@ -141,25 +138,26 @@ export class TestPointRepository extends SQLiteRepository {
             CASE WHEN potentialTypes.permType = ? AND referenceCells.mainReference = 1 THEN potentials.value END) AS v1,
         MAX(
             CASE WHEN potentialTypes.permType = ? AND referenceCells.mainReference = 1 THEN potentials.value END) AS v2 
-        FROM potentials 
+        FROM testPoints
+        LEFT JOIN cards ON
+        testPoints.id = cards.testPointId
+        LEFT JOIN potentials ON
+        potentials.cardId = cards.id 
         INNER JOIN potentialTypes ON 
         potentials.type = potentialTypes.id 
         INNER JOIN referenceCells ON 
-        potentials.portableReferenceId = referenceCells.id 
-        LEFT JOIN cards ON 
-        potentials.cardId = cards.id 
-        LEFT JOIN testPoints ON
-        testPoints.id = cards.testPointId
+        potentials.portableReferenceId = referenceCells.id
         WHERE
         ${filterQuery} AND
         ${idListQuery}
         GROUP BY cards.id
         UNION ALL 
-        SELECT testPoints.id AS itemId, testPoints.testPointType, testPoints.status, testPoints.name AS itemName, testPoints.timeModified, testPoints.uid AS itemUid, testPoints.location, cards.id, cards.uid, cards.name, cards.type, potentials.value AS v1, potentials.value AS v2 FROM cards 
-        LEFT JOIN potentials ON 
-        potentials.cardId = cards.id 
-        LEFT JOIN testPoints ON
+        SELECT testPoints.id AS itemId, testPoints.testPointType, testPoints.status, testPoints.name AS itemName, testPoints.timeModified, testPoints.uid AS itemUid, testPoints.location, cards.id, cards.uid, cards.name, cards.type, potentials.value AS v1, potentials.value AS v2 
+        FROM testPoints
+        LEFT JOIN cards ON
         testPoints.id = cards.testPointId
+        LEFT JOIN potentials ON
+        potentials.cardId = cards.id 
         WHERE potentials.cardId IS NULL AND 
         ${filterQuery} AND
         ${idListQuery}

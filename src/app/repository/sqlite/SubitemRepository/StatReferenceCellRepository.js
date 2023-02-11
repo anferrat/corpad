@@ -5,7 +5,7 @@ import { StatReferenceCell } from "../../../entities/survey/subitems/StatReferen
 
 
 export class StatRefrenceCellRepository extends SQLiteRepository {
-    constructor() {
+    constructor () {
         super()
     }
 
@@ -40,15 +40,18 @@ export class StatRefrenceCellRepository extends SQLiteRepository {
             return new StatReferenceCell(id, testPointId, uid, name, rcType, wireGauge, wireColor)
         }
         catch (err) {
-            throw new Error(`DatabaseError', 'Unable to get reference cell with id ${id}`, err)
+            throw new Error(`DatabaseError`, `Unable to get reference cell with id ${id}`, err)
         }
     }
 
-    async update(referenceCell) {
-        const { id, name, rcType, wireGauge, wireColor } = referenceCell
+    async update(referenceCell, currentTime) {
+        const { id, parentId, name, rcType, wireGauge, wireColor } = referenceCell
         try {
-            const result = await this.runSingleQueryTransaction('UPDATE cards SET name=?, rcType=?, wireColor=?, wireGauge=? WHERE id=?', [name, rcType, wireColor, wireGauge, id])
-            if (result.rowsAffected === 0)
+            const result = await this.runMultiQueryTransaction(tx => [
+                this.runQuery(tx, 'UPDATE cards SET name=?, rcType=?, wireColor=?, wireGauge=? WHERE id=?', [name, rcType, wireColor, wireGauge, id]),
+                this.runQuery(tx, 'UPDATE testPoints SET timeModified=? WHERE id=?', [currentTime, parentId])
+            ])
+            if (result[0].rowsAffected === 0)
                 throw 'Item not found'
             else return referenceCell
         }

@@ -3,7 +3,7 @@ import { Error } from "../../utils/Error"
 import { Potential } from "../../entities/survey/subitems/Potential"
 
 export class PotentialRepository extends SQLiteRepository {
-    constructor() {
+    constructor () {
         super()
         this.tableName = 'potentials'
     }
@@ -11,7 +11,7 @@ export class PotentialRepository extends SQLiteRepository {
     async getAll() {
         try {
             const result = await super.runSingleQueryTransaction(`SELECT * from ${this.tableName}`, [])
-            super.generateArray(result.rows.length, result.rows.item)
+            return super.generateArray(result.rows.length, result.rows.item)
                 .map(({ id, uid, value, cardId, type, permanentReferenceId, portableReferenceId }) => {
                     const isPortable = permanentReferenceId === null
                     const refCellId = isPortable ? portableReferenceId : permanentReferenceId
@@ -25,8 +25,12 @@ export class PotentialRepository extends SQLiteRepository {
 
     async getBySubitemId(subitemId) {
         try {
-            const result = await super.runSingleQueryTransaction(`SELECT * from ${this.tableName} WHERE cardId=?`, [subitemId])
-            super.generateArray(result.rows.length, result.rows.item)
+            const result = await super.runSingleQueryTransaction(
+                `SELECT * from ${this.tableName} 
+                INNER JOIN potentialTypes ON potentialTypes.id = potentials.type
+                WHERE potentials.cardId=? 
+                ORDER BY potentials.permanentReferenceId, potentials.portableReferenceId, potentialTypes.id`, [subitemId])
+            return super.generateArray(result.rows.length, result.rows.item)
                 .map(({ id, uid, value, cardId, type, permanentReferenceId, portableReferenceId }) => {
                     const isPortable = permanentReferenceId === null
                     const refCellId = isPortable ? portableReferenceId : permanentReferenceId
@@ -38,58 +42,48 @@ export class PotentialRepository extends SQLiteRepository {
         }
     }
 
-    async getByItemId({ idList, permTypes }) {
-        //returns all potentails of selected permTypes and activeReference
-        try {
-            const permTypeCondition = permTypes.length > 0 ? `AND potentialTypes.permType IN ${super.convertArrayToInStatement(permTypes)}` : ''
-            const result = await super.runSingleQueryTransaction(
-            `SELECT potentials.* 
-            FROM potentials 
-            LEFT JOIN cards ON 
-            potentials.cardId = cards.id 
-            LEFT JOIN testPoints ON 
-            cards.testPointId = testPoints.id
-            INNER JOIN potentialTypes ON 
-            potentials.type = potentialTypes.id 
-            INNER JOIN referenceCells ON 
-            potentials.portableReferenceId = referenceCells.id
-            WHERE testPoints.id IN ${super.convertArrayToInStatement(idList)}
-            ${permTypeCondition} AND
-            referenceCells.mainReference = 1`)
-            return super.generateArray(result.rows.length, result.rows.item)
-            .map(({ id, uid, value, cardId, type, permanentReferenceId, portableReferenceId }) => {
-                const isPortable = permanentReferenceId === null
-                const refCellId = isPortable ? portableReferenceId : permanentReferenceId
-                return new Potential(id, uid, cardId, value, type, refCellId, isPortable)
-            })
-        }
-        catch (err) {
-            throw new Error('DatabaseError', `Unable to get potentials for test points`, err)
-        }
-    }
-
     async create(potential) {
-        const { uid, referenceCellId, isPortableReference, potentialTypeId, subitemId, value } = potential
+        const { uid, referenceCellId, isPortableReference, potentialType, subitemId, value } = potential
         try {
             const refField = isPortableReference ? 'portableReferenceId' : 'permanentReferenceid'
             const result = await super.runSingleQueryTransaction(`INSERT INTO ${this.tableName} (uid, cardId, type, ${refField}, value) VALUES (?,?,?,?,?)`,
-                [uid, subitemId, potentialTypeId, referenceCellId, value])
-            return new Potential(result.insertId, uid, subitemId, value, potentialTypeId, referenceCellId, isPortableReference)
+                [uid, subitemId, potentialType, referenceCellId, value])
+            return new Potential(result.insertId, uid, subitemId, value, potentialType, referenceCellId, isPortableReference)
         }
         catch (er) {
             throw new Error('DatabseError', `Unable to create potential with ${isPortableReference ? '' : 'non-'}portable referenceCellId ${referenceCellId}, potentialType with id ${potentialTypeId} for subitem with id ${subitemId} and value ${value}`, er)
         }
     }
 
-    async update(potential) {
-        const { id, value } = potential
+    async update(potential, currentTime) {
+        const { id, value, subitemId } = potential
         try {
-            const result = await super.runSingleQueryTransaction(`UPDATE ${this.tableName} SET value = ? WHERE id = ?`, [value, id])
-            if (result.rowsAffeted === 0)
+            const result = await super.runMultiQueryTransaction(tx => [
+                this.runQuery(tx, `UPDATE potentials SET value = ? WHERE id = ?`, [value, id]),
+                this.runQuery(tx, 'UPDATE testPoints SET timeModified =? WHERE id IN (SELECT testPointId FROM cards WHERE id=?)', [currentTime, subitemId])
+            ])
+            if (result[0].rowsAffeted === 0)
                 throw 'Potential was not updated'
         }
         catch (er) {
             throw new Error('DatabaseError', `Unable to update poetntial with id ${id} and value ${value}`, er)
+        }
+    }
+
+    async updateList(potentials) {
+        try {
+            const idList = potentials.map(potential => potential.id)
+            if (idList.length > 0)
+                await super.runMultiQueryTransaction(tx => [
+                    this.runQuery(tx, `DELETE FROM potentials WHERE id IN ${this.convertArrayToInStatement(idList)}`),
+                    this.runQuery(tx,
+                        `INSERT INTO potentials (id, uid, cardId, type, portableReferenceId, permanentReferenceid, value) 
+                                VALUES ${potentials.map(({ id, uid, subitemId, potentialType, referenceCellId, value, isPortableReference }) =>
+                            `(${id}, "${uid}", ${subitemId}, ${potentialType}, ${isPortableReference ? referenceCellId : null}, ${!isPortableReference ? referenceCellId : null}, ${value})`).join(', ')} `)
+                ])
+        }
+        catch (er) {
+            throw new Error('DatabaseError', `Unable to update potential list`, er)
         }
     }
 

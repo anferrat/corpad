@@ -3,18 +3,18 @@ import { PotentialType } from "../../entities/survey/other/PotentialType"
 import { Error } from "../../utils/Error"
 
 export class PotentialTypeRepository extends SQLiteRepository {
-    constructor() {
+    constructor () {
         super()
         this.tableName = 'potentialTypes'
     }
 
     async getAll() {
         try {
-            const result = await super.runSingleQueryTransaction(`SELECT * from ${this.tableName}`, [])
-            super.generateArray(result.rows.length, result.rows.item)
-                .map(({ id, uid, name, permType }) => {
-                    return new PotentialType(id, uid, name, permType)
-                })
+            const result = await super.runSingleQueryTransaction(`SELECT * from potentialTypes`)
+            return super.generateArray(result.rows.length, result.rows.item)
+                .map(({ id, uid, name, permType }) =>
+                    new PotentialType(id, uid, name, permType)
+                )
         }
         catch (er) {
             throw new Error('DatabaseError', `Unable to get potential types`, er)

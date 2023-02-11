@@ -6,7 +6,7 @@ import { SubitemResponseProcessor } from "../utils/SubitemResponseProcessor"
 
 
 export class ShuntRepository extends SQLiteRepository {
-    constructor() {
+    constructor () {
         super()
         this.responseProcessor = new SubitemResponseProcessor()
     }
@@ -47,29 +47,32 @@ export class ShuntRepository extends SQLiteRepository {
             ])
             const sideA = this.generateArray(sideAresult.rows.length, sideAresult.rows.item).map(side => side.sideAId)
             const sideB = this.generateArray(sideBresult.rows.length, sideBresult.rows.item).map(side => side.sideBId)
+            
             const { testPointId, uid, name, fromAtoB, current, ratioCurrent, ratioVoltage, factorSelected, factor, voltageDrop } = result.rows.item(0)
 
             return new Shunt(id, testPointId, uid, name, factor, ratioVoltage, ratioCurrent, factorSelected, current, voltageDrop, fromAtoB, sideA, sideB)
         }
         catch (err) {
-            throw new Error(`DatabaseError', 'Unable to get shunt with id ${id}`, err)
+            throw new Error(`DatabaseError`, `Unable to get shunt with id ${id}`, err)
         }
     }
 
-    async update(shunt) {
-        const { id, name, fromAtoB, current, ratioCurrent, ratioVoltage, factorSelected, factor, voltageDrop, sideA, sideB } = shunt
+    async update(shunt, currentTime) {
+        const { id, parentId, name, fromAtoB, current, ratioCurrent, ratioVoltage, factorSelected, factor, voltageDrop, sideA, sideB } = shunt
         try {
             const sides = sideA.map(side => ({ sideA: side, sideB: null })).concat(sideB.map(side => ({ sideB: side, sideA: null })))
             const [result] = await super.runMultiQueryTransaction(tx => [
                 this.runQuery(tx, `UPDATE cards SET name=?, fromAtoB=?, current=?, ratioCurrent=?, ratioVoltage=?, factorSelected=?, factor=?, voltageDrop=? WHERE id=?`, [name, fromAtoB, current, ratioCurrent, ratioVoltage, factorSelected, factor, voltageDrop, id]),
-                this.runQuery(tx, `DELETE * FROM sides WHERE parentCardId = ?`, [id]),
-                sides.lenght > 0 ? this.runQuery(tx, `INSERT INTO sides (sideAId, sideBId, parentCardId) VALUES ${sides.map(side => `(${side.sideA}, ${side.sideB}, ${id})`).join()}`) : null
+                this.runQuery(tx, 'UPDATE testPoints SET timeModified = ? WHERE id=?', [currentTime, parentId]),
+                this.runQuery(tx, `DELETE FROM sides WHERE parentCardId = ?`, [id]),
+                sides.length > 0 ? this.runQuery(tx, `INSERT INTO sides (sideAId, sideBId, parentCardId) VALUES ${sides.map(side => `(${side.sideA}, ${side.sideB}, ${id})`).join()}`) : null
             ])
             if (result.rowsAffected === 0)
                 throw 'Item not found'
             else return shunt
         }
         catch (err) {
+            console.log(err)
             throw new Error('DatabaseError', `Unable to update shunt with id ${id}`, err)
         }
     }

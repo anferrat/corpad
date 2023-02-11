@@ -5,7 +5,7 @@ import { Riser } from "../../../entities/survey/subitems/Riser"
 
 
 export class RiserRepository extends SQLiteRepository {
-    constructor() {
+    constructor () {
         super()
     }
 
@@ -39,15 +39,18 @@ export class RiserRepository extends SQLiteRepository {
             return new Riser(id, testPointId, uid, name, pipelineId, nps)
         }
         catch (err) {
-            throw new Error(`DatabaseError', 'Unable to get riser with id ${id}`, err)
+            throw new Error(`DatabaseError`, `Unable to get riser with id ${id}`, err)
         }
     }
 
-    async update(riser) {
-        const { id, name, pipelineId, nps, } = riser
+    async update(riser, currentTime) {
+        const { id, name, pipelineId, nps, parentId } = riser
         try {
-            const result = await this.runSingleQueryTransaction('UPDATE cards SET name=?, pipelineId=?, nps=? WHERE id=?', [name, pipelineId, nps, id])
-            if (result.rowsAffected === 0)
+            const result = await this.runMultiQueryTransaction(tx => [
+                this.runQuery(tx, 'UPDATE cards SET name=?, pipelineId=?, nps=? WHERE id=?', [name, pipelineId, nps, id]),
+                this.runQuery(tx, 'UPDATE testPoints SET timeModified =? WHERE id =? ', [currentTime, parentId])
+            ])
+            if (result[0].rowsAffected === 0)
                 throw 'Item not found'
             else return riser
         }

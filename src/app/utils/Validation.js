@@ -2,14 +2,14 @@ import { object, string, number, boolean, array, mixed } from 'yup'
 import { PipelineMaterials, PipelineProducts } from '../entities/survey/items/Pipeline'
 import { CoarseFineOptions, PowerSources, TapOptions } from '../entities/survey/items/Rectifier'
 import { ItemStatuses, ItemTypes, TestPointTypes } from '../entities/survey/items/SurveyItem'
-import { AnodeMaterials, CouponTypes, DisplayedReadingOptions, IsolationTypes, PermanentPotentialTypes, PipeDiameters, ReferenceCellTypes, SortingOptions, WireColors, WireGauges } from '../entities/survey/other/properties'
+import { AnodeMaterials, CouponTypes, DisplayedReadingOptions, IsolationTypes, ItemPropertyUpdateTypes, PermanentPotentialTypes, PipeDiameters, PotentialUnits, ReferenceCellTypes, SortingOptions, SubitemPropertyUpdateTypes, WireColors, WireGauges } from '../entities/survey/other/properties'
 import { SubitemTypes } from '../entities/survey/subitems/Subitem'
 import { Error } from "./Error"
 
 export class Validation {
     name = string('Name must be string').matches(/^[-a-zA-Z0-9_.\s() ]*$/, { message: 'Name has invalid format' }).max(40, 'Name must be less than 40 characters').min(1, 'Name must be longer than one character.').trim()
     id = number('Id must be a number').positive('Id must be a positive number').integer('Id must be integer value')
-    index = number('Index must be a number').positive('Index must be a positive number').integer('Index must be integer value')
+    index = number('Index must be a number').integer('Index must be integer value')
     uid = string('uid must be a string').min(10, 'uid must have at least 10 characters')
     bool = boolean().nullable()
     longitude = number('Longitude must be a number').min(-180, 'longitude must larger than -180').max(180, 'Longitude must be smaller than 180').nullable()
@@ -44,6 +44,10 @@ export class Validation {
     wireGauge = mixed().oneOf(Object.values(WireGauges))
     couponType = mixed().oneOf(Object.values(CouponTypes))
     isolationType = mixed().oneOf(Object.values(IsolationTypes))
+    potentialUnit = mixed().oneOf(Object.values(PotentialUnits))
+    subitemPropertyUpdateType = mixed().oneOf(Object.values(SubitemPropertyUpdateTypes))
+    itemPropertyUpdateType = mixed().oneOf(Object.values(ItemPropertyUpdateTypes))
+    side = array().of(this.id)
     validate(value, schema) {
         try {
             return schema.validateSync(value)

@@ -7,5 +7,6 @@ export class StatReferenceCell extends Subitem {
         this.wireGauge = wireGauge
         this.wireColor = wireColor
         this.rcType = rcType
+        this.isPortable = false
     }
 }

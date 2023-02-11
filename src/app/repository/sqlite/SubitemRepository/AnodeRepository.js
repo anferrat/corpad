@@ -4,7 +4,7 @@ import { Anode } from "../../../entities/survey/subitems/Anode"
 import { Error } from "../../../utils/Error"
 
 export class AnodeRepository extends SQLiteRepository {
-    constructor() {
+    constructor () {
         super()
     }
 
@@ -39,16 +39,20 @@ export class AnodeRepository extends SQLiteRepository {
             return new Anode(id, testPointId, uid, name, anodeMaterial, wireGauge, wireColor)
         }
         catch (err) {
-            throw new Error(`DatabaseError', 'Unable to get anode with id ${id}`, err)
+            throw new Error(`DatabaseError`, `Unable to get anode with id ${id}`, err)
         }
     }
 
 
-    async update(anode) {
-        const { id, name, anodeMaterial, wireGauge, wireColor } = anode
+    async update(anode, currentTime) {
+        const { id, name, parentId, anodeMaterial, wireGauge, wireColor } = anode
         try {
-            const result = await this.runSingleQueryTransaction('UPDATE cards SET name=?, anodeMaterial=?, wireColor=?, wireGauge=? WHERE id=?', [name, anodeMaterial, wireColor, wireGauge, id])
-            if (result.rowsAffected === 0)
+            const result = await this.runMultiQueryTransaction(tx => [
+                this.runQuery(tx, 'UPDATE cards SET name=?, anodeMaterial=?, wireColor=?, wireGauge=? WHERE id=?', [name, anodeMaterial, wireColor, wireGauge, id]),
+                this.runQuery(tx, 'UPDATE testPoints SET timeModified=? WHERE id = ?', [currentTime, parentId])
+            ])
+            if (result[0].rowsAffected === 0) 
+            //not great. in case when update failed timeModified will be still updated. need to resolve query within transaction to find out if want to update the rest. leave it for now
                 throw 'Item not found'
             else return anode
         }

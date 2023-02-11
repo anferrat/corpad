@@ -5,7 +5,7 @@ import { ItemResponseProcessor } from "./utils/ItemResponseProcessor"
 import { ItemTypes } from "../../entities/survey/items/SurveyItem"
 
 export class PipelineRepository extends SQLiteRepository {
-    constructor() {
+    constructor () {
         super()
         this.responseProcessor = new ItemResponseProcessor()
         this.tableName = 'pipelines'
@@ -14,22 +14,12 @@ export class PipelineRepository extends SQLiteRepository {
 
     async getIdList(sorting) {
         try {
-            const sortingQuery = super.getSortingQuery(sorting)
-            const result = await super.runSingleQueryTransaction(`SELECT id, name FROM ${this.tableName}${sortingQuery}`, [])
+            const sortingQuery = this.responseProcessor.sortingQuery(sorting)
+            const result = await super.runSingleQueryTransaction(`SELECT id FROM pipelines ${sortingQuery}`, [])
             return super.generateArray(result.rows.length, result.rows.item).map(row => row.id)
         }
         catch (err) {
             throw new Error('DatabaseError', `Unable to get pipelines id list with sorting ${sorting}`, err)
-        }
-    }
-
-    async getNameList() {
-        try {
-            const result = await super.runSingleQueryTransaction(`SELECT id, name FROM ${this.tableName}`, [])
-            return super.generateArray(result.rows.length, result.rows.item).map(row => row.id)
-        }
-        catch (err) {
-            throw new Error('DatabaseError', `Unable to get pipelines name list`, err)
         }
     }
 
@@ -47,13 +37,13 @@ export class PipelineRepository extends SQLiteRepository {
     async getById(idList) {
         try {
             const result = await super.runSingleQueryTransaction(
-                `SELECT *.${this.tableName}, COUNT(DISTINCT ${this.subitemTable}.testPointId) AS tpCount 
-                FROM ${this.tableName} 
-                LEFT OUTER JOIN ${this.subitemTable} 
-                ON ${this.tableName}.id = ${this.subitemTable}.pipelineId 
-                WHERE ${this.tableName}.id IN ${super.convertArrayToInStatement(idList)}`, [])
+                `SELECT pipelines.*, COUNT(DISTINCT cards.testPointId) AS tpCount 
+                FROM pipelines 
+                LEFT JOIN cards 
+                ON pipelines.id = cards.pipelineId 
+                WHERE pipelines.id IN ${super.convertArrayToInStatement(idList)}`)
             return this.generateArray(result.rows.length, result.rows.item)
-                .map(({ uid, name, timeCreated, timeModified, comment, nps, material, coating, licenseNumber, product, tpCount }) =>
+                .map(({ id, uid, name, timeCreated, timeModified, comment, nps, material, coating, licenseNumber, product, tpCount }) =>
                     new Pipeline(id, uid, name, timeCreated, timeModified, comment, nps, material, coating, licenseNumber, product, tpCount))
         }
         catch (err) {
@@ -62,13 +52,13 @@ export class PipelineRepository extends SQLiteRepository {
     }
 
     async create(pipeline) {
-        const { uid, name, currentTime, comment, nps, material, coating, licenseNumber, product, tpCount } = pipeline
-        if (uid && currentTime) {
+        const { uid, name, timeCreated, timeModified, comment, nps, material, coating, licenseNumber, product, tpCount } = pipeline
+        if (uid && timeCreated) {
             try {
                 const result = await super.runSingleQueryTransaction(
                     `INSERT INTO ${this.tableName} (uid, timeCreated, name, timeModified, nps, material, coating, licenseNumber, product, comment) VALUES (?,?,?,?,?,?,?,?,?,?)`,
-                    [uid, currentTime, name, currentTime, nps, material, Number(coating), licenseNumber, product, comment])
-                return new Pipeline(result.insertId, uid, name, currentTime, currentTime, comment, nps, material, Boolean(coating), licenseNumber, product, tpCount)
+                    [uid, timeCreated, name, timeModified, nps, material, Number(coating), licenseNumber, product, comment])
+                return new Pipeline(result.insertId, uid, name, timeCreated, timeModified, comment, nps, material, Boolean(coating), licenseNumber, product, tpCount)
             }
             catch (err) {
                 throw new Error('DatabaseError', `Unable to create pipeline with name ${name}.`, err)
@@ -123,7 +113,7 @@ export class PipelineRepository extends SQLiteRepository {
         try {
             const result = await super.runSingleQueryTransaction(`SELECT *, 0 AS tpCount from ${this.tableName}`, [])
             return this.generateArray(result.rows.length, result.rows.item)
-                .map(({ uid, name, timeCreated, timeModified, comment, nps, material, coating, licenseNumber, product, tpCount }) =>
+                .map(({ id, uid, name, timeCreated, timeModified, comment, nps, material, coating, licenseNumber, product, tpCount }) =>
                     new Pipeline(id, uid, name, timeCreated, timeModified, comment, nps, material, coating, licenseNumber, product, tpCount))
         }
         catch (err) {

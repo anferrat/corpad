@@ -4,7 +4,7 @@ import { PipelineLead } from "../../../entities/survey/subitems/PipelineLead"
 import { Error } from "../../../utils/Error"
 
 export class PipelineLeadRepository extends SQLiteRepository {
-    constructor() {
+    constructor () {
         super()
     }
 
@@ -34,21 +34,24 @@ export class PipelineLeadRepository extends SQLiteRepository {
 
     async getById(id) {
         try {
-            const result = await this.runSingleQueryTransaction('SELECT testPointId uid, name, pipelineId, wireColor, wireGauge FROM cards WHERE id=? AND type=?', [id, SubitemTypes.PIPELINE])
+            const result = await this.runSingleQueryTransaction('SELECT testPointId, uid, name, pipelineId, wireColor, wireGauge FROM cards WHERE id=? AND type=?', [id, SubitemTypes.PIPELINE])
             const { uid, name, pipelineId, wireColor, wireGauge, testPointId } = result.rows.item(0)
             return new PipelineLead(id, testPointId, uid, name, pipelineId, wireGauge, wireColor)
         }
         catch (err) {
-            throw new Error(`DatabaseError', 'Unable to get pipeline lead with id ${id}`, err)
+            throw new Error(`DatabaseError`, `Unable to get pipeline lead with id ${id}`, err)
         }
     }
 
 
-    async update(pipelineLead) {
-        const { id, name, pipelineId, wireGauge, wireColor } = pipelineLead
+    async update(pipelineLead, currentTime) {
+        const { id, name, parentId, pipelineId, wireGauge, wireColor } = pipelineLead
         try {
-            const result = await this.runSingleQueryTransaction('UPDATE cards SET name=?, pipelineId=?, wireColor=?, wireGauge=? WHERE id=?', [name, pipelineId, wireColor, wireGauge, id])
-            if (result.rowsAffected === 0)
+            const result = await this.runMultiQueryTransaction(tx => [
+                this.runQuery(tx, 'UPDATE cards SET name=?, pipelineId=?, wireColor=?, wireGauge=? WHERE id=?', [name, pipelineId, wireColor, wireGauge, id]),
+                this.runQuery(tx, 'UPDATE testPoints SET timeModified =? WHERE id =?', [currentTime, parentId])
+            ])
+            if (result[0].rowsAffected === 0)
                 throw 'Item not found'
             else return pipelineLead
         }

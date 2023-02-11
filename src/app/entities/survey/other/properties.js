@@ -93,9 +93,8 @@ export const DisplayedReadingOptions = Object.freeze({
         SHORTING_CURRENT: 4
     }),
     [ItemTypes.RECTIFIER]: Object.freeze({
-        CURRENT: 0,
-        VOLTAGE: 1,
-        CURRENT_TARGET: 2
+        CURRENT_VOLTAGE: 0,
+        CURRENT_TARGET: 1,
     })
 })
 
@@ -153,4 +152,18 @@ export const WireGauges = Object.freeze({
     AVG17: 18,
     AVG17_MINUS: 19,
 
+})
+
+export const SubitemPropertyUpdateTypes = Object.freeze({
+    CURRENT: 'CURRENT',
+    SHORTED: 'SHORTED',
+    VOLTAGE_DROP: 'VOLTAGE_DROP',
+    VOLTAGE: 'VOLTAGE'
+})
+
+export const ItemPropertyUpdateTypes = Object.freeze({
+    STATUS: 'STATUS',
+    TAP_VALUE: 'TAP_VALUE',
+    TAP_COARSE: 'TAP_COARSE',
+    TAP_FINE: 'TAP_FINE'
 })

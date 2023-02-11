@@ -5,6 +5,7 @@ export class ReferenceCell {
         this.rcType = rcType
         this.name = name
         this.isMainReference = Boolean(isMainReference)
+        this.isPortable = true
     }
     makeMainReference() {
         this.isMainReference = true

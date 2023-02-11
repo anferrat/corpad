@@ -5,7 +5,7 @@ import { Structure } from "../../../entities/survey/subitems/Structure"
 
 
 export class StructureRepository extends SQLiteRepository {
-    constructor() {
+    constructor () {
         super()
     }
 
@@ -24,7 +24,7 @@ export class StructureRepository extends SQLiteRepository {
     async create(structure) {
         const { uid, parentId, type, name, description } = structure
         try {
-            const result = await this.runSingleQueryTransaction('INSERT INTO cards VALUES (uid, testPointId, type, name, description) VALUES (?,?,?,?,?)',
+            const result = await this.runSingleQueryTransaction('INSERT INTO cards (uid, testPointId, type, name, description) VALUES (?,?,?,?,?)',
                 [uid, parentId, type, name, description])
             return new Structure(result.insertId, parentId, uid, name, description)
         }
@@ -40,15 +40,18 @@ export class StructureRepository extends SQLiteRepository {
             return new Structure(id, testPointId, uid, name, description)
         }
         catch (err) {
-            throw new Error(`DatabaseError', 'Unable to get structure with id ${id}`, err)
+            throw new Error(`DatabaseError`, `Unable to get structure with id ${id}`, err)
         }
     }
 
-    async update(structure) {
-        const { id, name, description } = structure
+    async update(structure, currentTime) {
+        const { id, name, description, parentId } = structure
         try {
-            const result = await this.runSingleQueryTransaction('UPDATE cards SET name=?, description=? WHERE id=?', [name, description, id])
-            if (result.rowsAffected === 0)
+            const result = await this.runMultiQueryTransaction(tx => [
+                this.runQuery(tx, 'UPDATE cards SET name=?, description=? WHERE id=?', [name, description, id]),
+                this.runQuery(tx, 'UPDATE testPoints SET timeModified=? WHERE id=?', [currentTime, parentId])
+            ])
+            if (result[0].rowsAffected === 0)
                 throw 'Item not found'
             else return structure
         }
