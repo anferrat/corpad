@@ -7,4 +7,8 @@ export class Marker extends SurveyItem {
         this.latitude = latitude
         this.longitude = longitude
     }
+
+    getMarker() {
+        return this
+    }
 }

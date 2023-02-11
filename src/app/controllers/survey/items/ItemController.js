@@ -1,163 +1,106 @@
-import { ItemTypes } from "../../../entities/survey/items/SurveyItem"
-import { CreatePipeline } from "../../../use_cases/survey/survey_items/pipelines/CreatePipeline"
-import { DeletePipeline } from "../../../use_cases/survey/survey_items/pipelines/DeletePipeline"
-import { GetPipelineById } from "../../../use_cases/survey/survey_items/pipelines/GetPipelineById"
-import { GetPipelineDisplayDataById } from "../../../use_cases/survey/survey_items/pipelines/GetPipelineDisplayDataById"
-import { GetPipelineIdList } from "../../../use_cases/survey/survey_items/pipelines/GetPipelineIdList"
-import { UpdatePipeline } from "../../../use_cases/survey/survey_items/pipelines/UpdatePipeline"
-import { UpdatePipelineProperty } from "../../../use_cases/survey/survey_items/pipelines/UpdatePipelineProperty"
-import { CreateRectifier } from "../../../use_cases/survey/survey_items/rectifiers/CreateRectifier"
-import { DeleteRectifier } from "../../../use_cases/survey/survey_items/rectifiers/DeleteRectifier"
-import { GetRectifierById } from "../../../use_cases/survey/survey_items/rectifiers/GetRectifierById"
-import { GetRectifierDisplayDataById } from "../../../use_cases/survey/survey_items/rectifiers/GetRectifierDisplayDataById"
-import { GetRectifierIdList } from "../../../use_cases/survey/survey_items/rectifiers/GetRectifierIdList"
-import { UpdateRectifier } from "../../../use_cases/survey/survey_items/rectifiers/UpdateRectifier"
-import { UpdateRectifierProperty } from "../../../use_cases/survey/survey_items/rectifiers/UpdateRectifierProperty"
-import { CreateTestPoint } from "../../../use_cases/survey/survey_items/test_points/CreateTestPoint"
-import { DeleteTestPoint } from "../../../use_cases/survey/survey_items/test_points/DeleteTestPoint"
-import { GetTestPointById } from "../../../use_cases/survey/survey_items/test_points/GetTestPointById"
-import { GetTestPointDisplayDataById } from "../../../use_cases/survey/survey_items/test_points/GetTestPointDisplayDataById"
-import { GetTestPointIdList } from "../../../use_cases/survey/survey_items/test_points/GetTestPointIdList"
-import { UpdateTestPoint } from "../../../use_cases/survey/survey_items/test_points/UpdateTestPoint"
-import { UpdateTestPointProperty } from "../../../use_cases/survey/survey_items/test_points/UpdateTestPointProperty"
+import { TestPointRepository } from "../../../repository/sqlite/TestPointRepository"
+import { RectifierRepository } from "../../../repository/sqlite/RectifierRepository"
+import { PipelineRepository } from "../../../repository/sqlite/PipelineRepository"
 import { Controller } from "../../../utils/Controller"
 import { ItemValidation } from "../../../validation/survey/ItemValidation"
+import { CreateItem } from "../../../services/survey/items/CreateItem"
+import { DeleteItem } from "../../../services/survey/items/DeleteItem"
+import { UpdateItem } from "../../../services/survey/items/UpdateItem"
+import { GetItem } from "../../../services/survey/items/GetItemById"
+import { GetItemIdList } from "../../../services/survey/items/GetItemIdList"
+import { GetItemListWithDisplayValues } from "../../../services/survey/items/GetItemListWithDisplayValues"
+import { DefaultNameRepository } from "../../../repository/sqlite/DefaultNameRepository"
+import { BasicPresenter } from "../../../presenters/BasciPresenter"
+import { ItemPreseneter } from "../../../presenters/ItemPresenter"
+import { UpdateItemProperty } from "../../../services/survey/items/UpdateProperty"
 
-export class ItemController extends Controller {
-    constructor() {
+class ItemController extends Controller {
+    constructor (testPointRepo, rectifierRepo, pipelineRepo, defaultNameRepo, basicPresenter, itemPresenter) {
         super()
 
         this.validation = new ItemValidation()
-
-        this.createTestPointService = new CreateTestPoint()
-        this.createRectifierService = new CreateRectifier()
-        this.createPipelineService = new CreatePipeline()
-
-        this.deleteTestPointService = new DeleteTestPoint()
-        this.deleteRectifierService = new DeleteRectifier()
-        this.deletePipelineService = new DeletePipeline()
-
-        this.updateTestPointService = new UpdateTestPoint()
-        this.updateRectifierService = new UpdateRectifier()
-        this.updatePipelineService = new UpdatePipeline()
-
-        this.getTestPointService = new GetTestPointById()
-        this.getRectifierService = new GetRectifierById()
-        this.getPipelineService = new GetPipelineById()
-
-        this.getTestPointIdListService = new GetTestPointIdList()
-        this.getRectifierIdListSrvice = new GetRectifierIdList()
-        this.getPipelineIdListService = new GetPipelineIdList()
-
-        this.getTestPointDisplayDataService = new GetTestPointDisplayDataById()
-        this.getRectifierDisplayDataService = new GetRectifierDisplayDataById()
-        this.getPipelineDisplayDataService = new GetPipelineDisplayDataById()
-
-        this.updateTestPointPropertyService = new UpdateTestPointProperty()
-        this.updateRectifierPropertyService = new UpdateRectifierProperty()
-        this.updatePipelinePropertyService = new UpdatePipelineProperty()
+        this.createItemService = new CreateItem(testPointRepo, rectifierRepo, pipelineRepo, basicPresenter)
+        this.deleteItemService = new DeleteItem(testPointRepo, rectifierRepo, pipelineRepo)
+        this.updateItemService = new UpdateItem(testPointRepo, rectifierRepo, pipelineRepo, basicPresenter)
+        this.getItemService = new GetItem(testPointRepo, rectifierRepo, pipelineRepo, defaultNameRepo, basicPresenter, itemPresenter)
+        this.getIdListService = new GetItemIdList(testPointRepo, rectifierRepo, pipelineRepo)
+        this.getDisplayListService = new GetItemListWithDisplayValues(testPointRepo, rectifierRepo, pipelineRepo)
+        this.updatePropertyService = new UpdateItemProperty(testPointRepo, rectifierRepo)
     }
 
-    createItem(params, onError = null, onSuccess = null) {
+    create(params, onError = null, onSuccess = null) {
         return super.controllerHandler(onSuccess, onError, 600, async () => {
-            const { itemType } = this.validation.createItem(params)
-            switch (itemType) {
-                case ItemTypes.TEST_POINT:
-                    return this.createTestPointService.execute()
-                case ItemTypes.RECTIFIER:
-                    return this.createRectifierService.execute()
-                case ItemTypes.PIPELINE:
-                    return this.createPipelineService.execute()
-            }
+            const { itemType, latitude, longitude } = this.validation.createItem(params)
+            return this.createItemService.execute(itemType, latitude, longitude)
         }
         )
     }
 
-    deleteItem(params, onError = null, onSuccess = null) {
+    delete(params, onError = null, onSuccess = null) {
         return super.controllerHandler(onSuccess, onError, 600, async () => {
             const { id, itemType } = this.validation.deleteItem(params)
-            switch (itemType) {
-                case ItemTypes.TEST_POINT:
-                    return this.deleteTestPointService.execute(id)
-                case ItemTypes.RECTIFIER:
-                    return this.deleteRectifierService.execute(id)
-                case ItemTypes.PIPELINE:
-                    return this.deletePipelineService.execute(id)
-            }
+            return this.deleteItemService.execute(id, itemType)
         }
         )
     }
 
     getById(params, onError = null, onSuccess = null) {
+
         return super.controllerHandler(onSuccess, onError, 600, async () => {
             const { id, itemType } = this.validation.getById(params)
-            switch (itemType) {
-                case ItemTypes.TEST_POINT:
-                    return this.getTestPointService.execute(id)
-                case ItemTypes.RECTIFIER:
-                    return this.getRectifierService.execute(id)
-                case ItemTypes.PIPELINE:
-                    return this.getPipelineService.execute(id)
-            }
-        }
-        )
+            return this.getItemService.executeWithDefaultName(id, itemType)
+        })
     }
 
-    updateItem(params, onError = null, onSuccess = null) {
+    update(params, onError = null, onSuccess = null) {
         return super.controllerHandler(onSuccess, onError, 600, async () => {
             const data = this.validation.updateItem(params)
-            switch (params.itemType) {
-                case ItemTypes.TEST_POINT:
-                    return this.updateTestPointService.execute(data)
-                case ItemTypes.RECTIFIER:
-                    return this.updateRectifierService.execute(data)
-                case ItemTypes.PIPELINE:
-                    return this.updatePipelineService.execute(data)
-            }
+            return this.updateItemService.execute(data)
         }
         )
     }
 
     getIdList(params, onSuccess = null, onError = null) {
         return super.controllerHandler(onSuccess, onError, 600, async () => {
-            const { itemType, filters, sorting, latitude = null, longitude = null } = this.validation.getIdList(params)
-            switch (itemType) {
-                case ItemTypes.TEST_POINT:
-                    return this.getTestPointIdListService.execute({ sorting, filters, latitude, longitude })
-                case ItemTypes.RECTIFIER:
-                    return this.getRectifierIdListSrvice.execute({ sorting, latitude, longitude })
-                case ItemTypes.PIPELINE:
-                    return this.getPipelineIdListService.execute(sorting)
-            }
+            const { itemType, filters, sorting, latitude, longitude } = this.validation.getIdList(params)
+            return this.getIdListService.execute({ itemType, filters, sorting, latitude, longitude })
         }
         )
     }
 
     getDisplayData(params, onSuccess = null, onError = null) {
         return super.controllerHandler(onSuccess, onError, 600, async () => {
-            const { itemType, displayedReading, id, readingTypeFilter } = this.validation.getDisplayData(params)
-            switch (itemType) {
-                case ItemTypes.TEST_POINT:
-                    return this.getTestPointDisplayDataService.execute(id, displayedReading, readingTypeFilter)
-                case ItemTypes.RECTIFIER:
-                    return this.getRectifierDisplayDataService.execute(id, displayedReading)
-                case ItemTypes.PIPELINE:
-                    return this.getPipelineDisplayDataService.execute(id)
-            }
+            const { itemType, displayedReading, idList, readingTypeFilter } = this.validation.getDisplayData(params)
+            return this.getDisplayListService.execute({ idList, displayedReading, itemType, readingTypeFilter })
         })
     }
 
     updateProperty(params, onSuccess = null, onError = null) {
         return super.controllerHandler(onSuccess, onError, 600, async () => {
-            const { itemType, id, property, value } = this.validation.updateProperty(params)
-            switch (itemType) {
-                case ItemTypes.TEST_POINT:
-                    return this.updateTestPointPropertyService.execute(id, property, value)
-                case ItemTypes.RECTIFIER:
-                    return this.updateTestPointPropertyService.execute(id, property, value)
-                case ItemTypes.PIPELINE:
-                    return this.updatePipelinePropertyService.execute(id, property, value)
-            }
+            const { id, itemType, propertyType, value } = this.validation.updateProperty(params)
+            return this.updatePropertyService.execute(id, itemType, propertyType, value)
         })
     }
 }
+
+const itemController = new ItemController(
+    new TestPointRepository(),
+    new RectifierRepository(),
+    new PipelineRepository(),
+    new DefaultNameRepository(),
+    new BasicPresenter(),
+    new ItemPreseneter())
+
+export const createItem = (params, onError, onSuccess) => itemController.create(params, onError, onSuccess)
+
+export const deleteItem = (params, onError, onSuccess) => itemController.delete(params, onError, onSuccess)
+
+export const getItemById = (params, onError, onSuccess) => itemController.getById(params, onError, onSuccess)
+
+export const updateItem = (params, onError, onSuccess) => itemController.update(params, onError, onSuccess)
+
+export const getItemIdList = (params, onError, onSuccess) => itemController.getIdList(params, onError, onSuccess)
+
+export const getItemDisplayData = (params, onError, onSuccess) => itemController.getDisplayData(params, onError, onSuccess)
+
+export const updateItemProperty = (params, onError, onSuccess) => itemController.updateProperty(params, onError, onSuccess)

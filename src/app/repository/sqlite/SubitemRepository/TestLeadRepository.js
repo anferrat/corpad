@@ -5,7 +5,7 @@ import { TestLead } from "../../../entities/survey/subitems/TestLead"
 
 
 export class TestLeadRepository extends SQLiteRepository {
-    constructor() {
+    constructor () {
         super()
     }
 
@@ -41,15 +41,18 @@ export class TestLeadRepository extends SQLiteRepository {
             return new TestLead(id, testPointId, uid, name, wireColor, wireGauge)
         }
         catch (err) {
-            throw new Error(`DatabaseError', 'Unable to get test lead with id ${id}`, err)
+            throw new Error(`DatabaseError`, `Unable to get test lead with id ${id}`, err)
         }
     }
 
-    async update(testLead) {
-        const { id, name, wireColor, wireGauge } = testLead
+    async update(testLead, currentTime) {
+        const { id, name, wireColor, wireGauge, parentId } = testLead
         try {
-            const result = await this.runSingleQueryTransaction('UPDATE cards SET name=?, wireColor=?, wireGauge=? WHERE id=?', [name, wireColor, wireGauge, id])
-            if (result.rowsAffected === 0)
+            const result = await this.runMultiQueryTransaction(tx => [
+                this.runQuery(tx, 'UPDATE cards SET name=?, wireColor=?, wireGauge=? WHERE id=?', [name, wireColor, wireGauge, id]),
+                this.runQuery(tx, 'UPDATE testPoints SET timeModified=? WHERE id=?', [currentTime, parentId])
+            ])
+            if (result[0].rowsAffected === 0)
                 throw 'Item not found'
             else return testLead
         }

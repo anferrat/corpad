@@ -30,7 +30,7 @@ export class SurveyRepository extends SQLiteRepository {
             ${fieldsQuery} ${ItemTypes.PIPELINE} AS itemType, NULL AS testPointType FROM pipelines ${searchQuery}
             ORDER BY length(name) ASC LIMIT ${limit}`
 
-            const result = await super.runSingleQueryTransaction(query, [])
+            const result = await super.runSingleQueryTransaction(query)
 
             return super.generateArray(result.rows.length, result.rows.item)
                 .map(({ id, uid, itemType, status, testPointType, name, comment, timeCreated, timeModifed }) =>

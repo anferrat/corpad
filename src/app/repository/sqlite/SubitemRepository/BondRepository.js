@@ -6,7 +6,7 @@ import { SubitemResponseProcessor } from "../utils/SubitemResponseProcessor"
 
 
 export class BondRepository extends SQLiteRepository {
-    constructor() {
+    constructor () {
         super()
         this.responseProcessor = new SubitemResponseProcessor()
     }
@@ -52,17 +52,18 @@ export class BondRepository extends SQLiteRepository {
             return new Bond(id, testPointId, uid, name, fromAtoB, current, sideA, sideB)
         }
         catch (err) {
-            throw new Error(`DatabaseError', 'Unable to get bond with id ${id}`, err)
+            throw new Error(`DatabaseError`, `Unable to get bond with id ${id}`, err)
         }
     }
 
-    async update(bond) {
-        const { id, name, fromAtoB, current, sideA, sideB } = bond
+    async update(bond, currentTime) {
+        const { id, name, fromAtoB, current, parentId, sideA, sideB } = bond
         try {
             const sides = sideA.map(side => ({ sideA: side, sideB: null })).concat(sideB.map(side => ({ sideB: side, sideA: null })))
             const [result] = await super.runMultiQueryTransaction(tx => [
                 this.runQuery(tx, `UPDATE cards SET name=?, fromAtoB=?, current=? WHERE id=?`, [name, fromAtoB, current, id]),
-                this.runQuery(tx, `DELETE * FROM sides WHERE parentCardId = ?`, [id]),
+                this.runQuery(tx, `UPDATE testPoints SET timeModified=? WHERE id =?`, [currentTime, parentId]),
+                this.runQuery(tx, `DELETE FROM sides WHERE parentCardId = ?`, [id]),
                 sides.length > 0 ? this.runQuery(tx, `INSERT INTO sides (sideAId, sideBId, parentCardId) VALUES ${sides.map(side => `(${side.sideA}, ${side.sideB}, ${id})`).join()}`) : null
             ])
             if (result.rowsAffected === 0)
@@ -70,8 +71,8 @@ export class BondRepository extends SQLiteRepository {
             else return bond
         }
         catch (err) {
+            console.log(err)
             throw new Error('DatabaseError', `Unable to update bond with id ${id}`, err)
         }
     }
-
 }

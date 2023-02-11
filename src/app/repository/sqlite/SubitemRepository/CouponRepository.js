@@ -5,7 +5,7 @@ import { Error } from "../../../utils/Error"
 
 
 export class CouponRepository extends SQLiteRepository {
-    constructor() {
+    constructor () {
         super()
     }
 
@@ -25,11 +25,12 @@ export class CouponRepository extends SQLiteRepository {
         const { uid, parentId, type, name, pipelineCardId, couponType, current, density, area, wireColor, wireGauge } = coupon
         try {
             const result = await this.runSingleQueryTransaction(
-                'INSERT INTO cards (uid, testPointId, type, name, pipelineCardId, couponType, current, density, area, wireColor, wireGauge) VALUES (?,?,?,?,?,?,?,?,?,?,?',
+                'INSERT INTO cards (uid, testPointId, type, name, pipelineCardId, couponType, current, density, area, wireColor, wireGauge) VALUES (?,?,?,?,?,?,?,?,?,?,?)',
                 [uid, parentId, type, name, pipelineCardId, couponType, current, density, area, wireColor, wireGauge])
             return new Coupon(result.insertId, parentId, uid, name, pipelineCardId, wireGauge, wireColor, couponType, current, density, area)
         }
         catch (err) {
+            console.log(err)
             throw new Error('DatabaseError', `Unable to create coupon`, err)
         }
     }
@@ -41,18 +42,20 @@ export class CouponRepository extends SQLiteRepository {
             return new Coupon(id, testPointId, uid, name, pipelineCardId, wireGauge, wireColor, couponType, current, density, area)
         }
         catch (err) {
-            throw new Error(`DatabaseError', 'Unable to get coupon with id ${id}`, err)
+            throw new Error(`DatabaseError`, `Unable to get coupon with id ${id}`, err)
         }
     }
 
 
-    async update(coupon) {
-        const { id, name, pipelineCardId, couponType, current, density, area, wireColor, wireGauge } = coupon
+    async update(coupon, currentTime) {
+        const { id, name, parentId, pipelineCardId, couponType, current, density, area, wireColor, wireGauge } = coupon
         try {
-            const result = await this.runSingleQueryTransaction(
-                'UPDATE cards SET name=?, pipelineCardId=?, couponType=?, current=?, density=?, area=?, wireColor=?, wireGauge=? WHERE id=?',
-                [name, pipelineCardId, couponType, current, density, area, wireColor, wireGauge, id])
-            if (result.rowsAffected === 0)
+            const result = await this.runMultiQueryTransaction(tx => [
+                this.runQuery(tx, 'UPDATE cards SET name=?, pipelineCardId=?, couponType=?, current=?, density=?, area=?, wireColor=?, wireGauge=? WHERE id=?',
+                    [name, pipelineCardId, couponType, current, density, area, wireColor, wireGauge, id]),
+                this.runQuery(tx, 'UPDATE testPoints SET timeModified=? WHERE id = ?', [currentTime, parentId])
+            ])
+            if (result[0].rowsAffected === 0)
                 throw 'Item not found'
             else return coupon
         }

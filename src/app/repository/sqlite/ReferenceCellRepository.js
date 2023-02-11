@@ -1,9 +1,11 @@
 import { SQLiteRepository } from "../../utils/SQLite"
 import { ReferenceCell } from "../../entities/survey/other/ReferenceCell"
 import { Error } from "../../utils/Error"
+import { SubitemTypes } from "../../entities/survey/subitems/Subitem"
+import { StatReferenceCell } from "../../entities/survey/subitems/StatReferenceCell"
 
 export class ReferenceCellRepository extends SQLiteRepository {
-    constructor() {
+    constructor () {
         super()
         this.tableName = 'referenceCells'
     }
@@ -16,6 +18,21 @@ export class ReferenceCellRepository extends SQLiteRepository {
         }
         catch (err) {
             throw new Error('DatabaseError', 'Unable to get list of reference cells.', err)
+        }
+    }
+
+    async getAllForSubitem(itemId, subitemId) {
+        //Returns full list of portable reference cells plus stationary reference cells within test point excluding given subitemId in case of RE type ( no self reference )
+        try {
+            const result = await super.runSingleQueryTransaction('SELECT id, uid, rcType, name, mainReference, 1 AS isPortable from referenceCells UNION ALL SELECT id, uid, rcType, name, 0 AS mainReference, 0 AS isPortable FROM cards WHERE testPointId = ? AND type = ? AND id <> ?',
+                [itemId, SubitemTypes.REFERENCE_CELL, subitemId])
+            return this.generateArray(result.rows.length, result.rows.item).map(({ id, uid, rcType, name, mainReference, isPortable }) =>
+                isPortable ?
+                    new ReferenceCell(id, uid, rcType, name, mainReference) :
+                    new StatReferenceCell(id, null, uid, name, rcType, null, null))
+        }
+        catch (err) {
+            throw new Error('DatabaseError', `Unable to get reference cell list for subitem `)
         }
     }
 
@@ -56,14 +73,10 @@ export class ReferenceCellRepository extends SQLiteRepository {
 
     async updateMainReference(id) {
         try {
-            const [updateOld, updateNew] = await super.runMultiQueryTransaction((tx) => [
+            await super.runMultiQueryTransaction((tx) => [
                 super.runQuery(tx, `UPDATE ${this.tableName} SET mainReference=0 WHERE mainReference=1`, []),
                 super.runQuery(tx, `UPDATE ${this.tableName} SET mainReference=1 WHERE id=?`, [id])
             ])
-            return {
-                rowsUpdated: updateOld.rowsAffected + updateNew.rowsAffected,
-                mainReferenceId: id
-            }
         }
         catch (err) {
             throw new Error('DatabaseError', `Unable to update main reference with id ${id}`, err)

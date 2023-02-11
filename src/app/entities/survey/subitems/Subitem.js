@@ -1,11 +1,16 @@
 export class Subitem {
-    constructor(id, parentId, uid, type, parentType, name) {
+    constructor (id, parentId, uid, type, parentType, name) {
         this.id = id
         this.parentId = parentId
         this.parentType = parentType
         this.uid = uid
         this.type = type
         this.name = name
+        this.potentials = []
+    }
+
+    setPotentials(potentials) {
+        this.potentilas = potentials
     }
 }
 

@@ -11,7 +11,7 @@ export class SettingRepository extends SQLiteRepository {
 
     async get() {
         try {
-            const result = await super.runSingleQueryTransaction(`SELECT * from ${this.tableName} LIMIT 1`, [subitemId])
+            const result = await super.runSingleQueryTransaction(`SELECT * from settings LIMIT 1`)
             const { pipelineNameAsDefault, defaultPotentialUnit, autoCreatePotentials, isSurveyNew, isCloud, originalHash, fileName, cloudId, lastSync, onboarding } = result.rows.item(0)
             return new AppSettings(pipelineNameAsDefault, defaultPotentialUnit, autoCreatePotentials, isSurveyNew, isCloud, originalHash, fileName, cloudId, lastSync, onboarding)
         }

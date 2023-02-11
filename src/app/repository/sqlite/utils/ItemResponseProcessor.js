@@ -6,7 +6,7 @@ import { IconTypes, ItemStatuses } from "../../../entities/survey/items/SurveyIt
 import { ItemTypes } from "../../../entities/survey/items/SurveyItem"
 
 export class ItemResponseProcessor {
-    constructor() {
+    constructor () {
         this.natSortASC = ` ORDER BY 
         (CASE
         WHEN (CAST(name AS INTEGER)==0 AND substr(name, 1) <> '0') THEN NULL
@@ -93,7 +93,6 @@ export class ItemResponseProcessor {
                     savedValue.dataMap.set(DisplayCardDataTypes.LOCATION, value.location)
                 if (value?.material !== null && value?.material !== undefined)
                     savedValue.dataMap.set(DisplayCardDataTypes.MATERIAL, value.material)
-                    console.log(value.tapSetting)
                 if (value?.tapSetting != null)
                     savedValue.dataMap.set(DisplayCardDataTypes.TAP, {
                         setting: value.tapSetting,
@@ -102,7 +101,7 @@ export class ItemResponseProcessor {
                         coarse: value.tapCoarse
                     })
             }
-            if (value.v1 !== undefined)
+            if (value.type && value.name)
                 savedValue.readingList.push(new DisplayCardReading(value.uid, value.name, value.type, value.v1, value.v2))
 
             if (i === result.rows.length - 1) {

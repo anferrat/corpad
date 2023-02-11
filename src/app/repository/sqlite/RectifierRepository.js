@@ -5,9 +5,10 @@ import { ItemResponseProcessor } from "./utils/ItemResponseProcessor"
 import { SubitemTypes } from "../../entities/survey/subitems/Subitem"
 import { ItemTypes } from "../../entities/survey/items/SurveyItem"
 import { Circuit } from "../../entities/survey/subitems/Circuit"
+import { ItemPropertyUpdateTypes } from "../../entities/survey/other/properties"
 
 export class RectifierRepository extends SQLiteRepository {
-    constructor() {
+    constructor () {
         super()
         this.responseProcessor = new ItemResponseProcessor()
         this.tableName = 'rectifiers'
@@ -38,19 +39,19 @@ export class RectifierRepository extends SQLiteRepository {
     }
 
     async create(rectifier) {
-        const { uid, currentTime, name, status, location, latitude, longitude, comment, model, serialNumber, powerSource, acVoltage, acCurrent, tapSetting, tapValue, tapCoarse, tapFine, maxVoltage, maxCurrent } = rectifier
-        if (uid && currentTime) {
+        const { uid, timeCreated, timeModified, name, status, location, latitude, longitude, comment, model, serialNumber, powerSource, acVoltage, acCurrent, tapSetting, tapValue, tapCoarse, tapFine, maxVoltage, maxCurrent } = rectifier
+        if (uid && timeCreated) {
             try {
                 const result = await super.runSingleQueryTransaction(
                     `INSERT INTO rectifiers (uid, timeCreated, status, name, location, latitude, longitude, comment, timeModified, model, serialNumber, powerSource, acVoltage, acCurrent, tapSetting, tapValue, tapCoarse, tapFine, maxVoltage, maxCurrent) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)`,
-                    [uid, currentTime, status, name, location, latitude, longitude, comment, currentTime, model, serialNumber, powerSource, acVoltage, acCurrent, tapSetting, tapValue, tapCoarse, tapFine, maxVoltage, maxCurrent])
-                return new Rectifier(result.insertId, uid, name, status, currentTime, currentTime, comment, location, latitude, longitude, model, serialNumber, powerSource, acVoltage, acCurrent, tapSetting, tapValue, tapCoarse, tapFine, maxVoltage, maxCurrent)
+                    [uid, timeCreated, status, name, location, latitude, longitude, comment, timeModified, model, serialNumber, powerSource, acVoltage, acCurrent, tapSetting, tapValue, tapCoarse, tapFine, maxVoltage, maxCurrent])
+                return new Rectifier(result.insertId, uid, name, status, timeCreated, timeModified, comment, location, latitude, longitude, model, serialNumber, powerSource, acVoltage, acCurrent, tapSetting, tapValue, tapCoarse, tapFine, maxVoltage, maxCurrent)
             }
             catch (err) {
                 throw new Error('DatabaseError', `Unable to create rectifier with name ${name}, latitude ${latitude} and longitude ${longitude}.`, err)
             }
         }
-        else throw new Error('CorpadError', `Unable to create test point without required minimum parameters. Name: ${name}, uid: ${uid}, currentTime: ${currentTime}`)
+        else throw new Error('CorpadError', `Unable to create rectifier without required minimum parameters:  uid: ${uid}, currentTime: ${currentTime}`)
     }
 
     async delete(id) {
@@ -79,12 +80,12 @@ export class RectifierRepository extends SQLiteRepository {
         }
     }
 
-    async getSubitems(idList) {
+    async getSubitemsById(id) {
         try {
-            const whereQuery = idList ? `WHERE testPointId IN ${super.convertArrayToInStatement(idList)}` : ''
-            const result = await super.runSingleQueryTransaction(`SELECT * FROM circuits ${whereQuery} ORDER BY id DESC`)
-            return this.generateArray(result.rows.length, result.rows.item).map(({ id, rectifierId, uid, name, ratiCurrent, ratioVoltage, targetMin, targetMax, current, voltage }) =>
-                new Circuit(id, rectifierId, uid, name, ratiCurrent, ratioVoltage, targetMin, targetMax, current, voltage))
+
+            const result = await super.runSingleQueryTransaction(`SELECT * FROM circuits WHERE rectifierId = id ORDER BY id DESC`)
+            return this.generateArray(result.rows.length, result.rows.item).map(({ id, rectifierId, uid, name, ratiCurrent, ratioVoltage, targetMin, targetMax, current, voltage, voltageDrop }) =>
+                new Circuit(id, rectifierId, uid, name, ratiCurrent, ratioVoltage, targetMin, targetMax, current, voltage, voltageDrop))
         }
         catch (err) {
             throw new Error('DatabaseError', `Unable to get list of subitems`, err)
@@ -103,11 +104,11 @@ export class RectifierRepository extends SQLiteRepository {
         }
     }
 
-    //testPoints.id AS itemId, testPoints.testPointType, testPoints.status, testPoints.name AS itemName, testPoints.timeModified, testPoints.uid AS itemUid, testPoints.location, cards.id, cards.uid, cards.name, cards.type, potentials.value AS v1, potentials.value AS v2 FROM cards
+
     async getDisplayListWithCurrentAndVoltage(idList) {
         try {
             const result = await super.runSingleQueryTransaction(
-                `SELECT rectifiers.id AS itemId, rectifiers.uid AS itemUid, rectifiers.name AS itemName, rectifiers.timeModified, rectifiers.location, rectifiers.tapCoarse, rectifiers.tapFine, rectifiers.tapValue, rectifiers.tapSetting, circuits.id, circuits.uid, circuits.name, '${SubitemTypes.CIRCUIT}' AS type, circuits.current AS v1, circuits.voltage AS v2 
+                `SELECT rectifiers.id AS itemId, rectifiers.uid AS itemUid, rectifiers.name AS itemName, rectifiers.timeModified, rectifiers.status, rectifiers.location, rectifiers.tapCoarse, rectifiers.tapFine, rectifiers.tapValue, rectifiers.tapSetting, circuits.id, circuits.uid, circuits.name, '${SubitemTypes.CIRCUIT}' AS type, circuits.current AS v1, circuits.voltage AS v2 
                 FROM circuits
                 LEFT JOIN rectifiers ON
                 rectifiers.id = circuits.rectifierId
@@ -136,20 +137,24 @@ export class RectifierRepository extends SQLiteRepository {
         }
     }
 
-    async updateProperty({ id, property, value, currentTime }) {
+    async updateProperty(id, propertyType, value, currentTime) {
         try {
-            const result = await super.runSingleQueryTransaction(
-                `UPDATE ${this.tableName} SET ${property}=?, timeModified=? WHERE id=?`,
-                [value, currentTime, id]
-            )
-            if (result.rowsAffected === 0) {
-                throw 'Rectifier not found'
+            switch (propertyType) {
+                case ItemPropertyUpdateTypes.STATUS:
+                    return this.runSingleQueryTransaction('UPDATE rectifiers SET status=?, timeModified=? WHERE id =?', [value, currentTime, id])
+                case ItemPropertyUpdateTypes.TAP_VALUE:
+                    return this.runSingleQueryTransaction('UPDATE rectifiers SET tapValue=?, timeModified=? WHERE id =?', [value, currentTime, id])
+                case ItemPropertyUpdateTypes.TAP_FINE:
+                    return this.runSingleQueryTransaction('UPDATE rectifiers SET tapFine=?, timeModified=? WHERE id =?', [value, currentTime, id])
+                case ItemPropertyUpdateTypes.TAP_COARSE:
+                    return this.runSingleQueryTransaction('UPDATE rectifiers SET tapCoarse=?, timeModified=? WHERE id =?', [value, currentTime, id])
+                default: throw 'Unsupported property update'
             }
         }
         catch (err) {
-            throw new Error('DatabaseError', `Unable to update property ${property} for rectifier with id ${id}`)
+            throw new Error('DatabaseError', `Unable to update property ${propertyType} for rectifier with id ${id}`)
         }
     }
 
-   
+
 }
