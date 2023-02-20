@@ -1,30 +1,49 @@
 import React from 'react'
 import { Button, Text } from '@ui-kitten/components'
 import { View, StyleSheet } from 'react-native'
-import { getItemName } from '../helpers/functions'
+import { getItemIcon, getItemName } from '../helpers/functions'
 import { importIcon } from '../../../../components/Icons'
 import ModalTitle from './ModalTitle'
+import { primary } from '../../../../styles/colors'
+import ModalStatusRow from './ModalStatusRow'
 
 const ModalStart = ({
     count,
     itemType,
+    fileName,
     hideModal,
     onImportStart
 }) => {
     return (
         <>
-            <ModalTitle hideModal={hideModal} />
+            <ModalTitle
+                title={'Import from .csv'}
+                iconFill={primary}
+                icon='download-outline'
+                hideModal={hideModal} />
             <View style={styles.content}>
-                <Text
-                    category='label'
-                    appearance='hint'>
-                    {count} {getItemName(itemType, count)} will be created.
-                </Text>
-                <Button
-                    onPress={onImportStart}
-                    accessoryLeft={importIcon}>
-                    Begin import
-                </Button>
+                <View style={styles.status}>
+                    <ModalStatusRow icon='file-text-outline'>
+                        {fileName}
+                    </ModalStatusRow>
+                    <ModalStatusRow icon={getItemIcon(itemType)} pack='cp'>
+                        {count} {getItemName(itemType, count)} will be created.
+                    </ModalStatusRow>
+                </View>
+                <View style={styles.buttons}>
+                    <Button
+                        style={styles.button}
+                        appearance='outline'
+                        onPress={hideModal}>
+                        Cancel
+                    </Button>
+                    <Button
+                        style={styles.button}
+                        onPress={onImportStart}
+                        accessoryLeft={importIcon}>
+                        Start
+                    </Button>
+                </View>
             </View>
         </>
     )
@@ -34,9 +53,20 @@ export default ModalStart
 
 
 const styles = StyleSheet.create({
-    content: {
+    status: {
         flex: 1,
         justifyContent: 'center',
-        padding: 12
+        paddingBottom: 12
     },
+    content: {
+        flex: 1,
+        justifyContent: 'flex-end'
+    },
+    buttons: {
+        justifyContent: 'space-between',
+        flexDirection: 'row'
+    },
+    button: {
+        width: '48%'
+    }
 })

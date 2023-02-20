@@ -33,12 +33,15 @@ const styles = StyleSheet.create({
     },
     title: {
         textTransform: 'uppercase',
-        color: primary
+        color: primary,
+        paddingRight: 12
     },
 
     valueView: {
         flexDirection: 'row',
-        alignItems: 'center'
+        justifyContent: 'flex-end',
+        alignItems: 'center',
+        flex: 1,
     },
     text: {
         paddingRight: 3

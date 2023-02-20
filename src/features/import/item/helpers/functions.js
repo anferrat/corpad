@@ -1,4 +1,5 @@
 import { labels } from "../../../../constants/constants"
+
 export const emptyValueCheck = (value) => {
     if (!value || value === null || value === undefined)
         return '<Empty>'
@@ -215,4 +216,36 @@ export const getSideIcon = (fromAtoB) => {
         return {
             name: 'arrow-back-outline'
         }
+}
+
+export const getItemIcon = (itemType) => {
+    if (itemType = 'TEST_POINT')
+        return 'TSS'
+    else if (itemType === 'RECTIFIER')
+        return 'RT'
+    else if (itemType === 'PIPELINE')
+        return 'PL'
+    else return null
+}
+
+export const getTextByWarningType = (warning) => {
+    switch (warning?.warningCode) {
+        case 'testPointTypeMismatch':
+            return 'Test point type was not defined. Default test point type is set.'
+        case 'subitemConverter':
+        case 'subitemValidator':
+            const labelObject = labels[warning?.type]
+            const label = labelObject ? labelObject?.label : '??'
+            return `"${label}" cannot be created from provided data.`
+        case 'nameFormat':
+            return `Name property ${warning?.originalValue} was converted to ${warning?.convertedValue}`
+        case 'statusMismatch':
+            return 'Status is not defined. Unknown status was set.'
+        case 'stringLengthMax40':
+        case 'stringLengthMax80':
+        case 'stringLengthMax300':
+            return `Value of property " ${warning?.property} " is too long and was cropped to a maximum allowed length.`
+        default:
+            return 'Some values may be invalid and were converted to null'
+    }
 }

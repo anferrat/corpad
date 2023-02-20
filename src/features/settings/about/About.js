@@ -8,6 +8,7 @@ import { ScrollView } from 'react-native-gesture-handler'
 
 const About = (props) => {
     const linkedin = (props) => <Icon {...props} name='linkedin' />
+    const twitter = (props) => <Icon {...props} name='twitter' />
     const linkHandler = (link) => Linking.openURL(link)
     return (
         <ScrollView >
@@ -25,6 +26,7 @@ const About = (props) => {
                 </View>
                 <ListItem title={'Support'} description='andrei@corpad.ca' onPress={linkHandler.bind(this, 'mailto:andrei@corpad.ca')} />
                 <ListItem title={'Created by'} description='Andrei Lomtev' accessoryRight={linkedin} onPress={linkHandler.bind(this, 'https://www.linkedin.com/in/andrei-lomtev/')} />
+                <ListItem title={'Follow on Twitter'} description='@CorpadCorrosion' accessoryRight={twitter} onPress={linkHandler.bind(this, 'https://twitter.com/CorpadCorrosion')} />
             </View>
         </ScrollView>
     )

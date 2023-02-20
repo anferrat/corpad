@@ -5,12 +5,14 @@ import FilePicker from './FilePicker'
 import SelectFileView from './components/SelectFileView'
 import SelectItem from './SelectItem'
 import NextButton from './NextButton'
+import LastImportView from './LastImportView'
 
 
-export const FilePickerImport = ({ navigateToSpreadsheet, navigateToImportItem }) => {
+export const FilePickerImport = ({ navigateToSpreadsheet, navigateToImportItem, navigateToList }) => {
 
     return (
         <ScrollView contentContainerStyle={styles.scrollView}>
+            <LastImportView navigateToList={navigateToList} />
             <SelectItem />
             <SelectFileView>
                 <FilePicker

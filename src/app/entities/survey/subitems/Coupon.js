@@ -1,18 +1,26 @@
-import { ItemTypes } from "../items/SurveyItem";
-import { CurrentUnits } from "../other/properties";
-import { Subitem, SubitemTypes } from "./Subitem";
+import { ItemTypes } from "../items/SurveyItem"
+import { AreaUnits, CurrentUnits } from "../other/properties"
+import { Subitem, SubitemTypes } from "./Subitem"
 
 export class Coupon extends Subitem {
-    constructor(id, parentId, uid, name, pipelineCardId, wireGauge, wireColor, couponType, current, density, area) {
+    constructor (id, parentId, uid, name, pipelineCardId, wireGauge, wireColor, couponType, current, density, area) {
         super(id, parentId, uid, SubitemTypes.COUPON, ItemTypes.TEST_POINT, name)
         this.pipelineCardId = pipelineCardId
         this.wireColor = wireColor
         this.wireGauge = wireGauge
         this.couponType = couponType
         this.current = current
-        this.currentUnit = CurrentUnits.MICRO_AMPS
         this.density = density
         this.area = area
+    }
+    static areaUnit = AreaUnits.CENTIMETER_SQUARE
+    static currentUnit = CurrentUnits.MICRO_AMPS
+    //density unit also should be here
+
+    calculate() {
+        if (this.area && (this.current || this.current === 0)) {
+            this.density = parseFloat((this.current / this.area * 0.1).toFixed(5))
+        }
     }
 }
 

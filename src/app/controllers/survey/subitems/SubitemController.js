@@ -7,6 +7,7 @@ import { RectifierRepository } from "../../../repository/sqlite/RectifierReposit
 import { SettingRepository } from "../../../repository/sqlite/SettingRepository"
 import { SubitemRepository } from "../../../repository/sqlite/SubitemRepository"
 import { TestPointRepository } from "../../../repository/sqlite/TestPointRepository"
+import { SubitemFactory } from "../../../services/other/SubitemFactory"
 import { CreateSubitem } from "../../../services/survey/subitems/subitem/CreateSubitem"
 import { DeleteSubitem } from "../../../services/survey/subitems/subitem/DeleteSubitem"
 import { GetSubitemById } from "../../../services/survey/subitems/subitem/GetSubitemById"
@@ -17,13 +18,13 @@ import { Controller } from "../../../utils/Controller"
 import { SubitemValidation } from "../../../validation/survey/SubitemValidation"
 
 class SubitemController extends Controller {
-    constructor (subitemRepo, testPointRepo, pipelineRepo, rectifierRepo, defaultNameRepo, settingRepo, subitemPresenter, listPresenter, basicPresenter) {
+    constructor (subitemRepo, testPointRepo, pipelineRepo, rectifierRepo, defaultNameRepo, settingRepo, subitemPresenter, listPresenter, basicPresenter, subitemFactory) {
         super()
-        this.createSubitemService = new CreateSubitem(subitemRepo, basicPresenter)
+        this.createSubitemService = new CreateSubitem(subitemRepo, basicPresenter, subitemFactory)
         this.deleteSubitemService = new DeleteSubitem(subitemRepo)
         this.getSubitemByIdService = new GetSubitemById(subitemRepo, defaultNameRepo, testPointRepo, rectifierRepo, pipelineRepo, settingRepo, subitemPresenter)
         this.getSubitemListService = new GetSubitemList(testPointRepo, rectifierRepo, listPresenter)
-        this.updateSubitemService = new UpdateSubitem(subitemRepo, subitemPresenter)
+        this.updateSubitemService = new UpdateSubitem(subitemRepo, subitemPresenter, subitemFactory)
         this.updatePropertyService = new UpdateSubitemProperty(subitemRepo)
 
         this.validation = new SubitemValidation()
@@ -83,7 +84,9 @@ const subitemController = new SubitemController(
     new SettingRepository(),
     new SubitemPresenter(),
     new ListPresenter(),
-    new BasicPresenter())
+    new BasicPresenter(),
+    new SubitemFactory()
+)
 
 
 export const createSubitem = (params, onError, onSuccess) => subitemController.create(params, onError, onSuccess)

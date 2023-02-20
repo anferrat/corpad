@@ -74,7 +74,7 @@ const PropertyImportField = ({
 const FileAccessory = ({ display }) => {
     if (display)
         return (
-            <Text appearance='hint' category='s2' style={styles.fileAccessory}>file:</Text>
+            <Text appearance='hint' category='c2' style={styles.fileAccessory}>field:</Text>
         )
     else return null
 }
@@ -89,7 +89,7 @@ const MapCounter = ({ count }) => {
     if (count !== null)
         return (
             <View style={{ ...styles.counterView, backgroundColor: count > 0 ? basic : warning }}>
-                <Text style={styles.counterText} status='control' numberOfLines={1} ellipsizeMode={'tail'}>{count} mapped</Text>
+                <Text style={styles.counterText} status='control' numberOfLines={1} ellipsizeMode={'tail'}>{count}</Text>
             </View>
         )
     else return null
@@ -154,7 +154,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'center',
         alignItems: 'center',
-        marginLeft: 18,
+        marginLeft: 12,
     },
     icon: {
         width: 20,
@@ -164,8 +164,8 @@ const styles = StyleSheet.create({
     counterView: {
         flex: -1,
         marginTop: 4,
+        flexBasis: 20,
         height: 14,
-        flexBasis: 60,
         borderRadius: 5,
         justifyContent: 'center',
         alignItems: 'center',

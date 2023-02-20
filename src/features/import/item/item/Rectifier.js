@@ -1,6 +1,7 @@
 import React from 'react'
 import { View, StyleSheet } from 'react-native'
 import Parameter from '../Parameter'
+import RectifierSetting from './RectifierSetting'
 
 const RectifierView = () => {
     return (
@@ -33,16 +34,7 @@ const RectifierView = () => {
                     style={styles.locationField}
                     property='maxCurrent' />
             </View>
-            <Parameter
-                property='tapValue' />
-            <View style={styles.location}>
-                <Parameter
-                    style={styles.locationField}
-                    property='tapCoarse' />
-                <Parameter
-                    style={styles.locationField}
-                    property='tapFine' />
-            </View>
+            <RectifierSetting />
             <Parameter
                 property='comment' />
         </>

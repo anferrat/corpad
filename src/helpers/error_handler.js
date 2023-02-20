@@ -40,6 +40,7 @@ const warningCodes = {
     57: 'Are you sure you want to delete this circuit?',
     58: 'Are you sure you want to delete this item?',
     59: 'Are you sure you want to delete this import setting?',
+    60: 'Previously imported items will be deleted, this action cannot be reverted. Would you like to undo last import?'
 }
 
 const errorCodes = {
@@ -117,6 +118,7 @@ const errorCodes = {
     629: 'Export error.',
     630: `File version doesn't match.`,
     631: 'Unable to delete main reference cell.',
+    632: 'Unable to delete item list',
     701: `Unable to access app folder in cloud storage.`,
     702: `Unable to obtain metadata of a file.`,
     703: `Unable to update remote file.`,

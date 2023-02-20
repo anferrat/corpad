@@ -1,11 +1,11 @@
-import { CurrentUnits, PotentialUnits } from "../../entities/survey/other/properties"
+import { AreaUnits, CurrentUnits, FactorUnits, PotentialUnits } from "../../entities/survey/other/properties"
 
 export class UnitConverter {
     constructor () {
     }
 
     convertVolts(value, inputUnit, outputUnit) {
-        if (inputUnit === outputUnit) {
+        if (inputUnit === outputUnit || value === null) {
             return value
         }
 
@@ -38,11 +38,11 @@ export class UnitConverter {
         } else {
             result = result.toFixed(0)
         }
-        return result
+        return parseFloat(result)
     }
 
     convertAmps(value, inputUnit, outputUnit) {
-        if (inputUnit === outputUnit) {
+        if (inputUnit === outputUnit || value === null) {
             return value
         }
         let result = value
@@ -67,6 +67,46 @@ export class UnitConverter {
         } else {
             result = result.toFixed(1)
         }
+        return parseFloat(result)
+    }
+
+    convertArea(value, inputUnit, outputUnit) {
+        //only works for cm2 and m2. change when added more
+        if (inputUnit === outputUnit || value === null) {
+            return value
+        }
+        else if (inputUnit === AreaUnits.CENTIMETER_SQUARE)
+            return parseFloat((value * 0.0001).toFixed(3))
+        else return parseFloat((value * 10000).toFixed(2))
+    }
+
+    convertFactor(value, inputUnit, outputUnit) {
+        if (inputUnit === outputUnit || value === null)
+            return value
+        let result = value
+        switch (inputUnit) {
+            case FactorUnits.AMPS_OVER_VOLTS:
+                result = result * 0.001
+                break
+            case FactorUnits.MILIVOLTS_OVER_AMPS:
+                result = 1 / (result)
+                break
+            case FactorUnits.VOLTS_OVER_AMPS:
+                result = 1 / (result * 0.001)
+                break
+        }
+        switch (outputUnit) {
+            case FactorUnits.AMPS_OVER_VOLTS:
+                result = result * 1000
+                break
+            case FactorUnits.MILIVOLTS_OVER_AMPS:
+                result = 1 / (result)
+                break
+            case FactorUnits.VOLTS_OVER_AMPS:
+                result = 1 / (result * 1000)
+                break
+        }
         return result
+
     }
 }

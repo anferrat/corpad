@@ -14,9 +14,10 @@ import { Circuit } from "../../../../entities/survey/subitems/Circuit"
 import { Error } from "../../../../utils/Error"
 
 export class CreateSubitem {
-    constructor (subitemRepo, basicPresenter) {
+    constructor (subitemRepo, basicPresenter, subitemFactory) {
         this.subitemRepo = subitemRepo
         this.basicPresenter = basicPresenter
+        this.subitemFactory = subitemFactory
     }
 
     _getSubitemByType(subitemType, parentId, uid) {
@@ -49,7 +50,7 @@ export class CreateSubitem {
 
     async execute(subitemType, parentId) {
         const uid = guid()
-        const subitem = this._getSubitemByType(subitemType, parentId, uid)
+        const subitem = this.subitemFactory.execute(null, uid, null, subitemType, parentId, {})
         return this.basicPresenter.execute(await this.subitemRepo.create(subitem))
     }
 }

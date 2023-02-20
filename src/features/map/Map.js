@@ -79,20 +79,22 @@ const Map = (props) => {
     useEffect(() => {
         componentMounted.current = true
         const fetchData = async () => {
-            const markersData = await sendRequest('SELECT', 'MARKERS', {})
-            if (markersData.status === 200) {
-                if (showMarker.id === null) {
-                    //if there will be an active marker no need to calculate init region
-                    const startRegion = await getInitRegion(markersData.result, initRegion)
-                    if (startRegion !== initRegion)
-                        ref.current.animateToRegion(startRegion, 400)
+            if (refreshing && isFocused) {
+                const markersData = await sendRequest('SELECT', 'MARKERS', {})
+                if (markersData.status === 200) {
+                    if (showMarker.id === null) {
+                        //if there will be an active marker no need to calculate init region
+                        const startRegion = await getInitRegion(markersData.result, initRegion)
+                        if (startRegion !== initRegion)
+                            ref.current.animateToRegion(startRegion, 400)
+                    }
+                    dispatch(loadMarkers(markersData.result))
                 }
-                dispatch(loadMarkers(markersData.result))
+                else errorHandler(615)
             }
-            else errorHandler(615)
         }
         fetchData()
-    }, [refreshing])
+    }, [refreshing, isFocused])
 
     useEffect(() => () => {
         componentMounted.current = false

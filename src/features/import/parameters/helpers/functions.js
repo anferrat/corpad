@@ -38,5 +38,5 @@ export const getFieldValues = (data, fieldIndex, fields) => {
 
 export const parseIndex = (value) => {
     const r = parseInt(value)
-    return isNaN(r) || r < 0 ? null : r
+    return isNaN(r) || r <= 0 ? null : r
 }

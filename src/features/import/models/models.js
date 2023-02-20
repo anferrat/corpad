@@ -16,6 +16,7 @@ const getParameter = ({
     valid = true, // flag to check if defaultValue passed validation for this prop (importType 0)
     unit = 0, // unitIndex from unitList when importType 1, in order to convert values to correct units
     unitList = [], //unitList that can be used for this property
+    unitCodeList = [],
     defaultUnitIndex = 0, //shows which unit from the unitList is the one used to store data in DB
     attributeMap = [], //list of mapped attributes. Attribute matches index from itemList to indexes of values from a field in csv file. when importing value indexes will be converted to index from itemlist. (parameterType 1, importType 1)
 }) => ({
@@ -24,6 +25,7 @@ const getParameter = ({
     itemList: itemList,
     unit: unit,
     unitList: unitList,
+    unitCodeList: unitCodeList,
     defaultUnitIndex: defaultUnitIndex,
     defaultValue: defaultValue,
     fieldIndex: fieldIndex,
@@ -83,11 +85,12 @@ export const getItem = (itemType) => {
                 model: getParameter({ mergeAllowed: true }),
                 serialNumber: getParameter({}),
                 powerSource: getParameter({ parameterType: 1, itemList: powerSourceList }),
+                tapSetting: 0,
                 tapValue: getParameter({}),
                 tapCoarse: getParameter({ parameterType: 1, itemList: tapOptions }),
                 tapFine: getParameter({ parameterType: 1, itemList: tapOptions }),
                 maxVoltage: getParameter({ unitList: [potentialUnits[3]] }),
-                maxCurrent: getParameter({ unitList: [currentUnits[1]] }),
+                maxCurrent: getParameter({ unitList: [currentUnits[2]] }),
             }
         case 'PIPELINE':
             return {
@@ -110,7 +113,7 @@ export const getSubitem = (type, autoCreatePotentials = false, initialPotentials
                 ...getNameProps(type),
                 ...getWireProps(),
                 ...getPotentials(autoCreatePotentials, initialPotentials),
-                pipelineId: null
+                pipelineIndex: null
 
             }
         case 'AN':
@@ -124,7 +127,7 @@ export const getSubitem = (type, autoCreatePotentials = false, initialPotentials
             return {
                 ...getNameProps(type),
                 ...getSides(),
-                current: getParameter({ unitList: [currentUnits[1], currentUnits[2]], defaultUnitIndex: 1, unit: 1 })
+                current: getParameter({ unitList: [currentUnits[1], currentUnits[2]], defaultUnitIndex: 1, unit: 1, unitCodeList: [1, 2] })
             }
         case 'CN':
             return {
@@ -132,8 +135,8 @@ export const getSubitem = (type, autoCreatePotentials = false, initialPotentials
                 pipelineCardKey: null,
                 couponType: getParameter({ parameterType: 1, itemList: couponTypes }),
                 area: getParameter({ unitList: areaUnits, defaultUnitIndex: 0 }),
-                current: getParameter({ unitList: [currentUnits[0], currentUnits[1]], defaultUnitIndex: 0, unit: 0 }),
-                density: getParameter({ unitList: currentDensityUnits, defaultUnitIndex: 2 }),
+                current: getParameter({ unitList: [currentUnits[0], currentUnits[1]], defaultUnitIndex: 0, unit: 0, unitCodeList: [0, 1] }),
+                density: getParameter({ unitList: currentDensityUnits, defaultUnitIndex: 2, unitCodeList: [0, 1, 2, 3] }),
                 ...getWireProps(),
                 ...getPotentials(autoCreatePotentials, initialPotentials)
             }
@@ -146,7 +149,7 @@ export const getSubitem = (type, autoCreatePotentials = false, initialPotentials
             return {
                 ...getNameProps(type),
                 ...getSides(null),
-                current: getParameter({ unitList: [currentUnits[2], currentUnits[1]], defaultUnitIndex: 0, unit: 0 }),
+                current: getParameter({ unitList: [currentUnits[2], currentUnits[1]], defaultUnitIndex: 0, unit: 0, unitCodeList: [2, 1] }),
                 shorted: getParameter({ parameterType: 1, itemList: ['No', 'Yes'] }),
                 isolationType: getParameter({ parameterType: 1, itemList: isolationAssemblyTypes }),
             }
@@ -161,7 +164,7 @@ export const getSubitem = (type, autoCreatePotentials = false, initialPotentials
                 ...getNameProps(type),
                 nps: getParameter({ parameterType: 1, itemList: pipeDiameterList }),
                 ...getPotentials(autoCreatePotentials, initialPotentials),
-                pipelineId: null
+                pipelineIndex: null
             }
         case 'RE':
             return {
@@ -174,17 +177,17 @@ export const getSubitem = (type, autoCreatePotentials = false, initialPotentials
             return {
                 ...getNameProps(type),
                 ...getSides(),
-                factor: getParameter({ unitList: factorUnits, defaultUnitIndex: 0, unit: 0 }),
+                factor: getParameter({ unitList: factorUnits, defaultUnitIndex: 0, unit: 0, unitCodeList: [0, 1, 2, 3] }),
                 voltageDrop: getParameter({ unitList: [potentialUnits[1]] }),
-                current: getParameter({ unitList: [currentUnits[1], currentUnits[2]], defaultUnitIndex: 1, unit: 1 }),
+                current: getParameter({ unitList: [currentUnits[1], currentUnits[2]], defaultUnitIndex: 1, unit: 1, unitCodeList: [1, 2] }),
             }
         case 'CT':
             return {
                 ...getNameProps(type),
-                current: getParameter({ unitList: [currentUnits[2]] }),
-                targetMin: getParameter({ unitList: [currentUnits[2]] }),
-                targetMax: getParameter({ unitList: [currentUnits[2]] }),
-                voltage: getParameter({ unitList: [potentialUnits[3]] })
+                current: getParameter({ unitList: [currentUnits[2]], unitCodeList: [2] }),
+                targetMin: getParameter({ unitList: [currentUnits[2]], unitCodeList: [2] }),
+                targetMax: getParameter({ unitList: [currentUnits[2]], unitCodeList: [2] }),
+                voltage: getParameter({ unitList: [potentialUnits[3]], unitCodeList: [3] })
             }
     }
 }
@@ -196,7 +199,7 @@ export const getAttribute = ({ index, mappedIndexes, mappedValues }) => ({
 })
 
 export const getPotentialParameter = (potentialTypeIndex, referenceCellIndex) => ({
-    ...getParameter({ unitList: potentialUnits, defaultUnitIndex: 3 }),
+    ...getParameter({ unitList: potentialUnits, defaultUnitIndex: 3, unitCodeList: [0, 1, 2, 3] }),
     createIfEmpty: true, // when false, potential will not be created if value is null. Not implemented for now
     potentialTypeIndex,
     referenceCellIndex

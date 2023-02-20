@@ -1,23 +1,24 @@
 import React, { useState } from 'react'
-import { Button, Icon, Text } from '@ui-kitten/components'
+import { Button } from '@ui-kitten/components'
 import { Modal } from 'react-native'
 import { View, StyleSheet } from 'react-native'
 import { getItemName } from '../helpers/functions'
 import { info, listIcon } from '../../../../components/Icons'
-import { success, basic300 } from '../../../../styles/colors'
+import { success, basic300, danger } from '../../../../styles/colors'
 import ModalStatusRow from './ModalStatusRow'
 import ModalDetails from './ModalDetails'
+import ModalTitle from './ModalTitle'
 
-const ModalCompleted = ({ successCount, warningCount, failedCount, navigateToList, itemType }) => {
+const ModalCompleted = ({ successCount, warningCount, failedCount, navigateToList, itemType, status, warnings }) => {
     const [visible, setVisible] = useState(false)
     const showModal = () => setVisible(true)
     hideModal = () => setVisible(false)
     return (
         <>
-            <View style={styles.header}>
-                <Icon name='checkmark-circle-outline' style={styles.checkIcon} fill={success} />
-                <Text category={'h6'}>Import completed</Text>
-            </View>
+            <ModalTitle
+                title={status === 200 ? 'Import completed' : 'Import failed'}
+                icon={status === 200 ? 'checkmark-circle-outline' : 'alert-circle-outline'}
+                iconFill={status === 200 ? success : danger} />
             <View style={styles.info}>
                 <ModalStatusRow icon={'checkmark'}>{successCount} {getItemName(itemType, successCount)} {successCount === 1 ? 'was' : 'were'} created</ModalStatusRow>
                 <ModalStatusRow icon={'info-outline'}>{warningCount} warnings</ModalStatusRow>
@@ -45,6 +46,7 @@ const ModalCompleted = ({ successCount, warningCount, failedCount, navigateToLis
                 onRequestClose={hideModal}
                 visible={visible}>
                 <ModalDetails
+                    warnings={warnings}
                     hideModal={hideModal} />
             </Modal>
         </>
