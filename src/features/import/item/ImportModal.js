@@ -1,37 +1,41 @@
-import React, { useEffect, useContext, useState } from 'react'
-import { View, StyleSheet, BackHandler } from 'react-native'
-import { Modal, Text } from '@ui-kitten/components'
-import { useSelector } from 'react-redux'
-import { basic300, control } from '../../../styles/colors'
+import React, { useContext } from 'react'
+import { StyleSheet } from 'react-native'
+import { Modal } from '@ui-kitten/components'
+import { useDispatch, useSelector } from 'react-redux'
+import { control } from '../../../styles/colors'
 import { ImportData } from './ImportDataProvider'
 import ImportModalContent from './components/ImportModalContent'
-import IconButton from '../../../components/IconButton'
-
+import { importData } from '../../../app/controllers/manager/ImportController'
+import { setRefresh } from '../../../store/actions/list'
+import { refreshMarkers } from '../../../store/actions/map'
 
 const ImportModal = ({ visible, hideModal }) => {
-    const importData = useSelector(state => state.importData)
-    const [importing, setImporting] = useState(false)
+    const { itemType, data, fields, defaultNames, item, subitems, extraData, fileName } = useSelector(state => state.importData)
     const { navigateToList } = useContext(ImportData)
+    const dispatch = useDispatch()
 
-    const hideModalHandler = React.useCallback(() => {
-        if (!importing)
-            hideModal()
-    }, [importing, hideModal])
+    const navigateHandler = React.useCallback(() => {
+        navigateToList(itemType)
+        dispatch(setRefresh(itemType))
+        dispatch(refreshMarkers())
+    }, [])
 
-    const isImporting = React.useCallback(() => {
-        if (visible && !importing) {
-            hideModal()
-            return true
-        }
-        else return importing
-    }, [importing, visible, hideModal])
+    const importHandler = React.useCallback((callback) => {
+        return importData({
+            itemType,
+            pipelineList: extraData.pipelineList,
+            data,
+            fields,
+            defaultNames,
+            referenceCells: extraData.referenceCellList,
+            potentialTypes: extraData.potentialTypes,
+            item,
+            subitems,
+            callback: callback
+        })
+    },
+        [itemType, extraData, data, fields, defaultNames, item, subitems])
 
-    useEffect(() => {
-        BackHandler.addEventListener('hardwareBackPress', isImporting)
-        return () => {
-            BackHandler.removeEventListener('hardwareBackPress', isImporting)
-        }
-    }, [isImporting])
     return (
         <Modal
             backdropStyle={styles.backdrop}
@@ -39,30 +43,18 @@ const ImportModal = ({ visible, hideModal }) => {
             style={styles.modal}
             visible={visible}>
             <ImportModalContent
-                count={importData.data.length}
-                itemType={importData.itemType}
-                importHandler={async (dataCallback) => {
-                    dataCallback({
-                        index: 19,
-                        success: true,
-                        warning: false,
-                        id: 1,
-                        completed: false,
-                    })
-                }}
-                importing={importing}
-                setImporting={setImporting}
-                navigateToList={navigateToList}
-                hideModal={hideModal}
-            />
+                fileName={fileName}
+                visible={visible}
+                count={data.length}
+                itemType={itemType}
+                importHandler={importHandler}
+                navigateToList={navigateHandler}
+                hideModal={hideModal} />
         </Modal>
-
     )
-
 }
 
 export default ImportModal
-
 
 const styles = StyleSheet.create({
     modal: {

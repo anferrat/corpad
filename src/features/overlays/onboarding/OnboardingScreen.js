@@ -51,20 +51,20 @@ const OnboardingScreen = () => {
         {
             backgroundColor: basic300,
             image: <Icon name='corpad-logo' fill={primary} pack='cp' style={styles.icon} />,
-            title: 'Corpad was updated to version 1.1',
-            subtitle: 'Check out awesome features that come with this update'
+            title: 'Corpad was updated to version 1.2',
+            subtitle: 'Take a look at the fantastic features that are included in this update.'
         },
         {
             backgroundColor: basic300,
-            image: <Icon name='calculator' fill={primary} pack='cp' style={styles.icon} />,
-            title: 'Corrosion calculator',
-            subtitle: 'Soil resistivity, current span and other useful calculation tools are now available. Save results and export them to CSV.'
+            image: <Icon name='file-text' fill={primary} style={styles.icon} />,
+            title: 'Import from spreadsheets',
+            subtitle: 'Using the new feature to import a complete property list from a spreadsheet, including support for various settings and units, can streamline your survey management.'
         },
         {
             backgroundColor: basic300,
-            image: <Icon name='file-text-outline' fill={primary} style={styles.icon} />,
-            title: 'Exported files',
-            subtitle: 'Now you can manage your CSV and KML files, share and delete them when you want.'
+            image: <Icon name='compass' fill={primary} style={styles.icon} />,
+            title: 'Compass widget',
+            subtitle: 'Incorporating a navigation component that displays the direction towards the selected item can expedite the process of locating test points and rectifiers.'
         },
         {
             backgroundColor: basic300,

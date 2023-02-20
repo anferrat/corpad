@@ -109,6 +109,18 @@ export const CurrentUnits = Object.freeze({
     AMPS: 2
 })
 
+export const FactorUnits = Object.freeze({
+    AMPS_OVER_MILIVOLTS: 0,
+    AMPS_OVER_VOLTS: 1,
+    VOLTS_OVER_AMPS: 2,
+    MILIVOLTS_OVER_AMPS: 3
+})
+
+export const AreaUnits = Object.freeze({
+    CENTIMETER_SQUARE: 0,
+    METER_SQUARE: 1
+})
+
 export const IsolationTypes = Object.freeze({
     ISOLATION_KIT: 0,
     ISOLATION_JOINT: 1,

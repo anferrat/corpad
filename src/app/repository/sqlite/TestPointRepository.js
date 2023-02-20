@@ -70,6 +70,15 @@ export class TestPointRepository extends SQLiteRepository {
         }
     }
 
+    async deleteList(idList) {
+        try {
+            await super.runSingleQueryTransaction(`DELETE FROM testPoints WHERE id IN ${this.convertArrayToInStatement(idList)}`)
+        }
+        catch (err) {
+            throw new Error('DatabaseError', `Unable to delete test point list ${idList}`, err)
+        }
+    }
+
     async update(testPoint) {
         const { id, name, location, latitude, longitude, comment, testPointType, status, timeModified } = testPoint
         try {

@@ -13,12 +13,12 @@ const pipeIcon = {
 
 const PipelineSelect = () => {
     const importData = useContext(ImportData)
-    const selectedIndex = useSelector(state => getSubitemProperty(state, importData.subitemIndex, 'pipelineId'))
+    const selectedIndex = useSelector(state => getSubitemProperty(state, importData.subitemIndex, 'pipelineIndex'))
     const pipelineList = React.useMemo(() => importData.extraData.pipelineList.map(pipeline => pipeline.name), [importData.extraData.pipeineList])
     const dispatch = useDispatch()
 
     const onSelect = (selectedIndex) => {
-        dispatch(setImportSubitemSetting('pipelineId', importData.subitemIndex, selectedIndex))
+        dispatch(setImportSubitemSetting('pipelineIndex', importData.subitemIndex, selectedIndex))
     }
 
     return (

@@ -22,6 +22,8 @@ import { createItem, deleteItem, updateItem, getItemById, getItemDisplayData, ge
 import { PotentialPresenter } from '../app/presenters/PotentialPresenter'
 import { createPotential, updatePotential, deletePotential, getPotentialList, updatePotentialList } from '../app/controllers/survey/subitems/PotentialController'
 import { getSubitemById, getSubitemList, createSubitem, deleteSubitem, updateSubitemProperty, updateSubitem } from '../app/controllers/survey/subitems/SubitemController'
+import { ImportValidation } from '../app/validation/survey/import_from_spreadsheet/ImportValidation'
+import { UnitConverter } from '../app/services/other/UnitConverter'
 
 const testObj = JSON.parse(`{"version":1,"type":"plsv","data":{"survey":[["8003dcd1-d70a-ca6f-bf31-9a458ee3a686","Yry","Wade Watts"]],"testPoints":[[1, "a5ea8b-e1b6-0ac0-7db5-e32784054ab7","TP1",null,"Bugagag",-122.090987,null,0,0,1674791569082,1674791571299],[2,"9ea4c6e2-1f2c-2f1f-3455-1d75acda7536","TP2",null,null,null,null,0,0,1675042971190,1675042974118]],"rectifiers":[],"pipelines":[[1,"bbd98ab1-7790-3383-ee44-ca7501fb4ee8","Pipeline",null,null,null,null,null,1674635057466,null,null]],"potentialTypes":[[1,"0ed1e078-0961-4a03-f505-9a9f5bde1861","On",0,"PERM_ON"],[2,"0c57b36f-5dab-f1e8-7761-e9d34c2d77d9","Off",0,"PERM_OFF"],[3,"ec798b88-dc41-45a5-bd81-bbb3e5d023e0","Native",0,"PERM_NATIVE"],[4,"64e035af-5074-d1f4-b554-d88f0e7ba640","Connected",0,"PERM_CONNECTED"],[5,"9941c9d6-87da-1b5f-dbf7-c4171303f427","Disconnected",0,"PERM_DISCONNECTED"]],"referenceCells":[[1,"75d921a8-54d7-cb64-8a70-231b47793a06",0,"RC1",1]],"cards":[],"potentials":[],"circuits":[],"sides":[]}}`)
 
@@ -32,14 +34,43 @@ export default DevScreen = ({ navigation, route }) => {
   const { smst } = route
   const jaja = async () => {
     try {
+      const test = new UnitConverter()
+      console.log(test.convertFactor(.13, 0, 1))
       //const repo = new PotentialRepository()
       //const dataFile = new PipelineSurveyFile(testObj.data.survey, testObj.data.testPoints, testObj.data.rectifiers, testObj.data.pipelines, testObj.data.potentialTypes, testObj.data.referenceCells, testObj.data.cards, testObj.data.potentials, testObj.data.circuits, testObj.data.sides)
       //const res = await repo.getDisplayListWithPotentials({ readingTypeFilter: [], idList: [11,12,13,14,24,42,17,18], permTypes: ['PERM_OFF', 'PERM_NATIVE'] }) //{ readingTypeFilter: [], idList: [11,12,13,14,24,42,17,18], permTypes: ['PERM_OFF', 'PERM_NATIVE'] }
-      const res2 = await updateSubitem({ nps: 17, description: 'lalalal', current: 190, fromAtoB: false, sideA: [291], sideB: [292], factor: 12, ratioVoltage: 22, ratioCurrent: 33, factorSelected: false, voltageDrop: 12, pipelineCardId: 279, couponType: 0, current: 12, area: 2, density: 4, id: 293, parentId: 100, uid: 'balblablablablablaaaa', name: 'GirlhasNoName', shorted: true, pipelineId: 1, wireColor: 6, wireGauge: 3, type: 'IK', anodeMaterial: 2, rcType: 3 })
+      //const res2 = await updateSubitem({ nps: 17, description: 'lalalal', current: 190, fromAtoB: false, sideA: [291], sideB: [292], factor: 12, ratioVoltage: 22, ratioCurrent: 33, factorSelected: false, voltageDrop: 12, pipelineCardId: 279, couponType: 0, current: 12, area: 2, density: 4, id: 293, parentId: 100, uid: 'balblablablablablaaaa', name: 'GirlhasNoName', shorted: true, pipelineId: 1, wireColor: 6, wireGauge: 3, type: 'IK', anodeMaterial: 2, rcType: 3 })
       //const res3 = await createPotential({potentialTypes: res2 })
       //const res3 = await updatePotentialList({ unit: res2.response.unit, subitemId: 279, potentials: res2.response.potentials.map(p => ({ ...p, value: 999 })) })
-      console.log(res2.status === 200 ? res2.response : res2)
+      //console.log(res2.status === 200 ? res2.response : res2)
       //console.log(await repo.getIdList({ itemType: 'TEST_POINT', sorting: 1, filters: { readingTypeFilter: ['PL'], statusFilter: [], testPointTypeFilter: [], hideEmptyTestPoints: false } }))
+      /* const test = new ImportValidation()
+       console.log(test.execute({
+         name: 'Kenny',
+         key: 'jdjdjdjdj',
+         anodeMaterial: 3,
+         wireColor: null,
+         potentials: [{
+           value: 12,
+           unit: 2,
+           potentialTypeId: 1,
+           referenceCellId: 1
+         }]
+       }).result)
+     }
+     */
+      /*
+  {
+          name: 'MyPint  and its not too long',
+          testPointType: 0,
+          location: null,
+          latitude: 23,
+          longitude: 11,
+          comment: 'what the fuck is this place',
+          status: 2,
+          potentials: [{value: 'hui'}]
+        }
+      */
     }
     catch (err) {
       console.log('Error', err)
@@ -59,6 +90,8 @@ export default DevScreen = ({ navigation, route }) => {
     message: 'some message',
     social: Share.Social.FACEBOOK
   })
+
+
 
   return (
     <SafeAreaView style={{ ...globalStyle.screen, paddingTop: StatusBar.currentHeight }}>

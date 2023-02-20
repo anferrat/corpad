@@ -142,7 +142,7 @@ const InputFieldParamaters = ({ value, property, subitemIndex, potentialIndex, g
                                 checked={importType === 2}>
                                 Use default name values
                             </Radio>
-                            <View style={importType !== 2 ? styles.hidden : styles.visible}>
+                            <View style={importType !== 2 || subitemIndex !== null ? styles.hidden : styles.visible}>
                                 <InputField
                                     style={styles.field}
                                     placeholder={'1'}

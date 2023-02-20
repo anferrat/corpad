@@ -4,6 +4,7 @@ export const SET_IMPORT_PROPERTY = 'SET_IMPORT_PROPERTY'
 export const RESET_IMPORT_ITEM = 'RESET_IMPORT_ITEM'
 export const ADD_IMPORT_SUBITEM = 'ADD_IMPORT_SUBITEM'
 export const SET_IMPORT_SUBITEM_SETTING = 'SET_IMPORT_SUBITEM_SETTING'
+export const SET_IMPORT_ITEM_SETTING = 'SET_IMPORT_ITEM_SETTING'
 export const ADD_IMPORT_SUBITEM_POTENTIAL = 'ADD_IMPORT_SUBITEM_POTENTIAL'
 export const REMOVE_IMPORT_SUBITEM_POTENTAIL = 'REMOVE_IMPORT_SUBITEM_POTENTAIL'
 export const REMOVE_IMPORT_SUBITEM = 'REMOVE_IMPORT_SUBITEM'
@@ -29,6 +30,9 @@ export const deleteImportSubitem = (subitemIndex) =>
 
 export const setImportSubitemSetting = (property, subitemIndex, value) =>
     ({ type: SET_IMPORT_SUBITEM_SETTING, property: property, subitemIndex: subitemIndex, value: value })
+
+export const setImportItemSetting = (property, value) =>
+    ({ type: SET_IMPORT_ITEM_SETTING, property: property, value: value })
 
 export const addPotential = (subitemIndex, potentialTypeIndex, referenceCellIndex) =>
     ({ type: ADD_IMPORT_SUBITEM_POTENTIAL, potentialTypeIndex: potentialTypeIndex, subitemIndex: subitemIndex, referenceCellIndex: referenceCellIndex })

@@ -12,6 +12,8 @@ export class Subitem {
     setPotentials(potentials) {
         this.potentilas = potentials
     }
+
+    calculate() { }
 }
 
 export const SubitemTypes = Object.freeze({

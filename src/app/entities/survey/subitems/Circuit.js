@@ -12,9 +12,14 @@ export class Circuit extends Subitem {
         this.targetMax = targetMax
         this.targetMin = targetMin
         this.voltageDrop = voltageDrop
-        this.currentUnit = CurrentUnits.AMPS
-        this.voltageUnit = PotentialUnits.VOLTS
     }
 
-    //add methods for current verification calculation
+    static currentUnit = CurrentUnits.AMPS
+    static voltageUnit = PotentialUnits.VOLTS
+
+    calculate() {
+        if ((this.ratioCurrent || this.ratioCurrent === 0) && this.ratioVoltage && (this.voltageDrop || this.voltageDrop === 0)) {
+            this.current = this.voltageDrop / this.ratioVoltage * this.ratioCurrent
+        }
+    }
 }

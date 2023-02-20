@@ -6,6 +6,11 @@ const initialState = {
         itemType: 'TEST_POINT',
         content: 'sorting'
     },
+    lastImport: {
+        itemType: null,
+        idList: [],
+        importTime: null
+    },
     loader: { //FullScreenLoader component
         title: null,
         text: null,
@@ -48,10 +53,15 @@ const initialState = {
 const settings = (state = initialState, action) => {
     switch (action.type) {
         case UPDATE_SETTING:
-            return {
-                ...state,
-                [action.setting]: action.value,
-            }
+            if (action.value)
+                return {
+                    ...state,
+                    [action.setting]: action.value,
+                }
+            else return {
+                    ...state,
+                    [action.setting]: initialState[action.setting],
+                }
         case LOAD_SETTINGS:
             return {
                 ...state,
@@ -113,7 +123,7 @@ const settings = (state = initialState, action) => {
                     versionOnboarding: action.versionOnboarding ?? state.onboarding.versionOnboarding
                 }
             }
-        case SET_EXPORT_MODAL: 
+        case SET_EXPORT_MODAL:
             return {
                 ...state,
                 exportModal: {
@@ -121,7 +131,7 @@ const settings = (state = initialState, action) => {
                     fileUrl: action.fileUrl ?? state.exportModal.fileUrl,
                     mimeType: action.mimeType ?? state.exportModal.mimeType,
                 }
-        }
+            }
         default:
             return state
     }

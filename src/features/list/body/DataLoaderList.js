@@ -14,7 +14,7 @@ import { primary } from '../../../styles/colors'
 const ItemList = (props) => {
     const dispatch = useDispatch()
     const t = useSelector(state => getListStateByType(props.dataType, state))
-    // updating object has two fields: id - <id of item that action needs to be applied to; and action - <DELETE, UPDATE, INSERT>. Default value is null, if changed, triggers effect with action and id. // My own mini redux :)
+    // updating object has two fields: id - <id of item that action needs to be applied to; and action - <DELETE, UPDATE, INSERT>. Default value is null, if changed, triggers effect with action and id. // Will be changed in future with events
     useEffect(() => {
         const updateHandler = async () => {
             if (t.settings.updating?.action === 'DELETE') {
@@ -65,6 +65,7 @@ const ItemList = (props) => {
                 dispatch(loadListState(props.dataType, data, idList))
             }
             else {
+                // Id list is already fetched and loaded to state. just need to fetch data for the next page and load to state
                 const data = await fetchData(
                     props.dataType,
                     t.idList.slice(t.settings.offset * t.settings.limit, (t.settings.offset + 1) * t.settings.limit),
@@ -120,6 +121,7 @@ const ItemList = (props) => {
             filtered={t.settings.filterCounter !== 0 && t.settings.filterCounter !== undefined}
             visible={!t.settings.refreshing} />, [t.settings.refreshing, t.settings.filterCounter])
 
+    //When elements are updated from outside we only recieve an id, so we create a blocking view with loading indicator while data is fetched from db to update that element.
     const UpdatingView = React.memo((props) => <View style={props.updating ? styles.backdrop : styles.hidden}><ActivityIndicator color={primary} size='large' /></View>)
 
     const keyExtractor = React.useCallback((item) => props.dataType + item.uid, [props.dataType])

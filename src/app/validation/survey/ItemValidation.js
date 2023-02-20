@@ -83,6 +83,14 @@ export class ItemValidation extends Validation {
         )
     }
 
+    deleteItemList(obj) {
+        return this.validate(obj,
+            object({
+                idList: array().of(this.id).required(),
+                itemType: this.itemType.required()
+            }))
+    }
+
     getById(obj) {
         return this.validate(obj,
             object({

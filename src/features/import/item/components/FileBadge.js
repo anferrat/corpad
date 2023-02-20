@@ -1,6 +1,6 @@
 import React from 'react'
 import { View, StyleSheet, Pressable } from 'react-native'
-import { Text, Icon } from '@ui-kitten/components'
+import { Icon } from '@ui-kitten/components'
 import { control, primary } from '../../../../styles/colors'
 import { androidRipple } from '../../../../styles/styles'
 
@@ -17,7 +17,7 @@ export default FileBadge
 
 const styles = StyleSheet.create({
     mainView: {
-        width: 55,
+        marginLeft: 12,
         justifyContent: 'center',
         alignItems: 'center'
     },

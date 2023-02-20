@@ -13,6 +13,7 @@ import { DefaultNameRepository } from "../../../repository/sqlite/DefaultNameRep
 import { BasicPresenter } from "../../../presenters/BasciPresenter"
 import { ItemPreseneter } from "../../../presenters/ItemPresenter"
 import { UpdateItemProperty } from "../../../services/survey/items/UpdateProperty"
+import { DeleteItemList } from "../../../services/survey/items/DeleteItemList"
 
 class ItemController extends Controller {
     constructor (testPointRepo, rectifierRepo, pipelineRepo, defaultNameRepo, basicPresenter, itemPresenter) {
@@ -26,6 +27,7 @@ class ItemController extends Controller {
         this.getIdListService = new GetItemIdList(testPointRepo, rectifierRepo, pipelineRepo)
         this.getDisplayListService = new GetItemListWithDisplayValues(testPointRepo, rectifierRepo, pipelineRepo)
         this.updatePropertyService = new UpdateItemProperty(testPointRepo, rectifierRepo)
+        this.deleteItemListService = new DeleteItemList(testPointRepo, rectifierRepo, pipelineRepo)
     }
 
     create(params, onError = null, onSuccess = null) {
@@ -44,8 +46,15 @@ class ItemController extends Controller {
         )
     }
 
-    getById(params, onError = null, onSuccess = null) {
+    deleteList(params, onError = null, onSuccess = null) {
+        return super.controllerHandler(onSuccess, onError, 632, async () => {
+            const { idList, itemType } = this.validation.deleteItemList(params)
+            return this.deleteItemListService.execute(idList, itemType)
+        }
+        )
+    }
 
+    getById(params, onError = null, onSuccess = null) {
         return super.controllerHandler(onSuccess, onError, 600, async () => {
             const { id, itemType } = this.validation.getById(params)
             return this.getItemService.executeWithDefaultName(id, itemType)
@@ -94,6 +103,8 @@ const itemController = new ItemController(
 export const createItem = (params, onError, onSuccess) => itemController.create(params, onError, onSuccess)
 
 export const deleteItem = (params, onError, onSuccess) => itemController.delete(params, onError, onSuccess)
+
+export const deleteItemList = (params, onError, onSuccess) => itemController.deleteList(params, onError, onSuccess)
 
 export const getItemById = (params, onError, onSuccess) => itemController.getById(params, onError, onSuccess)
 

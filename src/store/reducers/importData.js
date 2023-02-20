@@ -1,4 +1,4 @@
-import { SET_IMPORT_ITEM_TYPE, SET_IMPORT_DATA, ADD_IMPORT_SUBITEM, SET_IMPORT_PROPERTY, RESET_IMPORT_ITEM, SET_IMPORT_SUBITEM_SETTING, ADD_IMPORT_SUBITEM_POTENTIAL, REMOVE_IMPORT_SUBITEM_POTENTAIL, REMOVE_IMPORT_SUBITEM } from "../actions/importData"
+import { SET_IMPORT_ITEM_TYPE, SET_IMPORT_DATA, ADD_IMPORT_SUBITEM, SET_IMPORT_PROPERTY, RESET_IMPORT_ITEM, SET_IMPORT_SUBITEM_SETTING, ADD_IMPORT_SUBITEM_POTENTIAL, REMOVE_IMPORT_SUBITEM_POTENTAIL, REMOVE_IMPORT_SUBITEM, SET_IMPORT_ITEM_SETTING } from "../actions/importData"
 import { getItem, getSubitem, getPotentialParameter } from "../../features/import/models/models"
 
 const initialItemType = 'TEST_POINT'
@@ -87,6 +87,18 @@ const importData = (state = initialState, action) => {
                         [action.property]: action.value
                     }
                 })
+            }
+        }
+
+        case SET_IMPORT_ITEM_SETTING: {
+            if (state.item[action.property] === undefined)
+                return state
+            else return {
+                ...state,
+                item: {
+                    ...state.item,
+                    [action.property]: action.value
+                }
             }
         }
 

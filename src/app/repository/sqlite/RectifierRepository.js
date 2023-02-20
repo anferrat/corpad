@@ -65,6 +65,15 @@ export class RectifierRepository extends SQLiteRepository {
         }
     }
 
+    async deleteList(idList) {
+        try {
+            await super.runSingleQueryTransaction(`DELETE FROM rectifiers WHERE id IN ${this.convertArrayToInStatement(idList)}`)
+        }
+        catch (err) {
+            throw new Error('DatabaseError', `Unable to delete rectifier list ${idList}`, err)
+        }
+    }
+
     async update(rectifier) {
         const { id, timeModified, status, name, location, latitude, longitude, comment, model, serialNumber, powerSource, acVoltage, acCurrent, tapSetting, tapValue, tapCoarse, tapFine, maxVoltage, maxCurrent } = rectifier
         try {
