@@ -1,11 +1,11 @@
 import React, { useEffect, useRef } from 'react'
-import { Pressable, View, StyleSheet, Animated, Linking } from 'react-native'
+import { Pressable, View, StyleSheet, Animated } from 'react-native'
 import { Text, Icon } from '@ui-kitten/components'
 import { iconHandlerItem, subtitleHandlerItem, getStatusProps } from '../../helpers/functions'
 import { basic } from '../../styles/colors'
 import { androidRipple } from '../../styles/styles'
-import MapButton from './components/MapButton'
 import { extMapHandler } from './helpers/linking'
+import OpenInButton from './components/OpenInButton'
 
 const getMapIconSVG = (icon, status) => <Icon name={'map-' + icon} pack='cp' style={styles.mainIcon} fill={getStatusProps(status).color} />
 
@@ -19,7 +19,7 @@ const MarkerInfo = (props) => {
                 transY.current,
                 {
                     toValue: 140,
-                    duration: 300,
+                    duration: 250,
                     useNativeDriver: true
                 }
             ).start()
@@ -28,7 +28,7 @@ const MarkerInfo = (props) => {
                 transY.current,
                 {
                     toValue: 0,
-                    duration: 300,
+                    duration: 250,
                     useNativeDriver: true
                 }
             ).start()
@@ -49,10 +49,8 @@ const MarkerInfo = (props) => {
                     outputRange: [1, 0]
                 })
             }}>
-                <MapButton
-                    icon='share'
-                    onPress={hidden ? null : extMapHandler.bind(this, props.latitude, props.longitude)}
-                />
+                <OpenInButton
+                    onPress={hidden ? null : extMapHandler.bind(this, props.latitude, props.longitude)} />
             </Animated.View>
             <Animated.View style={{
                 ...styles.mainView,

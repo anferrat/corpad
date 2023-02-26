@@ -4,7 +4,6 @@ export class Controller {
 
     async controllerHandler(onSuccess, onError, errorCode, controller) {
         try {
-            console.log(onSuccess)
             const response = await controller()
             if (onSuccess)
                 onSuccess(response)
@@ -18,7 +17,6 @@ export class Controller {
             }
         }
         catch (er) {
-            console.log(er)
             if (onError)
                 onError(errorCode, er)
             return {

@@ -57,7 +57,6 @@ const LoaderItem = (props) => {
             }
         }
     }, [dispatch])
-    console.log(props.itemId)
     if (!data.uid)
         return <View style={styles.empty}><ActivityIndicator color={primary} /></View>
     else

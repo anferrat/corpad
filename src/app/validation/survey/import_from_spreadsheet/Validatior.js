@@ -77,7 +77,6 @@ export class Validatior {
             }
         }
         catch (err) {
-            console.log(err)
             return {
                 result: null,
                 type: type,

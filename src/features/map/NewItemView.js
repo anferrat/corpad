@@ -56,7 +56,7 @@ const NewItemView = (props) => {
                 transY.current,
                 {
                     toValue: 240,
-                    duration: 450,
+                    duration: 300,
                     useNativeDriver: true
                 }
             ).start()
@@ -65,7 +65,7 @@ const NewItemView = (props) => {
                 transY.current,
                 {
                     toValue: 0,
-                    duration: 450,
+                    duration: 300,
                     useNativeDriver: true
                 }
             ).start()

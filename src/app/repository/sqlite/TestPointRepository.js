@@ -38,7 +38,6 @@ export class TestPointRepository extends SQLiteRepository {
                 new TestPoint(id, uid, name, status, timeCreated, timeModified, comment, location, latitude, longitude, testPointType))
         }
         catch (err) {
-            console.log(err)
             throw new Error('DatabaseError', `Unable to get test point with id ${idList.join()}`, err)
         }
     }

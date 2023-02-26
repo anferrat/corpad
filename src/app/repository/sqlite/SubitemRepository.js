@@ -60,7 +60,6 @@ export class SubitemRepository extends SQLiteRepository {
             ])
         }
         catch (err) {
-            console.log(err)
             throw new Error('DatabaseError', `Unable to update property ${propertyType}`)
         }
     }

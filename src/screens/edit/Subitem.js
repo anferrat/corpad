@@ -6,7 +6,6 @@ import { EditSubitem } from '../../features/edit/subitem'
 const EditSubitemScreen = ({ route, navigation }) => {
     const { subitemId, itemId, isNew, subitemType, dataTypeItem, dataTypeSubitem } = route.params
     const goBack = () => navigation.goBack()
-    console.log('sub', subitemId)
     return (
         <SafeAreaView style={globalStyle.screen}>
             <EditSubitem
