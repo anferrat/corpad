@@ -30,7 +30,6 @@ export class CouponRepository extends SQLiteRepository {
             return new Coupon(result.insertId, parentId, uid, name, pipelineCardId, wireGauge, wireColor, couponType, current, density, area)
         }
         catch (err) {
-            console.log(err)
             throw new Error('DatabaseError', `Unable to create coupon`, err)
         }
     }

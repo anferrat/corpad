@@ -34,7 +34,6 @@ export class IsolationRepository extends SQLiteRepository {
             return new Isolation(result.insertId, parentId, uid, name, fromAtoB, isolationType, Boolean(shorted), current, sideA, sideB)
         }
         catch (err) {
-            console.log(err)
             throw new Error('DatabaseError', `Unable to create isolation reading`, err)
         }
     }

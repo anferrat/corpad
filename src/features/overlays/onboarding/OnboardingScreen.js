@@ -51,13 +51,13 @@ const OnboardingScreen = () => {
         {
             backgroundColor: basic300,
             image: <Icon name='corpad-logo' fill={primary} pack='cp' style={styles.icon} />,
-            title: 'Corpad was updated to version 1.2',
+            title: 'Updated to version 1.2',
             subtitle: 'Take a look at the fantastic features that are included in this update.'
         },
         {
             backgroundColor: basic300,
             image: <Icon name='file-text' fill={primary} style={styles.icon} />,
-            title: 'Import from spreadsheets',
+            title: 'Import from spreadsheet',
             subtitle: 'Using the new feature to import a complete property list from a spreadsheet, including support for various settings and units, can streamline your survey management.'
         },
         {

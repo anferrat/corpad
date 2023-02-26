@@ -55,7 +55,6 @@ const ImportModalContent = ({
     useEffect(() => {
         const importing = async () => {
             const response = await importHandler(onImportHandler)
-            console.log(response)
             setImportedStatus(old => ({
                 ...old,
                 completed: true,

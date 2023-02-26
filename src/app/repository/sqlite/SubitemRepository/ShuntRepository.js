@@ -72,7 +72,6 @@ export class ShuntRepository extends SQLiteRepository {
             else return shunt
         }
         catch (err) {
-            console.log(err)
             throw new Error('DatabaseError', `Unable to update shunt with id ${id}`, err)
         }
     }

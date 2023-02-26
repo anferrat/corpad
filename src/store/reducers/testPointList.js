@@ -13,7 +13,7 @@ const initialState = {
         latitude: 0,
         longitude: 0,
         displayedReading: 0,
-        sorting: 1,
+        sorting: 0,
         filterView: 0,
         filterCounter: 0,
         applyFilters: false,

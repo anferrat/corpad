@@ -26,8 +26,8 @@ const ModalDetails = ({ hideModal, warnings }) => {
                 onBackPress={hideModal} />
             <View style={styles.mainView}>
                 <View style={globalStyle.card}>
-                    <Text category='label' appearance='hint' style={styles.title}>Imported rows with issues</Text>
                     <FlatList
+                    ListHeaderComponent={<Text category='label' appearance='hint' style={styles.title}>Imported rows with issues</Text>}
                         ListEmptyComponent={EmptyDetailsComponent}
                         keyExtractor={(item) => item.rowIndex}
                         data={warnings}
@@ -42,7 +42,8 @@ export default ModalDetails
 const styles = StyleSheet.create({
     mainView: {
         flex: 1,
-        backgroundColor: basic300
+        backgroundColor: basic300,
+        paddingBottom: 12
     },
     title: {
         paddingBottom: 6

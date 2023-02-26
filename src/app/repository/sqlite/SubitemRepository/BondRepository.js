@@ -71,7 +71,6 @@ export class BondRepository extends SQLiteRepository {
             else return bond
         }
         catch (err) {
-            console.log(err)
             throw new Error('DatabaseError', `Unable to update bond with id ${id}`, err)
         }
     }

@@ -59,9 +59,9 @@ const settings = (state = initialState, action) => {
                     [action.setting]: action.value,
                 }
             else return {
-                    ...state,
-                    [action.setting]: initialState[action.setting],
-                }
+                ...state,
+                [action.setting]: initialState[action.setting],
+            }
         case LOAD_SETTINGS:
             return {
                 ...state,
@@ -70,6 +70,7 @@ const settings = (state = initialState, action) => {
         case RESET_CURRENT_SURVEY_SETTINGS:
             return {
                 ...state,
+                lastImport: initialState.lastImport,
                 currentSurvey: {
                     ...initialState.currentSurvey,
                     homeScreenCloud: state.currentSurvey.isCloudSurvey,
