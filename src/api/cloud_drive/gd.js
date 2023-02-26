@@ -2,7 +2,7 @@ import { GDrive, MimeTypes, ListQueryBuilder } from "@robinbobin/react-native-go
 import { authHandler } from "./auth"
 
 export const gdrive = new GDrive()
-gdrive.fetchTimeout = 30000
+gdrive.fetchTimeout = 15000
 
 const errorWrapper = (error, errorCode) => error?.status ? error : ({ status: errorCode })
 
