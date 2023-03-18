@@ -9,10 +9,13 @@ import { Structure } from "../../../entities/survey/subitems/Structure"
 import { Shunt } from "../../../entities/survey/subitems/Shunt"
 import { TestLead } from "../../../entities/survey/subitems/TestLead"
 import { SubitemTypes } from "../../../entities/survey/subitems/Subitem"
+import { Potential } from "../../../entities/survey/subitems/Potential"
 
+
+//DO NOT CHANGE these class methods by itself. they are tightly coupled with queries in subitemRepo. 
 
 export class SubitemResponseProcessor {
-    constructor() { }
+    constructor () { }
 
     generateArrayWithSides(length, item) {
         let result = []
@@ -35,6 +38,47 @@ export class SubitemResponseProcessor {
         }
         return result
     }
+
+    generateSubitemArrayWithSidesAndPotentials(length, item) {
+        let result = []
+        let savedValue
+        for (i = 0; i < length; i++) {
+            let value = item(i)
+            if (value?.id !== savedValue?.id) {
+                if (savedValue)
+                    result.push(savedValue)
+                savedValue = { ...value, sideA: [], sideB: [], potentials: [] }
+            }
+            if (value.sideAId !== null)
+                savedValue.sideA.push(value.sideAId)
+            else
+                if (value.sideBId !== null)
+                    savedValue.sideB.push(value.sideBId)
+                else if (value.potentialId !== null) {
+                    const { potentialId, potentialTypeId, potentialValue, permanentReferenceId, portableReferenceId, potentialUid, id } = value
+                    const isPortable = permanentReferenceId === null
+                    savedValue.potentials.push({
+                        id: potentialId,
+                        cardId: id,
+                        uid: potentialUid,
+                        type: potentialTypeId,
+                        value: potentialValue,
+                        referenceCellId: isPortable ? portableReferenceId : permanentReferenceId,
+                        isPortable: isPortable
+                    })
+                }
+            if (i === length - 1) {
+                result.push(savedValue)
+            }
+        }
+        return result
+    }
+
+    getPotentialsFromTableData(data) {
+        return data.potentials.map(({ id, uid, type, value, referenceCellId, isPortable, cardId }) =>
+            new Potential(id, uid, cardId, value, type, referenceCellId, isPortable))
+    }
+
 
     getSubitemFromTableData(data) {
         switch (data.type) {
@@ -88,9 +132,10 @@ export class SubitemResponseProcessor {
                     const { id, testPointId, uid, name, wireGauge, wireColor } = data
                     return new TestLead(id, testPointId, uid, name, wireGauge, wireColor)
                 }
-          //Circuits are processed directly in rectifier
+            //Circuits are processed directly in rectifier
             default: return null
         }
     }
+
 
 }

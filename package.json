@@ -33,6 +33,7 @@
     "react-native-gesture-handler": "^2.9.0",
     "react-native-google-signin": "^2.1.1",
     "react-native-haptic-feedback": "^1.13.1",
+    "react-native-keyboard-aware-scroll-view": "^0.9.5",
     "react-native-maps": "^0.31.0",
     "react-native-modal": "^13.0.1",
     "react-native-onboarding-swiper": "^1.2.0",

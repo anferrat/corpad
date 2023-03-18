@@ -15,7 +15,7 @@ export class GetSubitemById {
     async _getPipelineNameAsDefaultSetting(subitemType) {
         if (subitemType === SubitemTypes.PIPELINE || subitemType === SubitemTypes.RISER)
             return (await this.settingRepo.get()).pipelineNameAsDefault
-        else return null
+        else return false
     }
 
     _getSubitemList(subitemType, itemId) {

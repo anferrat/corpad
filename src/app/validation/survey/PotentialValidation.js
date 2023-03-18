@@ -19,7 +19,7 @@ export class PotentialValidation extends Validation {
                 referenceCells: array().of(object({
                     id: this.id.required(),
                     name: this.name.required(),
-                    rcType: this.rcType.required(),
+                    rcType: this.rcType.required().nullable(),
                     isPortable: this.bool.required(),
                 })).required()
             }))
@@ -44,12 +44,12 @@ export class PotentialValidation extends Validation {
             subitemId: this.id.required(),
             unit: this.potentialUnit.required(),
             potentials: array().of(object({
-                id: this.id.required(),
-                uid: this.uid.required(),
+                id: this.id.required().nullable(),
+                uid: this.uid.required().nullable(),
                 potentialTypeId: this.id.required(),
                 isPortable: this.bool.required(),
                 referenceCellId: this.id.required(),
-                value: this.number.nullable().required()
+                value: this.number.required().nullable()
             }))
         }))
     }

@@ -1,5 +1,6 @@
-import { Potential } from "../../../../entities/survey/subitems/Potential";
-import { PotentialUnits } from "../../../../entities/survey/other/properties";
+import { Potential } from "../../../../entities/survey/subitems/Potential"
+import { PotentialUnits } from "../../../../entities/survey/other/properties"
+import { guid } from "../../../../utils/guid"
 
 export class UpdatePotentialList {
     constructor (potentialRepo, unitConverter) {
@@ -10,8 +11,8 @@ export class UpdatePotentialList {
     async execute(potentialData, subitemId, unit) {
         const potentials = potentialData.map(({ id, uid, potentialTypeId, isPortable, referenceCellId, value }) => {
             const convertedValue = this.unitConverter.convertVolts(value, unit, PotentialUnits.VOLTS)
-            return new Potential(id, uid, subitemId, convertedValue, potentialTypeId, referenceCellId, isPortable)
+            return new Potential(id, uid ?? guid(), subitemId, convertedValue, potentialTypeId, referenceCellId, isPortable)
         })
-        await this.potentialRepo.updateList(potentials)
+        await this.potentialRepo.updateList(potentials, subitemId)
     }
 }

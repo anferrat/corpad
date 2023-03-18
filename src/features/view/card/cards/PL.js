@@ -1,8 +1,8 @@
 import React from 'react'
 import TextLine from '../../components/TextLine'
 import Header from '../../components/Header'
-import PotentialsView from '../PotentialsView'
-import SmartDivider from '../../components/SmartDivider'
+import PotentialsView from '../../components/PotentialsView'
+import SmartDivider from '../../components/Divider'
 import { getPipelineNameById } from '../../../../helpers/functions'
 
 const PL = (props) => {

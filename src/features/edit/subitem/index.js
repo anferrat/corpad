@@ -1,20 +1,18 @@
 import React from 'react'
 import { ScrollView, StyleSheet, View } from 'react-native'
-import LoaderSubItem from './LoaderSubitem'
+import SubitemView from './SubitemView'
 import SaveButton from './SaveButton'
 import { globalStyle } from '../../../styles/styles'
 
-export const EditSubitem = ({ subitemId, itemId, isNew, subitemType, dataTypeItem, dataTypeSubitem, goBack }) => {
+export const EditSubitem = ({ itemId, subitemId, subitemType, isNew }) => {
+
     return (
         <>
             <ScrollView contentContainerStyle={styles.scrollView}>
                 <View style={globalStyle.card}>
-                    <LoaderSubItem
-                        dataType={dataTypeSubitem}
-                        dataTypeItem={dataTypeItem}
+                    <SubitemView
                         subitemType={subitemType}
                         isNew={isNew}
-                        goBack={goBack}
                         itemId={itemId}
                         subitemId={subitemId} />
                 </View>

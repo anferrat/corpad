@@ -14,7 +14,7 @@ export class TestLeadRepository extends SQLiteRepository {
             const result = await this.runSingleQueryTransaction('SELECT id, testPointId, uid, name, wireColor, wireGauge FROM cards WHERE type=?', [SubitemTypes.TEST_LEAD])
             return this.generateArray(result.rows.length, result.rows.item)
                 .map(({ id, testPointId, type, uid, name, wireColor, wireGauge }) =>
-                    new TestLead(id, testPointId, type, uid, name, wireColor, wireGauge))
+                    new TestLead(id, testPointId, type, uid, name, wireGauge, wireColor,))
         }
         catch (err) {
             throw new Error(`DatabaseError', 'Unable to get test lead with id ${id}`, err)
@@ -38,7 +38,7 @@ export class TestLeadRepository extends SQLiteRepository {
         try {
             const result = await this.runSingleQueryTransaction('SELECT testPointId, uid, name, wireColor, wireGauge FROM cards WHERE id=? AND type=?', [id, SubitemTypes.TEST_LEAD])
             const { testPointId, uid, name, wireColor, wireGauge } = result.rows.item(0)
-            return new TestLead(id, testPointId, uid, name, wireColor, wireGauge)
+            return new TestLead(id, testPointId, uid, name, wireGauge, wireColor)
         }
         catch (err) {
             throw new Error(`DatabaseError`, `Unable to get test lead with id ${id}`, err)

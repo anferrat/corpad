@@ -4,7 +4,7 @@ import { SafeAreaView } from 'react-native-safe-area-context'
 import { globalStyle } from '../styles/styles'
 
 export default SearchModalScreen = ({ navigation }) => {
-    const navigateToItemView = (id, dataType) => navigation.navigate('ViewItem', { itemId: id, dataTypeItem: dataType })
+    const navigateToItemView = (id, itemType) => navigation.navigate('ViewItem', { itemId: id, itemType: itemType })
     const goBack = () => navigation.goBack()
     return (
         <SafeAreaView style={globalStyle.screen}>

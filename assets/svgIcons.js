@@ -1199,6 +1199,7 @@ export const Icon = (props) => {
     case 'JB-filled':
       return <JBFilled {...props} />
     case 'PL':
+    case 'PIPELINE':
       return <PL {...props} />
     case 'PL-filled':
       return <PLFilled {...props} />
@@ -1207,6 +1208,7 @@ export const Icon = (props) => {
     case 'HD-filled':
       return <HDFilled {...props} />
     case 'RT':
+    case 'RECTIFIER':
       return <RT {...props} />
     case 'RT-filled':
       return <RTFilled {...props} />
@@ -1312,7 +1314,7 @@ export const Icon = (props) => {
       return <OnboardingSettings {...props} />
     case 'onboarding-stars':
       return <OnboardingStars {...props} />
-      case 'onboarding-calculator':
+    case 'onboarding-calculator':
       return <OnboardingCalculator {...props} />
     case 'onboarding-comment':
       return <OnboardingComment {...props} />

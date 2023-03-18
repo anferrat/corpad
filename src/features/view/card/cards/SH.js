@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import TextLine from '../../components/TextLine'
 import Header from '../../components/Header'
 import { currentCalculation } from '../../../../helpers/functions'
-import SmartDivider from '../../components/SmartDivider'
+import SmartDivider from '../../components/Divider'
 import SidesDisplay from '../../components/SidesDisplay'
 import InputField from '../../InputField'
 import { sendRequest } from '../../../../api/database/index'
@@ -58,7 +58,7 @@ const getDisplayData = (factorSelected, factor, ratioVoltage, ratioCurrent) => {
     if (factorSelected)
         return {
             title: 'Factor',
-            value: factor !== null ? factor + ' A/V' : null,
+            value: factor !== null ? factor + ' A/mV' : null,
         }
     else if (ratioVoltage !== '' && ratioCurrent !== '')
         return {

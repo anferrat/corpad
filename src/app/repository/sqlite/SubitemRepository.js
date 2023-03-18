@@ -6,7 +6,7 @@ import { SubitemRepositoryFactory } from "./utils/SubitemRepositoryFactory"
 import { SubitemPropertyUpdateTypes } from "../../entities/survey/other/properties"
 
 export class SubitemRepository extends SQLiteRepository {
-    constructor () {
+    constructor() {
         super()
         this.responseProcessor = new SubitemResponseProcessor()
         this.subitemRepoFactory = new SubitemRepositoryFactory()
@@ -23,15 +23,19 @@ export class SubitemRepository extends SQLiteRepository {
         return this.subitemRepoFactory.execute(type).getById(id)
     }
 
-    async delete(id, type) {
+    async delete(itemId, subitemId, subitemType, currentTime) {
         try {
-            const subitemTable = type === SubitemTypes.CIRCUIT ? 'circuits' : 'cards'
-            const result = await super.runSingleQueryTransaction(`DELETE FROM ${subitemTable} WHERE id=?`, [id])
+            const subitemTable = subitemType === SubitemTypes.CIRCUIT ? 'circuits' : 'cards'
+            const itemTable = subitemType === SubitemTypes.CIRCUIT ? 'rectifiers' : 'testPoints'
+            const result = await super.runMultiQueryTransaction(tx => [
+                this.runQuery(tx, `DELETE FROM ${subitemTable} WHERE id=?`, [subitemId]),
+                this.runQuery(tx, `UPDATE ${itemTable} SET timeModified = ? WHERE id = ?`, [currentTime, itemId]),
+            ])
             if (result.rowsAffected === 0)
                 return // throw `Subitem doesn't exist` // Silently fail if item not found
         }
         catch (err) {
-            throw new Error('DatabaseError', `Unable to delete subitem of type ${type} with id ${id}`, err)
+            throw new Error('DatabaseError', `Unable to delete subitem of type ${subitemType} with id ${subitemId}`, err)
         }
     }
 

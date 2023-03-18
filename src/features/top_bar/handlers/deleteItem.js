@@ -1,19 +1,15 @@
-import { sendRequest } from "../../../api/database"
-import { setUpdating } from "../../../store/actions/list"
-import { setMarkerUpdate } from "../../../store/actions/map"
-import { getListNameFromDataType, getWarningCode, genRequestObject } from "../../../helpers/functions"
 import { errorHandler, warningHandler } from "../../../helpers/error_handler"
+import { deleteItem as deleteItemRequest } from "../../../app/controllers/survey/items/ItemController"
 
-export const deleteItem = async (dispatch, dataType, itemId, navigation) => {
-    const confirm = await warningHandler(getWarningCode(dataType), 'Delete', 'Cancel')
+const warningCodes = {
+    TEST_POINT: 55,
+    RECTIFIER: 53,
+    PIPELINE: 54
+}
+
+export const deleteItem = async (itemId, itemType, navigation) => {
+    const confirm = await warningHandler(warningCodes[itemType], 'Delete', 'Cancel')
     if (confirm) {
-        const deleteRequest = await sendRequest('DELETE', dataType, genRequestObject(dataType, itemId))
-        if (deleteRequest.status === 200) {
-            navigation.navigate(getListNameFromDataType(dataType))
-            dispatch(setUpdating(dataType, itemId, 'DELETE'))
-            dispatch(setMarkerUpdate('DELETE', dataType, itemId))
-        }
-        else
-            errorHandler(601)
+        await deleteItemRequest({ id: itemId, itemType }, er => errorHandler(er), () => navigation.navigate('PipelineSurvey'))
     }
 }

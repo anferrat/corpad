@@ -16,7 +16,7 @@ import { UpdateItemProperty } from "../../../services/survey/items/UpdatePropert
 import { DeleteItemList } from "../../../services/survey/items/DeleteItemList"
 
 class ItemController extends Controller {
-    constructor (testPointRepo, rectifierRepo, pipelineRepo, defaultNameRepo, basicPresenter, itemPresenter) {
+    constructor(testPointRepo, rectifierRepo, pipelineRepo, defaultNameRepo, basicPresenter, itemPresenter) {
         super()
 
         this.validation = new ItemValidation()
@@ -39,7 +39,7 @@ class ItemController extends Controller {
     }
 
     delete(params, onError = null, onSuccess = null) {
-        return super.controllerHandler(onSuccess, onError, 600, async () => {
+        return super.controllerHandler(onSuccess, onError, 601, async () => {
             const { id, itemType } = this.validation.deleteItem(params)
             return this.deleteItemService.execute(id, itemType)
         }
@@ -55,21 +55,21 @@ class ItemController extends Controller {
     }
 
     getById(params, onError = null, onSuccess = null) {
-        return super.controllerHandler(onSuccess, onError, 600, async () => {
+        return super.controllerHandler(onSuccess, onError, 603, async () => {
             const { id, itemType } = this.validation.getById(params)
             return this.getItemService.executeWithDefaultName(id, itemType)
         })
     }
 
     update(params, onError = null, onSuccess = null) {
-        return super.controllerHandler(onSuccess, onError, 600, async () => {
+        return super.controllerHandler(onSuccess, onError, 604, async () => {
             const data = this.validation.updateItem(params)
             return this.updateItemService.execute(data)
         }
         )
     }
 
-    getIdList(params, onSuccess = null, onError = null) {
+    getIdList(params, onError = null, onSuccess = null,) {
         return super.controllerHandler(onSuccess, onError, 600, async () => {
             const { itemType, filters, sorting, latitude, longitude } = this.validation.getIdList(params)
             return this.getIdListService.execute({ itemType, filters, sorting, latitude, longitude })
@@ -77,14 +77,14 @@ class ItemController extends Controller {
         )
     }
 
-    getDisplayData(params, onSuccess = null, onError = null) {
+    getDisplayData(params, onError = null, onSuccess = null,) {
         return super.controllerHandler(onSuccess, onError, 600, async () => {
             const { itemType, displayedReading, idList, readingTypeFilter } = this.validation.getDisplayData(params)
             return this.getDisplayListService.execute({ idList, displayedReading, itemType, readingTypeFilter })
         })
     }
 
-    updateProperty(params, onSuccess = null, onError = null) {
+    updateProperty(params, onError = null, onSuccess = null,) {
         return super.controllerHandler(onSuccess, onError, 600, async () => {
             const { id, itemType, propertyType, value } = this.validation.updateProperty(params)
             return this.updatePropertyService.execute(id, itemType, propertyType, value)

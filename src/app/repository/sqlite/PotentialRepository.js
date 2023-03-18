@@ -26,15 +26,15 @@ export class PotentialRepository extends SQLiteRepository {
     async getBySubitemId(subitemId) {
         try {
             const result = await super.runSingleQueryTransaction(
-                `SELECT * from ${this.tableName} 
+                `SELECT *, potentials.id AS potentialId from ${this.tableName} 
                 INNER JOIN potentialTypes ON potentialTypes.id = potentials.type
                 WHERE potentials.cardId=? 
                 ORDER BY potentials.permanentReferenceId, potentials.portableReferenceId, potentialTypes.id`, [subitemId])
             return super.generateArray(result.rows.length, result.rows.item)
-                .map(({ id, uid, value, cardId, type, permanentReferenceId, portableReferenceId }) => {
+                .map(({ potentialId, uid, value, cardId, type, permanentReferenceId, portableReferenceId }) => {
                     const isPortable = permanentReferenceId === null
                     const refCellId = isPortable ? portableReferenceId : permanentReferenceId
-                    return new Potential(id, uid, cardId, value, type, refCellId, isPortable)
+                    return new Potential(potentialId, uid, cardId, value, type, refCellId, isPortable)
                 })
         }
         catch (er) {
@@ -70,17 +70,15 @@ export class PotentialRepository extends SQLiteRepository {
         }
     }
 
-    async updateList(potentials) {
+    async updateList(potentials, subitemId) {
         try {
-            const idList = potentials.map(potential => potential.id)
-            if (idList.length > 0)
-                await super.runMultiQueryTransaction(tx => [
-                    this.runQuery(tx, `DELETE FROM potentials WHERE id IN ${this.convertArrayToInStatement(idList)}`),
-                    this.runQuery(tx,
-                        `INSERT INTO potentials (id, uid, cardId, type, portableReferenceId, permanentReferenceid, value) 
+            await super.runMultiQueryTransaction(tx => [
+                this.runQuery(tx, `DELETE FROM potentials WHERE cardId = ? `, [subitemId]),
+                potentials.length > 0 ? this.runQuery(tx,
+                    `INSERT INTO potentials (id, uid, cardId, type, portableReferenceId, permanentReferenceid, value) 
                                 VALUES ${potentials.map(({ id, uid, subitemId, potentialType, referenceCellId, value, isPortableReference }) =>
-                            `(${id}, "${uid}", ${subitemId}, ${potentialType}, ${isPortableReference ? referenceCellId : null}, ${!isPortableReference ? referenceCellId : null}, ${value})`).join(', ')} `)
-                ])
+                        `(${id}, "${uid}", ${subitemId}, ${potentialType}, ${isPortableReference ? referenceCellId : null}, ${!isPortableReference ? referenceCellId : null}, ${value})`).join(', ')} `) : null
+            ])
         }
         catch (er) {
             throw new Error('DatabaseError', `Unable to update potential list`, er)
@@ -89,7 +87,7 @@ export class PotentialRepository extends SQLiteRepository {
 
     async delete(id) {
         try {
-            const result = await super.runSingleQueryTransaction(`DELETE FROM ${this.tableName} WHERE id=?`, [id])
+            const result = await super.runSingleQueryTransaction(`DELETE FROM potentials WHERE id=?`, [id])
             if (result.rowsAffected === 0)
                 return // throw `Test point doesn't exist` // No Error if item not found seems logical
         }

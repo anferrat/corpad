@@ -13,7 +13,7 @@ export class CreatePotential {
         const potentialType = potentialTypes[potentialTypeIndex]
         if (refCell && potentialType) {
             const potential = new Potential(null, guid(), subitemId, null, potentialType.id, refCell.id, refCell.isPortable)
-            return this.potentialPresenter.execute(await this.potentialRepo.create(potential), potentialType, refCell)
+            return this.potentialPresenter.execute(potential, potentialType, refCell)
         }
         else throw new Error('CorpadError', `Unable to create potential based on provided data.`)
     }

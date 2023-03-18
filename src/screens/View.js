@@ -2,11 +2,10 @@ import React, { useEffect } from 'react'
 import { SafeAreaView, InteractionManager } from 'react-native'
 import { globalStyle } from '../styles/styles'
 import { CommonActions } from '@react-navigation/native'
-import { getSubitemNameFromDataType, screenHandlerItem } from '../helpers/functions'
 import ViewItem from '../features/view'
 
 const ViewItemScreen = ({ navigation, route }) => {
-    const { itemId, dataTypeItem } = route.params
+    const { itemId, itemType } = route.params
 
     useEffect(() => {
         InteractionManager.runAfterInteractions(() => {
@@ -21,9 +20,9 @@ const ViewItemScreen = ({ navigation, route }) => {
         })
     }, [])
 
-    const navigateToEdit = () => navigation.navigate('EditItem', { itemId: itemId, isNew: false, dataTypeItem: dataTypeItem })
+    const navigateToEdit = () => navigation.navigate('EditItem', { itemId: itemId, isNew: false, itemType: itemType })
 
-    const navigateToEditSubitem = (subitemId, isNew, subitemType) => navigation.navigate('EditSubitem', { isNew: isNew, itemId: itemId, subitemId: subitemId, subitemType: subitemType, dataTypeItem: dataTypeItem, dataTypeSubitem: getSubitemNameFromDataType(dataTypeItem) })
+    const navigateToEditSubitem = (subitemId, isNew, subitemType) => navigation.navigate('EditSubitem', { isNew: isNew, itemId: itemId, subitemId: subitemId, subitemType: subitemType })
 
     const navigateToMap = () => navigation.navigate('Map')
 
@@ -37,7 +36,7 @@ const ViewItemScreen = ({ navigation, route }) => {
         <SafeAreaView style={globalStyle.screen}>
             <ViewItem
                 itemId={itemId}
-                dataTypeItem={dataTypeItem}
+                itemType={itemType}
                 navigateToEdit={navigateToEdit}
                 navigateToEditSubitem={navigateToEditSubitem}
                 navigateToMap={navigateToMap}

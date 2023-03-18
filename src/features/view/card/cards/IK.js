@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { View, StyleSheet } from 'react-native'
 import Header from '../../components/Header'
-import SmartDivider from '../../components/SmartDivider'
+import SmartDivider from '../../components/Divider'
 import InputField from '../../InputField'
 import ToggleField from '../../ToggleField'
 import TextLine from '../../components/TextLine'

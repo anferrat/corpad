@@ -1,30 +1,53 @@
-import { UPDATE_POTENTIALS, DELETE_POTENTIAL, ADD_POTENTIAL, LOAD_POTENTIALS_STATE } from "../actions/potentials"
+import { UPDATE_POTENTIALS, DELETE_POTENTIAL, ADD_POTENTIAL, LOAD_POTENTIALS_STATE, RESET_POTENTIALS_STATE } from "../actions/potentials"
 
-const initialState = []
+const initialState = {
+    potentials: [],
+    referenceCells: [],
+    potentialTypes: [],
+    unit: null,
+    loading: true
+}
 
 const potentials = (state = initialState, action) => {
     switch (action.type) {
         case UPDATE_POTENTIALS:
-            if (state[action.index]) {
-                if (state[action.index].hasOwnProperty('value') && state[action.index].hasOwnProperty('unit') && state[action.index].hasOwnProperty('valid')) {
-                    return Object.assign([], state, {
-                        [action.index]: {
-                            ...state[action.index],
-                            value: action.value === undefined ? state[action.index].value : action.value,
-                            unit: action.unit === undefined ? state[action.index].unit : action.unit,
-                            valid: action.valid === undefined ? state[action.index].valid : action.valid,
-                        }
-                    })
+            if (state.potentials[action.index]) {
+                if (state.potentials[action.index].hasOwnProperty('value') && state.potentials[action.index].hasOwnProperty('valid')) {
+                    return {
+                        ...state,
+                        potentials: Object.assign([], state.potentials, {
+                            [action.index]: {
+                                ...state.potentials[action.index],
+                                value: action.value,
+                                valid: action.valid,
+                            }
+                        })
+                    }
                 }
                 else return state
             }
             else return state
         case LOAD_POTENTIALS_STATE:
-            return action.potentialsArray
+            return {
+                ...state,
+                referenceCells: action.referenceCells,
+                potentialTypes: action.potentialTypes,
+                unit: action.unit,
+                potentials: action.potentials,
+                loading: false
+            }
         case ADD_POTENTIAL:
-            return state.concat(action.potentialObject)
+            return {
+                ...state,
+                potentials: state.potentials.concat(action.potentialObject)
+            }
         case DELETE_POTENTIAL:
-            return state.filter((_, index) => (index !== action.index))
+            return {
+                ...state,
+                potentials: state.potentials.filter((_, index) => (index !== action.index))
+            }
+        case RESET_POTENTIALS_STATE:
+            return initialState
         default: return state
     }
 }

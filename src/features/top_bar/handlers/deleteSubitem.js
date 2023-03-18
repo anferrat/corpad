@@ -1,21 +1,11 @@
-import { sendCombinedRequest } from "../../../api/database"
-import { updateViewProperty } from "../../../store/actions/item"
-import { genRequestObject, getWarningCode } from "../../../helpers/functions"
 import { errorHandler, warningHandler } from "../../../helpers/error_handler"
+import { deleteSubitem as deleteSubitemRequest } from "../../../app/controllers/survey/subitems/SubitemController"
 
-export const deleteSubitem = async (dispatch, dataType, itemId, dataTypeItem, subitemId, navigation) => {
-    const confirm = await warningHandler(getWarningCode(dataType), 'Delete', 'Cancel')
+const warningCode = (type) => type === 'CT' ? 57 : 56
+
+export const deleteSubitem = async (itemId, subitemId, subitemType, navigation) => {
+    const confirm = await warningHandler(warningCode(subitemType), 'Delete', 'Cancel')
     if (confirm) {
-        const newTime = Date.now()
-        const deleteRequest = await sendCombinedRequest([
-            ['DELETE', dataType, genRequestObject(dataType, subitemId)],
-            ['UPDATE', dataTypeItem + '_PROPERTY', { ...genRequestObject(dataTypeItem, itemId), property: 'timeModified', value: newTime }]
-        ])
-        if (deleteRequest.status === 200) {
-            navigation.goBack()
-            dispatch(updateViewProperty(newTime, 'timeModified'))
-        }
-        else
-            errorHandler(601)
+        await deleteSubitemRequest({ itemId, subitemId, subitemType }, er => errorHandler(er), () => navigation.goBack())
     }
 }

@@ -1,3 +1,4 @@
+import { EventRegister } from "react-native-event-listeners";
 import { Pipeline } from "../../../entities/survey/items/Pipeline";
 import { Rectifier } from "../../../entities/survey/items/Rectifier";
 import { ItemTypes } from "../../../entities/survey/items/SurveyItem";
@@ -16,27 +17,35 @@ export class UpdateItem {
         const { itemType, defaultName } = item
         const currentTime = Date.now()
         const name = item.name ?? defaultName ?? null
+        let updatedItem
         switch (itemType) {
             case ItemTypes.TEST_POINT:
                 {
                     const { id, uid, timeCreated, status, comment, location, latitude, longitude, testPointType } = item
                     const testPoint = new TestPoint(id, uid, name, status, timeCreated, currentTime, comment, location, latitude, longitude, testPointType)
-                    return this.basicPresenter.execute(await this.testPointRepo.update(testPoint))
+                    updatedItem = await this.testPointRepo.update(testPoint)
+                    break
                 }
             case ItemTypes.RECTIFIER:
                 {
                     const { id, uid, timeCreated, status, comment, location, latitude, longitude, model, serialNumber, powerSource, acVoltage, acCurrent, tapSetting, tapValue, tapCoarse, tapFine, maxVoltage, maxCurrent } = item
                     const rectifier = new Rectifier(id, uid, name, status, timeCreated, currentTime, comment, location, latitude, longitude, model, serialNumber, powerSource, acVoltage, acCurrent, tapSetting, tapValue, tapCoarse, tapFine, maxVoltage, maxCurrent)
-                    return this.basicPresenter.execute(await this.rectifierRepo.update(rectifier))
+                    updatedItem = await this.rectifierRepo.update(rectifier)
+                    break
                 }
             case ItemTypes.PIPELINE:
                 {
                     const { id, uid, timeCreated, comment, nps, material, coating, licenseNumber, product, tpCount } = item
                     const pipeline = new Pipeline(id, uid, name, timeCreated, currentTime, comment, nps, material, coating, licenseNumber, product, tpCount)
-                    return this.basicPresenter.execute(this.pipelineRepo.update(pipeline))
+                    updatedItem = await this.pipelineRepo.update(pipeline)
+                    break
                 }
             default:
                 throw new Error('CorpadError', `No such type ${itemType}. Unable to delete item`, err)
         }
+        const result = this.basicPresenter.execute(updatedItem)
+
+        EventRegister.emit('ITEM_UPDATED', result)
+        return result
     }
 }

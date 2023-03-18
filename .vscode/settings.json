@@ -1,6 +1,4 @@
 {
-    "java.compile.nullAnalysis.mode": "automatic",
-    "javascript.format.enable": true,
-    "javascript.format.insertSpaceAfterConstructor": true,
-    "typescript.format.insertSpaceAfterOpeningAndBeforeClosingNonemptyBraces": false
+    "typescript.autoClosingTags": false,
+    "editor.autoClosingBrackets": "always"
 }

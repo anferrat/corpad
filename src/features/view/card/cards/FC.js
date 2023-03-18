@@ -1,7 +1,7 @@
 import React from 'react'
 import Header from '../../components/Header'
-import PotentialsView from '../PotentialsView'
-import SmartDivider from '../../components/SmartDivider'
+import PotentialsView from '../../components/PotentialsView'
+import SmartDivider from '../../components/Divider'
 
 const FC = (props) => {
     return (

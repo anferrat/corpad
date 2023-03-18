@@ -41,7 +41,7 @@ export const Unit = (props) => {
 }
 
 const InputField = React.forwardRef((props, ref) => {
-    const styleObject = React.useMemo(() => ({ ...props.style, paddingBottom: 12, borderWidth: props.disabled ? 0 : 1 }), [props.style, props.disabled])
+    const styleObject = React.useMemo(() => ({ ...props.style, paddingBottom: 12, borderWidth: props.disabled ? 0 : 1}), [props.style, props.disabled])
     const caption = React.useMemo(() => getValidCaption(props.valid, props.property), [props.valid, props.property])
     const value = React.useMemo(() => toString(props.value), [props.value])
     const accessory = React.useMemo(() => <>

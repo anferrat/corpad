@@ -1,8 +1,13 @@
+import { ReferenceCell } from "../entities/survey/other/ReferenceCell"
+
+//there are two classes of reference cells - portable reference (ReferenceCell) and Stationary reference (StatReferenceCell).
+
 export class PotentialPresenter {
     constructor () { }
 
     _getRefCell(id, isPortable, refCellList) {
-        return refCellList.find(item => item.id === id && item.isPortable === isPortable) ?? { name: 'Error', rcType: null }
+        const isPortableRef = (item) => item instanceof ReferenceCell
+        return refCellList.find(item => item.id === id && isPortableRef(item) === isPortable) ?? { name: 'Error', rcType: null }
     }
 
     _getPotentialType(id, potentialTypeList) {
@@ -11,8 +16,8 @@ export class PotentialPresenter {
 
     executeWithList(potentials, potentialTypes, referenceCells, unit) {
         return {
-            potentialTypes: potentialTypes,
-            referenceCells: referenceCells,
+            potentialTypes: potentialTypes.map(pt => ({ ...pt })),
+            referenceCells: referenceCells.map(rc => ({ ...rc, isPortable: rc instanceof ReferenceCell })),
             unit: unit,
             potentials: potentials.map(({ id, uid, value, referenceCellId, potentialType, isPortableReference }) => {
                 const referenceCell = this._getRefCell(referenceCellId, isPortableReference, referenceCells)
@@ -24,7 +29,7 @@ export class PotentialPresenter {
                     potentialTypeId: potentialType,
                     referenceCellId: referenceCellId,
                     referenceCellName: referenceCell.name,
-                    referencecellType: referenceCell.rcType,
+                    referenceCellType: referenceCell.rcType,
                     isPortable: isPortableReference,
                     value: value,
                     valid: true,
@@ -43,7 +48,7 @@ export class PotentialPresenter {
             potentialTypeId: potentialType,
             referenceCellId: referenceCellId,
             referenceCellName: referenceCell.name,
-            referencecellType: referenceCell.rcType,
+            referenceCellType: referenceCell.rcType,
             isPortable: isPortableReference,
             value: value,
             valid: true,
