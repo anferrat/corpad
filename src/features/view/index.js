@@ -2,12 +2,12 @@ import React, { useContext, useEffect } from 'react'
 import { Animated, StyleSheet } from 'react-native'
 import ActionButton from '../../components/ActionButton'
 import { diagBack } from '../../components/Icons'
-import LoaderItem from './LoaderItem'
-import LoaderSubitemList from './LoaderSubitemList'
 import { ScrollRef } from '../../../App'
+import ItemView from './ItemView'
+import SubitemListView from './SubitemListView'
 
 
-const ViewItem = ({ itemId, dataTypeItem, navigateToEdit, navigateToEditSubitem, navigateToMap, goBack }) => {
+const ViewItem = ({ itemId, itemType, navigateToEdit, navigateToEditSubitem, navigateToMap, goBack }) => {
     const scrollingRef = useContext(ScrollRef)
 
     useEffect(() => () => scrollingRef.current.setValue(0), [])
@@ -26,17 +26,16 @@ const ViewItem = ({ itemId, dataTypeItem, navigateToEdit, navigateToEditSubitem,
                     }],
                     { useNativeDriver: true }
                 )}>
-                <LoaderItem
-                    dataType={dataTypeItem}
+                <ItemView
+                    itemType={itemType}
                     itemId={itemId}
-                    navigateToMap={navigateToMap}
-                    navigateToEditItem={navigateToEdit}
+                    navigateToEdit={navigateToEdit}
                     navigateToEditSubitem={navigateToEditSubitem}
-                    goBack={goBack} />
-                <LoaderSubitemList
-                    dataTypeItem={dataTypeItem}
-                    navigateToEditSubitem={navigateToEditSubitem}
-                    itemId={itemId} />
+                    navigateToMap={navigateToMap} />
+                <SubitemListView
+                    itemId={itemId}
+                    itemType={itemType}
+                    navigateToEditSubitem={navigateToEditSubitem} />
             </Animated.ScrollView>
             <ActionButton
                 icon={diagBack}

@@ -1,28 +1,40 @@
 import React from 'react'
 import { Text, Icon } from '@ui-kitten/components'
 import { Pressable, View, StyleSheet } from 'react-native'
-import { basic, basic200, danger, primary } from '../../../styles/colors'
+import { basic, basic200, danger, primary, warning, success } from '../../../styles/colors'
 
-const ControlButton = (props) => {
-    return (
-        <Pressable
-            onPress={props.onPress ?? null} style={styles.pressable}>
-            <View style={styles.topView}>
-                <View
-                    style={styles.elevatedView}>
-                    <Pressable
-                        style={styles.innerView}
-                        android_ripple={{ color: basic }}
-                        onPress={props.onPress ?? null}>
-                        <Icon fill={props.danger ? danger : primary} style={styles.icon} name={props.icon} />
-                    </Pressable>
+const ripple = { color: basic }
+
+const statusColors = {
+    danger: danger,
+    basic: basic,
+    primary: primary,
+    success: success,
+    warning: warning
+}
+
+const ControlButton = ({ onPress, status, icon, label, hidden }) => {
+    if (!hidden)
+        return (
+            <Pressable
+                onPress={onPress} style={styles.pressable}>
+                <View style={styles.topView}>
+                    <View
+                        style={styles.elevatedView}>
+                        <Pressable
+                            style={styles.innerView}
+                            android_ripple={ripple}
+                            onPress={onPress}>
+                            <Icon fill={statusColors[status] ?? primary} style={styles.icon} name={icon} />
+                        </Pressable>
+                    </View>
+                    <Text
+                        category='label'
+                        style={styles.label}>{label}</Text>
                 </View>
-                <Text
-                    category='label'
-                    style={styles.label}>{props.label}</Text>
-            </View>
-        </Pressable >
-    )
+            </Pressable >
+        )
+    else return null
 }
 
 export default React.memo(ControlButton)

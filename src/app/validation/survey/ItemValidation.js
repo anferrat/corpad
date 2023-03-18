@@ -24,7 +24,7 @@ export class ItemValidation extends Validation {
                     object({
                         itemType: this.itemType,
                         id: this.id.required(),
-                        name: this.name.nullable().required(),
+                        name: this.name.nullable(),
                         location: this.location,
                         latitude: this.latitude,
                         longitude: this.longitude,
@@ -38,7 +38,7 @@ export class ItemValidation extends Validation {
                     object({
                         itemType: this.itemType,
                         id: this.id.required(),
-                        name: this.name.nullable().required(),
+                        name: this.name.nullable(),
                         location: this.location,
                         latitude: this.latitude,
                         longitude: this.longitude,
@@ -62,7 +62,7 @@ export class ItemValidation extends Validation {
                     object({
                         itemType: this.itemType,
                         id: this.id.required(),
-                        name: this.name.nullable().required(),
+                        name: this.name.nullable(),
                         comment: this.comment,
                         defaultName: this.name,
                         coating: this.bool,

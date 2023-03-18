@@ -2,7 +2,7 @@ import { SubitemTypes } from "../entities/survey/subitems/Subitem";
 import { Error } from "../utils/Error";
 
 export class SubitemPresenter {
-    constructor () { }
+    constructor() { }
 
     _getValidObject(subitem) {
         switch (subitem.type) {
@@ -16,7 +16,7 @@ export class SubitemPresenter {
             case SubitemTypes.ISOLATION:
                 return { name: true, current: true }
             case SubitemTypes.CIRCUIT:
-                return { name: true, current: true, voltageDrop: true, ratioCurrent: true, ratioVoltage: true, targetMin: true, targetMax: true }
+                return { name: true, current: true, voltage: true, voltageDrop: true, ratioCurrent: true, ratioVoltage: true, targetMin: true, targetMax: true }
             case SubitemTypes.COUPON:
                 return { name: true, area: true, current: true }
             case SubitemTypes.SHUNT:
@@ -42,6 +42,15 @@ export class SubitemPresenter {
         return {
             subitem: { ...subitem },
             timeModified: timeModified
+        }
+    }
+
+    executeWithList(subitems, pipelineList, referenceCells, potentialUnit) {
+        return {
+            subitems: subitems.map(subitem => ({ ...subitem, valid: this._getValidObject(subitem) })),
+            pipelineList: pipelineList.map(({ id, name }) => ({ id, name })),
+            potentialUnit: potentialUnit,
+            referenceCells: referenceCells
         }
     }
 }

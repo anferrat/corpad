@@ -24,7 +24,7 @@ const SubitemListItem = (props) => {
     )
 }
 
-export default React.memo(SubitemListItem)
+export default React.memo(SubitemListItem, (prev, next) => prev.uid === next.uid && prev.title === next.title)
 
 const styles = StyleSheet.create({
     card: {

@@ -7,8 +7,8 @@ import { referenceCellCodes, referenceCellTypes } from '../../constants/constant
 
 const ReferenceCellModal = ({ referenceCellList, itemList, onSelect, dismiss, selectedTypeIndex }) => {
     const list = itemList.filter(rc => rc.potentialTypes.indexOf(selectedTypeIndex) !== -1)
-    const portableList = list.filter(referenceCell => !referenceCellList[referenceCell.index].portable).map(rc => rc.index)
-    const stationaryList = list.filter(referenceCell => referenceCellList[referenceCell.index].portable).map(rc => rc.index)
+    const portableList = list.filter(referenceCell => referenceCellList[referenceCell.index].isPortable).map(rc => rc.index)
+    const stationaryList = list.filter(referenceCell => !referenceCellList[referenceCell.index].isPortable).map(rc => rc.index)
 
     const genReferenceCellList = React.useCallback((list) => {
         if (list.length === 0)
@@ -19,7 +19,7 @@ const ReferenceCellModal = ({ referenceCellList, itemList, onSelect, dismiss, se
                 icon='RE'
                 pack='cp'
                 title={referenceCellList[rc].name}
-                subtitle={`${referenceCellTypes[referenceCellList[rc].rcType]} (${referenceCellCodes[referenceCellList[rc].rcType]})`}
+                subtitle={`${referenceCellTypes[referenceCellList[rc].rcType] ?? ''} (${referenceCellCodes[referenceCellList[rc].rcType]?? 'Type is not selected'})` }
                 onPress={onSelect.bind(this, rc)}
             />))
     }, [referenceCellList, onSelect])

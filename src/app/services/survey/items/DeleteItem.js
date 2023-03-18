@@ -1,8 +1,9 @@
+import { EventRegister } from "react-native-event-listeners";
 import { ItemTypes } from "../../../entities/survey/items/SurveyItem";
 import { Error } from "../../../utils/Error";
 
 export class DeleteItem {
-    constructor (testPointRepo, rectifierRepo, pipelineRepo) {
+    constructor(testPointRepo, rectifierRepo, pipelineRepo) {
         this.testPointRepo = testPointRepo
         this.rectifierRepo = rectifierRepo
         this.pipelineRepo = pipelineRepo
@@ -12,15 +13,16 @@ export class DeleteItem {
         switch (itemType) {
             case ItemTypes.TEST_POINT:
                 this.testPointRepo.delete(id)
-                return
+                break
             case ItemTypes.RECTIFIER:
                 this.rectifierRepo.delete(id)
-                return 
+                break
             case ItemTypes.PIPELINE:
                 this.pipelineRepo.delete(id)
-                return 
+                break
             default:
                 throw new Error('CorpadError', `No such type ${itemType}. Unable to delete item`)
         }
+        EventRegister.emit('ITEM_DELETED', { id, itemType })
     }
 }

@@ -51,7 +51,7 @@ const BottomSheetContent = () => {
         navigation.navigate('ImportFile')
     }, [navigation])
 
-    const navigateToEdit = React.useCallback((id, dataType) => navigation.navigate('EditItem', { itemId: id, isNew: true, dataTypeItem: dataType }), [navigation])
+    const navigateToEdit = React.useCallback((id, itemType) => navigation.navigate('EditItem', { itemId: id, isNew: true, itemType: itemType }), [navigation])
 
     const navigateToSettings = React.useCallback(() => {
         navigation.navigate('Settings')

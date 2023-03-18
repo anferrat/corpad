@@ -10,7 +10,7 @@ export class Subitem {
     }
 
     setPotentials(potentials) {
-        this.potentilas = potentials
+        this.potentials = potentials
     }
 
     calculate() { }

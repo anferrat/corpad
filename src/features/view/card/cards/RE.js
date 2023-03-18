@@ -1,10 +1,10 @@
 import React from 'react'
 import TextLine from '../../components/TextLine'
 import Header from '../../components/Header'
-import PotentialsView from '../PotentialsView'
+import PotentialsView from '../../components/PotentialsView'
 import { referenceCellTypes } from '../../../../constants/constants'
 import { getValue } from '../../../../helpers/functions'
-import SmartDivider from '../../components/SmartDivider'
+import SmartDivider from '../../components/Divider'
 
 const RE = (props) => {
     return (

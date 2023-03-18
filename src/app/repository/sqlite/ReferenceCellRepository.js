@@ -21,7 +21,7 @@ export class ReferenceCellRepository extends SQLiteRepository {
         }
     }
 
-    async getAllForSubitem(itemId, subitemId) {
+    async getAllForItem(itemId, subitemId) {
         //Returns full list of portable reference cells plus stationary reference cells within test point excluding given subitemId in case of RE type ( no self reference )
         try {
             const result = await super.runSingleQueryTransaction('SELECT id, uid, rcType, name, mainReference, 1 AS isPortable from referenceCells UNION ALL SELECT id, uid, rcType, name, 0 AS mainReference, 0 AS isPortable FROM cards WHERE testPointId = ? AND type = ? AND id <> ?',
@@ -29,7 +29,7 @@ export class ReferenceCellRepository extends SQLiteRepository {
             return this.generateArray(result.rows.length, result.rows.item).map(({ id, uid, rcType, name, mainReference, isPortable }) =>
                 isPortable ?
                     new ReferenceCell(id, uid, rcType, name, mainReference) :
-                    new StatReferenceCell(id, null, uid, name, rcType, null, null))
+                    new StatReferenceCell(id, itemId, uid, name, rcType, null, null))
         }
         catch (err) {
             throw new Error('DatabaseError', `Unable to get reference cell list for subitem `)

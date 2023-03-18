@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import Header from '../../components/Header'
-import SmartDivider from '../../components/SmartDivider'
+import SmartDivider from '../../components/Divider'
 import InputField from '../../InputField'
 import SidesDisplay from '../../components/SidesDisplay'
 

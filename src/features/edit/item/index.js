@@ -1,36 +1,50 @@
 import React from 'react'
-import { ScrollView, StyleSheet } from 'react-native'
-import LoaderItem from './LoaderItem'
-import LoaderSubitemList from './LoaderSubitemList'
+import { StyleSheet, FlatList, View } from 'react-native'
+import { labels } from '../../../constants/constants'
+import ItemView from './ItemView'
 import SaveButton from './SaveButton'
-import { getSubitemNameFromDataType } from '../../../helpers/functions'
+import useSubitemListData from './hooks/useSubitemListData'
+import SubitemListItem from './components/SubitemListItem'
+import LoadingView from '../../../components/LoadingView'
+import { KeyboardAwareFlatList } from 'react-native-keyboard-aware-scroll-view'
 
 
-export const EditItem = ({ itemId, isNew, dataTypeItem, navigateToSubitem, submit, goBack }) => {
+export const EditItem = ({ itemId, isNew, itemType, navigateToSubitem, submit }) => {
+    const { subitems, loading } = useSubitemListData({ itemId, itemType })
+
+    const renderSubitem = React.useCallback(({ item }) => {
+        const { uid, type, id, name } = item
+        return <SubitemListItem
+            uid={uid}
+            iconName={type}
+            title={name}
+            subtitle={labels[type].label}
+            onPress={navigateToSubitem.bind(this, id, false, type)} />
+    }, [navigateToSubitem])
+
     return (
-        <>
-            <ScrollView contentContainerStyle={styles.scrollView}>
-                <LoaderItem
+        <LoadingView loading={loading}>
+            <KeyboardAwareFlatList
+                enableOnAndroid={true}
+                extraHeight={100}
+                ListHeaderComponent={<ItemView
                     itemId={itemId}
                     isNew={isNew}
-                    dataType={dataTypeItem}
+                    itemType={itemType}
                     navigateToView={submit}
-                    navigateToSubitem={navigateToSubitem}
-                    goBack={goBack} />
-                <LoaderSubitemList
-                    itemId={itemId}
-                    goBack={goBack}
-                    dataType={dataTypeItem}
-                    dataTypeSubitem={getSubitemNameFromDataType(dataTypeItem)}
                     navigateToSubitem={navigateToSubitem} />
-            </ScrollView>
+                }
+                data={subitems}
+                renderItem={renderSubitem}
+                keyExtractor={item => item.uid}
+                contentContainerStyle={styles.scrollView} />
             <SaveButton />
-        </>
+        </LoadingView>
     )
 }
 
 const styles = StyleSheet.create({
     scrollView: {
-        paddingBottom: 72
+        paddingBottom: 72,
     }
 })

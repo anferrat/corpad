@@ -4,26 +4,35 @@ import { Text, Icon } from '@ui-kitten/components'
 import SingleSideDisplay from './SingleSideDisplay'
 import { basic, danger } from '../../../styles/colors'
 
-const SidesDisplay = (props) => {
-    const getSideCardList = (sideIdList, cardList) => sideIdList?.map(cardId => cardList?.find(card => card?.id === cardId))
-    const sideAList = getSideCardList(props.sideA, props.cardList)
-    const sideBList = getSideCardList(props.sideB, props.cardList)
-    if (props.sideA.length !== 0 || props.sideB.length !== 0)
+const getSideSubitems = (side, subitems) => side.map(id => subitems.find(subitem => subitem.id === id))
+
+const SidesDisplay = ({ subitems, sideA, sideB, shorted, fromAtoB, visible }) => {
+
+    const sideASubitems = React.useMemo(() => getSideSubitems(sideA, subitems), [sideA, subitems])
+    const sideBSubitems = React.useMemo(() => getSideSubitems(sideB, subitems), [sideB, subitems])
+
+   // const visible = sideA.length !== 0 || sideB.length !== 0
+
+    if (visible)
         return (
             <View style={styles.mainView}>
                 <View style={styles.side}>
-                    <SingleSideDisplay title='Side A' sideCardList={sideAList} />
+                    <SingleSideDisplay
+                        subitems={sideASubitems} />
                 </View>
                 <View style={styles.iconView}>
                     <Text
-                        status={(props.isolated !== undefined && !props.isolated) ? 'danger' : 'primary'}
+                        status={shorted ? 'danger' : 'primary'}
                         category='p2'>
                         {props.displayValue}
                     </Text>
-                    <DisplayedIcon isolated={props.isolated} fromAtoB={props.fromAtoB} />
+                    <CurrentIcon
+                        shorted={shorted}
+                        fromAtoB={fromAtoB} />
                 </View>
                 <View style={styles.side}>
-                    <SingleSideDisplay title='Side B' sideCardList={sideBList} />
+                    <SingleSideDisplay
+                        subitems={sideBSubitems} />
                 </View>
             </View>
         )
@@ -32,11 +41,11 @@ const SidesDisplay = (props) => {
 
 
 
-const DisplayedIcon = React.memo((props) => {
-    if (props.isolated === undefined || !props.isolated)
+const CurrentIcon = React.memo(({ shorted, fromAtoB }) => {
+    if (shorted || shorted === undefined)
         return <Icon
-            name={props.fromAtoB ? 'arrow-forward-outline' : 'arrow-back-outline'}
-            fill={(props.isolated !== undefined && !props.isolated) ? danger : basic}
+            name={fromAtoB ? 'arrow-forward-outline' : 'arrow-back-outline'}
+            fill={shorted ? danger : basic}
             style={styles.icon} />
     else return <Icon
         name='IK'

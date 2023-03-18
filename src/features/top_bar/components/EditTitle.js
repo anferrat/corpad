@@ -5,17 +5,16 @@ import TopBarTitle from './TopBarTitle'
 
 
 
-const EditTitle = ({ dataType }) => {
-    const title = useSelector(state => getEditTitle(state, dataType))
-    const subType = useSelector(state => getEditSubtype(state, dataType))
+const EditTitle = ({ itemType }) => {
+    const title = useSelector(state => getEditTitle(state, itemType))
+    const subType = useSelector(state => getEditSubtype(state, itemType))
     return (
         <TopBarTitle
             isPrimary={false}
             title={title}
-            subtitle={subtitleHandler(dataType, subType)}
-            icon={iconHandler(dataType, subType)}
-            pack='cp'
-        />
+            subtitle={subtitleHandler(itemType, subType)}
+            icon={iconHandler(itemType, subType)}
+            pack='cp' />
     )
 }
 export default EditTitle

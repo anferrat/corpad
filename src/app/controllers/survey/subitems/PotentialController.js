@@ -17,42 +17,42 @@ class PotentialController extends Controller {
         super()
         this.createPotentialService = new CreatePotential(potentialRepo, potentialPresenter)
         this.deletePotentialService = new DeletePotential(potentialRepo)
-        this.getPotentialListService = new GetPotentialList(potentialRepo, potentialTypeRepo, referenceCellRepo, settingRepo, potentialPresenter)
+        this.getPotentialListService = new GetPotentialList(potentialRepo, potentialTypeRepo, referenceCellRepo, settingRepo, unitConverter, potentialPresenter)
         this.updatePotentialService = new UpdatePotential(potentialRepo, unitConverter, potentialPresenter)
         this.updatePotentialListService = new UpdatePotentialList(potentialRepo, unitConverter)
         this.validation = new PotentialValidation()
     }
 
     create(params, onError = null, onSuccess = null) {
-        return super.controllerHandler(onSuccess, onError, 600, async () => {
-            const { referenceCellIndex, potentialTypeIndex, subitemId, potentialTypes, referenceCells, unit } = this.validation.create(params)
-            return this.createPotentialService.execute(referenceCellIndex, potentialTypeIndex, subitemId, potentialTypes, referenceCells, unit)
+        return super.controllerHandler(onSuccess, onError, 609, async () => {
+            const { referenceCellIndex, potentialTypeIndex, subitemId, potentialTypes, referenceCells } = this.validation.create(params)
+            return this.createPotentialService.execute(referenceCellIndex, potentialTypeIndex, subitemId, potentialTypes, referenceCells)
         })
     }
 
     delete(params, onError = null, onSuccess = null) {
-        return super.controllerHandler(onSuccess, onError, 600, async () => {
+        return super.controllerHandler(onSuccess, onError, 610, async () => {
             const { id } = this.validation.delete(params)
             return this.deletePotentialService.execute(id)
         })
     }
 
     getList(params, onError = null, onSuccess = null) {
-        return super.controllerHandler(onSuccess, onError, 600, async () => {
+        return super.controllerHandler(onSuccess, onError, 612, async () => {
             const { subitemId, itemId } = this.validation.getList(params)
             return this.getPotentialListService.execute(subitemId, itemId)
         })
     }
 
     update(params, onError = null, onSuccess = null) {
-        return super.controllerHandler(onSuccess, onError, 600, async () => {
+        return super.controllerHandler(onSuccess, onError, 611, async () => {
             const { id, value, unit } = this.validation.update(params)
             return this.updatePotentialService.execute(id, value, unit)
         })
     }
 
     updateList(params, onError = null, onSuccess = null) {
-        return super.controllerHandler(onSuccess, onError, 600, async () => {
+        return super.controllerHandler(onSuccess, onError, 611, async () => {
             const { potentials, unit, subitemId } = this.validation.updateList(params)
             return this.updatePotentialListService.execute(potentials, subitemId, unit)
         })

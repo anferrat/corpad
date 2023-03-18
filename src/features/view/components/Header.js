@@ -5,20 +5,29 @@ import SingleIconButton from '../../../components/IconButton'
 import WireParams from './WireParams.js'
 import { basic } from '../../../styles/colors'
 
-const Header = (props) => {
+const Header = ({ icon, title, wireColor, wireGauge, onEdit }) => {
     return (
         <View style={styles.mainView}>
             <View style={styles.titleView}>
-                <Icon pack='cp' name={props.icon} style={styles.titleIcon} fill={basic} />
-                    <Text appearance='hint' category='p1' style={styles.title} numberOfLines={1} ellipsizeMode={'tail'}>{props.title}</Text>
-                    <SingleIconButton
-                        size='small'
-                        iconName='edit'
-                        onPress={props.onPressEdit} />
+                <Icon
+                    pack='cp'
+                    name={icon}
+                    style={styles.titleIcon}
+                    fill={basic} />
+                <Text
+                    appearance='hint'
+                    category='p1'
+                    style={styles.title}
+                    numberOfLines={1}
+                    ellipsizeMode={'tail'}>{title}</Text>
+                <SingleIconButton
+                    size='small'
+                    iconName='edit'
+                    onPress={onEdit} />
             </View>
             <WireParams
-                wireColor={props.wireColor}
-                wireGauge={props.wireGauge} />
+                wireColor={wireColor}
+                wireGauge={wireGauge} />
         </View>
     )
 }

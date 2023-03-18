@@ -92,7 +92,7 @@ export class RectifierRepository extends SQLiteRepository {
     async getSubitemsById(id) {
         try {
 
-            const result = await super.runSingleQueryTransaction(`SELECT * FROM circuits WHERE rectifierId = id ORDER BY id DESC`)
+            const result = await super.runSingleQueryTransaction(`SELECT * FROM circuits WHERE rectifierId = ? ORDER BY id DESC`, [id])
             return this.generateArray(result.rows.length, result.rows.item).map(({ id, rectifierId, uid, name, ratiCurrent, ratioVoltage, targetMin, targetMax, current, voltage, voltageDrop }) =>
                 new Circuit(id, rectifierId, uid, name, ratiCurrent, ratioVoltage, targetMin, targetMax, current, voltage, voltageDrop))
         }

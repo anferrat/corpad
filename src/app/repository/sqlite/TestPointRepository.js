@@ -129,6 +129,28 @@ export class TestPointRepository extends SQLiteRepository {
         }
     }
 
+    async getSubitemsWithPotentialsById(id) {
+        try {
+            const { rows } = await super.runSingleQueryTransaction(
+                `SELECT cards.*, potentials.id AS potentialId, potentials.uid AS potentialUid, potentials.value AS potentialValue, potentials.type AS potentialTypeId, potentials.permanentReferenceId, potentials.portableReferenceId, sides.sideAId, sides.sideBId FROM cards 
+                LEFT JOIN sides 
+                ON cards.id = sides.parentCardId
+                LEFT JOIN potentials
+                ON cards.id = potentials.cardId
+                WHERE cards.testPointId = ? 
+                ORDER BY cards.id DESC`, [id])
+            return this.subitemProcessor.generateSubitemArrayWithSidesAndPotentials(rows.length, rows.item).map((data) => {
+                const subitem = this.subitemProcessor.getSubitemFromTableData(data)
+                const potentials = this.subitemProcessor.getPotentialsFromTableData(data)
+                subitem.setPotentials(potentials)
+                return subitem
+            })
+        }
+        catch (err) {
+            throw new Error('DatabaseError', `Unable to get list of subitems`, err)
+        }
+    }
+
 
     /*
     

@@ -1,32 +1,37 @@
 import React from 'react'
-import { saveIcon } from '../../../components/Icons'
-import { useSelector, useDispatch } from 'react-redux'
-import { saveSubitemState } from '../../../store/actions/subitem'
-import MainActionButton from '../../../components/ActionButton'
+import { useDispatch, useSelector } from 'react-redux'
+import BottomButton from '../../../components/BottomButton'
 import { hapticMedium } from '../../../native_libs/haptics'
+import { EventRegister } from 'react-native-event-listeners'
+import { errorHandler } from '../../../helpers/error_handler'
+import { updateSubitemProperty } from '../../../store/actions/subitem'
 
 const SaveButton = () => {
+    const saving = useSelector(state => state.subitem.saving)
+
     const dispatch = useDispatch()
     const valid = useSelector(state => {
         if (state.subitem.valid)
-            return (Object.keys(state.subitem.valid).every(v => state.subitem.valid[v])) &&
-                (state?.potentials.every(p => p.valid) ?? true)
+            return (Object.values(state.subitem.valid).every(v => v)) &&
+                (state.potentials.potentials.every(({ valid }) => valid))
         else return false
     })
 
-    const onPressValidCheck = React.useCallback(() => {
-        hapticMedium()
-        dispatch(saveSubitemState())
-    }, [dispatch])
+    const onPress = React.useCallback(() => {
+        if (valid) {
+            hapticMedium()
+            dispatch(updateSubitemProperty(true, 'saving'))
+            EventRegister.emit('onSubitemSave')
+        }
+        else errorHandler(505)
+    }, [valid])
 
     return (
-        <MainActionButton
-            icon={saveIcon}
-            haptics={true}
+        <BottomButton
+            disabled={saving}
+            icon={saving ? 'loading' : 'save'}
             title='Save'
-            onPress={onPressValidCheck}
-            error={505}
-            valid={valid} />
+            onPress={onPress} />
     )
 }
 

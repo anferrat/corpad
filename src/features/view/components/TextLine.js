@@ -4,22 +4,34 @@ import { View, StyleSheet } from 'react-native'
 import { basic, primary } from '../../../styles/colors'
 import Unit from '../../../components/Unit'
 
-const TextLine = (props) => {
-    if (props.hideEmpty && (props.value === '' || props.value === null || props.value === undefined))
+const TextLine = ({ value, title, icon, pack, fill, unit }) => {
+
+    const isEmpty = value === '' || value === null || value === undefined
+
+    if (isEmpty)
         return null
     else
-        return <View style={styles.mainView}>
-            <Text category='p2' style={styles.title} >
-                {props.title}
-            </Text>
-            <View style={styles.valueView}>
-                {props.icon ? <Icon style={styles.icon} name={props.icon} pack={props.pack} fill={props.fill ?? basic} /> : null}
-                <Text category='p1' style={styles.text}>
-                    {props.value}
-                </Text>
-                <Unit unit={props.unit} />
+        return (
+            <View
+                style={styles.mainView}>
+                <Text
+                    category='p2'
+                    style={styles.title}>{title}</Text>
+                <View style={styles.valueView}>
+                    {icon ?
+                        <Icon
+                            style={styles.icon}
+                            name={icon}
+                            pack={pack}
+                            fill={fill ?? basic} />
+                        : null}
+                    <Text
+                        category='p1'
+                        style={styles.text}>{value}</Text>
+                    <Unit unit={unit} />
+                </View>
             </View>
-        </View>
+        )
 }
 
 export default React.memo(TextLine)

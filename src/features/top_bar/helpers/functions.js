@@ -40,10 +40,10 @@ export const iconHandler = (dataType, subType = undefined) => {
 
 export const getEditTitle = (state, dataType) => {
     const titleState = dataType === 'CARD' || dataType === 'CIRCUIT' ? state.subitem : state.item.edit
-    return (titleState?.name === null || titleState?.name === '') ? titleState?.defaultName : titleState?.name ?? 'Error'
+    return (titleState?.name === null || titleState?.name === '') ? titleState?.defaultName : titleState?.name ?? 'Loading'
 }
 
-export const getEditSubtype = (state, dataType) => (dataType !== 'CARD' ? state.item.edit?.testPointType : state.subitem.type) ?? 'Error'
+export const getEditSubtype = (state, dataType) => (dataType !== 'CARD' ? state.item.edit?.testPointType : state.subitem.type) ?? 'Loading'
 
 const getTitleBySettingType = (setting) => {
     switch (setting) {
@@ -222,11 +222,11 @@ export const getHeader = (screen, params, navigation, dispatch, bottomSheet) => 
                     left: 'back',
                     title: {
                         editTitle: true,
-                        dataType: params.dataTypeItem
+                        itemType: params.itemType
                     },
                     right: [{
                         icon: 'trash',
-                        onPress: () => deleteItem(dispatch, params.dataTypeItem, params.itemId, navigation)
+                        onPress: () => deleteItem(params.itemId, params.itemType, navigation)
                     }]
                 }
             case 'EditSubitem':
@@ -236,11 +236,11 @@ export const getHeader = (screen, params, navigation, dispatch, bottomSheet) => 
                     left: 'back',
                     title: {
                         editTitle: true,
-                        dataType: params.dataTypeSubitem
+                        itemType: params.subitemType
                     },
                     right: [{
                         icon: 'trash',
-                        onPress: () => deleteSubitem(dispatch, params.dataTypeSubitem, params.itemId, params.dataTypeItem, params.subitemId, navigation)
+                        onPress: () => deleteSubitem(params.itemId, params.subitemId, params.subitemType, navigation)
                     }]
                 }
             case 'Search':

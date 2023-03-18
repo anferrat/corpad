@@ -4,7 +4,7 @@ import { Text } from '@ui-kitten/components'
 import { StyleSheet, View } from 'react-native'
 import { default as licenseList } from '../../../licenses/android/licenses.json'
 
-const Licenses = (props) => {
+const Licenses = () => {
     const renderItem = ({ item }) => {
         return (
             <Text category='s1' style={styles.listItem}>- {item}, <Text category='s1'>{licenseList[item].copyright}</Text></Text>

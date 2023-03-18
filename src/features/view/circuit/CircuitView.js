@@ -2,7 +2,7 @@ import React from 'react'
 import { Layout } from '@ui-kitten/components'
 import TextLine from '../components/TextLine'
 import Header from '../components/Header'
-import SmartDivider from '../components/SmartDivider'
+import SmartDivider from '../components/Divider'
 import InputField from '../InputField'
 import { globalStyle } from '../../../styles/styles'
 

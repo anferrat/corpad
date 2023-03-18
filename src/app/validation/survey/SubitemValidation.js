@@ -4,7 +4,7 @@ import { SubitemTypes } from "../../entities/survey/subitems/Subitem"
 import { Validation } from "../../utils/Validation"
 
 export class SubitemValidation extends Validation {
-    constructor () {
+    constructor() {
         super()
     }
 
@@ -20,7 +20,8 @@ export class SubitemValidation extends Validation {
         return this.validate(obj,
             object({
                 subitemType: this.subitemType.required(),
-                id: this.id.required()
+                itemId: this.id.required(),
+                subitemId: this.id.required()
             }))
     }
 
@@ -68,7 +69,7 @@ export class SubitemValidation extends Validation {
         const subitem = this.validate(obj, object({
             id: this.id.required(),
             uid: this.uid.required(),
-            name: this.name.required(),
+            name: this.name.nullable(),
             type: this.subitemType.required(),
             parentId: this.id.required(),
         }))
@@ -77,9 +78,9 @@ export class SubitemValidation extends Validation {
             switch (type) {
                 case SubitemTypes.ANODE:
                     return object({
-                        anodeMaterial: this.anodeMaterial.required(),
-                        wireColor: this.wireColor.required(),
-                        wireGauge: this.wireGauge.required(),
+                        anodeMaterial: this.anodeMaterial,
+                        wireColor: this.wireColor,
+                        wireGauge: this.wireGauge,
                     })
                 case SubitemTypes.BOND:
                     return object({
@@ -100,7 +101,7 @@ export class SubitemValidation extends Validation {
                     })
                 case SubitemTypes.COUPON:
                     return object({
-                        pipelineCardId: this.id,
+                        pipelineCardId: this.id.nullable(),
                         wireGauge: this.wireGauge,
                         wireColor: this.wireColor,
                         couponType: this.couponType,
@@ -119,7 +120,7 @@ export class SubitemValidation extends Validation {
                     })
                 case SubitemTypes.PIPELINE:
                     return object({
-                        pipelineId: this.pipelineId,
+                        pipelineId: this.id.nullable(),
                         wireColor: this.wireColor,
                         wireGauge: this.wireGauge
                     })
@@ -131,17 +132,17 @@ export class SubitemValidation extends Validation {
                     })
                 case SubitemTypes.RISER:
                     return object({
-                        pipelineId: this.id,
+                        pipelineId: this.id.nullable(),
                         nps: this.nps
                     })
                 case SubitemTypes.SHUNT:
                     return object({
-                        current: this.number,
-                        factor: this.number,
-                        ratioVoltage: this.number,
-                        ratioCurrent: this.number,
+                        current: this.number.nullable(),
+                        factor: this.number.nullable(),
+                        ratioVoltage: this.number.nullable(),
+                        ratioCurrent: this.number.nullable(),
                         factorSelected: this.bool,
-                        voltageDrop: this.number,
+                        voltageDrop: this.number.nullable(),
                         fromAtoB: this.bool,
                         sideA: this.side,
                         sideB: this.side

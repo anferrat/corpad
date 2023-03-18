@@ -3,8 +3,6 @@ import { Icon } from '@ui-kitten/components'
 import { StyleSheet } from 'react-native'
 import { basic1000 } from '../../../../styles/colors'
 
-//Move to stateLess
-
 const CurrentDirection = (props) => {
     const arrow = props.fromAtoB ? 'arrow-forward-outline' : 'arrow-back-outline'
     const displayArrow = props.shorted === undefined || props.shorted

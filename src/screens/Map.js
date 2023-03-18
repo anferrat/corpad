@@ -2,13 +2,13 @@ import React from 'react'
 import Map from '../features/map/Map'
 
 const MapScreen = ({ navigation }) => {
-  const navigateToView = (id, dataType) => navigation.navigate('ViewItem', { itemId: id, dataTypeItem: dataType })
-  const navigateToEdit = (id, dataType) => navigation.navigate('EditItem', { itemId: id, isNew: true, dataTypeItem: dataType })
+  const navigateToView = (id, itemType) => navigation.navigate('ViewItem', { itemId: id, itemType: itemType })
+  const navigateToEdit = (id, itemType) => navigation.navigate('EditItem', { itemId: id, isNew: true, itemType: itemType })
   return (
-      <Map
-        navigateToView={navigateToView}
-        navigateToEdit={navigateToEdit}
-      />
+    <Map
+      navigateToView={navigateToView}
+      navigateToEdit={navigateToEdit}
+    />
   )
 }
 export default MapScreen

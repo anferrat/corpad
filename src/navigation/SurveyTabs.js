@@ -66,10 +66,10 @@ export default TabNavigator = (props) => {
                     <TopBar screen={route.name} params={route.params} navigation={navigation} />
                 </>
             }}>
-            <Screen name='TestPoints' component={List} initialParams={{ dataType: 'TEST_POINT' }} />
-            <Screen name='Pipelines' component={List} initialParams={{ dataType: 'PIPELINE' }} />
+            <Screen name='TestPoints' component={List} initialParams={{ itemType: 'TEST_POINT' }} />
+            <Screen name='Pipelines' component={List} initialParams={{ itemType: 'PIPELINE' }} />
             <Screen name='Map' component={MapScreen} />
-            <Screen name='Rectifiers' component={List} initialParams={{ dataType: 'RECTIFIER' }} options={{ headerStyle: { height: 80 } }} />
+            <Screen name='Rectifiers' component={List} initialParams={{ itemType: 'RECTIFIER' }} options={{ headerStyle: { height: 80 } }} />
         </Navigator>
     )
 }

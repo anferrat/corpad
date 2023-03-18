@@ -1,24 +1,23 @@
-import { RESET_RUN_SAVE_EFFECT, RESET_STATE, UPDATE_PROPERTY, LOAD_VIEW_STATE, LOAD_EDIT_STATE, SAVE_STATE, UPDATE_VIEW_PROPERTY, UPDATE_EDIT_DATA } from "../actions/item"
+import { RESET_RUN_SAVE_EFFECT, RESET_STATE, UPDATE_EDIT_ITEM_PROPERTY, LOAD_VIEW_STATE, LOAD_EDIT_STATE, SAVE_STATE, UPDATE_VIEW_PROPERTY, UPDATE_EDIT_DATA, VALIDATE_PROPERTY, UPDATE_CURRENT_COORDINATES, UPDATE_TAP_SETTING, RESET_EDIT_STATE } from "../actions/item"
+import fieldValidation from '../../helpers/validation'
 
 const initialState = {
-    view: {},
+    view: {
+        loading: true
+    },
     edit:
     {
-        name: null,
-        status: null,
-        defaultName: null,
-        valid: {
-            name: true
-        },
-    },
-    runSaveEffect: false,
+        loading: true,
+        saving: false
+    }
 }
 
 const item = (state = initialState, action) => {
+    console.log(action.type)
     switch (action.type) {
         case UPDATE_EDIT_DATA:
             return state
-        case UPDATE_PROPERTY:
+        case UPDATE_EDIT_ITEM_PROPERTY:
             if (state.edit.hasOwnProperty(action.property) && action.value !== undefined) {
 
                 const newValidState = action.valid !== undefined ? { ...state.edit.valid, [action.property]: action.valid } : state.edit.valid
@@ -28,26 +27,96 @@ const item = (state = initialState, action) => {
                 }
             }
             else return state
+        case VALIDATE_PROPERTY:
+            if (state.edit.hasOwnProperty(action.property)) {
+                const validate = fieldValidation(state.edit[action.property], action.property)
+                console.log(validate)
+                return {
+                    ...state,
+                    edit: {
+                        ...state.edit,
+                        [action.property]: validate.value,
+                        valid: { ...state.edit.valid, [action.property]: validate.valid }
+                    }
+                }
+            }
+            else return state
+        case UPDATE_CURRENT_COORDINATES:
+            if (state.edit.hasOwnProperty('latitude') && state.edit.hasOwnProperty('longitude')) {
+                const lat = fieldValidation(action.latitude, 'latitude')
+                const lon = fieldValidation(action.longitude, 'longitude')
+                return {
+                    ...state,
+                    edit: {
+                        ...state.edit,
+                        latitude: lat.value,
+                        longitude: lon.value,
+                        valid: {
+                            ...state.edit.valid,
+                            latitude: lat.valid,
+                            longitude: lon.valid
+                        }
+                    }
+                }
+            }
+            else return state
+        case UPDATE_TAP_SETTING:
+            if (action.tapSetting !== state.tapSetting)
+                return {
+                    ...state,
+                    edit: {
+                        ...state.edit,
+                        tapSetting: action.tapSetting,
+                        tapValue: null,
+                        tapCoarse: null,
+                        tapFine: null,
+                        valid: {
+                            ...state.edit.valid,
+                            tapValue: true
+                        }
+                    }
+                }
+            else return state
         case UPDATE_VIEW_PROPERTY: // updates both view and edit to keep data same across two screens. No valid prop, updaing view prop is ok only after validation
             if (state.view.hasOwnProperty(action.property) && action.value !== undefined) {
                 return {
                     ...state,
-                    edit: { ...state.edit, [action.property]: action.value },
-                    view: { ...state.view, [action.property]: action.value },
+                    edit: {
+                        ...state.edit,
+                        timeModified: action.timeModified ?? state.edit.timeModified,
+                        [action.property]: action.value,
+                    },
+                    view: {
+                        ...state.view,
+                        timeModified: action.timeModified ?? state.view.timeModified,
+                        [action.property]: action.value,
+                    },
                 }
             }
             else return state
         case LOAD_VIEW_STATE:
             return {
-                edit: action.itemObject,
-                view: action.itemObject,
-                runSaveEffect: false,
+                edit: {
+                    ...state.edit,
+                    ...action.itemObject,
+                    loading: false,
+                    saving: false
+                },
+                view: {
+                    ...state.view,
+                    ...action.itemObject,
+                    loading: false,
+                }
             }
         case LOAD_EDIT_STATE:
             return {
                 ...state,
-                edit: action.itemObject,
-                runSaveEffect: false
+                edit: {
+                    ...state.edit,
+                    ...action.itemObject,
+                    loading: false,
+                    saving: false,
+                },
             }
         case RESET_RUN_SAVE_EFFECT:
             return {
@@ -78,6 +147,15 @@ const item = (state = initialState, action) => {
             }
         case RESET_STATE:
             return initialState
+        case RESET_EDIT_STATE:
+            return {
+                ...state,
+                edit: {
+                    ...state.view,
+                    loading: true,
+                    saving: false
+                }
+            }
         default: return state
     }
 }
