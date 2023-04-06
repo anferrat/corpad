@@ -34,9 +34,15 @@ const ReadingTitle = (props) => {
         case 'RECTIFIER':
             switch (props.reading) {
                 case 0:
-                    return <IconTitle icon='flash-outline' title='Current' />
+                    return <>
+                        <IconTitle icon='flash-outline' title='Amps' />
+                        <IconTitle pack='cp' icon='voltage' title='Volts' />
+                    </>
                 case 1:
-                    return <IconTitle pack='cp' icon='voltage' title='Voltage' />
+                    return <>
+                        <IconTitle icon='diagonal-arrow-right-up-outline' title='Max.' />
+                        <IconTitle icon='diagonal-arrow-right-down-outline' title='Min.' />
+                    </>
                 case 2:
                     return <IconTitle icon='trending-up-outline' title='Current target' />
             }

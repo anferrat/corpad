@@ -29,7 +29,6 @@ const CT = ({ data, update, validate }) => {
     const validateShuntProperty = React.useCallback((property) => {
         validate(property)
         const current = currentCalculation2(voltageDrop, ratioCurrent, ratioVoltage)
-        console.log('current')
         if (current !== null)
             update(current, 'current')
     }, [update, ratioCurrent, ratioVoltage, voltageDrop, validate])

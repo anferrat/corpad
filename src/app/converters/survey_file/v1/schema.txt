@@ -1,0 +1,19 @@
+v1 Pipeline survey file structure. (need to work on implementing better structured JSON in future)
+        data:{
+            survey: Array of ['uid', 'name', 'technician'],
+            testPoints: Array of [`id`, 'uid', 'name', 'location', 'latitude', 'longitude', 'comment', 'testPointType', 'status', 'timeCreated', 'timeModified'],
+            rectifiers: Array of ['id', 'uid', 'name', 'location', 'latitude', 'longitude', 'comment', 'status', 'timeCreated', 'timeModified', 'model', 'serialNumber', 'powerSource', 'acVoltage', 'acCurrent', 'tapSetting', 'tapValue', 'tapCoarse', 'tapFine', 'maxVoltage', 'maxCurrent'],
+            pipelines: Array of ['id', 'uid', 'name', 'nps', 'material', 'coating', 'licenseNumber', 'timeCreated', 'timeModified', 'product', 'comment'],
+            potentialTypes: Array of ['id', 'uid', 'name', 'custom', 'permType'],
+            referenceCells: Array of ['id', 'uid', 'rcType', 'name', 'mainReference'],
+            cards: Array of ['id', 'testPointId', 'uid', 'type', 'name', 'anodeMaterial', 'wireColor', 'wireGauge', 'fromAtoB', 'current', 'currentUnit', 'pipelineId', 'pipelineCardId', 'couponType', 'density', 'area', 'description', 'isolationType', 'shorted', 'rcType', 'nps', 'ratioCurrent', 'ratioVoltage', 'factorSelected', 'factor', 'voltageDrop'],
+            potentials: Array of ['id', 'cardId', 'uid', 'value', 'type', 'unit', 'portableReferenceId', 'permanentReferenceId'],
+            circuits: Array of ['id', 'uid', 'name', 'rectifierId', 'ratioCurrent', 'ratioVoltage', 'voltageDrop', 'current', 'voltage', 'targetMin', 'targetMax'],
+            sides: Array of ['id', 'sideAId', 'sideBId', 'parentCardId']
+            }
+ 
+ * Cards are subitems of test points,
+ * Circuits are subitems of rectifiers.
+ * Sides is array with sideA and sideB for cards. Each row can only have one either sideA or sideB field with data. The other one must be equal to null
+ * Redundant data is currentUnit in cards, unit in potentials. None of them are used when importing exporting. Should be set to null
+ * For types check validation

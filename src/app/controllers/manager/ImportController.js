@@ -6,10 +6,9 @@ import { SubitemRepository } from "../../repository/sqlite/SubitemRepository"
 import { TestPointRepository } from "../../repository/sqlite/TestPointRepository"
 import { SubitemFactory } from "../../services/other/SubitemFactory"
 import { UnitConverter } from "../../services/other/UnitConverter"
-import { DeleteItemList } from "../../services/survey/items/DeleteItemList"
 import { ImportSpreadsheetData } from "../../services/survey/manager/import/ImportSpreadsheetData"
 import { Controller } from "../../utils/Controller"
-import { ImportValidation } from "../../validation/survey/import_from_spreadsheet/ImportValidation"
+import { ImportValidation } from "../../validation/import_from_spreadsheet/ImportValidation"
 
 class ImportController extends Controller {
     constructor (importDataConverter, importDataValidator, testPointRepository, rectifierRepository, pipelineRepository, potentialRepository, subitemRepository, subitemFactory, unitConverter) {

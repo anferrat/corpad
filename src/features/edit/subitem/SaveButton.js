@@ -8,6 +8,8 @@ import { updateSubitemProperty } from '../../../store/actions/subitem'
 
 const SaveButton = () => {
     const saving = useSelector(state => state.subitem.saving)
+    const subitem = useSelector(state => state.subitem)
+    const potentials = useSelector(state => state.potentials)
 
     const dispatch = useDispatch()
     const valid = useSelector(state => {
@@ -21,10 +23,10 @@ const SaveButton = () => {
         if (valid) {
             hapticMedium()
             dispatch(updateSubitemProperty(true, 'saving'))
-            EventRegister.emit('onSubitemSave')
+            EventRegister.emit('onSubitemSave', { subitem, potentials })
         }
         else errorHandler(505)
-    }, [valid])
+    }, [valid, subitem, potentials])
 
     return (
         <BottomButton

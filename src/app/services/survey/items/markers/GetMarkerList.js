@@ -1,9 +1,15 @@
 export class GetMarkerList {
-    constructor(markerRepo) {
-        this.markerRepo = markerRepo
+    constructor(testPointRepo, rectifierRepo, listPresenter) {
+        this.testPointRepo = testPointRepo
+        this.rectifierRepo = rectifierRepo
+        this.listPresenter = listPresenter
     }
 
-    execute() {
-        return this.markerRepo.getAll()
+    async execute() {
+        const [testPoints, rectifiers] = await Promise.all([
+            this.testPointRepo.getAllMarkers(),
+            this.rectifierRepo.getAllMarkers()
+        ])
+        return this.listPresenter.execute([...testPoints, ...rectifiers])
     }
 }

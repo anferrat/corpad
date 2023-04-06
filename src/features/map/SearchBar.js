@@ -1,0 +1,110 @@
+import React, { useEffect } from 'react'
+import { Pressable, Modal, StyleSheet, StatusBar, View } from 'react-native'
+import { Icon, Text } from '@ui-kitten/components'
+import { basic400, primary } from '../../styles/colors'
+import IconButton from '../../components/IconButton'
+import useMarkerSearch from './hooks/useMarkerSearch'
+import SearchModal from './components/search/SearchModal'
+
+const SearchBar = ({ setMarkerActive, resetActiveMarker, satelliteMode }) => {
+    const { search, hideModal, showModal, openMenu, onChangeKeyword, showOnMap, resetKeyword } = useMarkerSearch({ setMarkerActive, resetActiveMarker })
+    const { keyword, modalEnabled, markersFound, searching } = search
+    const inputRef = React.useRef()
+    const isEmpty = keyword === null
+    const onModalLoad = React.useCallback(() => {
+        inputRef.current?.focus()
+    }, [inputRef])
+
+
+    //THIS IS SUCH A BS!!!
+    if (modalEnabled)
+        StatusBar.setBarStyle('dark-content')
+    useEffect(() => {
+        return () => modalEnabled ? StatusBar.setBarStyle(satelliteMode ? 'light-content' : 'dark-content') : null
+    }, [modalEnabled])
+
+
+    return (
+        <>
+            <Pressable style={styles.mainView} onPress={showModal}>
+                <View style={styles.side}>
+                    <Icon pack='cp' name='corpad-logo' fill={primary} style={styles.logo} />
+                    <Text appearance={keyword ? 'default' : 'hint'} style={styles.text}>{keyword ? keyword : 'Search by name'}</Text>
+                </View>
+                <View style={styles.side}>
+                    {
+                        isEmpty ? <Icon name='search-outline' fill={primary} style={styles.search} /> :
+                            <IconButton
+                                iconName={'close-circle'}
+                                fill={primary}
+                                onPress={resetKeyword}
+                            />
+                    }
+                    <IconButton
+                        style={styles.button}
+                        iconName={'more-vertical'}
+                        onPress={openMenu}
+                        size='small' />
+                </View>
+            </Pressable>
+            <Modal
+                hardwareAccelerated={true}
+                statusBarTranslucent={true}
+                animationType='fade'
+                onShow={onModalLoad}
+                onRequestClose={hideModal}
+                visible={modalEnabled}>
+                <SearchModal
+                    searching={searching}
+                    inputRef={inputRef}
+                    resetKeyword={resetKeyword}
+                    showOnMap={showOnMap}
+                    markersFound={markersFound}
+                    keyword={keyword}
+                    onChangeKeyword={onChangeKeyword}
+                    hideModal={hideModal} />
+            </Modal>
+        </>
+    )
+}
+
+export default SearchBar
+
+const styles = StyleSheet.create({
+    mainView: {
+        width: '95%',
+        alignSelf: 'center',
+        height: 45,
+        backgroundColor: "#FFF",
+        position: 'absolute',
+        top: StatusBar.currentHeight + 5,
+        borderWidth: 1,
+        elevation: 5,
+        borderRadius: 15,
+        borderColor: basic400,
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-between'
+    },
+    logo: {
+        width: 30,
+        height: 30,
+        marginHorizontal: 12
+    },
+    text: {
+        marginLeft: 4
+    },
+    search: {
+        width: 23,
+        height: 23,
+        marginRight: 10
+    },
+    side: {
+        flexDirection: 'row',
+        alignItems: 'center'
+    },
+    button: {
+        marginRight: 12,
+
+    }
+})

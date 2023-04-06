@@ -1,34 +1,25 @@
 export const LOAD_MARKERS = 'LOAD_MARKERS'
 export const REFRESH_MARKERS = 'REFRESH_MARKERS'
-export const ADD_MARKER = 'ADD_MARKER'
 export const DELETE_MARKER = 'DELETE_MARKER'
 export const UPDATE_MARKER = 'UPDATE_MARKER'
 export const SET_ACTIVE_MARKER = 'SET_ACTIVE_MARKER'
 export const SET_MARKER_UPDATE = 'SET_MARKER_UPDATE'
 export const SET_NEW_ITEM_MARKER = 'SET_NEW_ITEM_MARKER'
-export const SET_MY_LOCATION_ACTIVE = 'SET_MY_LOCATION_ACTIVE'
-export const SET_SATELLITE = 'SET_SATELLITE'
-export const SHOW_MARKER_ON_MAP = 'SHOW_MARKER_ON_MAP'
-
+export const TOGGLE_SATELLITE_MODE = 'TOGGLE_SATELLITE_MODE'
+export const ACTIVATE_MARKER = 'ACTIVATE_MARKER'
+export const RESET_ACTIVE_MARKERS = 'RESET_ACTIVE_MARKERS'
+export const SET_MAP_READY = 'SET_MAP_READY'
 
 export const loadMarkers = (list) => {
     return { type: LOAD_MARKERS, list: list }
 }
 
-export const setShowMarker = (dataType = null, id = null) => {
-    return { type: SHOW_MARKER_ON_MAP, dataType: dataType, id: id }
-}
-
-export const setNewItemMarker = (latitude = null, longitude = null) => {
+export const setNewItemMarker = (latitude, longitude) => {
     return { type: SET_NEW_ITEM_MARKER, latitude: latitude, longitude: longitude }
 }
 
-export const addMarker = (marker) => {
-    return { type: ADD_MARKER, marker: marker }
-}
-
-export const deleteMarker = (id, dataType) => {
-    return { type: DELETE_MARKER, id: id, dataType: dataType }
+export const deleteMarker = (itemId, itemType) => {
+    return { type: DELETE_MARKER, itemId, itemType }
 }
 
 export const updateMarker = (marker) => {
@@ -39,18 +30,22 @@ export const refreshMarkers = () => {
     return { type: REFRESH_MARKERS }
 }
 
-export const setActiveMarker = (marker = null) => {
-    return { type: SET_ACTIVE_MARKER, markerObject: marker }
+export const setActiveMarker = (itemId, itemType) => {
+    return { type: SET_ACTIVE_MARKER, itemId, itemType }
 }
 
-export const setMarkerUpdate = (action, dataType, id) => {
-    return { type: SET_MARKER_UPDATE, action: action, dataType: dataType, id: id }
+export const activateMarker = (marker) => {
+    return { type: ACTIVATE_MARKER, marker }
 }
 
-export const setMyLocationActive = (value) => {
-    return { type: SET_MY_LOCATION_ACTIVE, value: value }
+export const toggleSatellite = () => {
+    return { type: TOGGLE_SATELLITE_MODE }
 }
 
-export const setSatellite = (value) => {
-    return { type: SET_SATELLITE, value: value }
+export const resetActiveMarkers = () => {
+    return { type: RESET_ACTIVE_MARKERS }
+}
+
+export const setMapReady = () => {
+    return { type: SET_MAP_READY }
 }

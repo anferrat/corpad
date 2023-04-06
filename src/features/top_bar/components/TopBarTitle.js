@@ -1,12 +1,18 @@
 import React from 'react'
 import { StyleSheet, View } from 'react-native'
 import { Text, Icon } from '@ui-kitten/components'
-import { basic, control } from '../../../styles/colors'
+import { basic, control, danger, success, warning } from '../../../styles/colors'
 
-const TopBarTitle = ({ isPrimary, title, subtitle, icon, pack }) => {
+const statusColors = [success, warning, danger, basic]
+
+const TopBarTitle = ({ isPrimary, title, subtitle, icon, pack, status }) => {
     return (
         <View style={styles.mainView}>
-            <Text category='h6' numberOfLines={1} ellipsizeMode='tail' status={isPrimary ? 'control' : null}>{title}</Text>
+            <View style={styles.titleView}>
+                {status !== undefined ?
+                    <Icon icon='circle' pack='cp' style={styles.statusIcon} fill={statusColors[status] ?? basic} /> : null}
+                <Text category='h6' numberOfLines={1} ellipsizeMode='tail' status={isPrimary ? 'control' : null}>{title}</Text>
+            </View>
             <View style={styles.subtitleView}>
                 <Text category={'s2'} appearance='hint' status={isPrimary ? 'control' : null}>
                     {subtitle}</Text>
@@ -38,5 +44,14 @@ const styles = StyleSheet.create({
         height: 16,
         width: 16,
         marginLeft: 6
+    },
+    statusIcon: {
+        width: 15,
+        height: 15,
+        marginRight: 6
+    },
+    titleView: {
+        flexDirection: 'row',
+        alignItems: 'center'
     }
 })

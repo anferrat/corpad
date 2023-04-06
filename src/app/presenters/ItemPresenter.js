@@ -44,7 +44,7 @@ export class ItemPreseneter {
     execute(item, defaultName) {
         return {
             ...item,
-            defaultName: `${defaultName}${item.id}`,
+            defaultName: defaultName,
             valid: this._getValidObject(item.itemType)
         }
     }

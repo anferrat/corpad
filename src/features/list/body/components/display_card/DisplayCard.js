@@ -9,41 +9,43 @@ import { nextReading } from '../../../helpers/functions'
 import { androidRipple } from '../../../../../styles/styles'
 
 
-const DisplayCard = (props) => {
-    const [readingIndex, setReadingIndex] = useState(props.firstReadingIndex)
+const DisplayCard = ({ id, dataList, subtitle, timeModified, status, onPress, name, firstReadingIndex, displayedReading, icon, readingList, itemType }) => {
+    const [readingIndex, setReadingIndex] = useState(firstReadingIndex)
     useEffect(() => {
-        if (readingIndex !== props.firstReadingIndex) {
-            setReadingIndex(props.firstReadingIndex)
+        // updates reading index in case of updates in the card. first reading index re-calculated on card update
+        if (readingIndex !== firstReadingIndex) {
+            setReadingIndex(firstReadingIndex)
         }
-    }, [props.readingList]) // updates reading index in case of updates in the card. we don't care if reading index is updated as long as list of readings stays the same
-    const toggleReading = React.useCallback(() => setReadingIndex(r => nextReading(r, props.readingList)), [props.readingList])
+    }, [firstReadingIndex])
+
+    const toggleReading = () => setReadingIndex(r => nextReading(r, readingList))
+
     return (
         <Pressable
             style={displayCard.pressable}
             android_ripple={androidRipple}
-            onPress={props.onPress}>
+            onPress={onPress}>
             <View style={displayCard.Card}>
                 <View style={displayCard.StatusAndTitleView}>
                     <StatusIndicator
-                        status={props.status} />
+                        status={status} />
                     <DisplayCardTitle
-                        dataList={props.dataList}
-                        uid={props.uid}
-                        title={props.name}
-                        subtitle={props.subtitle}
-                        iconName={props.mainIcon} />
+                        dataList={dataList}
+                        title={name}
+                        subtitle={subtitle}
+                        icon={icon} />
                 </View>
                 <ReadingDisplay
-                    dataType={props.dataType}
-                    displayedReading={props.displayedReading}
-                    readingList={props.readingList}
+                    itemType={itemType}
+                    displayedReading={displayedReading}
+                    readingList={readingList}
                     readingIndex={readingIndex}
                     onPress={toggleReading} />
             </View>
-            <View style={props.readingList !== 'none' ? displayCard.readingBar : displayCard.hidden}>
+            <View style={readingList.length ? displayCard.readingBar : displayCard.hidden}>
                 <ReadingBar
                     readingIndex={readingIndex}
-                    readingList={props.readingList} />
+                    readingList={readingList} />
             </View>
         </Pressable>
     )

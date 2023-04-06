@@ -28,6 +28,13 @@ export const displayCard = StyleSheet.create({
         color: basic,
         marginLeft: 5,
     },
+    iconTextSelected: {
+        width: 20,
+        height: 20,
+        color: basic,
+        marginLeft: 5,
+        fontWeight: 'bold'
+    },
     row: {
         flexDirection: 'row',
         alignItems: 'center',

@@ -1,30 +1,17 @@
-import React, { useState, useRef, useEffect } from 'react'
-import { ActivityIndicator, StyleSheet, View } from 'react-native'
+import React, { useState } from 'react'
+import { StyleSheet, View } from 'react-native'
 import Input from './Input'
 import IconButton from '../../../../components/IconButton'
-import { primary } from '../../../../styles/colors'
-import { requestLocationAsync } from '../../../../native_libs/location'
-import { errorHandler } from '../../../../helpers/error_handler'
 import LocationModal from './LocationModal'
 
 
 const LocationView = ({ update, validate, latitude, longitude, latitudeValid, longitudeValid, updateLatAndLon }) => {
-    const [isLoading, setIsLoading] = useState(false)
     const [visible, setVisible] = useState(false)
-    const componentMounted = useRef(true)
 
-    const getLocationAsync = React.useCallback(async () => {
-        setIsLoading(true)
-        const { status, location } = await requestLocationAsync()
-        if (componentMounted.current) {
-            if (status === 200)
-                updateLatAndLon(location.coords.latitude, location.coords.longitude)
-            else errorHandler(status)
-            setIsLoading(false)
-        }
-    }, [requestLocationAsync, setIsLoading, updateLatAndLon])
+    const showModal = React.useCallback(() => setVisible(true), [setVisible])
 
-    useEffect(() => () => { componentMounted.current = false }, [])
+    const hideModal = React.useCallback(() => setVisible(false), [setVisible])
+
 
     return (
         <View style={styles.GPSInputs}>
@@ -50,15 +37,15 @@ const LocationView = ({ update, validate, latitude, longitude, latitudeValid, lo
                 valid={longitudeValid}
                 label='Longitude' />
             <View style={styles.button}>
-                {isLoading ? <ActivityIndicator color={primary} /> : <IconButton
+                <IconButton
                     iconName='navigation'
-                    onPress={setVisible.bind(this, true)}
-                />}
+                    onPress={showModal}
+                />
             </View>
             <LocationModal
                 visible={visible}
                 updateLatAndLon={updateLatAndLon}
-                hideModal={setVisible.bind(this, false)}
+                hideModal={hideModal}
 
             />
         </View>

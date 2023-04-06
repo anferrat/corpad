@@ -1,16 +1,17 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { View, StyleSheet, StatusBar } from 'react-native'
 import IconButton from './IconButton'
 import { Text } from '@ui-kitten/components'
 import { control, primary, basic300 } from '../styles/colors'
 
 const Header = ({ title, onBackPress }) => {
+    
+    //this status bar hack is nuts, just leaving it here
+    StatusBar.setBarStyle('light-content')
+    useEffect(() => () => { StatusBar.setBarStyle('dark-content') }, [])
+
     return (
         <View style={styles.topBar} >
-            <StatusBar
-                barStyle={'light-content'}
-                translucent={true}
-                backgroundColor='transparent' />
             <View style={styles.leftRow}>
                 <IconButton
                     iconName={'arrow-back-outline'}
@@ -24,7 +25,7 @@ const Header = ({ title, onBackPress }) => {
     )
 }
 
-export default React.memo(Header)
+export default Header
 
 const styles = StyleSheet.create({
     topBar: {

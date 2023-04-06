@@ -5,7 +5,7 @@ import { guid } from "../../../../utils/guid"
 // first order subitems are getting imported first, to retrive id's for the second order subitems (shunts, bonds etc.)
 
 export class SubitemImport {
-    constructor (subitemRepository, potentialRepository, subitemFactory, dataUnitConverter) {
+    constructor(subitemRepository, potentialRepository, subitemFactory, dataUnitConverter) {
         this.subitemRepository = subitemRepository
         this.potentialRepository = potentialRepository
         this.subitemFactory = subitemFactory
@@ -35,12 +35,19 @@ export class SubitemImport {
         const warnings = []
         await Promise.all(subitems.map(async subitemData => {
             try {
-                const uid = guid()
-                const { name, type, key, potentials } = subitemData
+                //Convert units to standard for the subitem
+                //Convert keys to ids of corresponding subitems. Ids are stored in keyMap
                 const convertedUnits = this.dataUnitConverter.executeForSubitem(subitemData)
                 const convertedKeys = this.convertKeys(subitemData, keyMap)
-                const subitem = this.subitemFactory.execute(null, uid, name, type, itemId, { ...subitemData, ...convertedUnits, ...convertedKeys })
+
+                //generate subitem from converted data
+                const uid = guid()
+                const { name, type, anodeMaterial, wireGauge, wireColor, fromAtoB, current, sideA, sideB, ratioCurrent, ratioVoltage, targetMin, targetMax, voltage, voltageDrop, pipelineCardId, couponType, density, area, isolationType, shorted, pipelineId, rcType, nps, factor, factorSelected, description } = { ...subitemData, ...convertedUnits, ...convertedKeys }
+                const subitem = this.subitemFactory.execute(null, uid, name, type, itemId, anodeMaterial, wireGauge, wireColor, fromAtoB, current, sideA, sideB, ratioCurrent, ratioVoltage, targetMin, targetMax, voltage, voltageDrop, pipelineCardId, couponType, density, area, isolationType, shorted, pipelineId, rcType, nps, factor, factorSelected, description)
                 subitem.calculate()
+
+                //generate potentails from data and pass down to potentias import
+                const { key, potentials } = subitemData
                 const { id } = await this.subitemRepository.create(subitem)
                 await this.potentialImport(potentials, id)
                 keyMap.set(key, id)

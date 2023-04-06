@@ -19,6 +19,7 @@
     "@react-navigation/native": "^6.0.10",
     "@react-navigation/native-stack": "^6.6.2",
     "@robinbobin/react-native-google-drive-api-wrapper": "^1.2.1",
+    "@shopify/flash-list": "^1.4.2",
     "@ui-kitten/components": "^5.1.2",
     "@ui-kitten/eva-icons": "^5.1.2",
     "babel-eslint": "^10.1.0",

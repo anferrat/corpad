@@ -58,7 +58,6 @@ const SaveListItem = (props) => {
             title='Save changes and exit'
             onPress={onSaveHandler.bind(this, fileName)}
             status='danger'
-
             icon='log-out' />
     )
 }

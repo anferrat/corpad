@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useRef } from 'react'
 import { View, StyleSheet } from 'react-native'
 import { testPointTypeCodes, testPointTypes } from '../../../../../constants/constants'
 import StatusView from '../StatusView'

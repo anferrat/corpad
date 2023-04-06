@@ -1,31 +1,28 @@
 import React from 'react'
-import InputWithTitle from './InputWithTitle'
-import { potentialUnits, referenceCellCodes } from '../../../constants/constants'
+import PotentialInput from './PotentialInput'
 
-const PotentialsView = ({ unit, displayHint, potentials, validatePotential, updatePotentialValue }) => {
+const PotentialsView = ({ unit, potentialHint, potentials, validatePotential, updatePotentialValue, subitemIndex }) => {
 
     return (
         <>
-            {potentials?.map(({ uid, name, referenceCellName, referenceCellType, value, valid, }) =>
-                <InputWithTitle
-                    onEndEditing={validatePotential}
-                    onChangeText={updatePotentialValue}
-                    keyboardType='numeric'
-                    displayHint={displayHint}
-                    hintTitle={referenceCellName}
-                    hintIcon='RE'
-                    key={`PotentialValue-${uid}`}
+            {potentials?.map(({ id, uid, name, referenceCellName, referenceCellType, value, valid }, index) =>
+                <PotentialInput
+                    key={`PotentialInput - ${uid}`}
+                    displayHint={potentialHint}
+                    potentialId={id}
+                    potentialIndex={index}
+                    subitemIndex={subitemIndex}
+                    name={name}
+                    referenceCellName={referenceCellName}
                     value={value}
-                    title={name}
                     valid={valid}
-                    property='potential'
-                    unit={{
-                        main: potentialUnits[unit],
-                        script: referenceCellCodes[referenceCellType].rcType
-                    }}
+                    referenceCellType={referenceCellType}
+                    validatePotential={validatePotential}
+                    updatePotentialValue={updatePotentialValue}
+                    unit={unit}
                 />)}
         </>
     )
 }
 
-export default PotentialsView
+export default React.memo(PotentialsView)

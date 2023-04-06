@@ -48,6 +48,7 @@ const RSCard = ({ pipelineList, data, itemId, subitemId, update, validate }) => 
                 placeholder="Select pipeline"
                 label='Pipeline' />
             <Select
+                placeholderOption={true}
                 style={styles.size}
                 onSelect={onSelectSize}
                 property='nps'

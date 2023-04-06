@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useCallback } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { getPotentialList, updatePotentialList, createPotential, deletePotential } from '../../../../app/controllers/survey/subitems/PotentialController'
+import { getPotentialList, updatePotentialList, createPotential } from '../../../../app/controllers/survey/subitems/PotentialController'
 import { errorHandler } from '../../../../helpers/error_handler'
 import { loadPotentialsState, resetPotentialsState } from '../../../../store/actions/potentials'
 import { EventRegister } from 'react-native-event-listeners'
@@ -40,16 +40,18 @@ const usePotentialsData = ({ itemId, subitemId }) => {
     }, [])
 
     useEffect(() => {
-        const onSaveHandler = EventRegister.addEventListener(onSubitemSave, async () => {
+        const onSaveHandler = EventRegister.addEventListener(onSubitemSave, async ({ potentials }) => {
             if (!loading)
-                await updatePotentialList({ potentials, unit, subitemId },
-                    er => errorHandler(er))
+                await updatePotentialList(
+                    { potentials, subitemId },
+                    er => errorHandler(er),
+                    (result) => EventRegister.emit('POTENTIALS_UPDATED', { potentials: result, subitemId }))
         })
         return () => {
             EventRegister.removeEventListener(onSaveHandler)
         }
     },
-        [unit, potentials, subitemId])
+        [loading])
 
     //creates potential in state
     const createPotentialHandler = useCallback(async (potentialTypeIndex, referenceCellIndex) => {
@@ -62,7 +64,7 @@ const usePotentialsData = ({ itemId, subitemId }) => {
 
     //deletes potential from state
     const deletePotentialHandler = useCallback(async (index) => {
-            dispatch(removePotential(index))
+        dispatch(removePotential(index))
     }, [dispatch])
 
     //updates potential value in state

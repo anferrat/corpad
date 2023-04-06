@@ -1,4 +1,4 @@
-import { RESET_RUN_SAVE_EFFECT, RESET_STATE, UPDATE_EDIT_ITEM_PROPERTY, LOAD_VIEW_STATE, LOAD_EDIT_STATE, SAVE_STATE, UPDATE_VIEW_PROPERTY, UPDATE_EDIT_DATA, VALIDATE_PROPERTY, UPDATE_CURRENT_COORDINATES, UPDATE_TAP_SETTING, RESET_EDIT_STATE } from "../actions/item"
+import { RESET_RUN_SAVE_EFFECT, RESET_STATE, UPDATE_EDIT_ITEM_PROPERTY, LOAD_VIEW_STATE, LOAD_EDIT_STATE, SAVE_STATE, UPDATE_VIEW_PROPERTY, UPDATE_EDIT_DATA, VALIDATE_PROPERTY, UPDATE_CURRENT_COORDINATES, UPDATE_TAP_SETTING, RESET_EDIT_STATE, VALIDATE_VIEW_PROPERTY, SUBMIT_VIEW_PROPERTY } from "../actions/item"
 import fieldValidation from '../../helpers/validation'
 
 const initialState = {
@@ -30,7 +30,6 @@ const item = (state = initialState, action) => {
         case VALIDATE_PROPERTY:
             if (state.edit.hasOwnProperty(action.property)) {
                 const validate = fieldValidation(state.edit[action.property], action.property)
-                console.log(validate)
                 return {
                     ...state,
                     edit: {
@@ -77,8 +76,9 @@ const item = (state = initialState, action) => {
                     }
                 }
             else return state
-        case UPDATE_VIEW_PROPERTY: // updates both view and edit to keep data same across two screens. No valid prop, updaing view prop is ok only after validation
-            if (state.view.hasOwnProperty(action.property) && action.value !== undefined) {
+        case SUBMIT_VIEW_PROPERTY:
+            if (state.view.hasOwnProperty(action.property)) {
+                const valid = state.view.valid.hasOwnProperty(action.property) ? { ...state.valid, [action.property]: true } : state.view.valid
                 return {
                     ...state,
                     edit: {
@@ -90,9 +90,31 @@ const item = (state = initialState, action) => {
                         ...state.view,
                         timeModified: action.timeModified ?? state.view.timeModified,
                         [action.property]: action.value,
-                    },
+                        valid: valid
+                    }
                 }
             }
+            else return state
+        case UPDATE_VIEW_PROPERTY: // updates both view and edit to keep data same across two screens. No valid prop, updaing view prop is ok only after validation
+            if (state.view.hasOwnProperty(action.property))
+                return {
+                    ...state,
+                    view: {
+                        ...state.view,
+                        [action.property]: action.value,
+                    }
+                }
+            else return state
+        case VALIDATE_VIEW_PROPERTY:
+            if (state.view.hasOwnProperty(action.property))
+                return {
+                    ...state,
+                    view: {
+                        ...state.view,
+                        [action.property]: action.value,
+                        valid: { ...state.view.valid, [action.property]: action.valid }
+                    }
+                }
             else return state
         case LOAD_VIEW_STATE:
             return {

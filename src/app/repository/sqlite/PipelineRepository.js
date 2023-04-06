@@ -5,7 +5,7 @@ import { ItemResponseProcessor } from "./utils/ItemResponseProcessor"
 import { ItemTypes } from "../../entities/survey/items/SurveyItem"
 
 export class PipelineRepository extends SQLiteRepository {
-    constructor () {
+    constructor() {
         super()
         this.responseProcessor = new ItemResponseProcessor()
         this.tableName = 'pipelines'
@@ -52,12 +52,12 @@ export class PipelineRepository extends SQLiteRepository {
     }
 
     async create(pipeline) {
-        const { uid, name, timeCreated, timeModified, comment, nps, material, coating, licenseNumber, product, tpCount } = pipeline
+        const { id, uid, name, timeCreated, timeModified, comment, nps, material, coating, licenseNumber, product, tpCount } = pipeline
         if (uid && timeCreated) {
             try {
                 const result = await super.runSingleQueryTransaction(
-                    `INSERT INTO ${this.tableName} (uid, timeCreated, name, timeModified, nps, material, coating, licenseNumber, product, comment) VALUES (?,?,?,?,?,?,?,?,?,?)`,
-                    [uid, timeCreated, name, timeModified, nps, material, Number(coating), licenseNumber, product, comment])
+                    `INSERT INTO ${this.tableName} (id, uid, timeCreated, name, timeModified, nps, material, coating, licenseNumber, product, comment) VALUES (?,?,?,?,?,?,?,?,?,?)`,
+                    [id, uid, timeCreated, name, timeModified, nps, material, Number(coating), licenseNumber, product, comment])
                 return new Pipeline(result.insertId, uid, name, timeCreated, timeModified, comment, nps, material, Boolean(coating), licenseNumber, product, tpCount)
             }
             catch (err) {
@@ -67,11 +67,24 @@ export class PipelineRepository extends SQLiteRepository {
         else throw new Error('CorpadError', `Unable to create pipeline without required minimum parameters. Name: ${name}, uid: ${uid}, currentTime: ${currentTime}`)
     }
 
+    async createAll(pipelines) {
+        try {
+            await super.runSingleQueryTransaction(
+                `INSERT INTO pipelines (id, uid, timeCreated, name, timeModified, nps, material, coating, licenseNumber, product, comment) VALUES ${pipelines.map(pipelines.map(() => '(?,?,?,?,?,?,?,?,?,?,?)')).join(', ')}`,
+                pipelines.map(({ id, uid, timeCreated, name, timeModified, nps, material, coating, licenseNumber, product, comment }) => [id, uid, timeCreated, name, timeModified, nps, material, coating, licenseNumber, product, comment]).flat(0))
+            return
+        }
+        catch (err) {
+            throw new Error('DatabaseError', `Unable to create pipeline with name ${name}.`, err)
+        }
+
+    }
+
     async delete(id) {
         try {
             const result = await super.runSingleQueryTransaction(`DELETE FROM ${this.tableName} WHERE id=?`, [id])
             if (result.rowsAffected === 0)
-                return // throw `Test point doesn't exist` // No Error if item not found seems logical
+                return // throw `Test point doesn't exist` // No Error if item not found seems logical 
         }
         catch (err) {
             throw new Error('DatabaseError', `Unable to delete pipeline with id ${id}`, err)
@@ -100,21 +113,6 @@ export class PipelineRepository extends SQLiteRepository {
         }
         catch (err) {
             throw new Error('DatabaseError', `Unable to update pipeline with id ${id}`, err)
-        }
-    }
-
-    async updateProperty({ id, property, value, currentTime }) {
-        try {
-            const result = await super.runSingleQueryTransaction(
-                `UPDATE ${this.tableName} SET ${property}=?, timeModified=? WHERE id=?`,
-                [value, currentTime, id]
-            )
-            if (result.rowsAffected === 0) {
-                throw 'Pipeline not found'
-            }
-        }
-        catch (err) {
-            throw new Error('DatabaseError', `Unable to update property ${property} for pipeline with id ${id}`)
         }
     }
 

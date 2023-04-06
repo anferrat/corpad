@@ -42,7 +42,11 @@ const SettingsList = (props) => {
             dispatch(updateSetting('loader', { visible: true, title: 'Exiting' }))
             await resetSurvey()
             dispatch(loadSettings({
-                loader: { visible: false, title: null, text: null },
+                loader: {
+                    visible: false,
+                    title: null,
+                    text: null
+                },
                 currentSurvey: {
                     name: null,
                     fileName: null,
@@ -55,10 +59,17 @@ const SettingsList = (props) => {
         }
     }
     return (
-        <ScrollView style={styles.mainView} contentContainerStyle={styles.container}>
+        <ScrollView
+            style={styles.mainView}
+            contentContainerStyle={styles.container}>
             {settingsParams.map(section => (
-                <React.Fragment key={section.title}>
-                    <Text style={styles.title} appearance='hint'>{section.title}</Text>
+                <React.Fragment
+                    key={section.title}>
+                    <Text
+                        style={styles.title}
+                        appearance='hint'>
+                        {section.title}
+                    </Text>
                     {section.settings.map(setting =>
                         <ListItem
                             pack={setting?.pack}

@@ -1,6 +1,6 @@
 import React from 'react'
 import { StyleSheet, View } from 'react-native'
-import { Text } from '@ui-kitten/components'
+import { Text, Icon } from '@ui-kitten/components'
 import { wireGaugesList, wireColorList } from '../../../constants/constants'
 
 const WireParams = ({ wireColor, wireGauge }) => {

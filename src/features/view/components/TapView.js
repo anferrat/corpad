@@ -7,13 +7,15 @@ import TextLine from './TextLine'
 import { tapSettings, tapOptions } from '../../../constants/constants'
 import { primary } from '../../../styles/colors'
 
-const TapView = ({ tapValue, tapFine, tapCoarse, tapSetting, updateTap }) => {
+const TapView = ({ tapValue, tapFine, tapCoarse, tapSetting, submit, update, valid }) => {
 
-    const updateTapValue = React.useCallback((value) => { updateTap(value, 'TAP_VALUE', 'tapValue') }, [updateTap])
+    const onChangeTapValue = React.useCallback((value) => { update(value, 'tapValue') }, [update])
 
-    const updateTapCoarse = React.useCallback((value) => { updateTap(value, 'TAP_COARSE', 'tapCoarse') }, [updateTap])
+    const submitTapValue = () => submit(tapValue, 'tapValue')
 
-    const updateTapFine = React.useCallback((value) => { updateTap(value, 'TAP_FINE', 'tapFine') }, [updateTap])
+    const submitTapCoarse = (value) => submit(value, 'tapCoarse')
+
+    const submitTapFine = (value) => submit(value, 'tapFine')
 
     switch (tapSetting) {
         case 0:
@@ -27,7 +29,7 @@ const TapView = ({ tapValue, tapFine, tapCoarse, tapSetting, updateTap }) => {
                         itemList={tapOptions}
                         placeholder='#'
                         property='tapCoarse'
-                        onSelect={updateTapCoarse} />
+                        onSelect={submitTapCoarse} />
                     <Select
                         placeholderOption={true}
                         style={styles.select}
@@ -35,15 +37,16 @@ const TapView = ({ tapValue, tapFine, tapCoarse, tapSetting, updateTap }) => {
                         itemList={tapOptions}
                         placeholder='#'
                         property='tapFine'
-                        onSelect={updateTapFine} />
+                        onSelect={submitTapFine} />
                 </View>
             </View>
         case 1:
             return <InputWithTitle
                 keyboardType='numeric'
                 value={tapValue}
-                onEndEditing={updateTapValue}
-                valid={true}
+                onEndEditing={submitTapValue}
+                onChangeText={onChangeTapValue}
+                valid={valid.tapValue}
                 title={'VA'}
                 property='tapValue'
                 unit={'%'} />

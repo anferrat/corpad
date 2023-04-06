@@ -3,7 +3,6 @@ import { useDispatch, useSelector } from 'react-redux'
 import { getSubitemById, updateSubitem, deleteSubitem } from '../../../../app/controllers/survey/subitems/SubitemController'
 import { loadSubitemState, updateSubitemProperty, resetSubitemState } from '../../../../store/actions/subitem'
 import { EventRegister } from 'react-native-event-listeners'
-import { updateViewProperty } from '../../../../store/actions/item'
 import { errorHandler } from '../../../../helpers/error_handler'
 import { useNavigation } from '@react-navigation/native'
 import { onSubitemSave, SUBITEM_UPDATED } from '../../../../helpers/events'
@@ -34,17 +33,15 @@ const useSubitemData = ({ itemId, subitemId, subitemType, isNew }) => {
     }, [])
 
     useEffect(() => {
-        const onSaveHandler = EventRegister.addEventListener(onSubitemSave, async () => {
+        const onSaveHandler = EventRegister.addEventListener(onSubitemSave, async ({ subitem }) => {
             if (!loading) {
-                const { status, response, errorMessage } = await updateSubitem(subitemData, (er) => errorHandler(er))
+                const { status, response, errorMessage } = await updateSubitem(subitem, (er) => errorHandler(er))
                 if (status === 200) {
                     deleteOnExit.current = false
                     EventRegister.emit(SUBITEM_UPDATED, response)
-                    dispatch(updateViewProperty(response.timeModified, 'timeModified'))
                     navigation.goBack()
                 }
                 else {
-                    console.log(errorMessage)
                     dispatch(updateSubitemProperty(false, 'saving'))
                 }
             }
@@ -52,7 +49,7 @@ const useSubitemData = ({ itemId, subitemId, subitemType, isNew }) => {
         return () => {
             EventRegister.removeEventListener(onSaveHandler)
         }
-    }, [subitemData])
+    }, [loading])
 
     //When pipeline selected for PL and RS and pipelineName as default set, updates defaultName property based on pipelineId
     useEffect(() => {

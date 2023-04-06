@@ -1,18 +1,24 @@
 import { ItemTypes } from "../../../../entities/survey/items/SurveyItem"
 
 export class GetMarker {
-    constructor(testPointRepo, rectifierRepo) {
+    constructor(testPointRepo, rectifierRepo, basicPresenter) {
         this.rectifierRepo = rectifierRepo
         this.testPointRepo = testPointRepo
+        this.basicPresenter = basicPresenter
     }
 
-    execute(itemType, id) {
+    async _getMarker(itemType, id) {
         switch (itemType) {
             case ItemTypes.TEST_POINT:
-                return this.testPointRepo.getById([id]).getMarker()
+                return (await this.testPointRepo.getById([id]))
             case ItemTypes.RECTIFIER:
-                return this.rectifierRepo.getById([id]).getMarker()
+                return (await this.rectifierRepo.getById([id]))
             default: throw new Error('CorpadError', `No marker exists with id ${id} and type ${itemType}`)
         }
+    }
+
+    async execute(itemType, id) {
+        const [item] = await this._getMarker(itemType, id)
+        return this.basicPresenter.execute(item.getMarker())
     }
 }

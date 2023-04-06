@@ -1,0 +1,102 @@
+import { useCallback, useState, useEffect, useRef, useMemo } from "react";
+import { getDefaultNameList, updateDefaultNameList } from "../../../../app/controllers/survey/other/DefaultNameController";
+import { errorHandler } from "../../../../helpers/error_handler";
+import fieldValidation from '../../../../helpers/validation'
+import { labels } from "../../../../constants/constants";
+import { useNavigation } from "@react-navigation/native";
+
+
+const useDefaultNames = () => {
+    const [defaultNames, setDefaultNames] = useState({})
+    console.log(defaultNames)
+    const [loading, setLoading] = useState(true)
+    const [selectedType, setSelectedType] = useState('TEST_POINT')
+    const [pipelineNameAsDefault, setPipelineNameAsDefault] = useState(true)
+    const [name, setName] = useState({
+        value: true,
+        valid: true,
+    })
+    const { value, valid } = name
+    const navigation = useNavigation()
+
+    const itemList = useMemo(() => Object.keys(defaultNames).map(type => ({ item: labels[type].label, type: type, value: defaultNames[type] })), [defaultNames])
+    const selectedIndex = itemList.findIndex(({ type }) => type === selectedType)
+    const accessoryList = useMemo(() => Object.keys(defaultNames).map(type => ({ icon: type, pack: 'cp' })), [defaultNames])
+
+    const pipelineNameSettingActive = selectedType === 'PL' || selectedType === 'RS'
+
+    const componentMounted = useRef(true)
+
+    useEffect(() => {
+        componentMounted.current = true
+        getDefaultNameList(
+            er => errorHandler(er),
+            ({ defaultNames, pipelineNameAsDefault }) => {
+                setDefaultNames(defaultNames)
+                setPipelineNameAsDefault(pipelineNameAsDefault)
+                setLoading(false)
+                setName({
+                    value: defaultNames[selectedType] ?? null,
+                    valid: true
+                })
+            }
+        )
+        return () => {
+            componentMounted.current = false
+        }
+    }, [])
+
+    const onChangeText = useCallback((text) => setName(state => ({ ...state, value: text })), [])
+
+    const onEndEditing = useCallback(() => {
+        const validation = fieldValidation(value, 'name')
+        if (validation.valid)
+            setDefaultNames(state => ({
+                ...state,
+                [selectedType]: validation.value
+            }))
+        setName({
+            value: validation.value,
+            valid: validation.valid
+        })
+    }, [value, selectedType])
+
+    const onChangeType = useCallback((index) => {
+        setSelectedType(itemList[index].type)
+        setName({
+            value: itemList[index].value,
+            valid: true
+        })
+    }, [itemList])
+
+    const onChangePipelineNameSetting = useCallback((checked) => {
+        setPipelineNameAsDefault(checked)
+    }, [])
+
+    const updateNames = useCallback(() => {
+        console.log(defaultNames)
+        updateDefaultNameList({ defaultNames, pipelineNameAsDefault }, (er, message) => { errorHandler(er); console.log(message) }, () => navigation.goBack())
+    }, [defaultNames, pipelineNameAsDefault])
+
+
+    return {
+        defaultNames,
+        loading,
+        selectedType,
+        selectedIndex,
+        value,
+        valid,
+        pipelineNameAsDefault,
+        pipelineNameSettingActive,
+        itemList,
+        accessoryList,
+        onChangeText,
+        onEndEditing,
+        onChangeType,
+        updateNames,
+        onChangePipelineNameSetting
+    }
+
+}
+
+export default useDefaultNames

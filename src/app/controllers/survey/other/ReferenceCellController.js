@@ -3,13 +3,14 @@ import { UpdateMainReference } from "../../../services/survey/other/reference_ce
 import { CreateReferenceCell } from "../../../services/survey/other/reference_cells/CreateReferenceCell"
 import { DeleteReferenceCell } from "../../../services/survey/other/reference_cells/DeleteReferenceCell"
 import { Controller } from "../../../utils/Controller"
-import { ReferenceCellValidation } from "../../../validation/survey/ReferenceCellValidation"
+import { ReferenceCellValidation } from "../../../validation/ReferenceCellValidation"
 import { ReferenceCellRepository } from "../../../repository/sqlite/ReferenceCellRepository"
 import { BasicPresenter } from "../../../presenters/BasciPresenter"
 import { ListPresenter } from "../../../presenters/ListPresenter"
 
 class ReferenceCellController extends Controller {
     constructor (referenceCellRepository, basicPresenter, listPresenter) {
+        super()
         this.referenceCellListService = new GetReferenceCellList(referenceCellRepository, listPresenter)
         this.updateMainReferenceService = new UpdateMainReference(referenceCellRepository, basicPresenter)
         this.createReferenceCellService = new CreateReferenceCell(referenceCellRepository, basicPresenter)

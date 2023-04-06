@@ -1,5 +1,6 @@
 import { SQLiteRepository } from "../../utils/SQLite"
 import { TestPoint } from "../../entities/survey/items/TestPoint"
+import { Marker } from "../../entities/survey/items/Marker"
 import { Error } from "../../utils/Error"
 import { ItemResponseProcessor } from "./utils/ItemResponseProcessor"
 import { ItemTypes } from "../../entities/survey/items/SurveyItem"
@@ -8,7 +9,7 @@ import { SubitemResponseProcessor } from "./utils/SubitemResponseProcessor"
 import { ItemPropertyUpdateTypes } from "../../entities/survey/other/properties"
 
 export class TestPointRepository extends SQLiteRepository {
-    constructor () {
+    constructor() {
         super()
         this.responseProcessor = new ItemResponseProcessor()
         this.subitemProcessor = new SubitemResponseProcessor()
@@ -93,29 +94,30 @@ export class TestPointRepository extends SQLiteRepository {
         }
     }
 
-    async updateProperty(id, propertyType, value, currentTime) {
-        try {
-            if (propertyType !== ItemPropertyUpdateTypes.STATUS)
-                throw 'Unsupported property update'
-            await super.runSingleQueryTransaction(`UPDATE testPoints SET status=?, timeModified=? WHERE id=?`, [value, currentTime, id])
-        }
-        catch (err) {
-            throw new Error('DatabaseError', `Unable to update property ${propertyType} for test point with id ${id}`)
-        }
-    }
-
     async getAll() {
         try {
-            const result = await super.runSingleQueryTransaction(
-                `SELECT * from ${this.tableName}}`,
-                []
-            )
+            const result = await super.runSingleQueryTransaction(`SELECT * FROM testPoints`, [])
             return this.generateArray(result.rows.length, result.rows.item)
                 .map(({ id, uid, name, status, timeCreated, timeModified, comment, location, latitude, longitude, testPointType }) =>
                     new TestPoint(id, uid, name, status, timeCreated, timeModified, comment, location, latitude, longitude, testPointType))
         }
         catch (err) {
             throw new Error('DatabaseError', `Unable to get test point list`, err)
+           
+        }
+    }
+
+    async getAllMarkers() {
+        try {
+            const sortingQuery = this.responseProcessor.sortingQuery(0, null, null)
+            const result = await this.runSingleQueryTransaction(
+                `SELECT id,'${ItemTypes.TEST_POINT}' AS itemType, uid, status, testPointType, latitude, longitude, name, location, comment, timeCreated, timeModified FROM testPoints WHERE latitude IS NOT NULL AND longitude IS NOT NULL${sortingQuery}`, [])
+            return super.generateArray(result.rows.length, result.rows.item)
+                .map(({ id, uid, itemType, status, testPointType, latitude, longitude, name, location, comment, timeCreated, timeModifed }) =>
+                    new Marker(id, uid, name, status, timeCreated, timeModifed, comment, itemType, testPointType, location, latitude, longitude))
+        }
+        catch (err) {
+            throw new Error('DatabaseError', `Unable to get get markers data`, err)
         }
     }
 
@@ -148,6 +150,21 @@ export class TestPointRepository extends SQLiteRepository {
         }
         catch (err) {
             throw new Error('DatabaseError', `Unable to get list of subitems`, err)
+        }
+    }
+
+    async updateMarker(marker) {
+        try {
+            const { id, name, latitude, longitude, status, comment, location, timeModified } = marker
+            const result = await super.runSingleQueryTransaction(
+                `UPDATE testPoints SET name=?, status=?, latitude=?, longitude=?, location=?, comment=?, timeModified=? WHERE id=?`,
+                [name, status, latitude, longitude, location, comment, timeModified, id])
+            if (result.rowsAffected === 0)
+                throw 'Marker not found'
+            return marker
+        }
+        catch (er) {
+            throw new Error('DatabaseError', 'Unable to update test point')
         }
     }
 
@@ -204,8 +221,8 @@ export class TestPointRepository extends SQLiteRepository {
         try {
             const result = await super.runSingleQueryTransaction(
                 `SELECT testPoints.id AS itemId, testPoints.testPointType, testPoints.status, testPoints.name AS itemName, testPoints.timeModified, testPoints.uid AS itemUid, testPoints.location, cards.id, cards.uid, cards.name, cards.type, density AS v1 
-            FROM cards
-            LEFT JOIN testPoints ON
+            FROM testPoints
+            LEFT JOIN cards ON
             testPoints.id = cards.testPointId
             WHERE testPoints.id IN ${super.convertArrayToInStatement(idList)} AND 
             type NOT IN ${super.convertArrayToInStatement(readingTypeFilter)}
@@ -221,8 +238,8 @@ export class TestPointRepository extends SQLiteRepository {
             const result = await super.runSingleQueryTransaction(
                 `SELECT testPoints.id AS itemId, testPoints.testPointType, testPoints.status, testPoints.name AS itemName, testPoints.timeModified, testPoints.uid AS itemUid, testPoints.location, cards.id, cards.uid, cards.name, cards.type,
             CASE WHEN type = ? OR type=? THEN current END AS v1 
-            FROM cards
-            LEFT JOIN testPoints ON
+            FROM testPoints
+            LEFT JOIN cards ON
             testPoints.id = cards.testPointId
             WHERE testPoints.id IN ${super.convertArrayToInStatement(idList)} AND 
             type NOT IN ${super.convertArrayToInStatement(readingTypeFilter)}
@@ -239,14 +256,15 @@ export class TestPointRepository extends SQLiteRepository {
         try {
             const result = await super.runSingleQueryTransaction(
                 `SELECT testPoints.id AS itemId, testPoints.testPointType, testPoints.status, testPoints.name AS itemName, testPoints.timeModified, testPoints.uid AS itemUid, testPoints.location, cards.id, cards.uid, cards.name, cards.type, 
-                CASE WHEN type = ? AND shorted = 1 THEN current END AS v1 
-                FROM cards
-                LEFT JOIN testPoints ON
+                CASE WHEN type = ? THEN current END AS v2,
+                CASE WHEN type = ? THEN shorted END AS v1
+                FROM testPoints
+                LEFT JOIN cards ON
                 testPoints.id = cards.testPointId
                 WHERE testPoints.id IN ${super.convertArrayToInStatement(idList)} AND 
                 type NOT IN ${super.convertArrayToInStatement(readingTypeFilter)}
                 ORDER BY testPoints.id`,
-                [SubitemTypes.ISOLATION])
+                [SubitemTypes.ISOLATION, SubitemTypes.ISOLATION])
             return this.responseProcessor.generateDisplayCardList(result, idList, ItemTypes.TEST_POINT)
         }
         catch (err) {

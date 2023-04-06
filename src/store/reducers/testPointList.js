@@ -1,4 +1,4 @@
-import { ADD_ITEM_TO_LIST, LOAD_LIST_STATE, UPDATE_LIST, DELETE_ITEM_FROM_LIST, SET_UPDATING, SET_RESFRESH, SET_DISPLAYED_READING, SET_SORTING_SETTING, SET_FILTER_VIEW, APPLY_FILTER, RESET_FILTERS, SET_OFFSET, ON_FILTER_BUTTON_PRESS, RESET_LIST_STATE } from '../actions/testPointList'
+import { LOAD_LIST_STATE, UPDATE_LIST, DELETE_ITEM_FROM_LIST, SET_RESFRESH, SET_DISPLAYED_READING, SET_SORTING_SETTING, SET_FILTER_VIEW, APPLY_FILTER, RESET_FILTERS, SET_OFFSET, ON_FILTER_BUTTON_PRESS, RESET_LIST_STATE } from '../actions/testPointList'
 
 const initialState = {
     itemList: [],
@@ -43,41 +43,26 @@ const testPointList = (state = initialState, action) => {
                     },
                 }
             }
-        case ADD_ITEM_TO_LIST:
-            return {
-                itemList: [action.item].concat(state.itemList),
-                idList: state.idList, //do not change Id list when new item is added. It'll mess up with 
-                settings:
-                {
-                    ...state.settings,
-                    updating: null
-                },
-            }
-        case UPDATE_LIST:
-            {
-                const index = state.itemList.findIndex(item => item.id === action.itemId)
-                if (index !== -1)
+        case UPDATE_LIST: {
+            const index = state.itemList.findIndex(item => item.id === action.itemId)
+            const isNew = !(~state.idList.indexOf(action.itemId)) && !~index
+            if (isNew)
+                return {
+                    ...state,
+                    itemList: [action.itemObject].concat(state.itemList),
+                    idList: state.idList, //do not change Id list when new item is added. It'll mess up with things 
+                }
+            else {
+                if (~index)
                     return {
                         ...state,
                         itemList: Object.assign([], state.itemList, {
                             [index]: action.itemObject,
-                        }),
-                        settings:
-                        {
-                            ...state.settings,
-                            updating: null
-                        },
-
+                        })
                     }
-                else return {
-                    ...state,
-                    settings:
-                    {
-                        ...state.settings,
-                        updating: null
-                    },
-                }
+                else return state
             }
+        }
         case DELETE_ITEM_FROM_LIST:
             return {
                 itemList: state.itemList.filter(item => item.id !== action.itemId),
@@ -163,14 +148,6 @@ const testPointList = (state = initialState, action) => {
                     ...state.settings,
                     offset: state.settings.offset + 1,
                     refreshing: true
-                }
-            }
-        case SET_UPDATING:
-            return {
-                ...state,
-                settings: {
-                    ...state.settings,
-                    updating: { action: action.listAction, id: action.id },
                 }
             }
         case RESET_FILTERS:

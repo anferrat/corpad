@@ -48,10 +48,9 @@ export const useLocation = () => {
     })
     useEffect(() => {
         const permission = getLocationPermission()
-        if (permission )
+        if (permission)
             watchId = Geolocation.watchPosition(({ coords }) => {
                 const { accuracy, latitude, longitude } = coords
-                console.log(coords)
                 setLocation({ accuracy, latitude, longitude })
             }, () => { },
                 {

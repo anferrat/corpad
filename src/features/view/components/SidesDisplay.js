@@ -4,39 +4,36 @@ import { Text, Icon } from '@ui-kitten/components'
 import SingleSideDisplay from './SingleSideDisplay'
 import { basic, danger } from '../../../styles/colors'
 
-const getSideSubitems = (side, subitems) => side.map(id => subitems.find(subitem => subitem.id === id))
+const getSideNames = (side, idMap) => side.map(id => idMap[id] ?? null).filter(subitem => subitem !== null)
 
-const SidesDisplay = ({ subitems, sideA, sideB, shorted, fromAtoB, visible }) => {
+const SidesDisplay = ({ idMap, sideA, sideB, shorted, fromAtoB, value }) => {
 
-    const sideASubitems = React.useMemo(() => getSideSubitems(sideA, subitems), [sideA, subitems])
-    const sideBSubitems = React.useMemo(() => getSideSubitems(sideB, subitems), [sideB, subitems])
+    const sideASubitems = React.useMemo(() => getSideNames(sideA, idMap), [sideA, idMap])
+    const sideBSubitems = React.useMemo(() => getSideNames(sideB, idMap), [sideB, idMap])
 
-   // const visible = sideA.length !== 0 || sideB.length !== 0
-
-    if (visible)
-        return (
-            <View style={styles.mainView}>
-                <View style={styles.side}>
-                    <SingleSideDisplay
-                        subitems={sideASubitems} />
-                </View>
-                <View style={styles.iconView}>
-                    <Text
-                        status={shorted ? 'danger' : 'primary'}
-                        category='p2'>
-                        {props.displayValue}
-                    </Text>
-                    <CurrentIcon
-                        shorted={shorted}
-                        fromAtoB={fromAtoB} />
-                </View>
-                <View style={styles.side}>
-                    <SingleSideDisplay
-                        subitems={sideBSubitems} />
-                </View>
+    return (
+        <View style={styles.mainView}>
+            <View style={styles.side}>
+                <SingleSideDisplay
+                    subitems={sideASubitems} />
             </View>
-        )
-    else return null
+            <View style={styles.iconView}>
+                <Text
+                    status={shorted ? 'danger' : 'primary'}
+                    category='p2'>
+                    {value}
+                </Text>
+                <CurrentIcon
+                    shorted={shorted}
+                    fromAtoB={fromAtoB} />
+            </View>
+            <View style={styles.side}>
+                <SingleSideDisplay
+                    subitems={sideBSubitems} />
+            </View>
+        </View>
+    )
+
 }
 
 

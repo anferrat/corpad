@@ -1,11 +1,11 @@
 import React from 'react'
 import { globalStyle } from '../../styles/styles'
 import { SafeAreaView } from 'react-native'
-import DefaultNames from '../../features/settings/default_names/DefaultNames'
-import RefCells from '../../features/settings/reference_cells/RefCells'
-import Potentials from '../../features/settings/potentials/Potentials'
+import { DefaultNames } from '../../features/settings/default_names/index'
+import { ReferenceCells } from '../../features/settings/reference_cells/index'
+import { PotentialTypes } from '../../features/settings/potentials/index'
 import ExportSurvey from '../../features/settings/export/ExportSurvey'
-import SurveyInfo from '../../features/settings/info/SurveyInfo'
+import { SurveyOverview } from '../../features/settings/info/index'
 import ExportedFilesList from '../../features/settings/exported_files/ExportedFilesList'
 import About from '../../features/settings/about/About'
 
@@ -14,13 +14,13 @@ const Setting = (props) => {
         case 'defaultNames':
             return <DefaultNames {...props} />
         case 'refCells':
-            return <RefCells {...props} />
+            return <ReferenceCells {...props} />
         case 'potentials':
-            return <Potentials {...props} />
+            return <PotentialTypes {...props} />
         case 'export':
             return <ExportSurvey {...props} />
         case 'info':
-            return <SurveyInfo {...props} />
+            return <SurveyOverview {...props} />
         case 'exportedFiles':
             return <ExportedFilesList {...props} />
         case 'about':

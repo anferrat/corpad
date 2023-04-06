@@ -3,27 +3,32 @@ import TextLine from '../../components/TextLine'
 import Header from '../../components/Header'
 import PotentialsView from '../PotentialsView'
 import { pipeDiameterList } from '../../../../constants/constants'
-import { getValue, getPipelineNameById } from '../../../../helpers/functions'
-import SmartDivider from '../Divider'
+import Divider from '../Divider'
 
-const RS = (props) => {
+const RS = ({ data, potentialUnit, potentialHint, updatePotentialValue, validatePotential, subitemIndex, onEdit, pipelineList }) => {
+    const { name, type, wireColor, wireGauge, potentials, pipelineId, nps } = data
+    const pipelineIndex = pipelineList.findIndex(({ id }) => id === pipelineId)
+
     return (
         <>
             <Header
-                wireColor={props.cardData?.wireColor}
-                wireGauge={props.cardData?.wireGauge}
-                title={props.cardData.name}
-                icon={props.cardData.type}
-                onPressEdit={props.navigateToEditSubitem} />
-            <SmartDivider depend={[props.cardData.potentials.length !== 0, props.cardData.pipelineId, props.cardData.nps]} />
+                wireColor={wireColor}
+                wireGauge={wireGauge}
+                title={name}
+                icon={type}
+                onEdit={onEdit} />
+            <Divider visible={potentials.length > 0 || ~pipelineIndex || nps !== null} />
             <PotentialsView
-                itemId={props.itemId}
-                potentials={props.cardData.potentials}
-                unit={props.defaultPotentialUnit}
-                referenceCellList={props.referenceCellList} />
-            <TextLine title='Diameter' value={getValue(props.cardData.nps, pipeDiameterList)} hideEmpty />
-            <TextLine title='Pipeline' value={getPipelineNameById(props.cardData.pipelineId, props.pipelineList)} icon='PL' pack='cp' hideEmpty />
+                subitemIndex={subitemIndex}
+                updatePotentialValue={updatePotentialValue}
+                validatePotential={validatePotential}
+                unit={potentialUnit}
+                potentialHint={potentialHint}
+                potentials={potentials} />
+            <TextLine title='Diameter' value={pipeDiameterList[nps] ?? null} />
+            <TextLine title='Pipeline' value={~pipelineIndex ? pipelineList[pipelineIndex].name : null} icon='PL' pack='cp' />
         </>
     )
 }
+
 export default RS

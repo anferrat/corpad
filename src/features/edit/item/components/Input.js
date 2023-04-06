@@ -12,7 +12,6 @@ const Input = (props) => {
     const onEndEditing = React.useCallback(() => {
        
         validate(property)
-        console.log('yayay')
     }, [property, validate])
 
     return (

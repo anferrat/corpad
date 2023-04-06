@@ -1,4 +1,3 @@
-import { EventRegister } from "react-native-event-listeners";
 import { Pipeline } from "../../../entities/survey/items/Pipeline";
 import { Rectifier } from "../../../entities/survey/items/Rectifier";
 import { ItemTypes } from "../../../entities/survey/items/SurveyItem";
@@ -6,11 +5,11 @@ import { TestPoint } from "../../../entities/survey/items/TestPoint";
 import { Error } from "../../../utils/Error";
 
 export class UpdateItem {
-    constructor (testPointRepo, rectifierRepo, pipelineRepo, basicPresenter) {
+    constructor(testPointRepo, rectifierRepo, pipelineRepo, itemPresenter) {
         this.testPointRepo = testPointRepo
         this.rectifierRepo = rectifierRepo
         this.pipelineRepo = pipelineRepo
-        this.basicPresenter = basicPresenter
+        this.itemPresenter = itemPresenter
     }
 
     async execute(item) {
@@ -43,9 +42,6 @@ export class UpdateItem {
             default:
                 throw new Error('CorpadError', `No such type ${itemType}. Unable to delete item`, err)
         }
-        const result = this.basicPresenter.execute(updatedItem)
-
-        EventRegister.emit('ITEM_UPDATED', result)
-        return result
+        return this.itemPresenter.execute(updatedItem, defaultName)
     }
 }

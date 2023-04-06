@@ -1,23 +1,26 @@
 import React from 'react'
-import Header from '../../components/Header'
+import Header from '../Header'
 import PotentialsView from '../PotentialsView'
-import SmartDivider from '../Divider'
+import Divider from '../Divider'
 
-const OT = (props) => {
+const OT = ({ data, potentialUnit, potentialHint, updatePotentialValue, validatePotential, subitemIndex, onEdit }) => {
+    const { type, name, potentials, wireColor, wireGauge } = data
     return (
         <>
             <Header
-                wireColor={props.cardData?.wireColor}
-                wireGauge={props.cardData?.wireGauge}
-                title={props.cardData?.name}
-                icon={props.cardData?.type}
-                onPressEdit={props.navigateToEditSubitem} />
-            <SmartDivider depend={[props.cardData.potentials.length !== 0]} />
+                wireColor={wireColor}
+                wireGauge={wireGauge}
+                title={name}
+                icon={type}
+                onEdit={onEdit} />
+            <Divider visible={potentials.length > 0} />
             <PotentialsView
-                itemId={props.itemId}
-                potentials={props.cardData.potentials}
-                unit={props.defaultPotentialUnit}
-                referenceCellList={props.referenceCellList} />
+                subitemIndex={subitemIndex}
+                updatePotentialValue={updatePotentialValue}
+                validatePotential={validatePotential}
+                unit={potentialUnit}
+                potentialHint={potentialHint}
+                potentials={potentials} />
         </>
     )
 }

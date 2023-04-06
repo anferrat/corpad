@@ -6,27 +6,22 @@ export const loadSubitemListDataAction = (subitems, pipelineList, potentialUnit,
     return { type: 'LOAD_DATA', subitems, pipelineList, potentialUnit, referenceCells }
 }
 
-export const updatePropertyAction = (subitemIndex, property, value, valid = undefined) => {
-    return { type: 'UPDATE_SUBITEM_PROPERTY', subitemIndex, property, value, valid }
+export const updatePropertyAction = (subitemIndex, value, valid = {}) => {
+    return { type: 'UPDATE_SUBITEM_PROPERTY', subitemIndex, value, valid }
 }
 
-export const validateCouponCurrentAction = (subitemIndex) => {
-    return { type: 'VALIDATE_COUPON_CURRENT', subitemIndex }
+export const updateSubitemAction = (subitem) => {
+    return { type: 'UPDATE_SUBITEM', subitem }
 }
 
-export const validateCurrentAction = (subitemIndex) => {
-    return { type: 'VALIDATE_CURRENT', subitemIndex }
+export const refreshSubitemList = () => {
+    return { type: 'REFRESH' }
 }
 
-export const validateVoltageAction = (subitemIndex) => {
-    return { type: 'VALIDATE_VOLTAGE', subitemIndex }
+export const updatePotentialsAction = (subitemId, potentials) => {
+    return { type: 'UPDATE_POTENTIALS', subitemId, potentials }
 }
 
-export const validateVoltageDropAction = (subitemIndex) => {
-    return { type: 'VALIDATE_VOLTAGE_DROP', subitemIndex }
+export const deleteSubitemAction = (subitemId) => {
+    return { type: 'DELETE_SUBITEM', subitemId }
 }
-
-export const toggleShortedAction = (subitemIndex, shorted) => {
-    return { type: 'TOGGLE_SHORTED', subitemIndex, shorted }
-}
-

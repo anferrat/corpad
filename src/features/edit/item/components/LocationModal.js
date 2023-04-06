@@ -1,7 +1,8 @@
 import React, { useCallback, useEffect, useRef } from 'react'
 import { View, StyleSheet } from 'react-native'
 import { Modal, Button, Text, Icon } from '@ui-kitten/components'
-import { useLocation } from '../../../../native_libs/location'
+//import { useLocation } from '../../../../native_libs/location'
+import { useLocation } from '../hooks/useLocation'
 import { basic400, control } from '../../../../styles/colors'
 
 const LocationModal = ({ visible, hideModal, updateLatAndLon }) => {
@@ -24,7 +25,7 @@ export default LocationModal
 
 
 const LocationModalContent = ({ hideModal, updateLatAndLon }) => {
-    const { latitude, longitude, accuracy } = useLocation()
+    const { latitude, longitude, accuracy } = useLocation(hideModal)
     const iconRef = useRef()
 
     const onCapture = useCallback(() => {

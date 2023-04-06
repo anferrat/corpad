@@ -1,9 +1,16 @@
 import React from 'react'
-import { Icon, Button } from '@ui-kitten/components'
-import { StyleSheet, View } from 'react-native'
+import { Icon, Text } from '@ui-kitten/components'
+import { StyleSheet, View, Pressable } from 'react-native'
 import { hapticMedium } from '../../../native_libs/haptics'
 import { statusInfo } from '../../../constants/constants'
+import { basic, control, success, danger, warning } from '../../../styles/colors'
 
+const backgroundColors = {
+    basic: basic,
+    success: success,
+    warning: warning,
+    danger: danger
+}
 
 const StatusIcon = ({ updateStatus, status }) => {
     const { title, icon } = statusInfo[status]
@@ -25,15 +32,18 @@ const StatusIcon = ({ updateStatus, status }) => {
 
     return (
         <View style={styles.outerView}>
-            <Button
-                style={styles.button}
+            <Pressable
+                style={{ ...styles.button, backgroundColor: backgroundColors[statusInfo[status].status] }}
                 size='small'
                 status={statusInfo[status].status}
                 accessoryLeft={renderIcon}
                 onLongPress={resetStatus}
                 onPress={toggleStatus}>
-                {title}
-            </Button>
+                <Icon style={styles.icon} fill={control} name={icon ?? 'question-mark-outline'} />
+                <Text status='control' category='label'>
+                    {title}
+                </Text>
+            </Pressable>
         </View>
     )
 }
@@ -50,10 +60,18 @@ const styles = StyleSheet.create({
     },
     button: {
         height: 40,
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'center',
+        paddingHorizontal: 10
+    },
+    basicButton: {
+        backgroundColor: basic,
     },
     icon: {
         width: 15,
-        height: 15
+        height: 15,
+        marginRight: 10
     },
     text: {
         marginLeft: 5,

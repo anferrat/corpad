@@ -1,10 +1,8 @@
 import React from 'react'
-import { Layout } from '@ui-kitten/components'
-import TextLine from '../components/TextLine'
-import Header from '../components/Header'
-import SmartDivider from '../components/SmartDivider'
-import InputField from '../InputField'
-import { globalStyle } from '../../../styles/styles'
+import TextLine from '../TextLine'
+import Header from '../Header'
+import Divider from '../Divider'
+import InputWithTitle from '../InputWithTitle'
 
 const getRatio = (ratioCurrent, ratioVoltage) => {
     if (ratioCurrent && ratioVoltage)
@@ -26,37 +24,49 @@ const targetDisplayHandler = (min, max) => {
         else return min + ' - ' + max
 }
 
-const CircuitView = (props) => {
+const CT = ({ data, validateVoltage, validateCurrent, updatePropertyValue, onEdit, subitemIndex }) => {
+    const { name, type, voltage, current, targetMin, targetMax, valid, ratioCurrent, ratioVoltage } = data
+
+    const targetDisplay = React.useMemo(() => targetDisplayHandler(targetMin, targetMax), [targetMin, targetMax])
+
+    const shuntDisplay = React.useMemo(() => getRatio(ratioCurrent, ratioVoltage), [ratioCurrent, ratioVoltage])
+
+    const onChangeCurrent = React.useCallback((value) => updatePropertyValue(value, subitemIndex, 'current'), [subitemIndex, updatePropertyValue])
+
+    const onEndEditingCurrent = React.useCallback(() => validateCurrent(subitemIndex, data), [subitemIndex, current, validateCurrent])
+
+    const onChangeVoltage = React.useCallback((value) => updatePropertyValue(value, subitemIndex, 'voltage'), [subitemIndex, updatePropertyValue])
+
+    const onEndEditingVoltage = React.useCallback(() => validateVoltage(subitemIndex, data), [subitemIndex, voltage, validateVoltage])
+
     return (
-        <Layout style={globalStyle.card}>
+        <>
             <Header
-                title={props.circuitData?.name}
-                icon='CT'
-                onPressEdit={props.navigateToEditSubitem} />
-            <SmartDivider depend={[true]} />
-            <InputField
-                dataTypeItem='RECTIFIER'
-                dataTypeSubitem='CIRCUIT'
+                title={name}
+                icon={type}
+                onEdit={onEdit} />
+            <Divider visible={true} />
+            <InputWithTitle
+                onChangeText={onChangeCurrent}
+                onEndEditing={onEndEditingCurrent}
                 keyboardType='numeric'
-                itemId={props.itemId}
-                subitemId={props.circuitData.id}
-                value={props.circuitData.current}
+                value={current}
+                valid={valid.current}
                 title='Current'
                 property='current'
                 unit={'A'} />
-            <InputField
-                dataTypeItem='RECTIFIER'
-                dataTypeSubitem='CIRCUIT'
+            <InputWithTitle
+                onChangeText={onChangeVoltage}
+                onEndEditing={onEndEditingVoltage}
                 keyboardType='numeric'
-                itemId={props.itemId}
-                subitemId={props.circuitData.id}
-                value={props.circuitData.voltage}
+                value={voltage}
+                valid={valid.voltage}
                 title='Voltage'
                 property='voltage'
                 unit={'V'} />
-            <TextLine title='Target' value={targetDisplayHandler(props.circuitData?.targetMin, props.circuitData?.targetMax)} unit='A' hideEmpty />
-            <TextLine title='Shunt ratio' value={getRatio(props.circuitData.ratioCurrent, props.circuitData.ratioVoltage)} hideEmpty />
-        </Layout>
+            <TextLine title='Target' value={targetDisplay} unit='A'/>
+            <TextLine title='Shunt ratio' value={shuntDisplay} />
+        </>
     )
 }
-export default CircuitView
+export default CT

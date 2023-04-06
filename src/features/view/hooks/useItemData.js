@@ -1,12 +1,13 @@
 import { useCallback, useEffect, useRef } from "react"
 import { useSelector, useDispatch } from "react-redux"
 import { EventRegister } from "react-native-event-listeners"
-import { loadViewState, resetState, updateViewProperty } from "../../../store/actions/item"
+import { loadViewState, resetState, submitViewProperty, updateViewProperty, validateViewProperty } from "../../../store/actions/item"
 import { useNavigation } from "@react-navigation/native"
 import { errorHandler, warningHandler } from "../../../helpers/error_handler"
-import { deleteItem as deleteItemRequest, getItemById, updateItemProperty } from "../../../app/controllers/survey/items/ItemController"
+import { deleteItem as deleteItemRequest, getItemById, updateItem } from "../../../app/controllers/survey/items/ItemController"
 import { createSubitem as createSubitemRequest } from "../../../app/controllers/survey/subitems/SubitemController"
 import { hapticDelete } from "../../../native_libs/haptics"
+import fieldValidation from '../../../helpers/validation'
 
 const warningCodes = {
     TEST_POINT: 55,
@@ -16,17 +17,29 @@ const warningCodes = {
 
 const useItemData = ({ itemId, itemType, navigateToMap, navigateToEditSubitem }) => {
     const item = useSelector(state => state.item.view)
-    const { loading } = item
+    const { loading, timeModified } = item
     const dispatch = useDispatch()
     const componentMounted = useRef(true)
     const navigation = useNavigation()
+    const updateTracker = useRef({
+        onLoadTimeModified: null,
+        itemUpdated: false
+    })
+
+    useEffect(() => {
+        //Update tracker keeps timeModified on load, and tracks if it was changed. Emits global update event on screen unmount if changes were made
+        if (!loading)
+            updateTracker.current.itemUpdated = updateTracker.current.onLoadTimeModified !== timeModified
+    }, [timeModified])
 
     useEffect(() => {
         componentMounted.current = true
         const loadData = async () => {
-            const { status, response } = await getItemById({ id: itemId, itemType }, er => errorHandler(er.code, navigation.goBack))
-            if (status === 200 && componentMounted.current)
+            const { status, response } = await getItemById({ id: itemId, itemType }, er => errorHandler(er, navigation.goBack))
+            if (status === 200 && componentMounted.current) {
                 dispatch(loadViewState(response))
+                updateTracker.current.onLoadTimeModified = response.timeModified
+            }
         }
 
         const itemUpdateHandler = EventRegister.addEventListener('ITEM_UPDATED', async (item) => {
@@ -36,34 +49,60 @@ const useItemData = ({ itemId, itemType, navigateToMap, navigateToEditSubitem })
 
         const subitemDeleteHandler = EventRegister.addEventListener('SUBITEM_DELETED', (data) => {
             if (itemId === data.itemId)
-                dispatch(updateViewProperty(data.timeModified, 'timeModified'))
+                dispatch(submitViewProperty(data.timeModified, 'timeModified'))
+        })
+
+        const subitemUpdateHandler = EventRegister.addEventListener('SUBITEM_UPDATED', ({ timeModified }) => {
+            dispatch(submitViewProperty(timeModified, 'timeModified'))
+
+        })
+
+        const potentialUpdateHandler = EventRegister.addEventListener('POTENTIAL_UPDATED', ({ timeModified }) => {
+            dispatch(submitViewProperty(timeModified, 'timeModified'))
         })
 
         loadData()
         return () => {
             EventRegister.removeEventListener(itemUpdateHandler)
             EventRegister.removeEventListener(subitemDeleteHandler)
+            EventRegister.removeEventListener(subitemUpdateHandler)
+            EventRegister.removeEventListener(potentialUpdateHandler)
             componentMounted.current = false
+            if (updateTracker.current.itemUpdated)
+                EventRegister.emit('GLOBAL_ITEM_UPDATED', { itemId, itemType })
             dispatch(resetState())
         }
     }, [])
 
-    const updateStatus = useCallback(async (value) => {
-        const { response, status } = await updateItemProperty({ value: value, propertyType: 'STATUS', itemType, id: itemId }, er => { console.log(er) })
-        if (status === 200)
-            dispatch(updateViewProperty(value, 'status', response.timeModified))
+    const submit = async (value, property) => {
+        const validation = fieldValidation(value, property)
+        if (validation.valid) {
+            await updateItem(
+                { itemType, ...item, [property]: validation.value },
+                er => errorHandler(er),
+                (result) => EventRegister.emit('ITEM_UPDATED', result)
+            )
+        }
+        else dispatch(validateViewProperty(value, property))
+    }
+
+    const update = useCallback(async (value, property) => {
+        dispatch(updateViewProperty(value, property))
     }, [dispatch])
 
     const deleteItem = useCallback(async () => {
         hapticDelete()
         const confirm = await warningHandler(warningCodes[itemType], 'Delete', 'Cancel')
         if (confirm)
-            await deleteItemRequest({ id: itemId, itemType: itemType }, er => errorHandler(er), () => navigation.goBack())
+            await deleteItemRequest({ id: itemId, itemType }, er => errorHandler(er), () => {
+                EventRegister.emit('GLOBAL_ITEM_DELETED', { itemId, itemType })
+                navigation.goBack()
+            })
     }, [navigation])
 
     const displayOnMap = useCallback(() => {
         if (item.latitude !== null && item.longitude !== null) {
-            EventRegister.emit('activateMapMarker', { itemId, itemType })
+            EventRegister.emit('selectOnMap', { itemId, itemType })
             navigateToMap()
         }
         else errorHandler(802)
@@ -75,7 +114,7 @@ const useItemData = ({ itemId, itemType, navigateToMap, navigateToEditSubitem })
             navigateToEditSubitem(response.id, true, type)
     }, [itemId])
 
-    return { item, loading, updateStatus, deleteItem, displayOnMap, createSubitem }
+    return { item, loading, submit, update, deleteItem, displayOnMap, createSubitem }
 }
 
 export default (useItemData)

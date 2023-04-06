@@ -179,3 +179,10 @@ export const ItemPropertyUpdateTypes = Object.freeze({
     TAP_COARSE: 'TAP_COARSE',
     TAP_FINE: 'TAP_FINE'
 })
+
+export const FileSystemLocations = Object.freeze({
+    SURVEYS: 'surveys',
+    EXPORTS: 'exports',
+    DOWNLOADS: 'downloads',
+    TEMP: 'temp'
+})

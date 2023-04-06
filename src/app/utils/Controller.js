@@ -7,7 +7,7 @@ export class Controller {
             const response = await controller()
             if (onSuccess)
                 onSuccess(response)
-            if (response)
+            if (response !== undefined)
                 return {
                     status: 200,
                     response: response

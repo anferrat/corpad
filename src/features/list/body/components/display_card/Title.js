@@ -5,30 +5,28 @@ import { basic } from '../../../../../styles/colors'
 import { displayCard } from './styles/displayCardStyles'
 import DataRow from './DataRow'
 import { getIconByFieldType } from '../../../../../helpers/functions'
+import { dataListIcons } from '../../../helpers/functions'
 
 
-const renderDataRows = (dataList, id) => <>
-    {dataList.map(data => <DataRow
-        key={id + '-' + data.type}
-        iconName={getIconByFieldType(data.type).icon}
-        pack={getIconByFieldType(data.type).pack}
-        fill={basic}
-        value={data.value}
-    />)}
-</>
-
-const DisplayCardTitle = (props) => {
+const DisplayCardTitle = ({ dataList, icon, title, subtitle }) => {
     return (
         <View style={displayCard.TitleDisplay}>
             <Text
                 category='h5'
                 numberOfLines={1}
-                ellipsizeMode='tail'>{props.title}</Text>
+                ellipsizeMode='tail'>{title}</Text>
             <Text
                 style={displayCard.subtitle}
                 category='p1'
-                appearance='hint'>{props.subtitle}</Text>
-            {renderDataRows(props.dataList, props.uid)}
+                appearance='hint'>{subtitle}</Text>
+            {Object.keys(dataList).map(key =>
+                <DataRow
+                    key={`Item data type ${key}`}
+                    icon={dataListIcons[key].icon}
+                    pack={dataListIcons[key].pack}
+                    fill={basic}
+                    value={dataList[key]}
+                />)}
         </View>
     )
 }

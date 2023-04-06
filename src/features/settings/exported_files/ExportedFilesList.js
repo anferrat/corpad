@@ -97,8 +97,7 @@ const ExportedFilesList = (props) => {
                     data={files}
                     renderItem={renderItem}
                     ListEmptyComponent={EmptyExportedFilesList}
-                    keyExtractor={keyExtractor}
-                />
+                    keyExtractor={keyExtractor} />
             </LoadingView>
             <MainActionButton
                 title='Delete all'

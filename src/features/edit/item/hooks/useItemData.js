@@ -28,7 +28,14 @@ const useItemData = ({ itemId, itemType, isNew, navigateToView, navigateToSubite
 
     useEffect(() => {
         const onSaveHandler = EventRegister.addEventListener('onItemSave', async (item) => {
-            const { status } = await updateItem({ itemType, ...item }, er => errorHandler(er))
+            const { status } = await updateItem(
+                { itemType, ...item },
+                er => errorHandler(er),
+                (result) => {
+                    EventRegister.emit('ITEM_UPDATED', result)
+                    EventRegister.emit('GLOBAL_ITEM_UPDATED', { itemId, itemType })
+                }
+            )
             if (status === 200) {
                 deleteOnExit.current = false
                 navigateToView()

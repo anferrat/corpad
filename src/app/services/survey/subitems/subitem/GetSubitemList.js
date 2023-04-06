@@ -37,7 +37,7 @@ export class GetSubitemList {
         else if (itemType === ItemTypes.RECTIFIER)
             return [this.rectifierRepo.getSubitemsById(id), [], [], [], {}]
         else if (itemType = ItemTypes.PIPELINE)
-            return []
+            return [[], [], [], [], {}]
         else throw new Error('CorpadError', `Item type ${itemType} is not supported.`)
     }
 

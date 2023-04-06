@@ -18,9 +18,8 @@ import { DeleteSubitem } from "../../../services/survey/subitems/subitem/DeleteS
 import { GetSubitemById } from "../../../services/survey/subitems/subitem/GetSubitemById"
 import { GetSubitemList } from "../../../services/survey/subitems/subitem/GetSubitemList"
 import { UpdateSubitem } from "../../../services/survey/subitems/subitem/UpdateSubitem"
-import { UpdateSubitemProperty } from "../../../services/survey/subitems/subitem/UpdateSubitemProperty"
 import { Controller } from "../../../utils/Controller"
-import { SubitemValidation } from "../../../validation/survey/SubitemValidation"
+import { SubitemValidation } from "../../../validation/SubitemValidation"
 
 class SubitemController extends Controller {
     constructor(subitemRepo, testPointRepo, pipelineRepo, rectifierRepo, defaultNameRepo, settingRepo, referenceCellRepo, potentialTypeRepo, potentialRepo, subitemPresenter, listPresenter, basicPresenter, potentialPresenter, subitemFactory, unitConverter) {
@@ -30,7 +29,6 @@ class SubitemController extends Controller {
         this.getSubitemByIdService = new GetSubitemById(subitemRepo, defaultNameRepo, testPointRepo, rectifierRepo, pipelineRepo, settingRepo, subitemPresenter)
         this.getSubitemListService = new GetSubitemList(testPointRepo, rectifierRepo, referenceCellRepo, potentialTypeRepo, pipelineRepo, settingRepo, listPresenter, subitemPresenter, potentialPresenter, unitConverter)
         this.updateSubitemService = new UpdateSubitem(subitemRepo, subitemPresenter, subitemFactory)
-        this.updatePropertyService = new UpdateSubitemProperty(subitemRepo)
 
         this.validation = new SubitemValidation()
     }
@@ -77,14 +75,6 @@ class SubitemController extends Controller {
         })
     }
 
-    updateProperty(params, onError = null, onSuccess = null) {
-        return super.controllerHandler(onSuccess, onError, 600, async () => {
-            const { subitemId, itemId, subitemType, propertyType, value } = this.validation.updateProperty(params)
-            return this.updatePropertyService.execute(subitemId, itemId, propertyType, subitemType, value)
-        })
-    }
-
-    //implement update
 }
 
 const subitemController = new SubitemController(
@@ -115,7 +105,5 @@ export const getSubitemById = (params, onError, onSuccess) => subitemController.
 export const getSubitemList = (params, onError, onSuccess) => subitemController.getList(params, onError, onSuccess)
 
 export const updateSubitem = (params, onError, onSuccess) => subitemController.update(params, onError, onSuccess)
-
-export const updateSubitemProperty = (params, onError, onSuccess) => subitemController.updateProperty(params, onError, onSuccess)
 
 export const getSubitemListData = (params, onError, onSuccess) => subitemController.getListWithData(params, onError, onSuccess)
