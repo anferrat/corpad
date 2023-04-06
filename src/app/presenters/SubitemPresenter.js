@@ -40,7 +40,10 @@ export class SubitemPresenter {
 
     executeWithUpdate(subitem, timeModified) {
         return {
-            subitem: { ...subitem },
+            subitem: {
+                ...subitem,
+                valid: this._getValidObject(subitem)
+            },
             timeModified: timeModified
         }
     }

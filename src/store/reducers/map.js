@@ -1,130 +1,109 @@
-import { LOAD_MARKERS, REFRESH_MARKERS, ADD_MARKER, DELETE_MARKER, UPDATE_MARKER, SET_ACTIVE_MARKER, SET_MARKER_UPDATE, SET_NEW_ITEM_MARKER, SET_MY_LOCATION_ACTIVE, SET_SATELLITE, SHOW_MARKER_ON_MAP } from "../actions/map"
+import { LOAD_MARKERS, REFRESH_MARKERS, DELETE_MARKER, UPDATE_MARKER, SET_ACTIVE_MARKER, SET_NEW_ITEM_MARKER, TOGGLE_SATELLITE_MODE, ACTIVATE_MARKER, RESET_ACTIVE_MARKERS, SET_MAP_READY } from "../actions/map"
 
-/*
-Marker: 
-{
-    dataType: 'TEST_POINT',
-    id: 10,
-    uid: '323jsjnds-sdsd',
-    status: 2,
-    testPointType: 'HD',
-    latitude: 123.33,
-    longitude: 45.22,
-    name: 'TP#2',
-    location: '143 Dalcastle Way NW'
-}
-*/
 const initialState = {
     markers: [],
-    refreshing: true,
-    updating: null,
-    myLocationActive: false,
-    satellite: false,
+    loading: true,
+    mapReady: false,
+    satelliteMode: false,
     newItemMarker: {
+        active: false,
         latitude: null,
         longitude: null,
-    },
-    showMarker: { //when this value is set map will try to find marker in marker list and activate it (show on map button in View Screen)
-        dataType: null,
-        id: null,
     },
     activeMarker: {
         id: null,
-        dataType: null,
-        latitude: null,
-        longitude: null,
-        testPointType: null,
         uid: null,
+        markerType: null,
+        itemType: null,
+        location: null,
+        comment: null,
         name: null,
-        status: null,
-        location: null
+        status: 3,
+        timeModified: null,
+        timeCreated: null,
+        latitude: null,
+        longitude: null
     }
 }
 
 const map = (state = initialState, action) => {
     switch (action.type) {
-        case SET_MY_LOCATION_ACTIVE: {
+        case TOGGLE_SATELLITE_MODE: {
             return {
                 ...state,
-                myLocationActive: action.value
-            }
-        }
-        case SET_SATELLITE: {
-            return {
-                ...state,
-                satellite: action.value
+                satelliteMode: !state.satelliteMode
             }
         }
         case SET_NEW_ITEM_MARKER:
             return {
                 ...state,
                 newItemMarker: {
+                    active: true,
                     latitude: action.latitude,
                     longitude: action.longitude,
                 },
                 activeMarker: initialState.activeMarker,
             }
-        case SET_MARKER_UPDATE:
+        case ACTIVATE_MARKER:
             return {
                 ...state,
-                updating: action.dataType === 'PIPELINE' || action.action === 'RESET' || state.refreshing ? null : { //state.refreshing - no marker update when markers haven't been fetched yet
-                    action: action.action,
-                    dataType: action.dataType,
-                    id: action.id
-                }
-            }
-        case SET_ACTIVE_MARKER:
-            return {
-                ...state,
-                activeMarker: action.markerObject !== null ? action.markerObject : initialState.activeMarker,
+                activeMarker: action.marker,
                 newItemMarker: initialState.newItemMarker,
-                showMarker: initialState.showMarker
             }
-        case SHOW_MARKER_ON_MAP:
+        case RESET_ACTIVE_MARKERS:
             return {
                 ...state,
-                showMarker: action.id !== null ? {
-                    id: action.id,
-                    dataType: action.dataType
-                } :
-                    initialState.showMarker
+                activeMarker: initialState.activeMarker,
+                newItemMarker: initialState.newItemMarker
             }
-        case ADD_MARKER:
+        case SET_ACTIVE_MARKER: {
+            const markerIndex = state.markers.findIndex(({ id, itemType }) => id === action.itemId && itemType === action.itemType)
             return {
                 ...state,
-                updating: null,
-                markers: [...state.markers, action.marker],
+                activeMarker: ~markerIndex ? state.markers[markerIndex] : state.activeMarker,
+                newItemMarker: initialState.newItemMarker,
             }
-        case UPDATE_MARKER:
-            const markerIndex = state.markers.findIndex(marker => marker.id === action.marker.id && marker.dataType === action.marker.dataType)
-            if (markerIndex === -1)
-                return state
-            else
+        }
+        case UPDATE_MARKER: {
+            const markerIndex = state.markers.findIndex(marker => marker.id === action.marker.id && marker.itemType === action.marker.itemType)
+            if (~markerIndex) {
+                const isActive = action.marker.id === state.activeMarker.id && action.marker.itemType === state.activeMarker.itemType
                 return {
                     ...state,
-                    updating: null,
-                    activeMarker: state.activeMarker.uid === state.markers[markerIndex].uid ? action.marker : state.activeMarker,
+                    activeMarker: isActive ? action.marker : state.activeMarker,
                     markers: Object.assign([], state.markers, {
                         [markerIndex]: action.marker,
                     }),
                 }
+            }
+            else
+                return {
+                    ...state,
+                    markers: [...state.markers, action.marker]
+                }
+        }
         case DELETE_MARKER:
+            const isActive = state.activeMarker.itemId === action.itemId && state.activeMarker.itemType === action.itemType
             return {
                 ...state,
-                updating: null,
-                activeMarker: state.activeMarker.id === action.id && state.activeMarker.dataType === action.dataType ? initialState.activeMarker : state.activeMarker,
-                markers: state.markers.filter(marker => (marker.id !== action.id || marker.dataType !== action.dataType)),
+                activeMarker: isActive ? initialState.activeMarker : state.activeMarker,
+                markers: state.markers.filter(marker => (marker.id !== action.itemId || marker.itemType !== action.itemType)),
             }
         case LOAD_MARKERS:
             return (
                 {
                     ...state,
                     markers: action.list,
-                    refreshing: false
+                    loading: false
                 }
             )
         case REFRESH_MARKERS:
             return initialState
+        case SET_MAP_READY:
+            return {
+                ...state,
+                mapReady: true
+            }
         default:
             return state
     }

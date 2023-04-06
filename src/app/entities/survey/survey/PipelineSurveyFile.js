@@ -16,10 +16,6 @@ export const SurveyFileDataFields = Object.freeze({
 
 
 export class PipelineSurveyFile {
-    static PIPELINE_SURVEY_FILE_VERSION = 1
-    static PIPELINE_SURVEY_FILE_TYPE = 'plsv'
-    static MIN_REFERENCE_CELLS = 1
-    static MIN_POTENTIAL_TYPES = 2
     static elements = Object.freeze({
         [SurveyFileDataFields.SURVEY]: ['uid', 'name', 'technician'],
         [SurveyFileDataFields.TEST_POINTS]: [`id`, 'uid', 'name', 'location', 'latitude', 'longitude', 'comment', 'testPointType', 'status', 'timeCreated', 'timeModified'],
@@ -33,33 +29,19 @@ export class PipelineSurveyFile {
         [SurveyFileDataFields.SIDES]: ['id', 'sideAId', 'sideBId', 'parentCardId'],
     })
 
-    constructor(
-        survey = [],
-        testPoints = [],
-        rectifiers = [],
-        pipelines = [],
-        potentialTypes = [],
-        referenceCells = [],
-        cards = [],
-        potentials = [],
-        circuits = [],
-        sides = []) {
-        this.version = PipelineSurveyFile.PIPELINE_SURVEY_FILE_VERSION
-        this.type = PipelineSurveyFile.PIPELINE_SURVEY_FILE_TYPE
-        this.data = {
-            [SurveyFileDataFields.SURVEY]: survey,
-            [SurveyFileDataFields.TEST_POINTS]: testPoints,
-            [SurveyFileDataFields.RECTIFIERS]: rectifiers,
-            [SurveyFileDataFields.PIPELINES]: pipelines,
-            [SurveyFileDataFields.POTENTIAL_TYPES]: potentialTypes,
-            [SurveyFileDataFields.REFERENCE_CELLS]: referenceCells,
-            [SurveyFileDataFields.CARDS]: cards,
-            [SurveyFileDataFields.POTENTIALS]: potentials,
-            [SurveyFileDataFields.CIRCUITS]: circuits,
-            [SurveyFileDataFields.SIDES]: sides,
-        }
+    constructor(survey, testPoints, rectifiers, pipelines, potentialTypes, referenceCells, subitems, potentials) {
+        this.survey = survey
+        this.testPoints = testPoints
+        this.rectifiers = rectifiers
+        this.pipelines = pipelines
+        this.potentialTypes = potentialTypes
+        this.referenceCells = referenceCells
+        this.subitems = subitems
+        this.potentials = potentials
     }
 
+
+    /*
     addElement(elementType, value) {
         this.data[elementType].push(value)
     }
@@ -96,7 +78,7 @@ export class PipelineSurveyFile {
     resetSurveyValues() {
         // used to reset some of survey file values such as status, potential values, current values etc.
     }
-
+*/
 
 }
 

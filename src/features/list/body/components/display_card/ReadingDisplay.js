@@ -2,37 +2,28 @@ import React from 'react'
 import { Pressable, View } from 'react-native'
 import { androidRipple } from '../../../../../styles/styles'
 import { displayCard } from './styles/displayCardStyles'
-import DataRow from './DataRow'
-import { displayedReadingsValues } from '../../../helpers/functions'
-
-const renderDataRows = (dataList, uid, dataType, reading) => {
-    if (dataList && dataList !== 'none') {
-        const single = !Array.isArray(displayedReadingsValues[dataType][reading].icon)
-        return <>
-            {dataList.map((value, i) => <DataRow
-                pack={displayedReadingsValues[dataType][reading].pack}
-                key={uid + '-' + i}
-                fill={'#9ca9cb'}
-                iconName={single ? displayedReadingsValues[dataType][reading].icon : displayedReadingsValues[dataType][reading].icon[i]}
-                value={value}
-                unitSuperscript={displayedReadingsValues[dataType][reading]?.unitSuperscript} // not ideal, but we hardly be using more units with supercript and subcripts, if so, change it
-            />)}
-        </>
-    }
-    else return null
-}
+import ReadingRow from './ReadingRow'
 
 
-const ReadingDisplay = (props) => {
-    if (props?.readingList !== 'none' && props?.readingList[props.readingIndex]?.readings !== 'none') {
+const ReadingDisplay = ({ readingList, readingIndex, onPress, displayedReading, itemType }) => {
+    if (readingList.length && readingIndex !== -1 && (readingList[readingIndex].v1 !== null || (readingList[readingIndex].v2 !== null && readingList[readingIndex].v2 !== undefined))) {
         return (
             <View style={displayCard.ReadingDisplay}>
                 <View style={displayCard.ReadingDisplayRoundBorder}>
                     <Pressable
                         style={displayCard.ReadingDisplayPressable}
                         android_ripple={androidRipple}
-                        onPress={props.onPress}>
-                        {renderDataRows(props.readingList[props.readingIndex]?.readings, props.uid, props.dataType, props.displayedReading)}
+                        onPress={onPress}>
+                        <ReadingRow
+                            index={0}
+                            displayedReading={displayedReading}
+                            value={readingList[readingIndex].v1}
+                            itemType={itemType} />
+                        <ReadingRow
+                            index={1}
+                            displayedReading={displayedReading}
+                            value={readingList[readingIndex].v2}
+                            itemType={itemType} />
                     </Pressable>
                 </View>
             </View>

@@ -1,4 +1,3 @@
-import { EventRegister } from "react-native-event-listeners";
 import { ItemTypes } from "../../../entities/survey/items/SurveyItem";
 import { Error } from "../../../utils/Error";
 
@@ -23,6 +22,5 @@ export class DeleteItem {
             default:
                 throw new Error('CorpadError', `No such type ${itemType}. Unable to delete item`)
         }
-        EventRegister.emit('ITEM_DELETED', { id, itemType })
     }
 }

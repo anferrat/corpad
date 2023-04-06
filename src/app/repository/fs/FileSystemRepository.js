@@ -1,5 +1,6 @@
 import RNFS from 'react-native-fs'
 import { Error } from '../../utils/Error'
+import { FileSystemLocations } from '../../entities/survey/other/properties'
 
 export class FileSystemRepository {
     constructor() {
@@ -27,13 +28,10 @@ export class FileSystemRepository {
             //write file
 
             await RNFS.writeFile(filePath, content)
-            return {
-                status: 200,
-                filePath: filePath,
-                hash: await RNFS.hash(filePath, 'md5')
-            }
+            return filePath
         }
         catch (er) {
+            console.log(er)
             throw new Error('FileError', 'Error while writing file', { status: 401, error: er })
         }
     }
@@ -92,14 +90,14 @@ export class FileSystemRepository {
 
     async getLocation(location) {
         switch (location) {
-            case 'surveys':
-                return await createDirectory(this.surveysFolder)
-            case 'exports':
-                return await createDirectory(this.exportsFolder)
-            case 'downloads':
+            case FileSystemLocations.SURVEYS:
+                return await this.createDirectory(this.surveysFolder)
+            case FileSystemLocations.EXPORTS:
+                return await this.createDirectory(this.exportsFolder)
+            case FileSystemLocations.DOWNLOADS:
                 return this.downloadsFolder
-            case 'temp': //not used
-                return await createDirectory(this.tempFolder)
+            case FileSystemLocations.TEMP: //not used
+                return await this.createDirectory(this.tempFolder)
             default:
                 throw new Error('FileError', `Unknown destination ${location}.`, { status: 400 })
         }

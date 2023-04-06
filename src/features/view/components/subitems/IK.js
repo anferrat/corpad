@@ -1,67 +1,56 @@
-import React, { useState, useEffect } from 'react'
+import React from 'react'
 import { View, StyleSheet } from 'react-native'
-import Header from '../../components/Header'
-import SmartDivider from '../Divider'
-import InputField from '../../InputField'
-import ToggleField from '../../ToggleField'
-import TextLine from '../../components/TextLine'
-import { getValue } from '../../../../helpers/functions'
+import { Toggle, Text } from '@ui-kitten/components'
+import Input from '../../../../components/Input'
+import Header from '../Header'
+import Divider from '../Divider'
+import TextLine from '../TextLine'
 import { isolationAssemblyTypes } from '../../../../constants/constants'
-import SidesDisplay from '../../components/SidesDisplay'
+import SidesDisplay from '../SidesDisplay'
+import { isEqualIK } from '../../helpers/comparators'
 
+const IK = ({ data, updateShorted, updatePropertyValue, validateCurrent, onEdit, idMap, subitemIndex }) => {
+    const { name, type, current, fromAtoB, isolationType, shorted, sideA, sideB, valid } = data
+    const currentValue = valid.current && current !== null ? current + ' A' : null
 
-const IK = (props) => {
-    const [current, setCurrent] = useState(props.cardData.current)
-    const [displayCurrent, setDisplayCurrent] = useState(props.cardData.current)
-    const [shorted, setShorted] = useState(props.cardData.shorted)
+    const onToggle = React.useCallback((value) => updateShorted(value, subitemIndex, data), [data])
 
-    useEffect(() => {
-        if (!shorted) {
-            setCurrent('')
-            setDisplayCurrent(null)
-        }
-    }, [shorted])
+    const onChangeCurrent = React.useCallback((value) => updatePropertyValue(value, subitemIndex, 'current'), [subitemIndex, updatePropertyValue])
+
+    const onEndEditingCurrent = React.useCallback(() => validateCurrent(subitemIndex, data), [data, subitemIndex])
 
     return (
         <>
             <Header
-                title={props.cardData?.name}
-                icon={props.cardData?.type}
-                onPressEdit={props.navigateToEditSubitem} />
-            <SmartDivider depend={[true]} />
+                title={name}
+                icon={type}
+                onEdit={onEdit} />
+            <Divider visible={true} />
             <SidesDisplay
-                displayValue={displayCurrent === null || displayCurrent === '' ? null : displayCurrent.toFixed(2) + ' A'}
-                fromAtoB={props.cardData.fromAtoB}
-                cardList={props.cardList}
-                isolated={!shorted}
-                sideATitle='Side A'
-                sideBTitle='Side B'
-                sideA={props.cardData.sideA}
-                sideB={props.cardData.sideB} />
-            <SmartDivider depend={[props.cardData.sideA.length !== 0, props.cardData.sideA.length !== 0]} />
-            <TextLine title='Isolation type' value={getValue(props.cardData.isolationType, isolationAssemblyTypes)} hideEmpty />
+                value={currentValue}
+                fromAtoB={fromAtoB}
+                shorted={shorted}
+                idMap={idMap}
+                sideA={sideA}
+                sideB={sideB} />
+            <Divider visible={true} />
+            <TextLine title='Isolation type' value={isolationAssemblyTypes[isolationType] ?? null} />
             <View style={styles.shortedView}>
-                <ToggleField
+                <Toggle
                     style={styles.toggle}
                     status={shorted ? 'danger' : 'primary'}
-                    checked={!!shorted}
-                    setValue={setShorted}
-                    property='shorted'
-                    dataTypeItem='TEST_POINT'
-                    dataTypeSubitem='CARD'
-                    itemId={props.itemId}
-                    subitemId={props.cardData.id}
-                    title='Shorted' />
-                <View style={shorted ? styles.input : styles.inputHidden}>
-                    <InputField
-                        dataTypeItem='TEST_POINT'
-                        dataTypeSubitem='CARD'
+                    checked={Boolean(shorted)}
+                    title='Shorted'
+                    onChange={onToggle}>
+                    <Text>Shorted</Text>
+                </Toggle>
+                <View style={shorted ? styles.input : styles.hidden}>
+                    <Input
+                        onChangeText={onChangeCurrent}
+                        onEndEditing={onEndEditingCurrent}
                         keyboardType='numeric'
-                        itemId={props.itemId}
-                        subitemId={props.cardData.id}
-                        value={current === '' ? 0 : current}
-                        setValue={setCurrent}
-                        onEndEditing={setDisplayCurrent}
+                        value={current}
+                        valid={valid.current}
                         property='current'
                         label='Current'
                         unit={'A'} />
@@ -70,24 +59,23 @@ const IK = (props) => {
         </>
     )
 }
-export default IK
+export default React.memo(IK, isEqualIK)
 
 const styles = StyleSheet.create({
     shortedView: {
         flexDirection: 'row',
         justifyContent: 'space-between',
-        alignItems: 'center',
+        alignItems: 'flex-start',
         paddingHorizontal: 12,
     },
     input: {
-        display: 'flex',
         marginLeft: 24,
         flex: 1
     },
-    inputHidden: {
+    hidden: {
         display: 'none',
     },
     toggle: {
-        height: 75
+        height: 80
     }
 })

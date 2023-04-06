@@ -14,9 +14,12 @@ import { getWebLink } from '../../api/cloud_drive/gd'
 import SignOutRow from './SignOutRow'
 import EmptySurveyListComponent from './components/EmptySurveyListComponent'
 import { copyToClipboard } from '../../native_libs/clipboard'
+import useSurveyFiles from './hooks/useSurveyFiles'
 
 
 const LoaderSurveyList = (props) => {
+    const { fileList } = useSurveyFiles({ isCloud: false })
+    console.log(fileList)
     const dispatch = useDispatch()
     const data = useSelector(state => props.isCloud ? state.surveyList.cloud : state.surveyList.local)
     const refreshing = useSelector(state => props.isCloud ? state.surveyList.refreshingCloud : state.surveyList.refreshingLocal)

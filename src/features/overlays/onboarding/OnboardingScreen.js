@@ -1,11 +1,12 @@
 import React from 'react'
 import { Icon } from '@ui-kitten/components'
-import { View, StyleSheet, StatusBar } from 'react-native'
+import { View, StyleSheet } from 'react-native'
 import { useDispatch, useSelector } from 'react-redux'
 import Onboarding from 'react-native-onboarding-swiper'
 import { updateOnboarding } from '../../../store/actions/settings'
 import { basic300, primary } from '../../../styles/colors'
 import SingleIconButton from '../../../components/IconButton'
+import FocusAwareStatusBar from '../../../components/FocusAwareStatusBar'
 import { markAsVisited, ONBOARDING_VERSION, onboardingCompleted } from './onboardingRequests'
 
 // onBoarding screen can display either mainPages when app runs for the first time, or astVersionPages when new big update has been released
@@ -83,7 +84,7 @@ const OnboardingScreen = () => {
     }
     return (
         <>
-            <StatusBar translucent={true} backgroundColor='transparent' barStyle='dark-content' />
+            <FocusAwareStatusBar translucent={true} backgroundColor='transparent' barStyle='dark-content' />
             <Onboarding
                 DoneButtonComponent={() => <View style={styles.doneButton}><SingleIconButton iconName='checkmark-circle-2' onPress={finishOnboarding} /></View>}
                 controlStatusBar={false}

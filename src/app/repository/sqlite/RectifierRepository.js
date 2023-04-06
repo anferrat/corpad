@@ -1,14 +1,14 @@
 import { SQLiteRepository } from "../../utils/SQLite"
 import { Rectifier } from "../../entities/survey/items/Rectifier"
+import { Marker } from "../../entities/survey/items/Marker"
 import { Error } from "../../utils/Error"
 import { ItemResponseProcessor } from "./utils/ItemResponseProcessor"
 import { SubitemTypes } from "../../entities/survey/subitems/Subitem"
 import { ItemTypes } from "../../entities/survey/items/SurveyItem"
 import { Circuit } from "../../entities/survey/subitems/Circuit"
-import { ItemPropertyUpdateTypes } from "../../entities/survey/other/properties"
 
 export class RectifierRepository extends SQLiteRepository {
-    constructor () {
+    constructor() {
         super()
         this.responseProcessor = new ItemResponseProcessor()
         this.tableName = 'rectifiers'
@@ -89,6 +89,21 @@ export class RectifierRepository extends SQLiteRepository {
         }
     }
 
+    async updateMarker(marker) {
+        try {
+            const { id, name, latitude, longitude, status, comment, location, timeModified } = marker
+            const result = await super.runSingleQueryTransaction(
+                `UPDATE rectifiers SET name=?, status=?, latitude=?, longitude=?, location=?, comment=?, timeModified=? WHERE id=?`,
+                [name, status, latitude, longitude, location, comment, timeModified, id])
+            if (result.rowsAffected === 0)
+                throw 'Marker not found'
+            return marker
+        }
+        catch (er) {
+            throw new Error('DatabaseError', 'Unable to update rectifier')
+        }
+    }
+
     async getSubitemsById(id) {
         try {
 
@@ -113,13 +128,28 @@ export class RectifierRepository extends SQLiteRepository {
         }
     }
 
+    async getAllMarkers() {
+        try {
+            const sortingQuery = this.responseProcessor.sortingQuery(0, null, null)
+            const result = await this.runSingleQueryTransaction(
+                `SELECT id, '${ItemTypes.RECTIFIER}' AS itemType, uid, status, NULL AS testPointType, latitude, longitude, name, location, comment, timeCreated, timeModified FROM rectifiers WHERE latitude IS NOT NULL AND longitude IS NOT NULL${sortingQuery}`, [])
+            return super.generateArray(result.rows.length, result.rows.item)
+                .map(({ id, uid, itemType, status, testPointType, latitude, longitude, name, location, comment, timeCreated, timeModifed }) =>
+                    new Marker(id, uid, name, status, timeCreated, timeModifed, comment, itemType, testPointType, location, latitude, longitude))
+        }
+        catch (err) {
+            throw new Error('DatabaseError', `Unable to get get markers data`, err)
+        }
+    }
+
 
     async getDisplayListWithCurrentAndVoltage(idList) {
         try {
+            console.log(idList)
             const result = await super.runSingleQueryTransaction(
                 `SELECT rectifiers.id AS itemId, rectifiers.uid AS itemUid, rectifiers.name AS itemName, rectifiers.timeModified, rectifiers.status, rectifiers.location, rectifiers.tapCoarse, rectifiers.tapFine, rectifiers.tapValue, rectifiers.tapSetting, circuits.id, circuits.uid, circuits.name, '${SubitemTypes.CIRCUIT}' AS type, circuits.current AS v1, circuits.voltage AS v2 
-                FROM circuits
-                LEFT JOIN rectifiers ON
+                FROM rectifiers
+                LEFT JOIN circuits ON
                 rectifiers.id = circuits.rectifierId
                 WHERE rectifiers.id IN ${super.convertArrayToInStatement(idList)}
                 ORDER BY rectifiers.id`)
@@ -133,9 +163,9 @@ export class RectifierRepository extends SQLiteRepository {
     async getDisplayListWithTargets(idList) {
         try {
             const result = await super.runSingleQueryTransaction(
-                `SELECT rectifiers.id AS itemId, rectifiers.uid AS itemUid, rectifiers.name AS itemName, rectifiers.timeModified, rectifiers.location, rectifiers.tapCoarse, rectifiers.tapFine, circuits.id, circuits.uid, circuits.name, '${SubitemTypes.CIRCUIT}' AS type, targetMin AS v1, targetMax AS v2 
-                FROM circuits
-                LEFT JOIN rectifiers ON
+                `SELECT rectifiers.id AS itemId, rectifiers.uid AS itemUid, rectifiers.name AS itemName, rectifiers.timeModified, rectifiers.status, rectifiers.location, rectifiers.tapCoarse, rectifiers.tapFine, circuits.id, circuits.uid, circuits.name, '${SubitemTypes.CIRCUIT}' AS type, targetMin AS v2, targetMax AS v1 
+                FROM rectifiers
+                LEFT JOIN circuits ON
                 rectifiers.id = circuits.rectifierId
                 WHERE rectifiers.id IN ${super.convertArrayToInStatement(idList)}
                 ORDER BY rectifiers.id`)
@@ -143,25 +173,6 @@ export class RectifierRepository extends SQLiteRepository {
         }
         catch (err) {
             throw new Error('DatabaseError', `Unable to get current target list for rectifiers`)
-        }
-    }
-
-    async updateProperty(id, propertyType, value, currentTime) {
-        try {
-            switch (propertyType) {
-                case ItemPropertyUpdateTypes.STATUS:
-                    return this.runSingleQueryTransaction('UPDATE rectifiers SET status=?, timeModified=? WHERE id =?', [value, currentTime, id])
-                case ItemPropertyUpdateTypes.TAP_VALUE:
-                    return this.runSingleQueryTransaction('UPDATE rectifiers SET tapValue=?, timeModified=? WHERE id =?', [value, currentTime, id])
-                case ItemPropertyUpdateTypes.TAP_FINE:
-                    return this.runSingleQueryTransaction('UPDATE rectifiers SET tapFine=?, timeModified=? WHERE id =?', [value, currentTime, id])
-                case ItemPropertyUpdateTypes.TAP_COARSE:
-                    return this.runSingleQueryTransaction('UPDATE rectifiers SET tapCoarse=?, timeModified=? WHERE id =?', [value, currentTime, id])
-                default: throw 'Unsupported property update'
-            }
-        }
-        catch (err) {
-            throw new Error('DatabaseError', `Unable to update property ${propertyType} for rectifier with id ${id}`)
         }
     }
 

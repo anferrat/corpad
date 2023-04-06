@@ -6,7 +6,7 @@ import { IconTypes, ItemStatuses } from "../../../entities/survey/items/SurveyIt
 import { ItemTypes } from "../../../entities/survey/items/SurveyItem"
 
 export class ItemResponseProcessor {
-    constructor () {
+    constructor() {
         this.natSortASC = ` ORDER BY 
         (CASE
         WHEN (CAST(name AS INTEGER)==0 AND substr(name, 1) <> '0') THEN NULL
@@ -85,21 +85,21 @@ export class ItemResponseProcessor {
             if (value?.itemId !== savedValue?.itemId) {
                 if (savedValue)
                     map.set(savedValue.itemId, savedValue)
-                savedValue = { ...value, readingList: [], dataMap: new Map() }
+                savedValue = { ...value, readingList: [], dataMap: {} }
 
                 if (value?.timeModified)
-                    savedValue.dataMap.set(DisplayCardDataTypes.TIME_MODIFIED, value.timeModified)
+                    savedValue.dataMap[DisplayCardDataTypes.TIME_MODIFIED] = value.timeModified
                 if (value?.location !== null && value?.location !== undefined)
-                    savedValue.dataMap.set(DisplayCardDataTypes.LOCATION, value.location)
+                    savedValue.dataMap[DisplayCardDataTypes.LOCATION] = value.location
                 if (value?.material !== null && value?.material !== undefined)
-                    savedValue.dataMap.set(DisplayCardDataTypes.MATERIAL, value.material)
+                    savedValue.dataMap[DisplayCardDataTypes.MATERIAL] = value.material
                 if (value?.tapSetting != null)
-                    savedValue.dataMap.set(DisplayCardDataTypes.TAP, {
+                    savedValue.dataMap[DisplayCardDataTypes.TAP] = {
                         setting: value.tapSetting,
                         value: value.tapValue,
                         fine: value.tapFine,
                         coarse: value.tapCoarse
-                    })
+                    }
             }
             if (value.type && value.name)
                 savedValue.readingList.push(new DisplayCardReading(value.uid, value.name, value.type, value.v1, value.v2))

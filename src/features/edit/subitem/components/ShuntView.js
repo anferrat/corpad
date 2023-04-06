@@ -12,9 +12,9 @@ const ShuntView = ({ update, updateRatioHandler, validateRatioHandler, updateFac
 
     const onChangeRatioCurrent = React.useCallback((value) => updateRatioHandler(value, 'ratioCurrent'), [update])
 
-    const setFactorSelected = React.useCallback((value) => value && update(value, 'factorSelected'), [update])
+    const setFactorSelected = React.useCallback(() => update(true, 'factorSelected'), [update])
 
-    const setRatioSelected = React.useCallback((value) => value && update(!value, 'factorSelected'), [update])
+    const setRatioSelected = React.useCallback(() => update(false, 'factorSelected'), [update])
 
     const validateRatioVoltage = React.useCallback(() => validateRatioHandler('ratioVoltage'), [validateRatioHandler])
 

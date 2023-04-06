@@ -30,7 +30,7 @@ const ItemTitleView = ({ title, itemType, testPointType }) => {
     )
 }
 
-export default ItemTitleView
+export default React.memo(ItemTitleView)
 
 const styles = StyleSheet.create({
     mainView: {

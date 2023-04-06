@@ -11,13 +11,13 @@ import { combineLatLon } from '../../helpers/functions'
 import ItemTitleView from '../ItemTitleView'
 
 
-const RT = ({ data, itemType, updateStatus, updateTap }) => {
-    const { name, status, timeModified, latitude, longitude, location, comment, maxVoltage, maxCurrent, model, serialNumber, powerSource, tapSetting, tapFine, tapCoarse, tapValue } = data
+const RT = ({ data, itemType, updateStatus, submit, update }) => {
+    const { name, status, timeModified, latitude, longitude, location, comment, maxVoltage, maxCurrent, model, serialNumber, powerSource, tapSetting, tapFine, tapCoarse, tapValue, valid } = data
 
     const displayedTime = React.useMemo(() => getFullDate(timeModified), [timeModified])
 
     const displayedCoord = React.useMemo(() => combineLatLon(latitude, longitude), [latitude, longitude])
-console.log(maxVoltage)
+
     return (
         <View>
             <View style={styles.titleView}>
@@ -40,10 +40,13 @@ console.log(maxVoltage)
             <TextLine title='Power source' value={powerSourceList[powerSource] ?? null} />
             <TapView
                 tapValue={tapValue}
+                valid={valid}
                 tapSetting={tapSetting}
                 tapFine={tapFine}
                 tapCoarse={tapCoarse}
-                updateTap={updateTap} />
+                submit={submit}
+                update={update}
+            />
         </View>
     )
 }

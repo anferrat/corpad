@@ -6,17 +6,11 @@ export const SET_FILTER_VIEW = 'SET_FILTER_VIEW'
 export const APPLY_FILTER = 'APPLY_FILTER'
 export const RESET_FILTERS = 'RESET_FILTERS'
 export const SET_OFFSET = 'SET_OFFSET'
-export const SET_UPDATING = 'SET_UPDATING'
 export const LOAD_LIST_STATE = 'LOAD_LIST_STATE'
 export const RESET_LIST_STATE = 'RESET_LIST_STATE'
 export const UPDATE_LIST = 'UPDATE_LIST'
 export const DELETE_ITEM_FROM_LIST = 'DELETE_ITEM_FROM_LIST'
-export const ADD_ITEM_TO_LIST = 'ADD_ITEM_TO_LIST'
 export const ON_FILTER_BUTTON_PRESS = 'ON_FILTER_BUTTON_PRESS'
-
-export const addItemToList = (listType, itemId, item) => {
-    return { type: listType + '_' + ADD_ITEM_TO_LIST, itemId: itemId, item: item }
-}
 
 export const resetListState = (listType) => {
     return { type: listType + '_' + RESET_LIST_STATE }
@@ -48,10 +42,6 @@ export const filterHandler = (listType) => {
 
 export const setOffset = (listType, offset) => {
     return { type: listType + '_' + SET_OFFSET, offset: offset }
-}
-
-export const setUpdating = (listType, id, listAction) => {
-    return { type: listType + '_' + SET_UPDATING, id: id, listAction: listAction }
 }
 
 export const resetFilters = (listType) => {

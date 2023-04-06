@@ -1228,6 +1228,7 @@ export const Icon = (props) => {
     case 'OT-filled':
       return <OT {...props} />
     case 'TS':
+    case 'TEST_POINT':
       return <TS {...props} />
     case 'TS-filled':
       return <TSFilled {...props} />

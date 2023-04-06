@@ -3,21 +3,23 @@ import Header from '../../components/Header'
 import PotentialsView from '../PotentialsView'
 import SmartDivider from '../Divider'
 
-const FC = (props) => {
+const FC = ({ data, potentialUnit, potentialHint, updatePotentialValue, validatePotential, subitemIndex, onEdit }) => {
+    const { potentials, type, name, description } = data
     return (
         <>
             <Header
-                wireColor={props.cardData?.wireColor}
-                wireGauge={props.cardData?.wireGauge}
-                title={props.cardData?.name}
-                icon={props.cardData?.type}
-                onPressEdit={props.navigateToEditSubitem} />
-            <SmartDivider depend={[props.cardData.potentials.length !== 0]} />
+                title={name}
+                icon={type}
+                onEdit={onEdit} />
+            <SmartDivider
+                visible={potentials.length > 0} />
             <PotentialsView
-                itemId={props.itemId}
-                potentials={props.cardData.potentials}
-                unit={props.defaultPotentialUnit}
-                referenceCellList={props.referenceCellList} />
+                subitemIndex={subitemIndex}
+                updatePotentialValue={updatePotentialValue}
+                validatePotential={validatePotential}
+                unit={potentialUnit}
+                potentialHint={potentialHint}
+                potentials={potentials} />
         </>
     )
 }

@@ -6,9 +6,9 @@ import PoitentialListItem from './components/PoitentialListItem'
 import { basic } from '../../styles/colors'
 
 const PotentialTypesModal = ({ potentialTypes, itemList, onSelect, dismiss }) => {
-    const displayList = potentialTypes.map((pt, i) => ({ index: i, potentialType: pt })).filter((_, i) => itemList.map(item => item.potentialTypes).flat().indexOf(i) !== -1)
-    //const potentailTypesDisplayList = itemList.map(item => item.potentialTypes).flat()
-    //const displayList = potentailTypesDisplayList.filter((c, i) => potentailTypesDisplayList.indexOf(c) === i)
+    const displayList = potentialTypes.map((pt, i) => ({ index: i, potentialType: pt }))
+        .filter((_, i) => itemList.map(item => item.potentialTypes)
+            .flat().indexOf(i) !== -1)
 
     const genTitleOptions = React.useCallback(() =>
         displayList.map((t) =>

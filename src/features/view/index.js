@@ -1,11 +1,13 @@
 import React, { useContext, useEffect } from 'react'
-import { Animated, StyleSheet } from 'react-native'
+import { Animated, StyleSheet, ScrollView } from 'react-native'
 import ActionButton from '../../components/ActionButton'
 import { diagBack } from '../../components/Icons'
 import { ScrollRef } from '../../../App'
 import ItemView from './ItemView'
 import SubitemListView from './SubitemListView'
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 
+const AnimatedKeyboardAwareScrollView = Animated.createAnimatedComponent(KeyboardAwareScrollView)
 
 const ViewItem = ({ itemId, itemType, navigateToEdit, navigateToEditSubitem, navigateToMap, goBack }) => {
     const scrollingRef = useContext(ScrollRef)
@@ -14,7 +16,10 @@ const ViewItem = ({ itemId, itemType, navigateToEdit, navigateToEditSubitem, nav
 
     return (
         <>
-            <Animated.ScrollView
+            <AnimatedKeyboardAwareScrollView
+                enableOnAndroid={true}
+                extraHeight={260}
+                enableResetScrollToCoords={false}
                 contentContainerStyle={styles.scrollView}
                 onScroll={Animated.event(
                     [{
@@ -36,7 +41,7 @@ const ViewItem = ({ itemId, itemType, navigateToEdit, navigateToEditSubitem, nav
                     itemId={itemId}
                     itemType={itemType}
                     navigateToEditSubitem={navigateToEditSubitem} />
-            </Animated.ScrollView>
+            </AnimatedKeyboardAwareScrollView>
             <ActionButton
                 icon={diagBack}
                 title='Back'
@@ -50,6 +55,6 @@ export default ViewItem
 
 const styles = StyleSheet.create({
     scrollView: {
-        paddingBottom: 72
+        paddingBottom: 72,
     }
 })

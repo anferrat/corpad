@@ -1,4 +1,4 @@
-import { testPointTypes, testPointTypeCodes, labels, calculatorTypes } from '../../../constants/constants'
+import { labels, calculatorTypes } from '../../../constants/constants'
 import { fieldProperties } from '../../../constants/fieldProperties'
 import { deleteItem } from '../handlers/deleteItem'
 import { deleteSubitem } from '../handlers/deleteSubitem'
@@ -7,43 +7,15 @@ import { openExternalSurvey } from '../handlers/openExternalFile'
 import { DEVELOPER_MODE_ON } from '../../../../App'
 import { deleteImportSubitem } from '../../../store/actions/importData'
 import { warningHandler } from '../../../helpers/error_handler'
+import { items } from '../../../constants/constants'
 
-export const subtitleHandler = (dataType, subType = undefined) => {
-    switch (dataType) {
-        case 'TEST_POINT':
-            return testPointTypes[subType]
-        case 'RECTIFIER':
-            return 'Rectifier'
-        case 'PIPELINE':
-            return 'Pipeline'
-        case 'CARD':
-            return labels[subType]?.label ?? 'Error'
-        case 'CIRCUIT':
-            return 'Circuit'
-    }
+
+export const getEditTitle = (globalState, type) => {
+    const state = ~items.indexOf(type) ? globalState.item.edit : globalState.subitem
+    return (state?.name === null || state?.name === '') ? state?.defaultName : state?.name ?? 'Loading...'
 }
 
-export const iconHandler = (dataType, subType = undefined) => {
-    switch (dataType) {
-        case 'TEST_POINT':
-            return testPointTypeCodes[subType]
-        case 'RECTIFIER':
-            return 'RT'
-        case 'PIPELINE':
-            return 'PL'
-        case 'CARD':
-            return subType
-        case 'CIRCUIT':
-            return 'CT'
-    }
-}
-
-export const getEditTitle = (state, dataType) => {
-    const titleState = dataType === 'CARD' || dataType === 'CIRCUIT' ? state.subitem : state.item.edit
-    return (titleState?.name === null || titleState?.name === '') ? titleState?.defaultName : titleState?.name ?? 'Loading'
-}
-
-export const getEditSubtype = (state, dataType) => (dataType !== 'CARD' ? state.item.edit?.testPointType : state.subitem.type) ?? 'Loading'
+export const getEditSubtype = (state, type) => ~items.indexOf(type) ? state.item.edit?.testPointType : state.subitem.type
 
 const getTitleBySettingType = (setting) => {
     switch (setting) {
@@ -112,7 +84,7 @@ export const getHeader = (screen, params, navigation, dispatch, bottomSheet) => 
                     left: 'back',
                     title: {
                         viewTitle: true,
-                        dataType: params.dataTypeItem
+                        itemType: params.itemType
                     },
                     right: [
                         { navigationWidget: true }

@@ -3,12 +3,11 @@ import TextLine from '../../components/TextLine'
 import Header from '../../components/Header'
 import PotentialsView from '../PotentialsView'
 import { anodeMaterialList } from '../../../../constants/constants'
-import { getValue } from '../../../../helpers/functions'
 import Divider from '../Divider'
 
-const AN = ({ data, potentialUnit, potentialHint, updatePotentialValue, validatePotential }) => {
+const AN = ({ data, potentialUnit, potentialHint, updatePotentialValue, validatePotential, subitemIndex, onEdit }) => {
     const { name, type, wireColor, wireGauge, potentials, anodeMaterial } = data
-    const dividerVisible = potentials.length > 0 && anodeMaterial !== null
+    const dividerVisible = potentials.length > 0 || anodeMaterial !== null
     return (
         <>
             <Header
@@ -16,9 +15,10 @@ const AN = ({ data, potentialUnit, potentialHint, updatePotentialValue, validate
                 wireGauge={wireGauge}
                 title={name}
                 icon={type}
-                onPressEdit={() => { }} />
+                onEdit={onEdit} />
             <Divider visible={dividerVisible} />
             <PotentialsView
+                subitemIndex={subitemIndex}
                 updatePotentialValue={updatePotentialValue}
                 validatePotential={validatePotential}
                 unit={potentialUnit}

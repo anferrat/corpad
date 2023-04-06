@@ -11,7 +11,7 @@ export default TestPointsScreen = ({ route, navigation }) => {
         <View style={globalStyle.screen}>
             <ListHeader dataType={itemType} />
             <DataLoaderList
-                dataType={itemType}
+                itemType={itemType}
                 navigateToView={navigateToView} />
         </View>
     )

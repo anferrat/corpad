@@ -10,12 +10,13 @@ export class DefaultNameRepository extends SQLiteRepository {
     async updateAll(defaultNames) {
         try {
             await this.runMultiQueryTransaction(tx => [
-                this.runQuery(tx, 'DELETE * from defaultNames'),
-                ...Object.keys(defaultNames).map(key => this.runQuery(tx, `INSERT INTO ${this.tableName} (type, name) VALUES (??) `, [key, defaultNames[key]]))
+                this.runQuery(tx, 'DELETE FROM defaultNames'),
+                ...Object.keys(defaultNames).map(key => this.runQuery(tx, `INSERT INTO defaultNames (type, name) VALUES (?,?) `, [key, defaultNames[key]]))
             ])
         }
         catch (err) {
-            throw new Error('DatabaseError', 'Unable to reset default name values')
+            console.log(err)
+            throw new Error('DatabaseError', 'Unable to update default name values')
         }
     }
 
@@ -36,7 +37,7 @@ export class DefaultNameRepository extends SQLiteRepository {
         try {
             const result = await super.runSingleQueryTransaction(
                 `SELECT * from defaultNames`, [])
-            return this.generateArray(result.rows.length, result.rows.item)
+            return this.generateArray(result.rows.length, result.rows.item).map(({ type, name }) => ({ type, name }))
         }
         catch (err) {
             throw new Error('DatabaseError', `Unable to get default name fro type ${type}`, err)

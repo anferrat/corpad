@@ -1,6 +1,3 @@
-import { calculateCouponDensity, currentCalculation } from '../../../../helpers/functions'
-import fieldValidation from '../../../../helpers/validation'
-
 export const initialState = {
     loading: true,
     subitems: [],
@@ -42,97 +39,50 @@ export function reducer(state, action) {
                 subitems: Object.assign([], state.subitems, {
                     [action.subitemIndex]: {
                         ...state.subitems[action.subitemIndex],
-                        [action.property]: action.value,
+                        ...action.value,
+                        valid: { ...state.subitems[action.subitemIndex].valid, ...action.valid }
                     }
                 })
             })
-        case 'VALIDATE_COUPON_CURRENT':
-            {
-                const { value, valid } = fieldValidation(state.subitems[action.subitemIndex].current, 'current')
-                const density = valid ? calculateCouponDensity(value, state.subitems[action.subitemIndex].area) : state.subitems[action.subitemIndex].density
-                return ({
-                    ...state,
-                    subitems: Object.assign([], state.subitems, {
-                        [action.subitemIndex]: {
-                            ...state.subitems[action.subitemIndex],
-                            current: value,
-                            density: density,
-                            valid: {
-                                ...state.subitems[action.subitemIndex].valid,
-                                current: valid,
-                            }
-                        }
-                    })
-                })
-            }
-        case 'VALIDATE_CURRENT':
-            {
-                const { value, valid } = fieldValidation(state.subitems[action.subitemIndex].current, 'current')
-                return ({
-                    ...state,
-                    subitems: Object.assign([], state.subitems, {
-                        [action.subitemIndex]: {
-                            ...state.subitems[action.subitemIndex],
-                            current: value,
-                            valid: {
-                                ...state.subitems[action.subitemIndex].valid,
-                                current: valid,
-                            }
-                        }
-                    })
-                })
-            }
-        case 'VALIDATE_VOLTAGE':
-            {
-                const { value, valid } = fieldValidation(state.subitems[action.subitemIndex].voltage, 'voltage')
-                return ({
-                    ...state,
-                    subitems: Object.assign([], state.subitems, {
-                        [action.subitemIndex]: {
-                            ...state.subitems[action.subitemIndex],
-                            voltage: value,
-                            valid: {
-                                ...state.subitems[action.subitemIndex].valid,
-                                voltage: valid,
-                            }
-                        }
-                    })
-                })
-            }
-        case 'VALIDATE_VOLTAGE_DROP':
-            {
-                const { value, valid } = fieldValidation(state.subitems[action.subitemIndex].voltageDrop, 'voltageDrop')
-                const current = valid ? currentCalculation(value, state.subitems[action.subitemIndex].factor) : state.subitems[action.subitemIndex].current
-                return ({
-                    ...state,
-                    subitems: Object.assign([], state.subitems, {
-                        [action.subitemIndex]: {
-                            ...state.subitems[action.subitemIndex],
-                            current: current,
-                            voltageDrop: value,
-                            valid: {
-                                ...state.subitems[action.subitemIndex].valid,
-                                voltageDrop: valid,
-                            }
-                        }
-                    })
-                })
-            }
-        case 'TOGGLE_SHORTED':
+        case 'UPDATE_SUBITEM': {
+            const index = state.subitems.findIndex(({ id }) => id === action.subitem.id)
             return ({
                 ...state,
-                subitems: Object.assign([], state.subitems, {
-                    [action.subitemIndex]: {
-                        ...state.subitems[action.subitemIndex],
-                        current: null,
-                        shorted: action.shorted,
-                        valid: {
-                            ...state.subitems[action.subitemIndex].valid,
-                            current: true,
+                subitems: ~index ?
+                    Object.assign([], state.subitems, {
+                        [index]: {
+                            ...state.subitems[index],
+                            ...action.subitem,
+                            potentials: state.subitems[index].potentials
                         }
-                    }
-                })
+                    }) : [action.subitem].concat(state.subitems)
             })
+        }
+        case 'UPDATE_POTENTIALS': {
+            const index = state.subitems.findIndex(({ id }) => id === action.subitemId)
+            return ({
+                ...state,
+                subitems: ~index ?
+                    Object.assign([], state.subitems, {
+                        [index]: {
+                            ...state.subitems[index],
+                            potentials: action.potentials
+                        }
+                    }) :
+                    [{
+                        id: action.subitemId,
+                        potentials: action.potentials
+                    }].concat(state.subitems)
+            })
+        }
+        case 'DELETE_SUBITEM':
+            return ({
+                ...state,
+                subitems: state.subitems.filter(({ id }) => id !== action.subitemId)
+            })
+        case 'REFRESH':
+            return initialState
+
         default:
             return state
     }

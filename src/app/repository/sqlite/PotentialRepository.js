@@ -3,7 +3,7 @@ import { Error } from "../../utils/Error"
 import { Potential } from "../../entities/survey/subitems/Potential"
 
 export class PotentialRepository extends SQLiteRepository {
-    constructor () {
+    constructor() {
         super()
         this.tableName = 'potentials'
     }
@@ -26,15 +26,15 @@ export class PotentialRepository extends SQLiteRepository {
     async getBySubitemId(subitemId) {
         try {
             const result = await super.runSingleQueryTransaction(
-                `SELECT *, potentials.id AS potentialId from ${this.tableName} 
+                `SELECT potentials.id, potentials.uid, potentials.value, potentials.cardId, potentials.type, potentials.permanentReferenceId, potentials.portableReferenceId from ${this.tableName} 
                 INNER JOIN potentialTypes ON potentialTypes.id = potentials.type
                 WHERE potentials.cardId=? 
                 ORDER BY potentials.permanentReferenceId, potentials.portableReferenceId, potentialTypes.id`, [subitemId])
             return super.generateArray(result.rows.length, result.rows.item)
-                .map(({ potentialId, uid, value, cardId, type, permanentReferenceId, portableReferenceId }) => {
+                .map(({ id, uid, value, cardId, type, permanentReferenceId, portableReferenceId }) => {
                     const isPortable = permanentReferenceId === null
                     const refCellId = isPortable ? portableReferenceId : permanentReferenceId
-                    return new Potential(potentialId, uid, cardId, value, type, refCellId, isPortable)
+                    return new Potential(id, uid, cardId, value, type, refCellId, isPortable)
                 })
         }
         catch (er) {
@@ -56,13 +56,13 @@ export class PotentialRepository extends SQLiteRepository {
     }
 
     async update(potential, currentTime) {
-        const { id, value, subitemId } = potential
+        const { id, value } = potential
         try {
             const result = await super.runMultiQueryTransaction(tx => [
                 this.runQuery(tx, `UPDATE potentials SET value = ? WHERE id = ?`, [value, id]),
-                this.runQuery(tx, 'UPDATE testPoints SET timeModified =? WHERE id IN (SELECT testPointId FROM cards WHERE id=?)', [currentTime, subitemId])
+                this.runQuery(tx, 'UPDATE testPoints SET timeModified =? WHERE id IN (SELECT testPointId FROM cards WHERE id IN (SELECT cardId FROM potentials WHERE id = ? ))', [currentTime, id])
             ])
-            if (result[0].rowsAffeted === 0)
+            if (result[0].rowsAffected === 0)
                 throw 'Potential was not updated'
         }
         catch (er) {
@@ -72,13 +72,24 @@ export class PotentialRepository extends SQLiteRepository {
 
     async updateList(potentials, subitemId) {
         try {
-            await super.runMultiQueryTransaction(tx => [
+          const [onDelete, onInsert, onSelect] = await super.runMultiQueryTransaction(tx => [
                 this.runQuery(tx, `DELETE FROM potentials WHERE cardId = ? `, [subitemId]),
                 potentials.length > 0 ? this.runQuery(tx,
                     `INSERT INTO potentials (id, uid, cardId, type, portableReferenceId, permanentReferenceid, value) 
                                 VALUES ${potentials.map(({ id, uid, subitemId, potentialType, referenceCellId, value, isPortableReference }) =>
-                        `(${id}, "${uid}", ${subitemId}, ${potentialType}, ${isPortableReference ? referenceCellId : null}, ${!isPortableReference ? referenceCellId : null}, ${value})`).join(', ')} `) : null
+                        `(${id}, "${uid}", ${subitemId}, ${potentialType}, ${isPortableReference ? referenceCellId : null}, ${!isPortableReference ? referenceCellId : null}, ${value})`).join(', ')} `) : null,
+                this.runQuery(tx, `SELECT potentials.id, potentials.uid, potentials.value, potentials.type, potentials.permanentReferenceId, potentials.portableReferenceId  from potentials 
+            INNER JOIN potentialTypes ON potentialTypes.id = potentials.type
+            WHERE potentials.cardId=? 
+            ORDER BY potentials.permanentReferenceId, potentials.portableReferenceId, potentialTypes.id`, [subitemId])
             ])
+            return super.generateArray(onSelect.rows.length, onSelect.rows.item)
+                .map(({ id, uid, value, cardId, type, permanentReferenceId, portableReferenceId }) => {
+                    console.log(uid)
+                    const isPortable = permanentReferenceId === null
+                    const refCellId = isPortable ? portableReferenceId : permanentReferenceId
+                    return new Potential(id, uid, cardId, value, type, refCellId, isPortable)
+                })
         }
         catch (er) {
             throw new Error('DatabaseError', `Unable to update potential list`, er)

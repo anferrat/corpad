@@ -1,5 +1,3 @@
-import { EventRegister } from "react-native-event-listeners"
-
 export class UpdateSubitem {
     constructor(subitemRepo, subitemPresenter, subitemFactory) {
         this.subitemRepo = subitemRepo
@@ -8,12 +6,10 @@ export class UpdateSubitem {
     }
 
     async execute(subitemData) {
-        const { id, uid, parentId, type, name, defaultName } = subitemData
+        const { id, uid, parentId, type, name, defaultName, anodeMaterial, wireGauge, wireColor, fromAtoB, current, sideA, sideB, ratioCurrent, ratioVoltage, targetMin, targetMax, voltage, voltageDrop, pipelineCardId, couponType, density, area, isolationType, shorted, pipelineId, rcType, nps, factor, factorSelected, description } = subitemData
         const currentTime = Date.now()
         const savedName = name === null || name === '' ? defaultName : name
-        const subitem = this.subitemFactory.execute(id, uid, savedName, type, parentId, subitemData)
-        const result = this.subitemPresenter.executeWithUpdate(await this.subitemRepo.update(subitem, currentTime), currentTime)
-        EventRegister.emit('SUBITEM_UPDATED', result)
-        return result
+        const subitem = this.subitemFactory.execute(id, uid, savedName, type, parentId, anodeMaterial, wireGauge, wireColor, fromAtoB, current, sideA, sideB, ratioCurrent, ratioVoltage, targetMin, targetMax, voltage, voltageDrop, pipelineCardId, couponType, density, area, isolationType, shorted, pipelineId, rcType, nps, factor, factorSelected, description)
+        return this.subitemPresenter.executeWithUpdate(await this.subitemRepo.update(subitem, currentTime), currentTime)
     }
 }

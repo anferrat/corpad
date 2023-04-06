@@ -1,51 +1,53 @@
-import React, { useState } from 'react'
-import TextLine from '../../components/TextLine'
-import Header from '../../components/Header'
-import { currentCalculation } from '../../../../helpers/functions'
-import SmartDivider from '../Divider'
-import SidesDisplay from '../../components/SidesDisplay'
-import InputField from '../../InputField'
-import { sendRequest } from '../../../../api/database/index'
-import { errorHandler } from '../../../../helpers/error_handler'
+import React from 'react'
+import TextLine from '../TextLine'
+import Header from '../Header'
+import Divider from '../Divider'
+import SidesDisplay from '../SidesDisplay'
+import InputWithTitle from '../InputWithTitle'
 
-const SH = (props) => {
-    const [voltageDrop, setVoltageDrop] = useState(props.cardData.voltageDrop)
-    const [current, setCurrent] = useState(props.cardData.current)
-    const shuntData = React.useMemo(() => getDisplayData(props.cardData.factorSelected, props.cardData.factor, props.cardData.ratioVoltage, props.cardData.ratioCurrent), [props.cardData.factorSelected, props.cardData.factor, props.cardData.ratioVoltage, props.cardData.ratioCurrent])
+const getShuntRatio = (ratioVoltage, ratioCurrent) => ratioVoltage !== null && ratioCurrent !== null ? ratioVoltage + ' mV - ' + ratioCurrent + ' A' : null
 
-    const updateCurrent = React.useCallback(async (voltageDrop, factor) => {
-        const c = currentCalculation(voltageDrop, factor)
-        const updateRequest = await sendRequest('UPDATE', 'CARD_PROPERTY', { cardId: props.cardData.id, value: c, property: 'current' })
-        if (updateRequest.status === 200)
-            setCurrent(c)
-        else errorHandler(623)
-    }, [])
+const SH = ({ data, validateVoltageDrop, updatePropertyValue, onEdit, idMap, subitemIndex }) => {
+    const { factorSelected, name, type, factor, ratioVoltage, ratioCurrent, voltageDrop, current, sideA, sideB, fromAtoB, valid } = data
+
+    const shuntRatio = React.useMemo(() => getShuntRatio(ratioVoltage, ratioCurrent),
+        [ratioVoltage, ratioCurrent])
+
+    const currentValue = current !== null ? current + ' A' : null
+
+    const onChangeVoltageDrop = React.useCallback((value) =>
+        updatePropertyValue(value, subitemIndex, 'voltageDrop'),
+        [subitemIndex, updatePropertyValue])
+
+    const onEndEditingCurrent = React.useCallback(() => validateVoltageDrop(subitemIndex, data),
+        [subitemIndex, data, validateVoltageDrop])
+
     return (
         <>
             <Header
-                title={props.cardData?.name}
-                icon={props.cardData?.type}
-                onPressEdit={props.navigateToEditSubitem} />
-            <SmartDivider depend={[true]} />
+                title={name}
+                icon={type}
+                onEdit={onEdit} />
+            <Divider
+                visible={true} />
             <SidesDisplay
-                displayValue={current === null ? null : current.toFixed(2) + ' A'}
-                fromAtoB={props.cardData.fromAtoB}
-                cardList={props.cardList}
-                sideATitle='Side A'
-                sideBTitle='Side B'
-                sideA={props.cardData.sideA}
-                sideB={props.cardData.sideB} />
-            <SmartDivider depend={[props.cardData.sideA.length !== 0, props.cardData.sideB.length !== 0]} />
-            <TextLine title={shuntData.title} value={shuntData.value} hideEmpty />
-            <InputField
-                dataTypeItem='TEST_POINT'
-                dataTypeSubitem='CARD'
+                value={currentValue}
+                fromAtoB={fromAtoB}
+                idMap={idMap}
+                sideA={sideA}
+                sideB={sideB} />
+            <Divider
+                visible={true} />
+            <TextLine
+                title={factorSelected ? 'Factor' : 'Shunt ratio'}
+                value={factorSelected ? factor : shuntRatio}
+                unit={factorSelected ? 'A/mV' : null} />
+            <InputWithTitle
+                onChangeText={onChangeVoltageDrop}
                 keyboardType='numeric'
-                itemId={props.itemId}
-                subitemId={props.cardData.id}
                 value={voltageDrop}
-                setValue={setVoltageDrop}
-                onEndEditing={updateCurrent.bind(this, voltageDrop, props.cardData.factor)}
+                valid={valid.voltageDrop}
+                onEndEditing={onEndEditingCurrent}
                 title='Voltage drop'
                 property='voltageDrop'
                 unit={'mV'} />
@@ -54,19 +56,3 @@ const SH = (props) => {
 }
 export default SH
 
-const getDisplayData = (factorSelected, factor, ratioVoltage, ratioCurrent) => {
-    if (factorSelected)
-        return {
-            title: 'Factor',
-            value: factor !== null ? factor + ' A/mV' : null,
-        }
-    else if (ratioVoltage !== '' && ratioCurrent !== '')
-        return {
-            title: 'Shunt ratio',
-            value: ratioVoltage !== null & ratioCurrent !== null ? ratioVoltage + ' mV - ' + ratioCurrent + ' A' : null,
-        }
-    else return {
-        title: 'Shunt ratio',
-        value: null,
-    }
-}

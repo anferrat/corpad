@@ -1,3 +1,4 @@
+import { ListPresenter } from "../../../presenters/ListPresenter"
 import { PotentialPresenter } from "../../../presenters/PotentialPresenter"
 import { PotentialRepository } from "../../../repository/sqlite/PotentialRepository"
 import { PotentialTypeRepository } from "../../../repository/sqlite/PotentialTypeRepository"
@@ -10,16 +11,16 @@ import { GetPotentialList } from "../../../services/survey/subitems/potentials/G
 import { UpdatePotential } from "../../../services/survey/subitems/potentials/UpdatePotential"
 import { UpdatePotentialList } from "../../../services/survey/subitems/potentials/UpdatePotentialList"
 import { Controller } from "../../../utils/Controller"
-import { PotentialValidation } from "../../../validation/survey/PotentialValidation"
+import { PotentialValidation } from "../../../validation/PotentialValidation"
 
 class PotentialController extends Controller {
-    constructor (potentialRepo, settingRepo, potentialPresenter, unitConverter, potentialTypeRepo, referenceCellRepo) {
+    constructor(potentialRepo, settingRepo, potentialPresenter, unitConverter, potentialTypeRepo, referenceCellRepo) {
         super()
         this.createPotentialService = new CreatePotential(potentialRepo, potentialPresenter)
         this.deletePotentialService = new DeletePotential(potentialRepo)
         this.getPotentialListService = new GetPotentialList(potentialRepo, potentialTypeRepo, referenceCellRepo, settingRepo, unitConverter, potentialPresenter)
         this.updatePotentialService = new UpdatePotential(potentialRepo, unitConverter, potentialPresenter)
-        this.updatePotentialListService = new UpdatePotentialList(potentialRepo, unitConverter)
+        this.updatePotentialListService = new UpdatePotentialList(potentialRepo, unitConverter, potentialPresenter)
         this.validation = new PotentialValidation()
     }
 
@@ -53,8 +54,8 @@ class PotentialController extends Controller {
 
     updateList(params, onError = null, onSuccess = null) {
         return super.controllerHandler(onSuccess, onError, 611, async () => {
-            const { potentials, unit, subitemId } = this.validation.updateList(params)
-            return this.updatePotentialListService.execute(potentials, subitemId, unit)
+            const { potentials, subitemId } = this.validation.updateList(params)
+            return this.updatePotentialListService.execute(potentials, subitemId)
         })
     }
 }
@@ -65,7 +66,8 @@ const potentialController = new PotentialController(
     new PotentialPresenter(),
     new UnitConverter(),
     new PotentialTypeRepository(),
-    new ReferenceCellRepository())
+    new ReferenceCellRepository()
+)
 
 export const createPotential = (params, onError, onSuccess) => potentialController.create(params, onError, onSuccess)
 

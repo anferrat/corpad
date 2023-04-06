@@ -10,6 +10,8 @@ export const VALIDATE_PROPERTY = 'VALIDATE_PROPERTY'
 export const UPDATE_CURRENT_COORDINATES = 'UPDATE_CURRENT_COORDINATES'
 export const UPDATE_TAP_SETTING = 'UPDATE_TAP_SETTING'
 export const RESET_EDIT_STATE = 'RESET_EDIT_STATE'
+export const VALIDATE_VIEW_PROPERTY = 'VALIDATE_VIEW_PROPERTY'
+export const SUBMIT_VIEW_PROPERTY = 'SUBMIT_VIEW_PROPERTY'
 
 export const updateEditItemProperty = (value, property, valid = undefined) => {
     return { type: UPDATE_EDIT_ITEM_PROPERTY, value: value, property: property, valid: valid }
@@ -39,8 +41,16 @@ export const saveState = () => {
     return { type: SAVE_STATE }
 }
 
-export const updateViewProperty = (value, property, timeModified = undefined) => {
-    return { type: UPDATE_VIEW_PROPERTY, value: value, property: property, timeModified: timeModified }
+export const updateViewProperty = (value, property) => {
+    return { type: UPDATE_VIEW_PROPERTY, value: value, property: property }
+}
+
+export const submitViewProperty = (value, property, timeModified = undefined) => {
+    return { type: SUBMIT_VIEW_PROPERTY, value: value, property: property, timeModified }
+}
+
+export const validateViewProperty = (value, property, valid = false) => {
+    return { type: VALIDATE_VIEW_PROPERTY, value: value, property: property, valid }
 }
 
 export const updateCurrentCoordinates = (latitude, longitude) => {

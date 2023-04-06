@@ -6,6 +6,7 @@ import WireParams from './WireParams.js'
 import { basic } from '../../../styles/colors'
 
 const Header = ({ icon, title, wireColor, wireGauge, onEdit }) => {
+
     return (
         <View style={styles.mainView}>
             <View style={styles.titleView}>

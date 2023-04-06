@@ -3,7 +3,7 @@ import TP from './items/TP'
 import PL from './items/PL'
 import RT from './items/RT'
 
-const ItemFactory = ({ itemType, updateStatus, updateTap, data }) => {
+const ItemFactory = ({ itemType, updateStatus, submit, update, data }) => {
     switch (itemType) {
         case 'TEST_POINT':
             return <TP
@@ -15,7 +15,8 @@ const ItemFactory = ({ itemType, updateStatus, updateTap, data }) => {
                 itemType={itemType}
                 data={data}
                 updateStatus={updateStatus}
-                updateTap={updateTap}
+                submit={submit}
+                update={update}
             />
         case 'PIPELINE':
             return <PL

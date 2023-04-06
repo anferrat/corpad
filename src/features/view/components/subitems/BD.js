@@ -1,42 +1,47 @@
-import React, { useState } from 'react'
-import Header from '../../components/Header'
-import SmartDivider from '../Divider'
-import InputField from '../../InputField'
-import SidesDisplay from '../../components/SidesDisplay'
+import React from 'react'
+import Header from '../Header'
+import Divider from '../Divider'
+import InputWithTitle from '../InputWithTitle'
+import SidesDisplay from '../SidesDisplay'
 
-const displayDivider = [true]
 
-const BD = (props) => {
-    const [current, setCurrent] = useState(props.cardData.current)
-    const [displayCurrent, setDisplayCurrent] = useState(props.cardData.current)
-    const dividerDepend = React.useMemo(() => [props.cardData.sideA.length !== 0, props.cardData.sideB.length !== 0], [props.cardData.sideA.length, props.cardData.sideB.length])
+const BD = ({ data, updatePropertyValue, validateCurrent, subitemIndex, idMap, onEdit }) => {
+    const { type, name, fromAtoB, current, valid, sideA, sideB } = data
+
+    const currentValue = valid.current && current !== null ? current + ' A' : null
+
+    const onChangeCurrent = React.useCallback((value) => {
+        updatePropertyValue(value, subitemIndex, 'current')
+    }, [subitemIndex, updatePropertyValue])
+
+    const onEndEditing = React.useCallback(() => {
+        validateCurrent(subitemIndex, data)
+    }, [subitemIndex, current, validateCurrent])
+
     return (
         <>
             <Header
-                title={props.cardData?.name}
-                icon={props.cardData?.type}
-                onPressEdit={props.navigateToEditSubitem} />
-            <SmartDivider depend={displayDivider} />
+                title={name}
+                icon={type}
+                onEdit={onEdit}
+            />
+            <Divider
+                visible={true} />
             <SidesDisplay
-                displayValue={displayCurrent === '' || displayCurrent === null ? null : displayCurrent.toFixed(2) + ' A'}
-                displayUnit='A'
-                fromAtoB={props.cardData.fromAtoB}
-                cardList={props.cardList}
-                sideATitle='Side A'
-                sideBTitle='Side B'
-                sideA={props.cardData.sideA}
-                sideB={props.cardData.sideB} />
-            <SmartDivider depend={dividerDepend} />
-            <InputField
-                dataTypeItem='TEST_POINT'
-                dataTypeSubitem='CARD'
+                value={currentValue}
+                fromAtoB={fromAtoB}
+                idMap={idMap}
+                sideA={sideA}
+                sideB={sideB} />
+            <Divider
+                visible={true} />
+            <InputWithTitle
                 keyboardType='numeric'
-                itemId={props.itemId}
-                subitemId={props.cardData.id}
                 value={current}
-                setValue={setCurrent}
+                valid={valid.current}
                 title='Current'
-                onEndEditing={setDisplayCurrent}
+                onEndEditing={onEndEditing}
+                onChangeText={onChangeCurrent}
                 property='current'
                 unit={'A'} />
         </>

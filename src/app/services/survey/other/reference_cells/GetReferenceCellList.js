@@ -1,6 +1,7 @@
 export class GetReferenceCellList {
     constructor (referenceCellRepo, listPresenter) {
-        this.refCellRepo = referenceCellRepo, listPresenter
+        this.refCellRepo = referenceCellRepo 
+        this.listPresenter = listPresenter
     }
 
     async execute() {

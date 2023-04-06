@@ -8,12 +8,16 @@ import useItemData from './hooks/useItemData'
 
 
 const ItemView = ({ itemId, itemType, navigateToMap, navigateToEditSubitem, navigateToEdit }) => {
-    const { item, loading, updateStatus, createSubitem, deleteItem, displayOnMap } = useItemData({ itemId, itemType, navigateToMap, navigateToEditSubitem })
+    const { item, loading, submit, update, createSubitem, deleteItem, displayOnMap } = useItemData({ itemId, itemType, navigateToMap, navigateToEditSubitem })
+
+    const updateStatus = (value) => submit(value, 'status')
+
     return (
-        <View style={loading ? styles.card : globalStyle.card}>
-            <LoadingView loading={loading}>
+        <View style={globalStyle.card}>
+            <LoadingView loading={loading} style={styles.loading}>
                 <ItemFactory
-                    updateTap={() => { }}
+                    submit={submit}
+                    update={update}
                     updateStatus={updateStatus}
                     data={item}
                     itemType={itemType} />
@@ -30,12 +34,15 @@ const ItemView = ({ itemId, itemType, navigateToMap, navigateToEditSubitem, navi
     )
 }
 
-export default ItemView
+export default React.memo(ItemView)
 
 const styles = StyleSheet.create({
     card: {
         ...globalStyle.card,
-        minHeight: 200
+        flex: -1
+    },
+    loading: {
+        minHeight: 250
     },
     bar: {
         marginHorizontal: -12,

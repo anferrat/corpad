@@ -39,6 +39,7 @@ export class SubitemRepository extends SQLiteRepository {
         }
     }
 
+
     async updateProperty(id, parentId, propertyType, subitemType, value, currentTime) {
         try {
             const getUpdateQuery = (propertyType) => {

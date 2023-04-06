@@ -20,15 +20,15 @@ export class SurveyRepository extends SQLiteRepository {
     }
 
 
-    async serachItem(string, limit) {
+    async searchItem(string) {1
         try {
             const searchQuery = `WHERE name LIKE '%${string}%'`
-            const fieldsQuery = `SELECT id, uid, name, status, timeCreated, timeModified, comment,`
+            const fieldsQuery = `SELECT id, uid, name, timeCreated, timeModified, comment,`
 
-            const query = `${fieldsQuery} ${ItemTypes.TEST_POINT} AS itemType, testPointType FROM testPoints ${searchQuery} UNION ALL
-            ${fieldsQuery} ${ItemTypes.RECTIFIER} AS itemType, NULL AS testPointType FROM rectifiers ${searchQuery} UNION ALL
-            ${fieldsQuery} ${ItemTypes.PIPELINE} AS itemType, NULL AS testPointType FROM pipelines ${searchQuery}
-            ORDER BY length(name) ASC LIMIT ${limit}`
+            const query = `${fieldsQuery} '${ItemTypes.TEST_POINT}' AS itemType, testPointType, status, length(name) AS sort FROM testPoints ${searchQuery} UNION ALL
+            ${fieldsQuery} '${ItemTypes.RECTIFIER}' AS itemType, NULL AS testPointType, status, length(name) AS sort FROM rectifiers ${searchQuery} UNION ALL
+            ${fieldsQuery} '${ItemTypes.PIPELINE}' AS itemType, NULL AS testPointType, NULL AS status, length(name) AS sort FROM pipelines ${searchQuery}
+            ORDER BY sort ASC`
 
             const result = await super.runSingleQueryTransaction(query)
 
@@ -116,6 +116,18 @@ export class SurveyRepository extends SQLiteRepository {
         }
         catch (err) {
             throw new Error('DatabaseError', 'Unable to get survey information', err)
+        }
+    }
+
+    async updateName(name) {
+        try {
+            const result = await this.runSingleQueryTransaction('UPDATE survey SET name = ?', [name])
+            if (result.rowAffected === 0)
+                throw 'Survey not found'
+            else return name
+        }
+        catch (err) {
+            throw new Error('DatabaseError', 'Unable to update survey name', err)
         }
     }
 
@@ -210,9 +222,5 @@ export class SurveyRepository extends SQLiteRepository {
         catch (err) {
             throw new Error('DatabaseError', `Unable to import survey file`, err)
         }
-    }
-
-    async exportToSpreadsheet() {
-
     }
 }

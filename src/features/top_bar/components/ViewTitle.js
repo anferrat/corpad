@@ -1,18 +1,22 @@
-import React, { useRef, useContext } from 'react'
-import { Animated, StyleSheet } from 'react-native'
+import React, { useContext } from 'react'
+import { Animated, StyleSheet, View } from 'react-native'
 import { useSelector } from 'react-redux'
 import TopBarTitle from './TopBarTitle'
-import { iconHandlerItem, subtitleHandlerItem } from '../../../helpers/functions'
 import { ScrollRef } from '../../../../App'
+import { labels, testPointTypeCodes } from '../../../constants/constants'
 
-const ViewTitle = ({ dataType }) => {
+const ViewTitle = ({ itemType }) => {
     const scrollingRef = useContext(ScrollRef)
     const title = useSelector(state => state.item.view.name ?? '')
-    const testPointType = useSelector(state => state.item.view?.testPointType)
+    const subType = useSelector(state => state.item.view?.testPointType ?? 0)
+    const status = useSelector(state => state.item.view?.status)
+
+    const subtitle = itemType === 'TEST_POINT' ? labels[testPointTypeCodes[subType]].label : labels[itemType].label
+    const icon = itemType === 'TEST_POINT' ? testPointTypeCodes[subType] : itemType
 
     const translation = scrollingRef.current.interpolate({
-        inputRange: [0, 75],
-        outputRange: [75, 0],
+        inputRange: [0, 80],
+        outputRange: [80, 0],
         extrapolate: 'clamp',
     })
     const opacity = scrollingRef.current.interpolate({
@@ -22,18 +26,19 @@ const ViewTitle = ({ dataType }) => {
     })
 
     return (
-        <Animated.View
-            style={{
-                ...styles.view,
-                opacity: opacity,
-                transform: [{ translateY: translation }],
-            }}>
-            <TopBarTitle
-                icon={iconHandlerItem(dataType, testPointType)}
-                pack='cp'
-                subtitle={subtitleHandlerItem(dataType, testPointType)}
-                title={title} />
-        </Animated.View>
+            <Animated.View
+                style={{
+                    ...styles.view,
+                    opacity: opacity,
+                    transform: [{ translateY: translation }],
+                }}>
+                <TopBarTitle
+                    status={status}
+                    icon={icon}
+                    pack='cp'
+                    subtitle={subtitle}
+                    title={title} />
+            </Animated.View>
     )
 }
 
@@ -41,7 +46,6 @@ export default ViewTitle
 
 const styles = StyleSheet.create({
     view: {
-        flexDirection: 'column',
         position: 'absolute',
         top: 0,
         left: 50,

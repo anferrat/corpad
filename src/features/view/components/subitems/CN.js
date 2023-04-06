@@ -1,23 +1,10 @@
-import React, { useState } from 'react'
-import TextLine from '../../components/TextLine'
-import Header from '../../components/Header'
+import React from 'react'
+import TextLine from '../TextLine'
+import Header from '../Header'
 import PotentialsView from '../PotentialsView'
 import { couponTypes } from '../../../../constants/constants'
-import { getValue, calculateCouponDensity } from '../../../../helpers/functions'
-import SmartDivider from '../Divider'
-import InputField from '../../InputField'
-import { sendRequest } from '../../../../api/database/index'
-import { errorHandler } from '../../../../helpers/error_handler'
-
-const getCardName = (cardList, cardId) => {
-    if (cardList !== undefined && cardId !== undefined) {
-        const cardIndex = cardList?.findIndex(card => card.id === cardId)
-        if (cardIndex === -1 || cardId === null)
-            return 'Disconnected'
-        else return cardList[cardIndex].name
-    }
-    else return 'Error'
-}
+import Divider from '../Divider'
+import InputWithTitle from '../InputWithTitle'
 
 const areaUnit = {
     main: 'cm',
@@ -31,49 +18,47 @@ const densityUnit = {
     format: 'super'
 }
 
-const CN = (props) => {
-    const [current, setCurrent] = useState(props.cardData.current)
-    const [density, setDensity] = useState(props.cardData.density)
-    const updateDensity = React.useCallback(async (current, area) => {
-        const density = calculateCouponDensity(current, area)
-        const updateRequest = await sendRequest('UPDATE', 'CARD_PROPERTY', { cardId: props.cardData.id, value: density, property: 'density' })
-        if (updateRequest.status === 200)
-            setDensity(density)
-        else errorHandler(623)
-    }, [])
+const CN = ({ data, validateCouponCurrent, updatePropertyValue, onEdit, subitemIndex, idMap, updatePotentialValue, validatePotential, potentialUnit, potentialHint }) => {
+    const { type, name, current, area, density, pipelineCardId, valid, potentials, couponType, wireColor, wireGauge } = data
+
+    const onChangeCurrent = React.useCallback((value) => updatePropertyValue(value, subitemIndex, 'current'), [updatePropertyValue, subitemIndex])
+
+    const onEndEditingCurrent = React.useCallback(() => validateCouponCurrent(subitemIndex, data), [subitemIndex, current, area])
+
+    const pipeSubitem = idMap[pipelineCardId] ?? {}
+
     return (
         <>
             <Header
-                wireColor={props.cardData?.wireColor}
-                wireGauge={props.cardData?.wireGauge}
-                title={props.cardData?.name}
-                icon={props.cardData?.type}
-                onPressEdit={props.navigateToEditSubitem} />
-            <SmartDivider depend={[true]} />
+                wireColor={wireColor}
+                wireGauge={wireGauge}
+                title={name}
+                icon={type}
+                onEdit={onEdit} />
+            <Divider visible={true} />
             <PotentialsView
-                itemId={props.itemId}
-                potentials={props.cardData.potentials}
-                unit={props.defaultPotentialUnit}
-                referenceCellList={props.referenceCellList} />
-            <TextLine title='Connected to' value={getCardName(props.cardList, props.cardData.pipelineCardId)} hideEmpty />
-            <TextLine title='Type' value={getValue(props.cardData.couponType, couponTypes)} hideEmpty />
+                subitemIndex={subitemIndex}
+                updatePotentialValue={updatePotentialValue}
+                validatePotential={validatePotential}
+                unit={potentialUnit}
+                potentialHint={potentialHint}
+                potentials={potentials} />
+            <TextLine title='Connected to' value={pipeSubitem.name ?? 'Disconnected'} icon={pipeSubitem.type ?? null} pack='cp' />
+            <TextLine title='Type' value={couponTypes[couponType] ?? null} />
             <TextLine
                 title='Area'
-                value={props.cardData.area}
-                unit={areaUnit} hideEmpty />
+                value={area}
+                unit={areaUnit} />
             <TextLine
                 title='Density'
                 value={density}
-                unit={densityUnit} hideEmpty />
-            <InputField
-                onEndEditing={updateDensity.bind(this, current, props.cardData.area)}
-                dataTypeItem='TEST_POINT'
-                dataTypeSubitem='CARD'
+                unit={densityUnit} />
+            <InputWithTitle
+                onEndEditing={onEndEditingCurrent}
+                onChangeText={onChangeCurrent}
                 keyboardType='numeric'
-                itemId={props.itemId}
-                subitemId={props.cardData.id}
                 value={current}
-                setValue={setCurrent}
+                valid={valid.current}
                 title='Current'
                 property='current'
                 unit={'\u00B5A'}

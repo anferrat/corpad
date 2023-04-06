@@ -51,7 +51,7 @@ export const AddPotentials = React.memo(({ referenceCellList, potentialTypes, se
         return null
     else
         return (
-            <>
+            <> 
                 <Button
                     disabled={itemList.length === 0}
                     onPress={showPotentialTypeSelector}
@@ -61,6 +61,7 @@ export const AddPotentials = React.memo(({ referenceCellList, potentialTypes, se
                 </Button>
                 <Modal
                     animationType="slide"
+                    hardwareAccelerated={true}
                     statusBarTranslucent={true}
                     style={styles.modal}
                     onRequestClose={hideModal}
@@ -93,4 +94,6 @@ const styles = StyleSheet.create({
     modal: {
         flex: 1
     },
+    light: 'light-content',
+    dark: 'dark-content'
 })

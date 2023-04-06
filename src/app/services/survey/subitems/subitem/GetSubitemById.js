@@ -2,7 +2,7 @@ import { SubitemTypes } from "../../../../entities/survey/subitems/Subitem"
 import { Error } from "../../../../utils/Error"
 
 export class GetSubitemById {
-    constructor (subitemRepo, defaultNameRepo, testPointRepo, rectifierRepo, pipelineRepo, settingRepo, subitemPresenter) {
+    constructor(subitemRepo, defaultNameRepo, testPointRepo, rectifierRepo, pipelineRepo, settingRepo, subitemPresenter) {
         this.subitemRepo = subitemRepo
         this.subitemPresenter = subitemPresenter
         this.defaultNameRepo = defaultNameRepo
@@ -36,6 +36,12 @@ export class GetSubitemById {
         return (subitemList.filter(subitem => subitem.type === subitemType)).length
     }
 
+    _getDefaultName(defaultName, index) {
+        if (defaultName === null)
+            return `${index}`
+        else return `${defaultName} ${index}`
+    }
+
     async execute(subitemType, itemId, subitemId) {
         const [subitem, pipelineNameAsDefualt, subitemList, pipelineList, defaultNameBase] = await Promise.all([
             this.subitemRepo.getByIdAndType(subitemId, subitemType),
@@ -47,7 +53,7 @@ export class GetSubitemById {
         if (subitem.parentId !== itemId) {
             throw new Error('CorpadError', `Subitem with id ${subitemId} doesn't belong to item with id ${itemId}`)
         }
-        const defaultName = `${defaultNameBase} ${this._getDefaultNameIndex(subitemList, subitemType)}`
+        const defaultName = this._getDefaultName(defaultNameBase, this._getDefaultNameIndex(subitemList, subitemType))
         return this.subitemPresenter.execute(subitem, pipelineNameAsDefualt, subitemList, pipelineList, defaultName)
     }
 }

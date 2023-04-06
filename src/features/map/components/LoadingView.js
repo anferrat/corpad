@@ -4,11 +4,11 @@ import { Icon, Text } from '@ui-kitten/components'
 import { basic, basic300, primary } from '../../../styles/colors'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 
-const LoadingView = (props) => {
-    const opacity = useRef(new Animated.Value(props.refreshing ? 1 : 0))
+const LoadingView = ({ loading }) => {
+    const [displayed, setDisplayed] = useState(loading)
+    const opacity = useRef(new Animated.Value(loading ? 1 : 0))
     const componentMounted = useRef(true)
     const insets = useSafeAreaInsets()
-    const [displayed, setDisplayed] = useState(props.refreshing)
     useEffect(() => {
         componentMounted.current = true
         return () => {
@@ -17,7 +17,7 @@ const LoadingView = (props) => {
     }, [])
 
     useEffect(() => {
-        if (!props.refreshing) {
+        if (!loading) {
             setTimeout(() => Animated.timing(
                 opacity.current,
                 {
@@ -33,9 +33,24 @@ const LoadingView = (props) => {
         }
     })
 
-    return <Animated.View style={{ ...styles.mainView, opacity: opacity.current, display: displayed ? 'flex' : 'none', top: insets.top + 65 }}>
-        {props.refreshing ? <><ActivityIndicator color={primary} /><Text category='p2' appearance='hint' style={styles.text}>Loading...</Text></> : <><Icon name='checkmark-circle-outline' fill={basic} style={styles.icon} /><Text category='p2' appearance='hint'>Loaded</Text></>}
-    </Animated.View>
+    return (
+        <Animated.View
+            style={{ ...styles.mainView, opacity: opacity.current, display: displayed ? 'flex' : 'none', top: insets.top + 65 }}>
+            {loading ? <>
+                <ActivityIndicator color={primary} />
+                <Text
+                    category='p2'
+                    appearance='hint'
+                    style={styles.text}>Loading...</Text>
+            </> :
+                <>
+                    <Icon name='checkmark-circle-outline'
+                        fill={basic} style={styles.icon} />
+                    <Text category='p2' appearance='hint'>Loaded</Text>
+                </>}
+        </Animated.View>
+    )
+
 }
 
 export default React.memo(LoadingView)

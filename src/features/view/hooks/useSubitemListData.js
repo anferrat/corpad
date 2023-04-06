@@ -1,11 +1,11 @@
 import { useNavigation } from '@react-navigation/native'
-import { useRef, useCallback, useReducer, useEffect } from 'react'
+import { useRef, useReducer, useEffect } from 'react'
 import { reducer, initialState } from '../store/reducers/subitemList'
-import { updatePotential } from '../../../app/controllers/survey/subitems/PotentialController'
 import { getSubitemListData } from '../../../app/controllers/survey/subitems/SubitemController'
 import { errorHandler } from '../../../helpers/error_handler'
-import { updatePotentialAction, loadSubitemListDataAction, updatePropertyAction, validateCouponCurrentAction, validateVoltageDropAction, validateCurrentAction, toggleShortedAction, validateVoltageAction } from '../store/actions/subitemList'
-import fieldValidation from '../../../helpers/validation'
+import { loadSubitemListDataAction, updateSubitemAction, deleteSubitemAction, updatePotentialsAction, refreshSubitemList } from '../store/actions/subitemList'
+import { EventRegister } from 'react-native-event-listeners'
+
 
 //local reducer is used here, mostly global one from redux is used
 
@@ -15,6 +15,8 @@ const useSubitemListData = ({ itemId, itemType }) => {
     const { potentialUnit, subitems, pipelineList, loading } = state
     const componentMounted = useRef(true)
 
+    const idMap = Object.fromEntries(state.subitems.map(({ id, name, type }) => ([id, { id, name, type }])))
+
     //in case of multiple reference cells, we display hint at potential field with ref cell name
     const potentialHint = state.referenceCells.length > 1
 
@@ -22,68 +24,52 @@ const useSubitemListData = ({ itemId, itemType }) => {
         componentMounted.current = true
 
         const loadData = async () => {
-            const { response, status } = await getSubitemListData({ itemId, itemType }, er => errorHandler(er, navigation.goBack))
+            const { response, status, errorMessage } = await getSubitemListData({ itemId, itemType }, er => errorHandler(er, navigation.goBack))
             if (status === 200 && componentMounted.current)
                 dispatch(loadSubitemListDataAction(response.subitems, response.pipelineList, response.potentialUnit, response.referenceCells))
         }
-        loadData()
+
+        if (loading)
+            loadData()
+
+        const onSubitemUpdate = EventRegister.addEventListener('SUBITEM_UPDATED', ({ subitem }) => {
+            //RE updates will change potential values for all items. lazy way here is to re-render entire list in case of RE changes
+            if (!loading)
+                if (subitem.type === 'RE')
+                    dispatch(refreshSubitemList())
+                else
+                    dispatch(updateSubitemAction(subitem))
+        })
+
+        const onSubitemDelete = EventRegister.addEventListener('SUBITEM_DELETED', ({ subitemId, subitemType }) => {
+            if (!loading)
+                if (subitemType === 'RE')
+                    dispatch(refreshSubitemList())
+                else
+                    dispatch(deleteSubitemAction(subitemId))
+        })
+
+        const onPotentialsUpdate = EventRegister.addEventListener('POTENTIALS_UPDATED', ({ subitemId, potentials }) => {
+            if (!loading && potentials)
+                dispatch(updatePotentialsAction(subitemId, potentials.potentials))
+        })
 
         return () => {
             componentMounted.current = false
+            EventRegister.removeEventListener(onSubitemUpdate)
+            EventRegister.removeEventListener(onSubitemDelete)
+            EventRegister.removeEventListener(onPotentialsUpdate)
         }
-    }, [])
-
-
-
-    const validatePotential = useCallback(async (value, subitemIndex, potentialId, potentialIndex) => {
-        const validation = fieldValidation(value, 'potential')
-        if (validation.valid)
-            await updatePotential({ id: potentialId, value: validation.value, unit: potentialUnit })
-        dispatch(updatePotentialAction(subitemIndex, potentialIndex, validation.value, validation.valid))
-    }, [potentialUnit])
-
-    const updatePotentialValue = useCallback((value, subitemIndex, potentialIndex) => {
-        dispatch(updatePotentialAction(subitemIndex, potentialIndex, value))
-    }, [])
-
-    const updatePropertyValue = useCallback((value, subitemIndex, property) => {
-        dispatch(updatePropertyAction(subitemIndex, property, value))
-    }, [])
-
-    const validateCouponCurrent = useCallback((subitemIndex) => {
-        dispatch(validateCouponCurrentAction(subitemIndex))
-    }, [])
-
-    const validateVoltageDrop = useCallback((subitemIndex) => {
-        dispatch(validateVoltageDropAction(subitemIndex))
-    }, [])
-
-    const validateCurrent = useCallback((subitemIndex) => {
-        dispatch(validateCurrentAction(subitemIndex))
-    }, [])
-
-    const updateShorted = useCallback((subitemIndex, shorted) => {
-        dispatch(toggleShortedAction(subitemIndex, shorted))
-    }, [])
-
-    const validateVoltage = useCallback((subitemIndex) => {
-        dispatch(validateVoltageAction(subitemIndex))
-    }, [])
+    }, [loading])
 
     return {
+        idMap,
         potentialUnit,
         potentialHint,
         subitems,
         pipelineList,
         loading,
-        validatePotential,
-        updatePotentialValue,
-        updatePropertyValue,
-        validateCouponCurrent,
-        validateVoltageDrop,
-        validateCurrent,
-        updateShorted,
-        validateVoltage
+        dispatch,
     }
 }
 

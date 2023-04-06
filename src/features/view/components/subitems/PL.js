@@ -1,26 +1,29 @@
 import React from 'react'
-import TextLine from '../../components/TextLine'
-import Header from '../../components/Header'
+import TextLine from '../TextLine'
+import Header from '../Header'
 import PotentialsView from '../PotentialsView'
-import SmartDivider from '../Divider'
-import { getPipelineNameById } from '../../../../helpers/functions'
+import Divider from '../Divider'
 
-const PL = (props) => {
+const PL = ({ data, potentialUnit, potentialHint, updatePotentialValue, validatePotential, subitemIndex, onEdit, pipelineList }) => {
+    const { name, type, wireColor, wireGauge, potentials, pipelineId } = data
+    const pipelineIndex = pipelineList.findIndex(({ id }) => id === pipelineId)
     return (
         <>
             <Header
-                wireColor={props.cardData?.wireColor}
-                wireGauge={props.cardData?.wireGauge}
-                title={props.cardData?.name}
-                icon={props.cardData?.type}
-                onPressEdit={props.navigateToEditSubitem} />
-            <SmartDivider depend={[props.cardData.potentials.length !== 0, props.cardData.pipelineId]} />
+                wireColor={wireColor}
+                wireGauge={wireGauge}
+                title={name}
+                icon={type}
+                onEdit={onEdit} />
+            <Divider visible={potentials.length > 0 || ~pipelineIndex} />
             <PotentialsView
-                itemId={props.itemId}
-                potentials={props.cardData.potentials}
-                unit={props.defaultPotentialUnit}
-                referenceCellList={props.referenceCellList} />
-            <TextLine title='Pipeline' value={getPipelineNameById(props.cardData.pipelineId, props.pipelineList)} icon='PL' pack='cp' hideEmpty />
+                subitemIndex={subitemIndex}
+                updatePotentialValue={updatePotentialValue}
+                validatePotential={validatePotential}
+                unit={potentialUnit}
+                potentialHint={potentialHint}
+                potentials={potentials} />
+            <TextLine title='Pipeline' value={~pipelineIndex ? pipelineList[pipelineIndex].name : null} icon='PL' pack='cp' />
         </>
     )
 }

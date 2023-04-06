@@ -25,8 +25,11 @@ export const EditItem = ({ itemId, isNew, itemType, navigateToSubitem, submit })
     return (
         <LoadingView loading={loading}>
             <KeyboardAwareFlatList
+                keyboardOpeningTime={100}
+                enableResetScrollToCoords={false}
                 enableOnAndroid={true}
-                extraHeight={100}
+                extraHeight={250}
+                enableAutomaticScroll={true}
                 ListHeaderComponent={<ItemView
                     itemId={itemId}
                     isNew={isNew}

@@ -10,15 +10,17 @@ import ViewTitle from './ViewTitle'
 import EditTitle from './EditTitle'
 import CloudButton from './CloudButton'
 import NavigationWidget from './NavigationWidget'
+import FocusAwareStatusBar from '../../../components/FocusAwareStatusBar'
 
 const TopBarBase = ({ left, right, title, isPrimary, navigation, noBorder }) => {
     const topBarStyle = isPrimary ? styles.primaryStyle : styles.defaultStyle
     const borderStyle = noBorder ? {} : styles.borderStyle
     return (
         <View style={{ ...styles.topBar, ...topBarStyle, ...borderStyle }} >
-            <StatusBar
+            <FocusAwareStatusBar
                 barStyle={isPrimary ? 'light-content' : 'dark-content'}
                 translucent={true}
+                animated={true}
                 backgroundColor='transparent' />
             <View style={styles.leftRow}>
                 <LeftSide
@@ -98,12 +100,12 @@ const Title = ({ title, isPrimary }) => {
         return <SurveyTitle />
     else if (title?.mainMenuTitle)
         return <MainMenuTitle />
-    else if (title?.viewTitle && title?.dataType)
+    else if (title?.viewTitle && title?.itemType)
         return <ViewTitle
-            dataType={title.dataType} />
-    else if (title?.editTitle && title?.dataType)
+            itemType={title.itemType} />
+    else if (title?.editTitle && title?.itemType)
         return <EditTitle
-            dataType={title.dataType} />
+            itemType={title.itemType} />
     else return null
 }
 
