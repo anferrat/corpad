@@ -15,8 +15,7 @@ import { EventRegister } from 'react-native-event-listeners'
 const ItemList = ({ itemType, navigateToView }) => {
     const dispatch = useDispatch()
     const t = useSelector(state => getListStateByType(itemType, state))
-if(itemType==='RECTIFIER')
-console.log(t.itemList)
+
     useEffect(() => {
         const onUpdateHandler = EventRegister.addEventListener('GLOBAL_ITEM_UPDATED', async (updated) => {
             if (itemType === updated.itemType) {
@@ -25,7 +24,6 @@ console.log(t.itemList)
                     [updated.itemId],
                     t.settings.appliedFilters,
                     t.settings.displayedReading)
-                    console.log(item)
                 if (item)
                     dispatch(updateList(itemType, updated.itemId, item))
             }
@@ -120,7 +118,8 @@ console.log(t.itemList)
     //When elements are updated from outside we only recieve an id, so we create a blocking view with loading indicator while data is fetched from db to update that element.
     const UpdatingView = React.memo(({ updating }) => <View style={updating ? styles.backdrop : styles.hidden}><ActivityIndicator color={primary} size='large' /></View>)
 
-    const keyExtractor = React.useCallback((item) => itemType + item.uid, [itemType])
+    //Keep timeModified as part of the key. When card is updated, it will reset internal card state
+    const keyExtractor = React.useCallback((item) => itemType + item.uid + item.timeModified, [itemType])
 
     return (
         <>

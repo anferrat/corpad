@@ -152,7 +152,7 @@ const testPointList = (state = initialState, action) => {
             }
         case RESET_FILTERS:
             return {
-                itemList: state.itemList,
+                itemList: [],
                 idList: [],
                 settings: {
                     ...state.settings,

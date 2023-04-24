@@ -1,5 +1,3 @@
-import { TestPointElement } from "./Elements/TestPointElement"
-
 export const SurveyFileDataFields = Object.freeze({
     SURVEY: 'survey',
     TEST_POINTS: 'testPoints',
@@ -40,6 +38,23 @@ export class PipelineSurveyFile {
         this.potentials = potentials
     }
 
+    resetValues() {
+        this.testPoints.forEach(testPoint => {
+            testPoint.reset()
+        })
+
+        this.rectifiers.forEach(rectifier => {
+            rectifier.reset()
+        })
+
+        this.subitems.forEach(subitem => {
+            subitem.reset()
+        })
+
+        this.potentials.forEach(potential => {
+            potential.reset()
+        })
+    }
 
     /*
     addElement(elementType, value) {

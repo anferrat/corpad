@@ -1,12 +1,12 @@
 import { SQLiteRepository } from "../../../utils/SQLite"
 import { SubitemTypes } from "../../../entities/survey/subitems/Subitem"
 import { Bond } from "../../../entities/survey/subitems/Bond"
-import { Error } from "../../../utils/Error"
+import { Error, errors } from "../../../utils/Error"
 import { SubitemResponseProcessor } from "../utils/SubitemResponseProcessor"
 
 
 export class BondRepository extends SQLiteRepository {
-    constructor () {
+    constructor() {
         super()
         this.responseProcessor = new SubitemResponseProcessor()
     }
@@ -19,22 +19,22 @@ export class BondRepository extends SQLiteRepository {
                     new Bond(id, testPointId, uid, name, fromAtoB, current, sideA, sideB))
         }
         catch (err) {
-            throw new Error('DatabaseError', `Unable to get all bonds`, err)
+            throw new Error(errors.DATABASE, `Unable to get all bonds`, err)
         }
     }
 
     async create(bond) {
-        const { uid, parentId, name, type, fromAtoB, current, sideA, sideB } = bond
         try {
+            const { id, uid, parentId, name, type, fromAtoB, current, sideA, sideB } = bond
             const sides = sideA.map(side => ({ sideA: side, sideB: null })).concat(sideB.map(side => ({ sideB: side, sideA: null })))
-            const result = await super.runSingleQueryTransaction(`INSERT INTO cards (uid, testPointId, type,  name, fromAtoB, current) VALUES (?,?,?,?,?,?)`,
-                [uid, parentId, type, name, fromAtoB, current])
+            const result = await super.runSingleQueryTransaction(`INSERT INTO cards (id, uid, testPointId, type,  name, fromAtoB, current) VALUES (?,?,?,?,?,?,?)`,
+                [id, uid, parentId, type, name, fromAtoB, current])
             if (sides.length > 0)
                 await super.runSingleQueryTransaction(`INSERT INTO sides (sideAId, sideBId, parentCardId) VALUES ${sides.map(side => `(${side.sideA}, ${side.sideB}, ${result.insertId})`).join()}`)
             return new Bond(result.insertId, parentId, uid, name, fromAtoB, current, sideA, sideB)
         }
         catch (err) {
-            throw new Error('DatabaseError', `Unable to create bond`, err)
+            throw new Error(errors.DATABASE, `Unable to create bond`, err)
         }
     }
 
@@ -52,7 +52,7 @@ export class BondRepository extends SQLiteRepository {
             return new Bond(id, testPointId, uid, name, fromAtoB, current, sideA, sideB)
         }
         catch (err) {
-            throw new Error(`DatabaseError`, `Unable to get bond with id ${id}`, err)
+            throw new Error(errors.DATABASE, `Unable to get bond with id ${id}`, err)
         }
     }
 
@@ -71,7 +71,7 @@ export class BondRepository extends SQLiteRepository {
             else return bond
         }
         catch (err) {
-            throw new Error('DatabaseError', `Unable to update bond with id ${id}`, err)
+            throw new Error(errors.DATABASE, `Unable to update bond with id ${id}`, err)
         }
     }
 }

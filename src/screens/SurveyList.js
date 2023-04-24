@@ -1,19 +1,17 @@
 import React from 'react'
 import { globalStyle } from '../styles/styles'
 import { SafeAreaView } from 'react-native'
-import LoaderSurveyList from '../features/survey_list/LoaderSurveyList'
+import { SurveyFileList } from '../features/survey_list'
 
 
 export default SurveyList = ({ route, navigation }) => {
     const { isCloud } = route.params
-    const navigateToCreate = () => navigation.navigate('CreateSurvey')
-    const navigateToList = (isCloud) => navigation.navigate(isCloud ? 'CloudSurveyList' : 'DeviceSurveyList')
+    const navigateToCreateSurvey = () => navigation.navigate('CreateSurvey')
     return (
         <SafeAreaView style={globalStyle.screen}>
-            <LoaderSurveyList
+            <SurveyFileList
                 isCloud={isCloud}
-                navigateToCreate={navigateToCreate}
-                navigateToList={navigateToList} />
+                navigateToCreateSurvey={navigateToCreateSurvey} />
         </SafeAreaView>
     )
 }

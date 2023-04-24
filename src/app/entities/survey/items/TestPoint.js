@@ -1,5 +1,5 @@
 import { Marker } from "./Marker"
-import { ItemTypes } from "./SurveyItem"
+import { ItemStatuses, ItemTypes } from "./SurveyItem"
 
 export class TestPoint extends Marker {
     constructor(
@@ -16,6 +16,11 @@ export class TestPoint extends Marker {
         testPointType) {
         super(id, uid, name, status, timeCreated, timeModified, comment, ItemTypes.TEST_POINT, testPointType, location, latitude, longitude)
         this.testPointType = testPointType
+    }
+
+    reset() {
+        this.status = ItemStatuses.UNKNOWN
+        this.timeModified = Date.now()
     }
 }
 

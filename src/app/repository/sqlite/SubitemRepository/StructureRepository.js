@@ -1,11 +1,11 @@
 import { SQLiteRepository } from "../../../utils/SQLite"
 import { SubitemTypes } from "../../../entities/survey/subitems/Subitem"
-import { Error } from "../../../utils/Error"
+import { Error, errors } from "../../../utils/Error"
 import { Structure } from "../../../entities/survey/subitems/Structure"
 
 
 export class StructureRepository extends SQLiteRepository {
-    constructor () {
+    constructor() {
         super()
     }
 
@@ -17,19 +17,19 @@ export class StructureRepository extends SQLiteRepository {
                     new Structure(id, testPointId, uid, name, description))
         }
         catch (err) {
-            throw new Error(`DatabaseError', 'Unable to get all structures`, err)
+            throw new Error(errors.DATABASE, 'Unable to get all structures', err)
         }
     }
 
     async create(structure) {
-        const { uid, parentId, type, name, description } = structure
         try {
-            const result = await this.runSingleQueryTransaction('INSERT INTO cards (uid, testPointId, type, name, description) VALUES (?,?,?,?,?)',
-                [uid, parentId, type, name, description])
+            const { id, uid, parentId, type, name, description } = structure
+            const result = await this.runSingleQueryTransaction('INSERT INTO cards (id, uid, testPointId, type, name, description) VALUES (?,?,?,?,?,?)',
+                [id, uid, parentId, type, name, description])
             return new Structure(result.insertId, parentId, uid, name, description)
         }
         catch (err) {
-            throw new Error('DatabaseError', `Unable to create structure`, err)
+            throw new Error(errors.DATABASE, `Unable to create structure`, err)
         }
     }
 
@@ -40,7 +40,7 @@ export class StructureRepository extends SQLiteRepository {
             return new Structure(id, testPointId, uid, name, description)
         }
         catch (err) {
-            throw new Error(`DatabaseError`, `Unable to get structure with id ${id}`, err)
+            throw new Error(errors.DATABASE, `Unable to get structure with id ${id}`, err)
         }
     }
 
@@ -56,7 +56,7 @@ export class StructureRepository extends SQLiteRepository {
             else return structure
         }
         catch (err) {
-            throw new Error('DatabaseError', `Unable to update structure with id ${id}`, err)
+            throw new Error(errors.DATABASE, `Unable to update structure with id ${id}`, err)
         }
     }
 

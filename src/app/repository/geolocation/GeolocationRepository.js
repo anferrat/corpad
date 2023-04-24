@@ -1,6 +1,6 @@
 import { PermissionsAndroid } from 'react-native'
 import Geolocation from 'react-native-geolocation-service';
-import { Error } from '../../utils/Error'
+import { Error, errors } from '../../utils/Error'
 
 export class GeolocationRepository {
     constructor() { }
@@ -33,10 +33,10 @@ export class GeolocationRepository {
                 })
             }
             catch (er) {
-                throw new Error('LocationError', 'Unable to get current position', er)
+                throw new Error(errors.LOCATION, 'Unable to get current position', er, 800)
             }
         else
-            throw new Error('PermissionError', 'Unable to obtain location permission')
+            throw new Error(errors.PERMISSION, 'Unable to obtain location permission', 'Permission not granted', 900)
     }
 
     watch(permissionGranted, callback) {
@@ -50,7 +50,7 @@ export class GeolocationRepository {
 
             },
                 (er) => {
-                    throw new Error('LocationError', 'Unable to obtain current position', er)
+                    throw new Error(errors.LOCATION, 'Unable to obtain current position', er, 800)
                 },
                 {
                     maximumAge: 200,
@@ -61,11 +61,10 @@ export class GeolocationRepository {
                     timeout: 200
 
                 })
-            console.log(watchId)
             return watchId
         }
         else {
-            throw new Error('PermissionError', 'Unable to obtain location permission')
+            throw new Error(errors.PERMISSION, 'Unable to obtain location permission', 'Permission not granted', 900)
         }
     }
 
@@ -74,7 +73,7 @@ export class GeolocationRepository {
             Geolocation.clearWatch(watchId)
         }
         catch (er) {
-            throw new Error('LocationError', 'Unable to clear location listener', er)
+            throw new Error(errors.LOCATION, 'Unable to clear location listener', er, 800)
         }
     }
 

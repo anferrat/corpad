@@ -1,6 +1,6 @@
 import { SQLiteRepository } from "../../../utils/SQLite"
 import { Circuit } from "../../../entities/survey/subitems/Circuit"
-import { Error } from "../../../utils/Error"
+import { Error, errors } from "../../../utils/Error"
 
 
 export class CircuitRepository extends SQLiteRepository {
@@ -16,19 +16,19 @@ export class CircuitRepository extends SQLiteRepository {
                     new Circuit(id, rectifierId, uid, name, ratioCurrent, ratioVoltage, targetMin, targetMax, current, voltage, voltageDrop))
         }
         catch (err) {
-            throw new Error(`DatabaseError', 'Unable to get all circuits`, err)
+            throw new Error(errors.DATABASE, 'Unable to get all circuits', err)
         }
     }
 
     async create(circuit) {
-        const { uid, parentId, name, ratioCurrent, ratioVoltage, current, voltage, targetMin, targetMax, voltageDrop } = circuit
         try {
-            const result = await this.runSingleQueryTransaction('INSERT INTO circuits (uid, rectifierId, name, ratioCurrent, ratioVoltage, current, voltage, targetMin, targetMax, voltageDrop) VALUES (?,?,?,?,?,?,?,?,?,?)',
-                [uid, parentId, name, ratioCurrent, ratioVoltage, current, voltage, targetMin, targetMax, voltageDrop])
+            const { id, uid, parentId, name, ratioCurrent, ratioVoltage, current, voltage, targetMin, targetMax, voltageDrop } = circuit
+            const result = await this.runSingleQueryTransaction('INSERT INTO circuits (id, uid, rectifierId, name, ratioCurrent, ratioVoltage, current, voltage, targetMin, targetMax, voltageDrop) VALUES (?,?,?,?,?,?,?,?,?,?,?)',
+                [id, uid, parentId, name, ratioCurrent, ratioVoltage, current, voltage, targetMin, targetMax, voltageDrop])
             return new Circuit(result.insertId, parentId, uid, name, ratioCurrent, ratioVoltage, targetMin, targetMax, current, voltage, voltageDrop)
         }
         catch (err) {
-            throw new Error('DatabaseError', `Unable to create circuit`, err)
+            throw new Error(errors.DATABASE, `Unable to create circuit`, err)
         }
     }
 
@@ -39,7 +39,7 @@ export class CircuitRepository extends SQLiteRepository {
             return new Circuit(id, rectifierId, uid, name, ratioCurrent, ratioVoltage, targetMin, targetMax, current, voltage, voltageDrop)
         }
         catch (err) {
-            throw new Error(`DatabaseError`, `Unable to get circuit with id ${id}`, err)
+            throw new Error(errors.DATABASE, `Unable to get circuit with id ${id}`, err)
         }
     }
 
@@ -55,7 +55,7 @@ export class CircuitRepository extends SQLiteRepository {
             else return circuit
         }
         catch (err) {
-            throw new Error('DatabaseError', `Unable to update circuit with id ${id}`, err)
+            throw new Error(errors.DATABASE, `Unable to update circuit with id ${id}`, err)
         }
     }
 

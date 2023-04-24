@@ -1,8 +1,8 @@
 import { ItemTypes } from "../../entities/survey/items/SurveyItem"
-import { Error } from "../../utils/Error"
+import { Error, errors } from "../../utils/Error"
 
 export class ItemConverter {
-    constructor (propertyConverter) {
+    constructor(propertyConverter) {
         this.conv = propertyConverter
     }
 
@@ -54,7 +54,7 @@ export class ItemConverter {
                         product: this.conv.convertValue(row, fields, product),
                         comment: this.conv.convertValue(row, fields, comment),
                     }
-                default: throw new Error('CorpadError', 'Unknown item type')
+                default: throw new Error(errors.GENERAL, 'Unknown item type')
             }
         }
         catch (err) {

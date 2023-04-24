@@ -13,12 +13,14 @@ const backgroundColors = {
 }
 
 const StatusIcon = ({ updateStatus, status }) => {
-    const { title, icon } = statusInfo[status]
+    const statusIndex = statusInfo[status] ? status : 3
+    const { title, icon } = statusInfo[statusIndex]
+    const statusValue = statusInfo[statusIndex].status
 
     const toggleStatus = () => {
-        const statusIndex = statusInfo?.findIndex((_, index) => status === index)
-        const newStatusIndex = statusIndex === -1 ? 0 : statusIndex + 1 > statusInfo.length - 2 ? 0 : statusIndex + 1
-        updateStatus(newStatusIndex)
+        const nextIndex = statusIndex + 1
+        const newIndex = statusInfo[nextIndex] && nextIndex !== 3 ? nextIndex : 0
+        updateStatus(newIndex)
     }
 
     const resetStatus = React.useCallback(() => {
@@ -33,14 +35,19 @@ const StatusIcon = ({ updateStatus, status }) => {
     return (
         <View style={styles.outerView}>
             <Pressable
-                style={{ ...styles.button, backgroundColor: backgroundColors[statusInfo[status].status] }}
+                style={{ ...styles.button, backgroundColor: backgroundColors[statusValue] }}
                 size='small'
-                status={statusInfo[status].status}
+                status={statusValue}
                 accessoryLeft={renderIcon}
                 onLongPress={resetStatus}
                 onPress={toggleStatus}>
-                <Icon style={styles.icon} fill={control} name={icon ?? 'question-mark-outline'} />
-                <Text status='control' category='label'>
+                <Icon
+                    style={styles.icon}
+                    fill={control}
+                    name={icon ?? 'question-mark-outline'} />
+                <Text
+                    status='control'
+                    category='label'>
                     {title}
                 </Text>
             </Pressable>

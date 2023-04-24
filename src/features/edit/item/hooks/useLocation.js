@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { watchPosition, clearWatch } from '../../../../app/controllers/survey/other/GeolocationController'
+import { watchPosition } from '../../../../app/controllers/survey/other/GeolocationController'
 import { errorHandler } from '../../../../helpers/error_handler'
 
 export const useLocation = (hideModal) => {
@@ -10,14 +10,15 @@ export const useLocation = (hideModal) => {
     })
 
     useEffect(() => {
-        let watchId
-        const loadLocation = async () => {
-            const { response } = await watchPosition(({ latitude, longitude, accuracy }) => setLocation({ latitude, longitude, accuracy }), er => errorHandler(er, hideModal))
-            watchId = response
+        let removeWatch
+        const loadData = async () => {
+            removeWatch = await watchPosition(({ latitude, longitude, accuracy }) => setLocation({ latitude, longitude, accuracy }),
+                er => errorHandler(er, hideModal))
         }
-        loadLocation()
+        loadData()
         return () => {
-            clearWatch(watchId)
+            if (removeWatch)
+                removeWatch()
         }
     }, [])
 

@@ -1,5 +1,5 @@
 import { SQLiteRepository } from "../../utils/SQLite"
-import { Error } from "../../utils/Error"
+import { Error, errors } from "../../utils/Error"
 import { Potential } from "../../entities/survey/subitems/Potential"
 
 export class PotentialRepository extends SQLiteRepository {
@@ -19,7 +19,7 @@ export class PotentialRepository extends SQLiteRepository {
                 })
         }
         catch (err) {
-            throw new Error('DatabaseError', 'Unable to get all potentials', err)
+            throw new Error(errors.DATABASE, 'Unable to get all potentials', err)
         }
     }
 
@@ -38,20 +38,20 @@ export class PotentialRepository extends SQLiteRepository {
                 })
         }
         catch (er) {
-            throw new Error('DatabaseError', `Unable to get potentials of subitem with id ${subitemId}`, er)
+            throw new Error(errors.DATABASE, `Unable to get potentials of subitem with id ${subitemId}`, er)
         }
     }
 
     async create(potential) {
-        const { uid, referenceCellId, isPortableReference, potentialType, subitemId, value } = potential
         try {
+            const { id, uid, referenceCellId, isPortableReference, potentialType, subitemId, value } = potential
             const refField = isPortableReference ? 'portableReferenceId' : 'permanentReferenceid'
-            const result = await super.runSingleQueryTransaction(`INSERT INTO ${this.tableName} (uid, cardId, type, ${refField}, value) VALUES (?,?,?,?,?)`,
-                [uid, subitemId, potentialType, referenceCellId, value])
+            const result = await super.runSingleQueryTransaction(`INSERT INTO ${this.tableName} (id, uid, cardId, type, ${refField}, value) VALUES (?,?,?,?,?,?)`,
+                [id, uid, subitemId, potentialType, referenceCellId, value])
             return new Potential(result.insertId, uid, subitemId, value, potentialType, referenceCellId, isPortableReference)
         }
         catch (er) {
-            throw new Error('DatabseError', `Unable to create potential with ${isPortableReference ? '' : 'non-'}portable referenceCellId ${referenceCellId}, potentialType with id ${potentialTypeId} for subitem with id ${subitemId} and value ${value}`, er)
+            throw new Error(errors.DATABASE, `Unable to create potential with ${isPortableReference ? '' : 'non-'}portable referenceCellId ${referenceCellId}, potentialType with id ${potentialTypeId} for subitem with id ${subitemId} and value ${value}`, er)
         }
     }
 
@@ -66,13 +66,13 @@ export class PotentialRepository extends SQLiteRepository {
                 throw 'Potential was not updated'
         }
         catch (er) {
-            throw new Error('DatabaseError', `Unable to update poetntial with id ${id} and value ${value}`, er)
+            throw new Error(errors.DATABASE, `Unable to update poetntial with id ${id} and value ${value}`, er)
         }
     }
 
     async updateList(potentials, subitemId) {
         try {
-          const [onDelete, onInsert, onSelect] = await super.runMultiQueryTransaction(tx => [
+            const [onDelete, onInsert, onSelect] = await super.runMultiQueryTransaction(tx => [
                 this.runQuery(tx, `DELETE FROM potentials WHERE cardId = ? `, [subitemId]),
                 potentials.length > 0 ? this.runQuery(tx,
                     `INSERT INTO potentials (id, uid, cardId, type, portableReferenceId, permanentReferenceid, value) 
@@ -85,14 +85,13 @@ export class PotentialRepository extends SQLiteRepository {
             ])
             return super.generateArray(onSelect.rows.length, onSelect.rows.item)
                 .map(({ id, uid, value, cardId, type, permanentReferenceId, portableReferenceId }) => {
-                    console.log(uid)
                     const isPortable = permanentReferenceId === null
                     const refCellId = isPortable ? portableReferenceId : permanentReferenceId
                     return new Potential(id, uid, cardId, value, type, refCellId, isPortable)
                 })
         }
         catch (er) {
-            throw new Error('DatabaseError', `Unable to update potential list`, er)
+            throw new Error(errors.DATABASE, `Unable to update potential list`, er)
         }
     }
 
@@ -103,7 +102,7 @@ export class PotentialRepository extends SQLiteRepository {
                 return // throw `Test point doesn't exist` // No Error if item not found seems logical
         }
         catch (er) {
-            new Error('DatabaseError', `Unable to delete potential with id ${id}`)
+            new Error(errors.DATABASE, `Unable to delete potential with id ${id}`, er)
         }
     }
 }

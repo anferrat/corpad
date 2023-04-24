@@ -83,7 +83,7 @@ const map = (state = initialState, action) => {
                 }
         }
         case DELETE_MARKER:
-            const isActive = state.activeMarker.itemId === action.itemId && state.activeMarker.itemType === action.itemType
+            const isActive = state.activeMarker.id === action.itemId && state.activeMarker.itemType === action.itemType
             return {
                 ...state,
                 activeMarker: isActive ? initialState.activeMarker : state.activeMarker,

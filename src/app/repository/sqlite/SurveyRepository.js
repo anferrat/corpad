@@ -1,26 +1,14 @@
 import { SQLiteRepository } from "../../utils/SQLite"
-import { Error } from "../../utils/Error"
+import { Error, errors } from "../../utils/Error"
 import { ItemTypes, SurveyItem } from "../../entities/survey/items/SurveyItem"
 import { Survey } from "../../entities/survey/other/Survey"
-import { PipelineSurveyFile, SurveyFileDataFields } from "../../entities/survey/survey/PipelineSurveyFile"
-import { SurveyElement } from "../../entities/survey/survey/Elements/SurveyElement"
-import { TestPointElement } from "../../entities/survey/survey/Elements/TestPointElement"
-import { RectifierElement } from "../../entities/survey/survey/Elements/RectifierElement"
-import { PipelineElement } from "../../entities/survey/survey/Elements/PipelineElement"
-import { PotentialTypeElement } from "../../entities/survey/survey/Elements/PotentialTypeElement"
-import { ReferenceCellElement } from "../../entities/survey/survey/Elements/ReferenceCellElement"
-import { CardElement } from "../../entities/survey/survey/Elements/CardElement"
-import { PotentialElement } from "../../entities/survey/survey/Elements/PotentialElement"
-import { CircuitElement } from "../../entities/survey/survey/Elements/CircuitElement"
-import { SideElement } from "../../entities/survey/survey/Elements/SideElement"
 
 export class SurveyRepository extends SQLiteRepository {
     constructor() {
         super()
     }
 
-
-    async searchItem(string) {1
+    async searchItem(string) {
         try {
             const searchQuery = `WHERE name LIKE '%${string}%'`
             const fieldsQuery = `SELECT id, uid, name, timeCreated, timeModified, comment,`
@@ -37,7 +25,7 @@ export class SurveyRepository extends SQLiteRepository {
                     new SurveyItem(id, uid, name, status, timeCreated, timeModifed, comment, itemType, testPointType))
         }
         catch (err) {
-            throw new Error('DatabaseError', `Unable to serach for item with search key ${string}`, err)
+            throw new Error(errors.DATABASE, `Unable to serach for item with search key ${string}`, err)
         }
     }
 
@@ -66,23 +54,43 @@ export class SurveyRepository extends SQLiteRepository {
             ])
         }
         catch (er) {
-            throw new Error('DatabaseError', 'Unable to create database tables', er)
+            throw new Error(errors.DATABASE, 'Unable to create database tables', er)
         }
     }
 
     async reset() {
         try {
             await super.runMultiQueryTransaction(tx => [
-                super.runQuery(tx, `DELETE * FROM survey`, []),
-                super.runQuery(tx, `DELETE * FROM testPoints`, []),
-                super.runQuery(tx, `DELETE * FROM rectifiers`, []),
-                super.runQuery(tx, `DELETE * FROM pipelines`, []),
-                super.runQuery(tx, `DELETE * from potentialTypes`, []),
-                super.runQuery(tx, 'DELETE * from refrenceCells', []),
+                super.runQuery(tx, `DELETE FROM survey`, []),
+                super.runQuery(tx, `DELETE FROM testPoints`, []),
+                super.runQuery(tx, `DELETE FROM rectifiers`, []),
+                super.runQuery(tx, `DELETE FROM pipelines`, []),
+                super.runQuery(tx, `DELETE FROM potentialTypes`, []),
+                super.runQuery(tx, 'DELETE FROM referenceCells', []),
+                super.runQuery(tx, `DELETE FROM cards`, []),
+                super.runQuery(tx, `DELETE FROM circuits`, []),
+                super.runQuery(tx, `DELETE FROM potentials`, []),
+                super.runQuery(tx, `DELETE FROM sides`, []),
             ])
         }
         catch (er) {
-            throw new Error('DatabaseError', 'Unable to reset database tables', er)
+            throw new Error(errors.DATABASE, 'Unable to reset database tables', er)
+        }
+    }
+
+    async clearEmptyValues() {
+        try {
+            //kinda design problem. Null name values can appear when creating new items and exiting app withouht saving.
+            this.runMultiQueryTransaction(tx => [
+                super.runQuery(tx, 'DELETE FROM testPoints WHERE name IS NULL'),
+                super.runQuery(tx, 'DELETE FROM rectifiers WHERE name IS NULL'),
+                super.runQuery(tx, 'DELETE FROM pipelines WHERE name IS NULL'),
+                super.runQuery(tx, 'DELETE FROM cards WHERE name IS NULL'),
+                super.runQuery(tx, 'DELETE FROM circuits WHERE name IS NULL'),
+            ])
+        }
+        catch (er) {
+            throw new Error(errors.DATABASE, 'Unable to clear empty values', 'Unable to clear empty values')
         }
     }
 
@@ -105,9 +113,10 @@ export class SurveyRepository extends SQLiteRepository {
             ])
         }
         catch (er) {
-            throw new Error('DatabaseError', 'Unable to reset database tables', er)
+            throw new Error(errors.DATABASE, 'Unable to reset database tables', er)
         }
     }
+
     async getSurvey() {
         try {
             const result = await this.runSingleQueryTransaction('SELECT * FROM survey LIMIT 1')
@@ -115,7 +124,18 @@ export class SurveyRepository extends SQLiteRepository {
             return new Survey(uid, name, technician)
         }
         catch (err) {
-            throw new Error('DatabaseError', 'Unable to get survey information', err)
+            throw new Error(errors.DATABASE, 'Unable to get survey information', err)
+        }
+    }
+
+    async create(survey) {
+        try {
+            const { uid, name, technician } = survey
+            await this.runSingleQueryTransaction('INSERT INTO survey (uid, name, technician) VALUES (?,?,?)', [uid, name, technician])
+            return survey
+        }
+        catch (err) {
+            throw new Error(errors.DATABASE, 'Unable to get survey information', err)
         }
     }
 
@@ -127,100 +147,54 @@ export class SurveyRepository extends SQLiteRepository {
             else return name
         }
         catch (err) {
-            throw new Error('DatabaseError', 'Unable to update survey name', err)
+            throw new Error(errors.DATABASE, 'Unable to update survey name', err)
         }
     }
 
-    async export() {
+    async import({ testPoints, pipelines, rectifiers, cards, circuits, potentials, potentialTypes, survey, referenceCells, sides }) {
+        /*
+        Fast import -min. number of insert request to import a survey. Fails on error. Fast but messy
+        boolConverter - important to wrap Boolean values before inserting to database. Null is legit option for boolean values when field is not used
+        */
+
+        const boolConverter = (bool) => bool === undefined || bool == null ? null : Number(bool)
         try {
-            const tables = ['survey', 'testPoints', 'rectifiers', 'pipelines', 'potentialTypes', 'referenceCells', 'cards', 'potentials', 'circuits', 'sides']
+            await this.runMultiQueryTransaction(async tx => [
+                this.runQuery(tx, `INSERT INTO survey (uid, name, technician) VALUES (?,?,?)`, [survey.uid, survey.name, survey.technician]),
 
-            const [survey, testPoints, rectifiers, pipelines, potentialTypes, referenceCells, cards, potentials, circuits, sides] =
-                await this.runMultiQueryTransaction(tx =>
-                    tables.map(table => this.runQuery(tx, `SELECT * FROM ${table}`, []))
-                )
-            return new PipelineSurveyFile(
-                super.generateArray(survey.rows.length, survey.rows.item)
-                    .map(({ uid, name, technician }) =>
-                        new SurveyElement(uid, name, technician)),
+                testPoints.length > 0 ? this.runQuery(tx, `INSERT INTO testPoints(id, uid, name, location, latitude, longitude, comment, testPointType, status, timeCreated, timeModified) VALUES ${testPoints.map(() => `(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`).join(', ')}`, testPoints.map(({ id, uid, name, location, latitude, longitude, comment, testPointType, status, timeCreated, timeModified }) => [id, uid, name, location, latitude, longitude, comment, testPointType, status, timeCreated, timeModified]).flat()) : null,
 
-                super.generateArray(testPoints.rows.length, testPoints.rows.item)
-                    .map(({ id, uid, name, location, latitude, longitude, comment, testPointType, status, timeCreated, timeModified }) =>
-                        new TestPointElement(id, uid, name, location, latitude, longitude, comment, testPointType, status, timeCreated, timeModified)),
+                rectifiers.length > 0 ? this.runQuery(tx, `INSERT INTO rectifiers(id, uid, name, status, timeCreated, timeModified, comment, location, latitude, longitude, model, serialNumber, powerSource, acVoltage, acCurrent, tapSetting, tapValue, tapCoarse, tapFine, maxVoltage, maxCurrent) VALUES ${rectifiers.map(() => `(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,?)`).join(', ')}`,
+                    rectifiers.map(({ id, uid, name, status, timeCreated, timeModified, comment, location, latitude, longitude, model, serialNumber, powerSource, acVoltage, acCurrent, tapSetting, tapValue, tapCoarse, tapFine, maxVoltage, maxCurrent }) => [id, uid, name, status, timeCreated, timeModified, comment, location, latitude, longitude, model, serialNumber, powerSource, acVoltage, acCurrent, tapSetting, tapValue, tapCoarse, tapFine, maxVoltage, maxCurrent]).flat()) : null,
 
-                super.generateArray(rectifiers.rows.length, rectifiers.rows.item)
-                    .map(({ id, uid, name, status, timeCreated, timeModified, comment, location, latitude, longitude, model, serialNumber, powerSource, acVoltage, acCurrent, tapSetting, tapValue, tapCoarse, tapFine, maxVoltage, maxCurrent }) =>
-                        new RectifierElement(id, uid, name, status, timeCreated, timeModified, comment, location, latitude, longitude, model, serialNumber, powerSource, acVoltage, acCurrent, tapSetting, tapValue, tapCoarse, tapFine, maxVoltage, maxCurrent)),
+                pipelines.length > 0 ? this.runQuery(tx, `INSERT INTO pipelines(id, uid, name, nps, material, coating, licenseNumber, timeCreated, timeModified, product, comment) VALUES ${pipelines.map(() => `(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`).join(', ')}`, pipelines.map(({ id, uid, name, nps, material, coating, licenseNumber, timeCreated, timeModified, product, comment }) => [id, uid, name, nps, material, boolConverter(coating), licenseNumber, timeCreated, timeModified, product, comment]).flat()) : null,
 
-                super.generateArray(pipelines.rows.length, pipelines.rows.item)
-                    .map(({ id, uid, name, nps, material, coating, licenseNumber, timeCreated, timeModified, product, comment }) =>
-                        new PipelineElement(id, uid, name, nps, material, coating, licenseNumber, timeCreated, timeModified, product, comment)),
+                potentialTypes.length > 0 ? this.runQuery(tx, `INSERT INTO potentialTypes (id, uid, name, permType) VALUES ${potentialTypes.map(() => `(?, ?, ?, ?)`).join(', ')}`, potentialTypes.map(({ id, uid, name, type }) => [id, uid, name, type]).flat()) : null,
 
-                super.generateArray(potentialTypes.rows.length, potentialTypes.rows.item)
-                    .map(({ id, uid, name, custom, permType }) =>
-                        new PotentialTypeElement(id, uid, name, custom, permType)),
+                this.runQuery(tx, `INSERT INTO referenceCells (id, uid, rcType, name, mainReference) VALUES ${referenceCells.map(() => '(?,?,?,?,?)').join(',')}`, referenceCells.map(({ id, uid, rcType, name, isMainReference }) => [id, uid, rcType, name, boolConverter(isMainReference)]).flat()),
 
-                super.generateArray(referenceCells.rows.length, referenceCells.rows.item)
-                    .map(({ id, uid, rcType, name, mainReference }) =>
-                        new ReferenceCellElement(id, uid, rcType, name, mainReference)),
+                cards.length > 0 ? this.runQuery(tx, `INSERT INTO cards(id, testPointId, uid, type, name, anodeMaterial, wireColor, wireGauge, fromAtoB, current, currentUnit, pipelineId, pipelineCardId, couponType, density, area, description, isolationType, shorted, rcType, nps, ratioCurrent, ratioVoltage, factorSelected, factor, voltageDrop) VALUES 
+                ${cards.map(() => `(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`).join(', ')}`,
+                    cards.map(({ id, uid, parentId, type, name, anodeMaterial, wireColor, wireGauge, fromAtoB, current, currentUnit, pipelineId, pipelineCardId, couponType, density, area, description, isolationType, shorted, rcType, nps, ratioCurrent, ratioVoltage, factorSelected, factor, voltageDrop }) => [id, parentId, uid, type, name, anodeMaterial ?? null, wireColor ?? null, wireGauge ?? null, boolConverter(fromAtoB), current ?? null, currentUnit ?? null, pipelineId ?? null, pipelineCardId ?? null, couponType ?? null, density ?? null, area ?? null, description ?? null, isolationType ?? null, boolConverter(shorted), rcType ?? null, nps ?? null, ratioCurrent ?? null, ratioVoltage ?? null, boolConverter(factorSelected), factor ?? null, voltageDrop ?? null]).flat()) : null,
 
-                super.generateArray(cards.rows.length, cards.rows.item)
-                    .map(({ id, parentId, uid, type, name, anodeMaterial, wireColor, wireGauge, fromAtoB, current, currentUnit, pipelineId, pipelineCardId, couponType, density, area, description, isolationType, shorted, rcType, nps, ratioCurrent, ratioVoltage, factorSelected, factor, voltageDrop }) =>
-                        new CardElement(id, parentId, uid, type, name, anodeMaterial, wireColor, wireGauge, fromAtoB, current, currentUnit, pipelineId, pipelineCardId, couponType, density, area, description, isolationType, shorted, rcType, nps, ratioCurrent, ratioVoltage, factorSelected, factor, voltageDrop)),
+                circuits.length > 0 ? this.runQuery(tx, `INSERT INTO circuits (id, uid, name, rectifierId, ratioCurrent, ratioVoltage, voltageDrop, current, voltage, targetMin, targetMax) VALUES
+                    ${circuits.map(() => `(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`).join(', ')}`, circuits.map(({ id, parentId, uid, name, ratioCurrent, ratioVoltage, voltageDrop, current, voltage, targetMin, targetMax }) =>
+                    [id, uid, name, parentId, ratioCurrent, ratioVoltage, voltageDrop, current, voltage, targetMin, targetMax]).flat()) : null,
 
-                super.generateArray(potentials.rows.length, potentials.rows.item)
-                    .map(({ id, cardId, uid, value, type, unit, portableReferenceId, permanentReferenceId }) =>
-                        new PotentialElement(id, cardId, uid, value, type, unit, portableReferenceId, permanentReferenceId)),
+                potentials.length > 0 ? this.runQuery(tx, `INSERT INTO potentials (id, cardId, uid, value, type, portableReferenceId, permanentReferenceId) VALUES ${potentials.map(() => `(?,?,?,?,?,?,?)`).join(', ')}`,
+                    potentials.map(({ id, uid, subitemId, value, potentialType, isPortableReference, referenceCellId }) => {
+                        const portableReferenceId = isPortableReference ? referenceCellId : null
+                        const permanentReferenceId = isPortableReference ? null : referenceCellId
+                        return [id, subitemId, uid, value, potentialType, portableReferenceId, permanentReferenceId]
+                    }).flat()) : null,
 
-                super.generateArray(circuits.rows.length, circuits.rows.item)
-                    .map(({ id, uid, name, rectifierId, ratioCurrent, ratioVoltage, voltageDrop, current, voltage, targetMin, targetMax }) =>
-                        new CircuitElement(id, uid, name, rectifierId, ratioCurrent, ratioVoltage, voltageDrop, current, voltage, targetMin, targetMax)),
 
-                super.generateArray(sides.rows.length, sides.rows.item)
-                    .map(({ id, sideAId, sideBId, parentCardId }) =>
-                        new SideElement(id, sideAId, sideBId, parentCardId))
-            )
+                sides.length > 0 ? this.runQuery(tx, `INSERT INTO sides (sideAId, sideBId, parentCardId) VALUES ${sides.map(() => `(?,?,?)`)}`,
+                    sides.map(({ parentId, sideAId, sideBId }) => [sideAId, sideBId, parentId]).flat()) : null
+            ])
         }
         catch (err) {
-            throw new Error('DatabaseError', 'Export failed', err)
-        }
-    }
-
-    async import(surveyFile) {
-        try {
-
-            await this.runMultiQueryTransaction(async tx => {
-                try {
-                    const [testPoints, rectifiers, pipelines, potentialTypes, referenceCells, survey] = await Promise.all([
-                        this.runQuery(tx, `INSERT INTO testPoints(uid, name, location, latitude, longitude, comment, testPointType, status, timeCreated, timeModified) VALUES 
-            ${surveyFile.data[SurveyFileDataFields.TEST_POINTS].map(e => `(${e.uid}, ${e.name}, ${e.location}, ${e.latitide}, ${e.longitude}, ${e.comment}, ${e.testPointType}, ${e.status}, ${e.timeCreated}, ${e.timeModified})`).join()}`),
-
-                        this.runQuery(tx, `INSERT INTO rectifiers(uid, name, status, timeCreated, timeModified, comment, location, latitude, longitude, model, serialNumber, powerSource, acVoltage, acCurrent, tapSetting, tapValue, tapCoarse, tapFine, maxVoltage, maxCurrent) VALUES 
-            ${surveyFile.data[SurveyFileDataFields.RECTIFIERS].map(e => `(${e.uid}, ${e.name}, ${e.status}, ${e.timeCreated}, ${e.timeModified}, ${e.comment}, ${e.location}, ${e.latitude}, ${e.longitude}, ${e.model}, ${e.serialNumber}, ${e.powerSource}, ${e.acVoltage}, ${e.acCurrent}, ${e.tapSetting}, ${e.tapValue}, ${e.tapCoarse}, ${e.tapFine}, ${e.maxVoltage}, ${e.maxCurrent})`).join()} `),
-
-                        this.runQuery(tx, `INSERT INTO pipelines(uid, name, nps, material, coating, licenseNumber, timeCreated, timeModified, product, comment) VALUES 
-            ${surveyFile.data[SurveyFileDataFields.PIPELINES].map(e => `(${e.uid}, ${e.name}, ${e.nps}, ${e.material}, ${e.coating}, ${e.licenseNumber}, ${e.timeCreated}, ${e.timeModified}, ${e.product}, ${e.comment})`).join()} `),
-
-                        this.runQuery(tx, `INSERT INTO potentialTypes (uid, name, custom, permType) VALUES 
-            ${surveyFile.data[SurveyFileDataFields.POTENTIAL_TYPES].map(e => `(${e.uid}, ${e.name}, ${e.custom}, ${e.permType})`).join()} `),
-
-                        this.runQuery(tx, `INSERT INTO referenceCells (uid, rcType, name, mainReference) VALUES 
-            ${surveyFile.data[SurveyFileDataFields.REFERENCE_CELLS].map(e => `(${e.uid}, ${e.rcType}, ${e.name}, ${e.mainReference})`).join()} `),
-
-                        this.runQuery(tx, `INSERT INTO survey (uid, name, technician) VALUES 
-            ${surveyFile.data[SurveyFileDataFields.REFERENCE_CELLS].map(e => `(${e.uid}, ${e.name}, ${e.technician})`).join()} `),
-                    ])
-                    return {
-                        status: 'jajajajaj'
-                    }
-                }
-                catch (er) {
-                    throw er
-                }
-            })
-        }
-        catch (err) {
-            throw new Error('DatabaseError', `Unable to import survey file`, err)
+            throw new Error(errors.DATABASE, `Unable to import survey file`, err)
         }
     }
 }

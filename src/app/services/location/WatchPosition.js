@@ -5,6 +5,7 @@ export class WatchPosition {
 
     async execute(callback) {
         const permission = await this.geolocationRepo.getPermission()
-        return this.geolocationRepo.watch(permission === 'granted', callback)
+        const watchId = this.geolocationRepo.watch(permission === 'granted', callback)
+        return () => this.geolocationRepo.clear(watchId)
     }
 }

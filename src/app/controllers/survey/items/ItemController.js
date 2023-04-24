@@ -105,7 +105,7 @@ const itemController = new ItemController(
     new ItemPreseneter(),
     new ListPresenter())
 
-export const createItem = (params, onError, onSuccess) => itemController.create(params, onError, onSuccess)
+export const createItem = ({ itemType, latitude, longitude }, onError, onSuccess) => itemController.create({ itemType, latitude, longitude }, onError, onSuccess)
 
 export const deleteItem = (params, onError, onSuccess) => itemController.delete(params, onError, onSuccess)
 

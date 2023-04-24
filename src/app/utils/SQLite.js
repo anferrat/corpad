@@ -1,5 +1,4 @@
-//import { db } from "../config/database"
-import { db } from "../../api/database" //jsut for test
+import { db } from "../config/database"
 
 export class SQLiteRepository {
     constructor() {

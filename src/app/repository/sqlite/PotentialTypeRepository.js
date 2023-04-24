@@ -1,9 +1,9 @@
 import { SQLiteRepository } from "../../utils/SQLite"
 import { PotentialType } from "../../entities/survey/other/PotentialType"
-import { Error } from "../../utils/Error"
+import { Error, errors } from "../../utils/Error"
 
 export class PotentialTypeRepository extends SQLiteRepository {
-    constructor () {
+    constructor() {
         super()
         this.tableName = 'potentialTypes'
     }
@@ -17,19 +17,19 @@ export class PotentialTypeRepository extends SQLiteRepository {
                 )
         }
         catch (er) {
-            throw new Error('DatabaseError', `Unable to get potential types`, er)
+            throw new Error(errors.DATABASE, `Unable to get potential types`, er)
         }
     }
 
     async create(potentialType) {
-        const { uid, name, permType } = potentialType
         try {
-            const result = await super.runSingleQueryTransaction(`INSERT INTO ${this.tableName} (uid, name, permType, custom) VALUES (?,?,?,?)`,
-                [uid, name, permType, !permType])
-            return new PotentialType(result.insertId, uid, name, permType)
+            const { id, uid, name, type } = potentialType
+            const result = await super.runSingleQueryTransaction(`INSERT INTO ${this.tableName} (id, uid, name, permType, custom) VALUES (?,?,?,?,?)`,
+                [id, uid, name, type, Number(!type)])
+            return new PotentialType(result.insertId, uid, name, type)
         }
         catch (er) {
-            throw new Error('DatabseError', `Unable to create potentialType with uid ${uid} and name ${name} and permType ${permType}`, er)
+            throw new Error(errors.DATABASE, `Unable to create potentialType`, er)
         }
     }
 
@@ -40,7 +40,7 @@ export class PotentialTypeRepository extends SQLiteRepository {
                 return // throw `Test point doesn't exist` // No Error if item not found seems logical
         }
         catch (er) {
-            new Error('DatabaseError', `Unable to delete potential type with id ${id}`)
+            new Error(errors.DATABASE, `Unable to delete potential type with id ${id}`, er)
         }
     }
 }

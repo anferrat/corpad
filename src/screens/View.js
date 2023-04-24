@@ -7,9 +7,11 @@ import ViewItem from '../features/view'
 const ViewItemScreen = ({ navigation, route }) => {
     const { itemId, itemType } = route.params
 
+
     useEffect(() => {
         InteractionManager.runAfterInteractions(() => {
             navigation.dispatch(state => { // In case of new test point clears edit screens
+                console.log(state)
                 const routes = state.routes.filter(r => r.name !== 'EditItem' && r.name !== 'EditSubitem')
                 return CommonActions.reset({
                     ...state,

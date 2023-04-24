@@ -16,6 +16,14 @@ export class Rectifier extends Marker {
         this.maxVoltage = maxVoltage
         this.maxCurrent = maxCurrent
     }
+
+    reset() {
+        this.status = ItemStatuses.UNKNOWN
+        this.tapCoarse = null
+        this.tapFine = null
+        this.tapValue = null
+        this.timeModified = Date.now()
+    }
 }
 
 export const PowerSources = Object.freeze({

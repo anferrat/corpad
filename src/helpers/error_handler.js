@@ -45,6 +45,7 @@ const warningCodes = {
 
 const errorCodes = {
     100: 'Unknown error occured',
+    101: 'Operation cancelled', //
     102: 'No internet connection',
     201: 'Items imported successfully.',
     301: 'Unable to obtain network status',

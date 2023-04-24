@@ -1,42 +1,30 @@
-import React, { useContext } from 'react'
+import React from 'react'
 import { StyleSheet, View } from 'react-native'
-import { useDispatch } from 'react-redux'
-import { BS } from '../../../../../App'
 import SortingHeaderButton from './SortingHeaderButton'
 import ReadingsHeaderButton from './ReadingsHeaderButton'
 import FilterHeaderButton from './FilterHeaderButton'
-import { updateSetting } from '../../../../store/actions/settings'
-import { errorHandler } from '../../../../helpers/functions'
 import { basic300 } from '../../../../styles/colors'
+import { useBottomSheetNavigation } from '../../../../hooks/bottom_sheet/useBottomSheetNavigation'
 
 const ListHeader = (props) => {
-    const bottomSheet = useContext(BS)
-    const dispatch = useDispatch()
-
-    const openSheetHandler = React.useCallback((content, index) => {
-        if (bottomSheet.current.snapToIndex)
-            bottomSheet.current.snapToIndex(index)
-        else errorHandler(503)
-        dispatch(updateSetting('bottomSheetContent', { itemType: props.dataType, content: content }))
-    }, [props.dataType])
-
+    const { openRectifierReadingMenu, openTestPointFilterMenu, openTestPointReadingMenu, openTestPointSortingMenu } = useBottomSheetNavigation()
     if (props.dataType !== 'PIPELINE')
         return (
             <View style={styles.mainView}>
                 <View style={styles.sorting}>
                     <SortingHeaderButton
                         dataType={props.dataType}
-                        openSheet={openSheetHandler.bind(this, 'sorting', 4)} />
+                        openSheet={openTestPointSortingMenu} />
                 </View>
                 <View style={styles.filter}>
                     <FilterHeaderButton
                         dataType={props.dataType}
-                        openSheet={openSheetHandler.bind(this, 'filter', 4)} />
+                        openSheet={openTestPointFilterMenu} />
                 </View>
                 <View style={styles.reading}>
                     <ReadingsHeaderButton
                         dataType={props.dataType}
-                        openSheet={openSheetHandler.bind(this, 'readings', props.dataType === 'RECTIFIER' ? 1 : 4)} />
+                        openSheet={props.dataType === 'RECTIFIER' ? openRectifierReadingMenu : openTestPointReadingMenu} />
                 </View>
             </View>
         )

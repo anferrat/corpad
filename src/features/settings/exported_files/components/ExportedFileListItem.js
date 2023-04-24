@@ -1,40 +1,65 @@
-import React, { useState, useRef, useEffect } from "react"
+import React, { useRef } from "react"
+import useModal from "../../../../hooks/useModal"
 import { StyleSheet, Pressable, View, Animated } from "react-native"
 import { Text, Icon } from "@ui-kitten/components"
 import { basic } from "../../../../styles/colors"
 import { androidRipple, globalStyle } from '../../../../styles/styles'
 import FileListItemMenu from "./FileListItemMenu"
-import { warningHandler } from "../../../../helpers/error_handler"
-import { getFileSize, getFormattedDate } from "../../../../helpers/functions"
+import { getFormattedDate } from "../../../../helpers/functions"
+import { getFileSize } from "../helpers/functions"
+import FileListItemMenuItem from "./FileListItemMenuItem"
 
-const ExportedFileListItem = (props) => {
+const fileIcons = {
+    'text/csv': {
+        icon: 'file-text-outline',
+        pack: null,
+    },
+    'application/vnd.google-earth.kml+xml': {
+        icon: 'kml-file',
+        pack: 'cp'
+    }
+}
+
+const ExportedFileListItem = ({ deleteFile, removeFileFromList, saveToDownloads, shareFileHandler, openInHandler, path, name, type, size, timeModified, navigateToSpreadsheet }) => {
+    const isKml = type !== 'text/csv'
     const scale = useRef(new Animated.Value(1))
-    const [deleting, setDeleting] = useState(false)
+    const { hideModal, showModal, visible } = useModal()
 
-    const fileSize = React.useMemo(() => getFileSize(props.fileSize), [props.fileSize])
+    const { unit, value } = React.useMemo(() => getFileSize(size), [size])
 
-    const onDeleteHandler = React.useCallback(async () => {
-        const confirmDelete = await warningHandler(44, 'Delete')
-        if (confirmDelete) {
-            setDeleting(true)
-        }
-    }, [setDeleting])
-
-    useEffect(() => {
-        const deleteResult = async () => {
-            const delRes = await props.onDeleteHandler()
-            if (delRes.status !== 200) {
-                setDeleting(false)
-                scale.current.setValue(1)
-            }
-        }
-        if (deleting)
+    const handleDelete = React.useCallback(async () => {
+        hideModal()
+        const success = await deleteFile(name, path)
+        if (success) {
             Animated.timing(scale.current, {
                 toValue: 0,
                 duration: 400,
                 useNativeDriver: false
-            }).start(deleteResult)
-    }, [deleting])
+            }).start(() => removeFileFromList(path))
+        }
+    }, [path, name])
+
+    const handleSaveToDownloads = React.useCallback(async () => {
+        hideModal()
+        await saveToDownloads(path)
+    }, [path])
+
+    const handleShareFile = React.useCallback(() => {
+        hideModal()
+        shareFileHandler(path, type)
+    }, [path, type])
+
+    const handleOpenIn = React.useCallback(() => {
+        hideModal()
+        openInHandler(path, type)
+    }, [path, type])
+
+    const handlePreview = React.useCallback(() => {
+        hideModal()
+        if (type === 'text/csv')
+            navigateToSpreadsheet(path, name)
+    }, [path, type, name, navigateToSpreadsheet])
+
     return (
         <Animated.View style={{
             height: scale.current.interpolate({
@@ -44,31 +69,68 @@ const ExportedFileListItem = (props) => {
             transform: [{ scale: scale.current }]
         }}>
             <Pressable
-                style={{ ...globalStyle.card, marginVertical: 0 }}
-                onPress={props.menuItems[0].onPress}
+                style={styles.mainView}
+                onPress={isKml ? handleShareFile : handlePreview}
                 android_ripple={androidRipple}>
-                <View style={styles.topView}>
-                    <Icon name={props.type === 'kml' ? 'kml-file' : 'file-text-outline'}
-                        pack={props.type === 'kml' ? 'cp' : undefined}
+                <View
+                    style={styles.topView}>
+                    <Icon
+                        name={fileIcons[type].icon}
+                        pack={fileIcons[type].pack}
                         style={styles.fileIcon}
                         fill={basic} />
                     <View
                         style={styles.titleView}>
-                        <Text category="p1" numberOfLines={1} ellipsizeMode={'tail'}>{props.fileName}</Text>
                         <Text
-                            category="c1" appearance="hint">{fileSize.value} {fileSize.unit}, {getFormattedDate(props.mtime.getTime())}</Text>
+                            category="p1"
+                            numberOfLines={1}
+                            ellipsizeMode={'tail'}>
+                            {name}</Text>
+                        <Text
+                            category="c1"
+                            appearance="hint">
+                            {value} {unit}, {getFormattedDate(timeModified)}</Text>
                     </View>
                     <FileListItemMenu
-                        menuItems={[...props.menuItems, { title: 'Delete', onPress: onDeleteHandler, icon: 'trash-outline' }]} />
+                        showMenu={showModal}
+                        hideMenu={hideModal}
+                        visible={visible}>
+                        {!isKml ?
+                            <FileListItemMenuItem
+                                title={'Preview'}
+                                icon={'eye-outline'}
+                                onPress={handlePreview} /> : null}
+                        <FileListItemMenuItem
+                            title={'Share'}
+                            icon={'share-outline'}
+                            onPress={handleShareFile} />
+                        <FileListItemMenuItem
+                            title={'Open in...'}
+                            icon={'external-link-outline'}
+                            onPress={handleOpenIn} />
+                        <FileListItemMenuItem
+                            title={'Save to Downloads'}
+                            icon={'download-outline'}
+                            onPress={handleSaveToDownloads} />
+                        <FileListItemMenuItem
+                            status='danger'
+                            title={'Delete'}
+                            icon={'trash-outline'}
+                            onPress={handleDelete} />
+                    </FileListItemMenu>
                 </View>
             </Pressable>
         </Animated.View>
     )
 }
 
-export default React.memo(ExportedFileListItem, (prev, next) => prev.path === next.path)
+export default ExportedFileListItem
 
 const styles = StyleSheet.create({
+    mainView: {
+        ...globalStyle.card,
+        marginVertical: 0
+    },
     plusIcon: {
         height: 23,
         width: 23,

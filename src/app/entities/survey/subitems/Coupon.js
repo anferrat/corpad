@@ -3,7 +3,7 @@ import { AreaUnits, CurrentUnits } from "../other/properties"
 import { Subitem, SubitemTypes } from "./Subitem"
 
 export class Coupon extends Subitem {
-    constructor (id, parentId, uid, name, pipelineCardId, wireGauge, wireColor, couponType, current, density, area) {
+    constructor(id, parentId, uid, name, pipelineCardId, wireGauge, wireColor, couponType, current, density, area) {
         super(id, parentId, uid, SubitemTypes.COUPON, ItemTypes.TEST_POINT, name)
         this.pipelineCardId = pipelineCardId
         this.wireColor = wireColor
@@ -21,6 +21,11 @@ export class Coupon extends Subitem {
         if (this.area && (this.current || this.current === 0)) {
             this.density = parseFloat((this.current / this.area * 0.1).toFixed(5))
         }
+    }
+
+    reset() {
+        this.current = null
+        this.density = null
     }
 }
 

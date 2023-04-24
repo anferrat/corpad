@@ -1,6 +1,6 @@
 import { ItemTypes } from "../../../entities/survey/items/SurveyItem"
 import { DisplayedReadingOptions, PermanentPotentialTypes } from "../../../entities/survey/other/properties"
-import { Error } from "../../../utils/Error"
+import { Error, errors } from "../../../utils/Error"
 
 export class GetItemListWithDisplayValues {
     constructor(testPointRepo, rectifierRepo, pipelineRepo) {
@@ -23,7 +23,7 @@ export class GetItemListWithDisplayValues {
                         return await this.testPointRepo.getDisplayListWithCurrentDensity({ idList, readingTypeFilter })
                     case DisplayedReadingOptions[ItemTypes.TEST_POINT].SHORTING_CURRENT:
                         return await this.testPointRepo.getDisplayListWithShortingCurrent({ idList, readingTypeFilter })
-                    default: throw new Error('CorpadError', `Displayed setting ${displayedReading} is not supported for test points`)
+                    default: throw new Error(errors.GENERAL, `Displayed setting ${displayedReading} is not supported for test points`)
                 }
             case ItemTypes.RECTIFIER:
                 switch (displayedReading) {
@@ -31,11 +31,11 @@ export class GetItemListWithDisplayValues {
                         return await this.rectifierRepo.getDisplayListWithCurrentAndVoltage(idList)
                     case DisplayedReadingOptions[ItemTypes.RECTIFIER].CURRENT_TARGET:
                         return await this.rectifierRepo.getDisplayListWithTargets(idList)
-                    default: throw new Error('CorpadError', `Displayed setting ${displayedReading} is not supported for rectifiers`)
+                    default: throw new Error(errors.GENERAL, `Displayed setting ${displayedReading} is not supported for rectifiers`)
                 }
             case ItemTypes.PIPELINE:
                 return this.pipelineRepo.getDisplayList(idList)
-            default: throw new Error('CorpadError', `Item type ${itemType} is not supported`)
+            default: throw new Error(errors.GENERAL, `Item type ${itemType} is not supported`)
         }
     }
 }

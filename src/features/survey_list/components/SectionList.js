@@ -2,30 +2,30 @@ import React from 'react'
 import { SectionList, StyleSheet } from 'react-native'
 import { Text } from '@ui-kitten/components'
 
-const DataLoaderSectionList = (props) => {
+const renderSectionHeader = ({ section }) => (
+    section.data.length > 0 ? <Text appearance='hint' style={styles.header}>{section.title}</Text> : null
+)
+
+const DataLoaderSectionList = ({ keyExtractor, sections, ListEmptyComponent, refreshing, onRefresh, renderItem, ListHeaderComponent, isEmpty }) => {
     return <SectionList
-        {...props}
-        keyExtractor={props.keyExtractor}
-        sections={props.sections}
-        renderSectionHeader={({ section }) => (
-            section.data.length > 0 ? <Text appearance='hint' style={styles.header}>{section.title}</Text> : null
-        )}
+        keyExtractor={keyExtractor}
+        sections={isEmpty ? [] : sections}
+        renderItem={renderItem}
+        ListEmptyComponent={ListEmptyComponent}
+        ListHeaderComponent={ListHeaderComponent}
+        renderSectionHeader={renderSectionHeader}
         contentContainerStyle={styles.container}
         initialNumToRender={18}
-        ListEmptyComponent={props.ListEmptyComponent}
         removeClippedSubviews={true}
-        refreshing={props.refreshing}
-        SectionSeparatorComponent={props.SectionSeparatorComponent}
-        onRefresh={props.onRefresh}
+        refreshing={refreshing}
+        onRefresh={onRefresh}
         onEndReachedThreshold={1}
-        onEndReached={props.onEndReached}
-        renderItem={props.renderItem}
         maxToRenderPerBatch={10}
         updateCellsBatchingPeriod={200}
         windowSize={21} />
 }
 
-export default React.memo(DataLoaderSectionList)
+export default DataLoaderSectionList
 
 const styles = StyleSheet.create({
     container: {

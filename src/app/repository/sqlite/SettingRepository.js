@@ -1,7 +1,7 @@
 import { SQLiteRepository } from "../../utils/SQLite"
-import { Error } from "../../utils/Error"
+import { Error, errors } from "../../utils/Error"
 import { AppSettings } from "../../entities/survey/other/Settings"
-import { defaultSettings } from "../../entities/survey/other/Settings"
+import { Onboarding } from "../../entities/survey/other/Onboarding"
 
 export class SettingRepository extends SQLiteRepository {
     constructor() {
@@ -12,22 +12,29 @@ export class SettingRepository extends SQLiteRepository {
     async get() {
         try {
             const result = await super.runSingleQueryTransaction(`SELECT * from settings LIMIT 1`)
-            const { pipelineNameAsDefault, defaultPotentialUnit, autoCreatePotentials, isSurveyNew, isCloud, originalHash, fileName, cloudId, lastSync, onboarding } = result.rows.item(0)
-            return new AppSettings(Boolean(pipelineNameAsDefault), defaultPotentialUnit, Boolean(autoCreatePotentials), Boolean(isSurveyNew), Boolean(isCloud), originalHash, fileName, cloudId, lastSync, onboarding)
+            if (result.rows.length === 0)
+                return {}
+            else {
+                const { pipelineNameAsDefault, defaultPotentialUnit, autoCreatePotentials, isSurveyNew, isCloud, originalHash, fileName, cloudId, lastSync, onboarding } = result.rows.item(0)
+                const { versionOnboarding, editTestPoint, editReferenceCell, map, potentialTypes, editBond, main } = JSON.parse(onboarding)
+                const onboard = new Onboarding(versionOnboarding, editTestPoint, editReferenceCell, map, potentialTypes, editBond, main)
+                return new AppSettings(Boolean(pipelineNameAsDefault), defaultPotentialUnit, Boolean(autoCreatePotentials), Boolean(isSurveyNew), Boolean(isCloud), originalHash, fileName, cloudId, lastSync, onboard)
+            }
         }
         catch (er) {
-            throw new Error('DatabaseError', `Unable to get app settings`, er)
+            throw new Error(errors.DATABASE, `Unable to get app settings`, er)
         }
     }
 
-    async update(settings) {
+    async updateSurveySettings(settings) {
+        const { isSurveyNew, isCloud, originalHash, fileName, cloudId, lastSync } = settings
         try {
-            const result = await super.runSingleQueryTransaction(`UPDATE ${this.tableName} SET ${settings.updated.map(key => `${key} = ?`).join(', ')}`, settings.updated.map(key => settings[key]))
+            const result = await super.runSingleQueryTransaction(`UPDATE settings SET isSurveyNew=?, isCloud=?, originalHash=?, fileName=?, cloudId=?, lastSync=?`, [isSurveyNew, isCloud, originalHash, fileName, cloudId, lastSync])
             if (result.rowsAffeted === 0)
                 throw 'Settings were not updated'
         }
         catch (er) {
-            throw new Error('DatabaseError', `Unable to update settings`, er)
+            throw new Error(errors.DATABASE, `Unable to update settings`, er)
         }
     }
 
@@ -38,7 +45,7 @@ export class SettingRepository extends SQLiteRepository {
                 throw 'Settings were not updated'
         }
         catch (er) {
-            throw new Error('DatabaseError', `Unable to update settings`, er)
+            throw new Error(errors.DATABASE, `Unable to update settings`, er)
         }
     }
 
@@ -49,7 +56,7 @@ export class SettingRepository extends SQLiteRepository {
                 throw 'Settings were not updated'
         }
         catch (er) {
-            throw new Error('DatabaseError', `Unable to update settings`, er)
+            throw new Error(errors.DATABASE, `Unable to update settings`, er)
         }
     }
 
@@ -60,33 +67,36 @@ export class SettingRepository extends SQLiteRepository {
                 throw 'Settings were not updated'
         }
         catch (er) {
-            throw new Error('DatabaseError', `Unable to update settings`, er)
+            throw new Error(errors.DATABASE, `Unable to update settings`, er)
         }
     }
 
     async updateOnboarding(onboarding) {
         try {
-            const result = await super.runSingleQueryTransaction(`UPDATE settings SET onboarding = ?`, [onboarding])
+            const value = JSON.stringify(onboarding)
+            const result = await super.runSingleQueryTransaction(`UPDATE settings SET onboarding = ?`, [value])
             if (result.rowsAffeted === 0)
                 throw 'Settings were not updated'
         }
         catch (er) {
-            throw new Error('DatabaseError', `Unable to update settings`, er)
+            throw new Error(errors.DATABASE, `Unable to update settings`, er)
         }
     }
 
-    async reset() {
+    async update(settings) {
         try {
-            const { pipelineNameAsDefault, defaultPotentialUnit, autoCreatePotentials, isSurveyNew, isCloud, originalHash, fileName, cloudId, lastSync, onboarding } = defaultSettings
+            const { pipelineNameAsDefault, defaultPotentialUnit, autoCreatePotentials, isSurveyNew, isCloud, originalHash, fileName, cloudId, lastSync, onboarding } = settings
+            const onboardingValue = JSON.stringify(onboarding)
             await this.runMultiQueryTransaction(tx => [
-                this.runQuery(tx, `DELETE * FROM ${this.tableName}`, []),
-                this.runQuery(`INSERT INTO settings (pipelineNameAsDefault, defaultPotentialUnit, autoCreatePotentials, onboarding, isSurveyNew, isCloud, originalHash, fileName, cloudId, lastSync) VALUES (?,?,?,?,?,?,?,?,?,?)`,
-                    [pipelineNameAsDefault, defaultPotentialUnit, autoCreatePotentials, onboarding, isSurveyNew, isCloud, originalHash, fileName, cloudId, lastSync])
+                this.runQuery(tx, `DELETE FROM ${this.tableName}`, []),
+                this.runQuery(tx, `INSERT INTO settings (pipelineNameAsDefault, defaultPotentialUnit, autoCreatePotentials, onboarding, isSurveyNew, isCloud, originalHash, fileName, cloudId, lastSync) VALUES (?,?,?,?,?,?,?,?,?,?)`,
+                    [pipelineNameAsDefault, defaultPotentialUnit, Boolean(autoCreatePotentials), onboardingValue, isSurveyNew, isCloud, originalHash, fileName, cloudId, lastSync])
             ])
-            return defaultSettings
+
+            return settings
         }
         catch (er) {
-            throw new Error('DatabaseError', `Unable to reset app settings`, er)
+            throw new Error(errors.DATABASE, `Unable to reset app settings`, er)
         }
     }
 }

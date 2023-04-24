@@ -3,7 +3,7 @@ import { CurrentUnits, PotentialUnits } from "../other/properties"
 import { Subitem, SubitemTypes } from "./Subitem"
 
 export class Circuit extends Subitem {
-    constructor (id, parentId, uid, name, ratioCurrent, ratioVoltage, targetMin, targetMax, current, voltage, voltageDrop) {
+    constructor(id, parentId, uid, name, ratioCurrent, ratioVoltage, targetMin, targetMax, current, voltage, voltageDrop) {
         super(id, parentId, uid, SubitemTypes.CIRCUIT, ItemTypes.RECTIFIER, name)
         this.ratioCurrent = ratioCurrent
         this.ratioVoltage = ratioVoltage
@@ -21,5 +21,11 @@ export class Circuit extends Subitem {
         if ((this.ratioCurrent || this.ratioCurrent === 0) && this.ratioVoltage && (this.voltageDrop || this.voltageDrop === 0)) {
             this.current = this.voltageDrop / this.ratioVoltage * this.ratioCurrent
         }
+    }
+
+    reset() {
+        this.current = null
+        this.voltage = null
+        this.voltageDrop = null
     }
 }

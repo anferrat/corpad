@@ -21,12 +21,11 @@ import rectifierList from './src/store/reducers/rectifierList'
 import map from './src/store/reducers/map'
 import settings from './src/store/reducers/settings'
 import exportSurvey from './src/store/reducers/exportSurvey'
-import surveyList from './src/store/reducers/surveyList'
 import importData from './src/store/reducers/importData'
 import Sheet from './src/bottom_sheet/Sheet'
 import FullScreenLoader from './src/features/overlays/loader/Loader'
 import ExportModal from './src/features/overlays/export_modal/ExportModal'
-import SessionModal from './src/features/overlays/session_modal/SessionModal'
+import {SessionModal} from './src/features/overlays/session_modal/'
 import { Animated } from 'react-native'
 
 
@@ -40,7 +39,6 @@ const rootReducer = combineReducers({
   map: map,
   settings: settings,
   exportSurvey: exportSurvey,
-  surveyList: surveyList,
   importData: importData,
 })
 

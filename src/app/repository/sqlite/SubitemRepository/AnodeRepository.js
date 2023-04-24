@@ -1,10 +1,10 @@
 import { SQLiteRepository } from "../../../utils/SQLite"
 import { SubitemTypes } from "../../../entities/survey/subitems/Subitem"
 import { Anode } from "../../../entities/survey/subitems/Anode"
-import { Error } from "../../../utils/Error"
+import { Error, errors } from "../../../utils/Error"
 
 export class AnodeRepository extends SQLiteRepository {
-    constructor () {
+    constructor() {
         super()
     }
 
@@ -16,19 +16,19 @@ export class AnodeRepository extends SQLiteRepository {
                     new Anode(id, testPointId, uid, name, anodeMaterial, wireGauge, wireColor))
         }
         catch (er) {
-            throw new Error('DatabaseError', 'Unable to get anodes', er)
+            throw new Error(errors.DATABASE, 'Unable to get anodes', er)
         }
     }
 
     async create(anode) {
-        const { uid, parentId, name, type, anodeMaterial, wireGauge, wireColor } = anode
         try {
-            const result = await this.runSingleQueryTransaction('INSERT INTO cards (uid, type, testPointId, name, anodeMaterial, wireGauge, wireColor) VALUES (?,?,?,?,?,?,?)',
-                [uid, type, parentId, name, anodeMaterial, wireGauge, wireColor])
+            const { id, uid, parentId, name, type, anodeMaterial, wireGauge, wireColor } = anode
+            const result = await this.runSingleQueryTransaction('INSERT INTO cards (id, uid, type, testPointId, name, anodeMaterial, wireGauge, wireColor) VALUES (?,?,?,?,?,?,?,?)',
+                [id, uid, type, parentId, name, anodeMaterial, wireGauge, wireColor])
             return new Anode(result.insertId, parentId, uid, name, anodeMaterial, wireGauge, wireColor)
         }
         catch (err) {
-            throw new Error('DatabaseError', `Unable to create anode`, err)
+            throw new Error(errors.DATABASE, `Unable to create anode`, err)
         }
     }
 
@@ -39,7 +39,7 @@ export class AnodeRepository extends SQLiteRepository {
             return new Anode(id, testPointId, uid, name, anodeMaterial, wireGauge, wireColor)
         }
         catch (err) {
-            throw new Error(`DatabaseError`, `Unable to get anode with id ${id}`, err)
+            throw new Error(errors.DATABASE, `Unable to get anode with id ${id}`, err)
         }
     }
 
@@ -51,13 +51,13 @@ export class AnodeRepository extends SQLiteRepository {
                 this.runQuery(tx, 'UPDATE cards SET name=?, anodeMaterial=?, wireColor=?, wireGauge=? WHERE id=?', [name, anodeMaterial, wireColor, wireGauge, id]),
                 this.runQuery(tx, 'UPDATE testPoints SET timeModified=? WHERE id = ?', [currentTime, parentId])
             ])
-            if (result[0].rowsAffected === 0) 
-            //not great. in case when update failed timeModified will be still updated. need to resolve query within transaction to find out if want to update the rest. leave it for now
+            if (result[0].rowsAffected === 0)
+                //not great. in case when update failed timeModified will be still updated. need to resolve query within transaction to find out if want to update the rest. leave it for now
                 throw 'Item not found'
             else return anode
         }
         catch (err) {
-            throw new Error('DatabaseError', `Unable to update anode with id ${id}`, err)
+            throw new Error(errors.DATABASE, `Unable to update anode with id ${id}`, err)
         }
     }
 }

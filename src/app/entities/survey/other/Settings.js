@@ -1,5 +1,3 @@
-import { PotentialUnits } from "./properties"
-
 export class AppSettings {
     constructor(
         pipelineNameAsDefault,
@@ -41,21 +39,3 @@ export class AppSettings {
     }
 }
 
-export const defaultSettings = new AppSettings(
-    true,
-    PotentialUnits.MILIVOLTS,
-    true,
-    null,
-    null,
-    null,
-    null,
-    null,
-    null,
-    JSON.stringify({
-        main: true,
-        editTestPoint: true,
-        map: true, editBond: true,
-        editReferenceCell: true,
-        potentialTypes: true,
-        versionUpdating: null
-    }))

@@ -6,10 +6,24 @@ import { basic, basic200 } from '../../../../styles/colors'
 
 const EmptyExportedFilesList = () => {
     return (
-        <View style={styles.mainView}>
-            <Icon style={styles.icon} fill={basic} name={'file-text-outline'} />
-            <Text category='h3' appearance={'hint'} style={styles.title}>Folder is empty</Text>
-            <Text category='p1' appearance={'hint'} style={styles.title}>You can see your .csv and .kml files here after exporting data from survey.</Text>
+        <View
+            style={styles.mainView}>
+            <Icon
+                style={styles.icon}
+                fill={basic}
+                name={'file-text-outline'} />
+            <Text
+                category='h4'
+                appearance={'hint'}
+                style={styles.title}>
+                No files found
+            </Text>
+            <Text
+                category='p1'
+                appearance={'hint'}
+                style={styles.title}>
+                You can manage .csv and .kml files here, after exporting data from surveys.
+            </Text>
         </View>
     )
 }

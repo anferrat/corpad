@@ -1,6 +1,6 @@
 import { SQLiteRepository } from "../../utils/SQLite"
 import { SubitemTypes } from "../../entities/survey/subitems/Subitem"
-import { Error } from "../../utils/Error"
+import { Error, errors } from "../../utils/Error"
 import { SubitemResponseProcessor } from "./utils/SubitemResponseProcessor"
 import { SubitemRepositoryFactory } from "./utils/SubitemRepositoryFactory"
 import { SubitemPropertyUpdateTypes } from "../../entities/survey/other/properties"
@@ -11,6 +11,11 @@ export class SubitemRepository extends SQLiteRepository {
         this.responseProcessor = new SubitemResponseProcessor()
         this.subitemRepoFactory = new SubitemRepositoryFactory()
     }
+
+    async getAll() {
+        return (await Promise.all(Object.values(SubitemTypes).map(subitemType => this.subitemRepoFactory.execute(subitemType).getAll()))).flat()
+    }
+
     create(subitem) {
         return this.subitemRepoFactory.execute(subitem.type).create(subitem)
     }
@@ -35,7 +40,7 @@ export class SubitemRepository extends SQLiteRepository {
                 return // throw `Subitem doesn't exist` // Silently fail if item not found
         }
         catch (err) {
-            throw new Error('DatabaseError', `Unable to delete subitem of type ${subitemType} with id ${subitemId}`, err)
+            throw new Error(errors.DATABASE, `Unable to delete subitem of type ${subitemType} with id ${subitemId}`, err)
         }
     }
 
@@ -65,7 +70,7 @@ export class SubitemRepository extends SQLiteRepository {
             ])
         }
         catch (err) {
-            throw new Error('DatabaseError', `Unable to update property ${propertyType}`)
+            throw new Error(errors.DATABASE, `Unable to update property ${propertyType}`)
         }
     }
 }

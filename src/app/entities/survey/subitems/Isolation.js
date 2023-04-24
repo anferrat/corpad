@@ -3,7 +3,7 @@ import { CurrentUnits } from "../other/properties";
 import { Subitem, SubitemTypes } from "./Subitem";
 
 export class Isolation extends Subitem {
-    constructor (id, parentId, uid, name, fromAtoB, isolationType, shorted, current, sideA, sideB) {
+    constructor(id, parentId, uid, name, fromAtoB, isolationType, shorted, current, sideA, sideB) {
         super(id, parentId, uid, SubitemTypes.ISOLATION, ItemTypes.TEST_POINT, name)
         this.fromAtoB = fromAtoB
         this.isolationType = isolationType
@@ -19,6 +19,12 @@ export class Isolation extends Subitem {
             this.current = Math.abs(this.current)
             this.fromAtoB = !this.fromAtoB
         }
+    }
+
+    reset() {
+        this.fromAtoB = true
+        this.current = null
+        this.shorted = false
     }
 }
 

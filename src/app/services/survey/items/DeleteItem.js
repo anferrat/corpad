@@ -1,5 +1,5 @@
 import { ItemTypes } from "../../../entities/survey/items/SurveyItem";
-import { Error } from "../../../utils/Error";
+import { Error, errors } from "../../../utils/Error";
 
 export class DeleteItem {
     constructor(testPointRepo, rectifierRepo, pipelineRepo) {
@@ -20,7 +20,7 @@ export class DeleteItem {
                 this.pipelineRepo.delete(id)
                 break
             default:
-                throw new Error('CorpadError', `No such type ${itemType}. Unable to delete item`)
+                throw new Error(errors.GENERAL, `No such type ${itemType}. Unable to delete item`)
         }
     }
 }

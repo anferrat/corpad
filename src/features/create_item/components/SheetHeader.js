@@ -6,9 +6,10 @@ import SingleIconButton from '../../../components/IconButton'
 const SheetHeader = (props) => (
     <View style={styles.titleRow}>
         <View style={styles.titleView}>
-            {props.backActionHandler ? <SingleIconButton
-                onPress={props.backActionHandler}
-                iconName={'arrow-back-outline'} /> : null}
+            {props.backActionHandler ?
+                <SingleIconButton
+                    onPress={props.backActionHandler}
+                    iconName={'arrow-back-outline'} /> : null}
             <Text category='h5'
                 style={styles.titleText}>
                 {props.title}
@@ -17,7 +18,8 @@ const SheetHeader = (props) => (
         <Button
             appearance='ghost'
             onPress={props.onCloseHandler}>
-            Close</Button>
+            Close
+        </Button>
     </View>
 )
 

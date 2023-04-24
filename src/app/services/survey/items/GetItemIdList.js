@@ -1,5 +1,5 @@
 import { ItemTypes } from "../../../entities/survey/items/SurveyItem"
-import { Error } from "../../../utils/Error"
+import { Error, errors } from "../../../utils/Error"
 
 export class GetItemIdList {
     constructor(testPointRepo, rectifierRepo, pipelineRepo) {
@@ -17,7 +17,7 @@ export class GetItemIdList {
             case ItemTypes.PIPELINE:
                 return this.pipelineRepo.getIdList(sorting)
             default:
-                throw new Error('CorpadError', `No such type ${itemType}. Unable to delete item`, err)
+                throw new Error(errors.GENERAL, `No such type ${itemType}. Unable to delete item`)
         }
     }
 }

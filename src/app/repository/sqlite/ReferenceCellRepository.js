@@ -1,6 +1,6 @@
 import { SQLiteRepository } from "../../utils/SQLite"
 import { ReferenceCell } from "../../entities/survey/other/ReferenceCell"
-import { Error } from "../../utils/Error"
+import { Error, errors } from "../../utils/Error"
 import { SubitemTypes } from "../../entities/survey/subitems/Subitem"
 import { StatReferenceCell } from "../../entities/survey/subitems/StatReferenceCell"
 
@@ -17,7 +17,7 @@ export class ReferenceCellRepository extends SQLiteRepository {
                 .map(({ id, uid, rcType, name, mainReference }) => new ReferenceCell(id, uid, rcType, name, Boolean(mainReference)))
         }
         catch (err) {
-            throw new Error('DatabaseError', 'Unable to get list of reference cells.', err)
+            throw new Error(errors.DATABASE, 'Unable to get list of reference cells.', err)
         }
     }
 
@@ -32,20 +32,20 @@ export class ReferenceCellRepository extends SQLiteRepository {
                     new StatReferenceCell(id, itemId, uid, name, rcType, null, null))
         }
         catch (err) {
-            throw new Error('DatabaseError', `Unable to get reference cell list for subitem `)
+            throw new Error(errors.DATABASE, `Unable to get reference cell list for subitem`, err)
         }
     }
 
     async create(referenceCell) {
-        const { rcType, name, uid, isMainReference } = referenceCell
+        const { id, rcType, name, uid, isMainReference } = referenceCell
         try {
             const result = await super.runSingleQueryTransaction(
-                `INSERT INTO ${this.tableName} (uid, mainReference, rcType, name) VALUES (?,?,?,?)`,
-                [uid, isMainReference, rcType, name])
+                `INSERT INTO ${this.tableName} (id, uid, mainReference, rcType, name) VALUES (?,?,?,?,?)`,
+                [id, uid, isMainReference, rcType, name])
             return new ReferenceCell(result.insertId, uid, rcType, name, isMainReference)
         }
         catch (err) {
-            throw new Error('DatabaseError', 'Unable to create reference cell.', err)
+            throw new Error(errors.DATABASE, 'Unable to create reference cell.', err)
         }
     }
 
@@ -56,7 +56,7 @@ export class ReferenceCellRepository extends SQLiteRepository {
             return new ReferenceCell(row.id, row.uid, row.rcType, row.name, Boolean(row.mainReference))
         }
         catch (err) {
-            throw new Error('DatabaseError', `Unable to get main reference cell.`)
+            throw new Error(errors.DATABASE, `Unable to get main reference cell.`, err)
         }
     }
 
@@ -67,7 +67,7 @@ export class ReferenceCellRepository extends SQLiteRepository {
             return new ReferenceCell(row.id, row.uid, row.rcType, row.name, Boolean(row.mainReference))
         }
         catch (er) {
-            throw new Error('DatabaseError', `Unable to get reference cell with id ${id}`)
+            throw new Error(errors.DATABASE, `Unable to get reference cell with id ${id}`, er)
         }
     }
 
@@ -79,7 +79,7 @@ export class ReferenceCellRepository extends SQLiteRepository {
             ])
         }
         catch (err) {
-            throw new Error('DatabaseError', `Unable to update main reference with id ${id}`, err)
+            throw new Error(errors.DATABASE, `Unable to update main reference with id ${id}`, err)
         }
     }
 
@@ -90,7 +90,7 @@ export class ReferenceCellRepository extends SQLiteRepository {
                 return //throw `Refernce cell doesn't exist`
         }
         catch (err) {
-            throw new Error('DatabaseError', `Unable to delete reference cell with id ${id}`, err)
+            throw new Error(errors.DATABASE, `Unable to delete reference cell with id ${id}`, err)
         }
     }
 }

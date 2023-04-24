@@ -110,7 +110,6 @@ export const saveSurveyHandler = async () => {
         else return metaData
     }
     else return savedFile
-
 }
 
 const loadSurveyHandler = async (surveyObject, valid) => {

@@ -2,11 +2,11 @@ import { Pipeline } from "../../../entities/survey/items/Pipeline";
 import { Rectifier, TapOptions } from "../../../entities/survey/items/Rectifier";
 import { ItemStatuses, ItemTypes, TestPointTypes } from "../../../entities/survey/items/SurveyItem";
 import { TestPoint } from "../../../entities/survey/items/TestPoint";
-import { Error } from "../../../utils/Error";
+import { Error, errors } from "../../../utils/Error";
 import { guid } from "../../../utils/guid";
 
 export class CreateItem {
-    constructor (testPointRepo, rectifierRepo, pipelineRepo, basicPresenter) {
+    constructor(testPointRepo, rectifierRepo, pipelineRepo, basicPresenter) {
         this.testPointRepo = testPointRepo
         this.rectifierRepo = rectifierRepo
         this.pipelineRepo = pipelineRepo
@@ -27,7 +27,7 @@ export class CreateItem {
                 const pipeline = new Pipeline(null, uid, null, currentTime, currentTime, null, null, null, true, null, null, 0)
                 return this.basicPresenter.execute(await this.pipelineRepo.create(pipeline))
             default:
-                throw new Error('CorpadError', `No such type ${itemType}. Unable to create item`, err)
+                throw new Error(errors.GENERAL, `No such type ${itemType}. Unable to create item`)
         }
     }
 }

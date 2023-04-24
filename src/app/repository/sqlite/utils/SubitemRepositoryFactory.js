@@ -8,7 +8,7 @@ import { RiserRepository } from "../SubitemRepository/RiserRepository"
 import { IsolationRepository } from "../SubitemRepository/IsolationRepository"
 import { StructureRepository } from "../SubitemRepository/StructureRepository"
 import { CircuitRepository } from "../SubitemRepository/CircuitRepository"
-import { Error } from "../../../utils/Error"
+import { Error, errors } from "../../../utils/Error"
 import { SubitemTypes } from "../../../entities/survey/subitems/Subitem"
 import { TestLeadRepository } from "../SubitemRepository/TestLeadRepository"
 
@@ -52,7 +52,7 @@ export class SubitemRepositoryFactory {
             case SubitemTypes.TEST_LEAD:
                 return this.testLeadRepo
             default:
-                throw new Error('DatabaseError', `Unknown subitem type ${type}. Cannot proceed with database operation.`)
+                throw new Error(errors.DATABASE, `Unknown subitem type ${type}. Cannot proceed with database operation.`)
         }
     }
 }

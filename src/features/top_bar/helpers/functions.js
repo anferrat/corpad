@@ -2,7 +2,6 @@ import { labels, calculatorTypes } from '../../../constants/constants'
 import { fieldProperties } from '../../../constants/fieldProperties'
 import { deleteItem } from '../handlers/deleteItem'
 import { deleteSubitem } from '../handlers/deleteSubitem'
-import { launchMenu } from '../handlers/launchMenu'
 import { openExternalSurvey } from '../handlers/openExternalFile'
 import { DEVELOPER_MODE_ON } from '../../../../App'
 import { deleteImportSubitem } from '../../../store/actions/importData'
@@ -71,8 +70,8 @@ getHeader : {
 
 */
 
-export const getHeader = (screen, params, navigation, dispatch, bottomSheet) => {
-    if (dispatch && bottomSheet.current && navigation && screen)
+export const getHeader = (screen, params, navigation, dispatch, openMenu) => {
+    if (dispatch && openMenu && navigation && screen)
         switch (screen) {
             case 'Onboarding':
                 return {
@@ -117,7 +116,7 @@ export const getHeader = (screen, params, navigation, dispatch, bottomSheet) => 
                         },
                         {
                             icon: 'more-vertical-outline',
-                            onPress: () => launchMenu(bottomSheet, dispatch)
+                            onPress: openMenu
                         },
                     ].concat(DEVELOPER_MODE_ON ? {
                         icon: 'eye',
@@ -246,6 +245,10 @@ export const getHeader = (screen, params, navigation, dispatch, bottomSheet) => 
                         {
                             icon: 'plus',
                             onPress: () => navigation.navigate('CreateSurvey')
+                        },
+                        {
+                            icon: 'eye',
+                            onPress: () => navigation.navigate('DevScreen')
                         }
                     ]
                 }
