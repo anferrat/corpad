@@ -1,5 +1,5 @@
 import React, { useContext, useEffect } from 'react'
-import { Animated, StyleSheet, ScrollView } from 'react-native'
+import { Animated, StyleSheet } from 'react-native'
 import ActionButton from '../../components/ActionButton'
 import { diagBack } from '../../components/Icons'
 import { ScrollRef } from '../../../App'

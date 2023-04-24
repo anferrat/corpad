@@ -1,11 +1,11 @@
 import { SQLiteRepository } from "../../../utils/SQLite"
 import { SubitemTypes } from "../../../entities/survey/subitems/Subitem"
 import { Coupon } from "../../../entities/survey/subitems/Coupon"
-import { Error } from "../../../utils/Error"
+import { Error, errors } from "../../../utils/Error"
 
 
 export class CouponRepository extends SQLiteRepository {
-    constructor () {
+    constructor() {
         super()
     }
 
@@ -17,20 +17,20 @@ export class CouponRepository extends SQLiteRepository {
                     new Coupon(id, testPointId, uid, name, pipelineCardId, wireGauge, wireColor, couponType, current, density, area))
         }
         catch (err) {
-            throw new Error(`DatabaseError', 'Unable to get all coupons`, err)
+            throw new Error(errors.DATABASE, 'Unable to get all coupons', err)
         }
     }
 
     async create(coupon) {
-        const { uid, parentId, type, name, pipelineCardId, couponType, current, density, area, wireColor, wireGauge } = coupon
         try {
+            const { id, uid, parentId, type, name, pipelineCardId, couponType, current, density, area, wireColor, wireGauge } = coupon
             const result = await this.runSingleQueryTransaction(
-                'INSERT INTO cards (uid, testPointId, type, name, pipelineCardId, couponType, current, density, area, wireColor, wireGauge) VALUES (?,?,?,?,?,?,?,?,?,?,?)',
-                [uid, parentId, type, name, pipelineCardId, couponType, current, density, area, wireColor, wireGauge])
+                'INSERT INTO cards (id, uid, testPointId, type, name, pipelineCardId, couponType, current, density, area, wireColor, wireGauge) VALUES (?,?,?,?,?,?,?,?,?,?,?,?)',
+                [id, uid, parentId, type, name, pipelineCardId, couponType, current, density, area, wireColor, wireGauge])
             return new Coupon(result.insertId, parentId, uid, name, pipelineCardId, wireGauge, wireColor, couponType, current, density, area)
         }
         catch (err) {
-            throw new Error('DatabaseError', `Unable to create coupon`, err)
+            throw new Error(errors.DATABASE, `Unable to create coupon`, err)
         }
     }
 
@@ -41,7 +41,7 @@ export class CouponRepository extends SQLiteRepository {
             return new Coupon(id, testPointId, uid, name, pipelineCardId, wireGauge, wireColor, couponType, current, density, area)
         }
         catch (err) {
-            throw new Error(`DatabaseError`, `Unable to get coupon with id ${id}`, err)
+            throw new Error(errors.DATABASE, `Unable to get coupon with id ${id}`, err)
         }
     }
 
@@ -59,7 +59,7 @@ export class CouponRepository extends SQLiteRepository {
             else return coupon
         }
         catch (err) {
-            throw new Error('DatabaseError', `Unable to update coupon with id ${id}`, err)
+            throw new Error(errors.DATABASE, `Unable to update coupon with id ${id}`, err)
         }
     }
 }

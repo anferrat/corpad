@@ -1,7 +1,7 @@
 import { SQLiteRepository } from "../../utils/SQLite"
 import { Rectifier } from "../../entities/survey/items/Rectifier"
 import { Marker } from "../../entities/survey/items/Marker"
-import { Error } from "../../utils/Error"
+import { Error, errors } from "../../utils/Error"
 import { ItemResponseProcessor } from "./utils/ItemResponseProcessor"
 import { SubitemTypes } from "../../entities/survey/subitems/Subitem"
 import { ItemTypes } from "../../entities/survey/items/SurveyItem"
@@ -22,7 +22,7 @@ export class RectifierRepository extends SQLiteRepository {
             return super.generateArray(result.rows.length, result.rows.item).map(row => row.id)
         }
         catch (err) {
-            throw new Error('DatabaseError', `Unable to get rectifier id list with sorting ${sorting}`, err)
+            throw new Error(errors.DATABASE, `Unable to get rectifier id list with sorting ${sorting}`, err)
         }
     }
 
@@ -34,24 +34,21 @@ export class RectifierRepository extends SQLiteRepository {
             )
         }
         catch (err) {
-            throw new Error('DatabaseError', `Unable to get rectifer with idList ${idList.join()}`, err)
+            throw new Error(errors.DATABASE, `Unable to get rectifer with idList ${idList.join()}`, err)
         }
     }
 
     async create(rectifier) {
-        const { uid, timeCreated, timeModified, name, status, location, latitude, longitude, comment, model, serialNumber, powerSource, acVoltage, acCurrent, tapSetting, tapValue, tapCoarse, tapFine, maxVoltage, maxCurrent } = rectifier
-        if (uid && timeCreated) {
-            try {
-                const result = await super.runSingleQueryTransaction(
-                    `INSERT INTO rectifiers (uid, timeCreated, status, name, location, latitude, longitude, comment, timeModified, model, serialNumber, powerSource, acVoltage, acCurrent, tapSetting, tapValue, tapCoarse, tapFine, maxVoltage, maxCurrent) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)`,
-                    [uid, timeCreated, status, name, location, latitude, longitude, comment, timeModified, model, serialNumber, powerSource, acVoltage, acCurrent, tapSetting, tapValue, tapCoarse, tapFine, maxVoltage, maxCurrent])
-                return new Rectifier(result.insertId, uid, name, status, timeCreated, timeModified, comment, location, latitude, longitude, model, serialNumber, powerSource, acVoltage, acCurrent, tapSetting, tapValue, tapCoarse, tapFine, maxVoltage, maxCurrent)
-            }
-            catch (err) {
-                throw new Error('DatabaseError', `Unable to create rectifier with name ${name}, latitude ${latitude} and longitude ${longitude}.`, err)
-            }
+        try {
+            const { id, uid, timeCreated, timeModified, name, status, location, latitude, longitude, comment, model, serialNumber, powerSource, acVoltage, acCurrent, tapSetting, tapValue, tapCoarse, tapFine, maxVoltage, maxCurrent } = rectifier
+            const result = await super.runSingleQueryTransaction(
+                `INSERT INTO rectifiers (id, uid, timeCreated, status, name, location, latitude, longitude, comment, timeModified, model, serialNumber, powerSource, acVoltage, acCurrent, tapSetting, tapValue, tapCoarse, tapFine, maxVoltage, maxCurrent) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)`,
+                [id, uid, timeCreated, status, name, location, latitude, longitude, comment, timeModified, model, serialNumber, powerSource, acVoltage, acCurrent, tapSetting, tapValue, tapCoarse, tapFine, maxVoltage, maxCurrent])
+            return new Rectifier(result.insertId, uid, name, status, timeCreated, timeModified, comment, location, latitude, longitude, model, serialNumber, powerSource, acVoltage, acCurrent, tapSetting, tapValue, tapCoarse, tapFine, maxVoltage, maxCurrent)
         }
-        else throw new Error('CorpadError', `Unable to create rectifier without required minimum parameters:  uid: ${uid}, currentTime: ${currentTime}`)
+        catch (err) {
+            throw new Error(errors.DATABASE, `Unable to create rectifier with name ${name}, latitude ${latitude} and longitude ${longitude}.`, err)
+        }
     }
 
     async delete(id) {
@@ -61,7 +58,7 @@ export class RectifierRepository extends SQLiteRepository {
                 return // throw `Rectifier doesn't exist` // Silently fail if item not found
         }
         catch (err) {
-            throw new Error('DatabaseError', `Unable to delete rectifier with id ${id}`, err)
+            throw new Error(errors.DATABASE, `Unable to delete rectifier with id ${id}`, err)
         }
     }
 
@@ -70,7 +67,7 @@ export class RectifierRepository extends SQLiteRepository {
             await super.runSingleQueryTransaction(`DELETE FROM rectifiers WHERE id IN ${this.convertArrayToInStatement(idList)}`)
         }
         catch (err) {
-            throw new Error('DatabaseError', `Unable to delete rectifier list ${idList}`, err)
+            throw new Error(errors.DATABASE, `Unable to delete rectifier list ${idList}`, err)
         }
     }
 
@@ -85,7 +82,7 @@ export class RectifierRepository extends SQLiteRepository {
             else return rectifier
         }
         catch (err) {
-            throw new Error('DatabaseError', `Unable to update rectifier with id ${id}`, err)
+            throw new Error(errors.DATABASE, `Unable to update rectifier with id ${id}`, err)
         }
     }
 
@@ -100,7 +97,7 @@ export class RectifierRepository extends SQLiteRepository {
             return marker
         }
         catch (er) {
-            throw new Error('DatabaseError', 'Unable to update rectifier')
+            throw new Error(errors.DATABASE, 'Unable to update rectifier')
         }
     }
 
@@ -112,7 +109,7 @@ export class RectifierRepository extends SQLiteRepository {
                 new Circuit(id, rectifierId, uid, name, ratiCurrent, ratioVoltage, targetMin, targetMax, current, voltage, voltageDrop))
         }
         catch (err) {
-            throw new Error('DatabaseError', `Unable to get list of subitems`, err)
+            throw new Error(errors.DATABASE, `Unable to get list of subitems`, err)
         }
     }
 
@@ -124,7 +121,7 @@ export class RectifierRepository extends SQLiteRepository {
                     new Rectifier(id, uid, name, status, timeCreated, timeModified, comment, location, latitude, longitude, model, serialNumber, powerSource, acVoltage, acCurrent, tapSetting, tapValue, tapCoarse, tapFine, maxVoltage, maxCurrent))
         }
         catch (err) {
-            throw new Error('DatabaseError', `Unable to get rectifier list`, err)
+            throw new Error(errors.DATABASE, `Unable to get rectifier list`, err)
         }
     }
 
@@ -138,14 +135,13 @@ export class RectifierRepository extends SQLiteRepository {
                     new Marker(id, uid, name, status, timeCreated, timeModifed, comment, itemType, testPointType, location, latitude, longitude))
         }
         catch (err) {
-            throw new Error('DatabaseError', `Unable to get get markers data`, err)
+            throw new Error(errors.DATABASE, `Unable to get get markers data`, err)
         }
     }
 
 
     async getDisplayListWithCurrentAndVoltage(idList) {
         try {
-            console.log(idList)
             const result = await super.runSingleQueryTransaction(
                 `SELECT rectifiers.id AS itemId, rectifiers.uid AS itemUid, rectifiers.name AS itemName, rectifiers.timeModified, rectifiers.status, rectifiers.location, rectifiers.tapCoarse, rectifiers.tapFine, rectifiers.tapValue, rectifiers.tapSetting, circuits.id, circuits.uid, circuits.name, '${SubitemTypes.CIRCUIT}' AS type, circuits.current AS v1, circuits.voltage AS v2 
                 FROM rectifiers
@@ -156,7 +152,7 @@ export class RectifierRepository extends SQLiteRepository {
             return this.responseProcessor.generateDisplayCardList(result, idList, ItemTypes.RECTIFIER)
         }
         catch (err) {
-            throw new Error('DatabaseError', `Unable to get current/voltage list for rectifiers`, err)
+            throw new Error(errors.DATABASE, `Unable to get current/voltage list for rectifiers`, err)
         }
     }
 
@@ -172,7 +168,7 @@ export class RectifierRepository extends SQLiteRepository {
             return this.responseProcessor.generateDisplayCardList(result, idList, ItemTypes.RECTIFIER)
         }
         catch (err) {
-            throw new Error('DatabaseError', `Unable to get current target list for rectifiers`)
+            throw new Error(errors.DATABASE, `Unable to get current target list for rectifiers`, err)
         }
     }
 

@@ -63,6 +63,7 @@ const useItemData = ({ itemId, itemType, isNew, navigateToView, navigateToSubite
 
     const createSubitem = useCallback(async (type) => {
         const { response, status, errorMessage } = await createSubitemRequest({ subitemType: type, itemId }, er => errorHandler(er))
+
         if (status === 200)
             navigateToSubitem(response.id, true, type)
     }, [itemId])

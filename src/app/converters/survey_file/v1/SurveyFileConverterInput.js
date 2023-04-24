@@ -8,6 +8,8 @@ import { Circuit } from "../../../entities/survey/subitems/Circuit";
 import { Potential } from "../../../entities/survey/subitems/Potential";
 import { PipelineSurveyFile, SurveyFileDataFields } from "../../../entities/survey/survey/PipelineSurveyFile";
 
+const convertBool = (bool) => bool === null ? null : Boolean(bool)
+
 export class SurveyFileConverterInput {
     constructor(subitemFactory) {
         this.subitemFactory = subitemFactory
@@ -20,7 +22,7 @@ export class SurveyFileConverterInput {
 
     _createPipeline(dataRow) {
         const [id, uid, name, nps, material, coating, licenseNumber, timeCreated, timeModified, product, comment] = dataRow
-        return new Pipeline(id, uid, name, timeCreated, timeModified, comment, nps, material, Boolean(coating), licenseNumber, product, null)
+        return new Pipeline(id, uid, name, timeCreated, timeModified, comment, nps, material, convertBool(coating), licenseNumber, product, null)
     }
 
     _createRectifier(dataRow) {
@@ -35,7 +37,7 @@ export class SurveyFileConverterInput {
 
     _createReferenceCell(dataRow) {
         const [id, uid, rcType, name, mainReference] = dataRow
-        return new ReferenceCell(id, uid, rcType, name, Boolean(mainReference))
+        return new ReferenceCell(id, uid, rcType, name, convertBool(mainReference))
     }
 
     _createSurvey(dataRow) {
@@ -69,7 +71,7 @@ export class SurveyFileConverterInput {
         const [id, testPointId, uid, type, name, anodeMaterial, wireColor, wireGauge, fromAtoB, current, currentUnit, pipelineId, pipelineCardId, couponType, density, area, description, isolationType, shorted, rcType, nps, ratioCurrent, ratioVoltage, factorSelected, factor, voltageDrop] = dataRow
         const subitemSides = sides[id] ?? {}
         const { sideA, sideB } = subitemSides
-        return this.subitemFactory.execute(id, uid, name, type, testPointId, anodeMaterial, wireGauge, wireColor, fromAtoB, current, sideA, sideB, ratioCurrent, ratioVoltage, null, null, null, voltageDrop, pipelineCardId, couponType, density, area, isolationType, shorted, pipelineId, rcType, nps, factor, factorSelected, description)
+        return this.subitemFactory.execute(id, uid, name, type, testPointId, anodeMaterial, wireGauge, wireColor, convertBool(fromAtoB), current, sideA, sideB, ratioCurrent, ratioVoltage, null, null, null, voltageDrop, pipelineCardId, couponType, density, area, isolationType, convertBool(shorted), pipelineId, rcType, nps, factor, convertBool(factorSelected), description)
     }
 
     _createCircuit(dataRow) {
@@ -80,6 +82,7 @@ export class SurveyFileConverterInput {
 
 
     execute(surveyObject) {
+
         const { data } = surveyObject
         const sides = this._convertSides(data[SurveyFileDataFields.SIDES])
         const testPoints = data[SurveyFileDataFields.TEST_POINTS].map(this._createTestPoint)

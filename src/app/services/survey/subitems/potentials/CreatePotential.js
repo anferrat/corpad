@@ -1,9 +1,9 @@
 import { Potential } from "../../../../entities/survey/subitems/Potential"
-import { Error } from "../../../../utils/Error"
+import { Error, errors } from "../../../../utils/Error"
 import { guid } from "../../../../utils/guid"
 
 export class CreatePotential {
-    constructor (potentialRepo, potentialPresenter) {
+    constructor(potentialRepo, potentialPresenter) {
         this.potentialRepo = potentialRepo
         this.potentialPresenter = potentialPresenter
     }
@@ -15,6 +15,6 @@ export class CreatePotential {
             const potential = new Potential(null, guid(), subitemId, null, potentialType.id, refCell.id, refCell.isPortable)
             return this.potentialPresenter.execute(potential, potentialType, refCell)
         }
-        else throw new Error('CorpadError', `Unable to create potential based on provided data.`)
+        else throw new Error(errors.GENERAL, `Unable to create potential based on provided data.`)
     }
 }

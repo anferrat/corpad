@@ -5,19 +5,27 @@ export class GetCurrentSurveyStatus {
     }
 
     async execute() {
-        const { isCloud, lastSync, isSurveyNew, fileName } = await this.settingRepo.get()
-        const isLoaded = isCloud !== null && isSurveyNew !== null
-        if (isLoaded) {
-            const { name } = await this.surveyRepo.getSurvey()
+        try {
+            const [{ name }, { isCloud, lastSync, fileName }] = await Promise.all([
+                this.surveyRepo.getSurvey(),
+                await this.settingRepo.get()
+            ])
             return {
-                isLoaded,
+                isLoaded: true,
                 syncTime: lastSync,
                 name: name,
                 fileName: fileName,
                 isCloud: isCloud
             }
         }
-        else
-            return { isLoaded }
+        catch (er) {
+            return {
+                isLoaded: false,
+                syncTime: null,
+                name: null,
+                fileName: null,
+                isCloud: false
+            }
+        }
     }
 }

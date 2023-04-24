@@ -2,24 +2,49 @@
 import React from 'react'
 import { View, StyleSheet, Pressable } from 'react-native'
 import { Icon, Text } from '@ui-kitten/components'
-import { basic, basic200, primary, success } from '../../../styles/colors'
+import { basic, basic200, control, primary, success } from '../../../styles/colors'
 import { androidRipple } from '../../../styles/styles'
 
-const OptionCard = (props) => {
+const OptionCard = ({ onPress, disabled, icon, pack, selected, hint, subtitle, title }) => {
+
     return (
-        <Pressable style={{ ...styles.mainView, backgroundColor: props.selected ? basic200 : '#fff' }}
+        <Pressable
+            style={selected ? styles.mainViewSelected : styles.mainView}
             android_ripple={androidRipple}
-            onPress={props.onPress.bind(this, props.isCloudValue)}
-            disabled={props.disabled}>
-            <View style={styles.topRow}>
-                {props.selected ?
-                    <Icon name={'checkmark-circle-2'} style={styles.checkIcon} fill={success} />
+            onPress={onPress}
+            disabled={disabled}>
+            <View
+                style={styles.topRow}>
+                {selected ?
+                    <Icon
+                        name={'checkmark-circle-2'}
+                        style={styles.checkIcon}
+                        fill={success} />
                     : null}
             </View>
-            <Icon name={props.icon} pack={props.pack} style={styles.icon} fill={props.selected ? primary : basic} />
-            <Text category={'h6'} appearance={props.disabled ? 'hint' : 'default'}>{props.title}</Text>
-            {props.hint ? <Text appearance={'hint'} category='s2'>{props.hint}</Text> : null}
-            <Text category={'s2'} appearance='hint' style={styles.subtitle}>{props.subtitle}</Text>
+            <Icon
+                name={icon}
+                pack={pack}
+                style={styles.icon}
+                fill={selected ? primary : basic} />
+            <Text
+                category={'h6'}
+                appearance={disabled ? 'hint' : 'default'}>
+                {title}
+            </Text>
+            {hint ?
+                <Text
+                    appearance={'hint'}
+                    category='s2'>
+                    {hint}
+                </Text>
+                : null}
+            <Text
+                category={'s2'}
+                appearance='hint'
+                style={styles.subtitle}>
+                {subtitle}
+            </Text>
         </Pressable>
     )
 }
@@ -35,6 +60,17 @@ const styles = StyleSheet.create({
         paddingHorizontal: 8,
         paddingVertical: 12,
         alignItems: 'center',
+        backgroundColor: control
+    },
+    mainViewSelected: {
+        flex: 1,
+        marginHorizontal: 8,
+        elevation: 5,
+        borderRadius: 6,
+        paddingHorizontal: 8,
+        paddingVertical: 12,
+        alignItems: 'center',
+        backgroundColor: basic200
     },
     icon: {
         width: 50,

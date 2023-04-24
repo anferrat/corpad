@@ -1,6 +1,6 @@
 import { Marker } from "../../../../entities/survey/items/Marker"
 import { ItemTypes } from "../../../../entities/survey/items/SurveyItem"
-import { Error } from "../../../../utils/Error"
+import { Error, errors } from "../../../../utils/Error"
 
 export class UpdateMarker {
     constructor(testPointRepo, rectifierRepo, basicPresenter) {
@@ -15,7 +15,7 @@ export class UpdateMarker {
             return this.testPointRepo.updateMarker(marker)
         else if (itemType === ItemTypes.RECTIFIER)
             return this.rectifierRepo.updateMarker(marker)
-        else throw new Error('CorpadError', `Item type ${itemType} is not supported`)
+        else throw new Error(errors.GENERAL, `Item type ${itemType} is not supported`)
     }
 
     async execute(markerData) {

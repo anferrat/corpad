@@ -8,7 +8,6 @@ import { useNavigation } from "@react-navigation/native";
 
 const useDefaultNames = () => {
     const [defaultNames, setDefaultNames] = useState({})
-    console.log(defaultNames)
     const [loading, setLoading] = useState(true)
     const [selectedType, setSelectedType] = useState('TEST_POINT')
     const [pipelineNameAsDefault, setPipelineNameAsDefault] = useState(true)
@@ -74,8 +73,7 @@ const useDefaultNames = () => {
     }, [])
 
     const updateNames = useCallback(() => {
-        console.log(defaultNames)
-        updateDefaultNameList({ defaultNames, pipelineNameAsDefault }, (er, message) => { errorHandler(er); console.log(message) }, () => navigation.goBack())
+        updateDefaultNameList({ defaultNames, pipelineNameAsDefault }, (er) => errorHandler(er), () => navigation.goBack())
     }, [defaultNames, pipelineNameAsDefault])
 
 

@@ -1,7 +1,14 @@
 import { SubitemTypes } from "../../../entities/survey/subitems/Subitem"
+import { SurveyFileDataFields } from "../../../entities/survey/survey/PipelineSurveyFile"
 
-export class SurveyFileConverterInput {
-    constructor() { }
+const convertBool = (bool) => bool === null || bool === undefined ? null : Number(bool)
+
+export class SurveyFileConverterOutput {
+    constructor() {
+        this.SURVEY_FILE_VERSION = 1
+        this.SURVEY_FILE_TYPE = 'plsv'
+    }
+
 
     _presentTestPoint(testPoint) {
         const { id, uid, name, location, latitude, longitude, comment, status, testPointType, timeCreated, timeModified } = testPoint
@@ -15,17 +22,18 @@ export class SurveyFileConverterInput {
 
     _presentPipeline(pipeline) {
         const { id, uid, name, timeCreated, timeModified, comment, nps, material, coating, licenseNumber, product } = pipeline
-        return [id, uid, name, nps, material, coating, licenseNumber, timeCreated, timeModified, product, comment]
+        return [id, uid, name, nps, material, convertBool(coating), licenseNumber, timeCreated, timeModified, product, comment]
     }
 
     _presentPotentialType(potentialType) {
         const { id, uid, type, name } = potentialType
-        return [id, uid, name, null, type]
+        //#4 element is always 0
+        return [id, uid, name, 0, type]
     }
 
     _presentReferenceCell(referenceCell) {
         const { id, uid, rcType, name, isMainReference } = referenceCell
-        return [id, uid, rcType, name, isMainReference]
+        return [id, uid, rcType, name, convertBool(isMainReference)]
     }
 
     _presentPotential(potential) {
@@ -52,7 +60,7 @@ export class SurveyFileConverterInput {
 
     _presentCard(subitem) {
         const { id, parentId, uid, type, name, anodeMaterial, wireColor, wireGauge, fromAtoB, current, pipelineId, pipelineCardId, couponType, density, area, description, isolationType, shorted, rcType, nps, ratioCurrent, ratioVoltage, factorSelected, factor, voltageDrop } = subitem
-        return [id, parentId, uid, type, name, anodeMaterial ?? null, wireColor ?? null, wireGauge ?? null, fromAtoB ?? null, current ?? null, null, pipelineId ?? null, pipelineCardId ?? null, couponType ?? null, density ?? null, area ?? null, description ?? null, isolationType ?? null, shorted ?? null, rcType ?? null, nps ?? null, ratioCurrent ?? null, ratioVoltage ?? null, factorSelected ?? null, factor ?? null, voltageDrop ?? null]
+        return [id, parentId, uid, type, name, anodeMaterial ?? null, wireColor ?? null, wireGauge ?? null, convertBool(fromAtoB), current ?? null, null, pipelineId ?? null, pipelineCardId ?? null, couponType ?? null, density ?? null, area ?? null, description ?? null, isolationType ?? null, convertBool(shorted), rcType ?? null, nps ?? null, ratioCurrent ?? null, ratioVoltage ?? null, convertBool(factorSelected), factor ?? null, voltageDrop ?? null]
     }
 
     _presentSurvey(survey) {
@@ -60,7 +68,30 @@ export class SurveyFileConverterInput {
         return [[uid, name, technician]]
     }
 
-    execute(pipelineSurveyFile) {
+    _presentList(list, presentFunction) {
+        return list.map(element => presentFunction(element))
+    }
 
+    execute(surveyFile) {
+        const { testPoints, rectifiers, pipelines, subitems, potentialTypes, potentials, survey, referenceCells } = surveyFile
+
+        const cards = subitems.filter(({ type }) => type !== SubitemTypes.CIRCUIT)
+        const circuits = subitems.filter(({ type }) => type === SubitemTypes.CIRCUIT)
+        return {
+            version: this.SURVEY_FILE_VERSION,
+            type: this.SURVEY_FILE_TYPE,
+            data: {
+                [SurveyFileDataFields.SURVEY]: this._presentSurvey(survey),
+                [SurveyFileDataFields.TEST_POINTS]: this._presentList(testPoints, this._presentTestPoint),
+                [SurveyFileDataFields.RECTIFIERS]: this._presentList(rectifiers, this._presentRectifier),
+                [SurveyFileDataFields.PIPELINES]: this._presentList(pipelines, this._presentPipeline),
+                [SurveyFileDataFields.POTENTIAL_TYPES]: this._presentList(potentialTypes, this._presentPotentialType),
+                [SurveyFileDataFields.REFERENCE_CELLS]: this._presentList(referenceCells, this._presentReferenceCell),
+                [SurveyFileDataFields.CARDS]: this._presentList(cards, this._presentCard),
+                [SurveyFileDataFields.POTENTIALS]: this._presentList(potentials, this._presentPotential),
+                [SurveyFileDataFields.CIRCUITS]: this._presentList(circuits, this._presentCircuit),
+                [SurveyFileDataFields.SIDES]: this._presentSides(cards)
+            }
+        }
     }
 }

@@ -1,0 +1,73 @@
+import React from "react"
+import { Icon } from "@ui-kitten/components"
+import { primary, basic300 } from "../../../../styles/colors"
+
+
+const styles = {
+    icon: {
+        width: 150,
+        height: 150
+    }
+}
+
+
+export const mainPages = [
+    {
+        backgroundColor: basic300,
+        image: <Icon name='corpad-logo' fill={primary} pack='cp' style={styles.icon} />,
+        title: 'Welcome to Corpad',
+        subtitle: 'Application for corrosion professionals that allows you to create and manage pipeline surveys with your mobile device'
+    },
+    {
+        backgroundColor: basic300,
+        image: <Icon name='onboarding-create' pack='cp' fill={primary} style={styles.icon} />,
+        title: 'Create',
+        subtitle: 'Create new surveys "on the go" or import your data from spreadsheets'
+    },
+    {
+        backgroundColor: basic300,
+        image: <Icon name='onboarding-navigate' pack='cp' fill={primary} style={styles.icon} />,
+        title: 'Navigate',
+        subtitle: `Display test points on the map and import its location to other apps for navigation`
+    },
+    {
+        backgroundColor: basic300,
+        image: <Icon name='onboarding-calculator' fill={primary} pack='cp' style={styles.icon} />,
+        title: 'Calculate',
+        subtitle: 'Calculate resistivity, current and other properties with your phone. Save results or/and export them to spreadsheets.'
+    },
+    {
+        backgroundColor: basic300,
+        image: <Icon name='onboarding-export' pack='cp' fill={primary} style={styles.icon} />,
+        title: 'Export',
+        subtitle: 'Export your data to spreadsheets or store them as JSON files on your device and cloud storage'
+    }
+]
+
+// Shows after onboarding version update changes
+export const lastVersionPages = [
+    {
+        backgroundColor: basic300,
+        image: <Icon name='corpad-logo' fill={primary} pack='cp' style={styles.icon} />,
+        title: 'Updated to version 1.2',
+        subtitle: 'Take a look at the fantastic features that are included in this update.'
+    },
+    {
+        backgroundColor: basic300,
+        image: <Icon name='file-text' fill={primary} style={styles.icon} />,
+        title: 'Import from spreadsheet',
+        subtitle: 'Using the new feature to import a complete property list from a spreadsheet, including support for various settings and units, can streamline your survey management.'
+    },
+    {
+        backgroundColor: basic300,
+        image: <Icon name='compass' fill={primary} style={styles.icon} />,
+        title: 'Compass widget',
+        subtitle: 'Incorporating a navigation component that displays the direction towards the selected item can expedite the process of locating test points and rectifiers.'
+    },
+    {
+        backgroundColor: basic300,
+        image: <Icon name='smiling-face' fill={primary} style={styles.icon} />,
+        title: 'Lots of small things',
+        subtitle: 'Check https://www.corpad.ca/updates for more info. If you encounter a bug, having issues or have great ideas on how to improve this app, please let me know at andrei@corpad.ca.'
+    },
+]

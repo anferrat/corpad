@@ -85,6 +85,15 @@ export const powerSourceList = ['AC power line', 'TEG', 'Wind turbine', 'Solar p
 export const tapSettings = ['Coarse - Fine', 'VA %', 'Automatic']
 export const tapOptions = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', '0', '1', '2', '3', '4', '5', '6', '7', '8', '9']
 export const statuses = ['Pass', 'Attention', 'Issue', 'Unknown']
+
+export const potentialLabels = {
+    PERM_ON: 'On',
+    PERM_OFF: 'Off',
+    PERM_NATIVE: 'Native',
+    PERM_CONNECTED: 'Connected',
+    PERM_DISCONNECTED: 'Disconnected'
+}
+
 export const potentialFields = [{
     name: 'On',
     custom: 0,

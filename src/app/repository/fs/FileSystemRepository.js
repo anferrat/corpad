@@ -1,5 +1,5 @@
 import RNFS from 'react-native-fs'
-import { Error } from '../../utils/Error'
+import { Error, errors } from '../../utils/Error'
 import { FileSystemLocations } from '../../entities/survey/other/properties'
 
 export class FileSystemRepository {
@@ -13,26 +13,25 @@ export class FileSystemRepository {
 
     async writeFile(content, name, location, overwrite = true) {
         try {
+            //add permissions for DOWNLOADS FOLDER
             const directoryPath = await this.getLocation(location)
             const filePath = directoryPath + '/' + name
             // check if ok to overwrite
             if ((await RNFS.exists(filePath)) && !overwrite)
                 if ((await RNFS.stat(filePath)).isFile())
-                    throw new Error('FileError', `File ${name} already exists in this directory.`, { status: 403 })
+                    throw new Error(errors.FILESYSTEM, `File ${name} already exists in this directory.`, 'File already exist', 403)
 
             //check if there is enough free space - content size + 10MB extra
             const freeSpace = (await RNFS.getFSInfo()).freeSpace
             if (!isNaN(freeSpace) && freeSpace !== null && freeSpace < ((encodeURI(content).split(/%..|./).length - 1) + 10485760))
-                throw new Error('FileError', `Not enough space on disk.`, { status: 402 })
+                throw new Error(errors.FILESYSTEM, `Not enough space on disk.`, 'Not enough space', 402)
 
             //write file
-
             await RNFS.writeFile(filePath, content)
             return filePath
         }
         catch (er) {
-            console.log(er)
-            throw new Error('FileError', 'Error while writing file', { status: 401, error: er })
+            throw new Error(errors.FILESYSTEM, 'Error while writing file', er, 401)
         }
     }
 
@@ -41,7 +40,7 @@ export class FileSystemRepository {
             //check if there is enough free space
             const freeSpace = (await RNFS.getFSInfo()).freeSpace
             if (!isNaN(freeSpace) && freeSpace !== null && freeSpace < ((await RNFS.stat(filePath)).size + 10485760)) //content size + 10MB
-                throw new Error('FileError', `Not enough space on disk.`, { status: 402 })
+                throw new Error(errors.FILESYSTEM, `Not enough space on disk.`, 'Not enough space', 402)
 
             //write file
             const directory = await this.getLocation(destinationLocation)
@@ -49,7 +48,7 @@ export class FileSystemRepository {
             await RNFS.copyFile(filePath, `${directory}/${fileNameCorrected}`)
         }
         catch (er) {
-            throw new Error('FileError', 'Error while copying file', { status: 401, error: er })
+            throw new Error(errors.FILESYSTEM, 'Error while copying file', er, 401)
         }
     }
 
@@ -65,11 +64,11 @@ export class FileSystemRepository {
                     if (!(await RNFS.exists(`${directory}/(${i})${fileName}`)))
                         return `(${i})${fileName}`
                 }
-                throw new Error('FileError', `Unable get unique name for ${fileName}. Maximum of ${MAX_FILE_INDEX} were used`, { status: 409 })
+                throw new Error(errors.FILESYSTEM, `Unable get unique name for ${fileName}. Maximum of ${MAX_FILE_INDEX} were used`, 'Too many repetetive names', 409)
             }
         }
         catch (er) {
-            throw new Error('FileError', `Error while getting filename of ${fileName} in directory ${directory}`, { status: 409, error: er })
+            throw new Error(errors.FILESYSTEM, `Error while getting filename of ${fileName} in directory ${directory}`, er, 409)
         }
     }
 
@@ -84,7 +83,7 @@ export class FileSystemRepository {
             return dir
         }
         catch (er) {
-            throw new Error('FileError', `Unable to create/access directory ${dir}`, { status: 400, error: er })
+            throw new Error(errors.FILESYSTEM, `Unable to create/access directory ${dir}`, er, 400)
         }
     }
 
@@ -99,7 +98,7 @@ export class FileSystemRepository {
             case FileSystemLocations.TEMP: //not used
                 return await this.createDirectory(this.tempFolder)
             default:
-                throw new Error('FileError', `Unknown destination ${location}.`, { status: 400 })
+                throw new Error(errors.FILESYSTEM, `Unknown destination ${location}.`, 'Location doesnt exist', 400)
         }
     }
 
@@ -112,7 +111,7 @@ export class FileSystemRepository {
                     await RNFS.unlink(path)
         }
         catch (er) {
-            throw new Error('FileError', `Unable to delete ${fileName} in direcory ${directory}`, { status: 410, error: er })
+            throw new Error(errors.FILESYSTEM, `Unable to delete ${fileName} in direcory ${directory}`, er, 410)
         }
     }
 
@@ -121,7 +120,7 @@ export class FileSystemRepository {
             return await RNFS.readFile(path)
         }
         catch (er) {
-            throw new Error('FileError', `Unable to read at ${path}`, { status: 418, error: er })
+            throw new Error(errors.FILESYSTEM, `Unable to read at ${path}`, er, 418)
         }
     }
 
@@ -130,7 +129,7 @@ export class FileSystemRepository {
             return await RNFS.hash(path, algorithm)
         }
         catch (er) {
-            throw new Error('FileError', `Unable to get hash of ${path}`, { status: 419, error: er })
+            return 'I am lazy'
         }
     }
 
@@ -139,7 +138,7 @@ export class FileSystemRepository {
             return await RNFS.stat(path)
         }
         catch (er) {
-            throw new Error('FileError', `Unable to get stats of ${path}`, { status: 419, error: er })
+            throw new Error(errors.FILESYSTEM, `Unable to get stats of ${path}`, er, 419)
         }
     }
 
@@ -149,7 +148,7 @@ export class FileSystemRepository {
             return await RNFS.readDir(dir)
         }
         catch (er) {
-            throw new Error('FileError', `Unable to read directory at ${dir}`, { status: 419, error: er })
+            throw new Error(errors.FILESYSTEM, `Unable to read directory at ${dir}`, er, 419)
         }
     }
 
@@ -159,7 +158,7 @@ export class FileSystemRepository {
             await RNFS.unlink(path)
         }
         catch (er) {
-            throw new Error('FileError', `Unable to delete file/directory at ${path}`, { status: 410, error: er })
+            throw new Error(errors.FILESYSTEM, `Unable to delete file/directory at ${path}`, er, 410)
         }
     }
 
@@ -168,7 +167,7 @@ export class FileSystemRepository {
             await RNFS.scanFile(path)
         }
         catch (er) {
-            throw new Error('FileError', `Scan of ${path} failed`, { status: 422, error: er })
+            throw new Error(errors.FILESYSTEM, `Scan of ${path} failed`, er, 422)
         }
     }
 }

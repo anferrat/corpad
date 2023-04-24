@@ -1,11 +1,11 @@
 import { SQLiteRepository } from "../../../utils/SQLite"
 import { SubitemTypes } from "../../../entities/survey/subitems/Subitem"
-import { Error } from "../../../utils/Error"
+import { Error, errors } from "../../../utils/Error"
 import { StatReferenceCell } from "../../../entities/survey/subitems/StatReferenceCell"
 
 
 export class StatRefrenceCellRepository extends SQLiteRepository {
-    constructor () {
+    constructor() {
         super()
     }
 
@@ -17,19 +17,19 @@ export class StatRefrenceCellRepository extends SQLiteRepository {
                     new StatReferenceCell(id, testPointId, uid, name, rcType, wireGauge, wireColor))
         }
         catch (err) {
-            throw new Error(`DatabaseError', 'Unable to get all reference cells`, err)
+            throw new Error(errors.DATABASE, 'Unable to get all reference cells', err)
         }
     }
 
     async create(referenceCell) {
-        const { uid, parentId, type, name, rcType, wireGauge, wireColor } = referenceCell
         try {
-            const result = await this.runSingleQueryTransaction('INSERT INTO cards (uid, type, testPointId, name, rcType, wireGauge, wireColor) VALUES (?,?,?,?,?,?,?)',
-                [uid, type, parentId, name, rcType, wireGauge, wireColor])
+            const { id, uid, parentId, type, name, rcType, wireGauge, wireColor } = referenceCell
+            const result = await this.runSingleQueryTransaction('INSERT INTO cards (id, uid, type, testPointId, name, rcType, wireGauge, wireColor) VALUES (?,?,?,?,?,?,?,?)',
+                [id, uid, type, parentId, name, rcType, wireGauge, wireColor])
             return new StatReferenceCell(result.insertId, parentId, uid, name, rcType, wireGauge, wireColor)
         }
         catch (err) {
-            throw new Error('DatabaseError', `Unable to create referenceCell`, err)
+            throw new Error(errors.DATABASE, `Unable to create referenceCell`, err)
         }
     }
 
@@ -40,7 +40,7 @@ export class StatRefrenceCellRepository extends SQLiteRepository {
             return new StatReferenceCell(id, testPointId, uid, name, rcType, wireGauge, wireColor)
         }
         catch (err) {
-            throw new Error(`DatabaseError`, `Unable to get reference cell with id ${id}`, err)
+            throw new Error(errors.DATABASE, `Unable to get reference cell with id ${id}`, err)
         }
     }
 
@@ -56,7 +56,7 @@ export class StatRefrenceCellRepository extends SQLiteRepository {
             else return referenceCell
         }
         catch (err) {
-            throw new Error('DatabaseError', `Unable to update referenceCell with id ${id}`, err)
+            throw new Error(errors.DATABASE, `Unable to update referenceCell with id ${id}`, err)
         }
     }
 

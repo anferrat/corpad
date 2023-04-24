@@ -1,5 +1,5 @@
 import { ItemTypes } from "../entities/survey/items/SurveyItem";
-import { Error } from "../utils/Error";
+import { Error, errors } from "../utils/Error";
 
 export class ItemPreseneter {
     constructor () {
@@ -37,7 +37,7 @@ export class ItemPreseneter {
                     comment: true,
                     licenseNumber: true
                 }
-            default: throw new Error('CorpadError', `No such item type as ${itemType}`)
+            default: throw new Error(errors.GENERAL, `No such item type as ${itemType}`)
         }
     }
 

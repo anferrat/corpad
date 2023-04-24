@@ -122,7 +122,10 @@ const isSurveyObject = (surveyObject) => {
 export const validateTable = (table, content) => {
     switch (table) {
         case 'cards':
-            return content.every(row => isCard(row))
+            return content.every(row => {
+                const check = isCard(row)
+                return check
+            })
         case 'potentials':
             return content.every(row => isPotential(row))
         case 'testPoints':

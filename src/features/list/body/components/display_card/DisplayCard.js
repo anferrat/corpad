@@ -5,18 +5,12 @@ import DisplayCardTitle from './Title'
 import StatusIndicator from './StatusIndicator'
 import ReadingBar from './ReadingBar'
 import ReadingDisplay from './ReadingDisplay'
-import { nextReading } from '../../../helpers/functions'
+import { nextReading, firstReading } from '../../../helpers/functions'
 import { androidRipple } from '../../../../../styles/styles'
 
 
 const DisplayCard = ({ id, dataList, subtitle, timeModified, status, onPress, name, firstReadingIndex, displayedReading, icon, readingList, itemType }) => {
-    const [readingIndex, setReadingIndex] = useState(firstReadingIndex)
-    useEffect(() => {
-        // updates reading index in case of updates in the card. first reading index re-calculated on card update
-        if (readingIndex !== firstReadingIndex) {
-            setReadingIndex(firstReadingIndex)
-        }
-    }, [firstReadingIndex])
+    const [readingIndex, setReadingIndex] = useState(() => firstReading(readingList))
 
     const toggleReading = () => setReadingIndex(r => nextReading(r, readingList))
 

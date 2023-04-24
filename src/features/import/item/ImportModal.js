@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { control } from '../../../styles/colors'
 import { ImportData } from './ImportDataProvider'
 import ImportModalContent from './components/ImportModalContent'
-import { importData } from '../../../app/controllers/manager/ImportController'
+import { importData } from '../../../app/controllers/survey/ImportController'
 import { setRefresh } from '../../../store/actions/list'
 import { refreshMarkers } from '../../../store/actions/map'
 

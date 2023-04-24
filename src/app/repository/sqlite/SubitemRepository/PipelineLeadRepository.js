@@ -1,10 +1,10 @@
 import { SQLiteRepository } from "../../../utils/SQLite"
 import { SubitemTypes } from "../../../entities/survey/subitems/Subitem"
 import { PipelineLead } from "../../../entities/survey/subitems/PipelineLead"
-import { Error } from "../../../utils/Error"
+import { Error, errors } from "../../../utils/Error"
 
 export class PipelineLeadRepository extends SQLiteRepository {
-    constructor () {
+    constructor() {
         super()
     }
 
@@ -16,19 +16,19 @@ export class PipelineLeadRepository extends SQLiteRepository {
                 new PipelineLead(id, testPointId, uid, name, pipelineId, wireGauge, wireColor))
         }
         catch (err) {
-            throw new Error(`DatabaseError', 'Unable to get all pipeline leads`, err)
+            throw new Error(errors.DATABASE, 'Unable to get all pipeline leads', err)
         }
     }
 
     async create(pipelineLead) {
-        const { uid, parentId, name, pipelineId, wireGauge, wireColor, type } = pipelineLead
         try {
-            const result = await this.runSingleQueryTransaction('INSERT INTO cards (uid, testPointId, type, name, pipelineId, wireGauge, wireColor) VALUES (?,?,?,?,?,?,?)',
-                [uid, parentId, type, name, pipelineId, wireGauge, wireColor])
+            const { id, uid, parentId, name, pipelineId, wireGauge, wireColor, type } = pipelineLead
+            const result = await this.runSingleQueryTransaction('INSERT INTO cards (id, uid, testPointId, type, name, pipelineId, wireGauge, wireColor) VALUES (?,?,?,?,?,?,?,?)',
+                [id, uid, parentId, type, name, pipelineId, wireGauge, wireColor])
             return new PipelineLead(result.insertId, parentId, uid, name, pipelineId, wireGauge, wireColor)
         }
         catch (err) {
-            throw new Error('DatabaseError', `Unable to create pipeline lead`, err)
+            throw new Error(errors.DATABASE, `Unable to create pipeline lead`, err)
         }
     }
 
@@ -39,7 +39,7 @@ export class PipelineLeadRepository extends SQLiteRepository {
             return new PipelineLead(id, testPointId, uid, name, pipelineId, wireGauge, wireColor)
         }
         catch (err) {
-            throw new Error(`DatabaseError`, `Unable to get pipeline lead with id ${id}`, err)
+            throw new Error(errors.DATABASE, `Unable to get pipeline lead with id ${id}`, err)
         }
     }
 
@@ -56,7 +56,7 @@ export class PipelineLeadRepository extends SQLiteRepository {
             else return pipelineLead
         }
         catch (err) {
-            throw new Error('DatabaseError', `Unable to update pipeline lead with id ${id}`, err)
+            throw new Error(errors.DATABASE, `Unable to update pipeline lead with id ${id}`, err)
         }
     }
 }

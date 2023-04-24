@@ -1,4 +1,5 @@
 import { ItemTypes } from "../../../../entities/survey/items/SurveyItem"
+import { errors } from "../../../../utils/Error"
 
 export class GetMarker {
     constructor(testPointRepo, rectifierRepo, basicPresenter) {
@@ -13,7 +14,7 @@ export class GetMarker {
                 return (await this.testPointRepo.getById([id]))
             case ItemTypes.RECTIFIER:
                 return (await this.rectifierRepo.getById([id]))
-            default: throw new Error('CorpadError', `No marker exists with id ${id} and type ${itemType}`)
+            default: throw new Error(errors.GENERAL, `No marker exists with id ${id} and type ${itemType}`)
         }
     }
 

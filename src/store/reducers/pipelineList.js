@@ -35,7 +35,7 @@ const pipelineList = (state = initialState, action) => {
             if (isNew)
                 return {
                     ...state,
-                    itemList: [action.item].concat(state.itemList),
+                    itemList: [action.itemObject].concat(state.itemList),
                     idList: state.idList, //do not change Id list when new item is added. It'll mess up with things 
                 }
             else {

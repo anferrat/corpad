@@ -17,10 +17,11 @@ export class Controller {
             }
         }
         catch (er) {
+            const code = er?.code ?? errorCode
             if (onError)
-                onError(errorCode, er)
+                onError(code, er)
             return {
-                status: errorCode,
+                status: code,
                 errorMessage: er.message
             }
         }

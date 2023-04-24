@@ -1,5 +1,5 @@
 export class Subitem {
-    constructor (id, parentId, uid, type, parentType, name) {
+    constructor(id, parentId, uid, type, parentType, name) {
         this.id = id
         this.parentId = parentId
         this.parentType = parentType
@@ -14,6 +14,8 @@ export class Subitem {
     }
 
     calculate() { }
+
+    reset() { }
 }
 
 export const SubitemTypes = Object.freeze({

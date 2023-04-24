@@ -1,12 +1,12 @@
 import { SQLiteRepository } from "../../../utils/SQLite"
 import { SubitemTypes } from "../../../entities/survey/subitems/Subitem"
 import { Isolation } from "../../../entities/survey/subitems/Isolation"
-import { Error } from "../../../utils/Error"
+import { Error, errors } from "../../../utils/Error"
 import { SubitemResponseProcessor } from "../utils/SubitemResponseProcessor"
 
 
 export class IsolationRepository extends SQLiteRepository {
-    constructor () {
+    constructor() {
         super()
         this.responseProcessor = new SubitemResponseProcessor()
     }
@@ -19,22 +19,22 @@ export class IsolationRepository extends SQLiteRepository {
                     new Isolation(id, testPointId, uid, name, fromAtoB, isolationType, Boolean(shorted), current, sideA, sideB))
         }
         catch (err) {
-            throw new Error('DatabaseError', `Unable to get all isolation readings`, err)
+            throw new Error(errors.DATABASE, `Unable to get all isolation readings`, err)
         }
     }
 
     async create(isolation) {
-        const { uid, parentId, type, name, fromAtoB, current, isolationType, shorted, sideA, sideB } = isolation
         try {
+            const { id, uid, parentId, type, name, fromAtoB, current, isolationType, shorted, sideA, sideB } = isolation
             const sides = sideA.map(side => ({ sideA: side, sideB: null })).concat(sideB.map(side => ({ sideB: side, sideA: null })))
-            const result = await super.runSingleQueryTransaction(`INSERT INTO cards (uid, testPointId, type, name, fromAtoB, current, isolationType, shorted) VALUES (?,?,?,?,?,?,?,?)`,
-                [uid, parentId, type, name, fromAtoB, current, isolationType, shorted])
+            const result = await super.runSingleQueryTransaction(`INSERT INTO cards (id, uid, testPointId, type, name, fromAtoB, current, isolationType, shorted) VALUES (?,?,?,?,?,?,?,?,?)`,
+                [id, uid, parentId, type, name, fromAtoB, current, isolationType, shorted])
             if (sides.length > 0)
                 super.runSingleQueryTransaction(`INSERT INTO sides (sideAId, sideBId, parentCardId) VALUES ${sides.map(side => `(${side.sideA}, ${side.sideB}, ${result.insertId})`).join()}`)
             return new Isolation(result.insertId, parentId, uid, name, fromAtoB, isolationType, Boolean(shorted), current, sideA, sideB)
         }
         catch (err) {
-            throw new Error('DatabaseError', `Unable to create isolation reading`, err)
+            throw new Error(errors.DATABASE, `Unable to create isolation reading`, err)
         }
     }
 
@@ -51,7 +51,7 @@ export class IsolationRepository extends SQLiteRepository {
             return new Isolation(id, testPointId, uid, name, fromAtoB, isolationType, Boolean(shorted), current, sideA, sideB)
         }
         catch (err) {
-            throw new Error(`DatabaseError`, `Unable to get isolation with id ${id}`, err)
+            throw new Error(errors.DATABASE, `Unable to get isolation with id ${id}`, err)
         }
     }
 
@@ -70,7 +70,7 @@ export class IsolationRepository extends SQLiteRepository {
             else return isolation
         }
         catch (err) {
-            throw new Error('DatabaseError', `Unable to update isolation with id ${id}`, err)
+            throw new Error(errors.DATABASE, `Unable to update isolation with id ${id}`, err)
         }
     }
 }

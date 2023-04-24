@@ -4,7 +4,7 @@ import { CoarseFineOptions, PowerSources, TapOptions } from '../entities/survey/
 import { ItemStatuses, ItemTypes, TestPointTypes } from '../entities/survey/items/SurveyItem'
 import { AnodeMaterials, CouponTypes, DisplayedReadingOptions, IsolationTypes, ItemPropertyUpdateTypes, PermanentPotentialTypes, PipeDiameters, PotentialUnits, ReferenceCellTypes, SortingOptions, SubitemPropertyUpdateTypes, WireColors, WireGauges } from '../entities/survey/other/properties'
 import { SubitemTypes } from '../entities/survey/subitems/Subitem'
-import { Error } from "./Error"
+import { Error, errors } from "./Error"
 
 export class Validation {
     name = string('nameString').matches(/^[-a-zA-Z0-9_.\s() ]*$/, { message: 'nameFormat' }).max(40, 'stringLengthMax40').min(1, 'stringLengthMin').trim()
@@ -15,7 +15,7 @@ export class Validation {
     longitude = number('numberValue').min(-180, 'numberValue').max(180, 'numberValue').nullable()
     latitude = number().min(-90, 'numberValue').max(90, 'numberValue').nullable()
     number = number().nullable().typeError('numberFormat')
-    positiveNumber = number().positive()
+    positiveNumber = number().positive().nullable()
     timestamp = number().positive().integer()
     location = string().max(80, 'stringLengthMax80').nullable()
     smallText = string().max(80, 'stringLengthMax80').nullable()
@@ -38,7 +38,7 @@ export class Validation {
     testPointTypeFilter = array().of(this.testPointType)
     subitemType = mixed().oneOf(Object.values(SubitemTypes))
     readingTypeFilter = array().of(this.subitemType)
-    permTypes = mixed().oneOf(Object.values(PermanentPotentialTypes)).nullable()
+    permTypes = mixed().oneOf([...Object.values(PermanentPotentialTypes), null]).nullable()
     anodeMaterial = mixed().oneOf([...Object.values(AnodeMaterials), null], 'typeMismatch').nullable()
     wireColor = mixed().oneOf([...Object.values(WireColors), null]).nullable()
     wireGauge = mixed().oneOf([...Object.values(WireGauges), null]).nullable()
@@ -53,7 +53,7 @@ export class Validation {
             return schema.validateSync(value)
         }
         catch (err) {
-            throw new Error('ValidationError', `Invalid data: ${err.message}`, err.message)
+            throw new Error(errors.VALIDATION, `Invalid data: ${err.message}`, err)
         }
     }
 
@@ -67,7 +67,7 @@ export class Validation {
 
     property(propertyName, value) {
         if (!this[propertyName])
-            throw new Error('InvalidParams', `Property ${propertyName} is not supported.`, 'You trying to access property value that was not defined in the app')
+            throw new Error(errors.VALIDATION, `Property ${propertyName} is not supported.`, 'You trying to access property value that was not defined in the app')
         return this.validate(value, this[propertyName].required())
     }
 

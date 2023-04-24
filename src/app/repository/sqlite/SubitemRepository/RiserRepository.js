@@ -1,11 +1,11 @@
 import { SQLiteRepository } from "../../../utils/SQLite"
 import { SubitemTypes } from "../../../entities/survey/subitems/Subitem"
-import { Error } from "../../../utils/Error"
+import { Error, errors } from "../../../utils/Error"
 import { Riser } from "../../../entities/survey/subitems/Riser"
 
 
 export class RiserRepository extends SQLiteRepository {
-    constructor () {
+    constructor() {
         super()
     }
 
@@ -16,19 +16,19 @@ export class RiserRepository extends SQLiteRepository {
                 new Riser(id, testPointId, uid, name, pipelineId, nps))
         }
         catch (err) {
-            throw new Error(`DatabaseError', 'Unable to get all risers`, err)
+            throw new Error(errors.DATABASE, `Unable to get all risers`, err)
         }
     }
 
     async create(riser) {
-        const { uid, parentId, type, name, pipelineId, nps, } = riser
         try {
-            const result = await this.runSingleQueryTransaction('INSERT INTO cards (uid, testPointId, type, name, pipelineId, nps) VALUES (?,?,?,?,?,?)',
-                [uid, parentId, type, name, pipelineId, nps])
+            const { id, uid, parentId, type, name, pipelineId, nps, } = riser
+            const result = await this.runSingleQueryTransaction('INSERT INTO cards (id, uid, testPointId, type, name, pipelineId, nps) VALUES (?,?,?,?,?,?,?)',
+                [id, uid, parentId, type, name, pipelineId, nps])
             return new Riser(result.insertId, parentId, uid, name, pipelineId, nps)
         }
         catch (err) {
-            throw new Error('DatabaseError', `Unable to create riser`, err)
+            throw new Error(errors.DATABASE, `Unable to create riser`, err)
         }
     }
 
@@ -39,7 +39,7 @@ export class RiserRepository extends SQLiteRepository {
             return new Riser(id, testPointId, uid, name, pipelineId, nps)
         }
         catch (err) {
-            throw new Error(`DatabaseError`, `Unable to get riser with id ${id}`, err)
+            throw new Error(errors.DATABASE, `Unable to get riser with id ${id}`, err)
         }
     }
 
@@ -55,7 +55,7 @@ export class RiserRepository extends SQLiteRepository {
             else return riser
         }
         catch (err) {
-            throw new Error('DatabaseError', `Unable to update riser with id ${id}`, err)
+            throw new Error(errors.DATABASE, `Unable to update riser with id ${id}`, err)
         }
     }
 

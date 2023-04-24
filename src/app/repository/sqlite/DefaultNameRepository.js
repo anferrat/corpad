@@ -1,5 +1,5 @@
 import { SQLiteRepository } from "../../utils/SQLite"
-import { Error } from "../../utils/Error"
+import { Error, errors } from "../../utils/Error"
 
 export class DefaultNameRepository extends SQLiteRepository {
     constructor() {
@@ -15,8 +15,7 @@ export class DefaultNameRepository extends SQLiteRepository {
             ])
         }
         catch (err) {
-            console.log(err)
-            throw new Error('DatabaseError', 'Unable to update default name values')
+            throw new Error(errors.DATABASE, 'Unable to update default name values', err)
         }
     }
 
@@ -29,7 +28,7 @@ export class DefaultNameRepository extends SQLiteRepository {
             return result.rows.item(0).name
         }
         catch (err) {
-            throw new Error('DatabaseError', `Unable to get default name fro type ${type}`, err)
+            throw new Error(errors.DATABASE, `Unable to get default name fro type ${type}`, err)
         }
     }
 
@@ -40,7 +39,7 @@ export class DefaultNameRepository extends SQLiteRepository {
             return this.generateArray(result.rows.length, result.rows.item).map(({ type, name }) => ({ type, name }))
         }
         catch (err) {
-            throw new Error('DatabaseError', `Unable to get default name fro type ${type}`, err)
+            throw new Error(errors.DATABASE, `Unable to get default name fro type ${type}`, err)
         }
     }
 }

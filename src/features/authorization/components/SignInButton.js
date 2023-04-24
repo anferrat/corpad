@@ -1,13 +1,22 @@
 import React from 'react'
-import { StyleSheet } from 'react-native'
+import { ActivityIndicator, StyleSheet } from 'react-native'
 import { Button } from '@ui-kitten/components'
 import { google } from '../../../components/Icons'
+import { primary } from '../../../styles/colors'
 
 
-const SignInButton = (props) => {
-    return <Button accessoryLeft={google} onPress={props.onPress} style={styles.button}>
-        Sign in with Google Drive
-    </Button>
+const SignInButton = ({ onPress, signing }) => {
+    if (signing)
+        return <ActivityIndicator
+            size={'large'}
+            color={primary} />
+    return (
+        <Button
+            accessoryLeft={google}
+            onPress={onPress}
+            style={styles.button}>
+            Sign in with Google Drive
+        </Button>)
 }
 
 export default SignInButton

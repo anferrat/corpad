@@ -7,7 +7,7 @@ export class SurveyFileListPresenter {
             tpCount: surveyObject.data.testPoints.length,
             rectifierCount: surveyObject.data.rectifiers.length,
             pipelineCount: surveyObject.data.pipelines.length,
-            good: surveyObject.data.testPoints.filter(tp => (tp[8] ?? -1) === 0).length,
+            good: surveyObject.data.testPoints.filter(tp => (tp[8] ?? -1) === 0).length + surveyObject.data.rectifiers.filter(tp => (tp[7] ?? -1) === 0).length,
             timeModified: timeModified,
             uid: surveyObject.data.survey[0][0],
             fileName: fileName
@@ -30,6 +30,7 @@ export class SurveyFileListPresenter {
             filePath: filePath,
             hash: hash,
             isCloud: false,
+            cloudId: null
         }
     }
 
@@ -37,9 +38,11 @@ export class SurveyFileListPresenter {
         return {
             ...this._getDataFromSurveyObject(surveyObject, fileName, timeModified),
             isCloud: true,
-            cloudId: cloudId
+            cloudId: cloudId,
+            hash: null,
+            filePath: null,
         }
-    } 
+    }
 
     executeForSurveyList(surveyList) {
         return {

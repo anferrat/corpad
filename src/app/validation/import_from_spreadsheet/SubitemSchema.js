@@ -1,9 +1,10 @@
 import { object, string, array } from "yup";
 import { SubitemTypes } from "../../entities/survey/subitems/Subitem";
 import { Validation } from "../../utils/Validation";
+import { errors } from "../../utils/Error";
 
 export class SubitemSchema extends Validation {
-    constructor (potentialSchema) {
+    constructor(potentialSchema) {
         super()
         this.key = string()
         this.nameSchema = {
@@ -108,7 +109,7 @@ export class SubitemSchema extends Validation {
                     ...this.wirePropSchema,
                     potentials: this.potentialSchema.execute()
                 })
-            default: throw new Error('CorpadError', 'Unknown subitem type')
+            default: throw new Error(errors.GENERAL, 'Unknown subitem type')
         }
     }
 }

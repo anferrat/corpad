@@ -6,8 +6,8 @@ import { useNavigation } from '@react-navigation/native'
 import Sorting from '../features/list/header/sorting/Sorting'
 import Readings from '../features/list/header/readings/Readings'
 import Filter from '../features/list/header/filter/Filter'
-import CreateItemSheet from '../features/create_item/CreateItemSheet'
-import MenuSheet from '../features/survey_menu/Menu'
+import { CreateItemSheet } from '../features/create_item/'
+import { MenuSheet } from '../features/survey_menu'
 import MoreOptionsSheet from '../features/navigation/more_options/MoreOptionsSheet'
 import { errorHandler } from '../helpers/error_handler'
 
@@ -29,9 +29,9 @@ const BottomSheetContent = () => {
             closeSheet()
             return false
         })
-      /*  const subscribeBlur = AppState.addEventListener("blur", () => {
-            closeSheet()
-        })*/
+        /*  const subscribeBlur = AppState.addEventListener("blur", () => {
+              closeSheet()
+          })*/
         const subscribeBackground = AppState.addEventListener("change", (nextState) => {
             if (nextState === 'background')
                 closeSheet()
@@ -39,7 +39,7 @@ const BottomSheetContent = () => {
         return () => {
             subscribeBack.remove()
             subscribeBackground.remove()
-           // subscribeBlur.remove()
+            // subscribeBlur.remove()
         }
     }, [appState])
 

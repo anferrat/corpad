@@ -12,8 +12,6 @@ import { createItem } from '../../../app/controllers/survey/items/ItemController
 import { extMapHandler } from '../helpers/linking'
 import { roundCoord } from '../helpers/functions'
 
-
-
 const useMarkers = ({ navigateToEdit, navigateToView, ref }) => {
     const map = useSelector(state => state.map)
     const isFocused = useIsFocused()
@@ -39,7 +37,6 @@ const useMarkers = ({ navigateToEdit, navigateToView, ref }) => {
             const { status, response } = await getMarkerList(er => errorHandler(er))
             if (status === 200) {
                 dispatch(loadMarkers(response))
-
                 //onLoad animate to initial region. if active marker exist on load, it will animate to active marker instead
                 if (activeMarkerRef.current.itemType === null) {
                     const regionData = await getInitialMapRegion({ markers: response })
@@ -54,7 +51,7 @@ const useMarkers = ({ navigateToEdit, navigateToView, ref }) => {
             loadData()
 
         const onUpdateHandler = EventRegister.addEventListener('GLOBAL_ITEM_UPDATED', async ({ itemType, itemId }) => {
-            if (!loading) {
+            if (!loading && (itemType === 'TEST_POINT' || itemType === 'RECTIFIER')) {
                 const { status, response } = await getMarker({ itemType, itemId }, er => errorHandler(er))
                 if (status === 200) {
                     dispatch(updateMarker(response))
@@ -63,13 +60,12 @@ const useMarkers = ({ navigateToEdit, navigateToView, ref }) => {
         })
 
         const onDeleteHandler = EventRegister.addEventListener('GLOBAL_ITEM_DELETED', ({ itemId, itemType }) => {
-            if (!loading)
+            if (!loading && (itemType === 'TEST_POINT' || itemType === 'RECTIFIER'))
                 dispatch(deleteMarker(itemId, itemType))
         })
 
 
         const onDisplayHandler = EventRegister.addEventListener('selectOnMap', ({ itemId, itemType }) => {
-            //gotta move this listener to the top level (first useEffect) and use global state var for activeMarkerRef
             if (!loading) {
                 if (activeMarkerRef.current.itemId !== itemId && activeMarkerRef.current.itemType !== itemType)
                     dispatch(setActiveMarker(itemId, itemType))
@@ -92,10 +88,7 @@ const useMarkers = ({ navigateToEdit, navigateToView, ref }) => {
     }, [])
 
     useEffect(() => {
-        if (!loading &&
-            isFocused &&
-            activeMarkerRef.current.itemId !== null &&
-            activeMarkerRef.current.itemType !== null) {
+        if (!loading && isFocused && activeMarkerRef.current.itemId !== null && activeMarkerRef.current.itemType !== null) {
             dispatch(setActiveMarker(activeMarkerRef.current.itemId, activeMarkerRef.current.itemType))
             activeMarkerRef.current.itemType = null
             activeMarkerRef.current.itemId = null

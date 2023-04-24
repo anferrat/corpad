@@ -1,6 +1,6 @@
 import { ItemTypes } from "../../../../entities/survey/items/SurveyItem"
 import { Potential } from "../../../../entities/survey/subitems/Potential"
-import { Error } from "../../../../utils/Error"
+import { Error, errors } from "../../../../utils/Error"
 
 export class GetSubitemList {
     constructor(testPointRepo, rectifierRepo, referenceCellRepo, potentialTypeRepo, pipelineRepo, settingRepo, listPresenter, subitemPresenter, potentialPresenter, unitConverter) {
@@ -23,7 +23,7 @@ export class GetSubitemList {
             return this.rectifierRepo.getSubitemsById(id)
         else if (itemType = ItemTypes.PIPELINE)
             return []
-        else throw new Error('CorpadError', `Item type ${itemType} is not supported.`)
+        else throw new Error(errors.GENERAL, `Item type ${itemType} is not supported.`)
     }
 
     _getFullList(id, itemType) {
@@ -38,7 +38,7 @@ export class GetSubitemList {
             return [this.rectifierRepo.getSubitemsById(id), [], [], [], {}]
         else if (itemType = ItemTypes.PIPELINE)
             return [[], [], [], [], {}]
-        else throw new Error('CorpadError', `Item type ${itemType} is not supported.`)
+        else throw new Error(errors.GENERAL, `Item type ${itemType} is not supported.`)
     }
 
 

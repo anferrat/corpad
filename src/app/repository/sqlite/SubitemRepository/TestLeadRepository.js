@@ -1,11 +1,11 @@
 import { SQLiteRepository } from "../../../utils/SQLite"
 import { SubitemTypes } from "../../../entities/survey/subitems/Subitem"
-import { Error } from "../../../utils/Error"
+import { Error, errors } from "../../../utils/Error"
 import { TestLead } from "../../../entities/survey/subitems/TestLead"
 
 
 export class TestLeadRepository extends SQLiteRepository {
-    constructor () {
+    constructor() {
         super()
     }
 
@@ -17,19 +17,20 @@ export class TestLeadRepository extends SQLiteRepository {
                     new TestLead(id, testPointId, type, uid, name, wireGauge, wireColor,))
         }
         catch (err) {
-            throw new Error(`DatabaseError', 'Unable to get test lead with id ${id}`, err)
+            throw new Error(errors.DATABASE, 'Unable to get test lead with id ${id}', err)
         }
     }
 
     async create(testLead) {
-        const { uid, parentId, type, name, wireColor, wireGauge } = testLead
         try {
-            const result = await this.runSingleQueryTransaction('INSERT INTO cards (uid, testPointId, type, name, wireColor, wireGauge) VALUES (?,?,?,?,?,?)',
-                [uid, parentId, type, name, wireColor, wireGauge])
+            const { id, uid, parentId, type, name, wireColor, wireGauge } = testLead
+            const result = await this.runSingleQueryTransaction('INSERT INTO cards (id, uid, testPointId, type, name, wireColor, wireGauge) VALUES (?,?,?,?,?,?,?)',
+                [id, uid, parentId, type, name, wireColor, wireGauge])
+             
             return new TestLead(result.insertId, parentId, uid, name, wireGauge, wireColor)
         }
         catch (err) {
-            throw new Error('DatabaseError', `Unable to create test lead`, err)
+            throw new Error(errors.DATABASE, `Unable to create test lead`, err)
         }
     }
 
@@ -41,7 +42,7 @@ export class TestLeadRepository extends SQLiteRepository {
             return new TestLead(id, testPointId, uid, name, wireGauge, wireColor)
         }
         catch (err) {
-            throw new Error(`DatabaseError`, `Unable to get test lead with id ${id}`, err)
+            throw new Error(errors.DATABASE, `Unable to get test lead with id ${id}`, err)
         }
     }
 
@@ -57,7 +58,7 @@ export class TestLeadRepository extends SQLiteRepository {
             else return testLead
         }
         catch (err) {
-            throw new Error('DatabaseError', `Unable to update testLead with id ${id}`, err)
+            throw new Error(errors.DATABASE, `Unable to update testLead with id ${id}`, err)
         }
     }
 

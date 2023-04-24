@@ -6,8 +6,9 @@ import { ReferenceCells } from '../../features/settings/reference_cells/index'
 import { PotentialTypes } from '../../features/settings/potentials/index'
 import ExportSurvey from '../../features/settings/export/ExportSurvey'
 import { SurveyOverview } from '../../features/settings/info/index'
-import ExportedFilesList from '../../features/settings/exported_files/ExportedFilesList'
+import { ExportedFilesList } from '../../features/settings/exported_files/'
 import About from '../../features/settings/about/About'
+import { OnboardingOverlayPotentialtypes } from '../../features/overlays/onboarding'
 
 const Setting = (props) => {
     switch (props.setting) {
@@ -38,6 +39,8 @@ export default SettingDetails = ({ navigation, route }) => {
     const navigateToSpreadsheet = (uri, title) => navigation.navigate('Spreadsheet', { title: title, uri: uri })
     return (
         <SafeAreaView style={globalStyle.screen}>
+            <OnboardingOverlayPotentialtypes
+                visible={setting === 'potentials'} />
             <Setting
                 navigateToSpreadsheet={navigateToSpreadsheet}
                 navigateToLicenses={navigateToLicenses}

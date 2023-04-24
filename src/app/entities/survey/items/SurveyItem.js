@@ -1,5 +1,5 @@
 export class SurveyItem {
-    constructor (id, uid, name, status, timeCreated, timeModified, comment, itemType, testPointType) {
+    constructor(id, uid, name, status, timeCreated, timeModified, comment, itemType, testPointType) {
         this.id = id
         this.uid = uid
         this.name = name
@@ -10,6 +10,9 @@ export class SurveyItem {
         this.comment = comment
         this.markerType = itemType === ItemTypes.TEST_POINT ? IconTypes[itemType][testPointType] : IconTypes[itemType]
         this.subitems = []
+    }
+
+    reset() {
     }
 
     setSubitems(subitems) {

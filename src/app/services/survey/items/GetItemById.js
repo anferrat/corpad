@@ -1,5 +1,5 @@
 import { ItemTypes } from "../../../entities/survey/items/SurveyItem";
-import { Error } from "../../../utils/Error";
+import { Error, errors } from "../../../utils/Error";
 
 export class GetItem {
     constructor(testPointRepo, rectifierRepo, pipelineRepo, defaultNameRepo, basicPresenter, itemPresenter) {
@@ -20,7 +20,7 @@ export class GetItem {
             case ItemTypes.PIPELINE:
                 return (await this.pipelineRepo.getById([id]))[0]
             default:
-                throw new Error('CorpadError', `No such type ${itemType}. Unable to delete item`, err)
+                throw new Error(errors.GENERAL, `No such type ${itemType}. Unable to delete item`)
         }
     }
 

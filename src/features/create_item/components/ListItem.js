@@ -1,22 +1,26 @@
 import React from 'react'
 import { Text, Icon } from '@ui-kitten/components'
 import { StyleSheet, Pressable, View } from 'react-native'
-import { primary } from '../../../styles/colors'
+import { control, primary } from '../../../styles/colors'
 import { androidRipple } from '../../../styles/styles'
 
-const ListItem = (props) => {
+const ListItem = ({ onPress, title, icon, pack }) => {
     return (
         <Pressable
             android_ripple={androidRipple}
             style={styles.pressable}
-            onPress={props.onPress}>
-            <View style={styles.iconLayout}>
-                <Icon name={props.iconName}
-                    pack={props.pack}
+            onPress={onPress}>
+            <View
+                style={styles.iconView}>
+                <Icon name={icon}
+                    pack={pack}
                     style={styles.icon}
-                    fill={'#fff'} />
+                    fill={control} />
             </View>
-            <Text style={styles.text}>{props.title}</Text>
+            <Text
+                style={styles.text}>
+                {title}
+            </Text>
         </Pressable>
     )
 }
@@ -31,7 +35,7 @@ const styles = StyleSheet.create({
         paddingLeft: 15,
 
     },
-    iconLayout: {
+    iconView: {
         backgroundColor: primary,
         width: 40,
         height: 40,

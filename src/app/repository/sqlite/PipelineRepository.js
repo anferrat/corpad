@@ -1,6 +1,6 @@
 import { SQLiteRepository } from "../../utils/SQLite"
 import { Pipeline } from "../../entities/survey/items/Pipeline"
-import { Error } from "../../utils/Error"
+import { Error, errors } from "../../utils/Error"
 import { ItemResponseProcessor } from "./utils/ItemResponseProcessor"
 import { ItemTypes } from "../../entities/survey/items/SurveyItem"
 
@@ -19,7 +19,7 @@ export class PipelineRepository extends SQLiteRepository {
             return super.generateArray(result.rows.length, result.rows.item).map(row => row.id)
         }
         catch (err) {
-            throw new Error('DatabaseError', `Unable to get pipelines id list with sorting ${sorting}`, err)
+            throw new Error(errors.DATABASE, `Unable to get pipelines id list with sorting ${sorting}`, err)
         }
     }
 
@@ -30,7 +30,7 @@ export class PipelineRepository extends SQLiteRepository {
             return this.responseProcessor.generateDisplayCardList(result, idList, ItemTypes.PIPELINE)
         }
         catch (err) {
-            throw new Error('DatabaseError', 'Unable to get pipeline display list', err)
+            throw new Error(errors.DATABASE, 'Unable to get pipeline display list', err)
         }
     }
 
@@ -47,24 +47,21 @@ export class PipelineRepository extends SQLiteRepository {
                     new Pipeline(id, uid, name, timeCreated, timeModified, comment, nps, material, coating, licenseNumber, product, tpCount))
         }
         catch (err) {
-            throw new Error('DatabaseError', `Unable to get pipeline with id ${idList.join()}`, err)
+            throw new Error(errors.DATABASE, `Unable to get pipeline with id ${idList.join()}`, err)
         }
     }
 
     async create(pipeline) {
-        const { id, uid, name, timeCreated, timeModified, comment, nps, material, coating, licenseNumber, product, tpCount } = pipeline
-        if (uid && timeCreated) {
-            try {
-                const result = await super.runSingleQueryTransaction(
-                    `INSERT INTO ${this.tableName} (id, uid, timeCreated, name, timeModified, nps, material, coating, licenseNumber, product, comment) VALUES (?,?,?,?,?,?,?,?,?,?)`,
-                    [id, uid, timeCreated, name, timeModified, nps, material, Number(coating), licenseNumber, product, comment])
-                return new Pipeline(result.insertId, uid, name, timeCreated, timeModified, comment, nps, material, Boolean(coating), licenseNumber, product, tpCount)
-            }
-            catch (err) {
-                throw new Error('DatabaseError', `Unable to create pipeline with name ${name}.`, err)
-            }
+        try {
+            const { id, uid, name, timeCreated, timeModified, comment, nps, material, coating, licenseNumber, product, tpCount } = pipeline
+            const result = await super.runSingleQueryTransaction(
+                `INSERT INTO ${this.tableName} (id, uid, timeCreated, name, timeModified, nps, material, coating, licenseNumber, product, comment) VALUES (?,?,?,?,?,?,?,?,?,?,?)`,
+                [id, uid, timeCreated, name, timeModified, nps, material, Number(coating), licenseNumber, product, comment])
+            return new Pipeline(result.insertId, uid, name, timeCreated, timeModified, comment, nps, material, Boolean(coating), licenseNumber, product, tpCount)
         }
-        else throw new Error('CorpadError', `Unable to create pipeline without required minimum parameters. Name: ${name}, uid: ${uid}, currentTime: ${currentTime}`)
+        catch (err) {
+            throw new Error(errors.DATABASE, `Unable to create pipeline with name ${name}.`, err)
+        }
     }
 
     async createAll(pipelines) {
@@ -75,7 +72,7 @@ export class PipelineRepository extends SQLiteRepository {
             return
         }
         catch (err) {
-            throw new Error('DatabaseError', `Unable to create pipeline with name ${name}.`, err)
+            throw new Error(errors.DATABASE, `Unable to create pipeline with name ${name}.`, err)
         }
 
     }
@@ -87,7 +84,7 @@ export class PipelineRepository extends SQLiteRepository {
                 return // throw `Test point doesn't exist` // No Error if item not found seems logical 
         }
         catch (err) {
-            throw new Error('DatabaseError', `Unable to delete pipeline with id ${id}`, err)
+            throw new Error(errors.DATABASE, `Unable to delete pipeline with id ${id}`, err)
         }
     }
 
@@ -96,7 +93,7 @@ export class PipelineRepository extends SQLiteRepository {
             await super.runSingleQueryTransaction(`DELETE FROM pipelines WHERE id IN ${this.convertArrayToInStatement(idList)}`)
         }
         catch (err) {
-            throw new Error('DatabaseError', `Unable to delete pipeline list ${idList}`, err)
+            throw new Error(errors.DATABASE, `Unable to delete pipeline list ${idList}`, err)
         }
     }
 
@@ -112,7 +109,7 @@ export class PipelineRepository extends SQLiteRepository {
 
         }
         catch (err) {
-            throw new Error('DatabaseError', `Unable to update pipeline with id ${id}`, err)
+            throw new Error(errors.DATABASE, `Unable to update pipeline with id ${id}`, err)
         }
     }
 
@@ -124,7 +121,7 @@ export class PipelineRepository extends SQLiteRepository {
                     new Pipeline(id, uid, name, timeCreated, timeModified, comment, nps, material, coating, licenseNumber, product, tpCount))
         }
         catch (err) {
-            throw new Error('DatabaseError', `Unable to get pipeline list`, err)
+            throw new Error(errors.DATABASE, `Unable to get pipeline list`, err)
         }
     }
 }

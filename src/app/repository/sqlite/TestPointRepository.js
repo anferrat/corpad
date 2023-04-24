@@ -1,12 +1,11 @@
 import { SQLiteRepository } from "../../utils/SQLite"
 import { TestPoint } from "../../entities/survey/items/TestPoint"
 import { Marker } from "../../entities/survey/items/Marker"
-import { Error } from "../../utils/Error"
+import { Error, errors } from "../../utils/Error"
 import { ItemResponseProcessor } from "./utils/ItemResponseProcessor"
 import { ItemTypes } from "../../entities/survey/items/SurveyItem"
 import { SubitemTypes } from "../../entities/survey/subitems/Subitem"
 import { SubitemResponseProcessor } from "./utils/SubitemResponseProcessor"
-import { ItemPropertyUpdateTypes } from "../../entities/survey/other/properties"
 
 export class TestPointRepository extends SQLiteRepository {
     constructor() {
@@ -28,7 +27,7 @@ export class TestPointRepository extends SQLiteRepository {
             return super.generateArray(result.rows.length, result.rows.item).map(row => row.id)
         }
         catch (err) {
-            throw new Error('DatabaseError', `Unable to get test point id list with filters ${filters} and sorting ${sorting}`, err)
+            throw new Error(errors.DATABASE, `Unable to get test point id list with filters ${filters} and sorting ${sorting}`, err)
         }
     }
 
@@ -39,24 +38,24 @@ export class TestPointRepository extends SQLiteRepository {
                 new TestPoint(id, uid, name, status, timeCreated, timeModified, comment, location, latitude, longitude, testPointType))
         }
         catch (err) {
-            throw new Error('DatabaseError', `Unable to get test point with id ${idList.join()}`, err)
+            throw new Error(errors.DATABASE, `Unable to get test point with id ${idList.join()}`, err)
         }
     }
 
     async create(testPoint) {
-        const { uid, name, status, latitude, longitude, timeCreated, timeModified, testPointType, comment, location } = testPoint
+        const { id, uid, name, status, latitude, longitude, timeCreated, timeModified, testPointType, comment, location } = testPoint
         if (uid && timeCreated) {
             try {
                 const result = await super.runSingleQueryTransaction(
-                    `INSERT INTO ${this.tableName} (uid, timeCreated, testPointType, status, name, latitude, longitude, timeModified, location, comment) VALUES (?,?,?,?,?,?,?,?,?,?)`,
-                    [uid, timeCreated, testPointType, status, name, latitude, longitude, timeModified, location, comment])
+                    `INSERT INTO ${this.tableName} (id, uid, timeCreated, testPointType, status, name, latitude, longitude, timeModified, location, comment) VALUES (?,?,?,?,?,?,?,?,?,?,?)`,
+                    [id, uid, timeCreated, testPointType, status, name, latitude, longitude, timeModified, location, comment])
                 return new TestPoint(result.insertId, uid, name, status, timeCreated, timeModified, comment, location, latitude, longitude, testPointType)
             }
             catch (err) {
-                throw new Error('DatabaseError', `Unable to create test point with name ${name}, latitude ${latitude} and longitude ${longitude}.`, err)
+                throw new Error(errors.DATABASE, `Unable to create test point with name ${name}, latitude ${latitude} and longitude ${longitude}.`, err)
             }
         }
-        else throw new Error('CorpadError', `Unable to create test point without required minimum parameters. Name: ${name}, uid: ${uid}, currentTime: ${currentTime}`)
+        else throw new Error(errors.GENERAL, `Unable to create test point without required minimum parameters. Name: ${name}, uid: ${uid}, currentTime: ${currentTime}`)
     }
 
     async delete(id) {
@@ -66,7 +65,7 @@ export class TestPointRepository extends SQLiteRepository {
                 return // throw `Test point doesn't exist` // Silently fail if item not found
         }
         catch (err) {
-            throw new Error('DatabaseError', `Unable to delete test point with id ${id}`, err)
+            throw new Error(errors.DATABASE, `Unable to delete test point with id ${id}`, err)
         }
     }
 
@@ -75,7 +74,7 @@ export class TestPointRepository extends SQLiteRepository {
             await super.runSingleQueryTransaction(`DELETE FROM testPoints WHERE id IN ${this.convertArrayToInStatement(idList)}`)
         }
         catch (err) {
-            throw new Error('DatabaseError', `Unable to delete test point list ${idList}`, err)
+            throw new Error(errors.DATABASE, `Unable to delete test point list ${idList}`, err)
         }
     }
 
@@ -90,7 +89,7 @@ export class TestPointRepository extends SQLiteRepository {
             return testPoint
         }
         catch (err) {
-            throw new Error('DatabaseError', `Unable to update test point with id ${id}`, err)
+            throw new Error(errors.DATABASE, `Unable to update test point with id ${id}`, err)
         }
     }
 
@@ -102,8 +101,8 @@ export class TestPointRepository extends SQLiteRepository {
                     new TestPoint(id, uid, name, status, timeCreated, timeModified, comment, location, latitude, longitude, testPointType))
         }
         catch (err) {
-            throw new Error('DatabaseError', `Unable to get test point list`, err)
-           
+            throw new Error(errors.DATABASE, `Unable to get test point list`, err)
+
         }
     }
 
@@ -117,7 +116,7 @@ export class TestPointRepository extends SQLiteRepository {
                     new Marker(id, uid, name, status, timeCreated, timeModifed, comment, itemType, testPointType, location, latitude, longitude))
         }
         catch (err) {
-            throw new Error('DatabaseError', `Unable to get get markers data`, err)
+            throw new Error(errors.DATABASE, `Unable to get get markers data`, err)
         }
     }
 
@@ -127,7 +126,7 @@ export class TestPointRepository extends SQLiteRepository {
             return this.subitemProcessor.generateArrayWithSides(result.rows.length, result.rows.item).map(this.subitemProcessor.getSubitemFromTableData)
         }
         catch (err) {
-            throw new Error('DatabaseError', `Unable to get list of subitems`, err)
+            throw new Error(errors.DATABASE, `Unable to get list of subitems`, err)
         }
     }
 
@@ -149,7 +148,7 @@ export class TestPointRepository extends SQLiteRepository {
             })
         }
         catch (err) {
-            throw new Error('DatabaseError', `Unable to get list of subitems`, err)
+            throw new Error(errors.DATABASE, `Unable to get list of subitems`, err)
         }
     }
 
@@ -164,7 +163,7 @@ export class TestPointRepository extends SQLiteRepository {
             return marker
         }
         catch (er) {
-            throw new Error('DatabaseError', 'Unable to update test point')
+            throw new Error(errors.DATABASE, 'Unable to update test point')
         }
     }
 
@@ -187,7 +186,7 @@ export class TestPointRepository extends SQLiteRepository {
             CASE WHEN potentialTypes.permType = ? AND referenceCells.mainReference = 1 THEN potentials.value END) AS v2 
         FROM testPoints
         LEFT JOIN cards ON
-        testPoints.id = cards.testPointId
+        testPoints.id = cards.testPointId AND ${filterQuery}
         LEFT JOIN potentials ON
         potentials.cardId = cards.id 
         INNER JOIN potentialTypes ON 
@@ -195,25 +194,23 @@ export class TestPointRepository extends SQLiteRepository {
         INNER JOIN referenceCells ON 
         potentials.portableReferenceId = referenceCells.id
         WHERE
-        ${filterQuery} AND
         ${idListQuery}
         GROUP BY cards.id
         UNION ALL 
         SELECT testPoints.id AS itemId, testPoints.testPointType, testPoints.status, testPoints.name AS itemName, testPoints.timeModified, testPoints.uid AS itemUid, testPoints.location, cards.id, cards.uid, cards.name, cards.type, potentials.value AS v1, potentials.value AS v2 
         FROM testPoints
         LEFT JOIN cards ON
-        testPoints.id = cards.testPointId
+        testPoints.id = cards.testPointId AND ${filterQuery}
         LEFT JOIN potentials ON
         potentials.cardId = cards.id 
         WHERE potentials.cardId IS NULL AND 
-        ${filterQuery} AND
         ${idListQuery}
         ORDER BY testPoints.id`,
                 [permTypes[0], permTypes[1]])
             return this.responseProcessor.generateDisplayCardList(result, idList, ItemTypes.TEST_POINT)
         }
         catch (err) {
-            throw new Error('DatabaseError', `Unable to get potential list for test points with permTypes ${permTypes[0], permTypes[1]}`, err)
+            throw new Error(errors.DATABASE, `Unable to get potential list for test points with permTypes ${permTypes[0], permTypes[1]}`, err)
         }
     }
 
@@ -223,14 +220,13 @@ export class TestPointRepository extends SQLiteRepository {
                 `SELECT testPoints.id AS itemId, testPoints.testPointType, testPoints.status, testPoints.name AS itemName, testPoints.timeModified, testPoints.uid AS itemUid, testPoints.location, cards.id, cards.uid, cards.name, cards.type, density AS v1 
             FROM testPoints
             LEFT JOIN cards ON
-            testPoints.id = cards.testPointId
-            WHERE testPoints.id IN ${super.convertArrayToInStatement(idList)} AND 
-            type NOT IN ${super.convertArrayToInStatement(readingTypeFilter)}
+            testPoints.id = cards.testPointId AND cards.type NOT IN ${super.convertArrayToInStatement(readingTypeFilter)}
+            WHERE testPoints.id IN ${super.convertArrayToInStatement(idList)}
             ORDER BY testPoints.id`)
             return this.responseProcessor.generateDisplayCardList(result, idList, ItemTypes.TEST_POINT)
         }
         catch (err) {
-            throw new Error('DatabaseError', `Unable to get current density list for test points`, err)
+            throw new Error(errors.DATABASE, `Unable to get current density list for test points`, err)
         }
     }
     async getDisplayListWithCurrent({ idList, readingTypeFilter }) {
@@ -240,15 +236,14 @@ export class TestPointRepository extends SQLiteRepository {
             CASE WHEN type = ? OR type=? THEN current END AS v1 
             FROM testPoints
             LEFT JOIN cards ON
-            testPoints.id = cards.testPointId
+            testPoints.id = cards.testPointId AND type NOT IN ${super.convertArrayToInStatement(readingTypeFilter)}
             WHERE testPoints.id IN ${super.convertArrayToInStatement(idList)} AND 
-            type NOT IN ${super.convertArrayToInStatement(readingTypeFilter)}
             ORDER BY testPoints.id`,
                 [SubitemTypes.SHUNT, SubitemTypes.BOND])
             return this.responseProcessor.generateDisplayCardList(result, idList, ItemTypes.TEST_POINT)
         }
         catch (err) {
-            throw new Error('DatabaseError', `Unable to get current list for test points`, err)
+            throw new Error(errors.DATABASE, `Unable to get current list for test points`, err)
         }
     }
 
@@ -260,15 +255,14 @@ export class TestPointRepository extends SQLiteRepository {
                 CASE WHEN type = ? THEN shorted END AS v1
                 FROM testPoints
                 LEFT JOIN cards ON
-                testPoints.id = cards.testPointId
+                testPoints.id = cards.testPointId AND type NOT IN ${super.convertArrayToInStatement(readingTypeFilter)}
                 WHERE testPoints.id IN ${super.convertArrayToInStatement(idList)} AND 
-                type NOT IN ${super.convertArrayToInStatement(readingTypeFilter)}
                 ORDER BY testPoints.id`,
                 [SubitemTypes.ISOLATION, SubitemTypes.ISOLATION])
             return this.responseProcessor.generateDisplayCardList(result, idList, ItemTypes.TEST_POINT)
         }
         catch (err) {
-            throw new Error('DatabaseError', `Unable to get shorting current list for test points`, err)
+            throw new Error(errors.DATABASE, `Unable to get shorting current list for test points`, err)
         }
     }
 }

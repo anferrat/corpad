@@ -2,7 +2,7 @@ import { Pipeline } from "../../../entities/survey/items/Pipeline";
 import { Rectifier } from "../../../entities/survey/items/Rectifier";
 import { ItemTypes } from "../../../entities/survey/items/SurveyItem";
 import { TestPoint } from "../../../entities/survey/items/TestPoint";
-import { Error } from "../../../utils/Error";
+import { Error, errors } from "../../../utils/Error";
 
 export class UpdateItem {
     constructor(testPointRepo, rectifierRepo, pipelineRepo, itemPresenter) {
@@ -40,7 +40,7 @@ export class UpdateItem {
                     break
                 }
             default:
-                throw new Error('CorpadError', `No such type ${itemType}. Unable to delete item`, err)
+                throw new Error(errors.GENERAL, `No such type ${itemType}. Unable to delete item`)
         }
         return this.itemPresenter.execute(updatedItem, defaultName)
     }

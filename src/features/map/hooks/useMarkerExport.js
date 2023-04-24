@@ -20,7 +20,6 @@ const useMarkerExport = () => {
     const exportMarkersToFile = useCallback(async () => {
         setExporting(true)
         const { status, response, errorMessage } = await exportMarkers(er => errorHandler(er))
-        console.log('Error: ', errorMessage)
         if (status === 200) {
             dispatch(setExportModal({ visible: true, fileUrl: response, mimeType: 'application/vnd.google-earth.kml+xml' }))
         }

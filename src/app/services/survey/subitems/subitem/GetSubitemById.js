@@ -1,5 +1,5 @@
 import { SubitemTypes } from "../../../../entities/survey/subitems/Subitem"
-import { Error } from "../../../../utils/Error"
+import { Error, errors } from "../../../../utils/Error"
 
 export class GetSubitemById {
     constructor(subitemRepo, defaultNameRepo, testPointRepo, rectifierRepo, pipelineRepo, settingRepo, subitemPresenter) {
@@ -23,7 +23,7 @@ export class GetSubitemById {
             return this.rectifierRepo.getSubitemsById(itemId)
         else if (~Object.values(SubitemTypes).indexOf(subitemType))
             return this.testPointRepo.getSubitemsById(itemId)
-        else throw new Error('CorpadError', `Subitem type ${subitemType} is not supported`)
+        else throw new Error(errors.GENERAL, `Subitem type ${subitemType} is not supported`)
     }
 
     _getPipelineList(subitemType) {
@@ -51,7 +51,7 @@ export class GetSubitemById {
             this.defaultNameRepo.getByType(subitemType)
         ])
         if (subitem.parentId !== itemId) {
-            throw new Error('CorpadError', `Subitem with id ${subitemId} doesn't belong to item with id ${itemId}`)
+            throw new Error(errors.GENERAL, `Subitem with id ${subitemId} doesn't belong to item with id ${itemId}`)
         }
         const defaultName = this._getDefaultName(defaultNameBase, this._getDefaultNameIndex(subitemList, subitemType))
         return this.subitemPresenter.execute(subitem, pipelineNameAsDefualt, subitemList, pipelineList, defaultName)

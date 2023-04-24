@@ -7,6 +7,6 @@ export class SideElement extends Element {
         this.id = id
         this.sideAId = sideAId
         this.sideBId = sideBId
-        this.parnetCardId = parentCardId
+        this.parentCardId = parentCardId
     }
 }

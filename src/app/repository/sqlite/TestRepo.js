@@ -1,5 +1,5 @@
 import { SQLiteRepository } from "../../utils/SQLite"
-import { Error } from "../../utils/Error"
+import { Error, errors } from "../../utils/Error"
 import { ItemResponseProcessor } from "./utils/ItemResponseProcessor"
 import { SubitemResponseProcessor } from "./utils/SubitemResponseProcessor"
 
@@ -17,7 +17,7 @@ export class TestRepository extends SQLiteRepository {
             return super.generateArray(result.rows.length, result.rows.item)
         }
         catch (err) {
-            throw new Error('DatabaseError', `Test failed with error: ${err}`, err)
+            throw new Error(errors.DATABASE, `Test failed with error: ${err}`, err)
         }
     }
 }

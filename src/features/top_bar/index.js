@@ -3,12 +3,14 @@ import TopBarBase from './components/TopBarBase'
 import { useDispatch } from 'react-redux'
 import { getHeader } from './helpers/functions'
 import { BS } from '../../../App'
+import { useBottomSheetNavigation } from '../../hooks/bottom_sheet/useBottomSheetNavigation'
 
 
 export const TopBar = React.memo(({ screen, params, navigation }) => {
     const dispatch = useDispatch()
     const bottomSheet = useContext(BS)
-    const header = getHeader(screen, params, navigation, dispatch, bottomSheet)
+    const { openMenu } = useBottomSheetNavigation()
+    const header = getHeader(screen, params, navigation, dispatch, openMenu)
     if (header.display)
         return <TopBarBase
             noBorder={header?.noBorder}

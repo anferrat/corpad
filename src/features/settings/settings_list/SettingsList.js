@@ -4,10 +4,10 @@ import { ScrollView } from 'react-native-gesture-handler'
 import { useDispatch } from 'react-redux'
 import { Text } from '@ui-kitten/components'
 import ListItem from './components/ListItemSettings'
-import { loadSettings, updateSetting } from '../../../store/actions/settings'
-import { warningHandler } from '../../../helpers/error_handler'
-import { resetSurvey } from '../../../api/database/index'
+import { resetCurrentSurveySettings, updateLoader } from '../../../store/actions/settings'
+import { errorHandler, warningHandler } from '../../../helpers/error_handler'
 import { hapticMedium } from '../../../native_libs/haptics'
+import { resetSurvey } from '../../../app/controllers/survey/SurveyController'
 
 const settingsParams = [
     {
@@ -39,23 +39,10 @@ const SettingsList = (props) => {
         hapticMedium()
         const confirm = await warningHandler(12, 'Exit', 'Cancel')
         if (confirm) {
-            dispatch(updateSetting('loader', { visible: true, title: 'Exiting' }))
-            await resetSurvey()
-            dispatch(loadSettings({
-                loader: {
-                    visible: false,
-                    title: null,
-                    text: null
-                },
-                currentSurvey: {
-                    name: null,
-                    fileName: null,
-                    isLoaded: false,
-                    isCloudSurvey: null,
-                    savingInProgress: false,
-                    lastSyncTime: null
-                }
-            }))
+            dispatch(updateLoader(true, 'Exiting survey'))
+            await resetSurvey(er => errorHandler(er))
+            dispatch(resetCurrentSurveySettings())
+            dispatch(updateLoader(false, null, null))
         }
     }
     return (

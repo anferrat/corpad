@@ -1,8 +1,8 @@
 import { pipeMaterials, labels, tapOptions } from '../../../constants/constants'
 import { getFormattedDate } from '../../../helpers/functions'
 import { errorHandler } from "../../../helpers/functions"
-import { requestLocationAsync } from "../../../native_libs/location"
 import { getItemDisplayData, getItemIdList } from '../../../app/controllers/survey/items/ItemController'
+import { getCurrentPosition } from '../../../app/controllers/survey/other/GeolocationController'
 
 export const firstReading = (readingList) => {
     if (readingList.length !== 0)
@@ -103,13 +103,12 @@ export const fetchIdList = async (itemType, filters = undefined, sorting = 0, la
 }
 
 export const getLocationAsync = async () => {
-    const loc = await requestLocationAsync()
-    if (loc.status === 200)
-        return loc.location.coords
-    else {
-        errorHandler(loc.status)
-        return { latitude: 0, longitude: 0 }
+    const { response, status } = await getCurrentPosition(er => errorHandler(er))
+    if (status === 200) {
+        const { latitude, longitude } = response
+        return { latitude, longitude }
     }
+    else return { latitude: 0, longitude: 0 }
 }
 
 const valueFormatter = (a) => {

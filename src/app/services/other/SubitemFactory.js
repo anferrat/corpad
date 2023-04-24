@@ -1,5 +1,5 @@
 import { SubitemTypes } from "../../entities/survey/subitems/Subitem"
-import { Error } from "../../utils/Error"
+import { Error, errors } from "../../utils/Error"
 import { Anode } from "../../entities/survey/subitems/Anode"
 import { Bond } from "../../entities/survey/subitems/Bond"
 import { Coupon } from "../../entities/survey/subitems/Coupon"
@@ -39,7 +39,7 @@ export class SubitemFactory {
                 return new Structure(id, parentId, uid, name, data.description ?? null)
             case SubitemTypes.TEST_LEAD:
                 return new TestLead(id, parentId, uid, name, data.wireGauge ?? null, data.wireColor ?? null)
-            default: throw new Error('CorpadError', `Unable to update subitem with type ${type}`)
+            default: throw new Error(errors.GENERAL, `Unable to update subitem with type ${type}`)
         }
     }
 
@@ -67,7 +67,7 @@ export class SubitemFactory {
                 return new Structure(id, parentId, uid, name, description)
             case SubitemTypes.TEST_LEAD:
                 return new TestLead(id, parentId, uid, name, wireGauge, wireColor)
-            default: throw new Error('CorpadError', `Unable to update subitem with type ${type}`)
+            default: throw new Error(errors.GENERAL, `Unable to update subitem with type ${type}`)
         }
     }
 }
