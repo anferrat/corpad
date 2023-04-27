@@ -199,3 +199,12 @@ export const SurveyLoadingStatuses = Object.freeze({
     LOADING: 'loading',
     SELECTING: 'selecting'
 })
+
+export const CalculatorTypes = Object.freeze({
+    WENNER: 'wenner',
+    SHUNT: 'shunt',
+    COATING: 'coating',
+    CURRENT_TWO_WIRE: 'current2Wire',
+    CURRENT_FOUR_WIRE: 'current4Wire',
+    REFERENCE_CELL: 'refCell'
+})

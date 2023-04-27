@@ -1,7 +1,6 @@
 import React from 'react'
-import { Icon, Text } from '@ui-kitten/components'
+import { Icon, Text, ProgressBar } from '@ui-kitten/components'
 import { View, StyleSheet } from 'react-native'
-import { Bar } from 'react-native-progress'
 import { basic, primary, basic300 } from '../../../../styles/colors'
 import { labels } from '../../../../constants/constants'
 import ModalTitle from './ModalTitle'
@@ -22,16 +21,16 @@ const ModalProgress = ({
                 <Icon style={styles.fileIcon}
                     name='file-text-outline'
                     fill={basic} />
-                <View>
+                <View style={styles.progressBar}>
                     <Text
                         category='s2'
                         appearance='hint'
                         style={styles.barText}>
                         {labels[itemType].label} {currentIndex + 1}/{count}
                     </Text>
-                    <Bar
-                        color={primary}
-                        animated={false}
+                    <ProgressBar
+                        status='primary'
+                        animating={false}
                         progress={(currentIndex + 1) / count} />
                 </View>
             </View>
@@ -64,4 +63,7 @@ const styles = StyleSheet.create({
     barText: {
         paddingBottom: 6
     },
+    progressBar: {
+        width: '80%'
+    }
 })

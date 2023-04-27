@@ -4,7 +4,7 @@ export class OpenInExternalApp {
     constructor() { }
 
     execute(fileUrl, mimeType) {
-        SendIntentAndroid.openFileChooser(
+        return SendIntentAndroid.openFileChooser(
             {
                 fileUrl: fileUrl,
                 type: mimeType,

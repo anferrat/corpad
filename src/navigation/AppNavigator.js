@@ -37,9 +37,6 @@ export const AppNavigator = () => {
         screenOptions={{
           headerShown: true,
           animation: 'fade',
-          headerStyle: {
-            backgroundColor: 'red',
-          },
           header: ({ route, navigation }) => <TopBar screen={route.name} params={route.params} navigation={navigation} />,
         }}>
         {isOnboardingVisible ? <Stack.Screen name='Onboarding' component={OnboardingScreen} /> : null}

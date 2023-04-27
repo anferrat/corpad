@@ -1,55 +1,29 @@
 import React from 'react'
-import { StyleSheet, View } from 'react-native'
-import { useSelector } from 'react-redux'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import Home from '../screens/SurveyList'
 import { TopBar } from '../features/top_bar'
 import CloudAuth from '../screens/Authorization'
 import NoInternetEmptyComponent from '../features/navigation/components/NoConnectionEmptyScreen'
-import BottomBarItem from '../features/navigation/components/BottomBarItem'
-import { basic300 } from '../styles/colors'
-
-import { useBottomSheetNavigation } from '../hooks/bottom_sheet/useBottomSheetNavigation'
+import { MainMenuBottomTabs } from '../features/navigation'
+import useSurveyListBottomTabs from '../hooks/app/useSurveyListBottomTabs'
 
 const { Navigator, Screen } = createBottomTabNavigator()
 
-const BottomBar = ({ navigation, state }) => {
-    const { openBasicMenu } = useBottomSheetNavigation()
 
-    const onPress = React.useCallback((isFocused, routeName, routeKey) => {
-        const event = navigation.emit({
-            type: 'tabPress',
-            target: routeKey,
-            canPreventDefault: true,
-        })
-        if (!isFocused && !event.defaultPrevented) {
-            navigation.navigate({ name: routeName, merge: true })
-        }
-    }, [navigation])
-    return (
-        <View style={styles.bar}>
-            <BottomBarItem icon='smartphone' title='Device' focused={state.index === 1} onPress={onPress.bind(this, state.index === 1, state.routes[1].name, state.routes[1].key)} />
-            <BottomBarItem icon='cloud' pack='cp' title='Cloud' focused={state.index === 0} onPress={onPress.bind(this, state.index === 0, state.routes[0].name, state.routes[0].key)} />
-            <BottomBarItem icon='more-horizontal-outline' title='More' focused={false} onPress={openBasicMenu} />
-        </View>
-    )
-}
-
-export default TabNavigator = ({ route }) => {
-    const { homeScreenCloud } = route.params
-    const isSigned = useSelector(state => state.settings.session.isSigned)
-    const isInternetOn = useSelector(state => state.settings.session.isInternetOn)
+export default TabNavigator = () => {
+    const { isCloud, openBasicMenu, isSigned, isInternetOn } = useSurveyListBottomTabs()
     const insets = useSafeAreaInsets()
+
     return (
         <Navigator
-            initialRouteName={homeScreenCloud ? 'CloudSurveyList' : 'DeviceSurveyList'}
-            tabBar={props => <BottomBar {...props} />}
+            initialRouteName={isCloud ? 'CloudSurveyList' : 'DeviceSurveyList'}
+            tabBar={props => <MainMenuBottomTabs {...props} openBasicMenu={openBasicMenu} />}
             screenOptions={{
                 headerStatusBarHeight: insets.top,
                 header: ({ route, navigation }) => <TopBar screen={route.name} params={route.params} navigation={navigation} />
             }}>
-
+            <Screen name='DeviceSurveyList' component={Home} initialParams={{ isCloud: false }} />
             {isInternetOn ? (
                 isSigned ? (
                     <Screen name='CloudSurveyList' component={Home} initialParams={{ isCloud: true }} />
@@ -58,18 +32,6 @@ export default TabNavigator = ({ route }) => {
                 )) :
                 <Screen name='NoInternetScreen' component={NoInternetEmptyComponent} />
             }
-            <Screen name='DeviceSurveyList' component={Home} initialParams={{ isCloud: false }} />
         </Navigator>
     )
 }
-
-const styles = StyleSheet.create({
-    bar: {
-        backgroundColor: '#fff',
-        height: 50,
-        flexDirection: 'row',
-        justifyContent: 'space-around',
-        borderTopWidth: 1,
-        borderTopColor: basic300,
-    },
-})

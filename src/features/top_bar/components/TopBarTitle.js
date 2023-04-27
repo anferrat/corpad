@@ -11,10 +11,10 @@ const TopBarTitle = ({ isPrimary, title, subtitle, icon, pack, status }) => {
             <View style={styles.titleView}>
                 {status !== undefined ?
                     <Icon icon='circle' pack='cp' style={styles.statusIcon} fill={statusColors[status] ?? basic} /> : null}
-                <Text category='h6' numberOfLines={1} ellipsizeMode='tail' status={isPrimary ? 'control' : null}>{title}</Text>
+                <Text category='h6' numberOfLines={1} ellipsizeMode='tail' status={isPrimary ? 'control' : 'basic'}>{title}</Text>
             </View>
             <View style={styles.subtitleView}>
-                <Text category={'s2'} appearance='hint' status={isPrimary ? 'control' : null}>
+                <Text category={'s2'} appearance='hint' status={isPrimary ? 'control' : 'basic'}>
                     {subtitle}</Text>
                 {icon ?
                     <Icon

@@ -11,7 +11,7 @@
     "lint": "eslint ."
   },
   "dependencies": {
-    "@eva-design/eva": "^2.1.1",
+    "@eva-design/eva": "^2.2.0",
     "@gorhom/bottom-sheet": "^4.4.5",
     "@react-native-clipboard/clipboard": "^1.11.1",
     "@react-native-community/netinfo": "^8.3.1",
@@ -20,7 +20,7 @@
     "@react-navigation/native-stack": "^6.6.2",
     "@robinbobin/react-native-google-drive-api-wrapper": "^1.2.1",
     "@shopify/flash-list": "^1.4.2",
-    "@ui-kitten/components": "^5.1.2",
+    "@ui-kitten/components": "^5.3.0",
     "@ui-kitten/eva-icons": "^5.1.2",
     "babel-eslint": "^10.1.0",
     "lodash.debounce": "^4.0.8",

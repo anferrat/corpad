@@ -40,6 +40,6 @@ const IconProvider = (name) => ({
 function MaterialIcon({ name, style, fill, fill2 }) {
   const { height, tintColor, ...iconStyle } = StyleSheet.flatten(style);
   return (
-    <Icon name={name} height={height} fill={fill} fill2={fill2} style={iconStyle} />
+    <Icon name={name} height={height} fill={fill ?? tintColor} fill2={fill2} style={iconStyle} />
   )
 }

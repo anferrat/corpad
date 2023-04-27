@@ -21,7 +21,7 @@ const useMarkerExport = () => {
         setExporting(true)
         const { status, response, errorMessage } = await exportMarkers(er => errorHandler(er))
         if (status === 200) {
-            dispatch(setExportModal({ visible: true, fileUrl: response, mimeType: 'application/vnd.google-earth.kml+xml' }))
+            dispatch(setExportModal(true, response, 'application/vnd.google-earth.kml+xml'))
         }
         if (componentMounted.current)
             setExporting(false)

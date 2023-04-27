@@ -80,7 +80,7 @@ const ExportButton = () => {
             if (componentMounted.current) {
                 const writeFs = await writeFile(genCsv(result), fileName, 'exports', false)
                 if (writeFs.status === 200 && componentMounted.current)
-                    dispatch(setExportModal({ visible: true, fileUrl: writeFs.filePath, mimeType: 'text/csv' }))
+                    dispatch(setExportModal(true, writeFs.filePath, 'text/csv'))
                 else errorHandler(writeFs.status)
             }
         }

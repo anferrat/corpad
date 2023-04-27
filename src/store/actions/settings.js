@@ -56,7 +56,7 @@ export const updateOnboarding = (onboardingScreen, versionOnboarding = null) => 
     return { type: UPDATE_ONBOARDING, onboardingScreen: onboardingScreen, versionOnboarding }
 }
 
-export const setExportModal = ({ visible, fileUrl, mimeType }) => {
+export const setExportModal = (visible, fileUrl, mimeType) => {
     return { type: SET_EXPORT_MODAL, visible: visible, fileUrl: fileUrl, mimeType: mimeType }
 }
 

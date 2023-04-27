@@ -3,7 +3,6 @@ import { View, StyleSheet } from 'react-native'
 import { useDispatch } from 'react-redux'
 import { ScrollView } from 'react-native-gesture-handler'
 import MainActionButton from '../../components/ActionButton'
-import { sendRequest } from '../../api/database/index'
 import ResultView from './ResultView'
 import CalculatorComponent from './CalculatorComponent'
 import { initialCalculatorData, initialValidObject, validateAll, getResult } from './helpers'
@@ -11,10 +10,8 @@ import UnitSelector from './UnitSelector'
 import { errorHandler } from '../../helpers/error_handler'
 import HistoryModal from './HistoryModal'
 import { setExportModal } from '../../store/actions/settings'
-import { writeFile } from '../../api/files/fs'
-import { fileNameGen } from '../../helpers/functions'
 import { calculatorTypes } from '../../constants/constants'
-import { genCsv } from '../../helpers/csv_generator'
+import { deleteCalculator, deleteCalculatorsByType, saveCalculator, saveCalculatorDataToFile } from '../../app/controllers/CalculatorController'
 
 const LoaderCalculator = (props) => {
     const dispatch = useDispatch()
@@ -78,22 +75,28 @@ const LoaderCalculator = (props) => {
     }, [setData, setValid, props.calculatorType])
 
     const exportCalculatorData = React.useCallback(async (exportedObject) => {
-        const writeFs = await writeFile(genCsv(exportedObject), fileNameGen(calculatorTypes[props.calculatorType].fileName, 'csv'), 'exports', false)
-        if (writeFs.status === 200)
-            dispatch(setExportModal({ visible: true, fileUrl: writeFs.filePath, mimeType: 'text/csv' }))
+        const { status, response, errorMessage } = await saveCalculatorDataToFile({ exportData: exportedObject, fileName: calculatorTypes[props.calculatorType].fileName })
+        if (status === 200) {
+            const { filePath } = response
+            dispatch(setExportModal(true, filePath, 'text/csv'))
+        }
+        else {
+            errorHandler(status)
+        }
     }, [dispatch])
 
     const saveCalculatorToDataBase = React.useCallback(async (calculatorData) => {
-        const saveToDatabase = await sendRequest('INSERT', 'CALCULATOR', { calculatorType: props.calculatorType, timeCreated: Date.now(), data: JSON.stringify(calculatorData), name: calculatorData.name, latitude: null, longitude: null })
-        if (saveToDatabase.status === 200) {
-            setData(old => ({ ...old, savedInHistory: true, calculatorId: saveToDatabase.result }))
+        const { response, status, errorMessage } = await saveCalculator({ data: calculatorData, calculatorType: props.calculatorType, latitude: null, longitude: null, name: calculatorData.name })
+        if (status === 200) {
+            const { id } = response
+            setData(old => ({ ...old, savedInHistory: true, calculatorId: id }))
             return {
                 status: 200
             }
         }
         else {
-            errorHandler(saveToDatabase.status)
-            return saveToDatabase
+            errorHandler(status)
+            return status
         }
     }, [setData])
 
@@ -103,29 +106,29 @@ const LoaderCalculator = (props) => {
             savedInHistory: false,
             disabled: true,
             calculatorId: id,
-            calculator: JSON.parse(data)
+            calculator: data
         }))
         setValid(initialValidObject[props.calculatorType])
     }, [setData])
 
     const deleteCalculatorFromDataBase = React.useCallback(async (id) => {
-        const deleteAction = await sendRequest('DELETE', 'CALCULATOR', { calculatorId: id })
-        if (deleteAction.status === 200) {
+        const { status, errorMessage } = await deleteCalculator({ id })
+        if (status === 200) {
             return true
         }
         else {
-            errorHandler(deleteAction.status)
+            errorHandler(status)
             return false
         }
     }, [])
 
     const deleteAllHistory = React.useCallback(async () => {
-        const deleteAction = await sendRequest('DELETE', 'CALCULATOR_ALL', { calculatorType: props.calculatorType })
-        if (deleteAction.status === 200) {
+        const { status, errorMessage } = await deleteCalculatorsByType({ calculatorType: props.calculatorType })
+        if (status === 200) {
             return true
         }
         else {
-            errorHandler(deleteAction.status)
+            errorHandler(status)
             return false
         }
     }, [props.calculatorType])

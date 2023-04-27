@@ -25,12 +25,17 @@ const ControlButton = ({ onPress, status, icon, label, hidden }) => {
                             style={styles.innerView}
                             android_ripple={ripple}
                             onPress={onPress}>
-                            <Icon fill={statusColors[status] ?? primary} style={styles.icon} name={icon} />
+                            <Icon
+                                fill={statusColors[status] ?? primary}
+                                style={styles.icon}
+                                name={icon} />
                         </Pressable>
                     </View>
                     <Text
                         category='label'
-                        style={styles.label}>{label}</Text>
+                        style={styles.label}>
+                        {label}
+                    </Text>
                 </View>
             </Pressable >
         )

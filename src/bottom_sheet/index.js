@@ -1,14 +1,14 @@
 import React from 'react'
-import BottomSheet, { BottomSheetBackdrop } from '@gorhom/bottom-sheet'
-import BottomSheetContent from '../screens/BottomSheet'
+import BottomSheetDefault, { BottomSheetBackdrop } from '@gorhom/bottom-sheet'
+import BottomSheetContent from './BottomSheetContent'
 
-const Sheet = React.forwardRef((props, bsRef) => {
+export const BottomSheet = React.forwardRef((props, bsRef) => {
     const renderBackdrop = (props) => <BottomSheetBackdrop
         {...props}
         appearsOnIndex={0}
         disappearsOnIndex={-1} />
 
-    return <BottomSheet
+    return <BottomSheetDefault
         ref={bsRef}
         backdropComponent={renderBackdrop}
         enableContentPanningGesture={false}
@@ -16,7 +16,7 @@ const Sheet = React.forwardRef((props, bsRef) => {
         index={-1}
         snapPoints={[176, 236, 376, 371, 419]}>
         <BottomSheetContent />
-    </BottomSheet>
+    </BottomSheetDefault>
 })
 
-export default Sheet
+export default BottomSheet

@@ -75,36 +75,6 @@ const useCreateSurvey = () => {
             })
         }
     }, [name.name, isBlank, isCloud, surveyList, selectedSurveyIndex])
-    /*
-        const createSurveyHandler = React.useCallback(async (name, notBlank, isCloud, filePath) => {
-            const validation = fieldValidation(name, 'name')
-            if (validation.valid) {
-                const surveyName = validation.value === null ? 'New survey' : validation.value
-                dispatch(updateSetting('loader', { title: 'Creating', text: `Pipeline survey: ${surveyName}`, visible: true }))
-                const newSurvey = (!notBlank || filePath === null) ? await createSurvey(surveyName, isCloud) : await surveyLoader(filePath, isCloud ? 'cloudTemplate' : 'localTemplate', surveyName)
-                if (newSurvey.status === 200) {
-                    dispatch(loadSurveySettings({
-                        isLoaded: true,
-                        name: newSurvey.name,
-                        fileName: newSurvey.fileName,
-                        isCloudSurvey: newSurvey.isCloud,
-                        syncTime: newSurvey.syncTime
-                    }
-                    ))
-                }
-                else {
-                    errorHandler(newSurvey.status)
-                    dispatch(updateSetting('loader', { visible: false }))
-                }
-            }
-            else {
-                setSurveyNameValid(validation.valid)
-                setSurveyName(validation.value)
-                errorHandler(506)
-            }
-        }, [setSurveyNameValid, setSurveyName, dispatch])
-    */
-
 
     return {
         name: name.name,

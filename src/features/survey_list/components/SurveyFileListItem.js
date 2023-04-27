@@ -1,7 +1,7 @@
 import React, { useRef, useState, useCallback } from 'react'
 import { View, StyleSheet, Pressable, Animated } from 'react-native'
 import * as Progress from 'react-native-progress'
-import { Text, Icon } from '@ui-kitten/components'
+import { Text, Icon, CircularProgressBar } from '@ui-kitten/components'
 import { basic, basic200, basic300, success } from '../../../styles/colors'
 import { androidRipple } from '../../../styles/styles'
 import { getFormattedDate } from '../../../helpers/functions'
@@ -72,18 +72,12 @@ const SurveyFileListItem = ({ name, fileName, timeModified, tpCount, rectifierCo
                 onPress={handleLoadSurvey}>
                 <View style={styles.mainView} >
                     <View style={styles.titleView}>
-                        <Progress.Circle
-                            fill={'none'}
-                            style={styles.circle}
-                            animated={false}
-                            color={success}
+                        <CircularProgressBar
                             progress={passedItems}
-                            size={70}
-                            unfilledColor={basic200}
-                            borderWidth={0}
-                            thickness={12}
-                            endAngle={0.7}
-                            showsText={true} />
+                            animating={false}
+                            status='success'
+                            style={styles.circle}
+                            size='large' />
                         <View
                             style={styles.titleData}>
                             <Text
@@ -182,7 +176,7 @@ const styles = StyleSheet.create({
         borderRadius: 12
     },
     circle: {
-        marginRight: 24,
+        marginRight: 20,
     },
     smallIcon: {
         width: 16,
