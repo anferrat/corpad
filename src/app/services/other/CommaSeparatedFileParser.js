@@ -30,6 +30,6 @@ export class CommaSeparatedFileParser {
     }
 
     unparse(array) {
-        Papa.unparse(array)
+        return Papa.unparse(array)
     }
 }

@@ -2,7 +2,7 @@ import { object, string, number, boolean, array, mixed } from 'yup'
 import { PipelineMaterials, PipelineProducts } from '../entities/survey/items/Pipeline'
 import { CoarseFineOptions, PowerSources, TapOptions } from '../entities/survey/items/Rectifier'
 import { ItemStatuses, ItemTypes, TestPointTypes } from '../entities/survey/items/SurveyItem'
-import { AnodeMaterials, CouponTypes, DisplayedReadingOptions, IsolationTypes, ItemPropertyUpdateTypes, PermanentPotentialTypes, PipeDiameters, PotentialUnits, ReferenceCellTypes, SortingOptions, SubitemPropertyUpdateTypes, WireColors, WireGauges } from '../entities/survey/other/properties'
+import { AnodeMaterials, CalculatorTypes, CouponTypes, DisplayedReadingOptions, IsolationTypes, ItemPropertyUpdateTypes, PermanentPotentialTypes, PipeDiameters, PotentialUnits, ReferenceCellTypes, SortingOptions, SubitemPropertyUpdateTypes, WireColors, WireGauges } from '../entities/survey/other/properties'
 import { SubitemTypes } from '../entities/survey/subitems/Subitem'
 import { Error, errors } from "./Error"
 
@@ -47,6 +47,7 @@ export class Validation {
     potentialUnit = mixed().oneOf(Object.values(PotentialUnits))
     subitemPropertyUpdateType = mixed().oneOf(Object.values(SubitemPropertyUpdateTypes))
     itemPropertyUpdateType = mixed().oneOf(Object.values(ItemPropertyUpdateTypes))
+    calculatorType = mixed().oneOf(Object.values(CalculatorTypes))
     side = array().of(this.id)
     validate(value, schema) {
         try {

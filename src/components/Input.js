@@ -5,6 +5,7 @@ import { getValidCaption, toString } from '../helpers/functions'
 import { primary, basic } from '../styles/colors'
 import { View, StyleSheet, Pressable } from 'react-native'
 
+
 //Unit component sets unit inside input field. If value is text just outupts text. it can be also an object :
 /* {
 main: 'mV', 
@@ -14,25 +15,32 @@ script: '2' //super or sub formatted text string
 }
 */
 
+const UnitText = (props) => {
+    const { children, disabled } = props
+    if (disabled)
+        return <Text appearance='hint' status='basic' {...props}>{children}</Text>
+    else return <Text status='primary' {...props}>{children}</Text>
+}
+
 export const Unit = (props) => {
     if (props.unit) {
         if (typeof props.unit === 'string')
-            return <Text style={styles.unitMain} status={props.disabled ? '' : 'primary'} appearance={props.disabled ? 'hint' : 'default'}>{props.unit}</Text>
+            return <UnitText style={styles.unitMain} disabled={props.disabled}>{props.unit}</UnitText>
 
         else {
             const mainStart = props.unit?.position ? props.unit.main.substr(0, props.unit.position) : props.unit.main
             const mainEnd = props.unit?.position ? props.unit.main.substr(props.unit.position) : ''
             return (
                 <View style={props.unit.format === 'super' ? styles.mainViewSuper : styles.mainViewSub}>
-                    <Text style={styles.unitMain} status={props.disabled ? '' : 'primary'} appearance={props.disabled ? 'hint' : 'default'}>
+                    <UnitText style={styles.unitMain} disabled={props.disabled}>
                         {mainStart}
-                    </Text>
-                    <Text style={styles.unitScript} status={props.disabled ? '' : 'primary'} appearance={props.disabled ? 'hint' : 'default'}>
+                    </UnitText>
+                    <UnitText style={styles.unitScript} disabled={props.disabled}>
                         {props.unit.script}
-                    </Text>
-                    <Text style={styles.unitMain} status={props.disabled ? '' : 'primary'} appearance={props.disabled ? 'hint' : 'default'}>
+                    </UnitText>
+                    <UnitText style={styles.unitMain} disabled={props.disabled}>
                         {mainEnd}
-                    </Text>
+                    </UnitText>
                 </View>
             )
         }

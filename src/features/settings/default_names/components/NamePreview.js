@@ -17,7 +17,7 @@ const NamePreview = ({ name, type, pipelineNameAsDefault, pipelineNameSettingAct
                 <Text category='h6'>{displayName}</Text>
                 <View
                     style={styles.subtitle}>
-                    <Text category={'s2'} appearance='hint'>
+                    <Text category='s2' appearance='hint'>
                         {labels[type].label}
                     </Text>
                     <Icon

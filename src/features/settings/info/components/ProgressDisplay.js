@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { View, StyleSheet } from 'react-native'
 import * as Progress from 'react-native-progress'
+import { CircularProgressBar } from '@ui-kitten/components'
 import { basic, danger, success, warning } from '../../../../styles/colors'
 import LegendItem from './LegendItem'
 import ButtonSelector from '../../../../components/ButtonSelector'
@@ -34,17 +35,13 @@ const ProgressDisplay = ({ status, count }) => {
             </View>
             <View style={styles.progress}>
                 <View style={styles.circle}>
-                    <Progress.Circle
-                        fill="none"
-                        animated={true}
-                        color={success}
+                    <CircularProgressBar
                         progress={calculateProgress(status, count, itemType)}
-                        size={140}
-                        borderWidth={0}
-                        thickness={16}
-                        endAngle={0.7}
-                        textStyle={styles.textStyle}
-                        showsText={true} />
+                        animating={true}
+                        status='success'
+                        style={styles.progressCircle}
+                        size='giant' />
+
                 </View>
                 <View style={styles.legend}>
                     {statusInfo.map(({ title, icon }, index) => (
@@ -94,5 +91,9 @@ const styles = StyleSheet.create({
     legend: {
         flex: 1,
         paddingLeft: 24
+    },
+    progressCircle: {
+        height: 140,
+        width: 140
     }
 })

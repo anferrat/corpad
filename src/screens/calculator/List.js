@@ -8,7 +8,7 @@ export default CalculatorListScreen = ({ navigation }) => {
     const [loading, setLoading] = useState(true)
 
     useEffect(() => {
-
+        //adds loading effect for slower devices
         setTimeout(() => setLoading(false), 20)
     }, [])
 

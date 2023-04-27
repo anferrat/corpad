@@ -1,5 +1,4 @@
 import React, { useState } from 'react'
-import { sendRequest } from '../../api/database/index'
 import { Modal, StyleSheet } from 'react-native'
 import { Button } from '@ui-kitten/components'
 import { errorHandler, warningHandler } from '../../helpers/error_handler'
@@ -12,6 +11,7 @@ import EmptyListComponent from '../../components/EmptyListComponent'
 import ModalTopBar from './components/ModalTopBar'
 import LoadingView from '../../components/LoadingView'
 import { trashIcon } from '../../components/Icons'
+import { getCalculatorListByType } from '../../app/controllers/CalculatorController'
 
 
 const HistoryModal = (props) => {
@@ -21,13 +21,16 @@ const HistoryModal = (props) => {
 
     const displayModal = React.useCallback(async () => {
         setVisible(true)
-        const dataList = await sendRequest('SELECT', 'CALCULATOR', { calculatorType: props.calculatorType })
-        if (dataList.status === 200) {
-            setHistoryList(dataList.result)
+        const { response, status, errorMessage } = await getCalculatorListByType({ calculatorType: props.calculatorType })
+        if (status === 200) {
+            setHistoryList(response.map(({ id, name, type, data, latitude, longitude, timeCreated }) => ({
+                id, name, calculatorType: type, latitude, longitude, timeCreated, data
+            })))
             setLoading(false)
         }
         else {
-            errorHandler(dataList.status)
+            console.log(errorMessage)
+            errorHandler(status)
         }
     }, [setLoading, setHistoryList, setVisible])
 

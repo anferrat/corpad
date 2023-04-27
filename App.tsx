@@ -22,9 +22,9 @@ import map from './src/store/reducers/map'
 import settings from './src/store/reducers/settings'
 import exportSurvey from './src/store/reducers/exportSurvey'
 import importData from './src/store/reducers/importData'
-import Sheet from './src/bottom_sheet/Sheet'
+import { BottomSheet } from './src/bottom_sheet'
 import FullScreenLoader from './src/features/overlays/loader/Loader'
-import ExportModal from './src/features/overlays/export_modal/ExportModal'
+import { ExportModal } from './src/features/overlays/export_modal/'
 import {SessionModal} from './src/features/overlays/session_modal/'
 import { Animated } from 'react-native'
 
@@ -49,7 +49,7 @@ export const ScrollRef = createContext<MutableRefObject<any> | null>(null)
 ModalService.setShouldUseTopInsets = true
 
 export const version = '1.2'
-export const DEVELOPER_MODE_ON = true
+export const DEVELOPER_MODE_ON = false
 
 function App(): JSX.Element {
   /*
@@ -66,15 +66,18 @@ scrolling ref - used to implement title scrolling animation inside View screen. 
     <Provider store={store}>
       <IconRegistry icons={[EvaIconsPack, CPIconsPack]} />
       <SafeAreaProvider>
-        <ApplicationProvider {...eva} theme={{ ...eva.light, ...theme }}>
+        <ApplicationProvider 
+          {...eva} 
+          theme={{ ...eva.light, ...theme }}>
           <GestureHandlerRootView style={{ flex: 1 }}>
             <ScrollRef.Provider value={scrollingRef}>
               <BS.Provider value={bottomSheet}>
                 <NavigationContainer onReady={SplashScreen.hide} ref={navigationRef}>
-                  <AppNavigator />
-                  <Sheet ref={bottomSheet} />
+                <AppNavigator />
+                  <BottomSheet ref={bottomSheet} />
                   <FullScreenLoader />
-                  <ExportModal navigationRef={navigationRef} />
+                  <ExportModal 
+                    navigationRef={navigationRef} />
                   <SessionModal />
                 </NavigationContainer>
               </BS.Provider>

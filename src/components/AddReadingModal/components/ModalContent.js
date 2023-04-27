@@ -26,7 +26,12 @@ const ModalContent = ({ onSelect, hideModal }) => {
             return (
                 <View
                     key={`Section_${type}`}>
-                    <Text category='h6' style={styles.sectionTitle} appearance='hint'>{index === 0 ? `${type} / ${testPointTypes[2]}` : type}</Text>
+                    <Text
+                        category='h6'
+                        style={styles.sectionTitle}
+                        appearance='hint'>
+                        {index === 0 ? `${type} / ${testPointTypes[2]}` : type}
+                    </Text>
                     {renderItem(testPointReadingOptions[index])}
                 </View>
             )
