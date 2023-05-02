@@ -1,7 +1,7 @@
 import React from 'react'
 import { View, StyleSheet } from 'react-native'
 import { Text } from '@ui-kitten/components'
-import ItemOption from './components/ItemOption'
+import ItemCard from '../../../components/ItemCard'
 import { useDispatch, useSelector } from 'react-redux'
 import { items, labels } from '../../../constants/constants'
 import { setImportItemType } from '../../../store/actions/importData'
@@ -16,17 +16,21 @@ const SelectItem = () => {
     }
     return (
         <View style={styles.mainView}>
-            <Text category='h6' style={styles.title}>1. Select survey item</Text>
-            <View style={styles.itemSelection}>
+            <Text
+                category='h6'
+                style={styles.title}>
+                1. Select survey item
+            </Text>
+            <View
+                style={styles.itemSelection}>
                 {items.map((item, i) => (
-                    <ItemOption
+                    <ItemCard
                         key={item}
-                        iconName={`${labels[item].icon}-filled`}
+                        icon={`${labels[item].icon}-filled`}
                         pack='cp'
                         title={`${labels[item].label}s`}
                         selected={selectedIndex === i}
-                        onPress={selectOption}
-                        index={i}
+                        onPress={selectOption.bind(this, i)}
                     />))}
             </View>
         </View>

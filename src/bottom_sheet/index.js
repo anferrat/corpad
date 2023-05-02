@@ -18,5 +18,3 @@ export const BottomSheet = React.forwardRef((props, bsRef) => {
         <BottomSheetContent />
     </BottomSheetDefault>
 })
-
-export default BottomSheet

@@ -208,3 +208,35 @@ export const CalculatorTypes = Object.freeze({
     CURRENT_FOUR_WIRE: 'current4Wire',
     REFERENCE_CELL: 'refCell'
 })
+
+export const ExportItemProperties = Object.freeze({
+    NAME: 'name',
+    TEST_POINT_TYPE: 'testPointType',
+    TIME_MODIFIED: 'timeModified',
+    STATUS: 'status',
+    LATITUDE: 'latitude',
+    LONGITUDE: 'longitude',
+    LOCATION: 'location',
+    COMMENT: 'comment',
+    MATERIAL: 'material',
+    NPS: 'nps',
+    LICENSE_NUMBER: 'licenseNumber',
+    PRODUCT: 'product',
+    MODEL: 'model',
+    SERIAL_NUMBER: 'serialNumber',
+    RECTIFIER_OUTPUT: 'rectifierOutput',
+    MAX_VOLTAGE: 'maxVoltage',
+    MIN_VOLTAGE: 'minVoltage'
+})
+
+export const ExportSubitemProperties = Object.freeze({
+    VOLTAGE_DROP: 'voltageDrop',
+    CURRENT: 'current',
+    AREA: 'area',
+    DENSITY: 'density',
+    SHUNT_RATIO: 'ratio',
+    FACTOR: 'factor',
+    SHORTED: 'shorted',
+    VOLTAGE: 'voltage',
+    TARGET: 'target'
+})
