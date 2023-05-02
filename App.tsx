@@ -20,7 +20,7 @@ import subitem from './src/store/reducers/subitem'
 import rectifierList from './src/store/reducers/rectifierList'
 import map from './src/store/reducers/map'
 import settings from './src/store/reducers/settings'
-import exportSurvey from './src/store/reducers/exportSurvey'
+import exportSurvey from './src/store/reducers/export'
 import importData from './src/store/reducers/importData'
 import { BottomSheet } from './src/bottom_sheet'
 import FullScreenLoader from './src/features/overlays/loader/Loader'
@@ -38,7 +38,7 @@ const rootReducer = combineReducers({
   rectifierList: rectifierList,
   map: map,
   settings: settings,
-  exportSurvey: exportSurvey,
+  export: exportSurvey,
   importData: importData,
 })
 

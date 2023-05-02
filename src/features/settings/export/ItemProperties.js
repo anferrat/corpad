@@ -1,67 +1,92 @@
 import React from 'react'
-import { useSelector, useDispatch } from 'react-redux'
-import { Icon } from '@ui-kitten/components'
-import { StyleSheet } from 'react-native'
-import { itemProperties } from "./helpers/functions"
-import { items, sortingOptions } from "../../../constants/constants"
-import { iconHandlerItem, titleHandlerItem } from "../../../helpers/functions"
-import MultiSelectField from "../../../components/MultiSelect"
-import SelectField from '../../../components/Select'
-import { basic } from '../../../styles/colors'
-import { setExportItemType } from '../../../store/actions/exportSurvey'
+import { View, StyleSheet } from 'react-native'
+import { Radio, RadioGroup } from '@ui-kitten/components'
+import { globalStyle } from '../../../styles/styles'
+import { items, } from '../../../constants/constants'
+import ItemSelectorCard from './components/item/ItemSelectorCard'
+import { sortingOptions } from '../../../constants/constants'
+import Title from './components/Title'
+import useExportItemProperties from './hooks/useExportItemProperties'
+import ItemPropertySelector from './components/item/ItemPropertySelector'
+import BottomButton from '../../../components/BottomButton'
 
-const renderIcon = (name) => <Icon pack='cp' name={name} style={styles.selectIcon} fill={basic} />
+//filter sorting by location. N/A for here
+const sortingValues = sortingOptions.filter((_, i) => i !== 4)
 
-const ItemProperties = (props) => {
-    const dispatch = useDispatch()
-    const itemType = useSelector(state => state.exportSurvey.itemType)
-    const sorting = useSelector(state => state.exportSurvey.sorting)
-    const selectedProperties = useSelector(state => state.exportSurvey.selectedProperties)
-    const itemsList = React.useMemo(() => items.map(item => titleHandlerItem(item) + 's'), [])
-    const itemAccessoryList = React.useMemo(() => items.map(i => renderIcon(iconHandlerItem(i))), [])
-    const sortingList = React.useMemo(() => sortingOptions.filter((_, i) => i !== 4), [])
-    const propertiesList = React.useMemo(() => itemProperties[itemType].map(p => p.value), [itemType])
-    const propertyDisplayList = React.useMemo(() => itemProperties[itemType].map(p => p.label), [itemType])
-
-    const onItemTypeChangeHandler = React.useCallback((value) => dispatch(setExportItemType(value)), [dispatch])
+const ItemProperties = ({ navigateToExportOverview, navigateToExportPotentials, navigateToExportSubitems }) => {
+    const { itemType,
+        sorting,
+        itemProperties,
+        properties,
+        loading,
+        onSelectItemType,
+        onSelectSorting,
+        toggleItemProperty,
+        onNextPress,
+    } = useExportItemProperties({ navigateToExportPotentials, navigateToExportSubitems, navigateToExportOverview })
 
     return (
         <>
-            <SelectField
-                style={styles.select}
-                label='Survey item'
-                accessoryList={itemAccessoryList}
-                selectedItem={items.indexOf(itemType)}
-                selectAction={onItemTypeChangeHandler}
-                itemsList={itemsList}
-                resultList={items} />
-            <SelectField
-                style={styles.select}
-                label='Sorted by'
-                selectedItem={sorting}
-                selectAction={props.updateSetting.bind(this, 'sorting')}
-                itemsList={sortingList} />
-            <MultiSelectField
-                style={styles.select}
-                label='Properties'
-                placeholder='Select properties'
-                selectedItems={selectedProperties}
-                onSelect={props.updateSetting.bind(this, 'selectedProperties')}
-                itemsList={propertiesList}
-                displayList={propertyDisplayList} />
+            <View style={globalStyle.card}>
+                <Title
+                    name={'EXPORTED ITEMS'} />
+                <View
+                    style={styles.itemSelector}>
+                    {items.map(type =>
+                        <ItemSelectorCard
+                            key={type}
+                            itemType={type}
+                            selectedItemType={itemType}
+                            onPress={onSelectItemType}
+                        />)}
+                </View>
+                <Title
+                    name={'SORTING'} />
+                <RadioGroup
+                    onChange={onSelectSorting}
+                    selectedIndex={sorting}
+                    style={styles.radioGroup}>
+                    {sortingValues.map((title) => (
+                        <Radio
+                            key={title}>
+                            {title}
+                        </Radio>
+                    ))}
+                </RadioGroup>
+                <Title
+                    name={'ITEM PROPERTIES'} />
+                <ItemPropertySelector
+                    loading={loading}
+                    itemProperties={itemProperties}
+                    properties={properties}
+                    toggleItemProperty={toggleItemProperty}
+                />
+            </View>
+            <BottomButton
+                icon={'arrow-circle-right-outline'}
+                title={'Next'}
+                onPress={onNextPress}
+            />
         </>
     )
 }
 
-export default React.memo(ItemProperties)
+export default ItemProperties
 
 const styles = StyleSheet.create({
-    selectIcon: {
-        width: 20,
-        height: 20,
-        marginHorizontal: 0
+    itemSelector: {
+        alignItems: 'flex-start',
+        flexDirection: 'row',
+        flexWrap: 'wrap',
+        justifyContent: 'space-evenly',
+        marginBottom: 12
     },
-    select: {
-        paddingBottom: 12,
+    tokens: {
+        flexDirection: 'row',
+        flexWrap: 'wrap'
+    },
+    radioGroup: {
+        marginBottom: 12
     }
+
 })

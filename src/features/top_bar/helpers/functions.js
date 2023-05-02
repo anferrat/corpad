@@ -73,6 +73,42 @@ getHeader : {
 export const getHeader = (screen, params, navigation, dispatch, openMenu) => {
     if (dispatch && openMenu && navigation && screen)
         switch (screen) {
+            case "ExportItem":
+                return {
+                    display: true,
+                    isPrimary: true,
+                    left: 'back',
+                    title: {
+                        title: 'Export to spreadsheet',
+                        subtitle: 'Item properties',
+                        icon: 'download-outline',
+                        pack: null
+                    }
+                }
+            case "ExportPotentials":
+                return {
+                    display: true,
+                    isPrimary: true,
+                    left: 'back',
+                    title: {
+                        title: 'Export to spreadsheet',
+                        subtitle: 'Potentials',
+                        icon: 'download-outline',
+                        pack: null
+                    }
+                }
+            case "ExportSubitems":
+                return {
+                    display: true,
+                    isPrimary: true,
+                    left: 'back',
+                    title: {
+                        title: 'Export to spreadsheet',
+                        subtitle: 'More properties',
+                        icon: 'download-outline',
+                        pack: null
+                    }
+                }
             case 'Onboarding':
                 return {
                     display: false

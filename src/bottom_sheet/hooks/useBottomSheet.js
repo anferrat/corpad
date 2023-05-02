@@ -54,7 +54,7 @@ const useBottomSheetContent = () => {
     }, [navigation, closeSheet])
 
     const navigateToExport = useCallback(() => {
-        navigation.navigate('SettingDetails', { setting: 'export' })
+        navigation.navigate('ExportItem')
         closeSheet()
     }, [navigation, closeSheet])
 

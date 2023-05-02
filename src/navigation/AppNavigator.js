@@ -23,6 +23,10 @@ import { TopBar } from '../features/top_bar'
 import SplashScreen from '../features/navigation/components/SplashScreen'
 import Licenses from '../screens/settings/Licenses'
 import useApp from '../hooks/app/useApp'
+import ExportItem from '../screens/export/Item'
+import ExportPotentials from '../screens/export/Potentials'
+import ExportSubitems from '../screens/export/Subitems'
+import ExportOverview from '../screens/export/Overview'
 
 
 const Stack = createNativeStackNavigator()
@@ -56,6 +60,10 @@ export const AppNavigator = () => {
                 <Stack.Screen name='ImportFile' component={ImportFile} />
                 <Stack.Screen name='ImportParameters' component={ImportParameters} />
                 <Stack.Screen name='Settings' component={SettingsScreen} />
+                <Stack.Screen name='ExportItem' component={ExportItem} />
+                <Stack.Screen name='ExportPotentials' component={ExportPotentials} />
+                <Stack.Screen name='ExportSubitems' component={ExportSubitems} />
+                <Stack.Screen name='ExportOverview' component={ExportOverview} />
               </Stack.Group >
               <Stack.Group screenOptions={{ presentation: 'modal' }}>
                 <Stack.Screen name='Search' component={SearchBar} />
