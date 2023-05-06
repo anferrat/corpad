@@ -1,5 +1,6 @@
 import { PermissionsAndroid } from 'react-native'
 import Geolocation from 'react-native-geolocation-service';
+import geomagnetism from 'geomagnetism'
 import { Error, errors } from '../../utils/Error'
 
 export class GeolocationRepository {
@@ -77,4 +78,12 @@ export class GeolocationRepository {
         }
     }
 
+    getDeclination(latitude, longitude) {
+        try {
+            return geomagnetism.model().point([latitude, longitude]).decl
+        }
+        catch (er) {
+            throw new Error(errors.LOCATION, 'Unable to get declination', er, 800)
+        }
+    }
 }

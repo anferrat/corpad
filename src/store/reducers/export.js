@@ -3,7 +3,7 @@ import { SET_EXPORT_ITEM_PROPERTIES, SET_EXPORT_ITEM_TYPE, SET_EXPORT_SORTING, R
 const initialState = {
     itemType: 'TEST_POINT',
     sorting: 0,
-    exportPotentials: false,
+    exportPotentials: true,
     exportSubitems: false,
     itemProperties: ['name'],
     referenceCellId: null,
@@ -102,7 +102,11 @@ const exportSurvey = (state = initialState, action) => {
             }
         }
         case RESET_EXPORT:
-            return initialState
+            return {
+                ...initialState,
+                itemType: state.itemType,
+                sorting: state.sorting
+            }
         default:
             return state
     }

@@ -10,8 +10,8 @@ export const displayCard = StyleSheet.create({
         backgroundColor: '#fff'
     },
     icon: {
-        width: 18,
-        height: 18,
+        width: 20,
+        height: 20,
         marginLeft: 5,
     },
     hidden: {
@@ -107,8 +107,8 @@ export const displayCard = StyleSheet.create({
         alignItems: 'center'
     },
     selectedBarIcon: {
-        height: 22,
-        width: 22,
+        height: 24,
+        width: 24,
         marginLeft: 5,
     },
     readingBarIcons: {

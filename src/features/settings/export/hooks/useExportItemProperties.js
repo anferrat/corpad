@@ -1,6 +1,6 @@
 import { useDispatch, useSelector } from "react-redux"
 import { useCallback, useState, useEffect, useRef } from 'react'
-import { setExportItemType, setExportSorting, toggleExportItemProperty } from "../../../../store/actions/export"
+import { resetExport, setExportItemType, setExportSorting, toggleExportItemProperty } from "../../../../store/actions/export"
 import { getExportItemProperties } from "../../../../app/controllers/survey/ExportController"
 import { errorHandler } from "../../../../helpers/error_handler"
 
@@ -29,6 +29,7 @@ const useExportItemProperties = ({ navigateToExportOverview, navigateToExportPot
         setTimeout(() => loadData(), 20)
         return () => {
             componentMounted.current = false
+            dispatch(resetExport())
         }
     }, [itemType])
 

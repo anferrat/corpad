@@ -4,7 +4,6 @@ import { SafeAreaView } from 'react-native'
 import { DefaultNames } from '../../features/settings/default_names/index'
 import { ReferenceCells } from '../../features/settings/reference_cells/index'
 import { PotentialTypes } from '../../features/settings/potentials/index'
-import ExportSurvey from '../../features/settings/export/ExportSurvey'
 import { SurveyOverview } from '../../features/settings/info/index'
 import { ExportedFilesList } from '../../features/settings/exported_files/'
 import About from '../../features/settings/about/About'
@@ -18,8 +17,6 @@ const Setting = (props) => {
             return <ReferenceCells {...props} />
         case 'potentials':
             return <PotentialTypes {...props} />
-        case 'export':
-            return <ExportSurvey {...props} />
         case 'info':
             return <SurveyOverview {...props} />
         case 'exportedFiles':
