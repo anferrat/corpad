@@ -4,17 +4,29 @@ import { StyleSheet, Pressable, View } from 'react-native'
 import { primary } from '../../../../styles/colors'
 import { androidRipple } from '../../../../styles/styles'
 
-const ListItem = (props) => {
+const ListItem = ({ icon, pack, title, subtitle, onPress }) => {
     return (
         <>
             <Pressable
                 android_ripple={androidRipple}
                 style={styles.pressable}
-                onPress={props.onPress}>
-                <Icon name={props.iconName} pack={props.pack} style={styles.icon} fill={primary} />
-                <View style={styles.textView}>
-                    <Text style={styles.text}>{props.title}</Text>
-                    <Text appearance='hint' category='p2'>{props.subtitle}</Text>
+                onPress={onPress}>
+                <Icon
+                    name={icon}
+                    pack={pack}
+                    style={styles.icon}
+                    fill={primary} />
+                <View
+                    style={styles.textView}>
+                    <Text
+                        style={styles.text}>
+                        {title}
+                    </Text>
+                    <Text
+                        appearance='hint'
+                        category='p2'>
+                        {subtitle}
+                    </Text>
                 </View>
             </Pressable>
         </>

@@ -52,7 +52,7 @@ const useMarkers = ({ navigateToEdit, navigateToView, ref }) => {
 
         const onUpdateHandler = EventRegister.addEventListener('GLOBAL_ITEM_UPDATED', async ({ itemType, itemId }) => {
             if (!loading && (itemType === 'TEST_POINT' || itemType === 'RECTIFIER')) {
-                const { status, response } = await getMarker({ itemType, itemId }, er => errorHandler(er))
+                const { status, response } = await getMarker({ itemType, itemId })
                 if (status === 200) {
                     dispatch(updateMarker(response))
                 }

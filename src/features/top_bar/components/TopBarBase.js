@@ -9,7 +9,7 @@ import MainMenuTitle from './MainMenuTitle'
 import ViewTitle from './ViewTitle'
 import EditTitle from './EditTitle'
 import CloudButton from './CloudButton'
-import NavigationWidget from './NavigationWidget'
+import NavigationWidget from './navigation_widget/'
 import FocusAwareStatusBar from '../../../components/FocusAwareStatusBar'
 
 const TopBarBase = ({ left, right, title, isPrimary, navigation, noBorder }) => {

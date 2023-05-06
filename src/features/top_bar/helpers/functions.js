@@ -109,6 +109,18 @@ export const getHeader = (screen, params, navigation, dispatch, openMenu) => {
                         pack: null
                     }
                 }
+            case "ExportOverview":
+                return {
+                    display: true,
+                    isPrimary: true,
+                    left: 'back',
+                    title: {
+                        title: 'Export to spreadsheet',
+                        subtitle: 'Overview',
+                        icon: 'download-outline',
+                        pack: null
+                    }
+                }
             case 'Onboarding':
                 return {
                     display: false

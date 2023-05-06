@@ -24,7 +24,7 @@ const ItemList = ({ itemType, navigateToView }) => {
                     [updated.itemId],
                     t.settings.appliedFilters,
                     t.settings.displayedReading)
-                if (item)
+                if (item.id)
                     dispatch(updateList(itemType, updated.itemId, item))
             }
         })
