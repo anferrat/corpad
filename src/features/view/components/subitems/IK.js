@@ -5,9 +5,10 @@ import Input from '../../../../components/Input'
 import Header from '../Header'
 import Divider from '../Divider'
 import TextLine from '../TextLine'
-import { isolationAssemblyTypes } from '../../../../constants/constants'
 import SidesDisplay from '../SidesDisplay'
 import { isEqualIK } from '../../helpers/comparators'
+import { IsolationShortedLabels, IsolationTypeLabels } from '../../../../constants/labels'
+import { IsolationShorted } from '../../../../constants/global'
 
 const IK = ({ data, updateShorted, updatePropertyValue, validateCurrent, onEdit, idMap, subitemIndex }) => {
     const { name, type, current, fromAtoB, isolationType, shorted, sideA, sideB, valid } = data
@@ -34,7 +35,7 @@ const IK = ({ data, updateShorted, updatePropertyValue, validateCurrent, onEdit,
                 sideA={sideA}
                 sideB={sideB} />
             <Divider visible={true} />
-            <TextLine title='Isolation type' value={isolationAssemblyTypes[isolationType] ?? null} />
+            <TextLine title='Isolation type' value={IsolationTypeLabels[isolationType] ?? null} />
             <View style={styles.shortedView}>
                 <Toggle
                     style={styles.toggle}
@@ -42,7 +43,7 @@ const IK = ({ data, updateShorted, updatePropertyValue, validateCurrent, onEdit,
                     checked={Boolean(shorted)}
                     title='Shorted'
                     onChange={onToggle}>
-                    <Text>Shorted</Text>
+                    <Text>{IsolationShortedLabels[IsolationShorted.SHORTED]}</Text>
                 </Toggle>
                 <View style={shorted ? styles.input : styles.hidden}>
                     <Input

@@ -1,4 +1,4 @@
-import { SubitemTypes } from "../../../../entities/survey/subitems/Subitem"
+import { SubitemTypes } from "../../../../../constants/global"
 import { Error, errors } from "../../../../utils/Error"
 
 export class GetSubitemById {

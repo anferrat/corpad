@@ -2,11 +2,14 @@ import React from 'react'
 import { Text, Icon } from '@ui-kitten/components'
 import { StyleSheet, View } from 'react-native'
 import { basic } from '../../../styles/colors'
-import { labels, testPointTypeCodes } from '../../../constants/constants'
+import { ItemTypes } from '../../../constants/global'
+import { ItemTypeIcons, TestPointTypeIcons } from '../../../constants/icons'
+import { ItemTypeLabels, TestPointTypeLabels } from '../../../constants/labels'
 
 const ItemTitleView = ({ title, itemType, testPointType }) => {
-    const icon = itemType === 'TEST_POINT' ? testPointTypeCodes[testPointType] : itemType
-    const subtitle = labels[icon].label
+    const tpIcon = TestPointTypeIcons[testPointType]
+    const icon = itemType === ItemTypes.TEST_POINT && tpIcon ? tpIcon : ItemTypeIcons[itemType]
+    const subtitle = itemType === ItemTypes.TEST_POINT && tpIcon ? TestPointTypeLabels[testPointType] : ItemTypeLabels[itemType]
     return (
         <View
             style={styles.mainView}>
@@ -16,15 +19,16 @@ const ItemTitleView = ({ title, itemType, testPointType }) => {
                 ellipsizeMode='tail'>{title}</Text>
             <View
                 style={styles.subtitleView}>
-                <Text
-                    category='p1'
-                    appearance='hint'>
-                    {subtitle}</Text>
                 <Icon
                     fill={basic}
                     style={styles.icon}
                     pack={'cp'}
-                    name={icon} />
+                    name={`${icon}-filled`} />
+                <Text
+                    category='p1'
+                    appearance='hint'>
+                    {subtitle}</Text>
+
             </View>
         </View>
     )
@@ -38,12 +42,13 @@ const styles = StyleSheet.create({
         flex: 1
     },
     subtitleView: {
+        paddingTop: 4,
         flexDirection: 'row',
         alignItems: 'center',
     },
     icon: {
-        height: 20,
-        width: 20,
-        marginLeft: 8
+        height: 18,
+        width: 18,
+        marginRight: 4
     }
 })

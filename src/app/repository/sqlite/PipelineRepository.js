@@ -2,7 +2,7 @@ import { SQLiteRepository } from "../../utils/SQLite"
 import { Pipeline } from "../../entities/survey/items/Pipeline"
 import { Error, errors } from "../../utils/Error"
 import { ItemResponseProcessor } from "./utils/ItemResponseProcessor"
-import { ItemTypes } from "../../entities/survey/items/SurveyItem"
+import { ItemTypes } from "../../../constants/global"
 
 export class PipelineRepository extends SQLiteRepository {
     constructor() {

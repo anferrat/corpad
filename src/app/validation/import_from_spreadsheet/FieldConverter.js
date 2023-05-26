@@ -1,7 +1,7 @@
-import { ItemStatuses, TestPointTypes } from "../../entities/survey/items/SurveyItem"
+import { ItemStatuses, TestPointTypes } from '../../../constants/global'
 
 export class FieldConverter {
-    constructor () {}
+    constructor() { }
 
     convertName(name) {
         //make sure this matches reg expression in Validation.name!

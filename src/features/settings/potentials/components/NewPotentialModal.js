@@ -12,8 +12,8 @@ const NewPotentialModal = ({ visible, addPotential, dismissModal, onChangeName, 
         const watch = setTimeout(() => {
             if (visible)
                 inputRef.current?.focus()
-        }, 30)
-        return () => clearInterval(watch)
+        }, 120)
+        return () => clearTimeout(watch)
     }, [visible])
 
     return (
@@ -23,10 +23,9 @@ const NewPotentialModal = ({ visible, addPotential, dismissModal, onChangeName, 
             backdropStyle={styles.backDrop}
             visible={visible}>
             <ScrollView
-                keyboardShouldPersistTaps='handled'
                 style={styles.inputView}>
                 <Input
-                    inputRef={inputRef}
+                    ref={inputRef}
                     label='New potential type'
                     maxLength={12}
                     valid={nameValid}
@@ -66,7 +65,9 @@ const styles = StyleSheet.create({
         paddingHorizontal: 12
     },
     modal: {
-        width: '90%'
+        position: 'absolute',
+        width: '90%',
+        top: '35%'
     },
     backDrop: {
         backgroundColor: 'rgba(0,0,0,0.5)'

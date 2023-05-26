@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react'
 import { StyleSheet, View } from 'react-native'
 import { Text } from '@ui-kitten/components'
-import { referenceCellCodes, potentialUnits } from '../../../../../constants/constants'
 import SingleIconButton from '../../../../../components/IconButton'
 import Input from '../../../../../components/Input'
+import { ReferenceCellCodeLabels, PotentialUnitLabels } from '../../../../../constants/labels'
 
 const displayTitle = (title) => <Text
     appearance='hint'
@@ -27,8 +27,8 @@ const PotentialField = (props) => {
     </Text>, [props.title])
 
     const unit = React.useMemo(() => ({
-        main: potentialUnits[props.unit],
-        script: referenceCellCodes[props.referenceCellType]
+        main: PotentialUnitLabels[props.unit],
+        script: ReferenceCellCodeLabels[props.referenceCellType]
     }), [])
 
     const removeButton = React.useMemo(() => <View style={styles.button}>

@@ -1,9 +1,23 @@
 import React from 'react'
-import { StyleSheet, View, ScrollView } from 'react-native'
-import { Text } from '@ui-kitten/components'
-import { testPointTypes, testPointReadingOptions, labels } from '../../../constants/constants'
+import { StyleSheet, ScrollView } from 'react-native'
 import Header from '../../Header'
 import ListItem from './ListItem'
+import { SubitemTypes } from '../../../constants/global'
+import { SubitemTypeLabels } from '../../../constants/labels'
+import { SubitemTypeIconsFilled } from '../../../constants/icons'
+
+const SubitemTypeOptions = [
+    SubitemTypes.PIPELINE,
+    SubitemTypes.RISER,
+    SubitemTypes.STRUCTURE,
+    SubitemTypes.TEST_LEAD,
+    SubitemTypes.ANODE,
+    SubitemTypes.COUPON,
+    SubitemTypes.REFERENCE_CELL,
+    SubitemTypes.BOND,
+    SubitemTypes.SHUNT,
+    SubitemTypes.ISOLATION,
+]
 
 const ModalContent = ({ onSelect, hideModal }) => {
 
@@ -12,31 +26,14 @@ const ModalContent = ({ onSelect, hideModal }) => {
         hideModal()
     }
 
-    const renderItem = React.useCallback((cardList) => cardList.map(cardCode => (
+    const renderItem = React.useCallback((subitemTypes) => subitemTypes.map(subitemType => (
         <ListItem
-            key={`SelectCard_${cardCode}`}
-            title={labels[cardCode]?.label}
+            key={subitemType}
+            title={SubitemTypeLabels[subitemType]}
             pack='cp'
-            onPress={onSelectHandler.bind(this, cardCode)}
-            iconName={`${cardCode}-filled`} />
-    )), [onSelect])
-
-    const renderSection = () => {
-        return testPointTypes.filter((_, index) => index < 2).map((type, index) => {
-            return (
-                <View
-                    key={`Section_${type}`}>
-                    <Text
-                        category='h6'
-                        style={styles.sectionTitle}
-                        appearance='hint'>
-                        {index === 0 ? `${type} / ${testPointTypes[2]}` : type}
-                    </Text>
-                    {renderItem(testPointReadingOptions[index])}
-                </View>
-            )
-        })
-    }
+            onPress={onSelectHandler.bind(this, subitemType)}
+            iconName={SubitemTypeIconsFilled[subitemType]} />
+    )), [onSelectHandler])
 
     return (
         <>
@@ -44,7 +41,7 @@ const ModalContent = ({ onSelect, hideModal }) => {
                 title='Select reading'
                 onBackPress={hideModal} />
             <ScrollView>
-                {renderSection()}
+                {renderItem(SubitemTypeOptions)}
             </ScrollView>
         </>
     )

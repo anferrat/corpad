@@ -12,7 +12,7 @@ const AttributeMapper = (props) => {
         return (
             <View style={i % 2 ? styles.even : styles.odd} key={item.index}>
                 <AttributeMapElement
-                    standardValue={props.itemList[item.index] ?? 'Error'}
+                    standardValue={props.itemListLabels[item.index] ?? 'Error'}
                     icon={fieldProperties[props.property].accessoryList[item.index]}
                     onDelete={props.removeAttribute.bind(this, item.index)}
                     mappedValues={item.mappedValues.map(v => v === '' ? '<Empty>' : v)}

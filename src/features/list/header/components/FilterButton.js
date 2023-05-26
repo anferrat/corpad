@@ -10,8 +10,19 @@ const FilterButton = (props) => {
             style={styles.pressable}
             onPress={props.onPress}
             android_ripple={androidRipple}>
-            <Text style={styles.buttonText} status='primary' category='p2'>{props.title}</Text>
-            <Icon name={props.icon} pack={props.pack} fill={primary} style={styles.icon} />
+            <Text
+                style={styles.buttonText}
+                status='primary'
+                category='s1'
+                numberOfLines={1}
+                ellipsizeMode={'head'}>
+                {props.title}
+            </Text>
+            <Icon
+                name={props.icon}
+                pack={props.pack}
+                fill={primary}
+                style={styles.icon} />
         </Pressable>
     )
 }

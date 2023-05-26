@@ -1,5 +1,5 @@
 import { Potential } from "../../../../../entities/survey/subitems/Potential"
-import { SubitemTypes } from "../../../../../entities/survey/subitems/Subitem"
+import { SubitemTypes } from "../../../../../../constants/global"
 import { guid } from "../../../../../utils/guid"
 
 // first order subitems are getting imported first, to retrive id's for the second order subitems (shunts, bonds etc.)

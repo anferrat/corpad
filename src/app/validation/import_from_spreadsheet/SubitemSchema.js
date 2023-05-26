@@ -1,5 +1,5 @@
 import { object, string, array } from "yup";
-import { SubitemTypes } from "../../entities/survey/subitems/Subitem";
+import { SubitemTypes } from "../../../constants/global";
 import { Validation } from "../../utils/Validation";
 import { errors } from "../../utils/Error";
 

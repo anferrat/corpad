@@ -1,5 +1,4 @@
-import { ItemTypes } from "../../../entities/survey/items/SurveyItem"
-import { DisplayedReadingOptions, PermanentPotentialTypes } from "../../../entities/survey/other/properties"
+import { ItemTypes, DisplayedReadingOptions, PermanentPotentialTypes } from "../../../../constants/global"
 import { Error, errors } from "../../../utils/Error"
 
 export class GetItemListWithDisplayValues {

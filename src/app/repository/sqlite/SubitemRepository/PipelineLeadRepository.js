@@ -1,5 +1,5 @@
 import { SQLiteRepository } from "../../../utils/SQLite"
-import { SubitemTypes } from "../../../entities/survey/subitems/Subitem"
+import { SubitemTypes } from "../../../../constants/global"
 import { PipelineLead } from "../../../entities/survey/subitems/PipelineLead"
 import { Error, errors } from "../../../utils/Error"
 

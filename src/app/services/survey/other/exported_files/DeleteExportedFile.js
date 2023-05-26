@@ -1,4 +1,4 @@
-import { FileSystemLocations } from "../../../../entities/survey/other/properties"
+import { FileSystemLocations } from "../../../../../constants/global"
 
 export class DeleteExportedFile {
     constructor(fileSystemRepo) {

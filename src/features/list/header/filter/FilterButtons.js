@@ -22,9 +22,9 @@ const FilterButtons = (props) => {
     }
 
     return <View style={styles.bottomBar}>
-        <Button style={displayReset ? styles.button : styles.hidden} appearance='outline' size='small' onPress={resetFiltersHandler}>Clear filters</Button>
+        <Button style={displayReset ? styles.button : styles.hidden} appearance='outline' onPress={resetFiltersHandler}>Clear filters</Button>
         <View style={displayReset ? styles.hidden : styles.button} />
-        <Button style={displayApply ? styles.button : styles.hidden} size='small' onPress={activateFilters}>Apply</Button>
+        <Button style={displayApply ? styles.button : styles.hidden}  onPress={activateFilters}>Apply</Button>
     </View>
 }
 
@@ -39,7 +39,7 @@ const styles = StyleSheet.create({
         width: '100%'
     },
     button: {
-        height: 40,
+        height: 42,
         width: 125
     },
     hidden: {

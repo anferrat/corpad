@@ -97,7 +97,7 @@ const SurveyFileListItem = ({ name, fileName, timeModified, tpCount, rectifierCo
                                     numberOfLines={1}
                                     ellipsizeMode={'middle'}
                                     appearance='hint'
-                                    category='c1'>
+                                    category='s1'>
                                     {fileName}
                                 </Text>
 
@@ -111,7 +111,7 @@ const SurveyFileListItem = ({ name, fileName, timeModified, tpCount, rectifierCo
                                     fill={basic} />
                                 <Text
                                     appearance='hint'
-                                    category='p2'>
+                                    category='s1'>
                                     {getFormattedDate(timeModified)}
                                 </Text>
                             </View>

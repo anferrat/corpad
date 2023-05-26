@@ -3,42 +3,52 @@ import { ScrollView } from 'react-native-gesture-handler'
 import { StyleSheet } from 'react-native'
 import { Text } from '@ui-kitten/components'
 import ListItem from './components/ListItemSettings'
-import { calculatorTypes } from '../../constants/constants'
+import { CalculatorTypes } from '../../constants/global'
+import { CalculatorTypeIconPacks, CalculatorTypeIcons } from '../../constants/icons'
+import { CalculatorTypeDescriptionLabels, CalculatorTypeLabels } from '../../constants/labels'
 
 export const calculatorParams = [
     {
         title: 'Current',
-        calculators: ['shunt', 'current2Wire', 'current4Wire']
+        calculators: [CalculatorTypes.SHUNT, CalculatorTypes.CURRENT_TWO_WIRE, CalculatorTypes.CURRENT_FOUR_WIRE]
     },
     {
         title: 'Soil',
-        calculators: ['wenner']
+        calculators: [CalculatorTypes.WENNER]
     },
     {
         title: 'Coating',
-        calculators: ['coating']
+        calculators: [CalculatorTypes.COATING]
     },
     {
         title: 'Other',
-        calculators: ['refCell']
+        calculators: [CalculatorTypes.REFERENCE_CELL]
     },
 ]
 
 const CalculatorList = (props) => {
     return (
-        <ScrollView style={styles.mainView} contentContainerStyle={styles.container}>
+        <ScrollView
+            style={styles.mainView}
+            contentContainerStyle={styles.container}>
             {calculatorParams.map(section => (
-                <React.Fragment key={section.title}>
-                    <Text style={styles.title} appearance='hint'>{section.title}</Text>
+                <React.Fragment
+                    key={section.title}>
+                    <Text
+                        style={styles.title}
+                        appearance='hint'>
+                        {section.title}
+                    </Text>
                     {section.calculators.map(calculator =>
                         <ListItem
-                            pack={calculatorTypes[calculator].pack}
-                            iconName={calculatorTypes[calculator].icon}
+                            pack={CalculatorTypeIconPacks[calculator]}
+                            iconName={CalculatorTypeIcons[calculator]}
                             key={calculator}
-                            title={calculatorTypes[calculator].title}
-                            subtitle={calculatorTypes[calculator].description}
+                            title={CalculatorTypeLabels[calculator]}
+                            subtitle={CalculatorTypeDescriptionLabels[calculator]}
                             onPress={props.navigateToCalculator.bind(this, calculator)} />)}
-                </React.Fragment>))}
+                </React.Fragment>
+            ))}
         </ScrollView>
     )
 }

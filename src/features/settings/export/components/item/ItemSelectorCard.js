@@ -1,12 +1,13 @@
 import React, { useCallback } from 'react'
 import SelectToken from '../SelectToken'
-import { labels } from '../../../../../constants/constants'
+import { ItemTypeLabelsPlural } from '../../../../../constants/labels'
+import { ItemTypeIconsFilled } from '../../../../../constants/icons'
 
 const ItemSelectorCard = ({ onPress, selectedItemType, itemType }) => {
     const selected = selectedItemType === itemType
     const onPressHandler = useCallback(() => onPress(itemType), [itemType, onPress])
-    const title = `${labels[itemType].label}s`
-    const icon = `${labels[itemType].icon}-filled`
+    const title = ItemTypeLabelsPlural[itemType]
+    const icon = ItemTypeIconsFilled[itemType]
 
     return (
         <SelectToken

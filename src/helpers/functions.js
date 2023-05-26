@@ -630,7 +630,7 @@ export const getDefaultUnit = (unitList, defaultUnitIndex, extraData=[], referen
             }
         }
         else {
-            // convertion last digit to superscript for display purposes, not ideal, but it's just easy
+            //convertion last digit to superscript for display purposes, not ideal, but it's just easy
             const unit = unitList[defaultUnitIndex]
             if (unit) {
                 if (!isNaN(unit[unit.length - 1]))

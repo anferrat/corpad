@@ -1,5 +1,5 @@
 import React, { useRef } from 'react'
-import { StyleSheet, StatusBar } from 'react-native'
+import { StyleSheet } from 'react-native'
 import PointMarker from './components/markers/PointMarker'
 import ActiveMarker from './components/markers/ActiveMarker'
 import { mapStyle } from './components/map_style/style'
@@ -26,7 +26,6 @@ const Map = ({ navigateToView, navigateToEdit }) => {
         newItemMarker,
         isFocused,
         loading,
-
         onRegionChange,
         animateToCoordinates,
         newItemMarkerHandler,
@@ -77,6 +76,10 @@ const Map = ({ navigateToView, navigateToEdit }) => {
                         uid={m.uid}
                         id={m.id}
                         name={m.name}
+                        //timeModified={m.timeModified}
+                        //timeCreated={m.timeCreated}
+                        //comment={m.comment}
+                        testPointType={m.testPointType}
                         onPress={onMarkerPress}
                         updateMarkerHandler={updateMarkerHandler}
                         onDragStart={onDragStart}
@@ -110,8 +113,7 @@ const Map = ({ navigateToView, navigateToEdit }) => {
             <SearchBar
                 satelliteMode={satelliteMode}
                 setMarkerActive={setMarkerActive}
-                resetActiveMarker={resetActiveMarker}
-            />
+                resetActiveMarker={resetActiveMarker} />
             <ControlBar
                 loading={loading}
                 satelliteMode={satelliteMode}

@@ -1,4 +1,4 @@
-import { SubitemTypes } from "../../../../../entities/survey/subitems/Subitem"
+import { SubitemTypes } from "../../../../../../constants/global"
 
 export class AdvancedJsonImport {
     constructor(testPointRepo, rectifierRepo, pipelineRepo, subitemRepo, potentialTypeRepo, surveyRepo, referenceCellRepo, potentialRepo) {

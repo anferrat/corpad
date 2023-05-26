@@ -1,5 +1,5 @@
 import React from 'react'
-import { StyleSheet, Pressable } from 'react-native'
+import { StyleSheet, Pressable, View } from 'react-native'
 import { Icon, Text } from '@ui-kitten/components'
 import { basic, basic300, basic400, control, primary } from '../styles/colors'
 import { androidRipple } from '../styles/styles'
@@ -8,48 +8,52 @@ import { androidRipple } from '../styles/styles'
 const ToggleToken = ({ checked, title, onPress, icon, pack }) => {
     const check = checked ? 'checkmark-circle-2' : 'radio-button-off-outline'
     return (
-        <Pressable
-            android_ripple={androidRipple}
-            style={styles.container}
-            onPress={onPress}>
-            <Icon
-                name={check}
-                fill={checked ? primary : basic400}
-                style={styles.icon} />
-            {icon ?
+        <View style={styles.wrapper}>
+            <Pressable
+                android_ripple={androidRipple}
+                style={styles.container}
+                onPress={onPress}>
                 <Icon
-                    name={icon}
-                    pack={pack}
-                    fill={basic}
+                    name={check}
+                    fill={checked ? primary : basic400}
                     style={styles.icon} />
-                : null}
-            <Text
-                style={styles.text}
-                category='p2'
-                ellipsizeMode={'tail'}
-                numberOfLines={1}>
-                {title}
-            </Text>
-        </Pressable>
+                {icon ?
+                    <Icon
+                        name={icon}
+                        pack={pack}
+                        fill={basic}
+                        style={styles.icon} />
+                    : null}
+                <Text
+                    style={styles.text}
+                    category='s1'
+                    ellipsizeMode={'tail'}
+                    numberOfLines={1}>
+                    {title}
+                </Text>
+            </Pressable>
+        </View>
     )
 }
 
 export default ToggleToken
 
 const styles = StyleSheet.create({
+    wrapper: {
+        overflow: 'hidden',
+        borderRadius: 20,
+        margin: 4,
+        elevation: 2,
+    },
     container: {
         flex: -1,
         flexDirection: 'row',
         alignItems: 'center',
-        paddingHorizontal: 8,
+        padding: 8,
         paddingRight: 12,
-        paddingVertical: 8,
         borderRadius: 20,
-        borderWidth: 1,
         borderColor: basic300,
-        maxWidth: 200,
-        margin: 4,
-        elevation: 1,
+        maxWidth: 200,      
         backgroundColor: control
     },
     icon: {

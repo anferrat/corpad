@@ -2,10 +2,13 @@ import React from 'react'
 import Select from '../../../../../components/Select2'
 import IsolationView from '../IsolationView'
 import SidesView from '../SidesView'
-import { isolationAssemblyTypes } from '../../../../../constants/constants'
 import NameInput from '../NameInput'
+import { IsolationTypes } from '../../../../../constants/global'
+import { IsolationTypeLabels } from '../../../../../constants/labels'
 
 const selectedTypes = ['RS', 'FC'] // types that can be used as side for IK card
+
+const isolationTypes = Object.values(IsolationTypes).map(type => ({ item: IsolationTypeLabels[type], index: type }))
 
 const IKCard = ({ data, subitemList, update, validate, updateShortedHandler }) => {
     const { sideA, sideB, fromAtoB, name, defaultName, valid, current, isolationType, shorted } = data
@@ -33,7 +36,7 @@ const IKCard = ({ data, subitemList, update, validate, updateShortedHandler }) =
             <Select
                 onSelect={onSelect}
                 property='isolationType'
-                itemList={isolationAssemblyTypes}
+                itemList={isolationTypes}
                 selectedIndex={isolationType}
                 placeholderOption={true}
                 placeholder="Select type"

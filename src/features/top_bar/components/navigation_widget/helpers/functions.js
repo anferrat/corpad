@@ -17,7 +17,8 @@ export const getCardinalDirection = (degree) => {
 }
 
 export const calculateResultHeading = (heading, bearing, declination) => {
-    const rotation = ((bearing - heading + declination) + 360) % 360
+    //without declination seem more accuarate
+    const rotation = ((bearing - heading) + 360) % 360
     return rotation
 }
 

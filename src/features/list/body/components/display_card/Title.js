@@ -12,7 +12,7 @@ const DisplayCardTitle = ({ dataList, icon, title, subtitle }) => {
     return (
         <View style={displayCard.TitleDisplay}>
             <Text
-                category='h5'
+                category='h4'
                 numberOfLines={1}
                 ellipsizeMode='tail'>{title}</Text>
             <Text

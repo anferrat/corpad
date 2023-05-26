@@ -1,6 +1,6 @@
 import React from 'react'
 import InputWithTitle from './InputWithTitle'
-import { referenceCellCodes, potentialUnits } from '../../../constants/constants'
+import { PotentialUnitLabels, ReferenceCellCodeLabels } from '../../../constants/labels'
 
 const PotentialInput = ({ potentialId, name, referenceCellName, referenceCellType, value, valid, validatePotential, updatePotentialValue, unit, displayHint, subitemIndex, potentialIndex }) => {
 
@@ -25,8 +25,8 @@ const PotentialInput = ({ potentialId, name, referenceCellName, referenceCellTyp
             valid={valid}
             property='potential'
             unit={{
-                main: potentialUnits[unit],
-                script: referenceCellCodes[referenceCellType]
+                main: PotentialUnitLabels[unit],
+                script: ReferenceCellCodeLabels[referenceCellType]
             }}
         />
     )

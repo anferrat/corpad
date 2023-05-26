@@ -1,5 +1,5 @@
 import { Marker } from "../../../../entities/survey/items/Marker"
-import { ItemTypes } from "../../../../entities/survey/items/SurveyItem"
+import { ItemTypes } from "../../../../../constants/global"
 import { Error, errors } from "../../../../utils/Error"
 
 export class UpdateMarker {

@@ -1,4 +1,3 @@
-import { ListPresenter } from "../../../presenters/ListPresenter"
 import { PotentialPresenter } from "../../../presenters/PotentialPresenter"
 import { PotentialRepository } from "../../../repository/sqlite/PotentialRepository"
 import { PotentialTypeRepository } from "../../../repository/sqlite/PotentialTypeRepository"

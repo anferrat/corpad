@@ -1,14 +1,13 @@
 import React from 'react'
 import { View, StyleSheet } from 'react-native'
 import { Divider } from '@ui-kitten/components'
-import { pipeMaterials, pipeDiameterList, pipeProducts } from '../../../../constants/constants'
 import IconLine from '../IconLine'
 import TextLine from '../TextLine'
 import ItemTitleView from '../ItemTitleView'
 import { getFullDate } from '../../../../helpers/functions'
 import { danger, success } from '../../../../styles/colors'
 import { getCountTitle } from '../../helpers/functions'
-
+import { PipelineMaterialLabels, PipelineProductLabels, PipeDiameterLabels, PipelineCoatingLabels } from '../../../../constants/labels'
 
 const PL = ({ data, itemType }) => {
     const { name, timeModified, licenseNumber, tpCount, comment, material, nps, coating, product } = data
@@ -31,17 +30,17 @@ const PL = ({ data, itemType }) => {
             <Divider style={styles.divider} />
             <TextLine
                 title='Material'
-                value={pipeMaterials[material] ?? null}
+                value={PipelineMaterialLabels[material] ?? null}
                 icon='cube-outline' />
             <TextLine
                 title='Size'
-                value={pipeDiameterList[nps] ?? null} />
+                value={PipeDiameterLabels[nps] ?? null} />
             <TextLine
-                title='Coated'
-                value={coating ? 'Yes' : 'No'}
+                title='Coating'
+                value={PipelineCoatingLabels[Number(coating)]}
                 icon={coating ? 'checkmark-outline' : 'slash-outline'}
                 fill={coating ? success : danger} />
-            <TextLine title='Product' value={pipeProducts[product] ?? null} />
+            <TextLine title='Product' value={PipelineProductLabels[product] ?? null} />
         </View>
     )
 }

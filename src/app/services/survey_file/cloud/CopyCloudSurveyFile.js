@@ -1,4 +1,4 @@
-import { FileSystemLocations } from "../../../entities/survey/other/properties"
+import { FileSystemLocations } from "../../../../constants/global"
 import { Error, errors } from "../../../utils/Error"
 
 export class CopyCloudSurveyFile {

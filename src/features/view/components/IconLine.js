@@ -22,7 +22,7 @@ const IconLine = ({ value, pack, icon }) => {
                     fill={primary}
                     pack={pack} />
                 <Text
-                    category='p2'
+                    category='s1'
                     numberOfLines={20}
                     style={styles.text}>{value}</Text>
             </Pressable>
@@ -42,7 +42,7 @@ const styles = StyleSheet.create({
     icon: {
         width: 20,
         height: 20,
-        marginRight: 12
+        marginRight: 8
     },
     text: {
         flexShrink: 1,

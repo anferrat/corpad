@@ -7,8 +7,8 @@ const anchor = {
     y: 0.5
 }
 
-const PointMarker = ({ uid, id, name, onPress, updateMarkerHandler, onDragStart, active, latitude, longitude, status, markerType, itemType, location, comment, timeModified, timeCreated }) => {
-    const marker = { uid, id, name, latitude, longitude, status, markerType, itemType, location, comment, timeModified, timeCreated }
+const PointMarker = ({ uid, id, name, onPress, updateMarkerHandler, onDragStart, active, latitude, longitude, status, markerType, itemType, location, comment, timeModified, timeCreated, testPointType }) => {
+    const marker = { uid, id, name, latitude, longitude, status, markerType, itemType, location, comment, timeModified, timeCreated, testPointType }
     const onPressHandler = () => onPress(marker)
 
     const onDragEnd = ({ nativeEvent: { coordinate: { latitude, longitude } } }) => {

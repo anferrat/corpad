@@ -1,4 +1,118 @@
-import { ItemTypes } from "../../../../constants/global"
+export const ItemTypes = Object.freeze({
+    TEST_POINT: 'TEST_POINT',
+    PIPELINE: 'PIPELINE',
+    RECTIFIER: 'RECTIFIER',
+})
+
+export const TestPointTypes = Object.freeze({
+    TEST_STATION: 0,
+    HEADER: 1,
+    JUNCTION_BOX: 2,
+    FIELD_NOTE: 3
+})
+
+export const ItemStatuses = {
+    GOOD: 0,
+    ATTENTION: 1,
+    BAD: 2,
+    UNKNOWN: 3,
+    NO_STATUS: null
+}
+
+export const IconTypes = Object.freeze({
+    [ItemTypes.TEST_POINT]: {
+        [TestPointTypes.TEST_STATION]: 'TS',
+        [TestPointTypes.JUNCTION_BOX]: 'JB',
+        [TestPointTypes.HEADER]: 'HD',
+        [TestPointTypes.FIELD_NOTE]: 'FN',
+    },
+    [ItemTypes.RECTIFIER]: 'RT',
+    [ItemTypes.PIPELINE]: 'PL'
+})
+
+export const SubitemTypes = Object.freeze({
+    ANODE: 'AN',
+    PIPELINE: 'PL',
+    REFERENCE_CELL: 'RE',
+    COUPON: 'CN',
+    BOND: 'BD',
+    SHUNT: 'SH',
+    TEST_LEAD: 'OT',
+    RISER: 'RS',
+    ISOLATION: 'IK',
+    STRUCTURE: 'FC',
+    CIRCUIT: 'CT'
+})
+
+export const PipelineProducts = Object.freeze({
+    GAS: 0,
+    OIL: 1,
+    WATER: 2,
+    OTHER: 3
+})
+
+export const PipelineMaterials = Object.freeze({
+    CARBON_STEEL: 0,
+    ALLOY_STEEL: 1,
+    CAST_IRON: 2,
+    COPPER: 3,
+    NICKEL: 4,
+    PVC: 5,
+    HDPE: 6,
+    OTHER: 7
+})
+
+export const PowerSources = Object.freeze({
+    AC_POWER: 0,
+    TEG: 1,
+    WIND: 2,
+    SOLAR: 3,
+})
+
+export const TapOptions = Object.freeze({
+    COARSE_FINE: 0,
+    RESISTOR: 1,
+    AUTO: 2
+})
+
+export const CoarseFineOptions = Object.freeze({
+    A: 0,
+    B: 1,
+    C: 2,
+    D: 3,
+    E: 4,
+    F: 5,
+    G: 6,
+    H: 7,
+    J: 8,
+    K: 9,
+    D0: 10,
+    D1: 11,
+    D2: 12,
+    D3: 13,
+    D4: 14,
+    D5: 15,
+    D6: 16,
+    D7: 17,
+    D8: 18,
+    D9: 19,
+})
+
+export const DisplayCardDataTypes = Object.freeze({
+    TIME_MODIFIED: 0,
+    MATERIAL: 1,
+    LOCATION: 2,
+    TAP: 3,
+})
+
+export const OnboardingScreens = Object.freeze({
+    REFERENCE_CELL_EDIT: 'editReferenceCell',
+    MAP: 'map',
+    POTENTIAL_TYPES: 'potentialTypes',
+    SIDES_EDIT: 'editBond',
+    TEST_POINT_EDIT: 'editTestPoint',
+    MAIN: 'main',
+})
 
 export const PipeDiameters = Object.freeze({
     NPS0_5: 0,
@@ -142,6 +256,16 @@ export const AnodeMaterials = Object.freeze({
     OTHER: 3
 })
 
+export const PipelineCoating = Object.freeze({
+    BARE: 0,
+    COATED: 1
+})
+
+export const IsolationShorted = Object.freeze({
+    NOT_SHORTED: 0,
+    SHORTED: 1,
+})
+
 export const WireGauges = Object.freeze({
     AVG0_PLUS: 0,
     AVG0: 1,
@@ -163,7 +287,6 @@ export const WireGauges = Object.freeze({
     AVG16: 17,
     AVG17: 18,
     AVG17_MINUS: 19,
-
 })
 
 export const SubitemPropertyUpdateTypes = Object.freeze({
@@ -239,4 +362,41 @@ export const ExportSubitemProperties = Object.freeze({
     SHORTED: 'shorted',
     VOLTAGE: 'voltage',
     TARGET: 'target'
+})
+
+export const SurveyFileDataFields = Object.freeze({
+    SURVEY: 'survey',
+    TEST_POINTS: 'testPoints',
+    RECTIFIERS: 'rectifiers',
+    PIPELINES: 'pipelines',
+    POTENTIAL_TYPES: 'potentialTypes',
+    REFERENCE_CELLS: 'referenceCells',
+    CARDS: 'cards',
+    POTENTIALS: 'potentials',
+    CIRCUITS: 'circuits',
+    SIDES: 'sides',
+})
+
+
+export const PipeSchedules = Object.freeze({
+    S10: 0,
+    S20: 1,
+    S30: 2,
+    STD: 3,
+    S40: 4,
+    S60: 5,
+    XS: 6,
+    S80: 7,
+    S100: 8,
+    S120: 9,
+    S140: 10,
+    S160: 11,
+    XXS: 12
+})
+
+export const CurrentDensityUnits = Object.freeze({
+    AMPS_OVER_CM_SQUARE: 0,
+    MILI_AMPS_OVER_CM_SQUARE: 1,
+    AMPS_OVER_METER_SQUARE: 2,
+    MILI_AMPS_OVER_METER_SQUARE: 3
 })

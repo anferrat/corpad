@@ -1,6 +1,5 @@
-import { ItemTypes } from "../items/SurveyItem";
+import { ItemTypes, SubitemTypes } from "../../../../constants/global";
 import { Subitem } from "./Subitem";
-import { SubitemTypes } from "./Subitem";
 
 export class Anode extends Subitem {
     constructor(id, parentId, uid, name, anodeMaterial, wireGauge, wireColor) {

@@ -22,7 +22,11 @@ export const getFieldIndexes = (fieldValues, attributeMap) => getNotIncludedValu
 }, [])
 )
 
-export const getPropertyIndexes = (itemList, attributeMap) => getNotIncludedValues(itemList, attributeMap.map(item => item.index))
+const getNotIncludedPropertyValues = (mainArray, usedIndexes) => {
+    return mainArray.filter(({ index }) => usedIndexes.indexOf(index) === -1)
+}
+
+export const getPropertyIndexes = (itemList, attributeMap) => getNotIncludedPropertyValues(itemList, attributeMap.map(item => item.index))
 
 export const getFieldValues = (data, fieldIndex, fields) => {
     function onlyUnique(value, index, self) {

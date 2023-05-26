@@ -1,6 +1,5 @@
-import { ItemTypes } from "../items/SurveyItem";
-import { CurrentUnits } from "../other/properties";
-import { Subitem, SubitemTypes } from "./Subitem";
+import { ItemTypes, CurrentUnits, SubitemTypes } from "../../../../constants/global"
+import { Subitem } from "./Subitem"
 
 export class Isolation extends Subitem {
     constructor(id, parentId, uid, name, fromAtoB, isolationType, shorted, current, sideA, sideB) {

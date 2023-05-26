@@ -1,19 +1,19 @@
 import { Text, Divider, Icon } from '@ui-kitten/components'
 import React from 'react'
 import { View, StyleSheet } from 'react-native'
-import { labels } from '../../../../../constants/constants'
 import { basic } from '../../../../../styles/colors'
-
+import { SubitemTypeLabels } from '../../../../../constants/labels'
+import { SubitemTypeIcons } from '../../../../../constants/icons'
 
 const SubitemTitle = ({ subitemType }) => {
-    const name = labels[subitemType].label
-
+    const name = SubitemTypeLabels[subitemType] ?? 'Unknown type'
+    const icon = SubitemTypeIcons[subitemType]
     return (
         <View style={styles.container}>
             <View style={styles.title}>
                 <Icon
                     pack='cp'
-                    name={subitemType}
+                    name={icon}
                     style={styles.icon}
                     fill={basic} />
                 <Text
@@ -46,6 +46,6 @@ const styles = StyleSheet.create({
     },
     title: {
         flexDirection: 'row',
-       // alignItems: 'center',
+        // alignItems: 'center',
     }
 })

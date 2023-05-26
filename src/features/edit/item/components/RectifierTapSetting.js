@@ -2,8 +2,12 @@ import React from 'react'
 import { View, StyleSheet } from 'react-native'
 import Input from './Input'
 import Select from './Select'
-import { tapSettings, tapOptions } from '../../../../constants/constants'
+import { TapOptions, CoarseFineOptions } from '../../../../constants/global'
+import { CoarseFineOptionLabels, TapOptionLabels } from '../../../../constants/labels'
 
+const tapOptionList = Object.values(TapOptions).map(option => ({ item: TapOptionLabels[option], index: option }))
+
+const coarseFineOptionList = Object.values(CoarseFineOptions).map(option => ({ item: CoarseFineOptionLabels[option], index: option }))
 
 const RectifierTapSetting = ({ update, validate, tapSetting, tapCoarse, tapFine, tapValue, tapValueValid, updateTap }) => {
     return (
@@ -15,7 +19,7 @@ const RectifierTapSetting = ({ update, validate, tapSetting, tapCoarse, tapFine,
                 label='Current control'
                 property='tapSetting'
                 selectedIndex={tapSetting}
-                itemList={tapSettings}
+                itemList={tapOptionList}
                 placeholder='Select control mode' />
             {
                 tapSetting === 0 ? (
@@ -27,7 +31,7 @@ const RectifierTapSetting = ({ update, validate, tapSetting, tapCoarse, tapFine,
                             label='Coarse'
                             property='tapCoarse'
                             selectedIndex={tapCoarse}
-                            itemList={tapOptions}
+                            itemList={coarseFineOptionList}
                             placeholder='#' />
                         <Select
                             placeholderOption={true}
@@ -36,7 +40,7 @@ const RectifierTapSetting = ({ update, validate, tapSetting, tapCoarse, tapFine,
                             label='Fine'
                             property='tapFine'
                             selectedIndex={tapFine}
-                            itemList={tapOptions}
+                            itemList={coarseFineOptionList}
                             placeholder='#' />
                     </View>
                 ) :

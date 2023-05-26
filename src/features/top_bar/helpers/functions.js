@@ -1,4 +1,3 @@
-import { labels, calculatorTypes } from '../../../constants/constants'
 import { fieldProperties } from '../../../constants/fieldProperties'
 import { deleteItem } from '../handlers/deleteItem'
 import { deleteSubitem } from '../handlers/deleteSubitem'
@@ -6,15 +5,17 @@ import { openExternalSurvey } from '../handlers/openExternalFile'
 import { DEVELOPER_MODE_ON } from '../../../../App'
 import { deleteImportSubitem } from '../../../store/actions/importData'
 import { warningHandler } from '../../../helpers/error_handler'
-import { items } from '../../../constants/constants'
+import { ItemTypes } from '../../../constants/global'
+import { CalculatorTypeTitleLabels, ItemTypeLabels, SubitemTypeLabels } from '../../../constants/labels'
+import { CalculatorTypeIconPacks, CalculatorTypeIcons } from '../../../constants/icons'
 
 
 export const getEditTitle = (globalState, type) => {
-    const state = ~items.indexOf(type) ? globalState.item.edit : globalState.subitem
+    const state = ~Object.values(ItemTypes).indexOf(type) ? globalState.item.edit : globalState.subitem
     return (state?.name === null || state?.name === '') ? state?.defaultName : state?.name ?? 'Loading...'
 }
 
-export const getEditSubtype = (state, type) => ~items.indexOf(type) ? state.item.edit?.testPointType : state.subitem.type
+export const getEditSubtype = (state, type) => ~Object.values(ItemTypes).indexOf(type) ? state.item.edit?.testPointType : state.subitem.type
 
 const getTitleBySettingType = (setting) => {
     switch (setting) {
@@ -182,7 +183,7 @@ export const getHeader = (screen, params, navigation, dispatch, openMenu) => {
                     isPrimary: true,
                     left: 'back',
                     title: {
-                        title: labels[params.itemType]?.label ?? '',
+                        title: ItemTypeLabels[params.itemType] ?? '',
                         subtitle: 'Import from .csv',
                         icon: false,
                         pack: null,
@@ -195,7 +196,7 @@ export const getHeader = (screen, params, navigation, dispatch, openMenu) => {
                     isPrimary: true,
                     left: 'back',
                     title: {
-                        title: labels[params.subitemType]?.label ?? '',
+                        title: SubitemTypeLabels[params.subitemType] ?? '',
                         subtitle: 'Import settings',
                         icon: false,
                         pack: null,
@@ -341,10 +342,10 @@ export const getHeader = (screen, params, navigation, dispatch, openMenu) => {
                     left: 'back',
                     isPrimary: true,
                     title: {
-                        title: calculatorTypes[params?.calculatorType]?.title ?? 'Error',
+                        title: CalculatorTypeTitleLabels[params?.calculatorType] ?? 'Error',
                         subtitle: 'Corrosion calculator',
-                        icon: calculatorTypes[params?.calculatorType]?.icon,
-                        pack: calculatorTypes[params?.calculatorType]?.pack,
+                        icon: CalculatorTypeIcons[params?.calculatorType],
+                        pack: CalculatorTypeIconPacks[params?.calculatorType],
                     },
                     right: [{
                         icon: 'question-mark-circle-outline',
@@ -357,10 +358,10 @@ export const getHeader = (screen, params, navigation, dispatch, openMenu) => {
                     left: 'back',
                     isPrimary: true,
                     title: {
-                        title: calculatorTypes[params?.calculatorType]?.title ?? 'Error',
+                        title: CalculatorTypeTitleLabels[params?.calculatorType] ?? 'Error',
                         subtitle: 'Procedure description',
-                        icon: calculatorTypes[params?.calculatorType]?.icon,
-                        pack: calculatorTypes[params?.calculatorType]?.pack,
+                        icon: CalculatorTypeIcons[params?.calculatorType],
+                        pack: CalculatorTypeIconPacks[params?.calculatorType],
                     },
                     right: null
                 }

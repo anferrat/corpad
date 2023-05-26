@@ -1,5 +1,5 @@
-import { ItemTypes } from "../items/SurveyItem";
-import { Subitem, SubitemTypes } from "./Subitem";
+import { ItemTypes, SubitemTypes } from "../../../../constants/global";
+import { Subitem } from "./Subitem";
 
 export class StatReferenceCell extends Subitem {
     constructor(id, parentId, uid, name, rcType, wireGauge, wireColor) {

@@ -6,10 +6,10 @@ import { Text } from '@ui-kitten/components'
 import Display from './components/overview/Display'
 import PropertyElement from './components/overview/PropertyElement'
 import ViewContainer from './components/ViewContainer'
-import { itemPropertyLabels, subitemPropertyLabels } from './constants/constants'
 import LoadingView from '../../../components/LoadingView'
-import { labels } from '../../../constants/constants'
 import BottomButton from '../../../components/BottomButton'
+import { ExportItemPropertyLabels, ExportSubitemPropertyLabels, SubitemTypeLabels } from '../../../constants/labels'
+import { SubitemTypeIconsFilled } from '../../../constants/icons'
 
 
 const Overview = () => {
@@ -40,7 +40,7 @@ const Overview = () => {
                         ITEM PROPERTIES
                     </Text>
                     <Display
-                        property={'Exported item type:'}>
+                        property={'Exported items:'}>
                         <PropertyElement
                             icon={itemTypeIcon}
                             pack='cp'>
@@ -56,8 +56,9 @@ const Overview = () => {
                     <Display
                         property={'Properties:'}>
                         {itemProperties.map(property => (
-                            <PropertyElement key={property}>
-                                {itemPropertyLabels[property]}
+                            <PropertyElement
+                                key={property}>
+                                {ExportItemPropertyLabels[property]}
                             </PropertyElement>
                         ))}
                     </Display>
@@ -94,9 +95,9 @@ const Overview = () => {
                                 {selectedSubitemTypes.map(type => (
                                     <PropertyElement
                                         key={type}
-                                        icon={type + '-filled'}
+                                        icon={SubitemTypeIconsFilled[type]}
                                         pack='cp'>
-                                        {labels[type].label}
+                                        {SubitemTypeLabels[type]}
                                     </PropertyElement>
                                 ))}
                             </Display>
@@ -122,7 +123,8 @@ const Overview = () => {
                             </ViewContainer>
                         </LoadingView>
                     </ViewContainer>
-                    <ViewContainer hidden={!showOther}>
+                    <ViewContainer
+                        hidden={!showOther}>
                         <Text
                             category='label'
                             style={styles.title}>
@@ -133,9 +135,9 @@ const Overview = () => {
                             {subitemProperties.map(([type, property]) => (
                                 <PropertyElement
                                     key={type + property}
-                                    icon={type + '-filled'}
+                                    icon={SubitemTypeIconsFilled[type]}
                                     pack='cp'>
-                                    {subitemPropertyLabels[property]}
+                                    {ExportSubitemPropertyLabels[property]}
                                 </PropertyElement>
                             ))}
                         </Display>

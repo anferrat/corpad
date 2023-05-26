@@ -1,6 +1,5 @@
-import { ItemTypes } from "../items/SurveyItem"
-import { CurrentUnits, PotentialUnits } from "../other/properties"
-import { Subitem, SubitemTypes } from "./Subitem"
+import { ItemTypes, CurrentUnits, PotentialUnits, SubitemTypes } from "../../../../constants/global"
+import { Subitem } from "./Subitem"
 
 export class Circuit extends Subitem {
     constructor(id, parentId, uid, name, ratioCurrent, ratioVoltage, targetMin, targetMax, current, voltage, voltageDrop) {

@@ -1,4 +1,4 @@
-import { SubitemTypes } from "../../entities/survey/subitems/Subitem"
+import { SubitemTypes } from "../../../constants/global"
 import { Error, errors } from "../../utils/Error"
 import { Anode } from "../../entities/survey/subitems/Anode"
 import { Bond } from "../../entities/survey/subitems/Bond"
@@ -13,7 +13,7 @@ import { Structure } from "../../entities/survey/subitems/Structure"
 import { TestLead } from "../../entities/survey/subitems/TestLead"
 
 export class SubitemFactory {
-    constructor () { }
+    constructor() { }
 
     execute2(id = null, uid, name = null, type, parentId, data = {}) {
         switch (type) {
@@ -43,7 +43,7 @@ export class SubitemFactory {
         }
     }
 
-    execute(id, uid, name, type, parentId, anodeMaterial = null, wireGauge = null, wireColor = null, fromAtoB = true, current = null, sideA = [], sideB = [], ratioCurrent = null, ratioVoltage = null, targetMin = null, targetMax = null, voltage = null, voltageDrop = null, pipelineCardId = null, couponType = null, density = null, area = null, isolationType =null, shorted = false, pipelineId = null, rcType = null, nps = null, factor = null, factorSelected = false, description = null ) {
+    execute(id, uid, name, type, parentId, anodeMaterial = null, wireGauge = null, wireColor = null, fromAtoB = true, current = null, sideA = [], sideB = [], ratioCurrent = null, ratioVoltage = null, targetMin = null, targetMax = null, voltage = null, voltageDrop = null, pipelineCardId = null, couponType = null, density = null, area = null, isolationType = null, shorted = false, pipelineId = null, rcType = null, nps = null, factor = null, factorSelected = false, description = null) {
         switch (type) {
             case SubitemTypes.ANODE:
                 return new Anode(id, parentId, uid, name, anodeMaterial, wireGauge, wireColor)

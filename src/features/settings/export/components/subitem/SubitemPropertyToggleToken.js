@@ -1,6 +1,6 @@
 import React, { useCallback } from 'react'
 import ToggleToken from '../../../../../components/ToggleToken'
-import { subitemPropertyLabels } from '../../constants/constants'
+import { ExportSubitemPropertyLabels } from '../../../../../constants/labels'
 
 
 const SubitemPropertyToggleToken = ({ selected, property, subitemType, onPress }) => {
@@ -12,7 +12,7 @@ const SubitemPropertyToggleToken = ({ selected, property, subitemType, onPress }
     return (
         <ToggleToken
             checked={checked}
-            title={subitemPropertyLabels[property]}
+            title={ExportSubitemPropertyLabels[property]}
             onPress={onPressHandler} />
     )
 }

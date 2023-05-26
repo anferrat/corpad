@@ -2,9 +2,12 @@ import React from 'react'
 import { StyleSheet } from 'react-native'
 import PotentialsView from '../potentials/PotentialsView'
 import WireView from '../WireView'
-import { referenceCellTypes } from '../../../../../constants/constants'
 import NameInput from '../NameInput'
 import Select from '../../../../../components/Select2'
+import { ReferenceCellTypes } from '../../../../../constants/global'
+import { ReferenceCellTypeLabels } from '../../../../../constants/labels'
+
+const referenceCellTypes = Object.values(ReferenceCellTypes).map(type => ({ item: ReferenceCellTypeLabels[type], index: type }))
 
 const RECard = ({ itemId, subitemId, data, update, validate }) => {
     const { name, defaultName, valid, rcType, wireColor, wireGauge } = data

@@ -1,7 +1,6 @@
 import { object } from "yup";
 import { Validation } from "../utils/Validation";
-import { ItemTypes } from "../entities/survey/items/SurveyItem";
-import { SubitemTypes } from "../entities/survey/subitems/Subitem";
+import { ItemTypes, SubitemTypes } from "../../constants/global";
 
 export class DefaultNameValidation extends Validation {
     constructor() {

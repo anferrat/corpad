@@ -1,8 +1,8 @@
-import { ItemTypes } from "../entities/survey/items/SurveyItem";
+import { ItemTypes } from "../../constants/global";
 import { Error, errors } from "../utils/Error";
 
 export class ItemPreseneter {
-    constructor () {
+    constructor() {
     }
 
     _getValidObject(itemType) {

@@ -3,16 +3,18 @@ import { View, StyleSheet } from 'react-native'
 import { Text } from '@ui-kitten/components'
 import ItemCard from '../../../components/ItemCard'
 import { useDispatch, useSelector } from 'react-redux'
-import { items, labels } from '../../../constants/constants'
 import { setImportItemType } from '../../../store/actions/importData'
+import { ItemTypes } from '../../../constants/global'
+import { ItemTypeIconsFilled } from '../../../constants/icons'
+import { ItemTypeLabelsPlural } from '../../../constants/labels'
 
 const SelectItem = () => {
-    const selectedIndex = useSelector(state => items.indexOf(state.importData.itemType))
+    const selectedType = useSelector(state => state.importData.itemType)
 
     const dispatch = useDispatch()
-    const selectOption = (index) => {
-        if (index !== selectedIndex)
-            dispatch(setImportItemType(items[index]))
+    const selectOption = (type) => {
+        if (type !== selectedType)
+            dispatch(setImportItemType(type))
     }
     return (
         <View style={styles.mainView}>
@@ -23,14 +25,14 @@ const SelectItem = () => {
             </Text>
             <View
                 style={styles.itemSelection}>
-                {items.map((item, i) => (
+                {Object.values(ItemTypes).map((type) => (
                     <ItemCard
-                        key={item}
-                        icon={`${labels[item].icon}-filled`}
+                        key={type}
+                        icon={ItemTypeIconsFilled[type]}
                         pack='cp'
-                        title={`${labels[item].label}s`}
-                        selected={selectedIndex === i}
-                        onPress={selectOption.bind(this, i)}
+                        title={ItemTypeLabelsPlural[type]}
+                        selected={selectedType === type}
+                        onPress={selectOption.bind(this, type)}
                     />))}
             </View>
         </View>

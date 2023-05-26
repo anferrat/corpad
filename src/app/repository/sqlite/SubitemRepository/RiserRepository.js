@@ -1,5 +1,5 @@
 import { SQLiteRepository } from "../../../utils/SQLite"
-import { SubitemTypes } from "../../../entities/survey/subitems/Subitem"
+import { SubitemTypes } from "../../../../constants/global"
 import { Error, errors } from "../../../utils/Error"
 import { Riser } from "../../../entities/survey/subitems/Riser"
 
@@ -22,7 +22,7 @@ export class RiserRepository extends SQLiteRepository {
 
     async create(riser) {
         try {
-            const { id, uid, parentId, type, name, pipelineId, nps, } = riser
+            const { id, uid, parentId, type, name, pipelineId, nps } = riser
             const result = await this.runSingleQueryTransaction('INSERT INTO cards (id, uid, testPointId, type, name, pipelineId, nps) VALUES (?,?,?,?,?,?,?)',
                 [id, uid, parentId, type, name, pipelineId, nps])
             return new Riser(result.insertId, parentId, uid, name, pipelineId, nps)

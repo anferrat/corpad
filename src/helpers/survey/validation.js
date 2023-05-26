@@ -1,6 +1,8 @@
-import { testPointReadings } from "../../constants/constants"
+
 import validation from "../validation"
 import { tables, fields } from "./base"
+
+const testPointReadings = []
 
 export const validateSurvey = (surveyObject) => {
     // validates survey using 4 parameters. if general survey file format is preserved (isSurveyObject) returns status 200 with corrupted flag set to true, in order to attempt to recover after

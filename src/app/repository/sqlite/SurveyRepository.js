@@ -1,6 +1,7 @@
 import { SQLiteRepository } from "../../utils/SQLite"
 import { Error, errors } from "../../utils/Error"
-import { ItemTypes, SurveyItem } from "../../entities/survey/items/SurveyItem"
+import { SurveyItem } from "../../entities/survey/items/SurveyItem"
+import { ItemTypes } from "../../../constants/global"
 import { Survey } from "../../entities/survey/other/Survey"
 
 export class SurveyRepository extends SQLiteRepository {
@@ -80,7 +81,7 @@ export class SurveyRepository extends SQLiteRepository {
 
     async clearEmptyValues() {
         try {
-            //kinda design problem. Null name values can appear when creating new items and exiting app withouht saving.
+            //kinda design problem. Null name values can appear when creating new items and exiting app withouht saving, so we delete those on app load
             this.runMultiQueryTransaction(tx => [
                 super.runQuery(tx, 'DELETE FROM testPoints WHERE name IS NULL'),
                 super.runQuery(tx, 'DELETE FROM rectifiers WHERE name IS NULL'),
@@ -154,7 +155,7 @@ export class SurveyRepository extends SQLiteRepository {
     async import({ testPoints, pipelines, rectifiers, cards, circuits, potentials, potentialTypes, survey, referenceCells, sides }) {
         /*
         Fast import -min. number of insert request to import a survey. Fails on error. Fast but messy
-        boolConverter - important to wrap Boolean values before inserting to database. Null is legit option for boolean values when field is not used
+        boolConverter - important to wrap Boolean values before inserting to database. Null is legit option for boolean values when field is not used (cards table)
         */
 
         const boolConverter = (bool) => bool === undefined || bool == null ? null : Number(bool)

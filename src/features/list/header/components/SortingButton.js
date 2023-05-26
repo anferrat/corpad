@@ -10,7 +10,7 @@ const SortingButton = (props) => {
             style={styles.pressable}
             onPress={props.onPress}
             android_ripple={androidRipple}>
-            <Text style={styles.buttonText} status='primary' category='p2'>Sort:</Text>
+            <Text style={styles.buttonText} status='primary' category='s1'>Sort:</Text>
             {props.iconText !== null ? <Text style={styles.iconText} status='primary' category='p2'>{props.iconText}</Text> : null}
             {props.icon !== null ? <Icon name={props.icon} fill={primary} style={styles.icon} /> : null}
             <Icon name={'arrow-' + props.direction} pack={'cp'} fill={primary} style={styles.arrow} />

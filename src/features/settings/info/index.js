@@ -8,18 +8,18 @@ import ProgressDisplay from "./components/ProgressDisplay"
 import SurveyNameView from "./components/SurveyNameView"
 import LoadingView from "../../../components/LoadingView"
 import useSurveyInfo from "./hooks/useSurveyInfo"
-import { items, labels } from "../../../constants/constants"
+import { ItemTypes } from "../../../constants/global"
+import { ItemTypeLabelsPlural } from "../../../constants/labels"
 import MoreInfoView from "./components/MoreInfoView"
+import { ItemTypeIconsFilled } from "../../../constants/icons"
 
-const itemIcons = ['TS-filled', 'RT-filled', 'PL-filled']
 
 export const SurveyOverview = () => {
     const { count, status, extraInfo, name, loading, inputText, updateSurveyName, onChangeNameInput, resetNameInput } = useSurveyInfo()
 
     return (
         <LoadingView loading={loading}>
-            <ScrollView
-                contentContainerStyle={styles.container}>
+            <ScrollView>
                 <View style={globalStyle.card}>
                     <SurveyNameView
                         name={name}
@@ -32,12 +32,12 @@ export const SurveyOverview = () => {
                         count={count} />
                     <View
                         style={styles.dataLine}>
-                        {items.map((item, index) => (
+                        {Object.values(ItemTypes).map((item) => (
                             <NumberDisplay
                                 key={item}
                                 number={count[item]}
-                                title={`${labels[item].label}s`}
-                                icon={itemIcons[index]} />
+                                title={ItemTypeLabelsPlural[item]}
+                                icon={ItemTypeIconsFilled[item]} />
                         ))}
                     </View>
                     <View
@@ -89,7 +89,4 @@ const styles = StyleSheet.create({
         paddingTop: 24,
         marginHorizontal: -12
     },
-    container: {
-        flex: 1
-    }
 })

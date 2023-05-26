@@ -9,7 +9,7 @@ import { IsolationRepository } from "../SubitemRepository/IsolationRepository"
 import { StructureRepository } from "../SubitemRepository/StructureRepository"
 import { CircuitRepository } from "../SubitemRepository/CircuitRepository"
 import { Error, errors } from "../../../utils/Error"
-import { SubitemTypes } from "../../../entities/survey/subitems/Subitem"
+import { SubitemTypes } from "../../../../constants/global"
 import { TestLeadRepository } from "../SubitemRepository/TestLeadRepository"
 
 export class SubitemRepositoryFactory {

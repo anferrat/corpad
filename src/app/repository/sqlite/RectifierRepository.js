@@ -3,8 +3,7 @@ import { Rectifier } from "../../entities/survey/items/Rectifier"
 import { Marker } from "../../entities/survey/items/Marker"
 import { Error, errors } from "../../utils/Error"
 import { ItemResponseProcessor } from "./utils/ItemResponseProcessor"
-import { SubitemTypes } from "../../entities/survey/subitems/Subitem"
-import { ItemTypes } from "../../entities/survey/items/SurveyItem"
+import { ItemTypes, SubitemTypes } from "../../../constants/global"
 import { Circuit } from "../../entities/survey/subitems/Circuit"
 
 export class RectifierRepository extends SQLiteRepository {
@@ -131,8 +130,8 @@ export class RectifierRepository extends SQLiteRepository {
             const result = await this.runSingleQueryTransaction(
                 `SELECT id, '${ItemTypes.RECTIFIER}' AS itemType, uid, status, NULL AS testPointType, latitude, longitude, name, location, comment, timeCreated, timeModified FROM rectifiers WHERE latitude IS NOT NULL AND longitude IS NOT NULL${sortingQuery}`, [])
             return super.generateArray(result.rows.length, result.rows.item)
-                .map(({ id, uid, itemType, status, testPointType, latitude, longitude, name, location, comment, timeCreated, timeModifed }) =>
-                    new Marker(id, uid, name, status, timeCreated, timeModifed, comment, itemType, testPointType, location, latitude, longitude))
+                .map(({ id, uid, itemType, status, testPointType, latitude, longitude, name, location, comment, timeCreated, timeModified }) =>
+                    new Marker(id, uid, name, status, timeCreated, timeModified, comment, itemType, testPointType, location, latitude, longitude))
         }
         catch (err) {
             throw new Error(errors.DATABASE, `Unable to get get markers data`, err)

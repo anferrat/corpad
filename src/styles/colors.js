@@ -1,3 +1,5 @@
+import { ItemStatuses, WireColors } from "../constants/global"
+
 export const primary = "#7186C7"
 export const success = "#43C150"
 export const warning = "#FFD311"
@@ -22,3 +24,33 @@ export const getColor = (status) => {
         return danger
     else return basic
 }
+
+export const WireColorColors = Object.freeze({
+    [WireColors.BLACK]: ['#1c1d20'],
+    [WireColors.BLACK_RED]: ['#1c1d20', '#bd4131'],
+    [WireColors.DARK_BLUE]: ['#1d507e'],
+    [WireColors.GREEEN_YELLOW]: ['#0a7340', '#c2b942'],
+    [WireColors.GREEN]: ['#0a7340'],
+    [WireColors.LIGHT_BLUE]: ['#3390e3'],
+    [WireColors.PINK]: ['#af5ca4'],
+    [WireColors.RED]: ['#bd4131'],
+    [WireColors.WHITE]: ['#dedede'],
+    [WireColors.WHITE_BLACK]: ['#dedede', '#1c1d20'],
+    [WireColors.WHITE_RED]: ['#dedede', '#bd4131'],
+    [WireColors.YELLOW]: ['#c2b942']
+})
+
+export const StatusColors = Object.freeze({
+    [ItemStatuses.ATTENTION]: warning,
+    [ItemStatuses.BAD]: danger,
+    [ItemStatuses.UNKNOWN]: basic,
+    [ItemStatuses.GOOD]: success
+})
+
+export const StatusStatuses = Object.freeze({
+    [ItemStatuses.ATTENTION]: 'warning',
+    [ItemStatuses.BAD]: 'danger',
+    [ItemStatuses.GOOD]: 'success',
+    [ItemStatuses.UNKNOWN]: 'basic',
+    [ItemStatuses.NO_STATUS]: 'basic'
+})

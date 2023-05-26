@@ -1,6 +1,6 @@
 import React, { useCallback } from 'react'
 import ToggleToken from '../../../../../components/ToggleToken'
-import { itemPropertyLabels } from '../../constants/constants'
+import { ExportItemPropertyLabels } from '../../../../../constants/labels'
 
 
 const ItemPropertyToggleToken = ({ itemProperties, property, toggleToken }) => {
@@ -9,9 +9,8 @@ const ItemPropertyToggleToken = ({ itemProperties, property, toggleToken }) => {
     return (
         <ToggleToken
             checked={checked}
-            title={itemPropertyLabels[property]}
-            onPress={onPress}
-        />
+            title={ExportItemPropertyLabels[property]}
+            onPress={onPress} />
     )
 }
 

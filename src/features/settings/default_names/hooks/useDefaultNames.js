@@ -2,14 +2,15 @@ import { useCallback, useState, useEffect, useRef, useMemo } from "react";
 import { getDefaultNameList, updateDefaultNameList } from "../../../../app/controllers/survey/other/DefaultNameController";
 import { errorHandler } from "../../../../helpers/error_handler";
 import fieldValidation from '../../../../helpers/validation'
-import { labels } from "../../../../constants/constants";
 import { useNavigation } from "@react-navigation/native";
+import { ItemTypes, SubitemTypes } from "../../../../constants/global";
+import { ItemTypeLabels, SubitemTypeLabels } from "../../../../constants/labels";
 
 
 const useDefaultNames = () => {
     const [defaultNames, setDefaultNames] = useState({})
     const [loading, setLoading] = useState(true)
-    const [selectedType, setSelectedType] = useState('TEST_POINT')
+    const [selectedType, setSelectedType] = useState(ItemTypes.TEST_POINT)
     const [pipelineNameAsDefault, setPipelineNameAsDefault] = useState(true)
     const [name, setName] = useState({
         value: true,
@@ -18,11 +19,11 @@ const useDefaultNames = () => {
     const { value, valid } = name
     const navigation = useNavigation()
 
-    const itemList = useMemo(() => Object.keys(defaultNames).map(type => ({ item: labels[type].label, type: type, value: defaultNames[type] })), [defaultNames])
+    const itemList = useMemo(() => Object.keys(defaultNames).map(type => ({ item: ItemTypeLabels[type] ?? SubitemTypeLabels[type], type: type, value: defaultNames[type] })), [defaultNames])
     const selectedIndex = itemList.findIndex(({ type }) => type === selectedType)
     const accessoryList = useMemo(() => Object.keys(defaultNames).map(type => ({ icon: type, pack: 'cp' })), [defaultNames])
 
-    const pipelineNameSettingActive = selectedType === 'PL' || selectedType === 'RS'
+    const pipelineNameSettingActive = selectedType === SubitemTypes.PIPELINE || selectedType === SubitemTypes.RISER
 
     const componentMounted = useRef(true)
 

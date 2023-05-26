@@ -1,6 +1,6 @@
 import { Pipeline } from "../../../entities/survey/items/Pipeline";
 import { Rectifier, TapOptions } from "../../../entities/survey/items/Rectifier";
-import { ItemStatuses, ItemTypes, TestPointTypes } from "../../../entities/survey/items/SurveyItem";
+import { ItemStatuses, ItemTypes, TestPointTypes } from "../../../../constants/global"
 import { TestPoint } from "../../../entities/survey/items/TestPoint";
 import { Error, errors } from "../../../utils/Error";
 import { guid } from "../../../utils/guid";

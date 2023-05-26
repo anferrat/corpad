@@ -1,12 +1,13 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import { View, StyleSheet } from 'react-native'
-import * as Progress from 'react-native-progress'
 import { CircularProgressBar } from '@ui-kitten/components'
-import { basic, danger, success, warning } from '../../../../styles/colors'
+import { StatusColors, basic, danger, success, warning } from '../../../../styles/colors'
 import LegendItem from './LegendItem'
 import ButtonSelector from '../../../../components/ButtonSelector'
-import { statusInfo } from '../../../../constants/constants'
 import { calculateProgress } from '../helpers/functions'
+import { ItemStatuses, ItemTypes } from '../../../../constants/global'
+import { StatusLabels } from '../../../../constants/labels'
+import { StatusIcons } from '../../../../constants/icons'
 
 const buttons = [
     { title: 'Test points' },
@@ -17,13 +18,8 @@ const statusColors = [success, warning, danger, basic]
 
 
 const ProgressDisplay = ({ status, count }) => {
-    const [activeItem, setActiveItem] = useState(null)
-    const itemType = activeItem === null ? null : (activeItem === 0 ? 'TEST_POINT' : 'RECTIFIER')
-
-    useEffect(() => {
-        //for start animation in ProgressCycle
-        setActiveItem(0)
-    }, [])
+    const [activeItem, setActiveItem] = useState(0)
+    const itemType = !activeItem ? ItemTypes.TEST_POINT : ItemTypes.RECTIFIER
 
     return (
         <View style={styles.mainView}>
@@ -44,13 +40,15 @@ const ProgressDisplay = ({ status, count }) => {
 
                 </View>
                 <View style={styles.legend}>
-                    {statusInfo.map(({ title, icon }, index) => (
-                        <LegendItem
-                            key={title}
-                            text={`${title} (${status[itemType] ? status[itemType][index] : 0})`}
-                            color={statusColors[index]}
-                            icon={icon} />
-                    ))}
+                    {
+                        Object.values(ItemStatuses).filter(s => s !== ItemStatuses.NO_STATUS).map(s => (
+                            <LegendItem
+                                key={s}
+                                text={`${StatusLabels[s]} (${status[itemType][s]})`}
+                                color={StatusColors[s]}
+                                icon={StatusIcons[s]} />
+                        ))
+                    }
                 </View>
             </View>
         </View>

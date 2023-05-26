@@ -2,30 +2,32 @@ import React from 'react'
 import WennerResult from './components/WennerResult'
 import ResultViewWrapper from './components/ResultViewWrapper'
 import ResultRow from './components/ResultRow'
-import { calculatorTypes } from '../../constants/constants'
 import CoatingQuality from './components/CoatingQuality'
+import { CalculatorTypes } from '../../constants/global'
+import { CalculatorTypeIconPacks, CalculatorTypeIcons } from '../../constants/icons'
 
 const ResultComponent = (props) => {
     switch (props.calculatorType) {
-        case 'wenner':
+        case CalculatorTypes.WENNER:
             return <WennerResult {...props} />
-        case 'shunt':
-        case 'current2Wire':
-        case 'current4Wire':
-        case 'refCell':
+        case CalculatorTypes.SHUNT:
+        case CalculatorTypes.CURRENT_TWO_WIRE:
+        case CalculatorTypes.CURRENT_FOUR_WIRE:
+        case CalculatorTypes.REFERENCE_CELL:
             return <ResultRow
-                icon={calculatorTypes[props.calculatorType].icon}
-                pack={calculatorTypes[props.calculatorType].pack}
+                icon={CalculatorTypeIcons[props.calculatorType]}
+                pack={CalculatorTypeIconPacks[props.calculatorType]}
                 title={props.result.title}
                 results={props.result.values} />
-        case 'coating':
+        case CalculatorTypes.COATING:
             return <>
                 <ResultRow
-                    icon={calculatorTypes[props.calculatorType].icon}
-                    pack={calculatorTypes[props.calculatorType].pack}
+                    icon={CalculatorTypeIcons[props.calculatorType]}
+                    pack={CalculatorTypeIconPacks[props.calculatorType]}
                     title={props.result.title}
                     results={props.result.values} />
-                <CoatingQuality coatingQuality={props.result.coatingQuality} />
+                <CoatingQuality
+                    coatingQuality={props.result.coatingQuality} />
             </>
         default:
             return null
@@ -35,7 +37,9 @@ const ResultComponent = (props) => {
 const ResultView = (props) => {
     return (
         <ResultViewWrapper {...props}>
-            <ResultComponent result={props.result} calculatorType={props.calculatorType} />
+            <ResultComponent
+                result={props.result}
+                calculatorType={props.calculatorType} />
         </ResultViewWrapper>
     )
 }

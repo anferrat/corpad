@@ -1,5 +1,4 @@
-import { SubitemTypes } from "../../../entities/survey/subitems/Subitem"
-import { SurveyFileDataFields } from "../../../entities/survey/survey/PipelineSurveyFile"
+import { SubitemTypes, SurveyFileDataFields } from "../../../../constants/global"
 
 const convertBool = (bool) => bool === null || bool === undefined ? null : Number(bool)
 

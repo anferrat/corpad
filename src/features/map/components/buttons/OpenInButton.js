@@ -16,7 +16,7 @@ const OpenInButton = (props) => {
                 name={'share'}
                 style={styles.icon}
                 fill={primary} />
-            <Text category='label'>Open in <Text status='primary' category='label'>Maps</Text></Text>
+            <Text category='s2'>Open in <Text status='primary' category='s2'>Maps</Text></Text>
         </Pressable>
     </View >
 }

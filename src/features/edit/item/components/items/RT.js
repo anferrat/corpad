@@ -4,10 +4,13 @@ import Input from '../Input'
 import StatusView from '../StatusView'
 import LocationView from '../LocationView'
 import Select from '../Select'
-import { powerSourceList } from '../../../../../constants/constants'
 import RectifierTapSetting from '../RectifierTapSetting'
 import CreateSubitemButton from '../CreateSubitemButton'
 import { globalStyle } from '../../../../../styles/styles'
+import { PowerSources } from '../../../../../constants/global'
+import { PowerSourceLabels } from '../../../../../constants/labels'
+
+const powerSourceList = Object.values(PowerSources).map(source => ({ item: PowerSourceLabels[source], index: source }))
 
 
 const RT = ({ data, createSubitem, itemType, update, validate, updateLatAndLon, updateTap }) => {
@@ -15,7 +18,7 @@ const RT = ({ data, createSubitem, itemType, update, validate, updateLatAndLon, 
     return (
         <>
             <StatusView
-            update={update}
+                update={update}
                 status={status} />
             <View style={globalStyle.card}>
                 <View style={styles.mainView}>

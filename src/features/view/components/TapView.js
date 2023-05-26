@@ -4,8 +4,11 @@ import { Text } from '@ui-kitten/components'
 import InputWithTitle from './InputWithTitle'
 import Select from '../../../components/Select2'
 import TextLine from './TextLine'
-import { tapSettings, tapOptions } from '../../../constants/constants'
+import { CoarseFineOptionLabels, TapOptionLabels } from '../../../constants/labels'
+import { TapOptions, CoarseFineOptions } from '../../../constants/global'
 import { primary } from '../../../styles/colors'
+
+const coarseFineOptions = Object.values(CoarseFineOptions).map(option => ({ item: CoarseFineOptionLabels[option], index: option }))
 
 const TapView = ({ tapValue, tapFine, tapCoarse, tapSetting, submit, update, valid }) => {
 
@@ -18,15 +21,15 @@ const TapView = ({ tapValue, tapFine, tapCoarse, tapSetting, submit, update, val
     const submitTapFine = (value) => submit(value, 'tapFine')
 
     switch (tapSetting) {
-        case 0:
+        case TapOptions.COARSE_FINE:
             return <View style={styles.mainView}>
-                <Text style={styles.title} category='p2'>{tapSettings[tapSetting]}</Text>
+                <Text style={styles.title} category='s1'>{TapOptionLabels[tapSetting]}</Text>
                 <View style={styles.selectFields}>
                     <Select
                         placeholderOption={true}
                         style={styles.select}
                         selectedIndex={tapCoarse}
-                        itemList={tapOptions}
+                        itemList={coarseFineOptions}
                         placeholder='#'
                         property='tapCoarse'
                         onSelect={submitTapCoarse} />
@@ -34,13 +37,13 @@ const TapView = ({ tapValue, tapFine, tapCoarse, tapSetting, submit, update, val
                         placeholderOption={true}
                         style={styles.select}
                         selectedIndex={tapFine}
-                        itemList={tapOptions}
+                        itemList={coarseFineOptions}
                         placeholder='#'
                         property='tapFine'
                         onSelect={submitTapFine} />
                 </View>
             </View>
-        case 1:
+        case TapOptions.RESISTOR:
             return <InputWithTitle
                 keyboardType='numeric'
                 value={tapValue}
@@ -50,8 +53,8 @@ const TapView = ({ tapValue, tapFine, tapCoarse, tapSetting, submit, update, val
                 title={'VA'}
                 property='tapValue'
                 unit={'%'} />
-        case 2:
-            return <TextLine title='Control mode' value={tapSettings[tapSetting] ?? null} />
+        case TapOptions.AUTO:
+            return <TextLine title='Control mode' value={TapOptionLabels[tapSetting] ?? null} />
         default:
             return null
     }

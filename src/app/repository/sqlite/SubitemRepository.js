@@ -1,14 +1,11 @@
 import { SQLiteRepository } from "../../utils/SQLite"
-import { SubitemTypes } from "../../entities/survey/subitems/Subitem"
+import { SubitemTypes } from "../../../constants/global"
 import { Error, errors } from "../../utils/Error"
-import { SubitemResponseProcessor } from "./utils/SubitemResponseProcessor"
 import { SubitemRepositoryFactory } from "./utils/SubitemRepositoryFactory"
-import { SubitemPropertyUpdateTypes } from "../../entities/survey/other/properties"
 
 export class SubitemRepository extends SQLiteRepository {
     constructor() {
         super()
-        this.responseProcessor = new SubitemResponseProcessor()
         this.subitemRepoFactory = new SubitemRepositoryFactory()
     }
 
@@ -41,36 +38,6 @@ export class SubitemRepository extends SQLiteRepository {
         }
         catch (err) {
             throw new Error(errors.DATABASE, `Unable to delete subitem of type ${subitemType} with id ${subitemId}`, err)
-        }
-    }
-
-
-    async updateProperty(id, parentId, propertyType, subitemType, value, currentTime) {
-        try {
-            const getUpdateQuery = (propertyType) => {
-                switch (propertyType) {
-                    case SubitemPropertyUpdateTypes.CURRENT:
-                        if (subitemType === SubitemTypes.CIRCUIT)
-                            return `UPDATE circuits SET current = ${value} WHERE id = ${id}`
-                        else return `UPDATE cards SET current = ${value} WHERE id = ${id} AND type = "${subitemType}"`
-                    case SubitemPropertyUpdateTypes.SHORTED:
-                        return `UPDATE cards SET shorted = ${Number(value)} WHERE id = ${id} AND type = "${subitemType}"`
-                    case SubitemPropertyUpdateTypes.VOLTAGE:
-                        return `UPDATE circuits SET voltage = ${value} WHERE id = ${id}`
-                    case SubitemPropertyUpdateTypes.VOLTAGE_DROP:
-                        return `UPDATE cards SET voltageDrop = ${value} WHERE id = ${id} AND type = "${subitemType}"`
-                    default:
-                        throw 'No such property to update'
-                }
-            }
-            const parentTable = subitemType === SubitemTypes.CIRCUIT ? 'rectifiers' : 'testPoints'
-            await this.runMultiQueryTransaction(tx => [
-                this.runQuery(tx, getUpdateQuery(propertyType)),
-                this.runQuery(tx, `UPDATE ${parentTable} SET timeModified = ${currentTime} WHERE id = ${parentId} `)
-            ])
-        }
-        catch (err) {
-            throw new Error(errors.DATABASE, `Unable to update property ${propertyType}`)
         }
     }
 }

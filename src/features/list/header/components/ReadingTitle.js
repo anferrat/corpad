@@ -6,7 +6,7 @@ import { primary } from '../../../../styles/colors'
 const IconTitle = (props) => {
     return <View style={styles.mainView}>
         <Icon pack={props.pack} name={props.icon} style={styles.icon} fill={primary} />
-        <Text category='p2' style={styles.title} status='primary'>{props.title}</Text>
+        <Text category='s1' style={styles.title} status='primary'>{props.title}</Text>
     </View>
 }
 

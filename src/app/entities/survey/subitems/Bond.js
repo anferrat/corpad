@@ -1,7 +1,5 @@
-import { ItemTypes } from "../items/SurveyItem"
-import { CurrentUnits } from "../other/properties"
 import { Subitem } from "./Subitem"
-import { SubitemTypes } from "./Subitem"
+import { ItemTypes, SubitemTypes, CurrentUnits } from "../../../../constants/global"
 
 export class Bond extends Subitem {
     constructor(id, parentId, uid, name, fromAtoB, current, sideA, sideB) {

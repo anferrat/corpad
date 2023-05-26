@@ -9,12 +9,7 @@ import SearchModal from './components/search/SearchModal'
 const SearchBar = ({ setMarkerActive, resetActiveMarker, satelliteMode }) => {
     const { search, hideModal, showModal, openMenu, onChangeKeyword, showOnMap, resetKeyword } = useMarkerSearch({ setMarkerActive, resetActiveMarker })
     const { keyword, modalEnabled, markersFound, searching } = search
-    const inputRef = React.useRef()
     const isEmpty = keyword === null
-    const onModalLoad = React.useCallback(() => {
-        inputRef.current?.focus()
-    }, [inputRef])
-
 
     //THIS IS SUCH A BS!!!
     if (modalEnabled)
@@ -26,19 +21,32 @@ const SearchBar = ({ setMarkerActive, resetActiveMarker, satelliteMode }) => {
 
     return (
         <>
-            <Pressable style={styles.mainView} onPress={showModal}>
+            <Pressable
+                style={styles.mainView}
+                onPress={showModal}>
                 <View style={styles.side}>
-                    <Icon pack='cp' name='corpad-logo' fill={primary} style={styles.logo} />
-                    <Text appearance={keyword ? 'default' : 'hint'} style={styles.text}>{keyword ? keyword : 'Search by name'}</Text>
+                    <Icon
+                        pack='cp'
+                        name='corpad-logo'
+                        fill={primary}
+                        style={styles.logo} />
+                    <Text
+                        appearance={keyword ? 'default' : 'hint'}
+                        style={styles.text}>
+                        {keyword ? keyword : 'Search by name'}
+                    </Text>
                 </View>
-                <View style={styles.side}>
+                <View
+                    style={styles.side}>
                     {
-                        isEmpty ? <Icon name='search-outline' fill={primary} style={styles.search} /> :
+                        isEmpty ? <Icon
+                            name='search-outline'
+                            fill={primary}
+                            style={styles.search} /> :
                             <IconButton
                                 iconName={'close-circle'}
                                 fill={primary}
-                                onPress={resetKeyword}
-                            />
+                                onPress={resetKeyword} />
                     }
                     <IconButton
                         style={styles.button}
@@ -51,12 +59,10 @@ const SearchBar = ({ setMarkerActive, resetActiveMarker, satelliteMode }) => {
                 hardwareAccelerated={true}
                 statusBarTranslucent={true}
                 animationType='fade'
-                onShow={onModalLoad}
                 onRequestClose={hideModal}
                 visible={modalEnabled}>
                 <SearchModal
                     searching={searching}
-                    inputRef={inputRef}
                     resetKeyword={resetKeyword}
                     showOnMap={showOnMap}
                     markersFound={markersFound}

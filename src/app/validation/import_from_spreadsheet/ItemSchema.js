@@ -1,7 +1,7 @@
 import { Validation } from "../../utils/Validation"
-import { ItemStatuses, ItemTypes } from "../../entities/survey/items/SurveyItem"
+import { ItemStatuses, ItemTypes } from "../../../constants/global"
 import { Error } from "../../utils/Error"
-import { array, object, mixed } from "yup"
+import { object, mixed } from "yup"
 
 export class ItemSchema extends Validation {
     constructor () {

@@ -1,8 +1,10 @@
-import { pipeMaterials, labels, tapOptions } from '../../../constants/constants'
+import { DisplayCardDataTypes, ItemTypes } from '../../../constants/global'
+import { PipelineMaterialLabels, CoarseFineOptionLabels, TestPointTypeLabels, ItemTypeLabels } from '../../../constants/labels'
 import { getFormattedDate } from '../../../helpers/functions'
 import { errorHandler } from "../../../helpers/functions"
 import { getItemDisplayData, getItemIdList } from '../../../app/controllers/survey/items/ItemController'
 import { getCurrentPosition } from '../../../app/controllers/survey/other/GeolocationController'
+import { ItemTypeSingleIcons, TestPointTypeIcons } from '../../../constants/icons'
 
 export const firstReading = (readingList) => {
     if (readingList.length !== 0)
@@ -23,8 +25,8 @@ export const nextReading = (i, readingList) => {
 }
 
 const getTapSettings = (tapSetting, tapCoarse, tapFine, tapValue) => {
-    if (tapSetting === 0 && tapOptions[tapCoarse] !== undefined && tapOptions[tapFine] !== undefined)
-        return `C${tapOptions[tapCoarse]} - F${tapOptions[tapFine]}`
+    if (tapSetting === 0 && CoarseFineOptionLabels[tapCoarse] && CoarseFineOptionLabels[tapFine])
+        return `C${CoarseFineOptionLabels[tapCoarse]} - F${CoarseFineOptionLabels[tapFine]}`
     else if (tapSetting === 1 && tapValue !== null)
         return tapValue + ' %'
     else if (tapSetting === 2)
@@ -34,13 +36,13 @@ const getTapSettings = (tapSetting, tapCoarse, tapFine, tapValue) => {
 
 const itemDataHandler = (type, value) => {
     switch (Number(type)) {
-        case 0:
+        case DisplayCardDataTypes.TIME_MODIFIED:
             return getFormattedDate(value)
-        case 1:
-            return pipeMaterials[value] ?? null
-        case 2:
+        case DisplayCardDataTypes.MATERIAL:
+            return PipelineMaterialLabels[value] ?? null
+        case DisplayCardDataTypes.LOCATION:
             return value
-        case 3:
+        case DisplayCardDataTypes.TAP:
             return getTapSettings(value.setting, value.coarse, value.fine, value.value)
         default: return null
     }
@@ -59,11 +61,11 @@ const readingListHandler = (readingList, displayedReading) => readingList.map((i
 
 
 export const fetchData = async (itemType, idList, filters, displayedReading) => {
-    const { status, response, errorMessage } = await getItemDisplayData({ itemType, displayedReading, idList, readingTypeFilter: filters?.readingTypeFilter })
+    const { status, response } = await getItemDisplayData({ itemType, displayedReading, idList, readingTypeFilter: filters?.readingTypeFilter })
     if (status === 200)
         return response.map((displayData, index) => {
             try {
-                const { dataList, id, itemType, markerType, name, readingList, status, timeModified, uid } = displayData
+                const { dataList, id, itemType, name, readingList, status, timeModified, uid, testPointType } = displayData
                 return ({
                     id: id,
                     uid: uid,
@@ -73,8 +75,8 @@ export const fetchData = async (itemType, idList, filters, displayedReading) => 
                     timeModified: timeModified,
                     firstReadingIndex: firstReading(readingList),
                     dataList: dataListHandler(dataList),
-                    icon: markerType,
-                    subtitle: itemType === 'TEST_POINT' ? labels[markerType].label : labels[itemType].label,
+                    icon: itemType === ItemTypes.TEST_POINT ? TestPointTypeIcons[testPointType] : ItemTypeSingleIcons[itemType],
+                    subtitle: itemType === ItemTypes.TEST_POINT ? TestPointTypeLabels[testPointType] : ItemTypeLabels[itemType],
                     readingList: readingListHandler(readingList, displayedReading)
                 })
             }

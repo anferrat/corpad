@@ -1,21 +1,21 @@
 import React from 'react'
 import { Pressable, View, StyleSheet } from 'react-native'
 import { Text, Icon } from '@ui-kitten/components'
-import { basic, danger, success, warning } from '../../../styles/colors'
+import { basic } from '../../../styles/colors'
 import { androidRipple } from '../../../styles/styles'
 import MarkerInfoView from './animated/MarkerInfoView'
-import { labels } from '../../../constants/constants'
+import { StatusColors } from '../../../styles/colors'
+import { ItemTypes } from '../../../constants/global'
+import { ItemTypeLabels, TestPointTypeLabels } from '../../../constants/labels'
 
-const statusColors = [success, warning, danger, basic]
 
-const MarkerInfo = ({ viewActiveMarkerData, shareActiveLocation, zoomToCoordinates, id, itemType, name, latitude, longitude, status, location, markerType }) => {
+const MarkerInfo = ({ viewActiveMarkerData, shareActiveLocation, zoomToCoordinates, id, itemType, name, latitude, longitude, status, location, markerType, testPointType }) => {
     const visible = itemType !== null && id !== null && latitude !== null && longitude !== null && markerType
-
     const animateToActive = React.useCallback(() =>
         zoomToCoordinates(latitude, longitude),
         [latitude, longitude, zoomToCoordinates])
 
-    const subtitle = visible ? (itemType === 'TEST_POINT' ? labels[markerType].label : labels[itemType].label) : 'Loading'
+    const subtitle = visible ? (itemType === ItemTypes.TEST_POINT ? TestPointTypeLabels[testPointType] : ItemTypeLabels[itemType]) : 'Loading'
 
     return (
         <MarkerInfoView
@@ -32,17 +32,17 @@ const MarkerInfo = ({ viewActiveMarkerData, shareActiveLocation, zoomToCoordinat
                         name={`map-${markerType}`}
                         pack='cp'
                         style={styles.mainIcon}
-                        fill={statusColors[status] ?? basic} />
+                        fill={StatusColors[status] ?? basic} />
                     <View style={styles.titleView}>
                         <Text
-                            category='h5'
+                            category='h4'
                             ellipsizeMode='tail'
                             numberOfLines={1}>
                             {name}
                         </Text>
                         <View style={styles.statusView}>
                             <Text
-                                category='p2'
+                                category='s1'
                                 appearance='hint'>
                                 {subtitle}
                             </Text>
@@ -57,7 +57,7 @@ const MarkerInfo = ({ viewActiveMarkerData, shareActiveLocation, zoomToCoordinat
                                     style={styles.subtitleIcon}
                                     fill={basic} />
                                 <Text
-                                    category='p2'
+                                    category='s1'
                                     appearance='hint'
                                     numberOfLines={1}
                                     ellipsizeMode='tail'>{location}

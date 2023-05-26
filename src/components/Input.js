@@ -48,7 +48,7 @@ export const Unit = (props) => {
     else return null
 }
 
-const InputField = (props) => {
+const InputField = React.forwardRef((props, ref) => {
     const styleObject = React.useMemo(() => ({ ...props.style, paddingBottom: 12, borderWidth: props.disabled ? 0 : 1 }), [props.style, props.disabled])
     const caption = React.useMemo(() => getValidCaption(props.valid, props.property), [props.valid, props.property])
     const value = React.useMemo(() => toString(props.value), [props.value])
@@ -65,14 +65,14 @@ const InputField = (props) => {
             accessoryRight={accessory}
             {...props}
             onChangeText={onChangeText}
-            ref={props.inputRef}
+            ref={ref}
             selectTextOnFocus={true}
             value={value}
             style={styleObject}
             status={props.valid ? 'basic' : 'danger'}
         />
     )
-}
+})
 
 export default InputField
 

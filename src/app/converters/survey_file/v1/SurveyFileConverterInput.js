@@ -6,7 +6,8 @@ import { ReferenceCell } from "../../../entities/survey/other/ReferenceCell";
 import { Survey } from "../../../entities/survey/other/Survey";
 import { Circuit } from "../../../entities/survey/subitems/Circuit";
 import { Potential } from "../../../entities/survey/subitems/Potential";
-import { PipelineSurveyFile, SurveyFileDataFields } from "../../../entities/survey/survey/PipelineSurveyFile";
+import { PipelineSurveyFile } from "../../../entities/survey/survey/PipelineSurveyFile";
+import { SurveyFileDataFields } from "../../../../constants/global";
 
 const convertBool = (bool) => bool === null ? null : Boolean(bool)
 

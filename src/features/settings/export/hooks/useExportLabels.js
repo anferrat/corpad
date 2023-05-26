@@ -1,9 +1,12 @@
 import { useEffect, useState, useRef } from "react"
 import { useSelector } from "react-redux"
-import { labels, sortingOptions } from "../../../../constants/constants"
 import { getExportPotentialPropertiesData } from "../../../../app/controllers/survey/ExportController"
 import { errorHandler } from "../../../../helpers/error_handler"
+import { ItemTypeIconsFilled } from "../../../../constants/icons"
+import { ItemTypeLabelsPlural, SortingOptionLabels } from "../../../../constants/labels"
 
+const labels = {}
+const sortingOptions = {}
 
 const useExportLabels = () => {
     const [potentialData, setPotentialData] = useState({
@@ -31,9 +34,9 @@ const useExportLabels = () => {
     } = useSelector(state => state.export)
 
     const showPotentials = exportPotentials && itemType === 'TEST_POINT'
-    const itemTypeLabel = labels[itemType].label
-    const itemTypeIcon = labels[itemType].icon + '-filled'
-    const sortingLabel = sortingOptions[sorting]
+    const itemTypeLabel = ItemTypeLabelsPlural[itemType]
+    const itemTypeIcon = ItemTypeIconsFilled[itemType]
+    const sortingLabel = SortingOptionLabels[sorting]
     const potentialsGroupingLabel = groupPotentialsByPipeline ? 'Pipeline' : 'Reading type'
     const showOther = subitemProperties.length > 0
 

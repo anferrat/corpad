@@ -2,12 +2,15 @@ import React from 'react'
 import { View, StyleSheet } from 'react-native'
 import PotentialsView from '../potentials/PotentialsView'
 import WireView from '../WireView'
-import { couponTypes } from '../../../../../constants/constants'
 import Select from '../../../../../components/Select2'
 import CurrentDensityView from '../CurrentDensityView'
 import NameInput from '../NameInput'
+import { CouponTypes } from '../../../../../constants/global'
+import { CouponTypeLabels } from '../../../../../constants/labels'
 
 const couponAttachmentTypes = ['PL', 'RS']
+
+const couponTypes = Object.values(CouponTypes).map(type => ({ item: CouponTypeLabels[type], index: type }))
 
 const CNCard = ({ subitemList, itemId, subitemId, data, update, validate, validateCouponHandler }) => {
 
