@@ -6,6 +6,7 @@ export class Marker extends SurveyItem {
         this.location = location
         this.latitude = latitude
         this.longitude = longitude
+        this.testPointType = testPointType
     }
 
     getMarker() {

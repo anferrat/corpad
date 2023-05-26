@@ -16,6 +16,7 @@ const SelectToken = ({ onPress, selected, title, icon, pack }) => {
                     style={styles.icon}
                     fill={selected ? control : basic} />
                 <Text
+                    style={styles.text}
                     category='p2'
                     numberOfLines={1}
                     ellipsizeMode={'tail'}
@@ -33,14 +34,17 @@ const containerStyles = StyleSheet.create({
     container: {
         paddingVertical: 10,
         backgroundColor: control,
-        borderWidth: 1,
+        borderWidth: 0,
         borderColor: basic300,
         borderRadius: 20,
         paddingHorizontal: 12,
-        paddingRight: 18,
+        paddingRight: 12,
         marginHorizontal: 2,
         marginBottom: 12,
-        elevation: 2
+        elevation: 2,
+        maxWidth: '32%',
+        flex: 1,
+      
     }
 })
 
@@ -50,14 +54,19 @@ const styles = StyleSheet.create({
         {
             backgroundColor: primary
         }),
-
     icon: {
         width: 20,
         height: 20,
         marginRight: 8
     },
     row: {
-        flexDirection: 'row'
+        flex: 1,
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+    text: {
+        textAlign: 'center'
     }
 })
 

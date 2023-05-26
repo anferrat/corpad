@@ -1,6 +1,6 @@
 import React from 'react'
 import { StyleSheet, View } from 'react-native'
-import { Divider, CheckBox, Icon } from '@ui-kitten/components'
+import { Divider, CheckBox, Icon, Text } from '@ui-kitten/components'
 import { basic } from '../../../../styles/colors'
 
 const CheckBoxListItem = (props) => {
@@ -11,8 +11,13 @@ const CheckBoxListItem = (props) => {
                     status={props.status ?? 'primary'}
                     style={styles.checkbox}
                     onChange={props.onChange}
-                    checked={props.checked}>
-                    {props.title}
+                    checked={props.checked}>{
+                        () =>
+                            <Text
+                                style={styles.text}
+                                category={'s1'}>
+                                {props.title}
+                            </Text>}
                 </CheckBox>
                 <Icon pack={props.status === undefined ? 'cp' : undefined} name={props.icon} style={styles.icon} fill={basic} />
             </View>
@@ -37,5 +42,8 @@ const styles = StyleSheet.create({
         width: 25,
         height: 25,
         marginRight: 24
+    },
+    text: {
+        paddingLeft: 12
     }
 })

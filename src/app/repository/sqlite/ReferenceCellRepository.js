@@ -1,11 +1,11 @@
 import { SQLiteRepository } from "../../utils/SQLite"
 import { ReferenceCell } from "../../entities/survey/other/ReferenceCell"
 import { Error, errors } from "../../utils/Error"
-import { SubitemTypes } from "../../entities/survey/subitems/Subitem"
+import { SubitemTypes } from "../../../constants/global"
 import { StatReferenceCell } from "../../entities/survey/subitems/StatReferenceCell"
 
 export class ReferenceCellRepository extends SQLiteRepository {
-    constructor () {
+    constructor() {
         super()
         this.tableName = 'referenceCells'
     }

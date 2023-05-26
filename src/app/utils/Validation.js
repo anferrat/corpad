@@ -1,9 +1,5 @@
 import { object, string, number, boolean, array, mixed } from 'yup'
-import { PipelineMaterials, PipelineProducts } from '../entities/survey/items/Pipeline'
-import { CoarseFineOptions, PowerSources, TapOptions } from '../entities/survey/items/Rectifier'
-import { ItemStatuses, ItemTypes, TestPointTypes } from '../entities/survey/items/SurveyItem'
-import { AnodeMaterials, CalculatorTypes, CouponTypes, DisplayedReadingOptions, IsolationTypes, ItemPropertyUpdateTypes, PermanentPotentialTypes, PipeDiameters, PotentialUnits, ReferenceCellTypes, SortingOptions, SubitemPropertyUpdateTypes, WireColors, WireGauges } from '../entities/survey/other/properties'
-import { SubitemTypes } from '../entities/survey/subitems/Subitem'
+import { SubitemTypes, PipelineMaterials, PipelineProducts, CoarseFineOptions, PowerSources, TapOptions, ItemStatuses, ItemTypes, TestPointTypes, AnodeMaterials, CalculatorTypes, CouponTypes, DisplayedReadingOptions, IsolationTypes, ItemPropertyUpdateTypes, PermanentPotentialTypes, PipeDiameters, PotentialUnits, ReferenceCellTypes, SortingOptions, SubitemPropertyUpdateTypes, WireColors, WireGauges } from '../../constants/global'
 import { Error, errors } from "./Error"
 
 export class Validation {

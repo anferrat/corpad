@@ -3,7 +3,7 @@ import { ScrollView, StyleSheet } from 'react-native'
 import { Text } from '@ui-kitten/components'
 import Header from '../Header'
 import PoitentialListItem from './components/PoitentialListItem'
-import { referenceCellCodes, referenceCellTypes } from '../../constants/constants'
+import { ReferenceCellTypeLabels, ReferenceCellCodeLabels } from '../../constants/labels'
 
 const ReferenceCellModal = ({ referenceCellList, itemList, onSelect, dismiss, selectedTypeIndex }) => {
     const list = itemList.filter(rc => rc.potentialTypes.indexOf(selectedTypeIndex) !== -1)
@@ -19,7 +19,7 @@ const ReferenceCellModal = ({ referenceCellList, itemList, onSelect, dismiss, se
                 icon='RE'
                 pack='cp'
                 title={referenceCellList[rc].name}
-                subtitle={`${referenceCellTypes[referenceCellList[rc].rcType] ?? ''} (${referenceCellCodes[referenceCellList[rc].rcType]?? 'Type is not selected'})` }
+                subtitle={`${ReferenceCellTypeLabels[referenceCellList[rc].rcType] ?? ''} (${ReferenceCellCodeLabels[referenceCellList[rc].rcType] ?? 'Type is not selected'})`}
                 onPress={onSelect.bind(this, rc)}
             />))
     }, [referenceCellList, onSelect])

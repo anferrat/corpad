@@ -22,7 +22,8 @@ const initialState = {
         timeModified: null,
         timeCreated: null,
         latitude: null,
-        longitude: null
+        longitude: null,
+        testPointType: null
     }
 }
 

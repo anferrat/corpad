@@ -6,7 +6,7 @@ const LegendItem = (props) => {
     return (
         <View style={styles.mainView}>
             <Icon name={props.icon} fill={props.color} style={styles.icon} />
-            <Text style={styles.text} category='s2'>
+            <Text style={styles.text} category='s1'>
                 {props.text}
             </Text>
         </View>

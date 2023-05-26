@@ -2,8 +2,8 @@ import React from 'react'
 import TextLine from '../../components/TextLine'
 import Header from '../../components/Header'
 import PotentialsView from '../PotentialsView'
-import { anodeMaterialList } from '../../../../constants/constants'
 import Divider from '../Divider'
+import { AnodeMaterialLabels } from '../../../../constants/labels'
 
 const AN = ({ data, potentialUnit, potentialHint, updatePotentialValue, validatePotential, subitemIndex, onEdit }) => {
     const { name, type, wireColor, wireGauge, potentials, anodeMaterial } = data
@@ -24,7 +24,7 @@ const AN = ({ data, potentialUnit, potentialHint, updatePotentialValue, validate
                 unit={potentialUnit}
                 potentialHint={potentialHint}
                 potentials={potentials} />
-            <TextLine title='Material' value={anodeMaterialList[anodeMaterial] ?? null} />
+            <TextLine title='Material' value={AnodeMaterialLabels[anodeMaterial] ?? null} />
         </>
     )
 }

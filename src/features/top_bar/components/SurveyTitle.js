@@ -22,7 +22,7 @@ const SurveyTitle = () => {
                     name='corpad-logo'
                     style={styles.logo}
                     fill={primary} />
-                <Text style={styles.title} category='h6' status='primary' numberOfLines={1} ellipsizeMode='tail'>{title}</Text>
+                <Text style={styles.title} category='h5' status='primary' numberOfLines={1} ellipsizeMode='tail'>{title}</Text>
             </Pressable>
         </View>
     )

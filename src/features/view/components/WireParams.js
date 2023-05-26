@@ -1,26 +1,27 @@
 import React from 'react'
 import { StyleSheet, View } from 'react-native'
 import { Text, Icon } from '@ui-kitten/components'
-import { wireGaugesList, wireColorList } from '../../../constants/constants'
+import { WireGauges, WireColors } from '../../../constants/global'
+import { WireColorColors } from '../../../styles/colors'
+import { WireGaugeLabels } from '../../../constants/labels'
 
 const WireParams = ({ wireColor, wireGauge }) => {
-    const hideWireColor = wireColor === null || !wireColorList[wireColor]
-    const hideWireGauge = wireGauge === null || !wireGaugesList[wireGauge]
+    const hideWireColor = wireColor === null || !~Object.values(WireColors).indexOf(wireColor)
+    const hideWireGauge = wireGauge === null || !~Object.values(WireGauges).indexOf(wireGauge)
 
     return (
         <View style={styles.view} >
             {!hideWireColor ?
                 <Icon
                     style={styles.icon}
-                    name={wireColorList[wireColor].color.length === 2 ? 'color-circle-double' : 'color-circle'}
+                    name={WireColorColors[wireColor].length === 2 ? 'color-circle-double' : 'color-circle'}
                     pack='cp'
-                    fill={wireColorList[wireColor].color[0]}
-                    fill2={wireColorList[wireColor].color[1]}
-                />
+                    fill={WireColorColors[wireColor][0]}
+                    fill2={WireColorColors[wireColor][1]} />
                 : null}
             {!hideWireGauge ?
                 <Text
-                    category='s2'>{wireGaugesList[wireGauge]}</Text>
+                    category='s2'>{WireGaugeLabels[wireGauge]}</Text>
                 : null}
         </View >
     )

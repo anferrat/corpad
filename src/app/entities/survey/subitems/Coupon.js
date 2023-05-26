@@ -1,6 +1,5 @@
-import { ItemTypes } from "../items/SurveyItem"
-import { AreaUnits, CurrentUnits } from "../other/properties"
-import { Subitem, SubitemTypes } from "./Subitem"
+import { ItemTypes, AreaUnits, CurrentUnits, SubitemTypes } from "../../../../constants/global"
+import { Subitem } from "./Subitem"
 
 export class Coupon extends Subitem {
     constructor(id, parentId, uid, name, pipelineCardId, wireGauge, wireColor, couponType, current, density, area) {

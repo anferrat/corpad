@@ -3,9 +3,16 @@ import { StyleSheet, ScrollView } from "react-native"
 import { Modal, Button } from "@ui-kitten/components"
 import Select from '../../../../components/Select2'
 import Input from "../../../../components/Input"
-import { referenceCellTypes } from "../../../../constants/constants"
 import { plusCircle } from "../../../../components/Icons"
+import { ReferenceCellTypes } from "../../../../constants/global"
+import { ReferenceCellTypeLabels } from "../../../../constants/labels"
 
+const accessory = {
+    icon: 'RE',
+    pack: 'cp'
+}
+
+const referenceCellTypes = Object.values(ReferenceCellTypes).map(type => ({ item: ReferenceCellTypeLabels[type], index: type }))
 
 const NewRefCellModal = ({ onChangeName, onChangeType, rcType, name, visible, dismissModal, nameValid, rcTypeValid, addReferenceCell }) => {
     const inputRef = useRef()
@@ -14,8 +21,8 @@ const NewRefCellModal = ({ onChangeName, onChangeType, rcType, name, visible, di
         const watch = setTimeout(() => {
             if (visible)
                 inputRef.current?.focus()
-        }, 30)
-        return () => clearInterval(watch)
+        }, 120)
+        return () => clearTimeout(watch)
     }, [visible])
 
     return (
@@ -28,7 +35,7 @@ const NewRefCellModal = ({ onChangeName, onChangeType, rcType, name, visible, di
                 keyboardShouldPersistTaps='handled'
                 style={styles.mainView}>
                 <Input
-                    inputRef={inputRef}
+                    ref={inputRef}
                     label='Name'
                     valid={nameValid}
                     value={name}
@@ -36,6 +43,7 @@ const NewRefCellModal = ({ onChangeName, onChangeType, rcType, name, visible, di
                     onChangeText={onChangeName} />
                 <Select
                     property='rcType'
+                    accessory={accessory}
                     onSelect={onChangeType}
                     itemList={referenceCellTypes}
                     selectedIndex={rcType}

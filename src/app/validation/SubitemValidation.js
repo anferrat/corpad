@@ -1,5 +1,5 @@
 import { object } from "yup"
-import { SubitemTypes } from "../entities/survey/subitems/Subitem"
+import { SubitemTypes } from "../../constants/global"
 import { Validation } from "../utils/Validation"
 
 export class SubitemValidation extends Validation {

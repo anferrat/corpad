@@ -29,6 +29,7 @@ const Parameter = (props) => {
                     unit={propertyData.unit}
                     unitList={propertyData.unitList}
                     itemList={propertyData.itemList}
+                    itemListLabels={propertyData.itemListLabels}
                     attributeCount={propertyData.attributeCount}
                     data={importData.data} />
             </View>

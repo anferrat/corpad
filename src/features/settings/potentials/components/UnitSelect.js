@@ -1,11 +1,12 @@
 import React from "react"
 import { StyleSheet } from "react-native"
 import Select from "../../../../components/Select2"
-import { potentialUnits, potentialUnitDescription } from "../../../../constants/constants"
+import { PotentialUnits } from "../../../../constants/global"
+import { PotentialUnitLabels, PotentialUnitDescriptionLabels } from "../../../../constants/labels"
 
+const itemList = Object.values(PotentialUnits).map(unit => ({ index: unit, item: `${PotentialUnitDescriptionLabels[unit]} (${PotentialUnitLabels[unit]})`}))
 
 const UnitSelect = ({ unit, updateUnit }) => {
-    const itemList = React.useMemo(() => potentialUnitDescription.map((desc, index) => `${desc} (${potentialUnits[index]})`), [])
     return (
         <Select
             style={styles.select}

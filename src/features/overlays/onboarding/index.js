@@ -1,3 +1,4 @@
+import { useIsFocused } from "@react-navigation/native"
 import OnboardingOverlay from "./components/OnboardingOverlay"
 import OnboardingScreenDefault from "./components/OnboardingScreen"
 
@@ -31,7 +32,8 @@ export const OnboardingOverlayEditReferenceCell = ({ visible }) => {
 }
 
 export const OnboardingOverlayEditMap = ({ visible }) => {
-    if (visible)
+    const isFocused = useIsFocused()
+    if (visible && isFocused)
         return <OnboardingOverlay
             onboarding='map'
             icon='onboarding-navigate'

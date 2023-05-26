@@ -2,9 +2,9 @@ import React from 'react'
 import TextLine from '../TextLine'
 import Header from '../Header'
 import PotentialsView from '../PotentialsView'
-import { couponTypes } from '../../../../constants/constants'
 import Divider from '../Divider'
 import InputWithTitle from '../InputWithTitle'
+import { CouponTypeLabels } from '../../../../constants/labels'
 
 const areaUnit = {
     main: 'cm',
@@ -35,7 +35,8 @@ const CN = ({ data, validateCouponCurrent, updatePropertyValue, onEdit, subitemI
                 title={name}
                 icon={type}
                 onEdit={onEdit} />
-            <Divider visible={true} />
+            <Divider
+                visible={true} />
             <PotentialsView
                 subitemIndex={subitemIndex}
                 updatePotentialValue={updatePotentialValue}
@@ -43,8 +44,14 @@ const CN = ({ data, validateCouponCurrent, updatePropertyValue, onEdit, subitemI
                 unit={potentialUnit}
                 potentialHint={potentialHint}
                 potentials={potentials} />
-            <TextLine title='Connected to' value={pipeSubitem.name ?? 'Disconnected'} icon={pipeSubitem.type ?? null} pack='cp' />
-            <TextLine title='Type' value={couponTypes[couponType] ?? null} />
+            <TextLine
+                title='Connected to'
+                value={pipeSubitem.name ?? 'Disconnected'}
+                icon={pipeSubitem.type ?? null}
+                pack='cp' />
+            <TextLine
+                title='Type'
+                value={CouponTypeLabels[couponType] ?? null} />
             <TextLine
                 title='Area'
                 value={area}

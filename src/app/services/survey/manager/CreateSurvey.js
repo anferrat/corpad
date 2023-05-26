@@ -1,9 +1,9 @@
-import { potentialLabels } from "../../../../constants/constants" //CONSTANT! need to reorginize
 import { Pipeline } from "../../../entities/survey/items/Pipeline"
 import { PotentialType } from "../../../entities/survey/other/PotentialType"
 import { ReferenceCell } from "../../../entities/survey/other/ReferenceCell"
 import { Survey } from "../../../entities/survey/other/Survey"
-import { PermanentPotentialTypes, ReferenceCellTypes } from "../../../entities/survey/other/properties"
+import { PermanentPotentialTypes, ReferenceCellTypes } from "../../../../constants/global"
+import { PermanentPotentialTypeLabels } from "../../../../constants/labels"
 import { guid } from "../../../utils/guid"
 
 export class CreateSurvey {
@@ -21,7 +21,7 @@ export class CreateSurvey {
         if (!isLoaded.isLoaded) {
             const currentTime = Date.now()
             const pipeline = new Pipeline(null, guid(), 'Pipeline', currentTime, currentTime, null, null, null, true, null, null, null)
-            const potentialTypes = Object.values(PermanentPotentialTypes).map(type => new PotentialType(null, guid(), potentialLabels[type], type))
+            const potentialTypes = Object.values(PermanentPotentialTypes).map(type => new PotentialType(null, guid(), PermanentPotentialTypeLabels[type], type))
             const survey = new Survey(guid(), name, 'Wade Watts')
             const referenceCell = new ReferenceCell(null, guid(), ReferenceCellTypes.COPPER_SULFATE, 'RC1', true)
             const syncTime = null

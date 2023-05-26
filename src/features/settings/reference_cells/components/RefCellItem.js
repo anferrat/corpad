@@ -4,7 +4,7 @@ import { Icon, Text } from "@ui-kitten/components"
 import { basic, basic200, basic300, primary } from '../../../../styles/colors'
 import { androidRipple } from "../../../../styles/styles"
 import IconButton from '../../../../components/IconButton'
-import { referenceCellCodes, referenceCellTypes } from "../../../../constants/constants"
+import { ReferenceCellTypeLabels, ReferenceCellCodeLabels } from "../../../../constants/labels"
 
 const RefCellItem = ({ selected, updateMain, name, rcType, deleteReference, id }) => {
 
@@ -37,7 +37,7 @@ const RefCellItem = ({ selected, updateMain, name, rcType, deleteReference, id }
                     <Text
                         category='s2'
                         appearance='hint'>
-                        {`${referenceCellTypes[rcType]} (${referenceCellCodes[rcType]})`}
+                        {`${ReferenceCellTypeLabels[rcType]} (${ReferenceCellCodeLabels[rcType]})`}
                     </Text>
                 </View>
             </View>

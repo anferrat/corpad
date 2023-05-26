@@ -1,4 +1,4 @@
-import { SubitemTypes } from "../../../../../entities/survey/subitems/Subitem"
+import { SubitemTypes } from "../../../../../../constants/global"
 
 export class SimpleJsonImport {
     constructor(surveyRepo) {

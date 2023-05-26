@@ -33,8 +33,8 @@ const SelectField = (props) => {
     const selectList = React.useMemo(() => {
         return (
             props.itemList.map((item, i) => <SelectItem
-                key={`${item.item ?? item}-SelectItem`}
-                title={item.item ?? item}
+                key={`${item?.item ?? item}-SelectItem`}
+                title={item?.item ?? item}
                 accessoryLeft={displayAccessory(props.accessory, props.accessoryList, i)} />)
         )
     }, [props.itemList, props.accessoryList, props.accessory])

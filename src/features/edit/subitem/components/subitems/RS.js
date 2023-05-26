@@ -2,13 +2,16 @@ import React, { useMemo, useCallback } from 'react'
 import PotentialsView from '../potentials/PotentialsView'
 import { StyleSheet } from 'react-native'
 import Select from '../../../../../components/Select2'
-import { pipeDiameterList } from '../../../../../constants/constants'
 import NameInput from '../NameInput'
+import { PipeDiameters } from '../../../../../constants/global'
+import { PipeDiameterLabels } from '../../../../../constants/labels'
 
 const pipeAccessory = {
     icon: 'PL',
     pack: 'cp'
 }
+
+const pipeDiamteres = Object.values(PipeDiameters).map(diameter => ({ item: PipeDiameterLabels[diameter], index: diameter }))
 
 const RSCard = ({ pipelineList, data, itemId, subitemId, update, validate }) => {
     const { pipelineId, name, valid, nps, defaultName } = data
@@ -52,7 +55,7 @@ const RSCard = ({ pipelineList, data, itemId, subitemId, update, validate }) => 
                 style={styles.size}
                 onSelect={onSelectSize}
                 property='nps'
-                itemList={pipeDiameterList}
+                itemList={pipeDiamteres}
                 selectedIndex={nps}
                 placeholder="Select NPS"
                 label='Diameter' />

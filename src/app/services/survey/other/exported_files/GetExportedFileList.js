@@ -1,5 +1,5 @@
 import { ExportedFile } from "../../../../entities/survey/other/ExportedFile"
-import { FileMimeTypes, FileSystemLocations } from "../../../../entities/survey/other/properties"
+import { FileMimeTypes, FileSystemLocations } from "../../../../../constants/global"
 
 export class GetExportedFileList {
     constructor(fileSystemRepo, listPresenter) {

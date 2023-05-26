@@ -1,6 +1,6 @@
 import RNDocumentPicker from 'react-native-document-picker'
 import { Error, errors } from '../../utils/Error'
-import { FileMimeTypes, SurveyLoadingStatuses } from '../../entities/survey/other/properties'
+import { FileMimeTypes, SurveyLoadingStatuses } from '../../../constants/global'
 
 export class DocumentPicker {
     constructor() { }

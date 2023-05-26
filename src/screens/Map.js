@@ -11,8 +11,7 @@ const MapScreen = ({ navigation }) => {
         visible={true} />
       <Map
         navigateToView={navigateToView}
-        navigateToEdit={navigateToEdit}
-      />
+        navigateToEdit={navigateToEdit} />
     </>
   )
 }

@@ -1,5 +1,5 @@
 import { Error, errors } from "../../utils/Error"
-import { SurveyLoadingStatuses } from "../../entities/survey/other/properties"
+import { SurveyLoadingStatuses } from "../../../constants/global"
 
 export class OpenExternalSurvey {
     constructor(loadExternalSurveyService, saveCurrentSurveyService, warningHandler, currentSurveyStatusService, resetCurrentSurveyService) {

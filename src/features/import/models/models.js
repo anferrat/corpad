@@ -1,5 +1,6 @@
-import { testPointTypes, statusInfo, powerSourceList, tapOptions, pipeCoating, pipeDiameterList, pipeMaterials, pipeProducts, wireColorList, wireGaugesList, anodeMaterialList, isolationAssemblyTypes, referenceCellTypes, areaUnits, currentUnits, currentDensityUnits, potentialUnits, couponTypes, factorUnits } from '../../../constants/constants'
-import { npsList } from '../../../constants/thicknessTable'
+
+import { TestPointTypeLabels, StatusLabels, PowerSourceLabels, CoarseFineOptionLabels, PipelineCoatingLabels, PipeDiameterLabels, PipelineMaterialLabels, PipelineProductLabels, WireColorLabels, WireGaugeLabels, AnodeMaterialLabels, IsolationTypeLabels, ReferenceCellTypeLabels, AreaUnitLabels, CurrentUnitLabels, CurrentDensityUnitLabels, PotentialUnitLabels, CouponTypeLabels, FactorUnitLabels, IsolationShortedLabels } from '../../../constants/labels'
+import { TestPointTypes, ItemStatuses, PowerSources, CoarseFineOptions, PipelineCoating, PipeDiameters, PipelineMaterials, PipelineProducts, WireColors, WireGauges, AnodeMaterials, IsolationTypes, ReferenceCellTypes, AreaUnits, CurrentUnits, CurrentDensityUnits, PotentialUnits, CouponTypes, FactorUnits, IsolationShorted } from '../../../constants/global'
 import IdGen from '../../../helpers/id_generator'
 
 /*
@@ -11,18 +12,20 @@ const getParameter = ({
     fieldIndex = null, // - index of fields array from csv data to import from when importType 1
     mergeAllowed = false, // indicates in importType 3 is allowed for this property
     itemList = [], // list of items to select from, when parameterType 1
+    itemListLabels = {},
     defaultValue = null, // default value when importType 0, stores string when parametertype 0, or index when parameterType 1. When importType 2 - stores first index for default name values
     fieldIndexList = [], //list of field indexes from csb file when mergeAllowed and importType 3
     valid = true, // flag to check if defaultValue passed validation for this prop (importType 0)
     unit = 0, // unitIndex from unitList when importType 1, in order to convert values to correct units
-    unitList = [], //unitList that can be used for this property
-    unitCodeList = [],
+    unitList = [], //unitList that can be used for this property (displayed labels). used for display purposes
+    unitCodeList = [], // actual unit values (int number) that corrspond to unit labels in unitList. Used in app for conversion
     defaultUnitIndex = 0, //shows which unit from the unitList is the one used to store data in DB
     attributeMap = [], //list of mapped attributes. Attribute matches index from itemList to indexes of values from a field in csv file. when importing value indexes will be converted to index from itemlist. (parameterType 1, importType 1)
 }) => ({
     parameterType: parameterType,
     importType: importType,
     itemList: itemList,
+    itemListLabels: itemListLabels,
     unit: unit,
     unitList: unitList,
     unitCodeList: unitCodeList,
@@ -36,8 +39,8 @@ const getParameter = ({
 })
 
 const getWireProps = () => ({
-    wireColor: getParameter({ parameterType: 1, itemList: wireColorList.map(w => w.title) }),
-    wireGauge: getParameter({ parameterType: 1, itemList: wireGaugesList }),
+    wireColor: getParameter({ parameterType: 1, itemList: Object.values(WireColors), itemListLabels: WireColorLabels }),
+    wireGauge: getParameter({ parameterType: 1, itemList: Object.values(WireGauges), itemListLabels: WireGaugeLabels }),
 })
 
 const getNameProps = (type) => ({
@@ -67,12 +70,12 @@ export const getItem = (itemType) => {
         case 'TEST_POINT':
             return {
                 name: getParameter({ importType: 2 }),
-                testPointType: getParameter({ parameterType: 1, itemList: testPointTypes }),
+                testPointType: getParameter({ parameterType: 1, itemList: Object.values(TestPointTypes), itemListLabels: TestPointTypeLabels }),
                 location: getParameter({ mergeAllowed: true }),
                 latitude: getParameter({}),
                 longitude: getParameter({}),
                 comment: getParameter({ mergeAllowed: true }),
-                status: getParameter({ parameterType: 1, itemList: statusInfo.map(s => s.title) })
+                status: getParameter({ parameterType: 1, itemList: Object.values(ItemStatuses).filter((status) => status !== ItemStatuses.NO_STATUS), itemListLabels: StatusLabels })
             }
         case 'RECTIFIER':
             return {
@@ -81,25 +84,25 @@ export const getItem = (itemType) => {
                 latitude: getParameter({}),
                 longitude: getParameter({}),
                 comment: getParameter({ mergeAllowed: true }),
-                status: getParameter({ parameterType: 1, itemList: statusInfo.map(s => s.title) }),
+                status: getParameter({ parameterType: 1, itemList: Object.values(ItemStatuses).filter((status) => status !== ItemStatuses.NO_STATUS), itemListLabels: StatusLabels }),
                 model: getParameter({ mergeAllowed: true }),
                 serialNumber: getParameter({}),
-                powerSource: getParameter({ parameterType: 1, itemList: powerSourceList }),
+                powerSource: getParameter({ parameterType: 1, itemList: Object.values(PowerSources), itemListLabels: PowerSourceLabels }),
                 tapSetting: 0,
                 tapValue: getParameter({}),
-                tapCoarse: getParameter({ parameterType: 1, itemList: tapOptions }),
-                tapFine: getParameter({ parameterType: 1, itemList: tapOptions }),
-                maxVoltage: getParameter({ unitList: [potentialUnits[3]] }),
-                maxCurrent: getParameter({ unitList: [currentUnits[2]] }),
+                tapCoarse: getParameter({ parameterType: 1, itemList: Object.values(CoarseFineOptions), itemListLabels: CoarseFineOptionLabels }),
+                tapFine: getParameter({ parameterType: 1, itemList: Object.values(CoarseFineOptions), itemListLabels: CoarseFineOptionLabels }),
+                maxVoltage: getParameter({ unitList: [PotentialUnitLabels[PotentialUnits.VOLTS]], unitCodeList: [PotentialUnits.VOLTS], defaultUnitIndex: 0, unit: 0 }),
+                maxCurrent: getParameter({ unitList: [CurrentUnitLabels[CurrentUnits.AMPS]], unitCodeList: [CurrentUnits.APMS], defaultUnitIndex: 0, unit: 0 }),
             }
         case 'PIPELINE':
             return {
                 name: getParameter({ importType: 2 }),
-                nps: getParameter({ parameterType: 1, itemList: npsList }),
+                nps: getParameter({ parameterType: 1, itemList: Object.values(PipeDiameters), itemListLabels: PipeDiameterLabels }),
                 licenseNumber: getParameter({}),
-                material: getParameter({ parameterType: 1, itemList: pipeMaterials }),
-                coating: getParameter({ parameterType: 1, itemList: pipeCoating, defaultValue: 0, importType: 0 }),
-                product: getParameter({ parameterType: 1, itemList: pipeProducts }),
+                material: getParameter({ parameterType: 1, itemList: Object.values(PipelineMaterials), itemListLabels: PipelineMaterialLabels }),
+                coating: getParameter({ parameterType: 1, itemList: Object.values(PipelineCoating), itemListLabels: PipelineCoatingLabels, defaultValue: 0, importType: 0 }),
+                product: getParameter({ parameterType: 1, itemList: Object.values(PipelineProducts), itemListLabels: PipelineProductLabels }),
                 comment: getParameter({ mergeAllowed: true }),
             }
         default: return null
@@ -121,22 +124,22 @@ export const getSubitem = (type, autoCreatePotentials = false, initialPotentials
                 ...getNameProps(type),
                 ...getWireProps(),
                 ...getPotentials(autoCreatePotentials, initialPotentials),
-                anodeMaterial: getParameter({ parameterType: 1, itemList: anodeMaterialList }),
+                anodeMaterial: getParameter({ parameterType: 1, itemList: Object.values(AnodeMaterials), itemListLabels: AnodeMaterialLabels }),
             }
         case 'BD':
             return {
                 ...getNameProps(type),
                 ...getSides(),
-                current: getParameter({ unitList: [currentUnits[1], currentUnits[2]], defaultUnitIndex: 1, unit: 1, unitCodeList: [1, 2] })
+                current: getParameter({ unitList: [CurrentUnitLabels[CurrentUnits.MILI_AMPS], CurrentUnitLabels[CurrentUnits.AMPS]], defaultUnitIndex: 1, unit: 1, unitCodeList: [CurrentUnits.MILI_AMPS, CurrentUnits.AMPS] })
             }
         case 'CN':
             return {
                 ...getNameProps(type),
                 pipelineCardKey: null,
-                couponType: getParameter({ parameterType: 1, itemList: couponTypes }),
-                area: getParameter({ unitList: areaUnits, defaultUnitIndex: 0 }),
-                current: getParameter({ unitList: [currentUnits[0], currentUnits[1]], defaultUnitIndex: 0, unit: 0, unitCodeList: [0, 1] }),
-                density: getParameter({ unitList: currentDensityUnits, defaultUnitIndex: 2, unitCodeList: [0, 1, 2, 3] }),
+                couponType: getParameter({ parameterType: 1, itemList: Object.values(CouponTypes), itemListLabels: CouponTypeLabels }),
+                area: getParameter({ unitList: [AreaUnitLabels[AreaUnits.CENTIMETER_SQUARE], AreaUnitLabels[AreaUnits.METER_SQUARE]], unitCodeList: [AreaUnits.CENTIMETER_SQUARE, AreaUnits.METER_SQUARE], defaultUnitIndex: 0, unit: 0 }),
+                current: getParameter({ unitList: [CurrentUnitLabels[CurrentUnits.MICRO_AMPS], CurrentUnitLabels[CurrentUnits.MILI_AMPS]], defaultUnitIndex: 0, unit: 0, unitCodeList: [CurrentUnits.MICRO_AMPS, CurrentUnits.MILI_AMPS] }),
+                density: getParameter({ unitList: [CurrentDensityUnitLabels[CurrentDensityUnits.AMPS_OVER_CM_SQUARE], CurrentDensityUnitLabels[CurrentDensityUnits.AMPS_OVER_METER_SQUARE], CurrentDensityUnitLabels[CurrentDensityUnits.MILI_AMPS_OVER_CM_SQUARE], CurrentDensityUnitLabels[CurrentDensityUnits.MILI_AMPS_OVER_METER_SQUARE]], defaultUnitIndex: 1, unit: 1, unitCodeList: [CurrentDensityUnits.AMPS_OVER_CM_SQUARE, CurrentDensityUnits.AMPS_OVER_METER_SQUARE, CurrentDensityUnits.MILI_AMPS_OVER_CM_SQUARE, CurrentDensityUnits.MILI_AMPS_OVER_METER_SQUARE] }),
                 ...getWireProps(),
                 ...getPotentials(autoCreatePotentials, initialPotentials)
             }
@@ -149,9 +152,9 @@ export const getSubitem = (type, autoCreatePotentials = false, initialPotentials
             return {
                 ...getNameProps(type),
                 ...getSides(null),
-                current: getParameter({ unitList: [currentUnits[2], currentUnits[1]], defaultUnitIndex: 0, unit: 0, unitCodeList: [2, 1] }),
-                shorted: getParameter({ parameterType: 1, itemList: ['No', 'Yes'] }),
-                isolationType: getParameter({ parameterType: 1, itemList: isolationAssemblyTypes }),
+                current: getParameter({ unitList: [CurrentUnitLabels[CurrentUnits.MILI_AMPS], CurrentUnitLabels[CurrentUnits.AMPS]], defaultUnitIndex: 1, unit: 1, unitCodeList: [CurrentUnits.MILI_AMPS, CurrentUnits.AMPS] }),
+                shorted: getParameter({ parameterType: 1, itemList: Object.values(IsolationShorted), itemListLabels: IsolationShortedLabels }),
+                isolationType: getParameter({ parameterType: 1, itemList: Object.values(IsolationTypes), itemListLabels: IsolationTypeLabels }),
             }
         case 'OT':
             return {
@@ -162,32 +165,35 @@ export const getSubitem = (type, autoCreatePotentials = false, initialPotentials
         case 'RS':
             return {
                 ...getNameProps(type),
-                nps: getParameter({ parameterType: 1, itemList: pipeDiameterList }),
+                nps: getParameter({ parameterType: 1, itemList: Object.values(PipeDiameters), itemListLabels: PipeDiameterLabels }),
                 ...getPotentials(autoCreatePotentials, initialPotentials),
                 pipelineIndex: null
             }
         case 'RE':
             return {
                 ...getNameProps(type),
-                rcType: getParameter({ parameterType: 1, itemList: referenceCellTypes }),
+                rcType: getParameter({ parameterType: 1, itemList: Object.values(ReferenceCellTypes), itemListLabels: ReferenceCellTypeLabels }),
                 ...getWireProps(),
                 ...getPotentials(autoCreatePotentials, initialPotentials),
             }
         case 'SH':
-            return {
-                ...getNameProps(type),
-                ...getSides(),
-                factor: getParameter({ unitList: factorUnits, defaultUnitIndex: 0, unit: 0, unitCodeList: [0, 1, 2, 3] }),
-                voltageDrop: getParameter({ unitList: [potentialUnits[1]] }),
-                current: getParameter({ unitList: [currentUnits[1], currentUnits[2]], defaultUnitIndex: 1, unit: 1, unitCodeList: [1, 2] }),
+            {
+                const factorUnits = Object.values(FactorUnits)
+                return {
+                    ...getNameProps(type),
+                    ...getSides(),
+                    factor: getParameter({ unitCodeList: factorUnits, defaultUnitIndex: 0, unit: 0, unitList: factorUnits.map(unit => FactorUnitLabels[unit]) }),
+                    voltageDrop: getParameter({ unitList: [PotentialUnitLabels[PotentialUnits.MILIVOLTS]], unitCodeList: [PotentialUnits.MILIVOLTS], defaultUnitIndex: 0, unit: 0 }),
+                    current: getParameter({ unitList: [CurrentUnitLabels[CurrentUnits.MILI_AMPS], CurrentUnitLabels[CurrentUnits.AMPS]], defaultUnitIndex: 1, unit: 1, unitCodeList: [CurrentUnits.MILI_AMPS, CurrentUnits.AMPS] }),
+                }
             }
         case 'CT':
             return {
                 ...getNameProps(type),
-                current: getParameter({ unitList: [currentUnits[2]], unitCodeList: [2] }),
-                targetMin: getParameter({ unitList: [currentUnits[2]], unitCodeList: [2] }),
-                targetMax: getParameter({ unitList: [currentUnits[2]], unitCodeList: [2] }),
-                voltage: getParameter({ unitList: [potentialUnits[3]], unitCodeList: [3] })
+                current: getParameter({ unitList: [CurrentUnitLabels[CurrentUnits.AMPS]], unitCodeList: [CurrentUnits.AMPS], unit: 0, defaultUnitIndex: 0 }),
+                targetMin: getParameter({ unitList: [CurrentUnitLabels[CurrentUnits.AMPS]], unitCodeList: [CurrentUnits.AMPS], unit: 0, defaultUnitIndex: 0 }),
+                targetMax: getParameter({ unitList: [CurrentUnitLabels[CurrentUnits.AMPS]], unitCodeList: [CurrentUnits.AMPS], unit: 0, defaultUnitIndex: 0 }),
+                voltage: getParameter({ unitList: [PotentialUnitLabels[PotentialUnits.VOLTS]], unitCodeList: [PotentialUnits.VOLTS], unit: 0, defaultUnitIndex: 0 })
             }
     }
 }
@@ -199,7 +205,7 @@ export const getAttribute = ({ index, mappedIndexes, mappedValues }) => ({
 })
 
 export const getPotentialParameter = (potentialTypeIndex, referenceCellIndex) => ({
-    ...getParameter({ unitList: potentialUnits, defaultUnitIndex: 3, unitCodeList: [0, 1, 2, 3] }),
+    ...getParameter({ unitList: [PotentialUnitLabels[PotentialUnits.NEGATIVE_MILIVOLTS], PotentialUnitLabels[PotentialUnits.MILIVOLTS], PotentialUnitLabels[PotentialUnits.VOLTS], PotentialUnitLabels[PotentialUnits.NEGATIVE_VOLTS]], defaultUnitIndex: 2, unit: 2, unitCodeList: [PotentialUnits.NEGATIVE_MILIVOLTS, PotentialUnits.MILIVOLTS, PotentialUnits.VOLTS, PotentialUnits.NEGATIVE_VOLTS] }),
     createIfEmpty: true, // when false, potential will not be created if value is null. Not implemented for now
     potentialTypeIndex,
     referenceCellIndex

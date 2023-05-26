@@ -1,6 +1,5 @@
-import { ItemTypes } from "../items/SurveyItem";
-import { CurrentUnits, FactorUnits, PotentialUnits } from "../other/properties";
-import { Subitem, SubitemTypes } from "./Subitem";
+import { ItemTypes, SubitemTypes, CurrentUnits, FactorUnits, PotentialUnits } from "../../../../constants/global";
+import { Subitem } from "./Subitem";
 
 export class Shunt extends Subitem {
     constructor(id, parentId, uid, name, factor, ratioVoltage, ratioCurrent, factorSelected, current, voltageDrop, fromAtoB, sideA, sideB) {

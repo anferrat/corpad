@@ -1,5 +1,5 @@
 import { SQLiteRepository } from "../../../utils/SQLite"
-import { SubitemTypes } from "../../../entities/survey/subitems/Subitem"
+import { SubitemTypes } from "../../../../constants/global"
 import { Error, errors } from "../../../utils/Error"
 import { TestLead } from "../../../entities/survey/subitems/TestLead"
 
@@ -13,8 +13,8 @@ export class TestLeadRepository extends SQLiteRepository {
         try {
             const result = await this.runSingleQueryTransaction('SELECT id, testPointId, uid, name, wireColor, wireGauge FROM cards WHERE type=?', [SubitemTypes.TEST_LEAD])
             return this.generateArray(result.rows.length, result.rows.item)
-                .map(({ id, testPointId, type, uid, name, wireColor, wireGauge }) =>
-                    new TestLead(id, testPointId, type, uid, name, wireGauge, wireColor,))
+                .map(({ id, testPointId, uid, name, wireColor, wireGauge }) =>
+                    new TestLead(id, testPointId, uid, name, wireGauge, wireColor))
         }
         catch (err) {
             throw new Error(errors.DATABASE, 'Unable to get test lead with id ${id}', err)
@@ -26,7 +26,7 @@ export class TestLeadRepository extends SQLiteRepository {
             const { id, uid, parentId, type, name, wireColor, wireGauge } = testLead
             const result = await this.runSingleQueryTransaction('INSERT INTO cards (id, uid, testPointId, type, name, wireColor, wireGauge) VALUES (?,?,?,?,?,?,?)',
                 [id, uid, parentId, type, name, wireColor, wireGauge])
-             
+
             return new TestLead(result.insertId, parentId, uid, name, wireGauge, wireColor)
         }
         catch (err) {

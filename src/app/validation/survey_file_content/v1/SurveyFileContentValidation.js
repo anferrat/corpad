@@ -1,5 +1,5 @@
-import { array, mixed, object, tuple, string, number } from "yup";
-import { SurveyFileDataFields } from "../../../entities/survey/survey/PipelineSurveyFile";
+import { array, mixed, object, tuple, string } from "yup";
+import { SurveyFileDataFields } from "../../../../constants/global"
 import { Validation } from "../../../utils/Validation";
 
 export class SurveyFileContentValidation extends Validation {

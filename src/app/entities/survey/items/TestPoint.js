@@ -1,5 +1,5 @@
 import { Marker } from "./Marker"
-import { ItemStatuses, ItemTypes } from "./SurveyItem"
+import { ItemStatuses, ItemTypes } from "./../../../../constants/global"
 
 export class TestPoint extends Marker {
     constructor(

@@ -1,8 +1,8 @@
 import React from 'react'
 import { View, StyleSheet } from 'react-native'
 import { Text, Icon } from '@ui-kitten/components'
-import { labels } from '../../../../constants/constants'
 import { basic, basic300 } from '../../../../styles/colors'
+import { ItemTypeLabels, SubitemTypeLabels } from '../../../../constants/labels'
 
 const index = Math.floor(Math.random() * 100) + 1
 
@@ -18,7 +18,7 @@ const NamePreview = ({ name, type, pipelineNameAsDefault, pipelineNameSettingAct
                 <View
                     style={styles.subtitle}>
                     <Text category='s2' appearance='hint'>
-                        {labels[type].label}
+                        {ItemTypeLabels[type] ?? SubitemTypeLabels[type] ?? 'Error'}
                     </Text>
                     <Icon
                         fill={basic}

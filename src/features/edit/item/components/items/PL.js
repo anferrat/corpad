@@ -2,9 +2,14 @@ import React from 'react'
 import { View, StyleSheet } from 'react-native'
 import Input from '../Input'
 import Select from '../Select'
-import { pipeMaterials, pipeProducts, pipeDiameterList } from '../../../../../constants/constants'
 import PipelineCoating from '../PipelineCoating'
 import { globalStyle } from '../../../../../styles/styles'
+import { PipelineMaterials, PipelineProducts, PipeDiameters } from '../../../../../constants/global'
+import { PipeDiameterLabels, PipelineMaterialLabels, PipelineProductLabels } from '../../../../../constants/labels'
+
+const pipeMaterials = Object.values(PipelineMaterials).map(material => ({ item: PipelineMaterialLabels[material], index: material }))
+const pipeProducts = Object.values(PipelineProducts).map(product => ({ item: PipelineProductLabels[product], index: product }))
+const pipeDiameters = Object.values(PipeDiameters).map(diameter => ({ item: PipeDiameterLabels[diameter], index: diameter }))
 
 
 const PL = ({ update, validate, data }) => {
@@ -48,7 +53,7 @@ const PL = ({ update, validate, data }) => {
                 label='Pipe size'
                 property='nps'
                 selectedIndex={nps}
-                itemList={pipeDiameterList}
+                itemList={pipeDiameters}
                 placeholder='Select pipe diameter' />
             <Select
                 style={styles.select} F

@@ -2,8 +2,8 @@ import React from 'react'
 import { Icon, Text, ProgressBar } from '@ui-kitten/components'
 import { View, StyleSheet } from 'react-native'
 import { basic, primary, basic300 } from '../../../../styles/colors'
-import { labels } from '../../../../constants/constants'
 import ModalTitle from './ModalTitle'
+import { ItemTypeLabels } from '../../../../constants/labels'
 
 const ModalProgress = ({
     count,
@@ -26,7 +26,7 @@ const ModalProgress = ({
                         category='s2'
                         appearance='hint'
                         style={styles.barText}>
-                        {labels[itemType].label} {currentIndex + 1}/{count}
+                        {ItemTypeLabels[itemType]} {currentIndex + 1}/{count}
                     </Text>
                     <ProgressBar
                         status='primary'

@@ -1,5 +1,5 @@
 import { Potential } from "../../../../entities/survey/subitems/Potential"
-import { PotentialUnits } from "../../../../entities/survey/other/properties"
+import { PotentialUnits } from "../../../../../constants/global"
 
 export class UpdatePotentialList {
     constructor(potentialRepo, unitConverter, potentialPresenter) {

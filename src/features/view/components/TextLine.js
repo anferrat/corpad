@@ -15,7 +15,7 @@ const TextLine = ({ value, title, icon, pack, fill, unit }) => {
             <View
                 style={styles.mainView}>
                 <Text
-                    category='p2'
+                    category='s1'
                     style={styles.title}>{title}</Text>
                 <View style={styles.valueView}>
                     {icon ?

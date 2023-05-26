@@ -1,17 +1,17 @@
 import React from 'react'
-import { View, StyleSheet } from 'react-native'
+import { View, StyleSheet, ScrollView } from 'react-native'
 import { Radio, RadioGroup } from '@ui-kitten/components'
 import { globalStyle } from '../../../styles/styles'
-import { items, } from '../../../constants/constants'
 import ItemSelectorCard from './components/item/ItemSelectorCard'
-import { sortingOptions } from '../../../constants/constants'
 import Title from './components/Title'
 import useExportItemProperties from './hooks/useExportItemProperties'
 import ItemPropertySelector from './components/item/ItemPropertySelector'
 import BottomButton from '../../../components/BottomButton'
+import { ItemTypes, SortingOptions } from '../../../constants/global'
+import { SortingOptionLabels } from '../../../constants/labels'
 
 //filter sorting by location. N/A for here
-const sortingValues = sortingOptions.filter((_, i) => i !== 4)
+const sortingValues = Object.values(SortingOptions).filter(sorting => sorting !== SortingOptions.NEAREST)
 
 const ItemProperties = ({ navigateToExportOverview, navigateToExportPotentials, navigateToExportSubitems }) => {
     const { itemType,
@@ -27,41 +27,43 @@ const ItemProperties = ({ navigateToExportOverview, navigateToExportPotentials, 
 
     return (
         <>
-            <View style={globalStyle.card}>
-                <Title
-                    name={'EXPORTED ITEMS'} />
-                <View
-                    style={styles.itemSelector}>
-                    {items.map(type =>
-                        <ItemSelectorCard
-                            key={type}
-                            itemType={type}
-                            selectedItemType={itemType}
-                            onPress={onSelectItemType}
-                        />)}
+            <ScrollView
+                contentContainerStyle={styles.scrollView}>
+                <View style={globalStyle.card}>
+                    <Title
+                        name={'EXPORTED ITEMS'} />
+                    <View
+                        style={styles.itemSelector}>
+                        {Object.values(ItemTypes).map(type =>
+                            <ItemSelectorCard
+                                key={type}
+                                itemType={type}
+                                selectedItemType={itemType}
+                                onPress={onSelectItemType}
+                            />)}
+                    </View>
+                    <Title
+                        name={'SORTING'} />
+                    <RadioGroup
+                        onChange={onSelectSorting}
+                        selectedIndex={sorting}
+                        style={styles.radioGroup}>
+                        {sortingValues.map((sorting) => (
+                            <Radio
+                                key={sorting}>
+                                {SortingOptionLabels[sorting]}
+                            </Radio>
+                        ))}
+                    </RadioGroup>
+                    <Title
+                        name={'ITEM PROPERTIES'} />
+                    <ItemPropertySelector
+                        loading={loading}
+                        itemProperties={itemProperties}
+                        properties={properties}
+                        toggleItemProperty={toggleItemProperty} />
                 </View>
-                <Title
-                    name={'SORTING'} />
-                <RadioGroup
-                    onChange={onSelectSorting}
-                    selectedIndex={sorting}
-                    style={styles.radioGroup}>
-                    {sortingValues.map((title) => (
-                        <Radio
-                            key={title}>
-                            {title}
-                        </Radio>
-                    ))}
-                </RadioGroup>
-                <Title
-                    name={'ITEM PROPERTIES'} />
-                <ItemPropertySelector
-                    loading={loading}
-                    itemProperties={itemProperties}
-                    properties={properties}
-                    toggleItemProperty={toggleItemProperty}
-                />
-            </View>
+            </ScrollView>
             <BottomButton
                 icon={'arrow-circle-right-outline'}
                 title={'Next'}
@@ -87,6 +89,9 @@ const styles = StyleSheet.create({
     },
     radioGroup: {
         marginBottom: 12
+    },
+    scrollView: {
+        paddingBottom: 72
     }
 
 })

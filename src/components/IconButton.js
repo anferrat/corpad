@@ -11,7 +11,7 @@ const SingleIconButton = (props) => {
         <Pressable
             disabled={props.disabled}
             onPress={props.onPress}
-            hitSlop={5}
+            hitSlop={10}
             android_ripple={{
                 radius: (size + 15) / 2,
                 color: basic300

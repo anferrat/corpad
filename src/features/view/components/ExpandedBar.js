@@ -1,7 +1,7 @@
 import React, { useState, useRef } from 'react'
 import { Animated, Easing, Pressable, View, StyleSheet } from 'react-native'
 import { Icon } from '@ui-kitten/components'
-import { basic, primary, basic200 } from '../../../styles/colors'
+import { primary, basic200, basic300 } from '../../../styles/colors'
 
 const ExpandedBar = (props) => {
     const [barDisplayed, setBarDisplayed] = useState(false)
@@ -12,7 +12,7 @@ const ExpandedBar = (props) => {
     })
 
     const rotate = height.interpolate({
-        inputRange: [0, 80],
+        inputRange: [0, 90],
         outputRange: ['0deg', '180deg'],
     })
     const toggleBar = (bar) => {
@@ -24,7 +24,7 @@ const ExpandedBar = (props) => {
     }
 
     const openBarAnimation = () => Animated.timing(height, {
-        toValue: 80,
+        toValue: 90,
         duration: 200,
         useNativeDriver: false,
         easing: Easing.linear
@@ -42,10 +42,10 @@ const ExpandedBar = (props) => {
     return (
         <View style={styles.mainView}>
             <Animated.View style={{ ...styles.bar, height: height, transform: [{ translateY: move }] }}>
-                    {props.children}
+                {props.children}
             </Animated.View>
             <Pressable
-                android_ripple={{ color: basic }}
+                android_ripple={{ color: basic300 }}
                 onPress={toggleBar.bind(this, barDisplayed)}
                 style={styles.pressable}>
                 <Animated.View style={{ transform: [{ rotate: rotate }] }}>

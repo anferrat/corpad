@@ -46,15 +46,14 @@ export const SearchBar = ({ navigateToView }) => {
             <FocusAwareStatusBar
                 translucent={true}
                 backgroundColor={'transparent'}
-                barStyle={'dark-content'}
-            />
+                barStyle={'dark-content'} />
             <View style={styles.searchBar}>
                 <SingleIconButton
                     style={styles.backIcon}
                     iconName='arrow-back-outline'
                     onPress={dismiss} />
                 <Input
-                    inputRef={inputRef}
+                    ref={inputRef}
                     style={styles.input}
                     value={keyword}
                     returnKeyType='search'

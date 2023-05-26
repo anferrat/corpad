@@ -1,4 +1,4 @@
-import { ItemStatuses } from "../../../../entities/survey/items/SurveyItem"
+import { ItemStatuses } from "../../../../../constants/global"
 
 export class GetSurveyInfo {
     constructor(testPointRepo, rectifierRepo, pipelineRepo, potentialRepo, referenceCellRepo, surveyRepo, geolocationCalculator) {

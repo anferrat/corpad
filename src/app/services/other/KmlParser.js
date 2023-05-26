@@ -1,5 +1,5 @@
-import { labels } from "../../../constants/constants" //hmmm what is the best way to have this here, maybe constants are global after all
-import { ItemTypes } from "../../entities/survey/items/SurveyItem"
+import { ItemTypes } from "../../../constants/global"
+import { ItemTypeLabels, TestPointTypeLabels } from "../../../constants/labels"
 
 export class KmlParser {
     constructor() {
@@ -32,22 +32,22 @@ export class KmlParser {
         this.end = '</Document> </kml>'
     }
 
-    _genSubtitle(itemType, markerType) {
+    _genSubtitle(itemType, testPointType) {
         switch (itemType) {
             case ItemTypes.TEST_POINT:
-                return labels[markerType].label
+                return TestPointTypeLabels[testPointType]
             default:
-                return labels[itemType].label
+                return ItemTypeLabels[itemType] ?? 'item'
         }
     }
 
-    _genMarkerDescription(location, comment, itemType, markerType) {
-        return `${this._genSubtitle(itemType, markerType)}\r`
+    _genMarkerDescription(itemType, testPointType) {
+        return `${this._genSubtitle(itemType, testPointType)}\r`
     }
 
     _parseMarker(marker) {
-        const { name, markerType, status, latitude, longitude, itemType, location, comment } = marker
-        const description = this._genMarkerDescription(location, comment, itemType, markerType)
+        const { name, status, latitude, longitude, itemType, testPointType } = marker
+        const description = this._genMarkerDescription(itemType, testPointType)
         return (
             '<Placemark>\r' +
             '<name>' + (name ?? 'No name') + '</name>\r' +

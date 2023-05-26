@@ -9,8 +9,18 @@ import SearchItem from './SearchItem'
 import EmptyList from './EmptyList'
 
 
-const SearchModal = ({ hideModal, keyword, onChangeKeyword, markersFound, showOnMap, inputRef, resetKeyword, searching }) => {
+const SearchModal = ({ hideModal, keyword, onChangeKeyword, markersFound, showOnMap, resetKeyword, searching }) => {
     const isEmptySearch = keyword === null
+
+    const inputRef = useRef()
+
+    useEffect(() => {
+        const watch = setTimeout(() => {
+            console.log('here')
+            inputRef.current?.focus()
+        }, 100)
+        return () => clearTimeout(watch)
+    }, [])
 
     const acessoryLeft = React.useCallback(() => <IconButton
         iconName={'arrow-back-outline'}
@@ -41,8 +51,7 @@ const SearchModal = ({ hideModal, keyword, onChangeKeyword, markersFound, showOn
             name={item.name}
             markerType={item.markerType}
             status={item.status}
-            location={item.location}
-        />
+            location={item.location} />
     ), [])
 
     const onSubmitEditing = React.useCallback(() => {
@@ -61,7 +70,7 @@ const SearchModal = ({ hideModal, keyword, onChangeKeyword, markersFound, showOn
                 onChangeText={onChangeKeyword}
                 accessoryLeft={acessoryLeft}
                 accessoryRight={accessoryRight}
-                inputRef={inputRef}
+                ref={inputRef}
                 style={styles.input}
                 value={keyword} />
             <FlashList

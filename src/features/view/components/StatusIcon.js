@@ -2,53 +2,44 @@ import React from 'react'
 import { Icon, Text } from '@ui-kitten/components'
 import { StyleSheet, View, Pressable } from 'react-native'
 import { hapticMedium } from '../../../native_libs/haptics'
-import { statusInfo } from '../../../constants/constants'
-import { basic, control, success, danger, warning } from '../../../styles/colors'
+import { basic, control } from '../../../styles/colors'
+import { StatusColors } from '../../../styles/colors'
+import { ItemStatuses } from '../../../constants/global'
+import { StatusLabels } from '../../../constants/labels'
+import { StatusIcons } from '../../../constants/icons'
 
-const backgroundColors = {
-    basic: basic,
-    success: success,
-    warning: warning,
-    danger: danger
-}
+//Order in which statuses replace one another, runs in circle
+const StatusOrder = [ItemStatuses.GOOD, ItemStatuses.ATTENTION, ItemStatuses.BAD]
 
 const StatusIcon = ({ updateStatus, status }) => {
-    const statusIndex = statusInfo[status] ? status : 3
-    const { title, icon } = statusInfo[statusIndex]
-    const statusValue = statusInfo[statusIndex].status
+
+    const orderIndex = Object.values(StatusOrder).indexOf(status)
+    const displayedStatus = ~orderIndex ? status : ItemStatuses.UNKNOWN
 
     const toggleStatus = () => {
-        const nextIndex = statusIndex + 1
-        const newIndex = statusInfo[nextIndex] && nextIndex !== 3 ? nextIndex : 0
-        updateStatus(newIndex)
+        const nextOrderIndex = orderIndex + 1 >= StatusOrder.length ? 0 : orderIndex + 1
+        updateStatus(StatusOrder[nextOrderIndex])
     }
 
     const resetStatus = React.useCallback(() => {
-        updateStatus(3)
+        updateStatus(ItemStatuses.UNKNOWN)
         hapticMedium()
     }, [])
-
-
-    const renderIcon = (props) => (
-        <Icon {...props} name={icon ?? 'question-mark-outline'} />)
 
     return (
         <View style={styles.outerView}>
             <Pressable
-                style={{ ...styles.button, backgroundColor: backgroundColors[statusValue] }}
-                size='small'
-                status={statusValue}
-                accessoryLeft={renderIcon}
+                style={{ ...styles.button, backgroundColor: StatusColors[displayedStatus] }}
                 onLongPress={resetStatus}
                 onPress={toggleStatus}>
                 <Icon
                     style={styles.icon}
                     fill={control}
-                    name={icon ?? 'question-mark-outline'} />
+                    name={StatusIcons[displayedStatus] ?? 'question-mark-outline'} />
                 <Text
                     status='control'
-                    category='label'>
-                    {title}
+                    category='s2'>
+                    {StatusLabels[displayedStatus]}
                 </Text>
             </Pressable>
         </View>
@@ -78,7 +69,7 @@ const styles = StyleSheet.create({
     icon: {
         width: 15,
         height: 15,
-        marginRight: 10
+        marginRight: 8
     },
     text: {
         marginLeft: 5,

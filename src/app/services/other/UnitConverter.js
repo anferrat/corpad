@@ -1,7 +1,7 @@
-import { AreaUnits, CurrentUnits, FactorUnits, PotentialUnits } from "../../entities/survey/other/properties"
+import { AreaUnits, CurrentUnits, FactorUnits, PotentialUnits } from "../../../constants/global"
 
 export class UnitConverter {
-    constructor () {
+    constructor() {
     }
 
     convertVolts(value, inputUnit, outputUnit) {

@@ -1,9 +1,6 @@
-import { SortingOptions } from "../../../entities/survey/other/properties"
-import { DisplayCardDataTypes } from "../../../entities/survey/other/DisplayCard/DisplayCardData"
 import { DisplayCardReading } from "../../../entities/survey/other/DisplayCard/DisplayCardReading"
 import { DisplayCard } from "../../../entities/survey/other/DisplayCard/DisplayCard"
-import { IconTypes, ItemStatuses } from "../../../entities/survey/items/SurveyItem"
-import { ItemTypes } from "../../../entities/survey/items/SurveyItem"
+import { ItemTypes, IconTypes, ItemStatuses, DisplayCardDataTypes, SortingOptions } from "../../../../constants/global"
 
 export class ItemResponseProcessor {
     constructor() {
@@ -114,8 +111,7 @@ export class ItemResponseProcessor {
             const value = map.get(id)
             if (value) {
                 const { itemId, itemUid, timeModified, status, itemName, dataMap, readingList, testPointType } = map.get(id)
-                const markerType = itemType === ItemTypes.TEST_POINT ? IconTypes[itemType][testPointType] : IconTypes[itemType]
-                return new DisplayCard(itemId, itemUid, timeModified, status ?? ItemStatuses.NO_STATUS, itemName, itemType, markerType, dataMap, readingList)
+                return new DisplayCard(itemId, itemUid, timeModified, status ?? ItemStatuses.NO_STATUS, itemName, itemType, dataMap, readingList, testPointType)
             }
             else return null
         }

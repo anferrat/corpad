@@ -1,11 +1,10 @@
 import React from 'react'
 import { Text, Icon } from '@ui-kitten/components'
 import { StyleSheet, Pressable, View } from 'react-native'
-import { basic, danger, primary, success, warning } from '../../../styles/colors'
+import { basic, primary } from '../../../styles/colors'
 import { androidRipple } from '../../../styles/styles'
-import { labels } from '../../../constants/constants'
-
-const statusColors = [success, warning, danger, basic]
+import { ItemTypeLabels } from '../../../constants/labels'
+import { StatusColors } from '../../../styles/colors'
 
 const ListItemSearch = ({ id, name, markerType, status, itemType, navigateToView }) => {
 
@@ -22,7 +21,7 @@ const ListItemSearch = ({ id, name, markerType, status, itemType, navigateToView
                     <Icon
                         name='circle'
                         pack='cp'
-                        fill={statusColors[status]}
+                        fill={StatusColors[status]}
                         style={styles.statusIcon}
                     /> : null}
                 <Icon
@@ -38,7 +37,7 @@ const ListItemSearch = ({ id, name, markerType, status, itemType, navigateToView
                     <Text
                         category='s2'
                         appearance='hint'>
-                        {labels[itemType].label}
+                        {ItemTypeLabels[itemType]}
                     </Text>
                 </View>
             </View>

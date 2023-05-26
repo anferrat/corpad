@@ -4,17 +4,21 @@ import CheckBoxListItem from '../components/CheckBoxListItem'
 import FlatList from '../components/FilterFlatList'
 import { applyFilter, setFilterView } from '../../../../store/actions/list'
 import { getListStateByType } from '../../../../helpers/functions'
-import { testPointReadings, testPointTypeCodes, statusInfo, testPointTypes, labels } from '../../../../constants/constants'
+import { ItemStatuses, TestPointTypes, SubitemTypes } from '../../../../constants/global'
+import { SubitemTypeIcons, TestPointTypeIcons, StatusIcons } from '../../../../constants/icons'
+import { StatusStatuses } from '../../../../styles/colors'
+import { StatusLabels, SubitemTypeLabels, TestPointTypeLabels } from '../../../../constants/labels'
+
 
 
 const getOptionByFilter = (filter) => {
     switch (filter) {
         case 'statusFilter':
-            return statusInfo.map((status, index) => ({ ...status, value: index }))
+            return Object.values(ItemStatuses).filter(status => status !== ItemStatuses.NO_STATUS).map((status) => ({ value: status, title: StatusLabels[status], icon: StatusIcons[status], status: StatusStatuses[status] }))
         case 'testPointTypeFilter':
-            return testPointTypeCodes.map((type, index) => ({ icon: type, title: testPointTypes[index], value: index }))
+            return Object.values(TestPointTypes).map(type => ({ value: type, title: TestPointTypeLabels[type], icon: TestPointTypeIcons[type] }))
         case 'readingTypeFilter':
-            return testPointReadings.map(type => ({ icon: type, title: labels[type].label, value: type }))
+            return Object.values(SubitemTypes).filter(type => type !== SubitemTypes.CIRCUIT).map(type => ({ value: type, icon: SubitemTypeIcons[type], title: SubitemTypeLabels[type] }))
     }
 }
 const initFilter = []

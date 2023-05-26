@@ -1,14 +1,10 @@
 import { SQLiteRepository } from "../../utils/SQLite"
 import { Error, errors } from "../../utils/Error"
-import { ItemResponseProcessor } from "./utils/ItemResponseProcessor"
-import { SubitemResponseProcessor } from "./utils/SubitemResponseProcessor"
-
 
 export class TestRepository extends SQLiteRepository {
     constructor() {
         super()
-        this.responseProcessor = new ItemResponseProcessor()
-        this.subitemProcessor = new SubitemResponseProcessor()
+
     }
 
     async test(query) {

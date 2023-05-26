@@ -1,10 +1,9 @@
 import { guid } from "../../../../utils/guid"
-import { SubitemTypes } from "../../../../entities/survey/subitems/Subitem"
-import { PermanentPotentialTypes } from "../../../../entities/survey/other/properties"
+import { SubitemTypes, PermanentPotentialTypes } from "../../../../../constants/global"
 import { Potential } from "../../../../entities/survey/subitems/Potential"
 
 export class CreateSubitem {
-    constructor (subitemRepo, basicPresenter, subitemFactory, settingRepo, referenceCellRepo, potentialTypeRepo, potentialRepo) {
+    constructor(subitemRepo, basicPresenter, subitemFactory, settingRepo, referenceCellRepo, potentialTypeRepo, potentialRepo) {
         this.subitemRepo = subitemRepo
         this.basicPresenter = basicPresenter
         this.subitemFactory = subitemFactory

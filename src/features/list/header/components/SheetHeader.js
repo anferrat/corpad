@@ -9,7 +9,7 @@ const SheetHeader = (props) => (
             {props.backActionHandler ? <SingleIconButton
                 onPress={props.backActionHandler}
                 iconName={'arrow-back-outline'} /> : null}
-            <Text category='h5'
+            <Text category='h4'
                 style={styles.titleText}>
                 {props.title}
             </Text>

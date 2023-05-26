@@ -1,4 +1,4 @@
-import { labels } from "../../../../constants/constants"
+import { SubitemTypeLabels, ItemTypeLabels, ItemTypeLabelsPlural } from "../../../../constants/labels"
 
 export const emptyValueCheck = (value) => {
     if (!value || value === null || value === undefined)
@@ -19,9 +19,11 @@ export const getDefaultNames = (state, property, subitemIndex) => {
 }
 
 const getParametersData = (parameter) => {
+    console.log(parameter)
     return {
         fieldIndex: parameter?.fieldIndex,
         itemList: parameter?.itemList,
+        itemListLabels: parameter?.itemListLabels,
         unit: parameter?.unit,
         defaultUnitIndex: parameter?.defaultUnitIndex,
         unitList: parameter?.unitList,
@@ -53,7 +55,7 @@ export const getData = (state, property, subitemIndex) => {
 
 
 
-export const getDisplayValue = (parameterType, importType, { itemList, defaultValue, fieldIndex, fieldIndexList, fields, defaultName }) => {
+export const getDisplayValue = (parameterType, importType, { itemList, defaultValue, fieldIndex, fieldIndexList, fields, defaultName, itemListLabels }) => {
     const emptyValue = {
         value: '<Empty>',
         empty: true
@@ -87,12 +89,12 @@ export const getDisplayValue = (parameterType, importType, { itemList, defaultVa
         }
         else if (parameterType === 1) {
             if (importType === 0)
-                if (!itemList)
+                if (!itemListLabels)
                     return emptyValue
-                else if (defaultValue === null || itemList?.length === 0)
+                else if (defaultValue === null)
                     return emptyValue
                 else
-                    return itemList[defaultValue] ?? emptyValue
+                    return itemListLabels[defaultValue] ?? emptyValue
             else if (importType === 1)
                 if (!fields)
                     return emptyValue
@@ -145,10 +147,10 @@ export const getButtonTitle = (itemType) => {
 }
 
 export const getItemName = (itemType, count = null) => {
-    const name = labels[itemType].label.toLowerCase()
-    if (count !== null)
-        return count === 1 ? name : name + 's'
-    else return name
+    const text = count === 1 ? ItemTypeLabels[itemType] : ItemTypeLabelsPlural[itemType]
+    if (!text)
+        return count === 1 ? 'item' : 'items'
+    else return text.toLowerCase()
 }
 
 export const getPotentialsData = (autoCreate, potentialTypes, referenceCellTypes) => {
@@ -197,9 +199,8 @@ export const getTypedIndex = (subitems, subitemIndex) => {
 }
 
 export const getSubitemName = (subitemType, typedIndex) => {
-    if (labels[subitemType])
-        return `${labels[subitemType].label} ${typedIndex}`
-    else return 'Error'
+    const label = SubitemTypeLabels[subitemType]
+    return label ? `${label} ${typedIndex}` : 'Error'
 }
 
 export const getSideIcon = (fromAtoB) => {
@@ -234,8 +235,7 @@ export const getTextByWarningType = (warning) => {
             return 'Test point type was not defined. Default test point type is set.'
         case 'subitemConverter':
         case 'subitemValidator':
-            const labelObject = labels[warning?.type]
-            const label = labelObject ? labelObject?.label : '??'
+            const label = SubitemTypeLabels[warning?.type] ?? '??'
             return `"${label}" cannot be created from provided data.`
         case 'nameFormat':
             return `Name property ${warning?.originalValue} was converted to ${warning?.convertedValue}`

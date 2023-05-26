@@ -1,4 +1,4 @@
-import { ItemTypes } from "../../../../entities/survey/items/SurveyItem"
+import { ItemTypes } from "../../../../../constants/global"
 import { Potential } from "../../../../entities/survey/subitems/Potential"
 import { Error, errors } from "../../../../utils/Error"
 

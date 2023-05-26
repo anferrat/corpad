@@ -1,7 +1,6 @@
 import React from 'react'
 import { View, StyleSheet } from 'react-native'
 import StatusIcon from '../StatusIcon'
-import { powerSourceList } from '../../../../constants/constants'
 import IconLine from '../IconLine'
 import TextLine from '../TextLine'
 import { getFullDate } from '../../../../helpers/functions'
@@ -9,6 +8,7 @@ import Divider from '../Divider'
 import TapView from '../TapView'
 import { combineLatLon } from '../../helpers/functions'
 import ItemTitleView from '../ItemTitleView'
+import { PowerSourceLabels } from '../../../../constants/labels'
 
 
 const RT = ({ data, itemType, updateStatus, submit, update }) => {
@@ -37,7 +37,7 @@ const RT = ({ data, itemType, updateStatus, submit, update }) => {
             <TextLine title='Max. current' value={maxCurrent} unit='A' />
             <TextLine title='Model' value={model} />
             <TextLine title='Serial number' value={serialNumber} />
-            <TextLine title='Power source' value={powerSourceList[powerSource] ?? null} />
+            <TextLine title='Power source' value={PowerSourceLabels[powerSource] ?? null} />
             <TapView
                 tapValue={tapValue}
                 valid={valid}

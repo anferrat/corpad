@@ -7,7 +7,7 @@ import { androidRipple } from '../../../../styles/styles'
 const FilterToggleListItem = (props) => {
     return (
             <Pressable style={styles.listItem} android_ripple={androidRipple} disabled={props.disabled}>
-                <Text category='p2'>{props.title}</Text>
+                <Text category='s1' numberOfLines={1} ellipsizeMode={'tail'}>{props.title}</Text>
                 {props.children}
             </Pressable>
     )

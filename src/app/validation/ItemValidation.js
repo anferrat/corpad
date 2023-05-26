@@ -1,5 +1,5 @@
 import {  object, array, string } from "yup";
-import { ItemTypes } from "../entities/survey/items/SurveyItem";
+import { ItemTypes } from "../../constants/global";
 import { Validation } from "../utils/Validation";
 
 export class ItemValidation extends Validation {

@@ -1,5 +1,4 @@
-import { ItemTypes } from "../../../../../entities/survey/items/SurveyItem";
-import { ExportItemProperties } from "../../../../../entities/survey/other/properties";
+import { ItemTypes, ExportItemProperties } from "../../../../../../constants/global";
 import { Error, errors } from "../../../../../utils/Error";
 
 export class GetExportItemProperties {

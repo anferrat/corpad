@@ -1,14 +1,18 @@
-import React, { useRef } from 'react'
+import React from 'react'
 import { View, StyleSheet } from 'react-native'
-import { testPointTypeCodes, testPointTypes } from '../../../../../constants/constants'
 import StatusView from '../StatusView'
 import Select from '../Select'
 import LocationView from '../LocationView'
 import CreateSubitemButton from '../CreateSubitemButton'
 import Input from '../Input'
 import { globalStyle } from '../../../../../styles/styles'
+import { TestPointTypes } from '../../../../../constants/global'
+import { TestPointTypeLabels } from '../../../../../constants/labels'
+import { TestPointTypeIcons } from '../../../../../constants/icons'
 
-const testPointAccessoryList = testPointTypeCodes.map(code => ({ icon: code, pack: 'cp' }))
+const testPointTypes = Object.values(TestPointTypes).map(type => ({ item: TestPointTypeLabels[type], index: type }))
+const testPointAccessoryList = testPointTypes.map(({ index }) => ({ icon: TestPointTypeIcons[index], pack: 'cp' }))
+
 
 const TestPointView = ({ data, createSubitem, itemType, update, validate, updateLatAndLon }) => {
     const { name, status, testPointType, latitude, longitude, location, comment, defaultName, valid } = data

@@ -3,8 +3,7 @@ import { TestPoint } from "../../entities/survey/items/TestPoint"
 import { Marker } from "../../entities/survey/items/Marker"
 import { Error, errors } from "../../utils/Error"
 import { ItemResponseProcessor } from "./utils/ItemResponseProcessor"
-import { ItemTypes } from "../../entities/survey/items/SurveyItem"
-import { SubitemTypes } from "../../entities/survey/subitems/Subitem"
+import { ItemTypes, SubitemTypes } from "../../../constants/global"
 import { SubitemResponseProcessor } from "./utils/SubitemResponseProcessor"
 
 export class TestPointRepository extends SQLiteRepository {
@@ -112,8 +111,8 @@ export class TestPointRepository extends SQLiteRepository {
             const result = await this.runSingleQueryTransaction(
                 `SELECT id,'${ItemTypes.TEST_POINT}' AS itemType, uid, status, testPointType, latitude, longitude, name, location, comment, timeCreated, timeModified FROM testPoints WHERE latitude IS NOT NULL AND longitude IS NOT NULL${sortingQuery}`, [])
             return super.generateArray(result.rows.length, result.rows.item)
-                .map(({ id, uid, itemType, status, testPointType, latitude, longitude, name, location, comment, timeCreated, timeModifed }) =>
-                    new Marker(id, uid, name, status, timeCreated, timeModifed, comment, itemType, testPointType, location, latitude, longitude))
+                .map(({ id, uid, itemType, status, testPointType, latitude, longitude, name, location, comment, timeCreated, timeModified }) =>
+                    new Marker(id, uid, name, status, timeCreated, timeModified, comment, itemType, testPointType, location, latitude, longitude))
         }
         catch (err) {
             throw new Error(errors.DATABASE, `Unable to get get markers data`, err)
@@ -233,11 +232,11 @@ export class TestPointRepository extends SQLiteRepository {
         try {
             const result = await super.runSingleQueryTransaction(
                 `SELECT testPoints.id AS itemId, testPoints.testPointType, testPoints.status, testPoints.name AS itemName, testPoints.timeModified, testPoints.uid AS itemUid, testPoints.location, cards.id, cards.uid, cards.name, cards.type,
-            CASE WHEN type = ? OR type=? THEN current END AS v1 
+            CASE WHEN type = ? OR type = ? THEN current END AS v1 
             FROM testPoints
             LEFT JOIN cards ON
-            testPoints.id = cards.testPointId AND type NOT IN ${super.convertArrayToInStatement(readingTypeFilter)}
-            WHERE testPoints.id IN ${super.convertArrayToInStatement(idList)} AND 
+            testPoints.id = cards.testPointId AND cards.type NOT IN ${super.convertArrayToInStatement(readingTypeFilter)}
+            WHERE testPoints.id IN ${super.convertArrayToInStatement(idList)}
             ORDER BY testPoints.id`,
                 [SubitemTypes.SHUNT, SubitemTypes.BOND])
             return this.responseProcessor.generateDisplayCardList(result, idList, ItemTypes.TEST_POINT)
@@ -255,8 +254,8 @@ export class TestPointRepository extends SQLiteRepository {
                 CASE WHEN type = ? THEN shorted END AS v1
                 FROM testPoints
                 LEFT JOIN cards ON
-                testPoints.id = cards.testPointId AND type NOT IN ${super.convertArrayToInStatement(readingTypeFilter)}
-                WHERE testPoints.id IN ${super.convertArrayToInStatement(idList)} AND 
+                testPoints.id = cards.testPointId AND cards.type NOT IN ${super.convertArrayToInStatement(readingTypeFilter)}
+                WHERE testPoints.id IN ${super.convertArrayToInStatement(idList)}
                 ORDER BY testPoints.id`,
                 [SubitemTypes.ISOLATION, SubitemTypes.ISOLATION])
             return this.responseProcessor.generateDisplayCardList(result, idList, ItemTypes.TEST_POINT)

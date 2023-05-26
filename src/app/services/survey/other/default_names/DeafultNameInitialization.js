@@ -1,4 +1,4 @@
-import { defaultNames } from "../../../../entities/survey/other/DefaultNames"
+import { DefaultNames } from "../../../../../constants/labels"
 
 export class DefaultNameInitialization {
     constructor(defaultNameRepo) {
@@ -7,9 +7,9 @@ export class DefaultNameInitialization {
 
     async execute() {
         const names = await this.defaultNameRepo.getAll()
-        const valid = names.length === Object.keys(defaultNames).length &&
-            names.every(({ type }) => ~Object.keys(defaultNames).indexOf(type))
+        const valid = names.length === Object.keys(DefaultNames).length &&
+            names.every(({ type }) => ~Object.keys(DefaultNames).indexOf(type))
         if (!valid)
-            await this.defaultNameRepo.updateAll(defaultNames)
+            await this.defaultNameRepo.updateAll(DefaultNames)
     }
 }

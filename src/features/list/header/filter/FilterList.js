@@ -21,7 +21,7 @@ const FilterList = (props) => {
     const renderFilters = React.useMemo(() => <>
         {filterOptions[props.dataType].map((filter, i) => <FilterListItem
             key={props.dataType + '-' + filter.property + '- ListItem'}
-            title={<Text category='p2'>{filter.title} <FilterCounter dataType={props.dataType} filter={filter.property} /></Text>}
+            title={<Text category='s1'>{filter.title} <FilterCounter dataType={props.dataType} filter={filter.property} /></Text>}
             onPress={updateFilterView.bind(this, i + 1)}
         />)}
         <FilterToggleListItem title={'Hide test points without readings'}>

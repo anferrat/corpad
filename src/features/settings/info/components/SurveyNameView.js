@@ -8,13 +8,13 @@ import { saveIcon } from '../../../../components/Icons'
 
 const SurveyNameView = ({ name, inputText, updateSurveyName, resetNameInput, onChangeNameInput }) => {
     const [visible, setVisible] = useState(false)
-    const inputRef = useRef(true)
+    const inputRef = useRef()
 
     useEffect(() => {
         const watch = setTimeout(() => {
             if (visible)
-                inputRef.current.focus()
-        }, 30)
+                inputRef.current?.focus()
+        }, 120)
         return () => {
             clearTimeout(watch)
         }
@@ -56,7 +56,7 @@ const SurveyNameView = ({ name, inputText, updateSurveyName, resetNameInput, onC
                     keyboardShouldPersistTaps='handled'
                     style={styles.inputView}>
                     <Input
-                        inputRef={inputRef}
+                        ref={inputRef}
                         label='Survey name'
                         maxLength={25}
                         property={'surveyName'}

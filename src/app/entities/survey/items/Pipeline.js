@@ -1,8 +1,8 @@
-import { ItemStatuses, SurveyItem } from "./SurveyItem"
-import { ItemTypes } from "./SurveyItem"
+import { SurveyItem } from "./SurveyItem"
+import { ItemTypes, ItemStatuses } from "../../../../constants/global"
 
 export class Pipeline extends SurveyItem {
-    constructor(id, uid, name , timeCreated, timeModified, comment, nps, material, coating, licenseNumber, product, tpCount) {
+    constructor(id, uid, name, timeCreated, timeModified, comment, nps, material, coating, licenseNumber, product, tpCount) {
         super(id, uid, name, ItemStatuses.NO_STATUS, timeCreated, timeModified, comment, ItemTypes.PIPELINE)
         this.nps = nps
         this.material = material

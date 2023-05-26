@@ -11,7 +11,7 @@ const ReadingBar = ({ readingIndex, readingList }) => {
         return (
             <>
                 <Text
-                    category={'s2'}
+                    category={'s1'}
                     appearance='hint'
                     numberOfLines={1}
                     ellipsizeMode='tail'>

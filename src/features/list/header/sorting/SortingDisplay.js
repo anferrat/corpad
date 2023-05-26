@@ -3,10 +3,12 @@ import { useSelector, useDispatch } from 'react-redux'
 import { Divider } from '@ui-kitten/components'
 import { getListStateByType } from '../../../../helpers/functions'
 import SortingFlatList from '../components/FlatList'
-import { sortingOptions } from '../../../../constants/constants'
 import RadioListOption from '../components/RadioListOption'
 import { setSortingSetting } from '../../../../store/actions/list'
+import { SortingOptions } from '../../../../constants/global'
+import { SortingOptionLabels } from '../../../../constants/labels'
 
+const sortingOptions = Object.values(SortingOptions)
 
 const SortingDisplay = (props) => {
     const dispatch = useDispatch()
@@ -18,19 +20,18 @@ const SortingDisplay = (props) => {
         props.closeSheet()
     }, [sorting, props.closeSheet, dispatch])
 
-    const renderItem = React.useCallback(({ item, index }) => {
+    const renderItem = React.useCallback(({ item }) => {
         return <RadioListOption
-            checked={index === sorting}
-            onChange={updateSortingHandler.bind(this, index)}
-            title={item}
-        />
+            checked={item === sorting}
+            onChange={updateSortingHandler.bind(this, item)}
+            title={SortingOptionLabels[item]} />
     }, [updateSortingHandler, sorting])
+
     return (
         <SortingFlatList
             ItemSeparatorComponent={Divider}
             data={sortingOptions}
-            renderItem={renderItem}
-        />
+            renderItem={renderItem} />
     )
 }
 

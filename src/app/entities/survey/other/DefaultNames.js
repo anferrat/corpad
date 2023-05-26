@@ -1,5 +1,5 @@
-import { ItemTypes } from "../items/SurveyItem"
-import { SubitemTypes } from "../subitems/Subitem"
+import { ItemTypes } from "../../../../constants/global"
+import { SubitemTypes } from "../../../../constants/global"
 
 
 export const defaultNames = Object.freeze({

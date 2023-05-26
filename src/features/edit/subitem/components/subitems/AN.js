@@ -3,8 +3,11 @@ import { StyleSheet } from 'react-native'
 import PotentialsView from '../potentials/PotentialsView'
 import Select from '../../../../../components/Select2'
 import WireView from '../WireView'
-import { anodeMaterialList } from '../../../../../constants/constants'
 import NameInput from '../NameInput'
+import { AnodeMaterials } from '../../../../../constants/global'
+import { AnodeMaterialLabels } from '../../../../../constants/labels'
+
+const anodeMaterialList = Object.values(AnodeMaterials).map(material => ({ item: AnodeMaterialLabels[material], index: material }))
 
 const ANCard = ({ data, itemId, subitemId, update, validate }) => {
     const { name, defaultName, valid, anodeMaterial, wireColor, wireGauge } = data

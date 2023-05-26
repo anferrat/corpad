@@ -6,12 +6,13 @@ import { basic200, primary } from '../../styles/colors'
 import FlatList from './components/FlatList'
 import HistoryListItem from './components/HistoryListItem'
 import { getFormattedDate } from '../../helpers/functions'
-import { calculatorTypes } from '../../constants/constants'
 import EmptyListComponent from '../../components/EmptyListComponent'
 import ModalTopBar from './components/ModalTopBar'
 import LoadingView from '../../components/LoadingView'
 import { trashIcon } from '../../components/Icons'
 import { getCalculatorListByType } from '../../app/controllers/CalculatorController'
+import { CalculatorTypeIconPacks, CalculatorTypeIcons } from '../../constants/icons'
+import { CalculatorTypeTitleLabels } from '../../constants/labels'
 
 
 const HistoryModal = (props) => {
@@ -51,9 +52,9 @@ const HistoryModal = (props) => {
                 active={props.activeCalculatorId === item.id}
                 onPress={loadCalculatorHandler.bind(this, item.data, item.id)}
                 onDeleteHandler={deleteHistoryItem.bind(this, item.id)}
-                icon={calculatorTypes[props.calculatorType].icon}
-                pack={calculatorTypes[props.calculatorType].pack}
-                title={calculatorTypes[props.calculatorType].historyTitle + ` (${item.name})`}
+                icon={CalculatorTypeIcons[props.calculatorType]}
+                pack={CalculatorTypeIconPacks[props.calculatorType]}
+                title={`${CalculatorTypeTitleLabels[props.calculatorType]} (${item.name})`}
                 subtitle={getFormattedDate(item.timeCreated)}
             />
         )

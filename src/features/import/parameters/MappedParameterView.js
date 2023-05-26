@@ -26,6 +26,9 @@ const SelectFieldParamaters = (props) => {
     const [importType, setImportType] = useState(props.value.importType)
     const [attributeMap, setAttributeMap] = useState(props.value.attributeMap)
     const fieldValues = React.useMemo(() => getFieldValues(props.data, fieldIndex, props.fields), [fieldIndex])
+
+    const itemList = React.useMemo(() => props.value.itemList.map(item => ({ item: props.value.itemListLabels[item], index: item })), [props.value.itemList, props.value.itemListLabels])
+
     const defaultValueImportType = React.useCallback(async () => {
         const confirm = attributeMap.length > 0 ? await warningHandler(51) : true
         if (confirm) {
@@ -87,7 +90,7 @@ const SelectFieldParamaters = (props) => {
                             disabled={importType !== 0}
                             placeholder={fieldProperties[props.property].placeholder}
                             accessoryList={fieldProperties[props.property].accessoryList}
-                            itemList={props.value.itemList}
+                            itemList={itemList}
                             selectedIndex={defaultValue}
                             onSelect={setDefaultValue} />
                     </View>
@@ -115,7 +118,7 @@ const SelectFieldParamaters = (props) => {
                         property={props.property}
                         fieldIndex={fieldIndex}
                         addAttribute={addAttribute}
-                        itemList={props.value.itemList}
+                        itemList={itemList}
                         fieldValues={fieldValues}
                         attributeMap={attributeMap} />
                     <Text category='h6'>Mapped attributes</Text>
@@ -123,7 +126,7 @@ const SelectFieldParamaters = (props) => {
                         property={props.property}
                         attributeMap={attributeMap}
                         fieldValues={fieldValues}
-                        itemList={props.value.itemList}
+                        itemListLabels={props.value.itemListLabels}
                         removeAttribute={removeAttribute} />
                 </View>
             </ScrollView>

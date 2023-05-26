@@ -8,7 +8,7 @@ import { primary } from '../../../styles/colors'
 const InputWithTitle = (props) => {
     return (
         <View style={styles.mainView}>
-            <Text style={styles.title} category='p2'>{props.title}</Text>
+            <Text style={styles.title} category='s1'>{props.title}</Text>
             <Input
                 {...props}
                 style={props.displayHint ? styles.inputViewLarge : styles.inputView}
@@ -23,11 +23,11 @@ const styles = StyleSheet.create({
     mainView: {
         flexDirection: 'row',
         justifyContent: 'space-between',
-        alignItems: 'flex-start',
-        padding: 6,
+        alignItems: 'center',
+        padding: 6
     },
     title: {
-        paddingTop: 12,
+        paddingBottom: 12,
         paddingLeft: 6,
         textTransform: 'uppercase',
         color: primary,

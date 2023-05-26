@@ -10,8 +10,8 @@ import UnitSelector from './UnitSelector'
 import { errorHandler } from '../../helpers/error_handler'
 import HistoryModal from './HistoryModal'
 import { setExportModal } from '../../store/actions/settings'
-import { calculatorTypes } from '../../constants/constants'
 import { deleteCalculator, deleteCalculatorsByType, saveCalculator, saveCalculatorDataToFile } from '../../app/controllers/CalculatorController'
+import { CalculatorTypeFileNameLabels } from '../../constants/labels'
 
 const LoaderCalculator = (props) => {
     const dispatch = useDispatch()
@@ -75,7 +75,11 @@ const LoaderCalculator = (props) => {
     }, [setData, setValid, props.calculatorType])
 
     const exportCalculatorData = React.useCallback(async (exportedObject) => {
-        const { status, response, errorMessage } = await saveCalculatorDataToFile({ exportData: exportedObject, fileName: calculatorTypes[props.calculatorType].fileName })
+        const { status, response, errorMessage } =
+            await saveCalculatorDataToFile({
+                exportData: exportedObject,
+                fileName: CalculatorTypeFileNameLabels[props.calculatorType]
+            })
         if (status === 200) {
             const { filePath } = response
             dispatch(setExportModal(true, filePath, 'text/csv'))

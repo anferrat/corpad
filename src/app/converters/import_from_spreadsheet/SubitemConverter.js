@@ -1,7 +1,7 @@
-import { SubitemTypes } from "../../entities/survey/subitems/Subitem"
+import { SubitemTypes } from "../../../constants/global"
 
 export class SubitemConverter {
-    constructor (propertyConverter) {
+    constructor(propertyConverter) {
         this.conv = propertyConverter
     }
 

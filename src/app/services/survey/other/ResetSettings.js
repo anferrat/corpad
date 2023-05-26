@@ -1,6 +1,6 @@
 import { Onboarding } from "../../../entities/survey/other/Onboarding"
 import { AppSettings } from "../../../entities/survey/other/Settings"
-import { PotentialUnits } from "../../../entities/survey/other/properties"
+import { PotentialUnits } from "../../../../constants/global"
 
 
 export class ResetSettings {

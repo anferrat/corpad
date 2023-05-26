@@ -23,10 +23,12 @@ const PropertyImportField = ({
     attributeCount,
     fields,
     defaultUnit,
+    itemListLabels,
     data }) => {
     const propertyValues = fieldProperties[property]
+    console.log(propertyValues.accessoryList)
     if (propertyValues) {
-        const displayValue = getDisplayValue(parameterType, importType, { itemList, defaultValue, fieldIndex, fieldIndexList, fields, defaultName })
+        const displayValue = getDisplayValue(parameterType, importType, { itemList, defaultValue, fieldIndex, fieldIndexList, fields, defaultName, itemListLabels })
         const accessory = getAccessory(parameterType, importType, propertyValues.accessoryList, defaultValue)
         const attributeMapCount = (parameterType === 1 && importType === 1 && !displayValue.empty) ? attributeCount : null
         const fileAccessoryDisplay = !displayValue.empty && (importType === 1 || importType === 3)

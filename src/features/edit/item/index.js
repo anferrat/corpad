@@ -1,12 +1,13 @@
 import React from 'react'
-import { StyleSheet, FlatList, View } from 'react-native'
-import { labels } from '../../../constants/constants'
+import { StyleSheet } from 'react-native'
 import ItemView from './ItemView'
 import SaveButton from './SaveButton'
 import useSubitemListData from './hooks/useSubitemListData'
 import SubitemListItem from './components/SubitemListItem'
 import LoadingView from '../../../components/LoadingView'
 import { KeyboardAwareFlatList } from 'react-native-keyboard-aware-scroll-view'
+import { SubitemTypeLabels } from '../../../constants/labels'
+import { SubitemTypeIcons } from '../../../constants/icons'
 
 
 export const EditItem = ({ itemId, isNew, itemType, navigateToSubitem, submit }) => {
@@ -16,9 +17,9 @@ export const EditItem = ({ itemId, isNew, itemType, navigateToSubitem, submit })
         const { uid, type, id, name } = item
         return <SubitemListItem
             uid={uid}
-            iconName={type}
+            iconName={SubitemTypeIcons[type]}
             title={name}
-            subtitle={labels[type].label}
+            subtitle={SubitemTypeLabels[type]}
             onPress={navigateToSubitem.bind(this, id, false, type)} />
     }, [navigateToSubitem])
 
