@@ -1,6 +1,6 @@
 import React, { useContext } from 'react'
 import { StyleSheet } from 'react-native'
-import MultiSelect from '../../../../components/MultiSelect2'
+import MultiSelect from '../../../../components/MultiSelect'
 import { useDispatch, useSelector } from 'react-redux'
 import { ImportData } from '../ImportDataProvider'
 import { getCardList, getSideSelectedIndexes } from '../helpers/selectors'

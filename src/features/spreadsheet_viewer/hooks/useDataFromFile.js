@@ -1,10 +1,8 @@
 import { useEffect, useState } from 'react'
-import { parseCSV } from '../../../helpers/csv_generator'
-import { readFile } from '../../../api/files/fs'
 import { errorHandler } from '../../../helpers/error_handler'
 import { getData } from '../helpers/function'
 import { useNavigation } from '@react-navigation/native'
-
+import { loadCommaSeparatedFile } from '../../../app/controllers/survey/other/ExportedFileController'
 
 export const useDataFromFile = (uri) => {
     const [values, setValues] = useState({
@@ -18,38 +16,28 @@ export const useDataFromFile = (uri) => {
     })
     const navigation = useNavigation()
     //Max values for optimization
-    const MAX_ROWS = 100
-    const MAX_FIELDS = 50
+
 
     useEffect(() => {
         const loadData = async () => {
             if (!values.loading)
                 setValues(old => ({ ...old, loading: true }))
-            const fileData = await readFile(uri)
-            if (fileData.status === 200) {
-                const parsed = await parseCSV(fileData.result)
-                if (parsed.status === 200) {
-                    const rowLimitReached = parsed.result.data.length > (MAX_ROWS)
-                    const fieldsLimitReached = parsed.result.meta.fields.length > (MAX_FIELDS)
-                    const data = parsed.result.data.filter((_, i) => i <= (MAX_ROWS - 1))
-                    const fields = parsed.result.meta.fields.filter((_, i) => i <= (MAX_FIELDS - 1))
-                    setValues(
-                        {
-                            loading: false,
-                            data: getData(data, fields),
-                            fields: fields,
-                            limitReached: {
-                                row: rowLimitReached,
-                                field: fieldsLimitReached
-                            }
-                        }
-                    )
-                    return
-                }
-                else errorHandler(parsed.status, navigation.goBack)
+            const { response, status } = await loadCommaSeparatedFile({ path: uri })
+            if (status === 200) {
+                const { rowLimitReached, fieldsLimitReached, fields, data } = response
+                setValues({
+                    loading: false,
+                    data: getData(data, fields),
+                    fields: fields,
+                    limitReached: {
+                        row: rowLimitReached,
+                        field: fieldsLimitReached
+                    }
+                })
             }
-            else errorHandler(fileData.status, navigation.goBack)
-            setLoading(false)
+            else {
+                errorHandler(status, navigation.goBack)
+            }
         }
         loadData()
     }, [])

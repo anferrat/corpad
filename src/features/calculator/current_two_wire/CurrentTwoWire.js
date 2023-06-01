@@ -42,19 +42,19 @@ const CurrentTwoWire = (props) => {
                     placeholder={'Select diameter'}
                     property={'npsIndex'}
                     style={styles.inputLeft}
-                    selectedItem={props.data.npsIndex}
-                    itemsList={npsList}
-                    selectAction={selectAction} />
+                    selectedIndex={props.data.npsIndex}
+                    itemList={npsList}
+                    onSelect={selectAction} />
                 <SelectDataField
                     disabled={props.disabled || !props.valid.npsIndex || scheduleList.length === 0}
                     label={'Pipe schedule'}
                     placeholder={'Select schedule'}
                     property={'scheduleIndex'}
                     style={styles.inputRight}
-                    selectedItem={props.data.scheduleIndex}
-                    itemsList={scheduleList}
+                    selectedIndex={props.data.scheduleIndex}
+                    itemList={scheduleList}
                     valid={props.valid.scheduleIndex}
-                    selectAction={selectAction} />
+                    onSelect={selectAction} />
             </View>
             <View style={styles.inputRow}>
                 <InputDataField

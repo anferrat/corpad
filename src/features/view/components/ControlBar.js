@@ -3,7 +3,7 @@ import ExpandedBar from './ExpandedBar'
 import ControlButton from './ControlButton'
 import { AddReadingModal } from '../../../components/AddReadingModal'
 
-const ControlBar = ({ createSubitem, deleteItem, itemType, displayOnMap, navigateToEdit }) => {
+const ControlBar = ({ createSubitem, deleteItem, itemType, displayOnMap, displayOnMapVisible, navigateToEdit }) => {
     const [visible, setVisible] = useState(false)
 
     const hideModal = React.useCallback(() => setVisible(false), [])
@@ -16,7 +16,7 @@ const ControlBar = ({ createSubitem, deleteItem, itemType, displayOnMap, navigat
     return (
         <>
             <ExpandedBar>
-                {itemType !== 'PIPELINE' ?
+                {displayOnMapVisible ?
                     <ControlButton
                         icon='map'
                         label='Map'

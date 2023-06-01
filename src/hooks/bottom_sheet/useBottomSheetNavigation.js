@@ -23,7 +23,7 @@ export const useBottomSheetNavigation = () => {
     const openBottomSheet = useCallback(({ itemType, content, index }) => {
         if (bottomSheet.current.snapToIndex)
             bottomSheet.current.snapToIndex(index)
-        else errorHandler(503)
+        else errorHandler(108)
         dispatch(updateBottomSheetContent(itemType, content))
     }, [])
 

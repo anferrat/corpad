@@ -13,8 +13,8 @@ export const REMOVE_IMPORT_SUBITEM = 'REMOVE_IMPORT_SUBITEM'
 export const setImportItemType = (value) =>
     ({ type: SET_IMPORT_ITEM_TYPE, itemType: value })
 
-export const setImportData = (fields, data, fileName, defaultNames, uri, extraData) =>
-    ({ type: SET_IMPORT_DATA, fields: fields, data: data, fileName: fileName, defaultNames: defaultNames, uri: uri, extraData: extraData })
+export const setImportData = (fields, data, fileName, defaultNames, uri, potentialTypes, referenceCells, pipelines, autoCreatePotentials) =>
+    ({ type: SET_IMPORT_DATA, fields: fields, data: data, fileName: fileName, defaultNames: defaultNames, uri: uri, potentialTypes, referenceCells, pipelines, autoCreatePotentials })
 
 export const setImportProperty = (property, subitemIndex, potentialIndex, value) =>
     ({ type: SET_IMPORT_PROPERTY, property: property, value: value, subitemIndex: subitemIndex, potentialIndex: potentialIndex })

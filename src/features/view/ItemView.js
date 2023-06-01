@@ -8,7 +8,7 @@ import useItemData from './hooks/useItemData'
 
 
 const ItemView = ({ itemId, itemType, navigateToMap, navigateToEditSubitem, navigateToEdit }) => {
-    const { item, loading, submit, update, createSubitem, deleteItem, displayOnMap } = useItemData({ itemId, itemType, navigateToMap, navigateToEditSubitem })
+    const { item, loading, displayOnMapVisible, submit, update, createSubitem, deleteItem, displayOnMap } = useItemData({ itemId, itemType, navigateToMap, navigateToEditSubitem })
 
     const updateStatus = (value) => submit(value, 'status')
 
@@ -24,6 +24,7 @@ const ItemView = ({ itemId, itemType, navigateToMap, navigateToEditSubitem, navi
                 <View style={styles.bar}>
                     <ControlBar
                         itemType={itemType}
+                        displayOnMapVisible={displayOnMapVisible}
                         createSubitem={createSubitem}
                         deleteItem={deleteItem}
                         displayOnMap={displayOnMap}

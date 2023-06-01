@@ -31,7 +31,7 @@ const ViewItemScreen = ({ navigation, route }) => {
     const goBack = () => navigation.goBack()
 
     // when working with map it's better to use go back, when working with lists goTo List. Maybe need to add the way to see where user navigated from (map or list) but in case of new item creates complication, so leave it for now
-    //const goToList = () => navigation.navigate(screenHandlerItem(dataTypeItem))
+  
 
 
     return (

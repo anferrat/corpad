@@ -51,7 +51,7 @@ const LoaderCalculator = (props) => {
             }))
         }
         else {
-            errorHandler(509)
+            errorHandler(505)
             setValid(validate.valid)
         }
     }, [setValid, valid, props.calculatorType, setData, data.calculator.isMetric, data.calculator.given])

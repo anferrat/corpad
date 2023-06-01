@@ -47,13 +47,13 @@ class GeolocationController extends Controller {
     }
 
     getPermission(onError = null, onSuccess = null) {
-        return super.controllerHandler(onSuccess, onError, 800, async () => {
+        return super.controllerHandler(onSuccess, onError, 902, async () => {
             return (await this.geolocationRepo.getPermission()) === 'granted'
         })
     }
 
     getDeclination(params, onError = null, onSuccess = null) {
-        return super.callbackHandler(onSuccess, onError, 800, () => {
+        return super.callbackHandler(onSuccess, onError, 801, () => {
             const { latitude, longitude } = params
             return this.getDeclinationService.execute(latitude, longitude)
         })

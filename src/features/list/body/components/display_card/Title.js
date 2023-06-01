@@ -4,7 +4,6 @@ import { Text } from '@ui-kitten/components'
 import { basic } from '../../../../../styles/colors'
 import { displayCard } from './styles/displayCardStyles'
 import DataRow from './DataRow'
-import { getIconByFieldType } from '../../../../../helpers/functions'
 import { dataListIcons } from '../../../helpers/functions'
 
 

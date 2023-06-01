@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from "react"
 import { StyleSheet, ScrollView } from "react-native"
 import { Modal, Button } from "@ui-kitten/components"
-import Select from '../../../../components/Select2'
+import Select from '../../../../components/Select'
 import Input from "../../../../components/Input"
 import { plusCircle } from "../../../../components/Icons"
 import { ReferenceCellTypes } from "../../../../constants/global"

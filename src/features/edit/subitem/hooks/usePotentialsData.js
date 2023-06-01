@@ -30,7 +30,6 @@ const usePotentialsData = ({ itemId, subitemId }) => {
                 const { referenceCells, potentialTypes, unit, potentials } = response
                 dispatch(loadPotentialsState(referenceCells, potentialTypes, unit, potentials))
             }
-            else errorHandler(612)
         }
         loadData()
 

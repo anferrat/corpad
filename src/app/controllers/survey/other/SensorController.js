@@ -9,7 +9,7 @@ class SensorController extends Controller {
     }
 
     watchHeading(callback, onError = null, onSuccess = null) {
-        return super.callbackHandler(onSuccess, onError, 622, () => {
+        return super.callbackHandler(onSuccess, onError, 103, () => {
             return this.deviceSensorService.watchOrientation(callback)
         })
     }

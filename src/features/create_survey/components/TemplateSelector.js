@@ -1,7 +1,7 @@
 import React from 'react'
 import { View, StyleSheet, ActivityIndicator } from 'react-native'
 import { RadioGroup, Radio, Text } from '@ui-kitten/components'
-import Select from '../../../components/Select2'
+import Select from '../../../components/Select'
 import { primary } from '../../../styles/colors'
 
 

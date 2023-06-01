@@ -2,10 +2,10 @@ import React from 'react'
 import SelectField from '../../../components/Select'
 
 const SelectDataField = (props) => {
-    const onSelect = React.useCallback((value) => props.selectAction(props.property, value), [props.selectAction, props.property])
+    const onSelect = React.useCallback((value) => props.onSelect(props.property, value), [props.onSelect, props.property])
     return <SelectField
         {...props}
-        selectAction={onSelect}
+        onSelect={onSelect}
     />
 }
 

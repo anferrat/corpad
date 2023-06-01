@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { View, StyleSheet } from 'react-native'
 import Select from './components/Select'
-import MultiSelect from '../../../components/MultiSelect3'
+import MultiSelect from '../../../components/MultiSelect'
 import { Icon } from '@ui-kitten/components'
 import { basic, primary } from '../../../styles/colors'
 import { getFieldIndexes, getPropertyIndexes } from './helpers/functions'

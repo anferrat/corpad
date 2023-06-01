@@ -3,7 +3,7 @@ import { StyleSheet } from 'react-native'
 import PotentialsView from '../potentials/PotentialsView'
 import WireView from '../WireView'
 import NameInput from '../NameInput'
-import Select from '../../../../../components/Select2'
+import Select from '../../../../../components/Select'
 import { ReferenceCellTypes } from '../../../../../constants/global'
 import { ReferenceCellTypeLabels } from '../../../../../constants/labels'
 

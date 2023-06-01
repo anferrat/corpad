@@ -1,4 +1,4 @@
-import { SubitemTypeLabels, ItemTypeLabels, ItemTypeLabelsPlural } from "../../../../constants/labels"
+import { SubitemTypeLabels, ItemTypeLabels, ItemTypeLabelsPlural, ReferenceCellCodeLabels } from "../../../../constants/labels"
 
 export const emptyValueCheck = (value) => {
     if (!value || value === null || value === undefined)
@@ -163,7 +163,7 @@ export const getPotentialsData = (autoCreate, potentialTypes, referenceCellTypes
     else {
         return {
             autoCreate: autoCreate,
-            init: autoTypes.map(type => [potentialTypes.findIndex(pt => pt.permType === type), referenceCellTypes.findIndex(rc => rc.mainReference)])
+            init: autoTypes.map(type => [potentialTypes.findIndex(pt => pt.type === type), referenceCellTypes.findIndex(rc => rc.isMainReference)])
                 .filter(p => p[0] !== -1 && p[1] !== -1)
         }
     }
@@ -248,4 +248,34 @@ export const getTextByWarningType = (warning) => {
         default:
             return 'Some values may be invalid and were converted to null'
     }
+}
+
+export const getDefaultUnit = (unitList, defaultUnitIndex, extraData=[], referenceCellIndex = undefined) => {
+    if (unitList.length === 0)
+        return null
+    else
+        if (referenceCellIndex !== undefined) {
+            const base = unitList[extraData?.defaultPotentialUnit] ?? unitList[0]
+            const rcType = extraData.referenceCellList[referenceCellIndex]?.rcType ?? 0
+            const sub = ReferenceCellCodeLabels[rcType]
+            return {
+                main: base,
+                script: sub,
+                format: 'sub'
+            }
+        }
+        else {
+            //convertion last digit to superscript for display purposes, not ideal, but it's just easy
+            const unit = unitList[defaultUnitIndex]
+            if (unit) {
+                if (!isNaN(unit[unit.length - 1]))
+                    return {
+                        main: unit.slice(0,unit.length - 1),
+                        format: 'super',
+                        script: unit.slice(-1)
+                    }
+                else return unit
+            }
+            else return null
+        }
 }

@@ -33,7 +33,7 @@ class SurveyController extends Controller {
     }
 
     async saveAndReset(onError = null, onSuccess = null) {
-        return super.controllerHandler(onSuccess, onError, 400, async () => {
+        return super.controllerHandler(onSuccess, onError, 104, async () => {
             const { fileName, isCloud, syncTime, cloudId } = await this.saveCurrentSurveyService.execute()
             await this.resetCurrentSurveyService.execute()
             return { fileName, isCloud, syncTime, cloudId }
@@ -41,13 +41,13 @@ class SurveyController extends Controller {
     }
 
     async save(onError = null, onSuccess = null) {
-        return super.controllerHandler(onSuccess, onError, 400, async () => {
+        return super.controllerHandler(onSuccess, onError, 105, async () => {
             return await this.saveCurrentSurveyService.execute()
         })
     }
 
     async reset(onError = null, onSuccess = null) {
-        return super.controllerHandler(onSuccess, onError, 400, async () => {
+        return super.controllerHandler(onSuccess, onError, 106, async () => {
             return await this.resetCurrentSurveyService.execute()
         })
     }

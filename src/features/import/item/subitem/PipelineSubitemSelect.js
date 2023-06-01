@@ -1,7 +1,7 @@
 import React, { useContext } from 'react'
 import { StyleSheet } from 'react-native'
 import { useSelector } from 'react-redux'
-import Select from '../../../../components/Select2'
+import Select from '../../../../components/Select'
 import { getCardList, getSelectedConnectionIndex } from '../helpers/selectors'
 import { useDispatch } from 'react-redux'
 import { setImportSubitemSetting } from '../../../../store/actions/importData'

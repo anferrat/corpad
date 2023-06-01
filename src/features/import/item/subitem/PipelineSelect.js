@@ -1,6 +1,6 @@
 import React, { useContext } from 'react'
 import { StyleSheet } from 'react-native'
-import Select from '../../../../components/Select2'
+import Select from '../../../../components/Select'
 import { ImportData } from '../ImportDataProvider'
 import { useDispatch, useSelector } from 'react-redux'
 import { getSubitemProperty } from '../helpers/functions'

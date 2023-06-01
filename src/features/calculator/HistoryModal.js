@@ -75,7 +75,7 @@ const HistoryModal = (props) => {
                 props.resetCalculator()
             }
             else {
-                errorHandler(601)
+                errorHandler(648)
                 setLoading(false)
             }
         }

@@ -1,5 +1,5 @@
 import React from 'react'
-import Select from '../../../../../components/Select2'
+import Select from '../../../../../components/Select'
 import IsolationView from '../IsolationView'
 import SidesView from '../SidesView'
 import NameInput from '../NameInput'

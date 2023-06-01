@@ -1,6 +1,6 @@
 import React from 'react'
 import { StyleSheet } from 'react-native'
-import MultiSelect from '../../../../components/MultiSelect3'
+import MultiSelect from '../../../../components/MultiSelect'
 
 const MultiSelectConnectionCardField = ({ update, selectedIdList, subitemList, property, label, selectedTypes }) => {
 

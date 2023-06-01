@@ -11,7 +11,7 @@ const initialState = {
         idList: [],
         importTime: null
     },
-    loader: { //FullScreenLoader component
+    loader: { //Loader component
         title: null,
         text: null,
         visible: false

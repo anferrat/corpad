@@ -9,14 +9,14 @@ class GoogleDriveAuthorizationController extends Controller {
     }
 
     async signIn(onError = null, onSuccess = null) {
-        return super.controllerHandler(onSuccess, onError, 400, async () => {
+        return super.controllerHandler(onSuccess, onError, 303, async () => {
             return await this.googleDriveAuthorizationService.signIn()
 
         })
     }
 
     async signOut(onError = null, onSuccess = null) {
-        return super.controllerHandler(onSuccess, onError, 400, async () => {
+        return super.controllerHandler(onSuccess, onError, 304, async () => {
             return await this.googleDriveAuthorizationService.signOut()
         })
     }

@@ -12,7 +12,12 @@ const initialState = {
     item: getItem(initialItemType),
     subitems: [],
     itemType: initialItemType,
-    extraData: {}
+    extraData: {
+        potentialTypes: [],
+        pipelineList: [],
+        referenceCellList: [],
+        autoCreatePotentials: false
+    }
 }
 
 
@@ -33,7 +38,12 @@ const importData = (state = initialState, action) => {
                 fileName: action.fileName,
                 uri: action.uri,
                 defaultNames: action.defaultNames,
-                extraData: action.extraData
+                extraData: {
+                    potentialTypes: action.potentialTypes,
+                    pipelineList: action.pipelines,
+                    referenceCellList: action.referenceCells,
+                    autoCreatePotentials: action.autoCreatePotentials
+                }
             }
         case SET_IMPORT_PROPERTY: {
             if (action.subitemIndex === null && action.potentialIndex === null)

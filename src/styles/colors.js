@@ -15,16 +15,6 @@ export const primary200 = '#CEDCF9'
 export const success100 = "#E3FBDB"
 export const control = '#fff'
 
-export const getColor = (status) => {
-    if (status === 'success' || status === 0)
-        return success
-    else if (status === 'warning' || status === 1)
-        return warning
-    else if (status === 'danger' || status === 2)
-        return danger
-    else return basic
-}
-
 export const WireColorColors = Object.freeze({
     [WireColors.BLACK]: ['#1c1d20'],
     [WireColors.BLACK_RED]: ['#1c1d20', '#bd4131'],

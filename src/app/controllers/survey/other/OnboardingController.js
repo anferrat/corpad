@@ -13,13 +13,13 @@ class OnboardingController extends Controller {
     }
 
     markOnboardingCompleted(onError = null, onSuccess = null) {
-        return super.controllerHandler(onSuccess, onError, 400, async () => {
+        return super.controllerHandler(onSuccess, onError, 633, async () => {
             return this.markOnboardingVisitedService.execute()
         })
     }
 
     markOnboardingOverlayVisited(params, onError = null, onSuccess = null) {
-        return super.controllerHandler(onSuccess, onError, 400, async () => {
+        return super.controllerHandler(onSuccess, onError, 633, async () => {
             const { onboardingScreen } = params
             return this.markOnboardingOverlayVisitedService.execute(onboardingScreen)
         })

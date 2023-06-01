@@ -62,7 +62,7 @@ class AppController extends Controller {
 
 
     init(onError = null, onSuccess = null,) {
-        return super.controllerHandler(onSuccess, onError, 600, async () => {
+        return super.controllerHandler(onSuccess, onError, 107, async () => {
             const url = await this.linkingService.getInitialUrl()
             return await this.appInitializationService.execute(url)
         })
@@ -70,14 +70,14 @@ class AppController extends Controller {
 
     addFileUrlListener(onStatusChanged, onError, onSuccess) {
         return this.linkingService.addUrlListener(url =>
-            super.controllerHandler(onSuccess, onError, 600, async () => {
+            super.controllerHandler(onSuccess, onError, 420, async () => {
                 return await this.openExternalSurveyService.execute(url, undefined, onStatusChanged)
             }))
     }
 
     addNetworkStatusListener(onInternetStatusChanged, onError, onSuccess) {
         return this.networkService.addNetworkListener((isInternetOn) =>
-            super.controllerHandler(onSuccess, onError, 600, () => {
+            super.controllerHandler(onSuccess, onError, 301, () => {
                 return onInternetStatusChanged(isInternetOn)
             }))
     }
