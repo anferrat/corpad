@@ -11,6 +11,7 @@ import EditTitle from './EditTitle'
 import CloudButton from './CloudButton'
 import NavigationWidget from './navigation_widget/'
 import FocusAwareStatusBar from '../../../components/FocusAwareStatusBar'
+import EditSubitemTitle from './EditSubitemTitle'
 
 const TopBarBase = ({ left, right, title, isPrimary, navigation, noBorder }) => {
     const topBarStyle = isPrimary ? styles.primaryStyle : styles.defaultStyle
@@ -106,6 +107,8 @@ const Title = ({ title, isPrimary }) => {
     else if (title?.editTitle && title?.itemType)
         return <EditTitle
             itemType={title.itemType} />
+    else if (title?.editSubitemTitle && title?.subitemType)
+        return <EditSubitemTitle subitemType={title.subitemType} />
     else return null
 }
 

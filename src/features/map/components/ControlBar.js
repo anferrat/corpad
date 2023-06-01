@@ -1,14 +1,12 @@
 import React from 'react'
-import { StyleSheet, View } from 'react-native'
+import { StyleSheet, View, StatusBar } from 'react-native'
 import ExportKmlButton from './buttons/ExportKmlButton'
 import SatelliteButton from './buttons/SatelliteButton'
 import MyLocationButton from './buttons/MyLocationButton'
-import { useSafeAreaInsets } from 'react-native-safe-area-context'
 
 const ControlBar = ({ satelliteMode, zoomToUserLocation, toggleSatelliteMode, loading }) => {
-    const insets = useSafeAreaInsets()
     return (
-        <View style={{ ...styles.controlBar, top: 70 + insets.top }}>
+        <View style={styles.controlBar}>
             <MyLocationButton
                 zoomToUserLocation={zoomToUserLocation} />
             <SatelliteButton
@@ -25,6 +23,7 @@ export default React.memo(ControlBar)
 
 const styles = StyleSheet.create({
     controlBar: {
+        top: 70 + StatusBar.currentHeight,
         position: 'absolute',
         right: '5%',
         alignSelf: 'flex-end',

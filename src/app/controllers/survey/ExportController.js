@@ -17,21 +17,21 @@ class ExportController extends Controller {
     }
 
     getItemProperties(params, onError = null, onSuccess = null) {
-        return super.controllerHandler(onSuccess, onError, 600, () => {
+        return super.controllerHandler(onSuccess, onError, 643, () => {
             const { itemType } = params
             return this.getExportItemPropertiesService.execute(itemType)
         })
     }
 
     getSubitemProperties(params, onError = null, onSuccess = null) {
-        return super.controllerHandler(onSuccess, onError, 600, () => {
+        return super.controllerHandler(onSuccess, onError, 644, () => {
             const { itemType } = params
             return this.getExportSubitemPropertiesService.execute(itemType)
         })
     }
 
     getPotentialPropertiesData(onError = null, onSuccess = null) {
-        return super.controllerHandler(onSuccess, onError, 600, () => {
+        return super.controllerHandler(onSuccess, onError, 645, () => {
             return this.getPotentialPropertiesDataService.execute()
         })
     }

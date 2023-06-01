@@ -50,10 +50,9 @@ const ReferenceConverter = (props) => {
                     label={'Base reference type'}
                     placeholder={'Select reference type'}
                     property={'initialType'}
-                    selectedItem={props.data.initialType}
-                    itemsList={refCellList}
-                    selectAction={selectAction}
-                />
+                    selectedIndex={props.data.initialType}
+                    itemList={refCellList}
+                    onSelect={selectAction} />
                 <Icon name='arrow-forward-outline' fill={primary} style={styles.icon} />
                 <SelectDataField
                     style={styles.select}
@@ -62,10 +61,9 @@ const ReferenceConverter = (props) => {
                     label={'Target reference type'}
                     placeholder={'Select reference type'}
                     property={'targetType'}
-                    selectedItem={props.data.targetType}
-                    itemsList={refCellList}
-                    selectAction={selectAction}
-                />
+                    selectedIndex={props.data.targetType}
+                    itemList={refCellList}
+                    onSelect={selectAction} />
             </View>
             <InputDataField
                 disabled={props.disabled}

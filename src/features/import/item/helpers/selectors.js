@@ -1,4 +1,3 @@
-import { verifyTypes } from "../../../../helpers/functions"
 import { getTypedIndex, getSubitemName } from "./functions"
 
 
@@ -8,7 +7,7 @@ export const getCardList = (state, cardTypes) => {
         key: s.key,
         type: s.type
     }))
-        .filter(s => verifyTypes(s.type, cardTypes))
+        .filter(s => ~cardTypes.indexOf(s.type))
 }
 
 export const getSelectedConnectionIndex = (state, subitemIndex, cardTypes) => {

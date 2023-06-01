@@ -8,6 +8,7 @@ import { deleteItem as deleteItemRequest, getItemById, updateItem } from "../../
 import { createSubitem as createSubitemRequest } from "../../../app/controllers/survey/subitems/SubitemController"
 import { hapticDelete } from "../../../native_libs/haptics"
 import fieldValidation from '../../../helpers/validation'
+import { ItemTypes } from "../../../constants/global"
 
 const warningCodes = {
     TEST_POINT: 55,
@@ -25,6 +26,7 @@ const useItemData = ({ itemId, itemType, navigateToMap, navigateToEditSubitem })
         onLoadTimeModified: null,
         itemUpdated: false
     })
+    const displayOnMapVisible = itemType !== ItemTypes.PIPELINE && item.latitude !== null && item.longitude !== null
 
     useEffect(() => {
         //Update tracker keeps timeModified on load, and tracks if it was changed. Emits global update event on screen unmount if changes were made
@@ -105,7 +107,6 @@ const useItemData = ({ itemId, itemType, navigateToMap, navigateToEditSubitem })
             EventRegister.emit('selectOnMap', { itemId, itemType })
             navigateToMap()
         }
-        else errorHandler(802)
     }, [item.latitude, item.longitude, navigateToMap])
 
     const createSubitem = useCallback(async (type) => {
@@ -114,7 +115,7 @@ const useItemData = ({ itemId, itemType, navigateToMap, navigateToEditSubitem })
             navigateToEditSubitem(response.id, true, type)
     }, [itemId])
 
-    return { item, loading, submit, update, deleteItem, displayOnMap, createSubitem }
+    return { item, loading, displayOnMapVisible, submit, update, deleteItem, displayOnMap, createSubitem }
 }
 
 export default (useItemData)

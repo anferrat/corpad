@@ -19,8 +19,7 @@ const CoatingResistivity = (props) => {
                             [property]: value
                         }
                     }
-                }
-                )
+                })
             else return ({
                 ...old, calculator: {
                     ...old.calculator, given:
@@ -79,10 +78,9 @@ const CoatingResistivity = (props) => {
                     label={'Pipe diameter'}
                     placeholder={'Select diameter'}
                     style={styles.inputRight}
-                    selectedItem={props.data.npsIndex}
-                    itemsList={npsList}
-                    selectAction={selectAction}
-                />
+                    selectedIndex={props.data.npsIndex}
+                    itemList={npsList}
+                    onSelect={selectAction} />
             </View>
             <CoatingPoint
                 disabled={props.disabled}

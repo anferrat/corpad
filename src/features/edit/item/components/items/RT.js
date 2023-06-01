@@ -23,6 +23,8 @@ const RT = ({ data, createSubitem, itemType, update, validate, updateLatAndLon, 
             <View style={globalStyle.card}>
                 <View style={styles.mainView}>
                     <Input
+                        update={update}
+                        validate={validate}
                         property='name'
                         maxLength={40}
                         label='Name'

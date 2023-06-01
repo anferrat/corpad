@@ -1,5 +1,5 @@
 import React from 'react'
-import SelectField from '../../../../components/Select2'
+import SelectField from '../../../../components/Select'
 
 const Select = (props) => {
     const { property, update } = props

@@ -25,7 +25,7 @@ class SurveyInfoController extends Controller {
     }
 
     updateName(params, onError = null, onSuccess = null) {
-        return super.controllerHandler(onSuccess, onError, 506, async () => {
+        return super.controllerHandler(onSuccess, onError, 625, async () => {
             const { name } = this.validation.updateName(params)
             return this.updateSurveyNameService.execute(name)
         })

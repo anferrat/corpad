@@ -4,7 +4,7 @@ import { useSelector } from 'react-redux'
 import { getData, getDefaultNames, parameterComparison } from './helpers/functions'
 import PropertyImportField from './components/PropertyImportField'
 import { ImportData } from './ImportDataProvider'
-import { getDefaultUnit } from '../../../helpers/functions'
+import { getDefaultUnit } from './helpers/functions'
 
 const Parameter = (props) => {
     const importData = useContext(ImportData)

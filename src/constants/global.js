@@ -314,7 +314,7 @@ export const FileMimeTypes = Object.freeze({
     CSV: 'text/csv',
     KML: 'application/vnd.google-earth.kml+xml',
     JSON: 'application/json',
-    TEXT: '*/text'
+    TEXT: 'text/*'
 })
 
 export const SurveyLoadingStatuses = Object.freeze({

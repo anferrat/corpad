@@ -1,6 +1,6 @@
 import React from "react"
 import { StyleSheet } from "react-native"
-import Select from "../../../../components/Select2"
+import Select from "../../../../components/Select"
 import { PotentialUnits } from "../../../../constants/global"
 import { PotentialUnitLabels, PotentialUnitDescriptionLabels } from "../../../../constants/labels"
 

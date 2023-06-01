@@ -57,7 +57,7 @@ const useNavigationWidget = () => {
                 }
                 else if (status !== 200)
                     errorHandler(status)
-                else errorHandler(800)
+                else errorHandler(902)
             }
         }
         onLoad()

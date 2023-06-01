@@ -24,21 +24,21 @@ class PotentialSettingController extends Controller {
     }
 
     create(params, onError = null, onSuccess = null) {
-        return super.controllerHandler(onSuccess, onError, 623, async () => {
+        return super.controllerHandler(onSuccess, onError, 634, async () => {
             const { name } = this.validation.create(params)
             return this.createPotentialTypeServie.execute(name)
         })
     }
 
     delete(params, onError = null, onSuccess = null) {
-        return super.controllerHandler(onSuccess, onError, 601, async () => {
+        return super.controllerHandler(onSuccess, onError, 635, async () => {
             const { id } = this.validation.delete(params)
             return this.deletePotentialTypeService.execute(id)
         })
     }
 
     updateUnit(params, onError = null, onSuccess = null) {
-        return super.controllerHandler(onSuccess, onError, 623, async () => {
+        return super.controllerHandler(onSuccess, onError, 636, async () => {
             const { unit } = this.validation.updateUnit(params)
             return this.updatePotentialUnitService.execute(unit)
         })
@@ -52,7 +52,7 @@ class PotentialSettingController extends Controller {
     }
 
     getData(onError = null, onSuccess = null) {
-        return super.controllerHandler(onSuccess, onError, 622, async () => {
+        return super.controllerHandler(onSuccess, onError, 638, async () => {
             return this.getPotentialSettingDataService.execute()
         })
     }

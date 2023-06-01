@@ -255,8 +255,8 @@ export const getHeader = (screen, params, navigation, dispatch, openMenu) => {
                     isPrimary: false,
                     left: 'back',
                     title: {
-                        editTitle: true,
-                        itemType: params.subitemType
+                        editSubitemTitle: true,
+                        subitemType: params.subitemType
                     },
                     right: [{
                         icon: 'trash',

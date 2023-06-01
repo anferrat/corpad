@@ -17,7 +17,7 @@ const SelectToken = ({ onPress, selected, title, icon, pack }) => {
                     fill={selected ? control : basic} />
                 <Text
                     style={styles.text}
-                    category='p2'
+                    category='p1'
                     numberOfLines={1}
                     ellipsizeMode={'tail'}
                     status={selected ? 'control' : 'basic'}>

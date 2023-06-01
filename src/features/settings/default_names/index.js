@@ -9,7 +9,7 @@ import CheckBox from './components/CheckBox'
 import NamePreview from './components/NamePreview'
 import Hint from '../../../components/Hint'
 import BottomButton from '../../../components/BottomButton'
-import Select from '../../../components/Select2'
+import Select from '../../../components/Select'
 
 export const DefaultNames = () => {
     const { defaultNames, loading, selectedType, value, valid, pipelineNameAsDefault, pipelineNameSettingActive, itemList, selectedIndex, accessoryList, onChangeText, onEndEditing, onChangeType, updateNames, onChangePipelineNameSetting } = useDefaultNames()

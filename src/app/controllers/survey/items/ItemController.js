@@ -33,7 +33,7 @@ class ItemController extends Controller {
     }
 
     create(params, onError = null, onSuccess = null) {
-        return super.controllerHandler(onSuccess, onError, 600, async () => {
+        return super.controllerHandler(onSuccess, onError, 606, async () => {
             const { itemType, latitude, longitude } = this.validation.createItem(params)
             return this.createItemService.execute(itemType, latitude, longitude)
         }
@@ -88,7 +88,7 @@ class ItemController extends Controller {
     }
 
     getDisplayData(params, onError = null, onSuccess = null,) {
-        return super.controllerHandler(onSuccess, onError, 600, async () => {
+        return super.controllerHandler(onSuccess, onError, 613, async () => {
             const { itemType, displayedReading, idList, readingTypeFilter } = this.validation.getDisplayData(params)
             return this.getDisplayListService.execute({ idList, displayedReading, itemType, readingTypeFilter })
         })

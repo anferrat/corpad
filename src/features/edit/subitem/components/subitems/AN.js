@@ -1,7 +1,7 @@
 import React from 'react'
 import { StyleSheet } from 'react-native'
 import PotentialsView from '../potentials/PotentialsView'
-import Select from '../../../../../components/Select2'
+import Select from '../../../../../components/Select'
 import WireView from '../WireView'
 import NameInput from '../NameInput'
 import { AnodeMaterials } from '../../../../../constants/global'

@@ -24,7 +24,7 @@ class MarkerController extends Controller {
     }
 
     getMarker(params, onError = null, onSuccess = null) {
-        return super.controllerHandler(onSuccess, onError, 616, async () => {
+        return super.controllerHandler(onSuccess, onError, 615, async () => {
             const { itemType, itemId } = this.validation.getMarker(params)
             return this.getMarkerService.execute(itemType, itemId)
         })
@@ -37,7 +37,7 @@ class MarkerController extends Controller {
     }
 
     updateMarker(params, onError = null, onSuccess = null) {
-        return super.controllerHandler(onSuccess, onError, 615, async () => {
+        return super.controllerHandler(onSuccess, onError, 616, async () => {
             const markerData = this.validation.update(params)
             return this.updateMarkerService.execute(markerData)
         })

@@ -4,7 +4,7 @@ import IconButton from '../../../../components/IconButton'
 import PropertyImportField from '../components/PropertyImportField'
 import { ImportData } from '../ImportDataProvider'
 import PotentialLabel from '../components/PotentialLabel'
-import { getDefaultUnit } from '../../../../helpers/functions'
+import { getDefaultUnit } from '../helpers/functions'
 
 const emptyList = []
 const ParameterPotential = ({

@@ -1,7 +1,7 @@
 import React, { useMemo, useCallback } from 'react'
 import PotentialsView from '../potentials/PotentialsView'
 import { StyleSheet } from 'react-native'
-import Select from '../../../../../components/Select2'
+import Select from '../../../../../components/Select'
 import NameInput from '../NameInput'
 import { PipeDiameters } from '../../../../../constants/global'
 import { PipeDiameterLabels } from '../../../../../constants/labels'

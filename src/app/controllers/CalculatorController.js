@@ -28,42 +28,42 @@ class CalculatorController extends Controller {
     }
 
     save(params, onError = null, onSuccess = null) {
-        return super.controllerHandler(onSuccess, onError, 600, async () => {
+        return super.controllerHandler(onSuccess, onError, 647, async () => {
             const { data, name, calculatorType, latitude, longitude } = this.validation.save(params)
             return await this.saveCalculatorService.execute({ data, name, calculatorType, latitude, longitude })
         })
     }
 
     delete(params, onError = null, onSuccess = null) {
-        return super.controllerHandler(onSuccess, onError, 600, async () => {
+        return super.controllerHandler(onSuccess, onError, 648, async () => {
             const { id } = this.validation.delete(params)
             return await this.deleteCalculatorService.executeById(id)
         })
     }
 
     deleteAll(params, onError = null, onSuccess = null) {
-        return super.controllerHandler(onSuccess, onError, 600, async () => {
+        return super.controllerHandler(onSuccess, onError, 648, async () => {
             const { calculatorType } = this.validation.deleteAll(params)
             return await this.deleteCalculatorService.executeByType(calculatorType)
         })
     }
 
     getList(params, onError = null, onSuccess = null) {
-        return super.controllerHandler(onSuccess, onError, 600, async () => {
+        return super.controllerHandler(onSuccess, onError, 649, async () => {
             const { calculatorType } = this.validation.getList(params)
             return await this.getCalculatorListByTypeService.execute(calculatorType)
         })
     }
 
     getById(params, onError = null, onSuccess = null) {
-        return super.controllerHandler(onSuccess, onError, 600, async () => {
+        return super.controllerHandler(onSuccess, onError, 650, async () => {
             const { id } = this.validation.getById(params)
             return await this.getCalculatorService.execute(id)
         })
     }
 
     saveToFile(params, onError = null, onSuccess = null) {
-        return super.controllerHandler(onSuccess, onError, 600, async () => {
+        return super.controllerHandler(onSuccess, onError, 431, async () => {
             const { exportData, fileName } = this.validation.writeToFile(params)
             return await this.writeCalculatorToFile.execute(exportData, fileName)
         })

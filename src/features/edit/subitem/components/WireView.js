@@ -1,10 +1,13 @@
 import React from 'react'
 import { StyleSheet, View } from 'react-native'
-import SelectField from "../../../../components/Select2"
-import { wireColorList, wireGaugesList } from '../../../../constants/constants.js'
+import SelectField from "../../../../components/Select"
+import { WireColors, WireGauges } from '../../../../constants/global'
+import { WireColorLabels, WireGaugeLabels } from '../../../../constants/labels'
+import { WireColorColors } from '../../../../styles/colors'
 
-const colorNames = wireColorList.map(({ title }) => title)
-const colorAccessories = wireColorList.map(({ color }) => ({ icon: color.length > 1 ? 'color-circle-double' : 'color-circle', fill: color[0], fill2: color[1], pack: 'cp' }))
+const wireColorList = Object.values(WireColors).map(color => ({ index: color, item: WireColorLabels[color] }))
+const colorAccessories = wireColorList.map(({ index }) => ({ icon: WireColorColors[index].length > 1 ? 'color-circle-double' : 'color-circle', fill: WireColorColors[index][0], fill2: WireColorColors[index][1], pack: 'cp' }))
+const wireGaugeList = Object.values(WireGauges).map(gauge => ({ index: gauge, item: WireGaugeLabels[gauge] }))
 
 const WireView = ({ update, wireColor, wireGauge }) => {
     const onSelectColor = React.useCallback((index) => {
@@ -23,7 +26,7 @@ const WireView = ({ update, wireColor, wireGauge }) => {
                     accessoryList={colorAccessories}
                     property='wireColor'
                     selectedIndex={wireColor}
-                    itemList={colorNames}
+                    itemList={wireColorList}
                     placeholder="Color"
                     label="Wire color" />
             </View>
@@ -33,7 +36,7 @@ const WireView = ({ update, wireColor, wireGauge }) => {
                     onSelect={onSelectGauge}
                     property='wireGauge'
                     selectedIndex={wireGauge}
-                    itemList={wireGaugesList}
+                    itemList={wireGaugeList}
                     placeholder='Gauge'
                     label='Wire gauge' />
             </View>

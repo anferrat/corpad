@@ -3,7 +3,7 @@ import InputFieldParamaters from './SimpleParameterView'
 import SelectFieldParamaters from './MappedParameterView'
 import { useSelector } from 'react-redux'
 import { getData } from './helpers/functions'
-import { getDefaultUnit } from '../../../helpers/functions'
+import { getDefaultUnit } from '../item/helpers/functions'
 
 
 export const ImportParameters = (props) => {

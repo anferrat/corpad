@@ -74,7 +74,7 @@ class SurveyFileController extends Controller {
     }
 
     getList(params, onError = null, onSuccess = null) {
-        return super.controllerHandler(onSuccess, onError, 400, async () => {
+        return super.controllerHandler(onSuccess, onError, 421, async () => {
             const { isCloud } = this.validation.getList(params)
 
             if (isCloud) {
@@ -86,7 +86,7 @@ class SurveyFileController extends Controller {
     }
 
     deleteFile(params, onError = null, onSuccess = null) {
-        return super.controllerHandler(onSuccess, onError, 400, async () => {
+        return super.controllerHandler(onSuccess, onError, 422, async () => {
             const { isCloud, path, hash, cloudId } = this.validation.deleteFile(params)
             if (isCloud)
                 return await this.deleteCloudSurveyFileService.execute(cloudId)
@@ -96,7 +96,7 @@ class SurveyFileController extends Controller {
     }
 
     loadFile(params, onError = null, onSuccess = null) {
-        return super.controllerHandler(onSuccess, onError, 400, async () => {
+        return super.controllerHandler(onSuccess, onError, 423, async () => {
             const { isCloud, path, cloudId } = this.validation.loadFile(params)
             if (isCloud)
                 return await this.loadCloudSurveyFileService.execute(cloudId)
@@ -106,7 +106,7 @@ class SurveyFileController extends Controller {
     }
 
     loadExternalFile(params, onError = null, onSuccess = null) {
-        return super.controllerHandler(onSuccess, onError, 400, async () => {
+        return super.controllerHandler(onSuccess, onError, 420, async () => {
             const { onStatusChanged } = params
             const file = await this.documentPickerService.pickSurveyFile(onStatusChanged)
             return await this.loadExternalSurveyService.execute(file.uri)
@@ -114,28 +114,28 @@ class SurveyFileController extends Controller {
     }
 
     getFileLink(params, onError = null, onSuccess = null) {
-        return super.controllerHandler(onSuccess, onError, 400, async () => {
+        return super.controllerHandler(onSuccess, onError, 419, async () => {
             const { cloudId } = params
             return await this.getCloudSurveyFileLinkService.execute(cloudId)
         })
     }
 
     copyToDevice(params, onError = null, onSuccess = null) {
-        return super.controllerHandler(onSuccess, onError, 400, async () => {
+        return super.controllerHandler(onSuccess, onError, 418, async () => {
             const { cloudId } = params
             return await this.copyCloudSurveyFileService.executeToAppFolder(cloudId)
         })
     }
 
     copyToCloud(params, onError = null, onSuccess = null) {
-        return super.controllerHandler(onSuccess, onError, 400, async () => {
+        return super.controllerHandler(onSuccess, onError, 417, async () => {
             const { path } = params
             return await this.copySurveyFileToCloudService.execute(path)
         })
     }
 
     copyToDownloads(params, onError = null, onSuccess = null) {
-        return super.controllerHandler(onSuccess, onError, 400, async () => {
+        return super.controllerHandler(onSuccess, onError, 416, async () => {
             const { path, cloudId, isCloud } = params
             if (isCloud)
                 return await this.copyCloudSurveyFileService.executeToDownloads(cloudId)
@@ -145,7 +145,7 @@ class SurveyFileController extends Controller {
     }
 
     async create(params, onError = null, onSuccess = null) {
-        return super.controllerHandler(onSuccess, onError, 400, async () => {
+        return super.controllerHandler(onSuccess, onError, 415, async () => {
             const { isBlank, isCloud, path, name } = params
             if (isBlank)
                 return await this.createSurveyService.execute(name, isCloud)

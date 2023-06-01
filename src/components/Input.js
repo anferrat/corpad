@@ -1,10 +1,47 @@
 import React, { useState } from 'react'
 import { Input, Text, Popover, Icon } from '@ui-kitten/components'
 import { basic200 } from '../styles/colors'
-import { getValidCaption, toString } from '../helpers/functions'
 import { primary, basic } from '../styles/colors'
 import { View, StyleSheet, Pressable } from 'react-native'
 
+const InvalidPropertyCaptionLabels = Object.freeze({
+    name: 'Name must only contain following characters: A-z, 0-9, -._() and be less than 40 characters',
+    latitude: 'Must be between -90 and +90',
+    longitude: 'Must be between -180 and +180',
+    number: 'Must be a number',
+    tapValue: 'Must be a number between 0 and 100 %',
+    smallText: 'Must be less than 80 characters',
+    largeText: 'Must be less than 300 characters'
+})
+
+const getPropertyCaption = (property) => {
+    switch (property) {
+        case 'name':
+            return InvalidPropertyCaptionLabels.name
+        case 'latitude':
+            return InvalidPropertyCaptionLabels.latitude
+        case 'longitude':
+            return InvalidPropertyCaptionLabels.longitude
+        case 'comment':
+            return InvalidPropertyCaptionLabels.largeText
+        case 'model':
+        case 'licenseNumber':
+        case 'serialNumber':
+            return InvalidPropertyCaptionLabels.smallText
+        case 'tapValue':
+            return InvalidPropertyCaptionLabels.tapValue
+        case 'shunt':
+        case 'current':
+        case 'voltage':
+        case 'area':
+        case 'potential':
+        case 'voltageDrop':
+        case 'maxVoltage':
+        case 'maxCurrent':
+            return InvalidPropertyCaptionLabels.number
+        default: return null
+    }
+}
 
 //Unit component sets unit inside input field. If value is text just outupts text. it can be also an object :
 /* {
@@ -14,6 +51,8 @@ format: 'super' // 'super' or 'sub'. sub to default
 script: '2' //super or sub formatted text string
 }
 */
+
+const toString = (value) => value === null ? '' : value.toString()
 
 const UnitText = (props) => {
     const { children, disabled } = props
@@ -48,9 +87,24 @@ export const Unit = (props) => {
     else return null
 }
 
+
 const InputField = React.forwardRef((props, ref) => {
+
+    const renderCaption = React.useCallback(() => {
+        if (!props.valid)
+            return (
+                <View>
+                    <Text
+                        category='label'
+                        status='danger'>
+                        {getPropertyCaption(props.property)}
+                    </Text>
+                </View>
+            )
+        else return null
+    }, [props.valid, props.property])
+
     const styleObject = React.useMemo(() => ({ ...props.style, paddingBottom: 12, borderWidth: props.disabled ? 0 : 1 }), [props.style, props.disabled])
-    const caption = React.useMemo(() => getValidCaption(props.valid, props.property), [props.valid, props.property])
     const value = React.useMemo(() => toString(props.value), [props.value])
     const accessory = React.useMemo(() => <>
         <Unit unit={props.unit} disabled={props.disabled} />
@@ -61,7 +115,7 @@ const InputField = React.forwardRef((props, ref) => {
 
     return (
         <Input
-            caption={caption}
+            caption={renderCaption}
             accessoryRight={accessory}
             {...props}
             onChangeText={onChangeText}
@@ -85,7 +139,10 @@ const InfoHint = (props) => {
         return <Pressable
             onPress={setVisible.bind(this, true)}
             style={styles.hint}>
-            <Icon pack='cp' name={props.icon} style={styles.hintIcon} fill={primary} />
+            <Icon pack='cp'
+                name={props.icon}
+                style={styles.hintIcon}
+                fill={primary} />
         </Pressable>
     }, [])
     if (props.displayHint)
