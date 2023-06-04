@@ -63,7 +63,7 @@ const SurveyFileListItem = ({ name, fileName, timeModified, tpCount, rectifierCo
         <Animated.View style={{
             height: scale.current.interpolate({
                 inputRange: [0, 1],
-                outputRange: [0, 130],
+                outputRange: [0, 140],
             }),
             transform: [{ scale: scale.current }]
         }}>
@@ -100,8 +100,6 @@ const SurveyFileListItem = ({ name, fileName, timeModified, tpCount, rectifierCo
                                     category='s1'>
                                     {fileName}
                                 </Text>
-
-
                             </View>
                             <View
                                 style={styles.time}>
@@ -154,7 +152,7 @@ export default SurveyFileListItem
 
 const styles = StyleSheet.create({
     mainView: {
-        height: 90,
+        height: 100,
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',

@@ -37,7 +37,7 @@ export class ItemPreseneter {
                     comment: true,
                     licenseNumber: true
                 }
-            default: throw new Error(errors.GENERAL, `No such item type as ${itemType}`)
+            default: throw new Error(errors.GENERAL, `No such item type as ${itemType}`,'Wrong item type', 109)
         }
     }
 

@@ -25,7 +25,6 @@ export class CalculatorRepository extends SQLiteRepository {
                 new Calculator(id, name, calculatorType, JSON.parse(data), timeCreated, latitude, longitude))
         }
         catch (err) {
-            console.log(err)
             throw new Error(errors.DATABASE, 'Unable to get calculator list', err)
         }
     }

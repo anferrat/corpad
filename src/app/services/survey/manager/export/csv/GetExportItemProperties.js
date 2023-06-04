@@ -30,7 +30,7 @@ export class GetExportItemProperties {
                     ExportItemProperties.MODEL,
                     ExportItemProperties.SERIAL_NUMBER,
                     ExportItemProperties.MAX_VOLTAGE,
-                    ExportItemProperties.MIN_VOLTAGE,
+                    ExportItemProperties.MAX_CURRENT,
                     ExportItemProperties.COMMENT
                 ]
             case ItemTypes.PIPELINE:

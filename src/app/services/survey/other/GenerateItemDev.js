@@ -103,21 +103,18 @@ export class GenerateItem {
             case SubitemTypes.BOND:
                 {
                     const { sideA, sideB } = getSides(firstOrderSubitems, [SubitemTypes.TEST_LEAD, SubitemTypes.PIPELINE, SubitemTypes.ANODE, SubitemTypes.RISER])
-                    console.log('sides', sideA, sideB)
                     subitem = new Bond(null, itemId, guid(), `Bond${index}`, this.getRandomItem([true, false]), this.getRandomFloat(0, 3), sideA, sideB)
                     break
                 }
             case SubitemTypes.SHUNT:
                 {
                     const { sideA, sideB } = getSides(firstOrderSubitems, [SubitemTypes.TEST_LEAD, SubitemTypes.PIPELINE, SubitemTypes.ANODE, SubitemTypes.RISER])
-                    console.log('sides', sideA, sideB)
                     subitem = new Shunt(null, itemId, guid(), `Shunt${index}`, this.getRandomFloat(0, 300), null, null, true, null, this.getRandomFloat(0, 5), this.getRandomItem([true, false]), sideA, sideB)
                     break
                 }
             case SubitemTypes.ISOLATION:
                 {
                     const { sideA, sideB } = getSides(firstOrderSubitems, [SubitemTypes.RISER, SubitemTypes.STRUCTURE])
-                    console.log('sides', sideA, sideB)
                     const shorted = this.getRandomItem([true, false])
                     subitem = new Isolation(null, itemId, guid(), `Isolation${index + 1}`, this.getRandomItem([true, false]), this.getRandomItem(IsolationTypes), shorted, shorted ? this.getRandomFloat(0, 3) : null, sideA, sideB)
                     break
@@ -165,10 +162,9 @@ export class GenerateItem {
             this.referenceCellRepo.getAll()
         ])
         for (let i = 0; i < count; i++) {
-            console.log('tp index ',i)
             const testPoint = await this.generateTestPoint(i)
             await this.generateSubitems(testPoint.id, pipelines, potentialTypes, referenceCells)
-            console.log(`Test point ${testPoint.name} generated`)
+            //console.log(`Test point ${testPoint.name} generated`)
         }
     }
 

@@ -28,17 +28,6 @@ const ShuntView = ({ update, updateRatioHandler, validateRatioHandler, updateFac
                     onChange={setRatioSelected}
                     style={styles.radio}>Ratio</Radio>
                 <Input
-                    style={styles.input}
-                    value={ratioVoltage}
-                    onChangeText={onChangeRatioVoltage}
-                    onEndEditing={validateRatioVoltage}
-                    maxLength={4}
-                    valid={valid.ratioVoltage}
-                    property='ratioVoltage'
-                    keyboardType='numeric'
-                    unit='mV' />
-                <Text style={styles.dash} category="p1">-</Text>
-                <Input
                     onChangeText={onChangeRatioCurrent}
                     onEndEditing={validateRatioCurrent}
                     style={styles.input}
@@ -48,6 +37,18 @@ const ShuntView = ({ update, updateRatioHandler, validateRatioHandler, updateFac
                     property='ratioCurrent'
                     keyboardType='numeric'
                     unit='A' />
+                <Text style={styles.dash} category="p1">-</Text>
+                <Input
+                    style={styles.input}
+                    value={ratioVoltage}
+                    onChangeText={onChangeRatioVoltage}
+                    onEndEditing={validateRatioVoltage}
+                    maxLength={4}
+                    valid={valid.ratioVoltage}
+                    property='ratioVoltage'
+                    keyboardType='numeric'
+                    unit='mV' />
+
             </View>
             <View style={styles.line}>
                 <Radio

@@ -12,18 +12,17 @@ const { Navigator, Screen } = createBottomTabNavigator()
 
 
 export default TabNavigator = () => {
-    const { isCloud, openBasicMenu, isSigned, isInternetOn } = useSurveyListBottomTabs()
+    const { isCloudSurvey, openBasicMenu, isSigned, isInternetOn } = useSurveyListBottomTabs()
     const insets = useSafeAreaInsets()
 
     return (
         <Navigator
-            initialRouteName={isCloud ? 'CloudSurveyList' : 'DeviceSurveyList'}
+            initialRouteName={isCloudSurvey ? 'CloudSurveyList' : 'DeviceSurveyList'}
             tabBar={props => <MainMenuBottomTabs {...props} openBasicMenu={openBasicMenu} />}
             screenOptions={{
                 headerStatusBarHeight: insets.top,
                 header: ({ route, navigation }) => <TopBar screen={route.name} params={route.params} navigation={navigation} />
             }}>
-            <Screen name='DeviceSurveyList' component={Home} initialParams={{ isCloud: false }} />
             {isInternetOn ? (
                 isSigned ? (
                     <Screen name='CloudSurveyList' component={Home} initialParams={{ isCloud: true }} />
@@ -32,6 +31,7 @@ export default TabNavigator = () => {
                 )) :
                 <Screen name='NoInternetScreen' component={NoInternetEmptyComponent} />
             }
+            <Screen name='DeviceSurveyList' component={Home} initialParams={{ isCloud: false }} />
         </Navigator>
     )
 }

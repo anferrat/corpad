@@ -54,7 +54,7 @@ export class ItemConverter {
                         product: this.conv.convertValue(row, fields, product),
                         comment: this.conv.convertValue(row, fields, comment),
                     }
-                default: throw new Error(errors.GENERAL, 'Unknown item type')
+                default: throw new Error(errors.GENERAL, 'Unknown item type', 'No such item type', 109)
             }
         }
         catch (err) {

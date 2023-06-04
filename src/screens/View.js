@@ -11,7 +11,6 @@ const ViewItemScreen = ({ navigation, route }) => {
     useEffect(() => {
         InteractionManager.runAfterInteractions(() => {
             navigation.dispatch(state => { // In case of new test point clears edit screens
-                console.log(state)
                 const routes = state.routes.filter(r => r.name !== 'EditItem' && r.name !== 'EditSubitem')
                 return CommonActions.reset({
                     ...state,

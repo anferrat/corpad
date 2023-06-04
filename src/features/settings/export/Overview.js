@@ -12,8 +12,9 @@ import { ExportItemPropertyLabels, ExportSubitemPropertyLabels, SubitemTypeLabel
 import { SubitemTypeIconsFilled } from '../../../constants/icons'
 
 
-const Overview = () => {
+const Overview = ({ navigateToExportItem }) => {
     const {
+        exportToSpreadsheet,
         itemTypeLabel,
         itemTypeIcon,
         sortingLabel,
@@ -28,7 +29,7 @@ const Overview = () => {
         groupPotentialsByPipeline,
         selectedSubitemTypes,
         showOther,
-    } = useExportLabels()
+    } = useExportLabels(navigateToExportItem)
     return (
         <>
             <ScrollView
@@ -145,6 +146,7 @@ const Overview = () => {
                 </View>
             </ScrollView>
             <BottomButton
+                onPress={exportToSpreadsheet}
                 title={'Export'}
                 icon={'download'}
             />

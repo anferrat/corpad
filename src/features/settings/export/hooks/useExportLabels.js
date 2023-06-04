@@ -1,14 +1,14 @@
-import { useEffect, useState, useRef } from "react"
-import { useSelector } from "react-redux"
-import { getExportPotentialPropertiesData } from "../../../../app/controllers/survey/ExportController"
+import { useEffect, useState, useRef, useCallback } from "react"
+import { useDispatch, useSelector } from "react-redux"
+import { exportSurveyToSpreadsheet, getExportPotentialPropertiesData } from "../../../../app/controllers/survey/ExportController"
 import { errorHandler } from "../../../../helpers/error_handler"
 import { ItemTypeIconsFilled } from "../../../../constants/icons"
 import { ItemTypeLabelsPlural, SortingOptionLabels } from "../../../../constants/labels"
+import { FileMimeTypes, ItemTypes } from "../../../../constants/global"
+import { setExportModal, updateLoader } from "../../../../store/actions/settings"
+import { resetExport } from "../../../../store/actions/export"
 
-const labels = {}
-const sortingOptions = {}
-
-const useExportLabels = () => {
+const useExportLabels = (navigateToExportItem) => {
     const [potentialData, setPotentialData] = useState({
         loading: true,
         referenceCellLabel: null,
@@ -19,6 +19,8 @@ const useExportLabels = () => {
     const { loading, referenceCellLabel, potentialTypeLabels, pipelineLabels } = potentialData
 
     const componentMounted = useRef(true)
+
+    const dispatch = useDispatch()
 
     const {
         itemType,
@@ -33,7 +35,7 @@ const useExportLabels = () => {
         subitemProperties
     } = useSelector(state => state.export)
 
-    const showPotentials = exportPotentials && itemType === 'TEST_POINT'
+    const showPotentials = exportPotentials && itemType === ItemTypes.TEST_POINT
     const itemTypeLabel = ItemTypeLabelsPlural[itemType]
     const itemTypeIcon = ItemTypeIconsFilled[itemType]
     const sortingLabel = SortingOptionLabels[sorting]
@@ -69,7 +71,21 @@ const useExportLabels = () => {
         }
     }, [])
 
+    const exportToSpreadsheet = useCallback(async () => {
+        dispatch(updateLoader(true, 'Exporting', 'Creating new .csv file'))
+        const { response, status, errorMessage } = await exportSurveyToSpreadsheet({ itemType, sorting, itemProperties, exportPotentials, referenceCellId, potentialTypeIdList, selectedSubitemTypes, pipelineIdList, groupPotentialsByPipeline, subitemProperties })
+        if (status === 200) {
+            navigateToExportItem()
+            dispatch(resetExport())
+            dispatch(updateLoader(false, null, null))
+            dispatch(setExportModal(true, response, FileMimeTypes.CSV))
+        }
+        else
+            dispatch(updateLoader(false, null, null))
+    }, [dispatch, navigateToExportItem, itemType, sorting, itemProperties, exportPotentials, referenceCellId, potentialTypeIdList, selectedSubitemTypes, pipelineIdList, groupPotentialsByPipeline, subitemProperties])
+
     return {
+        exportToSpreadsheet,
         itemTypeLabel,
         itemTypeIcon,
         sortingLabel,

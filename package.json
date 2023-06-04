@@ -28,6 +28,7 @@
     "papaparse": "^5.3.2",
     "react": "18.2.0",
     "react-native": "0.71.1",
+    "react-native-ble-manager": "^10.0.2",
     "react-native-document-picker": "^8.1.0",
     "react-native-event-listeners": "^1.0.7",
     "react-native-fs": "^2.19.0",

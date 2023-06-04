@@ -9,7 +9,6 @@ export class WriteCalculatorToFile {
 
     async execute(data, fileName) {
         const content = this.csvParserService.unparse(data)
-        console.log(this.csvParserService.unparse(data))
         return {
             filePath: await this.fileSystemRepo.writeFile(content, this.fileNameGenerator.execute(fileName, 'csv'), FileSystemLocations.EXPORTS, true)
         }

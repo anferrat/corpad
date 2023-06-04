@@ -16,7 +16,7 @@ const AuthScreenMessage = () => {
                 category={'p1'}
                 appearance='hint'
                 style={styles.text}>
-                Signing in with cloud storage allows you to store your survey files securely and to make them available on multiple devices.
+                Signing in with cloud storage allows you to store your survey files securely and to make them available on different devices.
             </Text>
         </View>
     )

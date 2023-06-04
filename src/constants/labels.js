@@ -101,7 +101,7 @@ export const SubitemTypeLabels = Object.freeze({
     [SubitemTypes.ANODE]: 'Anode test lead',
     [SubitemTypes.BOND]: 'Bond',
     [SubitemTypes.CIRCUIT]: 'Rectifier circuit',
-    [SubitemTypes.COUPON]: 'Coupon test lead',
+    [SubitemTypes.COUPON]: 'Coupon',
     [SubitemTypes.ISOLATION]: 'Isolation assambley',
     [SubitemTypes.PIPELINE]: 'Pipeline test lead',
     [SubitemTypes.REFERENCE_CELL]: 'Stationary reference lead',
@@ -328,13 +328,13 @@ export const ExportItemPropertyLabels = Object.freeze({
     [ExportItemProperties.SERIAL_NUMBER]: 'Serial number',
     [ExportItemProperties.RECTIFIER_OUTPUT]: 'Rectifier output',
     [ExportItemProperties.MAX_VOLTAGE]: 'Max. voltage',
-    [ExportItemProperties.MIN_VOLTAGE]: 'Min. voltage' // fix it should be max voltage
+    [ExportItemProperties.MAX_CURRENT]: 'Max. current'
 })
 
 export const ExportSubitemPropertyLabels = Object.freeze({
     [ExportSubitemProperties.VOLTAGE_DROP]: 'Voltage drop',
     [ExportSubitemProperties.CURRENT]: 'Current',
-    [ExportSubitemProperties.SHUNT_RATIO]: 'Shunt ratio',
+    [ExportSubitemProperties.SHUNT_RATIO]: 'Ratio',
     [ExportSubitemProperties.AREA]: 'Area',
     [ExportSubitemProperties.DENSITY]: 'Density',
     [ExportSubitemProperties.FACTOR]: 'Factor',

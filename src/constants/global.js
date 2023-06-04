@@ -317,6 +317,13 @@ export const FileMimeTypes = Object.freeze({
     TEXT: 'text/*'
 })
 
+export const FileExtensions = Object.freeze({
+    CSV: 'csv',
+    KML: 'kml',
+    JSON: 'json',
+    TEXT: 'txt'
+})
+
 export const SurveyLoadingStatuses = Object.freeze({
     SAVING: 'saving',
     LOADING: 'loading',
@@ -349,7 +356,7 @@ export const ExportItemProperties = Object.freeze({
     SERIAL_NUMBER: 'serialNumber',
     RECTIFIER_OUTPUT: 'rectifierOutput',
     MAX_VOLTAGE: 'maxVoltage',
-    MIN_VOLTAGE: 'minVoltage'
+    MAX_CURRENT: 'maxCurrent'
 })
 
 export const ExportSubitemProperties = Object.freeze({
@@ -399,4 +406,24 @@ export const CurrentDensityUnits = Object.freeze({
     MILI_AMPS_OVER_CM_SQUARE: 1,
     AMPS_OVER_METER_SQUARE: 2,
     MILI_AMPS_OVER_METER_SQUARE: 3
+})
+
+export const MultimeterTypes = Object.freeze({
+    POKIT: 'POKIT'
+})
+
+export const MultimeterServices = Object.freeze({
+    [MultimeterTypes.POKIT]: {
+        MULTIMETER: 'e7481d2f-5781-442e-bb9a-fd4e3441dadc',
+        DSO: '1569801e-1425-4a7a-b617-a4f4ed719de6',
+        DATA_LOGGER: 'a5ff3566-1fd8-4e10-8362-590a578a4121',
+        STATUS: '57d3a771-267c-4394-8872-78223e92aec5'
+    }
+})
+
+export const MultimeterCharacteristics = Object.freeze({
+    [MultimeterServices[MultimeterTypes.POKIT].MULTIMETER]: {
+        SETTINGS: '53dc9a7a-bc19-4280-b76b-002d0e23b078',
+        READING: '047d3559-8bee-423a-b229-4417fa603b90',
+    }
 })

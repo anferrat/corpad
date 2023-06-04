@@ -68,7 +68,7 @@ const styles = StyleSheet.create({
     modal: {
         position: 'absolute',
         width: '90%',
-        top: 200,
+        top: '25%',
     },
     backDrop: {
         backgroundColor: 'rgba(0,0,0,0.5)'

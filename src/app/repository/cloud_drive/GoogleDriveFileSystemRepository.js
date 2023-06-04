@@ -70,7 +70,7 @@ export class GoogleDriveFileSystemRepository {
             )
         }
         catch (er) {
-            throw new Error(errors.GOOGLE_DRIVE, 'Unable to read app folder', er, er.code ?? 705)
+            throw new Error(errors.GOOGLE_DRIVE, 'Unable to read app folder', er, er.code ?? 702)
         }
     }
 
@@ -80,7 +80,7 @@ export class GoogleDriveFileSystemRepository {
             return meta.id ? true : false
         }
         catch (er) {
-            throw new Error(errors.GOOGLE_DRIVE, 'Unable to check if file exists', er, er.code ?? 702)
+            throw new Error(errors.GOOGLE_DRIVE, 'Unable to check if file exists', er, er.code ?? 703)
         }
     }
 
@@ -100,7 +100,7 @@ export class GoogleDriveFileSystemRepository {
             }
         }
         catch (er) {
-            throw new Error(errors.GOOGLE_DRIVE, 'Unable to create file', er, er.code ?? 703)
+            throw new Error(errors.GOOGLE_DRIVE, 'Unable to create file', er, er.code ?? 704)
         }
 
     }
@@ -117,7 +117,7 @@ export class GoogleDriveFileSystemRepository {
             }
         }
         catch (er) {
-            throw new Error(errors.GOOGLE_DRIVE, 'Unable to update file', er, er.code ?? 704)
+            throw new Error(errors.GOOGLE_DRIVE, 'Unable to update file', er, er.code ?? 705)
         }
     }
 
@@ -127,7 +127,7 @@ export class GoogleDriveFileSystemRepository {
             return await this.authHandler(async () => await gdrive.files.delete(fileId))
         }
         catch (er) {
-            throw new Error(errors.GOOGLE_DRIVE, 'Unable to delete file', er, er.code ?? 709)
+            throw new Error(errors.GOOGLE_DRIVE, 'Unable to delete file', er, er.code ?? 706)
         }
     }
 
@@ -140,7 +140,7 @@ export class GoogleDriveFileSystemRepository {
             return ({ file, fileName: name })
         }
         catch (er) {
-            throw new Error(errors.GOOGLE_DRIVE, 'Unable to read file', er, er.code ?? 706)
+            throw new Error(errors.GOOGLE_DRIVE, 'Unable to read file', er, er.code ?? 707)
         }
     }
 
@@ -151,7 +151,7 @@ export class GoogleDriveFileSystemRepository {
             return ({ ...meta })
         }
         catch (er) {
-            throw new Error(errors.GOOGLE_DRIVE, 'Unable to get file meta data', er, er.code ?? 702)
+            throw new Error(errors.GOOGLE_DRIVE, 'Unable to get file meta data', er, er.code ?? 100)
         }
     }
 
@@ -169,7 +169,7 @@ export class GoogleDriveFileSystemRepository {
             return { link: meta.webViewLink }
         }
         catch (er) {
-            throw new Error(errors.GOOGLE_DRIVE, 'Unable to get file web link', er, er.code ?? 710)
+            throw new Error(errors.GOOGLE_DRIVE, 'Unable to get file web link', er, er.code ?? 708)
         }
     }
 

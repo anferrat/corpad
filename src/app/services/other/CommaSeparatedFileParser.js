@@ -25,11 +25,14 @@ export class CommaSeparatedFileParser {
             throw new Error(errors.GENERAL, 'Parser error', er, 513)
         }
     }
+
     parseFast(data) {
         return Papa.parse(data)
     }
 
-    unparse(array) {
-        return Papa.unparse(array)
+    unparse(array, columns = null) {
+        return Papa.unparse(array, { columns })
     }
+
+
 }

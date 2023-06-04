@@ -69,7 +69,7 @@ export const getFormattedDate = (timestamp) => { //formats date. date stored acr
     else return 'Time error'
 }
 
-export const getFullDate = (timestamp) => { //formats date. date stored across the app in a format of Date.now()
+export const getFullDate = (timestamp) => { 
     const t = new Date(timestamp)
     if (timestamp && !isNaN(timestamp) && timestamp > 0 && t) {
         return t.getFullYear() + '/'

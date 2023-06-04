@@ -30,7 +30,6 @@ const HistoryModal = (props) => {
             setLoading(false)
         }
         else {
-            console.log(errorMessage)
             errorHandler(status)
         }
     }, [setLoading, setHistoryList, setVisible])

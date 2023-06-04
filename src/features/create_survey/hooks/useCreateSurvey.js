@@ -62,7 +62,7 @@ const useCreateSurvey = () => {
             const path = surveyList[selectedSurveyIndex] ? surveyList[selectedSurveyIndex].path : null
             await createSurvey(
                 { isBlank, isCloud, path, name },
-                (er, message) => { errorHandler(er); console.log(message) },
+                (er) => errorHandler(er),
                 ({ name, fileName, isCloud, syncTime }) =>
                     dispatch(setSurveySettings(name, fileName, syncTime, isCloud, true)))
             dispatch(updateLoader(false, null, null))

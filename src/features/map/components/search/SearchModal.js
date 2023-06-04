@@ -16,7 +16,6 @@ const SearchModal = ({ hideModal, keyword, onChangeKeyword, markersFound, showOn
 
     useEffect(() => {
         const watch = setTimeout(() => {
-            console.log('here')
             inputRef.current?.focus()
         }, 100)
         return () => clearTimeout(watch)

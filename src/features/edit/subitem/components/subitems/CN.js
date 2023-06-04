@@ -92,6 +92,7 @@ const styles = StyleSheet.create({
     },
     rightSide: {
         flex: .5,
+        minWidth: 10,
         marginLeft: 6
     },
     mainView: {

@@ -1,5 +1,5 @@
 
-import { UPDATE_SETTING, LOAD_SETTINGS, SET_SURVEY_SAVING_STATUS, LOAD_SURVEY_SETTINGS, RESET_CURRENT_SURVEY_SETTINGS, LOAD_SESSION_STATE, UPDATE_ONBOARDING, SET_EXPORT_MODAL, UPDATE_LOADER, UPDATE_SESSION, UPDATE_NETWORK_STATUS, SET_SESSION_MODAL_VISIBLE, UPDATE_CURRENT_SURVEY_SETTINGS, SET_SETTINGS_ON_APP_LOAD, SET_SURVEY_SETTINGS, UPDATE_BOTTOM_SHEET_CONTENT } from "../actions/settings"
+import { UPDATE_SETTING, LOAD_SETTINGS, SET_SURVEY_SAVING_STATUS, LOAD_SURVEY_SETTINGS, RESET_CURRENT_SURVEY_SETTINGS, LOAD_SESSION_STATE, UPDATE_ONBOARDING, SET_EXPORT_MODAL, UPDATE_LOADER, UPDATE_SESSION, UPDATE_NETWORK_STATUS, SET_SESSION_MODAL_VISIBLE, UPDATE_CURRENT_SURVEY_SETTINGS, SET_SETTINGS_ON_APP_LOAD, SET_SURVEY_SETTINGS, UPDATE_BOTTOM_SHEET_CONTENT, SET_BLUETOOTH_SCANNING, SET_BLUETOOTH_STATUS, SET_ACTIVE_MULTIMETER } from "../actions/settings"
 
 const initialState = {
     bottomSheetContent: {  //BottomSheet component
@@ -20,6 +20,16 @@ const initialState = {
         visible: false,
         fileUrl: undefined,
         mimeType: undefined,
+    },
+    activeMultimeter: {
+        id: null,
+        paired: false,
+        name: null,
+        connected: false,
+    },
+    bluetooth: {
+        scanning: false,
+        isBluetoothOn: false,
     },
     session: {
         userName: null,
@@ -43,9 +53,8 @@ const initialState = {
         fileName: null, //file name of current survey. mainly used to be displayed when saving or loading file. the one in db settings has priority over this one
         isLoaded: false, //survey is loaded. if not it'll display survey list screen, if yes it'll display testPoint list
         isCloudSurvey: false, //is current survey on cloud
-        homeScreenCloud: false, //indicates what screen should be loaded when survey is not loaded (cloud drive, or device)
         savingInProgress: false, //survey is being saved
-        lastSyncTime: null // last time survey was saved or the time when survey was opened
+        lastSyncTime: null, // last time survey was saved or the time when survey was opened
     }
 
 }
@@ -82,8 +91,7 @@ const settings = (state = initialState, action) => {
                 lastImport: initialState.lastImport,
                 currentSurvey: {
                     ...initialState.currentSurvey,
-                    isCloudSurvey: state.currentSurvey.isCloudSurvey,
-                    homeScreenCloud: state.currentSurvey.isCloudSurvey,
+                    isCloudSurvey: state.currentSurvey.isCloudSurvey
                 },
                 loader: initialState.loader
             }
@@ -222,6 +230,33 @@ const settings = (state = initialState, action) => {
                     visible: action.visible ?? state.exportModal.visible,
                     fileUrl: action.fileUrl ?? state.exportModal.fileUrl,
                     mimeType: action.mimeType ?? state.exportModal.mimeType,
+                }
+            }
+        case SET_BLUETOOTH_STATUS:
+            return {
+                ...state,
+                bluetooth: {
+                    ...state.bluetooth,
+                    isBluetoothOn: action.isBluetoothOn
+                }
+            }
+        case SET_BLUETOOTH_SCANNING:
+            return {
+                ...state,
+                bluetooth: {
+                    ...state.bluetooth,
+                    scanning: action.scanning
+                }
+            }
+        case SET_ACTIVE_MULTIMETER:
+            return {
+                ...state,
+                activeMultimeter: {
+                    paired: action.paired,
+                    id: action.paired ? action.id : null,
+                    name: action.paired ? action.name : null,
+                    connected: action.paired ? action.connected : false,
+                    multimeterType: action.paired ? action.multimeterType : null
                 }
             }
         default:

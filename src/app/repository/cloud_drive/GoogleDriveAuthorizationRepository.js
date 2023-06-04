@@ -21,7 +21,7 @@ export class GoogleDriveAuthorizationRepository {
             if (er.code === statusCodes.SIGN_IN_CANCELLED)
                 throw new Error(errors.GENERAL, 'Sign in cancelled', 'Cancelled by user', 101)
             else
-                throw new Error(errors.AUTH, 'Unable to sign in', er, 707)
+                throw new Error(errors.AUTH, 'Unable to sign in', er, 303)
         }
     }
 
@@ -71,7 +71,7 @@ export class GoogleDriveAuthorizationRepository {
             gdrive.accessToken = null
         }
         catch (er) {
-            throw new Error(errors.AUTH, 'Unable to sign out', er, 708)
+            throw new Error(errors.AUTH, 'Unable to sign out', er, 304)
         }
     }
 }

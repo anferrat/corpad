@@ -23,7 +23,7 @@ export class SubitemPresenter {
                 return { name: true, ratioVoltage: true, ratioCurrent: true, voltageDrop: true, current: true, factor: true }
             case SubitemTypes.STRUCTURE:
                 return { name: true, description: true }
-            default: throw new Error(errors.GENERAL, `Subitem type ${subitem.type} is not supported`)
+            default: throw new Error(errors.GENERAL, `Subitem type ${subitem.type} is not supported`, 'Wrong subitem type', 109)
         }
     }
 

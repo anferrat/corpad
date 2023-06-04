@@ -74,7 +74,7 @@ const styles = StyleSheet.create({
         paddingRight: 12,
     },
     title: {
-        maxWidth: '35%'
+        maxWidth: '32%'
     },
     button: {
         paddingBottom: 12,

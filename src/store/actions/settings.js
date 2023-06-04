@@ -15,6 +15,9 @@ export const SET_SETTINGS_ON_APP_LOAD = 'SET_SETTINGS_ON_APP_LOAD'
 export const SET_SURVEY_SETTINGS = 'SET_SURVEY_SETTINGS'
 export const SET_INTERNET_ON = 'SET_INTERNET_ON'
 export const UPDATE_BOTTOM_SHEET_CONTENT = 'UPDATE_BOTTOM_SHEET_CONTENT'
+export const SET_BLUETOOTH_SCANNING = 'SET_BLUETOOTH_SCANNING'
+export const SET_BLUETOOTH_STATUS = 'SET_BLUETOOTH_STATUS'
+export const SET_ACTIVE_MULTIMETER = 'SET_ACTIVE_MULTIMETER'
 
 export const updateSetting = (setting, value) => {
     return { type: UPDATE_SETTING, setting: setting, value: value }
@@ -78,4 +81,16 @@ export const setSettingsOnAppLoad = (isLoaded, syncTime, name, fileName, isCloud
 
 export const updateBottomSheetContent = (itemType, content) => ({
     type: UPDATE_BOTTOM_SHEET_CONTENT, itemType, content
+})
+
+export const setActiveMultimeter = (paired, id, name, connected) => ({
+    type: SET_ACTIVE_MULTIMETER, paired, id, name, connected
+})
+
+export const setBluetoothScanning = (scanning) => ({
+    type: SET_BLUETOOTH_SCANNING, scanning
+})
+
+export const setBluetoothStatus = (isBluetoothOn) => ({
+    type: SET_BLUETOOTH_STATUS, isBluetoothOn
 })

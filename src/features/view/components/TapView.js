@@ -23,7 +23,7 @@ const TapView = ({ tapValue, tapFine, tapCoarse, tapSetting, submit, update, val
     switch (tapSetting) {
         case TapOptions.COARSE_FINE:
             return <View style={styles.mainView}>
-                <Text style={styles.title} category='s1'>{TapOptionLabels[tapSetting]}</Text>
+                <Text style={styles.title} category='s1' numberOfLines={1} ellipsizeMode={'tail'}>{TapOptionLabels[tapSetting]}</Text>
                 <View style={styles.selectFields}>
                     <Select
                         placeholderOption={true}
