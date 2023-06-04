@@ -26,7 +26,6 @@ const PropertyImportField = ({
     itemListLabels,
     data }) => {
     const propertyValues = fieldProperties[property]
-    console.log(propertyValues.accessoryList)
     if (propertyValues) {
         const displayValue = getDisplayValue(parameterType, importType, { itemList, defaultValue, fieldIndex, fieldIndexList, fields, defaultName, itemListLabels })
         const accessory = getAccessory(parameterType, importType, propertyValues.accessoryList, defaultValue)

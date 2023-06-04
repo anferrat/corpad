@@ -57,13 +57,14 @@ const styles = StyleSheet.create({
     icon: {
         width: 20,
         height: 20,
-        marginRight: 8
+        marginRight: 8,
     },
     row: {
         flex: 1,
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'center',
+        marginHorizontal: 8
     },
     text: {
         textAlign: 'center'

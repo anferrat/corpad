@@ -36,6 +36,8 @@ const useSettings = () => {
 
     const navigateToInfo = () => navigateToDetails('info')
 
+    const navigateToMultimeter = () => navigateToDetails('multimeter')
+
     const navigateToReferenceCells = () => navigateToDetails('refCells')
 
     return {
@@ -47,7 +49,8 @@ const useSettings = () => {
         navigateToDefaultNames,
         navigateToExportedFiles,
         navigateToInfo,
-        navigateToReferenceCells
+        navigateToReferenceCells,
+        navigateToMultimeter
     }
 }
 

@@ -77,7 +77,6 @@ const useNavigationWidget = () => {
 
 
     useEffect(() => {
-        //console.log(location)
         if (location.heading && location.bearing) {
             const diff = calculateResultHeading(location.heading, location.bearing, location.declination) //result heading of the user device in respect to remote point in deg (0 - 360) 
             const angle = calculateRotationAngle(rotation.current, diff) // arrow rotation angle. takes prev value and result heading to determine rotation (-infinity - +infinity)

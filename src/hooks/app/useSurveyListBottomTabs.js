@@ -4,13 +4,13 @@ import { useBottomSheetNavigation } from "../bottom_sheet/useBottomSheetNavigati
 const useSurveyListBottomTabs = () => {
     const isSigned = useSelector(state => state.settings.session.isSigned)
     const isInternetOn = useSelector(state => state.settings.session.isInternetOn)
-    const isCloud = useSelector(state => state.settings.currentSurvey.isCloud)
+    const isCloudSurvey = useSelector(state => state.settings.currentSurvey.isCloudSurvey)
     const { openBasicMenu } = useBottomSheetNavigation()
     return {
         openBasicMenu,
         isSigned,
         isInternetOn,
-        isCloud
+        isCloudSurvey
     }
 }
 

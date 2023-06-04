@@ -7,6 +7,7 @@ import useNavigationWidget from './hooks/useNavigationWidget'
 import ListItem from './components/ListItem'
 import { getDistance } from './helpers/functions'
 import LoadingView from '../../../../components/LoadingView'
+import DirectionLabel from './components/DirectionLabel'
 
 
 const NavigationWidget = () => {
@@ -37,7 +38,7 @@ const NavigationWidget = () => {
                     <View style={styles.container}>
                         <View style={styles.titleContainer}>
                             <Icon name={'compass'} style={styles.compassIcon} fill={primary} />
-                            <Text category={'h6'} style={styles.title}>Direction to: {name}</Text>
+                            <Text category={'h6'} style={styles.title} numberOfLines={1} ellipsizeMode={'tail'}>Direction to: {name}</Text>
                         </View>
                         <LoadingView loading={loading}>
                             <Animated.View
@@ -55,9 +56,12 @@ const NavigationWidget = () => {
                                     fill={primary}
                                     style={styles.icon} />
                             </Animated.View>
-                            <ListItem value={`${direction} (${Math.round(bearing)}\u00b0)`} />
-                            <ListItem title={'Distance: '} value={getDistance(distance)} />
-                            <ListItem title={'Accuracy: '} value={getDistance(accuracy)} />
+
+                            <View style={styles.values}>
+                                <DirectionLabel value={`${direction} (${Math.round(bearing)}\u00b0)`} />
+                                <ListItem title={'Distance: '} value={getDistance(distance)} />
+                                <ListItem title={'Accuracy: '} value={getDistance(accuracy)} />
+                            </View>
                         </LoadingView>
                         <Button
                             onPress={hideModal}
@@ -84,8 +88,7 @@ const styles = StyleSheet.create({
         marginRight: 12
     },
     arrow: {
-        width: 90,
-        height: 90,
+        marginTop: 12,
         alignSelf: 'center',
         justifyContent: 'center',
         alignItems: 'center'
@@ -107,7 +110,7 @@ const styles = StyleSheet.create({
     compassIcon: {
         width: 25,
         height: 25,
-        marginHorizontal: 12
+        marginRight: 12
     },
     modal: {
         flex: 1
@@ -122,6 +125,16 @@ const styles = StyleSheet.create({
     },
 
     titleContainer: {
-        flexDirection: 'row'
+        width: '100%',
+        flexDirection: 'row',
+        paddingHorizontal: 12,
+    },
+    title: {
+        flex: 1,
+    },
+    values: {
+        flex: 1,
+        paddingHorizontal: 12,
+
     }
 })

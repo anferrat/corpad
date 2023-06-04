@@ -14,7 +14,8 @@ export const SettingsList = () => {
         navigateToDefaultNames,
         navigateToExportedFiles,
         navigateToInfo,
-        navigateToReferenceCells
+        navigateToReferenceCells,
+        navigateToMultimeter
     } = useSettings()
     return (
         <ScrollView
@@ -56,6 +57,11 @@ export const SettingsList = () => {
                 title={'About'}
                 subtitle={'Check app version, legal information and support contact'}
                 onPress={navigateToAbout} />
+            <ListItem
+                icon={'bluetooth'}
+                title={'Digital multimeter'}
+                subtitle={'Control bluetooth multimeter settings'}
+                onPress={navigateToMultimeter} />
             <ListItem
                 icon={'people-outline'}
                 title={'Default names'}

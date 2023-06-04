@@ -42,7 +42,6 @@ export class AppInitialization {
 
         if (!isSigned) {
             const session = await this.authorizationService.signInSilently()
-            console.log('here')
             isSigned = session.isSigned
             userName = session.userName
         }

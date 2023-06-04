@@ -7,7 +7,7 @@ import { StatusLabels } from '../../../../constants/labels'
 
 const renderIcon = (icon) => (props) => <Icon {...props} name={icon} />
 
-const renderText = (text) => (props) => <Text {...props} category='c2'>{text}</Text>
+const renderText = (text) => (props) => <Text {...props} numberOfLines={1} ellipsizeMode={'tail'}>{text}</Text>
 
 const statuses = Object.freeze({
     [ItemStatuses.GOOD]: 'success',
@@ -58,7 +58,7 @@ const StatusView = ({ update, status }) => {
             width: '34%',
             height: 45,
             borderWidth: 0,
-            borderRadius: 0
+            borderRadius: 0,
         },
         buttonInactive: {
             width: '34%',

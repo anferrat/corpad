@@ -50,7 +50,6 @@ const useApp = () => {
     const onAppLoad = async () => {
       componentMounted.current = true
       const { status, response } = await initializeApp()
-      console.log(status, 'hshs')
       if (status === 200) {
         const { isLoaded, syncTime, name, fileName, isCloud, isSigned, userName, isInternetOn, onboarding } = response
         dispatch(setSettingsOnAppLoad(isLoaded, syncTime, name, fileName, isCloud, isSigned, userName, isInternetOn, onboarding))

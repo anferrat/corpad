@@ -27,6 +27,7 @@ export default ListItem
 const styles = StyleSheet.create({
     container: {
         flex: 1,
+        height: 35,
         alignItems: 'center',
         flexDirection: 'row',
         justifyContent: 'center',
@@ -36,6 +37,8 @@ const styles = StyleSheet.create({
         textTransform: 'uppercase',
     },
     value: {
+        flex: 1,
+        textAlign: 'center',
         fontWeight: 'bold'
     }
 })

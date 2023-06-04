@@ -4,10 +4,13 @@ import { SafeAreaView } from 'react-native'
 import { ExportOverview } from '../../features/settings/export'
 
 export default ExportOverviewScreen = ({ navigation, route }) => {
+    const navigateToExportItem = () => navigation.navigate('ExportItem')
     return (
         <SafeAreaView
             style={globalStyle.screen}>
-            <ExportOverview />
+            <ExportOverview
+                navigateToExportItem={navigateToExportItem}
+            />
         </SafeAreaView>
     )
 }

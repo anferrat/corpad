@@ -37,7 +37,7 @@ export class GeolocationRepository {
                 throw new Error(errors.LOCATION, 'Unable to get current position', er, 800)
             }
         else
-            throw new Error(errors.PERMISSION, 'Unable to obtain location permission', 'Permission not granted', 900)
+            throw new Error(errors.PERMISSION, 'Unable to obtain location permission', 'Permission not granted', 902)
     }
 
     watch(permissionGranted, callback) {
@@ -65,7 +65,7 @@ export class GeolocationRepository {
             return watchId
         }
         else {
-            throw new Error(errors.PERMISSION, 'Unable to obtain location permission', 'Permission not granted', 900)
+            throw new Error(errors.PERMISSION, 'Unable to obtain location permission', 'Permission not granted', 902)
         }
     }
 
@@ -83,7 +83,7 @@ export class GeolocationRepository {
             return geomagnetism.model().point([latitude, longitude]).decl
         }
         catch (er) {
-            throw new Error(errors.LOCATION, 'Unable to get declination', er, 800)
+            throw new Error(errors.LOCATION, 'Unable to get declination', er, 801)
         }
     }
 }

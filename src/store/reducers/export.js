@@ -92,7 +92,6 @@ const exportSurvey = (state = initialState, action) => {
         }
         case SET_EXPORT_SUBITEM_PROPERTIES: {
             const propertyExists = ~state.subitemProperties.findIndex(([type, property]) => action.subitemProperty === property && action.subitemType === type)
-            console.log(propertyExists)
             return {
                 ...state,
                 subitemProperties:

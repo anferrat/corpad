@@ -19,7 +19,6 @@ export const getDefaultNames = (state, property, subitemIndex) => {
 }
 
 const getParametersData = (parameter) => {
-    console.log(parameter)
     return {
         fieldIndex: parameter?.fieldIndex,
         itemList: parameter?.itemList,

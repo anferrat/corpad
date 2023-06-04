@@ -8,6 +8,7 @@ import { SurveyOverview } from '../../features/settings/info/index'
 import { ExportedFilesList } from '../../features/settings/exported_files/'
 import About from '../../features/settings/about/About'
 import { OnboardingOverlayPotentialtypes } from '../../features/overlays/onboarding'
+import Multimeter from '../../features/settings/multimeter'
 
 const Setting = (props) => {
     switch (props.setting) {
@@ -23,6 +24,8 @@ const Setting = (props) => {
             return <ExportedFilesList {...props} />
         case 'about':
             return <About {...props} />
+        case 'multimeter':
+            return <Multimeter {...props} />
         default:
             return null
     }

@@ -48,7 +48,7 @@ export class FileSystemRepository {
             await RNFS.copyFile(filePath, `${directory}/${fileNameCorrected}`)
         }
         catch (er) {
-            throw new Error(errors.FILESYSTEM, 'Error while copying file', er, 401)
+            throw new Error(errors.FILESYSTEM, 'Error while copying file', er, 404)
         }
     }
 
@@ -83,7 +83,7 @@ export class FileSystemRepository {
             return dir
         }
         catch (er) {
-            throw new Error(errors.FILESYSTEM, `Unable to create/access directory ${dir}`, er, 400)
+            throw new Error(errors.FILESYSTEM, `Unable to create/access directory ${dir}`, er, 405)
         }
     }
 
@@ -98,7 +98,7 @@ export class FileSystemRepository {
             case FileSystemLocations.TEMP: //not used
                 return await this.createDirectory(this.tempFolder)
             default:
-                throw new Error(errors.FILESYSTEM, `Unknown destination ${location}.`, 'Location doesnt exist', 400)
+                throw new Error(errors.FILESYSTEM, `Unknown destination ${location}.`, 'Location doesnt exist', 406)
         }
     }
 
@@ -111,7 +111,7 @@ export class FileSystemRepository {
                     await RNFS.unlink(path)
         }
         catch (er) {
-            throw new Error(errors.FILESYSTEM, `Unable to delete ${fileName} in direcory ${directory}`, er, 410)
+            throw new Error(errors.FILESYSTEM, `Unable to delete ${fileName} in direcory ${directory}`, er, 407)
         }
     }
 
@@ -120,7 +120,7 @@ export class FileSystemRepository {
             return await RNFS.readFile(path)
         }
         catch (er) {
-            throw new Error(errors.FILESYSTEM, `Unable to read at ${path}`, er, 418)
+            throw new Error(errors.FILESYSTEM, `Unable to read at ${path}`, er, 408)
         }
     }
 
@@ -138,7 +138,7 @@ export class FileSystemRepository {
             return await RNFS.stat(path)
         }
         catch (er) {
-            throw new Error(errors.FILESYSTEM, `Unable to get stats of ${path}`, er, 419)
+            throw new Error(errors.FILESYSTEM, `Unable to get stats of ${path}`, er, 410)
         }
     }
 
@@ -148,7 +148,7 @@ export class FileSystemRepository {
             return await RNFS.readDir(dir)
         }
         catch (er) {
-            throw new Error(errors.FILESYSTEM, `Unable to read directory at ${dir}`, er, 419)
+            throw new Error(errors.FILESYSTEM, `Unable to read directory at ${dir}`, er, 411)
         }
     }
 
@@ -158,7 +158,7 @@ export class FileSystemRepository {
             await RNFS.unlink(path)
         }
         catch (er) {
-            throw new Error(errors.FILESYSTEM, `Unable to delete file/directory at ${path}`, er, 410)
+            throw new Error(errors.FILESYSTEM, `Unable to delete file/directory at ${path}`, er, 407)
         }
     }
 
@@ -167,7 +167,7 @@ export class FileSystemRepository {
             await RNFS.scanFile(path)
         }
         catch (er) {
-            throw new Error(errors.FILESYSTEM, `Scan of ${path} failed`, er, 422)
+            throw new Error(errors.FILESYSTEM, `Scan of ${path} failed`, er, 410)
         }
     }
 }
