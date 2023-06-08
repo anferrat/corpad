@@ -5,11 +5,15 @@ import { errorHandler } from "../../../helpers/error_handler"
 import { resetCurrentSurveySettings, setSurveySaving, updateCurrentSurveySettings, updateLoader, updateSession } from "../../../store/actions/settings"
 import { hapticMedium } from "../../../native_libs/haptics"
 import { getFormattedDate } from "../../../helpers/functions"
+import { MultimeterTypeLabels } from "../../../constants/labels"
 
 const useSurveyManager = ({ hideSheet }) => {
     const { fileName, savingInProgress, lastSyncTime } = useSelector(state => state.settings.currentSurvey)
+    const { connected, paired, multimeterType } = useSelector(state => state.settings.activeMultimeter)
     const dispatch = useDispatch()
     const syncTimeLabel = (lastSyncTime === null ? 'Never saved' : `Last synced: ${getFormattedDate(lastSyncTime)}`)
+
+    const multimeterLablel = paired ? (`${connected ? 'Connected' : 'Disconnected'} | ${MultimeterTypeLabels[multimeterType]}`) : null
 
     const surveyManagerErroHandler = useCallback((error, message) => {
         if (error === 302)
@@ -47,7 +51,10 @@ const useSurveyManager = ({ hideSheet }) => {
         saveSurveyHandler,
         saveAndResetSurveyHandler,
         savingInProgress,
-        syncTimeLabel
+        syncTimeLabel,
+        multimeterLablel,
+        connected,
+        paired
     }
 }
 

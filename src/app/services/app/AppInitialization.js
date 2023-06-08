@@ -1,26 +1,34 @@
+import { MultimeterInitialization } from "../survey/other/multimeter/MultimeterInitialization"
+
 export class AppInitialization {
-    constructor(currentSurveyStatusService, networkService, authorizationService, surveyRepo, defaultNamesInitializationService, settingRepo, openExternalSurveyService, resetSettingsService) {
+    constructor(currentSurveyStatusService, networkService, authorizationService, surveyRepo, bluetoothRepo, defaultNamesInitializationService, settingRepo, openExternalSurveyService, settingInitializationService, databaseInitializationService) {
         this.currentSurveyStatusService = currentSurveyStatusService
         this.networkService = networkService
         this.authorizationService = authorizationService
         this.surveyRepo = surveyRepo
+        this.multimeterInitializationService = new MultimeterInitialization(bluetoothRepo, settingRepo)
         this.defaultNamesInitializationService = defaultNamesInitializationService
         this.settingRepo = settingRepo
         this.openExternalSurveyService = openExternalSurveyService
-        this.resetSettingsService = resetSettingsService
+        this.settingInitializationService = settingInitializationService
+        this.databaseInitializationService = databaseInitializationService
     }
 
     async execute(initialUrl) {
-        //Create tables if not existed
-        await this.surveyRepo.init()
-        //Get settings, or reset the ones are not found 
-        const settings = await this.resetSettingsService.execute()
+        //Creates tables, updates old tables to current schema
+        await this.databaseInitializationService.execute()
+
+        //Get settings, reset the ones are not found.
+        const settings = await this.settingInitializationService.execute()
+
+        //Initialize bluetooth module
+        await this.multimeterInitializationService.execute()
 
         let [{ isLoaded, syncTime, name, fileName, isCloud }, isInternetOn, { isSigned, userName }] = await Promise.all([
             this.currentSurveyStatusService.execute(),
             this.networkService.checkConnection(),
             this.authorizationService.checkSignInStatus(),
-            this.defaultNamesInitializationService.execute()
+            this.defaultNamesInitializationService.execute(),
         ])
 
         if (isLoaded) {
@@ -55,7 +63,8 @@ export class AppInitialization {
             isSigned,
             userName,
             isInternetOn,
-            onboarding: settings.onboarding
+            onboarding: settings.onboarding,
+            multimeter: settings.multimeter,
         }
     }
 }

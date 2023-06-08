@@ -9,7 +9,9 @@ export class AppSettings {
         fileName,
         cloudId,
         lastSync,
-        onboarding) {
+        onboarding,
+        multimeter,
+    ) {
         this.pipelineNameAsDefault = pipelineNameAsDefault
         this.defaultPotentialUnit = defaultPotentialUnit
         this.autoCreatePotentials = autoCreatePotentials
@@ -20,22 +22,8 @@ export class AppSettings {
         this.cloudId = cloudId
         this.lastSync = lastSync
         this.onboarding = onboarding
-        this.updated = []
-    }
-
-    getOnboarding() {
-        if (this.onboarding)
-            JSON.parse(this.onboarding)
-        else return null
-    }
-
-    updateSettings(settings) {
-        Object.keys(settings).forEach(key => {
-            if (this.hasOwnProperty(key)) {
-                this[key] = settings.key
-                this.updated.push(key)
-            }
-        })
+        this.multimeter = multimeter
+        this.updated = [] //probably not used
     }
 }
 

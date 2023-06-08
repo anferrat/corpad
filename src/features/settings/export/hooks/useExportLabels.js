@@ -80,8 +80,10 @@ const useExportLabels = (navigateToExportItem) => {
             dispatch(updateLoader(false, null, null))
             dispatch(setExportModal(true, response, FileMimeTypes.CSV))
         }
-        else
+        else {
+            errorHandler(status)
             dispatch(updateLoader(false, null, null))
+        }
     }, [dispatch, navigateToExportItem, itemType, sorting, itemProperties, exportPotentials, referenceCellId, potentialTypeIdList, selectedSubitemTypes, pipelineIdList, groupPotentialsByPipeline, subitemProperties])
 
     return {

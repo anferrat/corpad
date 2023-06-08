@@ -3,20 +3,24 @@ import { Divider } from '@ui-kitten/components'
 import { View, StyleSheet } from 'react-native'
 import ListItem from './components/ListItemMenu'
 import useSurveyManager from './hooks/useSurveyManager'
-import { control } from '../../styles/colors'
+import { basic, control, success } from '../../styles/colors'
+import { ItemStatuses } from '../../constants/global'
 
 
-export const MenuSheet = React.memo(({ closeSheet, navigateToCalculatorList, navigateToExport, navigateToSettings }) => {
+export const MenuSheet = React.memo(({ closeSheet, navigateToCalculatorList, navigateToExport, navigateToSettings, navigateToMultimeter }) => {
 
-    const { saveSurveyHandler, saveAndResetSurveyHandler, savingInProgress, syncTimeLabel } = useSurveyManager({ hideSheet: closeSheet })
+    const { saveSurveyHandler, saveAndResetSurveyHandler, savingInProgress, syncTimeLabel, multimeterLablel, paired, connected } = useSurveyManager({ hideSheet: closeSheet })
 
     return (
         <View style={styles.mainView}>
             <ListItem
-                title='Corrosion calculator'
-                icon='calculator'
-                pack='cp'
-                onPress={navigateToCalculatorList} />
+                title='Multimeter'
+                subtitle={multimeterLablel}
+                icon='radio'
+                onPress={navigateToMultimeter}
+                subtitleIcon={paired ? 'color-circle' : null}
+                subtitleIconPack='cp'
+                subtitleIconColor={connected ? success : basic} />
             <ListItem
                 title='Export survey'
                 icon='download-outline'
@@ -31,7 +35,7 @@ export const MenuSheet = React.memo(({ closeSheet, navigateToCalculatorList, nav
                 disabled={savingInProgress}
                 title='Save changes and exit'
                 onPress={saveAndResetSurveyHandler}
-                status='danger'
+                status={ItemStatuses.BAD}
                 icon='log-out' />
             <Divider />
             <ListItem title='Settings' icon='settings-outline' onPress={navigateToSettings} />

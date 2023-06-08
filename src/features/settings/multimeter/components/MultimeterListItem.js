@@ -1,21 +1,23 @@
-import React from "react"
-import { View, StyleSheet, Pressable } from "react-native"
+import React, { useCallback } from "react"
+import { View, StyleSheet, Pressable, ActivityIndicator } from "react-native"
 import { Icon, Text } from "@ui-kitten/components"
-import { basic, basic200, basic300, primary } from '../../../../styles/colors'
+import { basic300, primary } from '../../../../styles/colors'
 import { androidRipple } from "../../../../styles/styles"
-import IconButton from '../../../../components/IconButton'
-import { ReferenceCellTypeLabels, ReferenceCellCodeLabels } from "../../../../constants/labels"
+import { MultimeterTypeLabels } from "../../../../constants/labels"
 
-const MultimeterListItem = ({ selected, updateMain, name, rcType, deleteReference, id }) => {
 
+const MultimeterListItem = ({ id, name, type, pair, pairing }) => {
+    const onPress = useCallback(() => {
+        pair(id, name, type)
+    }, [id, name, type, pair])
     return (
         <Pressable
-            style={selected ? styles.mainViewChecked : styles.mainView}
+            onPress={onPress}
+            style={styles.mainView}
             android_ripple={androidRipple}>
             <View style={styles.titleView}>
                 <Icon
-                    name='RE'
-                    pack='cp'
+                    name='bluetooth'
                     fill={primary}
                     style={styles.icon} />
                 <View>
@@ -26,21 +28,13 @@ const MultimeterListItem = ({ selected, updateMain, name, rcType, deleteReferenc
                     <Text
                         category='s2'
                         appearance='hint'>
-                        {`${ReferenceCellTypeLabels[rcType]} (${ReferenceCellCodeLabels[rcType]})`}
+                        {MultimeterTypeLabels[type]}
                     </Text>
                 </View>
             </View>
-            {selected ?
-                <Icon
-                    fill={primary}
-                    style={styles.check}
-                    name='checkmark-circle-2' />
-                : <IconButton
-                    iconName='close-circle'
-                    color={basic}
-                    size='small'
-                    onPress={onDeleteHandler} />
-            }
+            {pairing ?
+                <ActivityIndicator color={primary} size={'small'} />
+                : null}
         </Pressable>
     )
 }
@@ -58,18 +52,6 @@ const styles = StyleSheet.create({
         marginBottom: 8,
         borderColor: basic300,
     },
-    mainViewChecked: {
-        height: 60,
-        flexDirection: "row",
-        alignItems: 'center',
-        backgroundColor: basic200,
-        padding: 12,
-        borderWidth: 1,
-        borderRadius: 6,
-        marginBottom: 8,
-        borderColor: basic300,
-    },
-
     titleView: {
         flexDirection: 'row',
         flex: 1,
@@ -78,12 +60,7 @@ const styles = StyleSheet.create({
     icon: {
         marginRight: 12,
         marginLeft: 6,
-        width: 18,
-        height: 18
-    },
-    check: {
-        width: 20,
-        height: 20,
-        marginHorizontal: 8
+        width: 25,
+        height: 25
     }
 })

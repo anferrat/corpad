@@ -43,3 +43,4 @@ export const activity = (props) => <ActivityIndicator color={props.style.tintCol
 export const listIcon = (props) => <Icon name='list' {...props} />
 export const emptyBox = (props) => <Icon name='square-outline' {...props} />
 export const checkedBox = (props) => <Icon name='checkmark-square-2-outline' {...props} />
+export const scanIcon = (props) => <Icon name='bluetooth' {...props} />

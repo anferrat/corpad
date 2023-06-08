@@ -1,4 +1,4 @@
-import { ItemTypes, SubitemTypes, PipeDiameters, WireColors, TestPointTypes, PermanentPotentialTypes, SortingOptions, ItemStatuses, PipeSchedules, WireGauges, CurrentUnits, AreaUnits, CurrentDensityUnits, FactorUnits, PotentialUnits, AnodeMaterials, ReferenceCellTypes, IsolationTypes, CouponTypes, PipelineMaterials, PipelineProducts, PowerSources, TapOptions, CoarseFineOptions, ExportItemProperties, ExportSubitemProperties, CalculatorTypes, PipelineCoating, IsolationShorted } from "./global"
+import { ItemTypes, SubitemTypes, PipeDiameters, WireColors, TestPointTypes, PermanentPotentialTypes, SortingOptions, ItemStatuses, PipeSchedules, WireGauges, CurrentUnits, AreaUnits, CurrentDensityUnits, FactorUnits, PotentialUnits, AnodeMaterials, ReferenceCellTypes, IsolationTypes, CouponTypes, PipelineMaterials, PipelineProducts, PowerSources, TapOptions, CoarseFineOptions, ExportItemProperties, ExportSubitemProperties, CalculatorTypes, PipelineCoating, IsolationShorted, MultimeterTypes, TimeUnits } from "./global"
 
 export const DefaultNames = Object.freeze({
     [ItemTypes.TEST_POINT]: 'TP',
@@ -377,4 +377,15 @@ export const CalculatorTypeFileNameLabels = Object.freeze({
     [CalculatorTypes.REFERENCE_CELL]: 'Ref_cell_conversion',
     [CalculatorTypes.SHUNT]: 'Shunt_current',
     [CalculatorTypes.WENNER]: 'Wenner_test'
+})
+
+export const MultimeterTypeLabels = Object.freeze({
+    [MultimeterTypes.POKIT]: 'Pokit multimeter'
+})
+
+export const TimeUnitLabels = Object.freeze({
+    [TimeUnits.SECONDS]: 's',
+    [TimeUnits.MILISECONDS]: 'ms',
+    [TimeUnits.MINUTES]: 'm',
+    [TimeUnits.HOURS]: 'hr'
 })

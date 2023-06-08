@@ -15,7 +15,8 @@ export const SettingsList = () => {
         navigateToExportedFiles,
         navigateToInfo,
         navigateToReferenceCells,
-        navigateToMultimeter
+        navigateToMultimeter,
+        navigateToCalculator,
     } = useSettings()
     return (
         <ScrollView
@@ -44,7 +45,7 @@ export const SettingsList = () => {
                 onPress={navigateToPotentials} />
             <ListItem
                 icon={'download'}
-                title={'Export to spreadsheet'}
+                title={'Export survey'}
                 subtitle={'Export data from survey to a spreadsheet file and save it to your device'}
                 onPress={navigateToExport} />
             <Text
@@ -58,10 +59,16 @@ export const SettingsList = () => {
                 subtitle={'Check app version, legal information and support contact'}
                 onPress={navigateToAbout} />
             <ListItem
-                icon={'bluetooth'}
+                icon={'radio'}
                 title={'Digital multimeter'}
                 subtitle={'Control bluetooth multimeter settings'}
                 onPress={navigateToMultimeter} />
+            <ListItem
+                icon={'calculator'}
+                pack='cp'
+                title={'Corrosion calculator'}
+                subtitle={'Execute number of cathodic protection calculations and export results into .csv files'}
+                onPress={navigateToCalculator} />
             <ListItem
                 icon={'people-outline'}
                 title={'Default names'}
@@ -70,7 +77,7 @@ export const SettingsList = () => {
             <ListItem
                 icon={'file-text-outline'}
                 title={'Exported files'}
-                subtitle={'View exported CSV and KML files, delete or share them with different apps'}
+                subtitle={'View exported .csv and .kml files, delete or share them with different apps'}
                 onPress={navigateToExportedFiles} />
             <Text
                 style={styles.title}

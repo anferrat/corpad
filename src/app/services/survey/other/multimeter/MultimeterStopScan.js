@@ -1,6 +1,6 @@
 export class MultimeterStopScan {
     constructor(bluetoothRepo) {
-        this.bluetoothrepo = bluetoothRepo
+        this.bluetoothRepo = bluetoothRepo
     }
 
     async execute() {
