@@ -52,7 +52,7 @@ script: '2' //super or sub formatted text string
 }
 */
 
-const toString = (value) => value === null ? '' : value.toString()
+const toString = (value) => value === null || value === undefined ? '' : value.toString()
 
 const UnitText = (props) => {
     const { children, disabled } = props

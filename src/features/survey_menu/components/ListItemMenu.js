@@ -1,25 +1,29 @@
 import React from 'react'
 import { Text, Icon } from '@ui-kitten/components'
 import { StyleSheet, Pressable, View, ActivityIndicator } from 'react-native'
-import { primary, danger, basic, success } from '../../../styles/colors'
+import { basic, primary, StatusColors } from '../../../styles/colors'
 import { androidRipple } from '../../../styles/styles'
 
 
-const ListItem = (props) => {
-    const color = React.useMemo(() => props.status === 'danger' ? danger : (props.status === 'basic' ? basic : (props.status === 'success' ? success : primary)), [props.status])
+const ListItem = ({ status, icon, pack, title, subtitle, onPress, disabled, subtitleIcon, subtitleIconPack, subtitleIconColor }) => {
+    const color = StatusColors[status] ?? primary
     return (
         <Pressable
-            disabled={props.disabled}
+            disabled={disabled}
             android_ripple={androidRipple}
             style={styles.pressable}
-            onPress={props.onPress}>
-            {props.icon === 'activityIndicator' ? <ActivityIndicator style={styles.icon} size='small' color={color} /> :
-                <Icon name={props.icon} pack={props.pack} style={styles.icon} fill={color} />
+            onPress={onPress}>
+            {icon === 'activityIndicator' ? <ActivityIndicator style={styles.icon} size='small' color={color} /> :
+                <Icon name={icon} pack={pack} style={styles.icon} fill={color} />
             }
             <View>
-                <Text category='s1' style={{ fontWeight: props.selected ? 'bold' : 'normal' }}>{props.title}</Text>
-                {props.subtitle ?
-                    <Text category='s2' appearance='hint'>{props.subtitle}</Text> : null}
+                <Text category='s1'>{title}</Text>
+                {subtitle ?
+                    <View style={styles.subtitleView}>
+                        {subtitleIcon ? <Icon name={subtitleIcon} fill={subtitleIconColor ?? basic} style={styles.subtitleIcon} pack={subtitleIconPack ?? 'cp'} /> : null}
+                        <Text category='s2' appearance='hint'>{subtitle}</Text>
+                    </View> : null}
+
             </View>
         </Pressable>
     )
@@ -41,4 +45,14 @@ const styles = StyleSheet.create({
         width: 25,
         marginRight: 24
     },
+    subtitleView: {
+        alignItems: 'center',
+        marginTop: 3,
+        flexDirection: 'row',
+    },
+    subtitleIcon: {
+        width: 14,
+        height: 14,
+        marginRight: 4,
+    }
 })

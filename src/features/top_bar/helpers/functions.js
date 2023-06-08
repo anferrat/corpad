@@ -35,6 +35,8 @@ const getTitleBySettingType = (setting) => {
             return 'About'
         case 'licenses':
             return 'Licenses'
+        case 'multimeter':
+            return 'Digital multimeter'
         default:
             return 'Settings'
     }

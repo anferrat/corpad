@@ -68,6 +68,11 @@ const useBottomSheetContent = () => {
         closeSheet()
     }, [navigation, closeSheet])
 
+    const navigateToMultimeter = useCallback(() => {
+        navigation.navigate('SettingDetails', { setting: 'multimeter' })
+        closeSheet()
+    }, [navigation, closeSheet])
+
     return {
         selectedRoute,
         navigateToImport,
@@ -76,6 +81,7 @@ const useBottomSheetContent = () => {
         navigateToExport,
         navigateToExportedFiles,
         navigateToCalculatorList,
+        navigateToMultimeter,
         closeSheet
     }
 }

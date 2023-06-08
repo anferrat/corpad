@@ -12,7 +12,7 @@ import Route from './components/Route'
 //implemented as single screen, possible to have embeded navigator inside
 
 const BottomSheetContent = () => {
-    const { selectedRoute, navigateToImport, navigateToEdit, navigateToSettings, navigateToExport, navigateToExportedFiles, navigateToCalculatorList, closeSheet } = useBottomSheetContent()
+    const { selectedRoute, navigateToImport, navigateToEdit, navigateToSettings, navigateToExport, navigateToExportedFiles, navigateToCalculatorList, navigateToMultimeter, closeSheet } = useBottomSheetContent()
     return (
         <Router
             selectedRoute={selectedRoute}>
@@ -26,6 +26,7 @@ const BottomSheetContent = () => {
             <Route
                 routeKey='MENU'>
                 <MenuSheet
+                    navigateToMultimeter={navigateToMultimeter}
                     navigateToExport={navigateToExport}
                     navigateToCalculatorList={navigateToCalculatorList}
                     navigateToSettings={navigateToSettings}

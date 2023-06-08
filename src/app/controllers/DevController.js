@@ -1,18 +1,18 @@
+import { AppRepository } from "../repository/sqlite/AppRepository"
 import { PipelineRepository } from "../repository/sqlite/PipelineRepository"
 import { PotentialRepository } from "../repository/sqlite/PotentialRepository"
 import { PotentialTypeRepository } from "../repository/sqlite/PotentialTypeRepository"
 import { ReferenceCellRepository } from "../repository/sqlite/ReferenceCellRepository"
 import { SubitemRepository } from "../repository/sqlite/SubitemRepository"
-import { SurveyRepository } from "../repository/sqlite/SurveyRepository"
 import { TestPointRepository } from "../repository/sqlite/TestPointRepository"
 import { GenerateItem } from "../services/survey/other/GenerateItemDev"
 import { Controller } from "../utils/Controller"
 
 
 class DevController extends Controller {
-    constructor(testPointRepo, subitemRepo, potentialRepo, pipelineRepo, potentialTypeRepo, referenceCellRepo, surveyRepo) {
+    constructor(testPointRepo, subitemRepo, potentialRepo, pipelineRepo, potentialTypeRepo, referenceCellRepo, appRepo) {
         super()
-        this.surveyRepo = surveyRepo
+        this.appRepo = appRepo
         this.generateItemService = new GenerateItem(testPointRepo, subitemRepo, potentialRepo, pipelineRepo, potentialTypeRepo, referenceCellRepo)
     }
 
@@ -25,7 +25,7 @@ class DevController extends Controller {
 
     resetDatabase(onError = null, onSuccess = null) {
         return super.controllerHandler(onSuccess, onError, 100, async () => {
-            return await this.surveyRepo.fullResetDevOnly()
+            return await this.appRepo.fullResetDevOnly()
         })
     }
 
@@ -38,7 +38,7 @@ const devController = new DevController(
     new PipelineRepository(),
     new PotentialTypeRepository(),
     new ReferenceCellRepository(),
-    new SurveyRepository()
+    new AppRepository()
 )
 
 

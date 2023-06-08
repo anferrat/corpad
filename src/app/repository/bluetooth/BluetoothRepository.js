@@ -27,12 +27,31 @@ export class BluetoothRepository {
         }
     }
 
-    async connect(deviceId) {
+    async stopScan() {
         try {
-            return await BleManager.connect(deviceId)
+            return await BleManager.stopScan()
         }
         catch (er) {
-            throw new Error(errors.BLUETOOTH, 'Unable to connect to the device', er, 802)
+            throw new Error(errors.BLUETOOTH, 'Unable to stop scan for bluetooth devices', er, 817)
+        }
+    }
+
+    async connect(deviceId) {
+        try {
+            await BleManager.connect(deviceId)
+        }
+        catch (er) {
+            // connect request fails silently
+            // throw new Error(errors.BLUETOOTH, 'Unable to connect to the device', er, 802)
+        }
+    }
+
+    async disconnect(deviceId) {
+        try {
+            await BleManager.disconnect(deviceId)
+        }
+        catch (er) {
+            throw new Error(errors.BLUETOOTH, 'Unable to disconnect from the device', er, 819)
         }
     }
 
@@ -45,7 +64,7 @@ export class BluetoothRepository {
         }
     }
 
-    async startNotificaton(deviceId, serviceUUID, characteristicUUID) {
+    async startNotification(deviceId, serviceUUID, characteristicUUID) {
         try {
             return await BleManager.startNotification(deviceId, serviceUUID, characteristicUUID)
         }
@@ -68,6 +87,7 @@ export class BluetoothRepository {
             return await BleManager.write(deviceId, serviceUUID, characteristicUUID, data, maxByteSize)
         }
         catch (er) {
+            console.log(er)
             throw new Error(errors.BLUETOOTH, 'Unable to write to charachteristic', er, 807)
         }
     }
@@ -105,10 +125,10 @@ export class BluetoothRepository {
 
     async getConnectedDevices(serviceUUIDs) {
         try {
-            const permission = await PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS['BLUETOOTH_CONNECT'])
-            if (permission === PermissionsAndroid.RESULTS.GRANTED)
+            const permission = await PermissionsAndroid.requestMultiple(['android.permission.BLUETOOTH_ADVERTISE', 'android.permission.BLUETOOTH_CONNECT', 'android.permission.BLUETOOTH_SCAN'])
+            //if (permission === PermissionsAndroid.RESULTS.GRANTED)
                 return await BleManager.getConnectedPeripherals(serviceUUIDs)
-            else throw new Error(errors.PERMISSION, 'Bluetooth permission is needed', '', 903)
+            //else throw new Error(errors.PERMISSION, 'Bluetooth permission is needed', '', 903)
         }
         catch (er) {
             throw new Error(errors.BLUETOOTH, 'Unable to get list of connected devices', er, 811)
@@ -124,9 +144,11 @@ export class BluetoothRepository {
         }
     }
 
-    bluetoothStateListener(callback) {
+    bluetoothStatusListener(callback) {
         try {
-            return bleManagerEmitter.addListener('BleManagerDidUpdateState', ({ state }) => callback(state))
+            return bleManagerEmitter.addListener('BleManagerDidUpdateState', ({ state }) => {
+                callback(state === 'on')
+            })
         }
         catch (er) {
             throw new Error(errors.BLUETOOTH, 'Unable to detect bluetoth state change', er, 813)
@@ -142,10 +164,29 @@ export class BluetoothRepository {
         }
     }
 
+    connectedDevicesListener(callback) {
+        try {
+            return bleManagerEmitter.addListener('BleManagerConnectPeripheral', ({ peripheral }) => callback(peripheral))
+        }
+        catch (er) {
+            throw new Error(errors.BLUETOOTH, 'Unable to listen for connected devices', er, 818)
+        }
+    }
+
+    disconnectedDevicesListener(callback) {
+        try {
+            return bleManagerEmitter.addListener('BleManagerDisconnectPeripheral', ({ peripheral }) => callback(peripheral))
+        }
+        catch (er) {
+            throw new Error(errors.BLUETOOTH, 'Unable to listen for disconnected devices', er, 821)
+        }
+    }
+
     discoverPeripheralListener(callback) {
         try {
-            return bleManagerEmitter.addListener('BleManagerDiscoverPeripheral', ({ id, name, rssi, advertising: { serviceUUIDs, isConnectable } }) => { 
-                callback(id, name, rssi, serviceUUIDs, isConnectable) })
+            return bleManagerEmitter.addListener('BleManagerDiscoverPeripheral', ({ id, name, rssi, advertising: { serviceUUIDs, isConnectable } }) => {
+                callback(id, name, rssi, serviceUUIDs, isConnectable)
+            })
         }
         catch (er) {
             throw new Error(errors.BLUETOOTH, 'Unable to listen for new scanned device', er, 815)
@@ -154,12 +195,14 @@ export class BluetoothRepository {
 
     newCharacteristicValueListener(callback) {
         try {
-            return bleManagerEmitter.addListener("BleManagerDidUpdateValueForCharacteristic", ({ value, peripheral, characteristic, service }) => callback(value, peripheral, service, characteristic))
+            return bleManagerEmitter.addListener("BleManagerDidUpdateValueForCharacteristic", (data) => {
+                console.log(data)
+                const { value, peripheral, characteristic, service } = data
+                callback({value, peripheral, service, characteristic})
+            })
         }
         catch (er) {
             throw new Error(errors.BLUETOOTH, 'Unable to listen for new characteristic values', er, 816)
         }
     }
-
-
 }

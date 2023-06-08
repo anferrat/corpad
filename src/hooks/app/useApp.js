@@ -2,9 +2,11 @@
 import { useState, useRef, useEffect } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import useOnboardingScreen from "./useOnboardingScreen"
-import { addFileUrlListener, addNetworkStatusListener, initializeApp } from "../../app/controllers/AppController"
-import { resetCurrentSurveySettings, setSettingsOnAppLoad, setSurveySettings, updateLoader, updateNetworkStatus } from "../../store/actions/settings"
+import { addBluetoothStatusListener, addFileUrlListener, addNetworkStatusListener, initializeApp } from "../../app/controllers/AppController"
+import { resetCurrentSurveySettings, setActiveMultimeterStatus, setBluetoothStatus, setSettingsOnAppLoad, setSurveySettings, updateLoader, updateNetworkStatus } from "../../store/actions/settings"
 import { errorHandler } from "../../helpers/error_handler"
+import { SurveyLoadingStatuses } from "../../constants/global"
+import { addMultimeterStatusListener } from "../../app/controllers/MultimeterController"
 
 const useApp = () => {
 
@@ -27,9 +29,9 @@ const useApp = () => {
     //fileUrlListener - listens for opened survey files from outside the app and loads them into database
     const urlListener = addFileUrlListener(
       (status) => {
-        if (status === 'saving')
+        if (status === SurveyLoadingStatuses.SAVING)
           dispatch(updateLoader(true, 'Saving survey', null))
-        else if (status === 'loading') {
+        else if (status === SurveyLoadingStatuses.LOADING) {
           dispatch(resetCurrentSurveySettings())
           dispatch(updateLoader(true, 'Loading file', null))
         }
@@ -46,13 +48,18 @@ const useApp = () => {
 
     const networkStatus = addNetworkStatusListener(isInternetOn => dispatch(updateNetworkStatus(isInternetOn)))
 
+    const bluetoothStatus = addBluetoothStatusListener(isBluetoothOn => dispatch(setBluetoothStatus(isBluetoothOn)))
+
+    const multimeterListener = addMultimeterStatusListener(({ isConnected }) => dispatch(setActiveMultimeterStatus(isConnected)))
+
+
     //onAppLoad - sets up initial data for database, logs in with Google Drive, checks if survey already loaded
     const onAppLoad = async () => {
       componentMounted.current = true
       const { status, response } = await initializeApp()
       if (status === 200) {
-        const { isLoaded, syncTime, name, fileName, isCloud, isSigned, userName, isInternetOn, onboarding } = response
-        dispatch(setSettingsOnAppLoad(isLoaded, syncTime, name, fileName, isCloud, isSigned, userName, isInternetOn, onboarding))
+        const { isLoaded, syncTime, name, fileName, isCloud, isSigned, userName, isInternetOn, onboarding, multimeter } = response
+        dispatch(setSettingsOnAppLoad(isLoaded, syncTime, name, fileName, isCloud, isSigned, userName, isInternetOn, onboarding, multimeter))
         if (componentMounted.current)
           setLoading(false)
       }
@@ -60,8 +67,14 @@ const useApp = () => {
     onAppLoad()
     return () => {
       componentMounted.current = false
-      urlListener.remove()
-      networkStatus()
+      if (urlListener)
+        urlListener.remove()
+      if (networkStatus)
+        networkStatus()
+      if (bluetoothStatus.response)
+        bluetoothStatus.response.remove()
+      if (multimeterListener.response)
+        multimeterListener.response()
     }
   }, [])
 

@@ -1,5 +1,5 @@
 
-import { UPDATE_SETTING, LOAD_SETTINGS, SET_SURVEY_SAVING_STATUS, LOAD_SURVEY_SETTINGS, RESET_CURRENT_SURVEY_SETTINGS, LOAD_SESSION_STATE, UPDATE_ONBOARDING, SET_EXPORT_MODAL, UPDATE_LOADER, UPDATE_SESSION, UPDATE_NETWORK_STATUS, SET_SESSION_MODAL_VISIBLE, UPDATE_CURRENT_SURVEY_SETTINGS, SET_SETTINGS_ON_APP_LOAD, SET_SURVEY_SETTINGS, UPDATE_BOTTOM_SHEET_CONTENT, SET_BLUETOOTH_SCANNING, SET_BLUETOOTH_STATUS, SET_ACTIVE_MULTIMETER } from "../actions/settings"
+import { UPDATE_SETTING, LOAD_SETTINGS, SET_SURVEY_SAVING_STATUS, LOAD_SURVEY_SETTINGS, RESET_CURRENT_SURVEY_SETTINGS, LOAD_SESSION_STATE, UPDATE_ONBOARDING, SET_EXPORT_MODAL, UPDATE_LOADER, UPDATE_SESSION, UPDATE_NETWORK_STATUS, SET_SESSION_MODAL_VISIBLE, UPDATE_CURRENT_SURVEY_SETTINGS, SET_SETTINGS_ON_APP_LOAD, SET_SURVEY_SETTINGS, UPDATE_BOTTOM_SHEET_CONTENT, SET_BLUETOOTH_SCANNING, SET_BLUETOOTH_STATUS, SET_ACTIVE_MULTIMETER, SET_ACTIVE_MULTIMETER_STATUS } from "../actions/settings"
 
 const initialState = {
     bottomSheetContent: {  //BottomSheet component
@@ -25,6 +25,7 @@ const initialState = {
         id: null,
         paired: false,
         name: null,
+        multimeterType: null,
         connected: false,
     },
     bluetooth: {
@@ -95,7 +96,8 @@ const settings = (state = initialState, action) => {
                 },
                 loader: initialState.loader
             }
-        case SET_SETTINGS_ON_APP_LOAD:
+        case SET_SETTINGS_ON_APP_LOAD: {
+            const multimeterPaired = action.multimeter.peripheralId !== null
             return {
                 ...state,
                 currentSurvey: {
@@ -120,8 +122,16 @@ const settings = (state = initialState, action) => {
                     editReferenceCell: action.onboarding.editReferenceCell,
                     potentialTypes: action.onboarding.potentialTypes,
                     versionOnboarding: action.onboarding.versionOnboarding
+                },
+                activeMultimeter: {
+                    paired: multimeterPaired,
+                    id: multimeterPaired ? action.multimeter.peripheralId : null,
+                    name: multimeterPaired ? action.multimeter.name : null,
+                    multimeterType: multimeterPaired ? action.multimeter.type : null,
+                    connected: false,
                 }
             }
+        }
         case UPDATE_BOTTOM_SHEET_CONTENT:
             return {
                 ...state,
@@ -255,8 +265,16 @@ const settings = (state = initialState, action) => {
                     paired: action.paired,
                     id: action.paired ? action.id : null,
                     name: action.paired ? action.name : null,
-                    connected: action.paired ? action.connected : false,
+                    connected: action.connected === undefined ? state.activeMultimeter.connected : action.connected,
                     multimeterType: action.paired ? action.multimeterType : null
+                }
+            }
+        case SET_ACTIVE_MULTIMETER_STATUS:
+            return {
+                ...state,
+                activeMultimeter: {
+                    ...state.activeMultimeter,
+                    connected: action.connected
                 }
             }
         default:

@@ -1,52 +1,46 @@
-import { useCallback, useState, useEffect } from 'react'
-import { useDispatch, useSelector } from "react-redux"
-import { startMultimeterScan, stopMultimeterScan, multimeterScanListener, multimeterStopScanListener } from '../../../../app/controllers/MultimeterController'
-import { setBluetoothScanning } from '../../../../store/actions/settings'
+import { useState, useCallback, useEffect, useRef } from 'react'
+import { getMultimeterSettings } from '../../../../app/controllers/MultimeterController'
+import { errorHandler } from '../../../../helpers/error_handler'
 
 const useMultimeterSettings = () => {
-    const dispatch = useDispatch()
-    const activeMultimiter = useSelector(state => state.settings.activeMultimeter)
-    const isBluetoothOn = useSelector(state => state.settings.bluetooth.isBluetoothOn)
-    const scanning = useSelector(state => state.settings.bluetooth.scanning)
-    const [scannedDevices, setScannedDevices] = useState([])
-
-
-    const scanDevices = useCallback(async () => {
-        if (!scanning) {
-
-            const { response, status, errorMessage } = await startMultimeterScan()
-            console.log('Scan started', response, status, errorMessage)
-            if (status === 200) {
-                dispatch(setBluetoothScanning(true))
-            }
-        }
-    }, [scanning])
+    const [onTime, setOnTime] = useState({ value: null, valid: true })
+    const [offTime, setOffTime] = useState({ value: null, valid: true })
+    const [delay, setDelay] = useState({ value: null, valid: true })
+    const [syncMode, setSyncMode] = useState(null)
+    const [loading, setLoading] = useState(true)
+    const componentMounted = useRef(true)
 
     useEffect(() => {
-        const deviceListener = multimeterScanListener((id, name, type, rssi) => {
-            console.log(id, name, type, rssi)
-        })
-
-        console.log('Device ', deviceListener.status, deviceListener.response, deviceListener.errorMessage)
-
-        const stopScan = multimeterStopScanListener(() => {
-            dispatch(setBluetoothScanning(false))
-        })
-        console.log('Stop ', stopScan.status, stopScan.response, stopScan.errorMessage)
-
+        componentMounted.current = true
+        const loadData = async () => {
+            const { status, response } = await getMultimeterSettings()
+            if (status === 200) {
+                const { onTime, offTime, delay, syncMode } = response
+                if (componentMounted.current) {
+                    setOnTime({ value: onTime, valid: true })
+                    setOffTime({ value: offTime, valid: true })
+                    setDelay({ value: delay, valid: true })
+                    setSyncMode(syncMode)
+                    setLoading(false)
+                }
+            }
+            else {
+                errorHandler(status)
+            }
+        }
+        loadData()
         return () => {
-            if (deviceListener.response)
-                deviceListener.response.remove()
-            if (stopScan.response)
-                stopScan.response.remove()
+            componentMounted.current = false
         }
     }, [])
 
     return {
-        scanDevices,
-        scanning
+        onTime,
+        offTime,
+        delay,
+        syncMode,
+        loading
     }
-
 }
 
 export default useMultimeterSettings

@@ -34,6 +34,8 @@ const useSettings = () => {
 
     const navigateToExportedFiles = () => navigateToDetails('exportedFiles')
 
+    const navigateToCalculator = () => navigation.navigate('CalculatorList')
+
     const navigateToInfo = () => navigateToDetails('info')
 
     const navigateToMultimeter = () => navigateToDetails('multimeter')
@@ -50,7 +52,8 @@ const useSettings = () => {
         navigateToExportedFiles,
         navigateToInfo,
         navigateToReferenceCells,
-        navigateToMultimeter
+        navigateToMultimeter,
+        navigateToCalculator
     }
 }
 

@@ -1,5 +1,5 @@
 import { object, string, number, boolean, array, mixed } from 'yup'
-import { SubitemTypes, PipelineMaterials, PipelineProducts, CoarseFineOptions, PowerSources, TapOptions, ItemStatuses, ItemTypes, TestPointTypes, AnodeMaterials, CalculatorTypes, CouponTypes, DisplayedReadingOptions, IsolationTypes, ItemPropertyUpdateTypes, PermanentPotentialTypes, PipeDiameters, PotentialUnits, ReferenceCellTypes, SortingOptions, SubitemPropertyUpdateTypes, WireColors, WireGauges } from '../../constants/global'
+import { SubitemTypes, PipelineMaterials, PipelineProducts, CoarseFineOptions, PowerSources, TapOptions, ItemStatuses, ItemTypes, TestPointTypes, AnodeMaterials, CalculatorTypes, CouponTypes, DisplayedReadingOptions, IsolationTypes, ItemPropertyUpdateTypes, PermanentPotentialTypes, PipeDiameters, PotentialUnits, ReferenceCellTypes, SortingOptions, SubitemPropertyUpdateTypes, WireColors, WireGauges, MultimeterTypes, MultimeterSyncModes, MultimeterCycles } from '../../constants/global'
 import { Error, errors } from "./Error"
 
 export class Validation {
@@ -44,6 +44,9 @@ export class Validation {
     subitemPropertyUpdateType = mixed().oneOf(Object.values(SubitemPropertyUpdateTypes))
     itemPropertyUpdateType = mixed().oneOf(Object.values(ItemPropertyUpdateTypes))
     calculatorType = mixed().oneOf(Object.values(CalculatorTypes))
+    multimeterType = mixed().oneOf([Object.values(MultimeterTypes), null])
+    multimeterSyncMode = mixed().oneOf([Object.values(MultimeterSyncModes)])
+    multimeterFirstCycle = mixed().oneOf([Object.values(MultimeterCycles)])
     side = array().of(this.id)
     validate(value, schema) {
         try {

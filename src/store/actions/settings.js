@@ -18,6 +18,7 @@ export const UPDATE_BOTTOM_SHEET_CONTENT = 'UPDATE_BOTTOM_SHEET_CONTENT'
 export const SET_BLUETOOTH_SCANNING = 'SET_BLUETOOTH_SCANNING'
 export const SET_BLUETOOTH_STATUS = 'SET_BLUETOOTH_STATUS'
 export const SET_ACTIVE_MULTIMETER = 'SET_ACTIVE_MULTIMETER'
+export const SET_ACTIVE_MULTIMETER_STATUS = 'SET_ACTIVE_MULTIMETER_STATUS'
 
 export const updateSetting = (setting, value) => {
     return { type: UPDATE_SETTING, setting: setting, value: value }
@@ -75,16 +76,20 @@ export const setSessionModalVisible = (visible) => {
     return { type: SET_SESSION_MODAL_VISIBLE, visible }
 }
 
-export const setSettingsOnAppLoad = (isLoaded, syncTime, name, fileName, isCloud, isSigned, userName, isInternetOn, onboarding) => {
-    return { type: SET_SETTINGS_ON_APP_LOAD, isLoaded, syncTime, name, fileName, isCloud, isSigned, userName, isInternetOn, onboarding }
+export const setSettingsOnAppLoad = (isLoaded, syncTime, name, fileName, isCloud, isSigned, userName, isInternetOn, onboarding, multimeter) => {
+    return { type: SET_SETTINGS_ON_APP_LOAD, isLoaded, syncTime, name, fileName, isCloud, isSigned, userName, isInternetOn, onboarding, multimeter }
 }
 
 export const updateBottomSheetContent = (itemType, content) => ({
     type: UPDATE_BOTTOM_SHEET_CONTENT, itemType, content
 })
 
-export const setActiveMultimeter = (paired, id, name, connected) => ({
-    type: SET_ACTIVE_MULTIMETER, paired, id, name, connected
+export const setActiveMultimeter = (paired, id, name, multimeterType, connected = undefined) => ({
+    type: SET_ACTIVE_MULTIMETER, paired, id, name, multimeterType, connected
+})
+
+export const setActiveMultimeterStatus = (connected) => ({
+    type: SET_ACTIVE_MULTIMETER_STATUS, connected
 })
 
 export const setBluetoothScanning = (scanning) => ({

@@ -1,9 +1,10 @@
 import { Onboarding } from "../../../entities/survey/other/Onboarding"
 import { AppSettings } from "../../../entities/survey/other/Settings"
-import { PotentialUnits } from "../../../../constants/global"
+import { MultimeterCycles, MultimeterSyncModes, PotentialUnits } from "../../../../constants/global"
+import { MultimeterSettings } from "../../../entities/survey/other/MultimeterSettings"
 
 
-export class ResetSettings {
+export class SettingInitialization {
     constructor(settingRepo) {
         this.settingRepo = settingRepo
     }
@@ -11,8 +12,10 @@ export class ResetSettings {
     async execute() {
         //Takes settings as argument, creates new settings objects and writes to db. undefined values for settings are replaced with standard ones
         const settings = await this.settingRepo.get()
-        const { pipelineNameAsDefault, defaultPotentialUnit, autoCreatePotentials, isSurveyNew, isCloud, originalHash, fileName, cloudId, lastSync, onboarding } = settings
+
+        const { pipelineNameAsDefault, defaultPotentialUnit, autoCreatePotentials, isSurveyNew, isCloud, originalHash, fileName, cloudId, lastSync, onboarding, multimeter } = settings
         const newOnboarding = new Onboarding(null, true, true, true, true, true, true)
+        const newMultimeter = new MultimeterSettings(null, null, null, 4, 1, 100, MultimeterSyncModes.HIGH_LOW, MultimeterCycles.OFF_FIRST)
         const newSettings = new AppSettings(
             pipelineNameAsDefault ?? true,
             defaultPotentialUnit ?? PotentialUnits.MILIVOLTS,
@@ -23,7 +26,8 @@ export class ResetSettings {
             fileName ?? null,
             cloudId ?? null,
             lastSync ?? null,
-            onboarding ?? newOnboarding)
+            onboarding ?? newOnboarding,
+            multimeter ?? newMultimeter)
         await this.settingRepo.update(newSettings)
         return newSettings
     }

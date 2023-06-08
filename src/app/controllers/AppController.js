@@ -1,9 +1,11 @@
 import { SurveyFileConverterInput } from "../converters/survey_file/v1/SurveyFileConverterInput"
 import { SurveyFileConverterOutput } from "../converters/survey_file/v1/SurveyFileConverterOutput"
+import { BluetoothRepository } from "../repository/bluetooth/BluetoothRepository"
 import { GoogleDriveAuthorizationRepository } from "../repository/cloud_drive/GoogleDriveAuthorizationRepository"
 import { GoogleDriveFileSystemRepository } from "../repository/cloud_drive/GoogleDriveFileSystemRepository"
 import { FileSystemRepository } from "../repository/fs/FileSystemRepository"
 import { NetworkRepository } from "../repository/network/NetworkRepository"
+import { AppRepository } from "../repository/sqlite/AppRepository"
 import { DefaultNameRepository } from "../repository/sqlite/DefaultNameRepository"
 import { PipelineRepository } from "../repository/sqlite/PipelineRepository"
 import { PotentialRepository } from "../repository/sqlite/PotentialRepository"
@@ -26,7 +28,8 @@ import { SaveCurrentSurvey } from "../services/survey/manager/SaveCurrentSurvey"
 import { SurveyJsonExport } from "../services/survey/manager/export/json/SurveyJsonExport"
 import { AdvancedJsonImport } from "../services/survey/manager/import/json/AdvancedJsonImport"
 import { SimpleJsonImport } from "../services/survey/manager/import/json/SimpleJsonImport"
-import { ResetSettings } from "../services/survey/other/ResetSettings"
+import { DatabaseInitialization } from "../services/survey/other/DatabaseInitialization"
+import { SettingInitialization } from "../services/survey/other/SettingInitialization"
 import { DefaultNameInitialization } from "../services/survey/other/default_names/DeafultNameInitialization"
 import { SaveCloudSurveyFile } from "../services/survey_file/cloud/SaveCloudSurveyFile"
 import { ReadExternalSurveyFile } from "../services/survey_file/local/ReadExternalSurveyFile"
@@ -35,10 +38,11 @@ import { Controller } from "../utils/Controller"
 import { SurveyFileContentValidation } from "../validation/survey_file_content/v1/SurveyFileContentValidation"
 
 class AppController extends Controller {
-    constructor(surveyRepo, settingRepo, defaultNameRepo, networkService, googleDriveAuthorizationService, testPointRepo, rectifierRepo, pipelineRepo, subitemRepo, potentialTypeRepo, referenceCellRepo, potentialRepo, fileSystemRepo, surveyFileContentValidation, surveyFileConverterInput, surveyFileConverterOutput, cloudFileSystemRepo, warningHandler) {
+    constructor(surveyRepo, settingRepo, appRepo, defaultNameRepo, networkService, googleDriveAuthorizationService, testPointRepo, rectifierRepo, pipelineRepo, subitemRepo, potentialTypeRepo, referenceCellRepo, potentialRepo, fileSystemRepo, bluetoothRepo, surveyFileContentValidation, surveyFileConverterInput, surveyFileConverterOutput, cloudFileSystemRepo, warningHandler) {
         super()
         this.linkingService = new Linking()
         this.networkService = networkService
+        this.bluetoothRepo = bluetoothRepo
         this.currentSurveyStatusService = new GetCurrentSurveyStatus(surveyRepo, settingRepo)
         this.defaultNameInitializationService = new DefaultNameInitialization(defaultNameRepo)
 
@@ -55,9 +59,10 @@ class AppController extends Controller {
 
         this.openExternalSurveyService = new OpenExternalSurvey(this.loadExternalSurveyService, this.saveCurrentSurveyService, warningHandler, this.currentSurveyStatusService, this.resetCurrentSurveyService)
 
-        this.resetSettingsService = new ResetSettings(settingRepo)
+        this.appSettingInitializationService = new SettingInitialization(settingRepo)
+        this.databaseInitializationService = new DatabaseInitialization(appRepo)
 
-        this.appInitializationService = new AppInitialization(this.currentSurveyStatusService, networkService, googleDriveAuthorizationService, surveyRepo, this.defaultNameInitializationService, settingRepo, this.openExternalSurveyService, this.resetSettingsService)
+        this.appInitializationService = new AppInitialization(this.currentSurveyStatusService, networkService, googleDriveAuthorizationService, surveyRepo, bluetoothRepo, this.defaultNameInitializationService, settingRepo, this.openExternalSurveyService, this.appSettingInitializationService, this.databaseInitializationService)
     }
 
 
@@ -81,11 +86,18 @@ class AppController extends Controller {
                 return onInternetStatusChanged(isInternetOn)
             }))
     }
+
+    addBluetoothStatusListener(callback, onError, onSuccess) {
+        return super.callbackHandler(onSuccess, onError, 110, () => {
+            return this.bluetoothRepo.bluetoothStatusListener(callback)
+        })
+    }
 }
 
 const appController = new AppController(
     new SurveyRepository(),
     new SettingRepository(),
+    new AppRepository(),
     new DefaultNameRepository(),
     new NetworkRepository(),
     new GoogleDriveAuthorizationRepository(),
@@ -97,6 +109,7 @@ const appController = new AppController(
     new ReferenceCellRepository(),
     new PotentialRepository(),
     new FileSystemRepository(),
+    new BluetoothRepository(),
     new SurveyFileContentValidation(),
     new SurveyFileConverterInput(new SubitemFactory()),
     new SurveyFileConverterOutput(),
@@ -109,3 +122,5 @@ export const initializeApp = (onError, onSuccess) => appController.init(onError,
 export const addFileUrlListener = (onStatusChanged, onError, onSuccess) => appController.addFileUrlListener(onStatusChanged, onError, onSuccess)
 
 export const addNetworkStatusListener = (onInternetStatusChanged, onError, onSuccess) => appController.addNetworkStatusListener(onInternetStatusChanged, onError, onSuccess)
+
+export const addBluetoothStatusListener = (callback, onError, onSuccess) => appController.addBluetoothStatusListener(callback, onError, onSuccess)

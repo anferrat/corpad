@@ -422,8 +422,27 @@ export const MultimeterServices = Object.freeze({
 })
 
 export const MultimeterCharacteristics = Object.freeze({
-    [MultimeterServices[MultimeterTypes.POKIT].MULTIMETER]: {
-        SETTINGS: '53dc9a7a-bc19-4280-b76b-002d0e23b078',
-        READING: '047d3559-8bee-423a-b229-4417fa603b90',
+    [MultimeterTypes.POKIT]: {
+        MULTIMETER: {
+            SETTINGS: '53dc9a7a-bc19-4280-b76b-002d0e23b078',
+            READING: '047d3559-8bee-423a-b229-4417fa603b90',
+        },
     }
+})
+
+export const MultimeterSyncModes = Object.freeze({
+    GPS: 0,
+    HIGH_LOW: 1
+})
+
+export const MultimeterCycles = Object.freeze({
+    ON_FIRST: 0,
+    OFF_FIRST: 1
+})
+
+export const TimeUnits = Object.freeze({
+    SECONDS: 0,
+    MILISECONDS: 1,
+    MINUTES: 2,
+    HOURS: 3
 })
