@@ -3,7 +3,7 @@ import { StyleSheet } from 'react-native'
 import { Select, SelectItem, Icon, List, CheckBox } from '@ui-kitten/components'
 import { primary100 } from '../styles/colors'
 
-//Started as of a joke, but seems like thsi version of multiselect with flatlist and cutom state works way faster than original multiselect
+//Started as of a joke, but seems like thsi version of multiselect with flatlist and custom state works way faster than original multiselect
 
 const accessoryRender = (name, pack) => (props) => <Icon {...props} name={name} pack={pack} />
 
@@ -67,7 +67,7 @@ const MultiSelect = (props) => {
     )
 }
 
-const keyExtractor = item => `${item.item ?? item}-SelectItem`
+const keyExtractor = (item, index) => `${item.item ?? item}-SelectItem-${index}`
 
 const getSelectedValue = (selectedItems, itemList) => (
     selectedItems.filter(selected => selected < itemList.length).map(selected => itemList[selected].item ?? itemList[selected]).join(', ')

@@ -47,13 +47,16 @@ export class AppRepository extends SQLiteRepository {
                 return rows.item(0).version
         }
         catch (er) {
-            //no Errros thrown while adjusting schemas
-            //console.log(er)
+            //no errros should be thrown while adjusting schemas
         }
     }
 
 
     async adjustDatabaseSchema(version) {
+        //when decided to update database schema u need:
+        //1. Update schema version in config file
+        //2. Write transaction for each previous schema version with queries to achive result schema
+        //3. Dont forget to update schema version to the latest one inside transaction
         try {
             switch (version) {
                 case null:
@@ -78,19 +81,19 @@ export class AppRepository extends SQLiteRepository {
     async fullResetDevOnly() {
         try {
             await super.runMultiQueryTransaction(tx => [
+                super.runQuery(tx, 'DROP TABLE IF EXISTS potentials', []),
+                super.runQuery(tx, 'DROP TABLE IF EXISTS sides', []),
+                super.runQuery(tx, 'DROP TABLE IF EXISTS cards', []),
+                super.runQuery(tx, 'DROP TABLE IF EXISTS circuits', []),
                 super.runQuery(tx, `DROP TABLE IF EXISTS survey`, []),
                 super.runQuery(tx, `DROP TABLE IF EXISTS schemaVersion`, []),
                 super.runQuery(tx, `DROP TABLE IF EXISTS testPoints`, []),
                 super.runQuery(tx, `DROP TABLE IF EXISTS rectifiers`, []),
                 super.runQuery(tx, `DROP TABLE IF EXISTS pipelines`, []),
-                super.runQuery(tx, `DROP TABLE IF EXISTS potentialTypes`, []),
                 super.runQuery(tx, 'DROP TABLE IF EXISTS referenceCells', []),
                 super.runQuery(tx, 'DROP TABLE IF EXISTS calculators', []),
+                super.runQuery(tx, `DROP TABLE IF EXISTS potentialTypes`, []),
                 super.runQuery(tx, 'DROP TABLE IF EXISTS settings', []),
-                super.runQuery(tx, 'DROP TABLE IF EXISTS circuits', []),
-                super.runQuery(tx, 'DROP TABLE IF EXISTS cards', []),
-                super.runQuery(tx, 'DROP TABLE IF EXISTS sides', []),
-                super.runQuery(tx, 'DROP TABLE IF EXISTS potentials', []),
                 super.runQuery(tx, 'DROP TABLE IF EXISTS defaultNames', []),
             ])
         }

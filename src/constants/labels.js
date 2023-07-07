@@ -131,7 +131,7 @@ export const StatusLabels = Object.freeze({
     [ItemStatuses.GOOD]: 'Pass',
     [ItemStatuses.ATTENTION]: 'Attention',
     [ItemStatuses.BAD]: 'Issue',
-    [ItemStatuses.UNKNOWN]: 'Unknown'
+    [ItemStatuses.UNKNOWN]: 'Not checked'
 })
 
 export const PipeScheduleLabels = Object.freeze({

@@ -48,6 +48,7 @@ const errorCodes = {
     109: 'Input data error.',
     110: 'Unable to listen for bluetooth state',
     111: 'No items to export.',
+    112: 'Unable to obtain user location.',
     301: 'Unable to update network status.',
     302: 'Unable to complete operation. Need to sign in.',
     303: 'Unable to sign in with Google Account',
@@ -165,7 +166,7 @@ const errorCodes = {
     900: 'Unable to obtain permission to proceed with operation.',
     901: 'Need permission to write to Downloads folder.',
     902: 'Location permission was not granted.',
-    903: 'Need bluetooth permission to use this feature',
+    903: 'You need to grant bluetooth permission to use this feature.',
 }
 
 const getErrorTitle = (error) => errorTitles[error - (error % 100)] ?? errorTitles[100]

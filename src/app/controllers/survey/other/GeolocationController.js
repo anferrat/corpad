@@ -7,24 +7,26 @@ import { GetMapRegion } from "../../../services/location/GetMapRegion"
 import { GeolocationCalculator } from "../../../services/other/GeolocationCalculator"
 import { WatchDistanseAndBearing } from "../../../services/location/WatchDistanseAndBearing"
 import { GetDeclination } from "../../../services/location/GetDeclination"
+import { Permissions } from "../../../services/other/Permissions"
+import { TimeAdjustmentListener } from "../../../services/location/TimeAdjustmentListener"
 
 class GeolocationController extends Controller {
-    constructor(geolocationRepo, geolocationCalculator) {
+    constructor(geolocationRepo, geolocationCalculator, permissions) {
         super()
         this.geolocationRepo = geolocationRepo
-        this.getCurrentPositionService = new GetCurrentPosition(geolocationRepo)
+        this.permissions = permissions
+        this.getCurrentPositionService = new GetCurrentPosition(geolocationRepo, permissions)
         this.watchPositionService = new WatchPosition(geolocationRepo)
-        this.getMapRegionService = new GetMapRegion(geolocationRepo, geolocationCalculator)
+        this.getMapRegionService = new GetMapRegion(geolocationRepo, geolocationCalculator, permissions)
         this.watchDistanceAndBearingService = new WatchDistanseAndBearing(geolocationRepo, geolocationCalculator)
         this.getDeclinationService = new GetDeclination(geolocationRepo)
+        this.timeAdjustmentListenerService = new TimeAdjustmentListener(geolocationRepo, permissions)
     }
 
-    watch(callback, onError = null, onSuccess = null) { //wrong plese redoo
-        return this.watchPositionService.execute(data =>
-            super.controllerHandler(onSuccess, onError, 800, async () => {
-                callback(data)
-            }))
-
+    watch(callback, onError = null, onSuccess = null) {
+        return super.callbackHandler(onSuccess, onError, 800, () => {
+            return this.watchPositionService.addListener(callback)
+        })
     }
 
     watchDistanceAndBearing({ latitude, longitude, onUpdate }, onError = null, onSuccess = null) {
@@ -48,7 +50,13 @@ class GeolocationController extends Controller {
 
     getPermission(onError = null, onSuccess = null) {
         return super.controllerHandler(onSuccess, onError, 902, async () => {
-            return (await this.geolocationRepo.getPermission()) === 'granted'
+            return this.permissions.location()
+        })
+    }
+
+    addTimeAdjustmentListener(callback, onError = null, onSuccess = null) {
+        return super.callbackHandler(onSuccess, onError, 100, () => {
+            return this.timeAdjustmentListenerService.addListener(callback)
         })
     }
 
@@ -61,7 +69,7 @@ class GeolocationController extends Controller {
 }
 
 const geolocationController = new GeolocationController(
-    new GeolocationRepository(), new GeolocationCalculator())
+    new GeolocationRepository(), new GeolocationCalculator(), new Permissions())
 
 export const getLocationPermission = (onError, onSuccess) => geolocationController.getPermission(onError, onSuccess)
 
@@ -74,3 +82,5 @@ export const getCurrentPosition = (onError, onSuccess) => geolocationController.
 export const getInitialMapRegion = ({ markers }, onError, onSuccess) => geolocationController.getMapRegion({ markers }, onError, onSuccess)
 
 export const getDeclination = ({ latitude, longitude }, onError, onSuccess) => geolocationController.getDeclination({ latitude, longitude }, onError, onSuccess)
+
+export const addTimeAdjustmentListener = (callback, onError, onSuccess) => geolocationController.addTimeAdjustmentListener(callback, onError, onSuccess)

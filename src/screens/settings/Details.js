@@ -8,7 +8,8 @@ import { SurveyOverview } from '../../features/settings/info/index'
 import { ExportedFilesList } from '../../features/settings/exported_files/'
 import About from '../../features/settings/about/About'
 import { OnboardingOverlayPotentialtypes } from '../../features/overlays/onboarding'
-import Multimeter from '../../features/settings/multimeter'
+import Multimeter from '../../features/settings/multimeter/scan'
+import MultimeterSettings from '../../features/settings/multimeter/cycle_settings'
 
 const Setting = (props) => {
     switch (props.setting) {
@@ -26,6 +27,8 @@ const Setting = (props) => {
             return <About {...props} />
         case 'multimeter':
             return <Multimeter {...props} />
+        case 'multimeter_cycle':
+            return <MultimeterSettings {...props} />
         default:
             return null
     }
@@ -36,12 +39,14 @@ export default SettingDetails = ({ navigation, route }) => {
     const { setting } = route.params
     const goBack = () => navigation.goBack()
     const navigateToLicenses = () => navigation.navigate('Licenses')
+    const navigateToMultimeterCycleSettings = () => navigation.navigate('CycleSettings')
     const navigateToSpreadsheet = (uri, title) => navigation.navigate('Spreadsheet', { title: title, uri: uri })
     return (
         <SafeAreaView style={globalStyle.screen}>
             <OnboardingOverlayPotentialtypes
                 visible={setting === 'potentials'} />
             <Setting
+                navigateToMultimeterCycleSettings={navigateToMultimeterCycleSettings}
                 navigateToSpreadsheet={navigateToSpreadsheet}
                 navigateToLicenses={navigateToLicenses}
                 goBack={goBack}

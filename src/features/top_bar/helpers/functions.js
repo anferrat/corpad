@@ -36,7 +36,7 @@ const getTitleBySettingType = (setting) => {
         case 'licenses':
             return 'Licenses'
         case 'multimeter':
-            return 'Digital multimeter'
+            return 'Multimeter'
         default:
             return 'Settings'
     }
@@ -325,6 +325,14 @@ export const getHeader = (screen, params, navigation, dispatch, openMenu) => {
                     left: 'back',
                     isPrimary: true,
                     title: 'Licences',
+                    right: null
+                }
+            case 'CycleSettings':
+                return {
+                    display: true,
+                    left: 'back',
+                    isPrimary: true,
+                    title: 'Cycle settings',
                     right: null
                 }
             case 'Spreadsheet':

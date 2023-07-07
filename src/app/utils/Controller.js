@@ -17,6 +17,7 @@ export class Controller {
             }
         }
         catch (er) {
+            console.log(er)
             const code = er?.code ?? errorCode
             if (onError)
                 onError(code, er)

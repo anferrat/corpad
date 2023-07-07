@@ -1,7 +1,7 @@
 import { DisplayCardDataTypes, ItemTypes } from '../../../constants/global'
 import { PipelineMaterialLabels, CoarseFineOptionLabels, TestPointTypeLabels, ItemTypeLabels } from '../../../constants/labels'
 import { getFormattedDate } from '../../../helpers/functions'
-import { errorHandler } from "../../../helpers/functions"
+import { errorHandler } from "../../../helpers/error_handler"
 import { getItemDisplayData, getItemIdList } from '../../../app/controllers/survey/items/ItemController'
 import { getCurrentPosition } from '../../../app/controllers/survey/other/GeolocationController'
 import { ItemTypeSingleIcons, TestPointTypeIcons } from '../../../constants/icons'
@@ -105,12 +105,15 @@ export const fetchIdList = async (itemType, filters = undefined, sorting = 0, la
 }
 
 export const getLocationAsync = async () => {
-    const { response, status } = await getCurrentPosition(er => errorHandler(er))
+    const { response, status } = await getCurrentPosition()
     if (status === 200) {
         const { latitude, longitude } = response
         return { latitude, longitude }
     }
-    else return { latitude: 0, longitude: 0 }
+    else {
+        errorHandler(902)
+        return { latitude: 0, longitude: 0 }
+    }
 }
 
 const valueFormatter = (a) => {

@@ -1,8 +1,8 @@
 import { useCallback, useState, useEffect, useRef } from 'react'
 import { useDispatch, useSelector } from "react-redux"
-import { startMultimeterScan, stopMultimeterScan, multimeterScanListener, multimeterStopScanListener, pairMultimeter, unpairMultimeter, connectMultimeter, disconnectMultimeter, addMultimeterStatusListener } from '../../../../app/controllers/MultimeterController'
-import { setActiveMultimeter, setActiveMultimeterStatus } from '../../../../store/actions/settings'
-import { errorHandler } from '../../../../helpers/error_handler'
+import { startMultimeterScan, stopMultimeterScan, multimeterScanListener, multimeterStopScanListener, pairMultimeter, unpairMultimeter, connectMultimeter, disconnectMultimeter, addMultimeterStatusListener } from '../../../../../app/controllers/MultimeterController'
+import { setActiveMultimeter, setActiveMultimeterStatus } from '../../../../../store/actions/settings'
+import { errorHandler } from '../../../../../helpers/error_handler'
 
 const useActiveMultimeter = () => {
     const dispatch = useDispatch()
@@ -49,8 +49,8 @@ const useActiveMultimeter = () => {
 
         return () => {
             componentMounted.current = false
-                if (stopScan.response)
-                    stopScan.response.remove()
+            if (stopScan.response)
+                stopScan.response.remove()
             if (connectedDevices.response)
                 connectedDevices.response()
             stopMultimeterScan()
@@ -93,6 +93,8 @@ const useActiveMultimeter = () => {
                     setConnecting(false)
                 dispatch(setActiveMultimeterStatus(true))
             }
+            else if (status === 903)
+                errorHandler(903)
             else {
                 setTimeout(() => {
                     if (connectingFlag.current) {
@@ -116,6 +118,7 @@ const useActiveMultimeter = () => {
                     setScanning(true)
                 }
             }
+            else errorHandler(status)
         }
     }, [scanning, isBluetoothOn])
 
@@ -130,6 +133,7 @@ const useActiveMultimeter = () => {
         unpairDevice,
         pairingId,
         connecting,
+        pairing: pairingId !== null && !activeMultimeter.paired
     }
 
 }

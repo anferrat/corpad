@@ -1,10 +1,11 @@
 export class GetCurrentPosition {
-    constructor(geolocationRepo) {
+    constructor(geolocationRepo, permissions) {
         this.geolocationRepo = geolocationRepo
+        this.permissions = permissions
     }
 
     async execute() {
-        const permission = await this.geolocationRepo.getPermission()
-        return this.geolocationRepo.getCurrent(permission === 'granted')
+        await this.permissions.location()
+        return await this.geolocationRepo.getCurrent()
     }
 }

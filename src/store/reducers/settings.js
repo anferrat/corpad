@@ -1,5 +1,5 @@
 
-import { UPDATE_SETTING, LOAD_SETTINGS, SET_SURVEY_SAVING_STATUS, LOAD_SURVEY_SETTINGS, RESET_CURRENT_SURVEY_SETTINGS, LOAD_SESSION_STATE, UPDATE_ONBOARDING, SET_EXPORT_MODAL, UPDATE_LOADER, UPDATE_SESSION, UPDATE_NETWORK_STATUS, SET_SESSION_MODAL_VISIBLE, UPDATE_CURRENT_SURVEY_SETTINGS, SET_SETTINGS_ON_APP_LOAD, SET_SURVEY_SETTINGS, UPDATE_BOTTOM_SHEET_CONTENT, SET_BLUETOOTH_SCANNING, SET_BLUETOOTH_STATUS, SET_ACTIVE_MULTIMETER, SET_ACTIVE_MULTIMETER_STATUS } from "../actions/settings"
+import { UPDATE_SETTING, LOAD_SETTINGS, SET_SURVEY_SAVING_STATUS, LOAD_SURVEY_SETTINGS, RESET_CURRENT_SURVEY_SETTINGS, LOAD_SESSION_STATE, UPDATE_ONBOARDING, SET_EXPORT_MODAL, UPDATE_LOADER, UPDATE_SESSION, UPDATE_NETWORK_STATUS, SET_SESSION_MODAL_VISIBLE, UPDATE_CURRENT_SURVEY_SETTINGS, SET_SETTINGS_ON_APP_LOAD, SET_SURVEY_SETTINGS, UPDATE_BOTTOM_SHEET_CONTENT, SET_BLUETOOTH_SCANNING, SET_BLUETOOTH_STATUS, SET_ACTIVE_MULTIMETER, SET_ACTIVE_MULTIMETER_STATUS, SET_TIME_ADJUSTMENT, SET_ACTIVE_MULTIMETER_SYNC_MODE } from "../actions/settings"
 
 const initialState = {
     bottomSheetContent: {  //BottomSheet component
@@ -27,6 +27,12 @@ const initialState = {
         name: null,
         multimeterType: null,
         connected: false,
+        syncMode: null,
+    },
+    timeAdjustment: {
+        device: null,
+        gnss: null,
+        recorderd: false
     },
     bluetooth: {
         scanning: false,
@@ -115,6 +121,7 @@ const settings = (state = initialState, action) => {
                     isInternetOn: action.isInternetOn,
                 },
                 onboarding: {
+                    ...state.onboarding,
                     main: action.onboarding.main,
                     map: action.onboarding.map,
                     editTestPoint: action.onboarding.editTestPoint,
@@ -124,11 +131,12 @@ const settings = (state = initialState, action) => {
                     versionOnboarding: action.onboarding.versionOnboarding
                 },
                 activeMultimeter: {
+                    ...state.activeMultimeter,
                     paired: multimeterPaired,
                     id: multimeterPaired ? action.multimeter.peripheralId : null,
                     name: multimeterPaired ? action.multimeter.name : null,
                     multimeterType: multimeterPaired ? action.multimeter.type : null,
-                    connected: false,
+                    syncMode: action.multimeter.syncMode
                 }
             }
         }
@@ -262,6 +270,7 @@ const settings = (state = initialState, action) => {
             return {
                 ...state,
                 activeMultimeter: {
+                    ...state.activeMultimeter,
                     paired: action.paired,
                     id: action.paired ? action.id : null,
                     name: action.paired ? action.name : null,
@@ -275,6 +284,24 @@ const settings = (state = initialState, action) => {
                 activeMultimeter: {
                     ...state.activeMultimeter,
                     connected: action.connected
+                }
+            }
+        case SET_ACTIVE_MULTIMETER_SYNC_MODE:
+            return {
+                ...state,
+                activeMultimeter: {
+                    ...state.activeMultimeter,
+                    syncMode: action.syncMode
+                }
+            }
+        case SET_TIME_ADJUSTMENT:
+            return {
+                ...state,
+                timeAdjustment: {
+                    ...state.timeAdjustment,
+                    device: action.deviceTimestamp,
+                    gnss: action.gnssTimestamp,
+                    recorded: true
                 }
             }
         default:

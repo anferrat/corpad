@@ -5,28 +5,31 @@ import ReadingsHeaderButton from './ReadingsHeaderButton'
 import FilterHeaderButton from './FilterHeaderButton'
 import { basic300 } from '../../../../styles/colors'
 import { useBottomSheetNavigation } from '../../../../hooks/bottom_sheet/useBottomSheetNavigation'
+import { Button } from '@ui-kitten/components'
 
 const ListHeader = (props) => {
     const { openRectifierReadingMenu, openTestPointFilterMenu, openTestPointReadingMenu, openTestPointSortingMenu } = useBottomSheetNavigation()
     if (props.dataType !== 'PIPELINE')
         return (
-            <View style={styles.mainView}>
-                <View style={styles.sorting}>
-                    <SortingHeaderButton
-                        dataType={props.dataType}
-                        openSheet={openTestPointSortingMenu} />
+            <>
+                <View style={styles.mainView}>
+                    <View style={styles.sorting}>
+                        <SortingHeaderButton
+                            dataType={props.dataType}
+                            openSheet={openTestPointSortingMenu} />
+                    </View>
+                    <View style={styles.filter}>
+                        <FilterHeaderButton
+                            dataType={props.dataType}
+                            openSheet={openTestPointFilterMenu} />
+                    </View>
+                    <View style={styles.reading}>
+                        <ReadingsHeaderButton
+                            dataType={props.dataType}
+                            openSheet={props.dataType === 'RECTIFIER' ? openRectifierReadingMenu : openTestPointReadingMenu} />
+                    </View>
                 </View>
-                <View style={styles.filter}>
-                    <FilterHeaderButton
-                        dataType={props.dataType}
-                        openSheet={openTestPointFilterMenu} />
-                </View>
-                <View style={styles.reading}>
-                    <ReadingsHeaderButton
-                        dataType={props.dataType}
-                        openSheet={props.dataType === 'RECTIFIER' ? openRectifierReadingMenu : openTestPointReadingMenu} />
-                </View>
-            </View>
+            </>
         )
     else return <View style={styles.empty} />
 }

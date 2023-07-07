@@ -69,8 +69,8 @@ export class ItemResponseProcessor {
             case SortingOptions.NEAREST:
                 if (latitude && longitude)
                     return ' ORDER BY ((latitude-' + latitude + ')*(latitude-' + latitude + ')) + ((longitude - ' + longitude + ')*(longitude - ' + longitude + ')) ASC NULLS LAST'
-                else ''
-            default: ''
+                else return ''
+            default: return ''
         }
     }
 
