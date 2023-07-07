@@ -19,6 +19,8 @@ export const SET_BLUETOOTH_SCANNING = 'SET_BLUETOOTH_SCANNING'
 export const SET_BLUETOOTH_STATUS = 'SET_BLUETOOTH_STATUS'
 export const SET_ACTIVE_MULTIMETER = 'SET_ACTIVE_MULTIMETER'
 export const SET_ACTIVE_MULTIMETER_STATUS = 'SET_ACTIVE_MULTIMETER_STATUS'
+export const SET_TIME_ADJUSTMENT = 'SET_ACTIVE_MULTIMETER_TIME_ADJUSTMENT'
+export const SET_ACTIVE_MULTIMETER_SYNC_MODE = 'SET_ACTIVE_MULTIMETER_SYNC_MODE'
 
 export const updateSetting = (setting, value) => {
     return { type: UPDATE_SETTING, setting: setting, value: value }
@@ -99,3 +101,12 @@ export const setBluetoothScanning = (scanning) => ({
 export const setBluetoothStatus = (isBluetoothOn) => ({
     type: SET_BLUETOOTH_STATUS, isBluetoothOn
 })
+
+export const setGpsTimeAdjustment = (deviceTimestamp, gnssTimestamp) => ({
+    type: SET_TIME_ADJUSTMENT, deviceTimestamp, gnssTimestamp
+})
+
+export const setMultimeterSyncMode = (syncMode) => ({
+    type: SET_ACTIVE_MULTIMETER_SYNC_MODE, syncMode
+})
+

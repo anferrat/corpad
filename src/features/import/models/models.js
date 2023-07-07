@@ -70,12 +70,12 @@ export const getItem = (itemType) => {
         case 'TEST_POINT':
             return {
                 name: getParameter({ importType: 2 }),
-                testPointType: getParameter({ parameterType: 1, itemList: Object.values(TestPointTypes), itemListLabels: TestPointTypeLabels }),
+                testPointType: getParameter({ parameterType: 1, itemList: Object.values(TestPointTypes), itemListLabels: TestPointTypeLabels, importType: 0, defaultValue: TestPointTypes.TEST_STATION }),
                 location: getParameter({ mergeAllowed: true }),
                 latitude: getParameter({}),
                 longitude: getParameter({}),
                 comment: getParameter({ mergeAllowed: true }),
-                status: getParameter({ parameterType: 1, itemList: Object.values(ItemStatuses).filter((status) => status !== ItemStatuses.NO_STATUS), itemListLabels: StatusLabels })
+                status: getParameter({ parameterType: 1, itemList: Object.values(ItemStatuses).filter((status) => status !== ItemStatuses.NO_STATUS), itemListLabels: StatusLabels, importType: 0, defaultValue: ItemStatuses.UNKNOWN })
             }
         case 'RECTIFIER':
             return {

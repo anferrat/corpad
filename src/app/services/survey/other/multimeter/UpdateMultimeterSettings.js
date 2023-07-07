@@ -1,7 +1,7 @@
 import { MultimeterSettings } from "../../../../entities/survey/other/MultimeterSettings"
 
 export class UpdateMultimeterSettings {
-    constructor(settingRepo, bluetoothRepo) {
+    constructor(settingRepo) {
         this.settingRepo = settingRepo
     }
 

@@ -171,7 +171,12 @@ const useMarkers = ({ navigateToEdit, navigateToView, ref }) => {
         dispatch(setNewItemMarker(lat, lon))
     }, [dispatch])
 
-    const zoomToUserLocation = useCallback(() => zoomToCoordinates(userLocation.current.latitude, userLocation.current.longitude), [userLocation, zoomToCoordinates])
+    const zoomToUserLocation = useCallback(() => {
+        if (userLocation.current.latitude || userLocation.current.longitude) {
+            zoomToCoordinates(userLocation.current.latitude, userLocation.current.longitude)
+        }
+        else errorHandler(112)
+    }, [userLocation, zoomToCoordinates])
 
     const onMarkerPress = useCallback((marker) => dispatch(activateMarker(marker)), [dispatch])
 

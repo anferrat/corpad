@@ -16,6 +16,7 @@ export class TestPointRepository extends SQLiteRepository {
     }
 
     async getIdList({ filters, sorting, latitude, longitude }) {
+        
         try {
             const statusFilter = filters.statusFilter.length > 0 ? `(status NOT IN ${this.convertArrayToInStatement(filters.statusFilter)})` : ''
             const testPointTypeFilter = filters.testPointTypeFilter.length > 0 ? (statusFilter !== '' ? ' AND ' : '') + "(testPointType NOT IN ('" + filters.testPointTypeFilter.join("', '") + "'))" : ''

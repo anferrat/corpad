@@ -7,7 +7,7 @@ export class MarkOnboardingVisited {
 
     async execute() {
         const { onboarding } = await this.settingRepo.get()
-        onboarding.updateVersion(ONBOARDING_VERSION)
+        onboarding.versionOnboarding = ONBOARDING_VERSION
         onboarding.main = false
         await this.settingRepo.updateOnboarding(onboarding)
         return ONBOARDING_VERSION

@@ -432,12 +432,14 @@ export const MultimeterCharacteristics = Object.freeze({
 
 export const MultimeterSyncModes = Object.freeze({
     GPS: 0,
-    HIGH_LOW: 1
+    HIGH_LOW: 1,
+    REAL_TIME: 2,
+    CYCLED: 3
 })
 
 export const MultimeterCycles = Object.freeze({
-    ON_FIRST: 0,
-    OFF_FIRST: 1
+    OFF: 0,
+    ON: 1
 })
 
 export const TimeUnits = Object.freeze({

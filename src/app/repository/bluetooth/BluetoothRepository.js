@@ -1,5 +1,4 @@
 import BleManager from 'react-native-ble-manager'
-import { PermissionsAndroid } from 'react-native'
 import { bleManagerEmitter } from '../../config/bluetooth'
 import { Error, errors } from '../../utils/Error'
 
@@ -112,10 +111,7 @@ export class BluetoothRepository {
 
     async retrieveServices(deviceId, serviceUUIDs = []) {
         try {
-            const permission = await PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.BLUETOOTH_SCAN)
-            if (permission === PermissionsAndroid.RESULTS.GRANTED)
-                return await BleManager.retrieveServices(deviceId, serviceUUIDs)
-            throw new Error(errors.PERMISSION, 'Bluetooth permission is needed', '', 903)
+            return await BleManager.retrieveServices(deviceId, serviceUUIDs)
         }
         catch (er) {
             throw new Error(errors.BLUETOOTH, 'Unable to retrieve services', er, 809)
@@ -125,10 +121,7 @@ export class BluetoothRepository {
 
     async getConnectedDevices(serviceUUIDs) {
         try {
-            const permission = await PermissionsAndroid.requestMultiple(['android.permission.BLUETOOTH_ADVERTISE', 'android.permission.BLUETOOTH_CONNECT', 'android.permission.BLUETOOTH_SCAN'])
-            //if (permission === PermissionsAndroid.RESULTS.GRANTED)
-                return await BleManager.getConnectedPeripherals(serviceUUIDs)
-            //else throw new Error(errors.PERMISSION, 'Bluetooth permission is needed', '', 903)
+            return await BleManager.getConnectedPeripherals(serviceUUIDs)
         }
         catch (er) {
             throw new Error(errors.BLUETOOTH, 'Unable to get list of connected devices', er, 811)
@@ -196,9 +189,8 @@ export class BluetoothRepository {
     newCharacteristicValueListener(callback) {
         try {
             return bleManagerEmitter.addListener("BleManagerDidUpdateValueForCharacteristic", (data) => {
-                console.log(data)
                 const { value, peripheral, characteristic, service } = data
-                callback({value, peripheral, service, characteristic})
+                callback({ value, peripheral, service, characteristic })
             })
         }
         catch (er) {

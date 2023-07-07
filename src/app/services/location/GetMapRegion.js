@@ -1,7 +1,8 @@
 export class GetMapRegion {
-    constructor(geolocationRepo, geolocationCalculator) {
+    constructor(geolocationRepo, geolocationCalculator, permissions) {
         this.geolocationRepo = geolocationRepo
         this.geolocationCalculator = geolocationCalculator
+        this.permissions = permissions
         this.DEFAULT_REGION = {
             latitude: 38.910594121910854,
             latitudeDelta: 69.4862269475757,
@@ -46,7 +47,7 @@ export class GetMapRegion {
             if (initialRegion)
                 return initialRegion
             else {
-                const permission = await this.geolocationRepo.getPermission()
+                await this.permissions.location()
                 return this._getRegionFromPosition(await this.geolocationRepo.getCurrent(permission === 'granted'))
             }
         }

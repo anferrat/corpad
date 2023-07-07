@@ -43,8 +43,8 @@ const useNavigationWidget = () => {
         let headingWatch
         const onLoad = async () => {
             if (visible) {
-                const { response, status } = await getLocationPermission()
-                if (status == 200 && response) {
+                const { status } = await getLocationPermission()
+                if (status == 200) {
                     positionWatch = watchDistanceAndBearing({
                         onUpdate: ({ distance, bearing, accuracy, declination }) => {
                             setlocation(state => ({ ...state, distance, bearing, accuracy, declination }))
@@ -55,9 +55,11 @@ const useNavigationWidget = () => {
                         er => errorHandler(er))
                     headingWatch = watchDeviceHeading(({ heading }) => setlocation(state => ({ ...state, heading })))
                 }
-                else if (status !== 200)
-                    errorHandler(status)
-                else errorHandler(902)
+                else {
+                    setVisisble(false)
+                    setLoading(true)
+                    errorHandler(902)
+                }
             }
         }
         onLoad()

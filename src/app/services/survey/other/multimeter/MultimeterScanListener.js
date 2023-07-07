@@ -7,6 +7,7 @@ export class MultimeterScanListener {
     }
 
     execute(callback, idFilter=[]) {
+        //no need for BLE permissions here
         return this.bluetoothRepo.discoverPeripheralListener((id, name, rssi, serviceUUIDs, isConnectable) => {
             const filtered = ~idFilter.indexOf(id)
             const isMultimeterService = serviceUUIDs && Array.isArray(serviceUUIDs) && ~serviceUUIDs.indexOf(this.MULTIMETER_SERVICES[0])

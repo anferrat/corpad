@@ -2,15 +2,12 @@ import React from "react"
 import { Icon } from "@ui-kitten/components"
 import { primary, basic300 } from "../../../../styles/colors"
 
-
-const styles = {
+const styles = { //dont use StyleSheet here
     icon: {
         width: 150,
         height: 150
     }
 }
-
-
 export const mainPages = [
     {
         backgroundColor: basic300,
@@ -44,7 +41,7 @@ export const mainPages = [
     }
 ]
 
-// Shows after onboarding version update changes
+// Shows after app update. U have to increase ONBOARDING_VERSION in app/configs/Onboarding in order to display these pages
 export const lastVersionPages = [
     {
         backgroundColor: basic300,
@@ -71,3 +68,7 @@ export const lastVersionPages = [
         subtitle: 'Check https://www.corpad.ca/updates for more info. If you encounter a bug, having issues or have great ideas on how to improve this app, please let me know at andrei@corpad.ca.'
     },
 ]
+
+
+
+

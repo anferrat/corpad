@@ -9,25 +9,6 @@ export class Onboarding {
         this.versionOnboarding = versionOnboarding
     }
 
-    parse(string) {
-        const { versionOnboarding, editTestPoint, editReferenceCell, map, potentialTypes, editBond, main } = JSON.parse(string)
-        this.main = main
-        this.editTestPoint = editTestPoint
-        this.editReferenceCell = editReferenceCell
-        this.map = map
-        this.potentialTypes = potentialTypes
-        this.editBond = editBond
-        this.versionOnboarding = versionOnboarding
-    }
-
-    getString() {
-        return JSON.stringify(this)
-    }
-
-    updateVersion(version) {
-        this.versionOnboarding = version
-    }
-
 }
 
 export const OnboardingScreens = Object.freeze({

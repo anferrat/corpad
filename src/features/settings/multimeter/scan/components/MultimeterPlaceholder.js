@@ -1,0 +1,53 @@
+import { Icon, Text } from '@ui-kitten/components'
+import React from 'react'
+import { View, StyleSheet } from 'react-native'
+import { primary } from '../../../../../styles/colors'
+
+
+const MultimeterPlaceholder = () => {
+    return (
+        <View style={styles.container}>
+            <Icon style={styles.icon}
+                name='radio'
+                fill={primary} />
+            <Text category='h5'
+                style={styles.title}>
+                Multimeter
+            </Text>
+            <Text
+                appearance='hint'
+                style={styles.description}>
+                Connect digital bluetooth multimeter in order to capture potential readings.
+            </Text>
+            <Text
+                appearance='hint'
+                category='s2'
+                style={styles.description}>
+                Find supported multimeters at corpad.ca/multimeters.
+            </Text>
+        </View>
+    )
+}
+
+export default React.memo(MultimeterPlaceholder)
+
+const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+        alignItems: 'center',
+        justifyContent: 'center',
+        paddingVertical: 24
+    },
+    icon: {
+        width: 60,
+        height: 60
+    },
+    title: {
+        marginBottom: 6,
+        marginTop: 12
+    },
+    description: {
+        textAlign: 'center',
+        paddingBottom: 24
+    }
+})

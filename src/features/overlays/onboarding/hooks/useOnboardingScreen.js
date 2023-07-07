@@ -2,7 +2,6 @@ import { useDispatch, useSelector } from "react-redux"
 import { markOnboardingCompleted, getOnboardingVersion } from "../../../../app/controllers/survey/other/OnboardingController"
 import { useCallback } from "react"
 import { updateOnboarding } from "../../../../store/actions/settings"
-import { primary } from "../../../../styles/colors"
 
 const useOnboardingScreen = () => {
     const dispatch = useDispatch()

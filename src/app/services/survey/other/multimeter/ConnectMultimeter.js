@@ -1,11 +1,15 @@
 export class ConnectMultimeter {
-    constructor(bluetoothRepo, settingRepo) {
+    constructor(bluetoothRepo, settingRepo, permissions) {
         this.bluetoothRepo = bluetoothRepo
         this.settingRepo = settingRepo
+        this.permissions = permissions
     }
 
     async execute() {
-        const { multimeter } = await this.settingRepo.get()
+        const [{ multimeter }] = await Promise.all([
+            this.settingRepo.get(),
+            this.permissions.bluetooth()
+        ])
         const { peripheralId } = multimeter
         if (peripheralId !== null && peripheralId) {
             const isConnected = await this.bluetoothRepo.isDeviceConnected(peripheralId)

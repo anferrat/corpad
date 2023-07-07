@@ -27,6 +27,7 @@ import ExportItem from '../screens/export/Item'
 import ExportPotentials from '../screens/export/Potentials'
 import ExportSubitems from '../screens/export/Subitems'
 import ExportOverview from '../screens/export/Overview'
+import CycleSettings from '../screens/settings/CycleSettings'
 
 
 const Stack = createNativeStackNavigator()
@@ -87,7 +88,8 @@ export const AppNavigator = () => {
           <Stack.Screen name='DevScreen' component={DevScreen} />
           <Stack.Screen name='CalculatorDescription' component={CalculatorDescription} />
           <Stack.Screen name='SettingDetails' component={SettingDetails} />
-          <Stack.Screen name='Licenses' component={Licenses} initialParams={{ setting: 'licenses' }} />
+          <Stack.Screen name='Licenses' component={Licenses} />
+          <Stack.Screen name='CycleSettings' component={CycleSettings} />
         </Stack.Group>
       </Stack.Navigator >
     )

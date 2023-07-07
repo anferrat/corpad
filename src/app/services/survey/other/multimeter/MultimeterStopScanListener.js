@@ -4,6 +4,7 @@ export class MultimeterStopScanListener {
     }
 
     execute(callback) {
+        //No need for ble permissions here
         return this.bluetoothRepo.bluetoothScanStoppedListener(callback)
     }
 }

@@ -1,82 +1,70 @@
-import { PermissionsAndroid } from 'react-native'
 import Geolocation from 'react-native-geolocation-service';
+//rn comunity is used for GNSS time capturing only (using Android API), geolocation-service is used for coordinated (using fused API)
+import GeolocationTime from '@react-native-community/geolocation'
 import geomagnetism from 'geomagnetism'
 import { Error, errors } from '../../utils/Error'
 
 export class GeolocationRepository {
     constructor() { }
 
-    getPermission() {
-        return PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION, {
-            title: "Location permission",
-            message: "App reqiures access to location service to display your current position",
-            buttonNeutral: "Ask Me Later",
-            buttonNegative: "Cancel",
-            buttonPositive: "OK"
+    async getCurrent() {
+        try {
+            return new Promise((resolve, reject) => {
+                Geolocation.getCurrentPosition(({ coords: { latitude, longitude, accuracy } }) => resolve({ latitude, longitude, accuracy }),
+                    er => reject(er),
+                    {
+                        timeout: 2000,
+                        accuracy: { android: 'balanced' },
+                        enableHighAccuracy: true,
+                        maximumAge: 10,
+                        distanceFilter: 0.1,
+                        showLocationDialog: true,
+                        forceRequestLocation: true,
+                    })
+            })
+        }
+        catch (er) {
+            throw new Error(errors.LOCATION, 'Unable to get current position', er, 800)
+        }
+    }
+
+    watch(callback) {
+        const watchId = Geolocation.watchPosition(({ coords: { latitude, longitude, accuracy } }) => {
+            callback({ latitude, longitude, accuracy })
+        },
+            (er) => {
+                throw new Error(errors.LOCATION, 'Unable to obtain current position', er, 800)
+            },
+            {
+                maximumAge: 200,
+                accuracy: { android: 'high' },
+                distanceFilter: 0.1,
+                fastestInterval: 1000,
+                interval: 1000,
+                timeout: 200
+            })
+        return () => Geolocation.clearWatch(watchId)
+    }
+
+    getGpsTimeAdjustment() {
+        return new Promise((resolve) => {
+            GeolocationTime.getCurrentPosition(({ timestamp }) => {
+                resolve({
+                    device: Date.now(),
+                    gnss: timestamp
+                })
+            }, () => resolve({ device: null, gnss: null }), { enableHighAccuracy: true, timeout: 10000, maximumAge: 50 })
         })
     }
 
-    async getCurrent(permissionGranted) {
-        if (permissionGranted)
-            try {
-                return new Promise((resolve, reject) => {
-                    Geolocation.getCurrentPosition(({ coords: { latitude, longitude, accuracy } }) => resolve({ latitude, longitude, accuracy }),
-                        er => reject(er),
-                        {
-                            timeout: 2000,
-                            accuracy: { android: 'balanced' },
-                            enableHighAccuracy: true,
-                            maximumAge: 10,
-                            distanceFilter: 0.1,
-                            showLocationDialog: true,
-                            forceRequestLocation: true,
-                        })
-                })
-            }
-            catch (er) {
-                throw new Error(errors.LOCATION, 'Unable to get current position', er, 800)
-            }
-        else
-            throw new Error(errors.PERMISSION, 'Unable to obtain location permission', 'Permission not granted', 902)
+    watchTimeAdjustment(callback) {
+        const watchId = GeolocationTime.watchPosition(
+            ({ timestamp }) => callback({ gnss: Date.now(), device: timestamp }),
+            (er) => { throw new Error(errors.LOCATION, 'Unable to get time adjustment', er, 800) },
+            { interval: 100, timeout: 10000, enableHighAccuracy: true, maximumAge: 50 })
+        return () => GeolocationTime.clearWatch(watchId)
     }
 
-    watch(permissionGranted, callback) {
-        if (permissionGranted) {
-            const watchId = Geolocation.watchPosition(({ coords: { latitude, longitude, accuracy } }) => {
-                callback({
-                    latitude,
-                    longitude,
-                    accuracy
-                })
-
-            },
-                (er) => {
-                    throw new Error(errors.LOCATION, 'Unable to obtain current position', er, 800)
-                },
-                {
-                    maximumAge: 200,
-                    accuracy: { android: 'high' },
-                    distanceFilter: 0.1,
-                    fastestInterval: 1000,
-                    interval: 1000,
-                    timeout: 200
-
-                })
-            return watchId
-        }
-        else {
-            throw new Error(errors.PERMISSION, 'Unable to obtain location permission', 'Permission not granted', 902)
-        }
-    }
-
-    clear(watchId) {
-        try {
-            Geolocation.clearWatch(watchId)
-        }
-        catch (er) {
-            throw new Error(errors.LOCATION, 'Unable to clear location listener', er, 800)
-        }
-    }
 
     getDeclination(latitude, longitude) {
         try {

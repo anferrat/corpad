@@ -7,6 +7,7 @@ import { resetCurrentSurveySettings, setActiveMultimeterStatus, setBluetoothStat
 import { errorHandler } from "../../helpers/error_handler"
 import { SurveyLoadingStatuses } from "../../constants/global"
 import { addMultimeterStatusListener } from "../../app/controllers/MultimeterController"
+import useTimeAdjustment from "./useTimeAdjustment"
 
 const useApp = () => {
 
@@ -18,6 +19,8 @@ const useApp = () => {
 
   //determines if onboarding screen should be shown
   const isOnboardingVisible = useOnboardingScreen()
+
+  useTimeAdjustment()
 
   const [loading, setLoading] = useState(true)
 
