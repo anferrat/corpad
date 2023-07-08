@@ -1,6 +1,6 @@
 import React from "react"
 import { View, StyleSheet } from "react-native"
-import { Icon, ListItem, Text } from "@ui-kitten/components"
+import { Divider, Icon, ListItem, Text } from "@ui-kitten/components"
 import { primary } from '../../../../../styles/colors'
 import { globalStyle } from "../../../../../styles/styles"
 import { MultimeterTypeLabels } from "../../../../../constants/labels"
@@ -41,25 +41,28 @@ const PairedView = ({ name, type, connected, connecting, connect, unpair, naviga
                     connecting={connecting}
                 />
             </View>
-            {!connected ?
+            <Divider />
+            <View style={styles.list}>
+                {!connected ?
+                    <ListItem
+                        style={styles.listItem}
+                        onPress={connect}
+                        disabled={connecting}
+                        accessoryLeft={connecting ? activity : connectIcon}
+                        title={'Connect'}
+                        description={'Press button on PokitPro to wake it up before connecting'} /> : null}
                 <ListItem
                     style={styles.listItem}
-                    onPress={connect}
-                    disabled={connecting}
-                    accessoryLeft={connecting ? activity : connectIcon}
-                    title={'Connect'}
-                    description={'Press button on PokitPro to wake it up before connecting'} /> : null}
-            <ListItem
-                style={styles.listItem}
-                accessoryLeft={optionIcon}
-                title={'Cycle settings'}
-                onPress={navigateToCycleSettings}
-                description='Adjust ON/OFF time cycles for potentials capture' />
-            <ListItem
-                style={styles.listItem}
-                title={'Unpair'}
-                onPress={unpair}
-                accessoryLeft={trashIcon} />
+                    accessoryLeft={optionIcon}
+                    title={'Cycle settings'}
+                    onPress={navigateToCycleSettings}
+                    description='Adjust ON/OFF time cycles for potentials capture' />
+                <ListItem
+                    style={styles.listItem}
+                    title={'Unpair'}
+                    onPress={unpair}
+                    accessoryLeft={trashIcon} />
+            </View>
         </View>
     )
 }
@@ -88,5 +91,8 @@ const styles = StyleSheet.create({
     listItem: {
         marginHorizontal: -12,
         height: 60,
+    },
+    list: {
+        paddingTop: 12
     }
 })

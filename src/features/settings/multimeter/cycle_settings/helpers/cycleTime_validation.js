@@ -3,7 +3,7 @@ import { MultimeterTypes } from "../../../../../constants/global";
 const convertValue = (value, multimeterType) => {
     switch (multimeterType) {
         case MultimeterTypes.POKIT:
-            return Math.floor(value - value % 500)
+            return Math.floor(value - value % 1000)
         default:
             return value
     }
@@ -12,7 +12,7 @@ const convertValue = (value, multimeterType) => {
 const isValid = (value, multimeterType) => {
     switch (multimeterType) {
         case MultimeterTypes.POKIT:
-            return Number.isInteger(value) && value >= 500 && value <= 20000
+            return Number.isInteger(value) && value >= 1000 && value <= 20000
         default:
             return false
     }
