@@ -17,13 +17,14 @@ import { AppStateListener } from "../services/other/AppStateListenerService"
 import { PotentialCaptureSetup } from "../services/survey/other/multimeter/PotentialCaptureSetup"
 import { PotentialCaptureListener } from "../services/survey/other/multimeter/PotentialCaptureListener"
 import { Permissions } from "../services/other/Permissions"
+import { GeolocationRepository } from "../repository/geolocation/GeolocationRepository"
 
 
 class MultimeterController extends Controller {
-    constructor(bluetoothRepo, settingRepo, permissions) {
+    constructor(bluetoothRepo, settingRepo, geolocationRepo, permissions) {
         super()
         this.potentialCaptureSetupService = new PotentialCaptureSetup(settingRepo, bluetoothRepo, permissions)
-        this.potentialCaptureListenerService = new PotentialCaptureListener(bluetoothRepo)
+        this.potentialCaptureListenerService = new PotentialCaptureListener(bluetoothRepo, geolocationRepo)
         this.multimeterScanService = new MultimeterScan(bluetoothRepo, permissions)
         this.multimeterStopScanService = new MultimeterStopScan(bluetoothRepo, permissions)
         this.multimeterStopScanListenerService = new MultimeterStopScanListener(bluetoothRepo)
@@ -73,7 +74,7 @@ class MultimeterController extends Controller {
 
     updateSettings(params, onError = null, onSuccess = null) {
         return super.controllerHandler(onSuccess, onError, 652, async () => {
-            const { multimeterType } = this.validation.checkMultimeterType(params)
+            const multimeterType = this.validation.checkMultimeterType(params)
             const multimeterData = this.validation.updateSettings(params, multimeterType)
             return await this.updateMultimeterSettingService.execute(multimeterData)
         })
@@ -128,6 +129,7 @@ class MultimeterController extends Controller {
 const multimeterController = new MultimeterController(
     new BluetoothRepository(),
     new SettingRepository(),
+    new GeolocationRepository(),
     new Permissions()
 )
 
@@ -155,4 +157,4 @@ export const addMultimeterStatusListener = (callback, onError, onSuccess) => mul
 
 export const potentialCaptureSetup = (onError, onSuccess) => multimeterController.potentialCaptureSetup(onError, onSuccess)
 
-export const addPotentialListener = (callback, { peripheralId, type, onTime, offTime, syncMode, firstCycle, timeAdjustment }, onError, onSuccess) => multimeterController.addPotentialListener(callback, { peripheralId, type, onTime, offTime, syncMode, firstCycle, timeAdjustment }, onError, onSuccess)
+export const addPotentialListener = (callback, { peripheralId, type, onTime, offTime, syncMode, firstCycle}, onError, onSuccess) => multimeterController.addPotentialListener(callback, { peripheralId, type, onTime, offTime, syncMode, firstCycle}, onError, onSuccess)

@@ -44,9 +44,9 @@ export class Validation {
     subitemPropertyUpdateType = mixed().oneOf(Object.values(SubitemPropertyUpdateTypes))
     itemPropertyUpdateType = mixed().oneOf(Object.values(ItemPropertyUpdateTypes))
     calculatorType = mixed().oneOf(Object.values(CalculatorTypes))
-    multimeterType = mixed().oneOf([Object.values(MultimeterTypes), null])
-    multimeterSyncMode = mixed().oneOf([Object.values(MultimeterSyncModes)])
-    multimeterFirstCycle = mixed().oneOf([Object.values(MultimeterCycles)])
+    multimeterType = mixed().oneOf(Object.values(MultimeterTypes))
+    multimeterSyncMode = mixed().oneOf(Object.values(MultimeterSyncModes))
+    multimeterFirstCycle = mixed().oneOf(Object.values(MultimeterCycles))
     side = array().of(this.id)
     validate(value, schema) {
         try {

@@ -86,7 +86,6 @@ export class BluetoothRepository {
             return await BleManager.write(deviceId, serviceUUID, characteristicUUID, data, maxByteSize)
         }
         catch (er) {
-            console.log(er)
             throw new Error(errors.BLUETOOTH, 'Unable to write to charachteristic', er, 807)
         }
     }

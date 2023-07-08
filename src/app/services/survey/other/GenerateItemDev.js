@@ -164,7 +164,6 @@ export class GenerateItem {
         for (let i = 0; i < count; i++) {
             const testPoint = await this.generateTestPoint(i)
             await this.generateSubitems(testPoint.id, pipelines, potentialTypes, referenceCells)
-            //console.log(`Test point ${testPoint.name} generated`)
         }
     }
 

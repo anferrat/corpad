@@ -56,7 +56,7 @@ export class AppRepository extends SQLiteRepository {
         //when decided to update database schema u need:
         //1. Update schema version in config file
         //2. Write transaction for each previous schema version with queries to achive result schema
-        //3. Dont forget to update schema version to the latest one inside transaction
+        //3. Dont forget to update schema version to the latest at the end of transaction
         try {
             switch (version) {
                 case null:
@@ -73,7 +73,6 @@ export class AppRepository extends SQLiteRepository {
         }
         catch (er) {
             //no Errros thrown while adjusting schemas
-            //console.log(er)
         }
 
     }

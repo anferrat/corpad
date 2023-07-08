@@ -102,8 +102,8 @@ export const setBluetoothStatus = (isBluetoothOn) => ({
     type: SET_BLUETOOTH_STATUS, isBluetoothOn
 })
 
-export const setGpsTimeAdjustment = (deviceTimestamp, gnssTimestamp) => ({
-    type: SET_TIME_ADJUSTMENT, deviceTimestamp, gnssTimestamp
+export const setGpsTimeAdjustment = (timeFix) => ({
+    type: SET_TIME_ADJUSTMENT, timeFix
 })
 
 export const setMultimeterSyncMode = (syncMode) => ({
