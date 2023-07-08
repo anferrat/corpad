@@ -23,25 +23,10 @@ export class _PokitMultimeterService {
         }
     }
 
-    _getTimeOut(deviceTime, cycleTime, timeAdjustment) {
-        const date = !timeAdjustment ? new Date(deviceTime) : new Date(deviceTime - timeAdjustment)
-        const cycleStartAdjustment = date.getSeconds() * 1000 % cycleTime
-        const milisecondAdjustment = 1000 - date.getMilliseconds()
-        return cycleStartAdjustment + milisecondAdjustment
-    }
-
     _convertFloat(value) {
         //Converts MM reading value to float
         const buf = Buffer.from(value)
         return Number(buf.readFloatLE(1).toFixed(3))
-    }
-
-    async _getMMReading(id) {
-        const value = await this.bluetoothRepo.read(
-            id,
-            this.multimeterServices.MULTIMETER,
-            this.multimeterCharacteristics.MULTIMETER.READING)
-        return this._convertFloat(value)
     }
 
     _convertBytes(hexArray) {
@@ -86,6 +71,7 @@ export class _PokitMultimeterService {
         const removeListener = this.realTimePotentialListener((_, value) => {
             timestamps.push(Date.now())
             values.push(value)
+            callback(null, value)
         }, { peripheralId })
 
         const timer = setInterval(() => {
@@ -102,12 +88,12 @@ export class _PokitMultimeterService {
         }
     }
 
-
-
-
     highLowPotentialListener(callback, { peripheralId, onTime, offTime }) {
         let values = []
-        const removeListener = this.realTimePotentialListener((_, value) => values.push(value), { peripheralId })
+        const removeListener = this.realTimePotentialListener((_, value) => {
+            values.push(value)
+            callback(null, value)
+        }, { peripheralId })
 
         const timer = setInterval(() => {
             const { on, off } = this._highLowCapture.execute(values)
@@ -123,7 +109,10 @@ export class _PokitMultimeterService {
 
     cyclicalPotentialListener(callback, { peripheralId, onTime, offTime }) {
         let values = []
-        const removeListener = this.realTimePotentialListener((_, value) => values.push(value), { peripheralId })
+        const removeListener = this.realTimePotentialListener((_, value) => {
+            values.push(value)
+            callback(null, value)
+        }, { peripheralId })
 
         const timer = setInterval(() => {
             const { on, off } = this._cyclicalCapture.execute(values, onTime, offTime)

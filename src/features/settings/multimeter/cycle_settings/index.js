@@ -36,96 +36,98 @@ const CycleSettings = () => {
         <>
             <ScrollView contentContainerStyle={styles.scrollView}>
                 <View style={globalStyle.card}>
-                    <LoadingView loading={loading}>
-                        <Text
-                            category='label'
-                            appearance='hint'>
-                            Interruption cycles (ON | OFF)
-                        </Text>
-                        <View
-                            style={styles.tokens}>
-                            {standardCycles.map(({ on, off, title }) =>
-                                <StandardCycleToken
-                                    key={title}
-                                    title={title}
-                                    checked={onTime.value === on && offTime.value === off}
-                                    setStandardCycle={setStandardCycleTime}
-                                    on={on}
-                                    off={off} />)}
-                        </View>
-                        <View
-                            style={styles.row}>
-                            <Input
-                                onChangeText={onOnCycleChanged}
-                                onEndEditing={onCycleValidate}
-                                style={styles.left}
-                                label='On'
-                                property='cycleTime'
-                                unit={TimeUnitLabels[TimeUnits.MILISECONDS]}
-                                value={onTime.value}
-                                valid={onTime.valid} />
-                            <Input
-                                onChangeText={onOffCycleChanged}
-                                onEndEditing={offCycleValidate}
-                                style={styles.right}
-                                label='Off'
-                                property='cycleTime'
-                                unit={TimeUnitLabels[TimeUnits.MILISECONDS]}
-                                value={offTime.value}
-                                valid={offTime.valid} />
-                        </View>
-                        {!onTime.valid || !offTime.valid ?
-                            <Text
-                                status='danger'
-                                category='label'
-                                style={styles.invalidCaption}>
-                                {getCaption(multimeterType)}
-                            </Text>
-                            : null}
-                        <View
-                            style={styles.captureModeView}>
+                    <View style={styles.container}>
+                        <LoadingView loading={loading}>
                             <Text
                                 category='label'
                                 appearance='hint'>
-                                ON/OFF capture mode
+                                Interruption cycles (ON | OFF)
                             </Text>
-
-                            <CheckBoxListItem
-                                checked={syncMode === MultimeterSyncModes.GPS}
-                                value={MultimeterSyncModes.GPS}
-                                onPress={onSyncModeChange}
-                                title={'GPS syncronized'}
-                                description='Captures potentials at the begining of ON and OFF cycles. Updates once per full cycle, needs clear sky view and permission to use device GPS.' />
-                            {syncMode === MultimeterSyncModes.GPS ?
-                                <>
-                                    <Text
-                                        category='label'
-                                        appearance='hint'>
-                                        First cycle
-                                    </Text>
-                                    <RadioGroup
-                                        style={styles.radioView}
-                                        onChange={onFirstCycleChange}
-                                        selectedIndex={firstCycle}>
-                                        <Radio>OFF</Radio>
-                                        <Radio>ON</Radio>
-                                    </RadioGroup>
-                                </>
+                            <View
+                                style={styles.tokens}>
+                                {standardCycles.map(({ on, off, title }) =>
+                                    <StandardCycleToken
+                                        key={title}
+                                        title={title}
+                                        checked={onTime.value === on && offTime.value === off}
+                                        setStandardCycle={setStandardCycleTime}
+                                        on={on}
+                                        off={off} />)}
+                            </View>
+                            <View
+                                style={styles.row}>
+                                <Input
+                                    onChangeText={onOnCycleChanged}
+                                    onEndEditing={onCycleValidate}
+                                    style={styles.left}
+                                    label='On'
+                                    property='cycleTime'
+                                    unit={TimeUnitLabels[TimeUnits.MILISECONDS]}
+                                    value={onTime.value}
+                                    valid={onTime.valid} />
+                                <Input
+                                    onChangeText={onOffCycleChanged}
+                                    onEndEditing={offCycleValidate}
+                                    style={styles.right}
+                                    label='Off'
+                                    property='cycleTime'
+                                    unit={TimeUnitLabels[TimeUnits.MILISECONDS]}
+                                    value={offTime.value}
+                                    valid={offTime.valid} />
+                            </View>
+                            {!onTime.valid || !offTime.valid ?
+                                <Text
+                                    status='danger'
+                                    category='label'
+                                    style={styles.invalidCaption}>
+                                    {getCaption(multimeterType)}
+                                </Text>
                                 : null}
-                            <CheckBoxListItem
-                                checked={syncMode === MultimeterSyncModes.HIGH_LOW}
-                                value={MultimeterSyncModes.HIGH_LOW}
-                                title={'High/Low mode'}
-                                description='Captures highest and lowest potential values within a cycle. Updates at least once per cycle, or more often if high/low values were captured.'
-                                onPress={onSyncModeChange} />
-                            <CheckBoxListItem
-                                checked={syncMode === MultimeterSyncModes.CYCLED}
-                                title={'Cyclical mode'}
-                                value={MultimeterSyncModes.CYCLED}
-                                description='Captures real-time potentials, determines on/off cycle by comparing number of recorded potentials to cycle periods. Reports once per cycle, takes full cycle before first report.'
-                                onPress={onSyncModeChange} />
-                        </View>
-                    </LoadingView>
+                            <View
+                                style={styles.captureModeView}>
+                                <Text
+                                    category='label'
+                                    appearance='hint'>
+                                    ON/OFF capture mode
+                                </Text>
+
+                                <CheckBoxListItem
+                                    checked={syncMode === MultimeterSyncModes.GPS}
+                                    value={MultimeterSyncModes.GPS}
+                                    onPress={onSyncModeChange}
+                                    title={'GPS syncronized'}
+                                    description='Captures potentials at the begining of ON and OFF cycles. Updates once per full cycle, needs clear sky view and permission to use device GPS.' />
+                                {syncMode === MultimeterSyncModes.GPS ?
+                                    <>
+                                        <Text
+                                            category='label'
+                                            appearance='hint'>
+                                            First cycle
+                                        </Text>
+                                        <RadioGroup
+                                            style={styles.radioView}
+                                            onChange={onFirstCycleChange}
+                                            selectedIndex={firstCycle}>
+                                            <Radio>OFF</Radio>
+                                            <Radio>ON</Radio>
+                                        </RadioGroup>
+                                    </>
+                                    : null}
+                                <CheckBoxListItem
+                                    checked={syncMode === MultimeterSyncModes.HIGH_LOW}
+                                    value={MultimeterSyncModes.HIGH_LOW}
+                                    title={'High/Low mode'}
+                                    description='Captures highest and lowest potential values within a cycle. Updates at least once per cycle, or more often if high/low values were captured.'
+                                    onPress={onSyncModeChange} />
+                                <CheckBoxListItem
+                                    checked={syncMode === MultimeterSyncModes.CYCLED}
+                                    title={'Cyclical mode'}
+                                    value={MultimeterSyncModes.CYCLED}
+                                    description='Captures real-time potentials, determines on/off cycle by comparing number of recorded potentials to cycle periods. Reports once per cycle, takes full cycle before first report.'
+                                    onPress={onSyncModeChange} />
+                            </View>
+                        </LoadingView>
+                    </View>
                 </View>
             </ScrollView>
             <BottomButton
@@ -153,7 +155,7 @@ const styles = StyleSheet.create({
         paddingLeft: 12,
     },
     tokens: {
-
+        paddingTop: 6,
         flexWrap: 'wrap',
         flexDirection: 'row',
         paddingBottom: 12
@@ -172,5 +174,8 @@ const styles = StyleSheet.create({
     },
     scrollView: {
         paddingBottom: 72
+    },
+    container: {
+        minHeight: 300
     }
 })

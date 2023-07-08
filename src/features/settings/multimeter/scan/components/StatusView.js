@@ -1,20 +1,15 @@
 import React from 'react'
-import { View, StyleSheet, ActivityIndicator } from 'react-native'
-import { basic, control, success } from '../../../../../styles/colors'
+import { View, StyleSheet } from 'react-native'
+import { basic, success } from '../../../../../styles/colors'
 import { Text } from '@ui-kitten/components'
 
 
-const StatusView = ({ connected, connecting }) => {
-    const status = connecting && !connected ? 'Connecting' : (connected ? 'Connected' : 'Disconnected')
+const StatusView = ({ connected }) => {
+    const status = connected ? 'Connected' : 'Disconnected'
     return (
         <View style={styles.container}>
             <View style={connected ? styles.success : styles.basic}>
                 <View style={styles.label}>
-                    {connecting && !connected ?
-                        <ActivityIndicator
-                            color={control}
-                            size={'small'}
-                            style={styles.activityIndicator} /> : null}
                     <Text
                         category='p2'
                         status='control'>
@@ -54,7 +49,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center'
     },
-   
+
     activityIndicator: {
         marginRight: 8
     }

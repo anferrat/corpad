@@ -42,8 +42,9 @@ const styles = StyleSheet.create({
     wrapper: {
         overflow: 'hidden',
         borderRadius: 20,
-        margin: 4,
         elevation: 2,
+        marginRight: 12,
+        marginVertical: 10
     },
     container: {
         flex: -1,

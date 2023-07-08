@@ -20,8 +20,8 @@ export class MultimeterValidation extends Validation {
                 return this.validate(obj,
                     object({
                         multimeterType: this.multimeterType.required(),
-                        onTime: this.number.min(500).max(20000).integer().required().test('multipleOf', 'Must be aliquot to 1000', value => value % 500 === 0),
-                        offTime: this.number.min(500).max(20000).integer().required().test('multipleOf', 'Must be aliquot to 1000', value => value % 500 === 0),
+                        onTime: this.number.min(1000).max(20000).integer().required().test('multipleOf', 'Must be aliquot to 1000', value => value % 1000 === 0),
+                        offTime: this.number.min(1000).max(20000).integer().required().test('multipleOf', 'Must be aliquot to 1000', value => value % 1000 === 0),
                         delay: this.number.required(), //add delay schema when confirmed
                         syncMode: this.multimeterSyncMode.required(),
                         firstCycle: this.multimeterFirstCycle.required()
