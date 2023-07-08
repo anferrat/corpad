@@ -12,17 +12,11 @@ const useTimeAdjustment = () => {
     const dispatch = useDispatch()
 
     useEffect(() => {
-        let listener
-        if (timeAdjustmentActive) {
-            listener = addTimeAdjustmentListener(({ device, gnss }) => {
-                dispatch(setGpsTimeAdjustment(device, gnss))
-            }).response
-        }
+        const { response } = addTimeAdjustmentListener(({ timeFix }) => {
+            dispatch(setGpsTimeAdjustment(timeFix))
+        })
         return () => {
-            if (listener){
-                listener()
-            }
-               
+            response()
         }
     }, [timeAdjustmentActive])
 }

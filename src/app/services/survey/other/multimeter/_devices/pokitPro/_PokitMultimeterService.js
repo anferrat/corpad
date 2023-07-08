@@ -17,7 +17,7 @@ export class _PokitMultimeterService {
             MULTIMETER_SERVICE: {
                 SETTING_SETUP: { //6 bytes
                     IDLE: [0x00, 0x00, 0x00, 0x00, 0x00, 0x00],
-                    DC_VOLTAGE: [0x1, 0xFF, 0x64, 0x00, 0x00, 0x00],
+                    DC_VOLTAGE: [0x1, 0xFF, 0xC8, 0x00, 0x00, 0x00],
                 }
             }
         }
@@ -80,7 +80,7 @@ export class _PokitMultimeterService {
         }).remove
     }
 
-    syncedPotentialListener(callback, { peripheralId, onTime, offTime, firstCycle, timeAdjustment }) {
+    syncedPotentialListener(callback, { peripheralId, onTime, offTime, firstCycle, getTimeAdjustment }) {
         let values = []
         let timestamps = []
         const removeListener = this.realTimePotentialListener((_, value) => {
@@ -89,6 +89,7 @@ export class _PokitMultimeterService {
         }, { peripheralId })
 
         const timer = setInterval(() => {
+            const timeAdjustment = getTimeAdjustment()
             const [[cycle1, value1], [cycle2, value2]] = this._gpsCapture.execute(values, timestamps, timeAdjustment, firstCycle, onTime, offTime)
             callback(cycle1, value1)
             callback(cycle2, value2)

@@ -3,16 +3,21 @@ import { Error, errors } from "../../../../utils/Error"
 import { _MultimeterFactory } from "./_devices/_MultimeterFactory"
 
 export class PotentialCaptureListener {
-    constructor(bluetoothRepo) {
+    constructor(bluetoothRepo, geolocationRepo) {
+        this.geolocationRepo = geolocationRepo
         this.multimeterFactory = new _MultimeterFactory(bluetoothRepo)
     }
 
-    addListener(callback, { peripheralId, type, onTime, offTime, syncMode, firstCycle, timeAdjustment }) {
+    addListener(callback, { peripheralId, type, onTime, offTime, syncMode, firstCycle }) {
         const multimeterService = this.multimeterFactory.execute(type)
         let removeListener
+        const getTimeAdjustment = () => {
+            const { gnss, device } = this.geolocationRepo.getTimeFix()
+            return gnss && device ? gnss - device : 0
+        }
         switch (syncMode) {
             case MultimeterSyncModes.GPS:
-                removeListener = multimeterService.syncedPotentialListener(callback, { peripheralId, onTime, offTime, firstCycle, timeAdjustment })
+                removeListener = multimeterService.syncedPotentialListener(callback, { peripheralId, onTime, offTime, firstCycle, getTimeAdjustment })
                 break
             case MultimeterSyncModes.HIGH_LOW:
                 removeListener = multimeterService.highLowPotentialListener(callback, { peripheralId, onTime, offTime })

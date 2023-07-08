@@ -30,9 +30,7 @@ const initialState = {
         syncMode: null,
     },
     timeAdjustment: {
-        device: null,
-        gnss: null,
-        recorderd: false
+        timeFix: false
     },
     bluetooth: {
         scanning: false,
@@ -298,10 +296,7 @@ const settings = (state = initialState, action) => {
             return {
                 ...state,
                 timeAdjustment: {
-                    ...state.timeAdjustment,
-                    device: action.deviceTimestamp,
-                    gnss: action.gnssTimestamp,
-                    recorded: true
+                    timeFix: action.timeFix
                 }
             }
         default:

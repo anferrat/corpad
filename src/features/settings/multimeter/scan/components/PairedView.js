@@ -9,7 +9,6 @@ import { connectIcon, optionIcon, trashIcon, activity } from "../../../../../com
 
 
 const PairedView = ({ name, type, connected, connecting, connect, unpair, navigateToCycleSettings }) => {
-    console.log(navigateToCycleSettings)
     return (
         <View style={globalStyle.card}>
             <Text

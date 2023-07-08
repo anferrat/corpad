@@ -3,6 +3,7 @@ import Geolocation from 'react-native-geolocation-service';
 import GeolocationTime from '@react-native-community/geolocation'
 import geomagnetism from 'geomagnetism'
 import { Error, errors } from '../../utils/Error'
+import { timeFix } from '../../config/geolocation';
 
 export class GeolocationRepository {
     constructor() { }
@@ -53,16 +54,25 @@ export class GeolocationRepository {
                     device: Date.now(),
                     gnss: timestamp
                 })
-            }, () => resolve({ device: null, gnss: null }), { enableHighAccuracy: true, timeout: 10000, maximumAge: 50 })
+            }, () => resolve({ device: null, gnss: null }), { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 })
         })
     }
 
     watchTimeAdjustment(callback) {
         const watchId = GeolocationTime.watchPosition(
-            ({ timestamp }) => callback({ gnss: Date.now(), device: timestamp }),
+            ({ timestamp }) => callback({ gnss: timestamp, device: Date.now() }),
             (er) => { throw new Error(errors.LOCATION, 'Unable to get time adjustment', er, 800) },
-            { interval: 100, timeout: 10000, enableHighAccuracy: true, maximumAge: 50 })
+            { interval: 100, timeout: 10000, enableHighAccuracy: true, maximumAge: 0 })
         return () => GeolocationTime.clearWatch(watchId)
+    }
+
+    recordTimeFix(gnss, device) {
+        timeFix.gnss = gnss
+        timeFix.device = device
+    }
+
+    getTimeFix() {
+        return timeFix
     }
 
 

@@ -81,7 +81,6 @@ export class _CyclicalCapture {
                 shifts.push(array[i + 1] - array[i])
             }
             const deviation = this._getZeroDeviation(shifts)
-            console.log(deviation)
             for (i = 0; i < shifts.length; i++) {
                 if (Math.abs(shifts[i]) < deviation) {
                     return array[i]
@@ -93,7 +92,7 @@ export class _CyclicalCapture {
 
     execute(array, onTime, offTime) {
         //array - data values captured during single cycle. Captured with same interval
-        //console.log(array)
+
         //Getting cycle based on shifts in captured values
         if (array.length === 0)
             return { on: null, off: null }
