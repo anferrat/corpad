@@ -74,4 +74,12 @@ export class PotentialValidation extends Validation {
             subitemId: this.id.required()
         }))
     }
+
+    getOnOffPair(obj) {
+        return this.validate(obj,
+            object({
+                subitemId: this.id.required(),
+                potentialId: this.id.required()
+            }))
+    }
 }

@@ -39,7 +39,7 @@ const containerStyles = StyleSheet.create({
         borderRadius: 20,
         paddingHorizontal: 12,
         paddingRight: 12,
-        marginHorizontal: 2,
+        marginHorizontal: 4,
         marginBottom: 12,
         elevation: 2,
         maxWidth: '32%',

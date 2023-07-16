@@ -33,26 +33,49 @@ export class _PokitMultimeterService {
         return Buffer.from(hexArray).toJSON().data
     }
 
-    async startPotentialCapture(peripheralId) {
+    async startMultimeter(peripheralId) {
         await this.bluetoothRepo.connect(peripheralId)
         await this.bluetoothRepo.retrieveServices(peripheralId)
+        await this.bluetoothRepo.startNotification(peripheralId, this.multimeterServices.MULTIMETER, this.multimeterCharacteristics.MULTIMETER.READING)
+        await this.bluetoothRepo.startNotification(peripheralId, this.multimeterServices.STATUS, this.multimeterCharacteristics.STATUS.BUTTON_PRESS)
+    }
+
+    async stopMultimeter(peripheralId) {
+        await this.bluetoothRepo.stopNotification(peripheralId, this.multimeterServices.MULTIMETER, this.multimeterCharacteristics.MULTIMETER.READING)
+        await this.bluetoothRepo.stopNotification(peripheralId, this.multimeterServices.STATUS, this.multimeterCharacteristics.STATUS.BUTTON_PRESS)
+        await this.bluetoothRepo.disconnect(peripheralId)
+    }
+
+    async startPotentialCapture(peripheralId) {
         await this.bluetoothRepo.write(
             peripheralId,
             this.multimeterServices.MULTIMETER,
             this.multimeterCharacteristics.MULTIMETER.SETTINGS,
             this._convertBytes(this.BYTE_DATA.MULTIMETER_SERVICE.SETTING_SETUP.DC_VOLTAGE),
             this.BYTE_DATA.MULTIMETER_SERVICE.SETTING_SETUP.DC_VOLTAGE.length)
-        await this.bluetoothRepo.startNotification(peripheralId, this.multimeterServices.MULTIMETER, this.multimeterCharacteristics.MULTIMETER.READING)
     }
 
     async stopPotentialCapture(peripheralId) {
-        await this.bluetoothRepo.stopNotification(peripheralId, this.multimeterServices.MULTIMETER, this.multimeterCharacteristics.MULTIMETER.READING)
-        await this.bluetoothRepo.write(
-            peripheralId,
-            this.multimeterServices.MULTIMETER,
-            this.multimeterCharacteristics.MULTIMETER.SETTINGS,
-            this._convertBytes(this.BYTE_DATA.MULTIMETER_SERVICE.SETTING_SETUP.IDLE),
-            this.BYTE_DATA.MULTIMETER_SERVICE.SETTING_SETUP.IDLE.length)
+        await Promise.all([
+            this.bluetoothRepo.write(
+                peripheralId,
+                this.multimeterServices.MULTIMETER,
+                this.multimeterCharacteristics.MULTIMETER.SETTINGS,
+                this._convertBytes(this.BYTE_DATA.MULTIMETER_SERVICE.SETTING_SETUP.IDLE),
+                this.BYTE_DATA.MULTIMETER_SERVICE.SETTING_SETUP.IDLE.length),
+        ])
+
+    }
+
+    buttonPressListener(callback, { peripheralId }) {
+        return this.bluetoothRepo.newCharacteristicValueListener(({ peripheral, characteristic, service, value }) => {
+            if (
+                peripheral === peripheralId &&
+                characteristic === this.multimeterCharacteristics.STATUS.BUTTON_PRESS &&
+                service === this.multimeterServices.STATUS)
+                //need to convert value to avoid longPress capture
+                callback(true)
+        }).remove
     }
 
     realTimePotentialListener(callback, { peripheralId }) {
@@ -61,14 +84,14 @@ export class _PokitMultimeterService {
                 peripheral === peripheralId &&
                 characteristic === this.multimeterCharacteristics.MULTIMETER.READING &&
                 service === this.multimeterServices.MULTIMETER)
-                callback(null, this._convertFloat(value))
+                callback({ cycle: null, value: this._convertFloat(value) })
         }).remove
     }
 
     syncedPotentialListener(callback, { peripheralId, onTime, offTime, firstCycle, getTimeAdjustment }) {
         let values = []
         let timestamps = []
-        const removeListener = this.realTimePotentialListener((_, value) => {
+        const removeListener = this.realTimePotentialListener(({ value }) => {
             timestamps.push(Date.now())
             values.push(value)
             callback(null, value)
@@ -77,8 +100,8 @@ export class _PokitMultimeterService {
         const timer = setInterval(() => {
             const timeAdjustment = getTimeAdjustment()
             const [[cycle1, value1], [cycle2, value2]] = this._gpsCapture.execute(values, timestamps, timeAdjustment, firstCycle, onTime, offTime)
-            callback(cycle1, value1)
-            callback(cycle2, value2)
+            callback({ cycle: cycle1, value: value1 })
+            callback({ cycle: cycle2, value: value2 })
             values = []
             timestamps = []
         }, onTime + offTime)
@@ -90,15 +113,15 @@ export class _PokitMultimeterService {
 
     highLowPotentialListener(callback, { peripheralId, onTime, offTime }) {
         let values = []
-        const removeListener = this.realTimePotentialListener((_, value) => {
+        const removeListener = this.realTimePotentialListener(({ value }) => {
             values.push(value)
-            callback(null, value)
+            callback({ cycle: null, value: value })
         }, { peripheralId })
 
         const timer = setInterval(() => {
             const { on, off } = this._highLowCapture.execute(values)
-            callback(MultimeterCycles.ON, on)
-            callback(MultimeterCycles.OFF, off)
+            callback({ cycle: MultimeterCycles.ON, value: on })
+            callback({ cycle: MultimeterCycles.OFF, value: off })
             values = []
         }, onTime + offTime)
         return () => {
@@ -109,15 +132,15 @@ export class _PokitMultimeterService {
 
     cyclicalPotentialListener(callback, { peripheralId, onTime, offTime }) {
         let values = []
-        const removeListener = this.realTimePotentialListener((_, value) => {
+        const removeListener = this.realTimePotentialListener(({ value }) => {
             values.push(value)
-            callback(null, value)
+            callback({ cycle: null, value })
         }, { peripheralId })
 
         const timer = setInterval(() => {
             const { on, off } = this._cyclicalCapture.execute(values, onTime, offTime)
-            callback(MultimeterCycles.ON, on)
-            callback(MultimeterCycles.OFF, off)
+            callback({ cycle: MultimeterCycles.ON, value: on })
+            callback({ cycle: MultimeterCycles.OFF, value: off })
             values = []
         }, onTime + offTime)
 

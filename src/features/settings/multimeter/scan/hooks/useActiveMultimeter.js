@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from "react-redux"
 import { startMultimeterScan, stopMultimeterScan, multimeterScanListener, multimeterStopScanListener, pairMultimeter, unpairMultimeter, connectMultimeter, disconnectMultimeter, addMultimeterStatusListener } from '../../../../../app/controllers/MultimeterController'
 import { setActiveMultimeter, setActiveMultimeterStatus } from '../../../../../store/actions/settings'
 import { errorHandler } from '../../../../../helpers/error_handler'
+import useModal from '../../../../../hooks/useModal'
 
 const useActiveMultimeter = () => {
     const dispatch = useDispatch()
@@ -12,7 +13,9 @@ const useActiveMultimeter = () => {
     const [pairingId, setPairingId] = useState(null)
     const [connecting, setConnecting] = useState(false)
     const [scanning, setScanning] = useState(false)
+    const { showModal, hideModal, visible } = useModal(false)
     const connectingFlag = useRef(false)
+    const scanningRef = useRef(false)
     const componentMounted = useRef(true)
 
 
@@ -38,6 +41,7 @@ const useActiveMultimeter = () => {
         //listens for when scan was stopped
         const stopScan = multimeterStopScanListener(() => {
             setScanning(false)
+            scanningRef.current = true
         })
 
         const connectedDevices = addMultimeterStatusListener(({ isConnected }) => {
@@ -53,9 +57,11 @@ const useActiveMultimeter = () => {
                 stopScan.response.remove()
             if (connectedDevices.response)
                 connectedDevices.response()
-            stopMultimeterScan()
+            if (scanningRef.current)
+                stopMultimeterScan()
         }
     }, [])
+
 
     const pairDevice = useCallback(async (id, name, multimeterType) => {
         if (pairingId === null) {
@@ -110,12 +116,14 @@ const useActiveMultimeter = () => {
     }, [activeMultimeter.connected])
 
     const scanDevices = useCallback(async () => {
+        hideModal()
         if (!scanning && isBluetoothOn) {
             const { status } = await startMultimeterScan()
             if (status === 200) {
                 if (componentMounted.current) {
                     setScannedDevices([])
                     setScanning(true)
+                    scanningRef.current = true
                 }
             }
             else errorHandler(status)
@@ -133,7 +141,10 @@ const useActiveMultimeter = () => {
         unpairDevice,
         pairingId,
         connecting,
-        pairing: pairingId !== null && !activeMultimeter.paired
+        pairing: pairingId !== null && !activeMultimeter.paired,
+        showModal,
+        hideModal,
+        visible
     }
 
 }

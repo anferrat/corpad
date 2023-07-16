@@ -2,7 +2,7 @@ import React from 'react'
 import InputWithTitle from './InputWithTitle'
 import { PotentialUnitLabels, ReferenceCellCodeLabels } from '../../../constants/labels'
 
-const PotentialInput = ({ potentialId, name, referenceCellName, referenceCellType, value, valid, validatePotential, updatePotentialValue, unit, displayHint, subitemIndex, potentialIndex }) => {
+const PotentialInput = ({ potentialId, name, referenceCellName, referenceCellType, value, valid, validatePotential, updatePotentialValue, unit, displayHint, subitemIndex, potentialIndex, onMultimeterPress, multimeterPaired }) => {
 
     const onEndEditing = React.useCallback(() => {
         validatePotential(value, unit, subitemIndex, potentialId, potentialIndex)
@@ -12,8 +12,19 @@ const PotentialInput = ({ potentialId, name, referenceCellName, referenceCellTyp
         updatePotentialValue(text, subitemIndex, potentialIndex)
     }, [subitemIndex, potentialIndex])
 
+    const onMultimeterPressHandler = React.useCallback(() => {
+        onMultimeterPress(potentialId)
+    }, [potentialId, onMultimeterPress])
+
+    const unitComp = React.useMemo(() => ({
+        main: PotentialUnitLabels[unit],
+        script: ReferenceCellCodeLabels[referenceCellType]
+    }), [unit, referenceCellType])
+
     return (
         <InputWithTitle
+            onMultimeterPress={onMultimeterPressHandler}
+            multimeterPaired={multimeterPaired}
             onEndEditing={onEndEditing}
             onChangeText={onChangeText}
             keyboardType='numeric'
@@ -24,10 +35,7 @@ const PotentialInput = ({ potentialId, name, referenceCellName, referenceCellTyp
             title={name}
             valid={valid}
             property='potential'
-            unit={{
-                main: PotentialUnitLabels[unit],
-                script: ReferenceCellCodeLabels[referenceCellType]
-            }}
+            unit={unitComp}
         />
     )
 }

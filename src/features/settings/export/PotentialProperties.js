@@ -1,6 +1,7 @@
 import React from 'react'
 import { View, StyleSheet, ScrollView } from 'react-native'
-import { CheckBox, RadioGroup, Radio } from '@ui-kitten/components'
+import { CheckBox, RadioGroup, Text } from '@ui-kitten/components'
+import Radio from './components/Radio'
 import { globalStyle } from '../../../styles/styles'
 import Title from './components/Title'
 import BottomButton from '../../../components/BottomButton'
@@ -11,6 +12,7 @@ import SubitemTypeSelector from './components/potentials/SubitemTypeSelector'
 import LoadingView from '../../../components/LoadingView'
 import ViewContainer from './components/ViewContainer'
 import PipelineSelector from './components/potentials/PipelineSelector'
+import CheckBoxText from './components/potentials/CheckBoxText'
 
 
 const subitemTypes = ['PL', 'RS', 'AN', 'CN', 'OT', 'FC', 'RE']
@@ -44,7 +46,7 @@ const PotentialProperties = ({ navigateToExportSubitems }) => {
                         checked={exportPotentials}
                         onChange={toggleExportPotentials}
                         style={styles.checkBox}>
-                        Export potentials
+                        <CheckBoxText>Export potentials</CheckBoxText>
                     </CheckBox>
                     <ViewContainer hidden={!exportPotentials}>
                         <View style={styles.content}>
@@ -97,7 +99,8 @@ const PotentialProperties = ({ navigateToExportSubitems }) => {
                 </View>
             </ScrollView>
             <BottomButton
-                icon={'arrow-circle-right-outline'}
+                iconPosition={'right'}
+                icon={'arrow-circle-right'}
                 onPress={onNextPress}
                 title={'Next'} />
         </>

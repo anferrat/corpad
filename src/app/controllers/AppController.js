@@ -19,6 +19,7 @@ import { TestPointRepository } from "../repository/sqlite/TestPointRepository"
 import { AppInitialization } from "../services/app/AppInitialization"
 import { OpenExternalSurvey } from "../services/app/OpenExternalSurvey"
 import { Linking } from "../services/other/Linking"
+import { Permissions } from "../services/other/Permissions"
 import { SubitemFactory } from "../services/other/SubitemFactory"
 import { WarningHandler } from "../services/other/WarningHandler"
 import { GetCurrentSurveyStatus } from "../services/survey/manager/GetCurrentSurveyStatus"
@@ -31,6 +32,8 @@ import { SimpleJsonImport } from "../services/survey/manager/import/json/SimpleJ
 import { DatabaseInitialization } from "../services/survey/other/DatabaseInitialization"
 import { SettingInitialization } from "../services/survey/other/SettingInitialization"
 import { DefaultNameInitialization } from "../services/survey/other/default_names/DeafultNameInitialization"
+import { MultimeterInitialization } from "../services/survey/other/multimeter/MultimeterInitialization"
+import { MultimeterFactory } from "../services/survey/other/multimeter/_devices/MultimeterFactory"
 import { SaveCloudSurveyFile } from "../services/survey_file/cloud/SaveCloudSurveyFile"
 import { ReadExternalSurveyFile } from "../services/survey_file/local/ReadExternalSurveyFile"
 import { SaveSurveyFile } from "../services/survey_file/local/SaveSurveyFile"
@@ -62,7 +65,10 @@ class AppController extends Controller {
         this.appSettingInitializationService = new SettingInitialization(settingRepo)
         this.databaseInitializationService = new DatabaseInitialization(appRepo)
 
-        this.appInitializationService = new AppInitialization(this.currentSurveyStatusService, networkService, googleDriveAuthorizationService, surveyRepo, bluetoothRepo, this.defaultNameInitializationService, settingRepo, this.openExternalSurveyService, this.appSettingInitializationService, this.databaseInitializationService)
+        this.multimeterFactory = new MultimeterFactory(bluetoothRepo)
+        this.multimeterInitializationService = new MultimeterInitialization(bluetoothRepo, settingRepo, this.multimeterFactory)
+
+        this.appInitializationService = new AppInitialization(this.currentSurveyStatusService, networkService, googleDriveAuthorizationService, surveyRepo, this.multimeterInitializationService, this.defaultNameInitializationService, settingRepo, this.openExternalSurveyService, this.appSettingInitializationService, this.databaseInitializationService)
     }
 
 

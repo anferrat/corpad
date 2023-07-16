@@ -17,6 +17,7 @@ const useMarkers = ({ navigateToEdit, navigateToView, ref }) => {
     const isFocused = useIsFocused()
     const dispatch = useDispatch()
     const { loading, activeMarker, markers, newItemMarker, satelliteMode } = map
+    console.log(markers)
     const currentRegion = useRef({
         latitudeDelta: 0.0135,
         longitudeDelta: 0.0135,
@@ -32,24 +33,27 @@ const useMarkers = ({ navigateToEdit, navigateToView, ref }) => {
         itemId: null
     })
 
-    useEffect(() => {
-        const loadData = async () => {
-            const { status, response } = await getMarkerList(er => errorHandler(er))
-            if (status === 200) {
-                dispatch(loadMarkers(response))
-                //onLoad animate to initial region. if active marker exist on load, it will animate to active marker instead
-                if (activeMarkerRef.current.itemType === null) {
-                    const regionData = await getInitialMapRegion({ markers: response })
-                    ref.current.animateToRegion(regionData.response)
-                }
-                else {
-                    dispatch(setActiveMarker(activeMarkerRef.current.itemId, activeMarkerRef.current.itemType))
-                }
+    const loadData = useCallback(async () => {
+        const { status, response } = await getMarkerList(er => errorHandler(er))
+        if (status === 200) {
+            dispatch(loadMarkers(response))
+            //onLoad animate to initial region. if active marker exist on load, it will animate to active marker instead
+            if (activeMarkerRef.current.itemType === null) {
+                const regionData = await getInitialMapRegion({ markers: response })
+                ref.current.animateToRegion(regionData.response)
+            }
+            else {
+                dispatch(setActiveMarker(activeMarkerRef.current.itemId, activeMarkerRef.current.itemType))
             }
         }
-        if (loading)
-            loadData()
+    }, [dispatch])
 
+    useEffect(() => {
+        if (loading && isFocused)
+            loadData()
+    }, [loading, isFocused, loadData])
+
+    useEffect(() => {
         const onUpdateHandler = EventRegister.addEventListener('GLOBAL_ITEM_UPDATED', async ({ itemType, itemId }) => {
             if (!loading && (itemType === 'TEST_POINT' || itemType === 'RECTIFIER')) {
                 const { status, response } = await getMarker({ itemType, itemId })

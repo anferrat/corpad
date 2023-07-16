@@ -40,7 +40,7 @@ const useApp = () => {
         }
       },
       (er) => {
-        errorHandler(er)
+        er !== 101 ? errorHandler(er) : null
         dispatch(updateLoader(false, null, null))
       },
       ({ name, fileName, syncTime, isCloud, isLoaded }) => {

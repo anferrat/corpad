@@ -1,12 +1,10 @@
-import { MultimeterInitialization } from "../survey/other/multimeter/MultimeterInitialization"
-
 export class AppInitialization {
-    constructor(currentSurveyStatusService, networkService, authorizationService, surveyRepo, bluetoothRepo, defaultNamesInitializationService, settingRepo, openExternalSurveyService, settingInitializationService, databaseInitializationService) {
+    constructor(currentSurveyStatusService, networkService, authorizationService, surveyRepo, multimeterInitializationService, defaultNamesInitializationService, settingRepo, openExternalSurveyService, settingInitializationService, databaseInitializationService) {
         this.currentSurveyStatusService = currentSurveyStatusService
         this.networkService = networkService
         this.authorizationService = authorizationService
         this.surveyRepo = surveyRepo
-        this.multimeterInitializationService = new MultimeterInitialization(bluetoothRepo, settingRepo)
+        this.multimeterInitializationService = multimeterInitializationService
         this.defaultNamesInitializationService = defaultNamesInitializationService
         this.settingRepo = settingRepo
         this.openExternalSurveyService = openExternalSurveyService
@@ -31,22 +29,20 @@ export class AppInitialization {
             this.defaultNamesInitializationService.execute(),
         ])
 
-        if (isLoaded) {
+        if (isLoaded)
             await this.surveyRepo.clearEmptyValues()
 
-            if (initialUrl !== null)
-                try {
-                    await this.openExternalSurveyService.execute(initialUrl, isLoaded).then(meta => {
-                        syncTime = meta.syncTime
-                        name = meta.name
-                        fileName = meta.fileName
-                        isCloud = meta.isCloud
-                        if (!meta.isLoaded)
-                            isLoaded = meta.isLoaded
-                    })
-                }
-                catch { }
-        }
+        if (initialUrl !== null)
+            try {
+                const loaded = await this.openExternalSurveyService.execute(initialUrl, isLoaded)
+                syncTime = loaded.syncTime ?? syncTime
+                name = loaded.name ?? name
+                fileName = loaded.fileName ?? fileName
+                isCloud = loaded.isCloud ?? isCloud
+                isLoaded = loaded.isLoaded ?? isLoaded
+            }
+            catch { }
+
 
         if (!isSigned) {
             const session = await this.authorizationService.signInSilently()

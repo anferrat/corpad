@@ -8,7 +8,7 @@ import useSubitemListActions from './hooks/useSubitemListActions'
 
 
 const SubitemListView = ({ itemId, itemType, navigateToEditSubitem }) => {
-    const { potentialUnit, potentialHint, subitems, pipelineList, loading, idMap, dispatch } = useSubitemListData({ itemId, itemType })
+    const { potentialUnit, potentialHint, subitems, pipelineList, loading, multimeterPaired, idMap, dispatch, onMultimeterPress } = useSubitemListData({ itemId, itemType })
     const { validatePotential, updatePotentialValue, updatePropertyValue, validateCouponCurrent, validateVoltageDrop, validateCurrent, updateShorted, validateVoltage } = useSubitemListActions(dispatch)
 
     return (
@@ -21,6 +21,7 @@ const SubitemListView = ({ itemId, itemType, navigateToEditSubitem }) => {
                     style={globalStyle.card}>
                     <SubitemViewFactory
                         subitem={subitem}
+                        multimeterPaired={multimeterPaired}
                         idMap={idMap}
                         subitemIndex={index}
                         navigateToEditSubitem={navigateToEditSubitem}
@@ -34,7 +35,8 @@ const SubitemListView = ({ itemId, itemType, navigateToEditSubitem }) => {
                         updatePropertyValue={updatePropertyValue}
                         validateCouponCurrent={validateCouponCurrent}
                         validateVoltageDrop={validateVoltageDrop}
-                        validateCurrent={validateCurrent} />
+                        validateCurrent={validateCurrent}
+                        onMultimeterPress={onMultimeterPress} />
                 </View>
             )
             )}

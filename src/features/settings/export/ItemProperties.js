@@ -1,6 +1,7 @@
 import React from 'react'
 import { View, StyleSheet, ScrollView } from 'react-native'
-import { Radio, RadioGroup } from '@ui-kitten/components'
+import { RadioGroup } from '@ui-kitten/components'
+import Radio from './components/Radio'
 import { globalStyle } from '../../../styles/styles'
 import ItemSelectorCard from './components/item/ItemSelectorCard'
 import Title from './components/Title'
@@ -65,7 +66,8 @@ const ItemProperties = ({ navigateToExportOverview, navigateToExportPotentials, 
                 </View>
             </ScrollView>
             <BottomButton
-                icon={'arrow-circle-right-outline'}
+                iconPosition={'right'}
+                icon={'arrow-circle-right'}
                 title={'Next'}
                 onPress={onNextPress}
             />

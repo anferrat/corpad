@@ -52,6 +52,7 @@ const usePotentialsData = ({ itemId, subitemId }) => {
     },
         [loading])
 
+
     //creates potential in state
     const createPotentialHandler = useCallback(async (potentialTypeIndex, referenceCellIndex) => {
         const { status, response } = await createPotential({ referenceCells, potentialTypes, subitemId, referenceCellIndex, potentialTypeIndex },
@@ -77,7 +78,7 @@ const usePotentialsData = ({ itemId, subitemId }) => {
         selected,
         createPotentialHandler,
         deletePotentialHandler,
-        updatePotentialHandler
+        updatePotentialHandler,
     }
 }
 

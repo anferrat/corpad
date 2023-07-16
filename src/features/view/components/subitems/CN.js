@@ -1,5 +1,5 @@
 import React from 'react'
-import TextLine from '../TextLine'
+import TextLine from '../../../../components/TextLine'
 import Header from '../Header'
 import PotentialsView from '../PotentialsView'
 import Divider from '../Divider'
@@ -18,7 +18,7 @@ const densityUnit = {
     format: 'super'
 }
 
-const CN = ({ data, validateCouponCurrent, updatePropertyValue, onEdit, subitemIndex, idMap, updatePotentialValue, validatePotential, potentialUnit, potentialHint }) => {
+const CN = ({ data, validateCouponCurrent, updatePropertyValue, onEdit, subitemIndex, idMap, updatePotentialValue, validatePotential, potentialUnit, potentialHint, onMultimeterPress, multimeterPaired }) => {
     const { type, name, current, area, density, pipelineCardId, valid, potentials, couponType, wireColor, wireGauge } = data
 
     const onChangeCurrent = React.useCallback((value) => updatePropertyValue(value, subitemIndex, 'current'), [updatePropertyValue, subitemIndex])
@@ -38,6 +38,8 @@ const CN = ({ data, validateCouponCurrent, updatePropertyValue, onEdit, subitemI
             <Divider
                 visible={true} />
             <PotentialsView
+                multimeterPaired={multimeterPaired}
+                onMultimeterPress={onMultimeterPress}
                 subitemIndex={subitemIndex}
                 updatePotentialValue={updatePotentialValue}
                 validatePotential={validatePotential}

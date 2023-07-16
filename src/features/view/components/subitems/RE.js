@@ -1,5 +1,5 @@
 import React from 'react'
-import TextLine from '../TextLine'
+import TextLine from '../../../../components/TextLine'
 import Header from '../Header'
 import PotentialsView from '../PotentialsView'
 import Divider from '../Divider'
@@ -13,6 +13,8 @@ const RE = ({
   validatePotential,
   subitemIndex,
   onEdit,
+  onMultimeterPress,
+  multimeterPaired
 }) => {
   const { name, type, wireColor, wireGauge, potentials, rcType } = data
   return (
@@ -26,6 +28,8 @@ const RE = ({
       <Divider
         visible={potentials.length > 0 || rcType !== null} />
       <PotentialsView
+        multimeterPaired={multimeterPaired}
+        onMultimeterPress={onMultimeterPress}
         subitemIndex={subitemIndex}
         updatePotentialValue={updatePotentialValue}
         validatePotential={validatePotential}

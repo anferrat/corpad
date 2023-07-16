@@ -84,7 +84,7 @@ export const getItem = (itemType) => {
                 latitude: getParameter({}),
                 longitude: getParameter({}),
                 comment: getParameter({ mergeAllowed: true }),
-                status: getParameter({ parameterType: 1, itemList: Object.values(ItemStatuses).filter((status) => status !== ItemStatuses.NO_STATUS), itemListLabels: StatusLabels }),
+                status: getParameter({ parameterType: 1, itemList: Object.values(ItemStatuses).filter((status) => status !== ItemStatuses.NO_STATUS), itemListLabels: StatusLabels, importType: 0, defaultValue: ItemStatuses.UNKNOWN }),
                 model: getParameter({ mergeAllowed: true }),
                 serialNumber: getParameter({}),
                 powerSource: getParameter({ parameterType: 1, itemList: Object.values(PowerSources), itemListLabels: PowerSourceLabels }),

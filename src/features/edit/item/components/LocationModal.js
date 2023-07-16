@@ -3,6 +3,7 @@ import { View, StyleSheet } from 'react-native'
 import { Modal, Button, Text, Icon } from '@ui-kitten/components'
 import { useLocation } from '../hooks/useLocation'
 import { basic400, control, primary } from '../../../../styles/colors'
+import LoadingView from '../../../../components/LoadingView'
 
 const LocationModal = ({ visible, hideModal, updateLatAndLon }) => {
     //Pretty horrible modal from ui kitten. had to split into two components for animation to work
@@ -27,13 +28,14 @@ const LocationModalContent = ({ hideModal, updateLatAndLon }) => {
     const { latitude, longitude, accuracy } = useLocation(hideModal)
 
     const onCapture = useCallback(() => {
-        updateLatAndLon(latitude, longitude)
+        if (latitude !== null && longitude !== null)
+            updateLatAndLon(latitude, longitude)
         hideModal()
     }, [latitude, longitude, updateLatAndLon, hideModal])
 
     const renderIcon = (props) => <Icon
         {...props}
-        name={'corner-down-right-outline'} />
+        name={'checkmark-circle-2'} />
 
     return (
         <>
@@ -41,17 +43,19 @@ const LocationModalContent = ({ hideModal, updateLatAndLon }) => {
                 <Icon name={'navigation'} style={styles.titleIcon} fill={primary} />
                 <Text category='h6' style={styles.title}>Coordinate capture</Text>
             </View>
-            <View style={styles.coords}>
-                <View style={styles.values}>
-                    <Text appearance='hint' category='label' style={styles.text}>Latitude:</Text>
-                    <Text category='p1' style={styles.textValue}>{latitude}</Text>
+            <LoadingView loading={latitude === null && longitude === null}>
+                <View style={styles.coords}>
+                    <View style={styles.values}>
+                        <Text appearance='hint' category='label' style={styles.text}>Latitude:</Text>
+                        <Text category='p1' style={styles.textValue}>{latitude}</Text>
+                    </View>
+                    <View style={styles.values}>
+                        <Text appearance='hint' category='label' style={styles.text}>Longitude:</Text>
+                        <Text category='p1' style={styles.textValue}>{longitude}</Text>
+                    </View>
                 </View>
-                <View style={styles.values}>
-                    <Text appearance='hint' category='label' style={styles.text}>Longitude:</Text>
-                    <Text category='p1' style={styles.textValue}>{longitude}</Text>
-                </View>
-            </View>
-            <Text style={styles.accuracy} category='label' appearance='hint'>Accuracy: <Text category='p1' style={styles.textValue}>{accuracy?.toFixed(0) ?? '??'} m</Text> </Text>
+                <Text style={styles.accuracy} category='label' appearance='hint'>Accuracy: <Text category='p1' style={styles.textValue}>{accuracy?.toFixed(0) ?? '??'} m</Text> </Text>
+            </LoadingView>
             <View style={styles.buttons}>
                 <Button style={styles.button} accessoryLeft={renderIcon} onPress={onCapture}>Capture</Button>
                 <Button style={styles.button} appearance='ghost' onPress={hideModal}>Cancel</Button>

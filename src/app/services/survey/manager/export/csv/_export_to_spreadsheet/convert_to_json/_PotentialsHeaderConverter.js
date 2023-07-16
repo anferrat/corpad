@@ -42,12 +42,12 @@ export class _PotentialHeaderConverter {
         const potentialName = potentialTypeNameMap[potentialTypeId] ?? '???'
         if (groupPotentialsByPipeline && (subitemType === SubitemTypes.RISER || subitemType === SubitemTypes.PIPELINE)) {
             const pipelineName = this._generatePipelineName(pipelineId, pipelineNameMap)
-            return `${potentialName}_PIPELINE_POTENTIAL_(${pipelineName}), V`
+            return `${potentialName}_PIPELINE_POTENTIAL_(${pipelineName}) V`
         }
         else {
             const subTypeLabel = SubitemTypeLabels[subitemType]
             const suffix = subitemTypeIndex ? `_${subitemTypeIndex + 1}` : ''
-            return `${potentialName}_POTENTIAL(${subTypeLabel}${suffix}), V`
+            return `${potentialName}_POTENTIAL(${subTypeLabel}${suffix}) V`
         }
     }
 

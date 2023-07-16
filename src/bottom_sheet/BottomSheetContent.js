@@ -59,6 +59,7 @@ const BottomSheetContent = () => {
             <Route
                 routeKey='BASIC_MENU'>
                 <MoreOptionsSheet
+                    navigateToMultimeter={navigateToMultimeter}
                     navigateToExportedFiles={navigateToExportedFiles}
                     navigateToCalculatorList={navigateToCalculatorList}
                     closeSheet={closeSheet} />

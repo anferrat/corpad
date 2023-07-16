@@ -1,4 +1,4 @@
-import { ItemTypes, SubitemTypes, PipeDiameters, WireColors, TestPointTypes, PermanentPotentialTypes, SortingOptions, ItemStatuses, PipeSchedules, WireGauges, CurrentUnits, AreaUnits, CurrentDensityUnits, FactorUnits, PotentialUnits, AnodeMaterials, ReferenceCellTypes, IsolationTypes, CouponTypes, PipelineMaterials, PipelineProducts, PowerSources, TapOptions, CoarseFineOptions, ExportItemProperties, ExportSubitemProperties, CalculatorTypes, PipelineCoating, IsolationShorted, MultimeterTypes, TimeUnits } from "./global"
+import { ItemTypes, SubitemTypes, PipeDiameters, WireColors, TestPointTypes, PermanentPotentialTypes, SortingOptions, ItemStatuses, PipeSchedules, WireGauges, CurrentUnits, AreaUnits, CurrentDensityUnits, FactorUnits, PotentialUnits, AnodeMaterials, ReferenceCellTypes, IsolationTypes, CouponTypes, PipelineMaterials, PipelineProducts, PowerSources, TapOptions, CoarseFineOptions, ExportItemProperties, ExportSubitemProperties, CalculatorTypes, PipelineCoating, IsolationShorted, MultimeterTypes, TimeUnits, MultimeterMeasurementTypes, MultimeterCycles, MultimeterSyncModes } from "./global"
 
 export const DefaultNames = Object.freeze({
     [ItemTypes.TEST_POINT]: 'TP',
@@ -388,4 +388,20 @@ export const TimeUnitLabels = Object.freeze({
     [TimeUnits.MILISECONDS]: 'ms',
     [TimeUnits.MINUTES]: 'm',
     [TimeUnits.HOURS]: 'hr'
+})
+
+export const MeasurementTypeLabels = Object.freeze({
+    [MultimeterMeasurementTypes.POTENTIALS]: 'DC Volts'
+})
+
+export const MultimeterCycleLabels = Object.freeze({
+    [MultimeterCycles.ON]: 'On',
+    [MultimeterCycles.OFF]: 'Off'
+})
+
+export const MultimeterSyncModeLabels = Object.freeze({
+    [MultimeterSyncModes.REAL_TIME]: 'No cycle',
+    [MultimeterSyncModes.GPS]: 'GPS',
+    [MultimeterSyncModes.HIGH_LOW]: 'High/Low',
+    [MultimeterSyncModes.CYCLED]: 'Shift'
 })

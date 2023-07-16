@@ -1,26 +1,64 @@
 import React from 'react'
-import { FlatList } from 'react-native-gesture-handler'
+import { SectionList } from 'react-native'
 import { Text } from '@ui-kitten/components'
 import { StyleSheet, View } from 'react-native'
-import { default as licenseList } from '../../../licenses/android/licenses.json'
+import { default as licenses } from '../../../licenses/android/licenses.json'
+import { licenseSplitter } from './helpers/functions'
+import { licenseText } from './helpers/licenseText'
+
 
 const Licenses = () => {
     const renderItem = ({ item }) => {
+        const { copyright, name } = item
         return (
-            <Text category='s1' style={styles.listItem}>- {item}, <Text category='s1'>{licenseList[item].copyright}</Text></Text>
+            <Text
+                category='s1'
+                style={styles.listItem}>- {name}, <Text category='s1'>{copyright}</Text></Text>
         )
     }
-    return (
-        <FlatList
-            contentContainerStyle={styles.mainView}
-            ListFooterComponent={<Text>{`\nThe MIT License (MIT)\n\nCopyright (c) <year> <copyright holders>\n\nPermission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:\n\nThe above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.\n\nTHE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.`}</Text>}
-            data={Object.keys(licenseList)}
-            renderItem={renderItem}
-            ListHeaderComponent={<>
-                <Text style={styles.header}>The following components are licensed under the MIT licence reproduced below:</Text>
-            </>}
-        />
+    const renderSectionHeader = ({ section: { title } }) => (
+        <View style={styles.sectionHeader}>
+            <Text
+                style={styles.sectionTitle}
+                category='h6'>
+                {title}
+            </Text>
+            <Text category='p1'>
+                The following components are licensed under the {title} licence reproduced below:
+            </Text>
+        </View>
+    )
 
+    const renderSectionFooter = ({ section: { title } }) => (
+        <View>
+            <Text category='p1'>
+                {licenseText[title]}
+            </Text>
+        </View>
+    )
+
+    const renderListHeader = () => (
+        <View>
+            <Text
+                category='h5'
+                style={styles.header}>
+                Third Party Notices
+            </Text>
+            <Text category='p1' style={styles.headerText}>
+                The following list third party software that may be contained in portion of this app:
+            </Text>
+        </View>
+    )
+    return (
+        <SectionList
+            keyExtractor={item => item.name}
+            contentContainerStyle={styles.mainView}
+            sections={licenseSplitter(licenses)}
+            renderItem={renderItem}
+            renderSectionHeader={renderSectionHeader}
+            renderSectionFooter={renderSectionFooter}
+            ListHeaderComponent={renderListHeader}
+        />
     )
 }
 
@@ -30,12 +68,22 @@ const styles = StyleSheet.create({
     mainView: {
         padding: 12
     },
-    header: {
+    sectionHeader: {
         paddingBottom: 12,
         paddingTop: 12
     },
     listItem: {
         paddingBottom: 6,
         fontWeight: 'bold'
+    },
+    sectionTitle: {
+        paddingBottom: 12,
+    },
+    header: {
+        paddingBottom: 24,
+        textAlign: 'center'
+    },
+    headerText: {
+        textAlign: 'center'
     }
 })

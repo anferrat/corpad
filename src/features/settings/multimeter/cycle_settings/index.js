@@ -4,7 +4,7 @@ import { globalStyle } from '../../../../styles/styles'
 import useMultimeterSettings from './hooks/useMultimeterSettings'
 import LoadingView from '../../../../components/LoadingView'
 import Input from '../../../../components/Input'
-import { TimeUnitLabels } from '../../../../constants/labels'
+import { MultimeterSyncModeLabels, TimeUnitLabels } from '../../../../constants/labels'
 import { MultimeterSyncModes, TimeUnits } from '../../../../constants/global'
 import { Radio, RadioGroup, Text } from '@ui-kitten/components'
 import StandardCycleToken from './components/StandardCycleToken'
@@ -86,6 +86,7 @@ const CycleSettings = () => {
                             <View
                                 style={styles.captureModeView}>
                                 <Text
+                                    style={styles.captureText}
                                     category='label'
                                     appearance='hint'>
                                     ON/OFF capture mode
@@ -95,8 +96,8 @@ const CycleSettings = () => {
                                     checked={syncMode === MultimeterSyncModes.GPS}
                                     value={MultimeterSyncModes.GPS}
                                     onPress={onSyncModeChange}
-                                    title={'GPS syncronized'}
-                                    description='Captures potentials at the begining of ON and OFF cycles. Updates once per full cycle, needs clear sky view and permission to use device GPS.' />
+                                    title={MultimeterSyncModeLabels[MultimeterSyncModes.GPS]}
+                                    description='Reporst captured values at the begining of ON and OFF cycles. Uses GPS to syncronize with global time. Cycle must start at the begining of a minute.' />
                                 {syncMode === MultimeterSyncModes.GPS ?
                                     <>
                                         <Text
@@ -116,14 +117,14 @@ const CycleSettings = () => {
                                 <CheckBoxListItem
                                     checked={syncMode === MultimeterSyncModes.HIGH_LOW}
                                     value={MultimeterSyncModes.HIGH_LOW}
-                                    title={'High/Low mode'}
-                                    description='Captures highest and lowest potential values within a cycle. Updates at least once per cycle, or more often if high/low values were captured.'
+                                    title={MultimeterSyncModeLabels[MultimeterSyncModes.HIGH_LOW]}
+                                    description='Captures highest and lowest values within a cycle. Updates once per cycle.'
                                     onPress={onSyncModeChange} />
                                 <CheckBoxListItem
                                     checked={syncMode === MultimeterSyncModes.CYCLED}
-                                    title={'Cyclical mode'}
+                                    title={MultimeterSyncModeLabels[MultimeterSyncModes.CYCLED]}
                                     value={MultimeterSyncModes.CYCLED}
-                                    description='Captures real-time potentials, determines on/off cycle by comparing number of recorded potentials to cycle periods. Reports once per cycle, takes full cycle before first report.'
+                                    description='Evaluates values and determines shift between cycles. Reports captured values at the begining of ON and OFF cycles. Only works for cycles with different ON/OFF durations.'
                                     onPress={onSyncModeChange} />
                             </View>
                         </LoadingView>
@@ -177,5 +178,8 @@ const styles = StyleSheet.create({
     },
     container: {
         minHeight: 300
-    }
+    },
+    captureText: {
+        paddingBottom: 12
+    },
 })

@@ -1,5 +1,5 @@
 import React, { useContext } from 'react'
-import { Animated, StyleSheet, View } from 'react-native'
+import { Animated, StyleSheet } from 'react-native'
 import { useSelector } from 'react-redux'
 import TopBarTitle from './TopBarTitle'
 import { ScrollRef } from '../../../../App'
@@ -17,8 +17,8 @@ const ViewTitle = ({ itemType }) => {
     const icon = itemType === ItemTypes.TEST_POINT ? TestPointTypeIcons[subType] : ItemTypeSingleIcons[itemType]
 
     const translation = scrollingRef.current.interpolate({
-        inputRange: [0, 80],
-        outputRange: [80, 0],
+        inputRange: [0, 70],
+        outputRange: [70, 0],
         extrapolate: 'clamp',
     })
     const opacity = scrollingRef.current.interpolate({
@@ -48,9 +48,7 @@ export default ViewTitle
 
 const styles = StyleSheet.create({
     view: {
-        position: 'absolute',
-        top: 0,
-        left: 50,
-        right: 0,
+        flexDirection: 'row',
+        pointerEvents: 'none'
     }
 })

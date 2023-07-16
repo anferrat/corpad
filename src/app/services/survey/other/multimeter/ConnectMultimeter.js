@@ -1,8 +1,10 @@
+import { _MultimeterFactory } from "./_devices/MultimeterFactory"
+
 export class ConnectMultimeter {
-    constructor(bluetoothRepo, settingRepo, permissions) {
-        this.bluetoothRepo = bluetoothRepo
+    constructor(settingRepo, permissions, multimeterFactory) {
         this.settingRepo = settingRepo
         this.permissions = permissions
+        this.multimeterFactory = multimeterFactory
     }
 
     async execute() {
@@ -10,19 +12,12 @@ export class ConnectMultimeter {
             this.settingRepo.get(),
             this.permissions.bluetooth()
         ])
-        const { peripheralId } = multimeter
+        const { peripheralId, type } = multimeter
         if (peripheralId !== null && peripheralId) {
-            const isConnected = await this.bluetoothRepo.isDeviceConnected(peripheralId)
-            if (isConnected)
-                return {
-                    isConnected
-                }
-            else {
-                this.bluetoothRepo.connect(peripheralId)
-                return {
-                    isConnected: false
-                }
-
+            const multimeterService = this.multimeterFactory.execute(type)
+            await multimeterService.startMultimeter(peripheralId)
+            return {
+                isConnected: true
             }
         }
         return {

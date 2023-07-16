@@ -22,5 +22,6 @@ export const globalStyle = StyleSheet.create({
         marginTop: 12,
         backgroundColor: '#fff',
         overflow: 'hidden',
+        zIndex: 1
     }
 }) 

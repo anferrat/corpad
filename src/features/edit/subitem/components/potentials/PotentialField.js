@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { StyleSheet, View } from 'react-native'
 import { Text } from '@ui-kitten/components'
-import SingleIconButton from '../../../../../components/IconButton'
+import IconButton from '../../../../../components/IconButton'
 import Input from '../../../../../components/Input'
 import { ReferenceCellCodeLabels, PotentialUnitLabels } from '../../../../../constants/labels'
 
@@ -15,10 +15,13 @@ const displayTitle = (title) => <Text
 
 const PotentialField = (props) => {
     const [text, setText] = useState(props.value)
+
     useEffect(() => {
         if (text !== props.value)
             setText(props.value)
     }, [props.value])
+
+
     const title = React.useCallback(() => <Text
         appearance='hint'
         numberOfLines={1}
@@ -32,11 +35,12 @@ const PotentialField = (props) => {
     }), [])
 
     const removeButton = React.useMemo(() => <View style={styles.button}>
-        <SingleIconButton
+        <IconButton
             iconName='close'
             onPress={props.deletePotentialHandler.bind(this, props.index, props.id)}
         />
     </View>, [props.deletePotentialHandler, props.index, props.id])
+
 
     return (
         <View style={styles.mainView}>

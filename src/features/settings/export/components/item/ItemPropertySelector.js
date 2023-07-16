@@ -7,7 +7,9 @@ import LoadingView from '../../../../../components/LoadingView'
 const ItemPropertySelector = ({ itemProperties, properties, toggleItemProperty, loading }) => {
     return (
         <View style={styles.container}>
-            <LoadingView loading={loading}>
+            <LoadingView
+                loading={loading}
+                style={styles.loading}>
                 {properties.map(property => (
                     <ItemPropertyToggleToken
                         key={property}
@@ -25,6 +27,9 @@ export default ItemPropertySelector
 const styles = StyleSheet.create({
     container: {
         flexDirection: 'row',
-        flexWrap: 'wrap'
+        flexWrap: 'wrap',
     },
+    loading: {
+        minHeight: 150
+    }
 })

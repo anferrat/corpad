@@ -7,16 +7,20 @@ import { MultimeterSyncModes } from "../../constants/global"
 const useTimeAdjustment = () => {
     const timeAdjustmentActive = useSelector(state => (
         //Only sync GPS time when there is paired multimeter and it is set to record GPS synced values
-        state.settings.activeMultimeter.paired && state.settings.activeMultimeter.syncMode === MultimeterSyncModes.GPS
+        Boolean(state.settings.activeMultimeter.paired && state.settings.activeMultimeter.syncMode === MultimeterSyncModes.GPS)
     ))
     const dispatch = useDispatch()
 
     useEffect(() => {
-        const { response } = addTimeAdjustmentListener(({ timeFix }) => {
-            dispatch(setGpsTimeAdjustment(timeFix))
-        })
+        let listener
+        if (timeAdjustmentActive) {
+            listener = addTimeAdjustmentListener(({ timeFix }) => {
+                dispatch(setGpsTimeAdjustment(timeFix))
+            })
+        }
         return () => {
-            response()
+            if (listener)
+                listener.response()
         }
     }, [timeAdjustmentActive])
 }

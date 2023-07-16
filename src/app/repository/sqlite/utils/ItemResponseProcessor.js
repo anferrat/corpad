@@ -4,53 +4,53 @@ import { ItemTypes, IconTypes, ItemStatuses, DisplayCardDataTypes, SortingOption
 
 export class ItemResponseProcessor {
     constructor() {
-        this.natSortASC = ` ORDER BY 
-        (CASE
-        WHEN (CAST(name AS INTEGER)==0 AND substr(name, 1) <> '0') THEN NULL
-        ELSE CAST(name AS INTEGER)
-        END) ASC NULLS LAST,
-        (CASE
-        WHEN (name IS NULL) OR (length(name)==1) OR ((CAST(substr(name, -1) AS INTEGER)==0) AND substr(name, -1) <> '0' ) THEN NULL
-        WHEN ((CAST(substr(name, -2) AS INTEGER)==0) AND (substr(name, -2) <>'00')) THEN substr(name, 1, length(name)-1) COLLATE NOCASE
-        WHEN ((CAST(substr(name, -3) AS INTEGER)==0) AND (substr(name, -3) <>'000')) THEN substr(name, 1, length(name)-2) COLLATE NOCASE
-        WHEN ((CAST(substr(name, -4) AS INTEGER)==0) AND (substr(name, -4) <>'0000')) THEN substr(name, 1, length(name)-3) COLLATE NOCASE
-        WHEN ((CAST(substr(name, -5) AS INTEGER)==0) AND (substr(name, -5) <>'00000')) THEN substr(name, 1, length(name)-4) COLLATE NOCASE
-        WHEN ((CAST(substr(name, -6) AS INTEGER)==0) AND (substr(name, -6) <>'000000')) THEN substr(name, 1, length(name)-5) COLLATE NOCASE
-        ELSE substr(name, 1, length(name)-6) COLLATE NOCASE
-        END),
-        (CASE
-        WHEN ((CAST(substr(name, -1) AS INTEGER)==0) AND substr(name, -1) <> '0' ) THEN NULL
-        WHEN ((CAST(substr(name, -2) AS INTEGER)==0) AND (substr(name, -2) <>'00')) THEN CAST(substr(name, -1) AS INTEGER)
-        WHEN ((CAST(substr(name, -3) AS INTEGER)==0) AND (substr(name, -3) <>'00')) THEN CAST(substr(name, -2) AS INTEGER)
-        WHEN ((CAST(substr(name, -4) AS INTEGER)==0) AND (substr(name, -4) <>'00')) THEN CAST(substr(name, -3) AS INTEGER)
-        WHEN ((CAST(substr(name, -5) AS INTEGER)==0) AND (substr(name, -5) <>'00')) THEN CAST(substr(name, -4) AS INTEGER)
-        WHEN ((CAST(substr(name, -6) AS INTEGER)==0) AND (substr(name, -6) <>'00')) THEN CAST(substr(name, -5) AS INTEGER)
-        ELSE CAST(substr(name, -6) AS INTEGER)
-        END) NULLS FIRST,
+        this.natSortASC = ` ORDER BY
+        CASE
+          WHEN (CAST(name AS INTEGER) = 0 AND substr(name, 1) <> '0') THEN ''
+          ELSE CAST(name AS INTEGER)
+        END ASC,
+        CASE
+          WHEN (name IS NULL) OR (length(name) = 1) OR ((CAST(substr(name, -1) AS INTEGER) = 0) AND substr(name, -1) <> '0') THEN ''
+          WHEN ((CAST(substr(name, -2) AS INTEGER) = 0) AND (substr(name, -2) <> '00')) THEN substr(name, 1, length(name) - 1) COLLATE NOCASE
+          WHEN ((CAST(substr(name, -3) AS INTEGER) = 0) AND (substr(name, -3) <> '000')) THEN substr(name, 1, length(name) - 2) COLLATE NOCASE
+          WHEN ((CAST(substr(name, -4) AS INTEGER) = 0) AND (substr(name, -4) <> '0000')) THEN substr(name, 1, length(name) - 3) COLLATE NOCASE
+          WHEN ((CAST(substr(name, -5) AS INTEGER) = 0) AND (substr(name, -5) <> '00000')) THEN substr(name, 1, length(name) - 4) COLLATE NOCASE
+          WHEN ((CAST(substr(name, -6) AS INTEGER) = 0) AND (substr(name, -6) <> '000000')) THEN substr(name, 1, length(name) - 5) COLLATE NOCASE
+          ELSE substr(name, 1, length(name) - 6) COLLATE NOCASE
+        END COLLATE NOCASE,
+        CASE
+          WHEN ((CAST(substr(name, -1) AS INTEGER) = 0) AND substr(name, -1) <> '0') THEN ''
+          WHEN ((CAST(substr(name, -2) AS INTEGER) = 0) AND (substr(name, -2) <> '00')) THEN CAST(substr(name, -1) AS INTEGER)
+          WHEN ((CAST(substr(name, -3) AS INTEGER) = 0) AND (substr(name, -3) <> '00')) THEN CAST(substr(name, -2) AS INTEGER)
+          WHEN ((CAST(substr(name, -4) AS INTEGER) = 0) AND (substr(name, -4) <> '00')) THEN CAST(substr(name, -3) AS INTEGER)
+          WHEN ((CAST(substr(name, -5) AS INTEGER) = 0) AND (substr(name, -5) <> '00')) THEN CAST(substr(name, -4) AS INTEGER)
+          WHEN ((CAST(substr(name, -6) AS INTEGER) = 0) AND (substr(name, -6) <> '00')) THEN CAST(substr(name, -5) AS INTEGER)
+          ELSE CAST(substr(name, -6) AS INTEGER)
+        END,
         name`
-        this.natSortDESC = ` ORDER BY 
-        (CASE
-        WHEN (CAST(name AS INTEGER)==0 AND substr(name, 1) <> '0') THEN NULL
-        ELSE CAST(name AS INTEGER)
-        END) DESC NULLS FIRST, 
-        (CASE
-        WHEN (name IS NULL) OR (length(name)==1) OR ((CAST(substr(name, -1) AS INTEGER)==0) AND substr(name, -1) <> '0' ) THEN NULL
-        WHEN ((CAST(substr(name, -2) AS INTEGER)==0) AND (substr(name, -2) <>'00')) THEN substr(name, 1, length(name)-1) COLLATE NOCASE 
-        WHEN ((CAST(substr(name, -3) AS INTEGER)==0) AND (substr(name, -3) <>'000')) THEN substr(name, 1, length(name)-2) COLLATE NOCASE
-        WHEN ((CAST(substr(name, -4) AS INTEGER)==0) AND (substr(name, -4) <>'0000')) THEN substr(name, 1, length(name)-3) COLLATE NOCASE
-        WHEN ((CAST(substr(name, -5) AS INTEGER)==0) AND (substr(name, -5) <>'00000')) THEN substr(name, 1, length(name)-4) COLLATE NOCASE
-        WHEN ((CAST(substr(name, -6) AS INTEGER)==0) AND (substr(name, -6) <>'000000')) THEN substr(name, 1, length(name)-5) COLLATE NOCASE
-        ELSE substr(name, 1, length(name)-6) COLLATE NOCASE
-        END) DESC,
-        (CASE
-        WHEN ((CAST(substr(name, -1) AS INTEGER)==0) AND substr(name, -1) <> '0' ) THEN NULL
-        WHEN ((CAST(substr(name, -2) AS INTEGER)==0) AND (substr(name, -2) <>'00')) THEN CAST(substr(name, -1) AS INTEGER)
-        WHEN ((CAST(substr(name, -3) AS INTEGER)==0) AND (substr(name, -3) <>'00')) THEN CAST(substr(name, -2) AS INTEGER)
-        WHEN ((CAST(substr(name, -4) AS INTEGER)==0) AND (substr(name, -4) <>'00')) THEN CAST(substr(name, -3) AS INTEGER)
-        WHEN ((CAST(substr(name, -5) AS INTEGER)==0) AND (substr(name, -5) <>'00')) THEN CAST(substr(name, -4) AS INTEGER)
-        WHEN ((CAST(substr(name, -6) AS INTEGER)==0) AND (substr(name, -6) <>'00')) THEN CAST(substr(name, -5) AS INTEGER)
-        ELSE CAST(substr(name, -6) AS INTEGER)
-        END) DESC,
+        this.natSortDESC = ` ORDER BY
+        CASE
+          WHEN (CAST(name AS INTEGER) = 0 AND substr(name, 1) <> '0') THEN ''
+          ELSE CAST(name AS INTEGER)
+        END DESC,
+        CASE
+          WHEN (name IS NULL) OR (length(name) = 1) OR ((CAST(substr(name, -1) AS INTEGER) = 0) AND substr(name, -1) <> '0') THEN ''
+          WHEN ((CAST(substr(name, -2) AS INTEGER) = 0) AND (substr(name, -2) <> '00')) THEN substr(name, 1, length(name) - 1) COLLATE NOCASE
+          WHEN ((CAST(substr(name, -3) AS INTEGER) = 0) AND (substr(name, -3) <> '000')) THEN substr(name, 1, length(name) - 2) COLLATE NOCASE
+          WHEN ((CAST(substr(name, -4) AS INTEGER) = 0) AND (substr(name, -4) <> '0000')) THEN substr(name, 1, length(name) - 3) COLLATE NOCASE
+          WHEN ((CAST(substr(name, -5) AS INTEGER) = 0) AND (substr(name, -5) <> '00000')) THEN substr(name, 1, length(name) - 4) COLLATE NOCASE
+          WHEN ((CAST(substr(name, -6) AS INTEGER) = 0) AND (substr(name, -6) <> '000000')) THEN substr(name, 1, length(name) - 5) COLLATE NOCASE
+          ELSE substr(name, 1, length(name) - 6) COLLATE NOCASE
+        END COLLATE NOCASE,
+        CASE
+          WHEN ((CAST(substr(name, -1) AS INTEGER) = 0) AND substr(name, -1) <> '0') THEN ''
+          WHEN ((CAST(substr(name, -2) AS INTEGER) = 0) AND (substr(name, -2) <> '00')) THEN CAST(substr(name, -1) AS INTEGER)
+          WHEN ((CAST(substr(name, -3) AS INTEGER) = 0) AND (substr(name, -3) <> '00')) THEN CAST(substr(name, -2) AS INTEGER)
+          WHEN ((CAST(substr(name, -4) AS INTEGER) = 0) AND (substr(name, -4) <> '00')) THEN CAST(substr(name, -3) AS INTEGER)
+          WHEN ((CAST(substr(name, -5) AS INTEGER) = 0) AND (substr(name, -5) <> '00')) THEN CAST(substr(name, -4) AS INTEGER)
+          WHEN ((CAST(substr(name, -6) AS INTEGER) = 0) AND (substr(name, -6) <> '00')) THEN CAST(substr(name, -5) AS INTEGER)
+          ELSE CAST(substr(name, -6) AS INTEGER)
+        END,
         name DESC
         `
     }

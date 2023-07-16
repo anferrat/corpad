@@ -27,16 +27,24 @@ const SubitemViewFactory = ({
   validateCouponCurrent,
   validateVoltageDrop,
   validateCurrent,
+  onMultimeterPress,
+  multimeterPaired,
 }) => {
+
   const onEdit = React.useCallback(() => {
     navigateToEditSubitem(subitem.id, false, subitem.type)
   }, [navigateToEditSubitem, subitem.id, subitem.type])
+
+  const onMultimeterPressHandler = React.useCallback((potentialId) => {
+    onMultimeterPress(subitem.id, potentialId)
+  }, [subitem.id, onMultimeterPress])
 
   switch (subitem.type) {
     case 'PL':
       return (
         <PL
           data={subitem}
+          multimeterPaired={multimeterPaired}
           subitemIndex={subitemIndex}
           pipelineList={pipelineList}
           onEdit={onEdit}
@@ -44,36 +52,42 @@ const SubitemViewFactory = ({
           potentialHint={potentialHint}
           updatePotentialValue={updatePotentialValue}
           validatePotential={validatePotential}
+          onMultimeterPress={onMultimeterPressHandler}
         />
       )
     case 'AN':
       return (
         <AN
           data={subitem}
+          multimeterPaired={multimeterPaired}
           subitemIndex={subitemIndex}
           onEdit={onEdit}
           potentialUnit={potentialUnit}
           potentialHint={potentialHint}
           updatePotentialValue={updatePotentialValue}
           validatePotential={validatePotential}
+          onMultimeterPress={onMultimeterPressHandler}
         />
       )
     case 'RE':
       return (
         <RE
           data={subitem}
+          multimeterPaired={multimeterPaired}
           subitemIndex={subitemIndex}
           onEdit={onEdit}
           potentialUnit={potentialUnit}
           potentialHint={potentialHint}
           updatePotentialValue={updatePotentialValue}
           validatePotential={validatePotential}
+          onMultimeterPress={onMultimeterPressHandler}
         />
       )
     case 'CN':
       return (
         <CN
           data={subitem}
+          multimeterPaired={multimeterPaired}
           idMap={idMap}
           subitemIndex={subitemIndex}
           onEdit={onEdit}
@@ -83,6 +97,7 @@ const SubitemViewFactory = ({
           potentialHint={potentialHint}
           updatePotentialValue={updatePotentialValue}
           validatePotential={validatePotential}
+          onMultimeterPress={onMultimeterPressHandler}
         />
       )
     case 'SH':
@@ -111,13 +126,15 @@ const SubitemViewFactory = ({
       return (
         <RS
           data={subitem}
+          multimeterPaired={multimeterPaired}
           subitemIndex={subitemIndex}
           pipelineList={pipelineList}
           onEdit={onEdit}
           potentialUnit={potentialUnit}
           potentialHint={potentialHint}
           updatePotentialValue={updatePotentialValue}
-          validatePotential={validatePotential} />
+          validatePotential={validatePotential}
+          onMultimeterPress={onMultimeterPressHandler} />
       )
     case 'IK':
       return (
@@ -135,24 +152,28 @@ const SubitemViewFactory = ({
       return (
         <FC
           data={subitem}
+          multimeterPaired={multimeterPaired}
           subitemIndex={subitemIndex}
           onEdit={onEdit}
           potentialUnit={potentialUnit}
           potentialHint={potentialHint}
           updatePotentialValue={updatePotentialValue}
           validatePotential={validatePotential}
+          onMultimeterPress={onMultimeterPressHandler}
         />
       )
     case 'OT':
       return (
         <OT
           data={subitem}
+          multimeterPaired={multimeterPaired}
           subitemIndex={subitemIndex}
           onEdit={onEdit}
           potentialUnit={potentialUnit}
           potentialHint={potentialHint}
           updatePotentialValue={updatePotentialValue}
           validatePotential={validatePotential}
+          onMultimeterPress={onMultimeterPressHandler}
         />
       )
     case 'CT':

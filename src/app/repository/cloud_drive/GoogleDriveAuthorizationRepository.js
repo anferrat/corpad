@@ -1,6 +1,6 @@
 import { Error, errors } from "../../utils/Error";
 import { gdrive, config } from "../../config/cloud_drive";
-import { GoogleSignin, statusCodes } from "react-native-google-signin";
+import { GoogleSignin, statusCodes } from '@react-native-google-signin/google-signin';
 
 export class GoogleDriveAuthorizationRepository {
     constructor() {
@@ -27,7 +27,6 @@ export class GoogleDriveAuthorizationRepository {
 
     async signInSilently() {
         try {
-            await GoogleSignin.hasPlayServices()
             const userInfo = await GoogleSignin.signInSilently()
             const token = (await GoogleSignin.getTokens()).accessToken
             gdrive.accessToken = token

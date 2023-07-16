@@ -1,25 +1,22 @@
 import { MultimeterSettings } from "../../../../entities/survey/other/MultimeterSettings"
 
 export class UnpairMultimeter {
-    constructor(settingRepo, bluetoothRepo, permissions) {
-        this.bluetoothRepo = bluetoothRepo
+    constructor(settingRepo, permissions, multimeterFactory) {
         this.settingRepo = settingRepo
         this.permissions = permissions
+        this.multimeterFactory = multimeterFactory
     }
 
     async execute() {
         const settings = await this.settingRepo.get()
         const { multimeter } = settings
-        const { peripheralId, onTime, offTime, delay, syncMode, firstCycle } = multimeter
-        const multimeterSettings = new MultimeterSettings(null, null, null, onTime, offTime, delay, syncMode, firstCycle)
+        const { peripheralId, onTime, offTime, delay, syncMode, firstCycle, onOffCaptureActive, type } = multimeter
+        const multimeterSettings = new MultimeterSettings(null, null, null, onTime, offTime, delay, syncMode, firstCycle, onOffCaptureActive)
         await this.settingRepo.updateMultimeter(multimeterSettings)
         if (peripheralId) {
             try {
                 await this.permissions.bluetooth()
-                const connected = await this.bluetoothRepo.isDeviceConnected(peripheralId)
-                if (connected) {
-                    await this.bluetoothRepo.disconnect(peripheralId)
-                }
+                this.multimeterFactory.execute(type).stopMultimeter(peripheralId)
             }
             catch { }
         }

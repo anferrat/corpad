@@ -113,15 +113,15 @@ const styles = StyleSheet.create({
         marginRight: 12
     },
     modal: {
-        flex: 1
-        //maxWidth: 900
+        width: '90%',
+        alignSelf: 'center'
     },
     container: {
-        width: 300,
         backgroundColor: control,
         height: 250,
         borderRadius: 10,
-        paddingTop: 12
+        paddingTop: 12,
+        justifyContent: 'center'
     },
 
     titleContainer: {

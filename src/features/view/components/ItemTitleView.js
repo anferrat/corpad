@@ -38,8 +38,8 @@ export default React.memo(ItemTitleView)
 
 const styles = StyleSheet.create({
     mainView: {
-        paddingRight: 24,
-        flex: 1
+        marginRight: 24,
+        flex: 1,
     },
     subtitleView: {
         paddingTop: 4,

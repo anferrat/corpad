@@ -7,10 +7,8 @@ export class _GPSCapture {
     _getCycleType(timestamp, firstCycle, onTime, offTime, delay = 100) { //delay equals approx update rate of multimeter
         const date = new Date(timestamp+delay)
         const cycleTime = onTime + offTime
-        console.log(cycleTime, firstCycle)
         const miliseconds = (date.getSeconds() * 1000) + date.getMilliseconds()
         const inCycleTime = miliseconds % cycleTime
-        console.log('in cycle time', inCycleTime)
         const firstCycleOn = firstCycle === MultimeterCycles.ON
         const onRange = [firstCycleOn ? 0 : offTime, firstCycleOn ? onTime : cycleTime]
         //const offRange = [firstCycleOn ? onTime : 0, firstCycleOn ? cycleTime : offTime]
@@ -20,10 +18,8 @@ export class _GPSCapture {
     }
 
     execute(array, timestamps, timeAdjustment, firstCycle, onTime, offTime) {
-        console.log('time adjustment', timeAdjustment)
         let shiftIndexes = []
         const cycles = timestamps.map(timestamp => this._getCycleType(timeAdjustment + timestamp, firstCycle, onTime, offTime))
-        console.log(cycles)
         for (i = 0; i < cycles.length; i++) {
             if (i === cycles.length - 1) {
                 if (cycles[i] !== cycles[0])
@@ -35,8 +31,6 @@ export class _GPSCapture {
             if (shiftIndexes.length >= 2)
                 break
         }
-        console.log(shiftIndexes)
-        console.log('data points', array)
         if (shiftIndexes.length === 0)
             return [[MultimeterCycles.ON, array[0]], [MultimeterCycles.OFF, array[0]]]
         else if (shiftIndexes.length === 1)

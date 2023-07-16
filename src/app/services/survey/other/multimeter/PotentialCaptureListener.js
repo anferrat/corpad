@@ -1,11 +1,10 @@
 import { MultimeterSyncModes } from "../../../../../constants/global"
 import { Error, errors } from "../../../../utils/Error"
-import { _MultimeterFactory } from "./_devices/_MultimeterFactory"
 
 export class PotentialCaptureListener {
-    constructor(bluetoothRepo, geolocationRepo) {
+    constructor(geolocationRepo, multimeterFactory) {
         this.geolocationRepo = geolocationRepo
-        this.multimeterFactory = new _MultimeterFactory(bluetoothRepo)
+        this.multimeterFactory = multimeterFactory
     }
 
     addListener(callback, { peripheralId, type, onTime, offTime, syncMode, firstCycle }) {
@@ -34,7 +33,6 @@ export class PotentialCaptureListener {
         return async () => {
             if (removeListener)
                 removeListener()
-            await multimeterService.stopPotentialCapture(peripheralId)
         }
     }
 }

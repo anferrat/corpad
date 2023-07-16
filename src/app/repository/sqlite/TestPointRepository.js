@@ -16,13 +16,18 @@ export class TestPointRepository extends SQLiteRepository {
     }
 
     async getIdList({ filters, sorting, latitude, longitude }) {
-        
         try {
-            const statusFilter = filters.statusFilter.length > 0 ? `(status NOT IN ${this.convertArrayToInStatement(filters.statusFilter)})` : ''
-            const testPointTypeFilter = filters.testPointTypeFilter.length > 0 ? (statusFilter !== '' ? ' AND ' : '') + "(testPointType NOT IN ('" + filters.testPointTypeFilter.join("', '") + "'))" : ''
-            const hideEmptyFilter = filters.hideEmptyTestPoints ? (statusFilter !== '' || testPointTypeFilter !== '' ? ' AND ' : '') + "((SELECT COUNT(cards.id) FROM cards WHERE ((cards.testPointId = testPoints.id) AND cards.type NOT IN ('" + filters.readingTypeFilter.join("', '") + "')))<>0)" : ''
-            const filterQuery = filters.statusFilter.length > 0 || filters.testPointTypeFilter.length > 0 || hideEmptyFilter ? ' WHERE (' + statusFilter + testPointTypeFilter + hideEmptyFilter + ')' : ''
+            const getFilterQuery = (filters) => {
+                if (filters) {
+                    const statusFilter = filters.statusFilter.length > 0 ? `(status NOT IN ${this.convertArrayToInStatement(filters.statusFilter)})` : ''
+                    const testPointTypeFilter = filters.testPointTypeFilter.length > 0 ? (statusFilter !== '' ? ' AND ' : '') + "(testPointType NOT IN ('" + filters.testPointTypeFilter.join("', '") + "'))" : ''
+                    const hideEmptyFilter = filters.hideEmptyTestPoints ? (statusFilter !== '' || testPointTypeFilter !== '' ? ' AND ' : '') + "((SELECT COUNT(cards.id) FROM cards WHERE ((cards.testPointId = testPoints.id) AND cards.type NOT IN ('" + filters.readingTypeFilter.join("', '") + "')))<>0)" : ''
+                    return filters.statusFilter.length > 0 || filters.testPointTypeFilter.length > 0 || hideEmptyFilter ? ' WHERE (' + statusFilter + testPointTypeFilter + hideEmptyFilter + ')' : ''
+                }
+                else return ''
+            }
             const sortingQuery = this.responseProcessor.sortingQuery(sorting, latitude, longitude)
+            const filterQuery = getFilterQuery(filters)
             const result = await super.runSingleQueryTransaction(`SELECT id FROM ${this.tableName}${filterQuery}${sortingQuery}`, [])
             return super.generateArray(result.rows.length, result.rows.item).map(row => row.id)
         }

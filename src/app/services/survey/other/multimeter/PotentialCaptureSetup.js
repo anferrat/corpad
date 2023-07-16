@@ -1,9 +1,7 @@
-import { _MultimeterFactory } from "./_devices/_MultimeterFactory"
-
 export class PotentialCaptureSetup {
-    constructor(settingRepo, bluetoothRepo, permissions) {
+    constructor(settingRepo, permissions, multimeterFactory) {
         this.settingRepo = settingRepo
-        this.multimeterFactoryService = new _MultimeterFactory(bluetoothRepo)
+        this.multimeterFactoryService = multimeterFactory
         this.permissions = permissions
     }
 

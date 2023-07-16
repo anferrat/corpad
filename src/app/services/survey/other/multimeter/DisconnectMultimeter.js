@@ -1,6 +1,6 @@
 export class DisconnectMultimeter {
-    constructor(bluetoothRepo, settingRepo, permissions) {
-        this.bluetoothRepo = bluetoothRepo
+    constructor(settingRepo, permissions, multimeterFactory) {
+        this.multimeterFactory = multimeterFactory
         this.settingRepo = settingRepo
         this.permissions = permissions
     }
@@ -10,8 +10,10 @@ export class DisconnectMultimeter {
             this.settingRepo.get(),
             this.permissions.bluetooth()
         ])
-        const { peripheralId } = multimeter
-        if (peripheralId !== null && peripheralId)
-            await this.bluetoothRepo.disconnect(peripheralId)
+        const { peripheralId, type } = multimeter
+        if (peripheralId !== null && peripheralId) {
+            const multimeterService = this.multimeterFactory.execute(type)
+            await multimeterService.stopMultimeter(peripheralId)
+        }
     }
 }

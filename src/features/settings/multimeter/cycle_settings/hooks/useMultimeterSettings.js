@@ -5,7 +5,7 @@ import { validateCycleTime } from '../helpers/cycleTime_validation'
 import { standardCycleTimes } from '../helpers/standardCycleTimes'
 import { useDispatch } from 'react-redux'
 import { useNavigation } from '@react-navigation/native'
-import { setMultimeterSyncMode } from '../../../../../store/actions/settings'
+import { setMultimeterSettings } from '../../../../../store/actions/settings'
 
 const useMultimeterSettings = () => {
     const [onTime, setOnTime] = useState({ value: null, valid: true })
@@ -81,7 +81,7 @@ const useMultimeterSettings = () => {
         if (onTime.valid && offTime.valid && delay.valid) {
             const { status } = await updateMultimeterSettings({ onTime: onTime.value, offTime: offTime.value, delay: delay.value, syncMode, firstCycle, multimeterType })
             if (status === 200) {
-                dispatch(setMultimeterSyncMode(syncMode))
+                dispatch(setMultimeterSettings(syncMode, onTime.value, offTime.value, delay.value, firstCycle))
                 navigation.goBack()
             }
             else errorHandler(status)
