@@ -28,16 +28,6 @@ const getSelectIndex = (selectedIndex, itemList, placeholderOption) => checkSele
 const getSelectValue = (selectedIndex, itemList) => checkSelectedIndex(selectedIndex, itemList.length) ? ((itemList[selectedIndex]?.item ?? itemList[selectedIndex]) ?? '') : ''
 
 const SelectField = (props) => {
-    const selectList = React.useMemo(() => {
-        return (
-            props.itemList.map((item, i) => <SelectItem
-                key={`${item?.item ?? item}-SelectItem`}
-                title={item?.item ?? item}
-                accessoryLeft={displayAccessory(props.accessory, props.accessoryList, i)} />)
-        )
-    }, [props.itemList, props.accessoryList, props.accessory])
-
-
     const onSelect = React.useCallback((index) => {
         const res = props.placeholderOption ? index.row - 1 : index.row
         props.onSelect(res < 0 ? null : res)
@@ -52,7 +42,10 @@ const SelectField = (props) => {
             status={props.valid !== false ? 'basic' : 'danger'}
             onSelect={onSelect}>
             {props.placeholderOption ? <SelectItem title={placeholderRender.bind(this, props.placeholder)} /> : null}
-            {selectList}
+            {props.itemList?.map((item, i) => <SelectItem
+                key={`${item?.item ?? item}-SelectItem`}
+                title={item?.item ?? item}
+                accessoryLeft={displayAccessory(props.accessory, props.accessoryList, i)} />)}
         </Select>
     )
 }

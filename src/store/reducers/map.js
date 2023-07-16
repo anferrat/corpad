@@ -1,16 +1,17 @@
 import { LOAD_MARKERS, REFRESH_MARKERS, DELETE_MARKER, UPDATE_MARKER, SET_ACTIVE_MARKER, SET_NEW_ITEM_MARKER, TOGGLE_SATELLITE_MODE, ACTIVATE_MARKER, RESET_ACTIVE_MARKERS, SET_MAP_READY } from "../actions/map"
 
 const initialState = {
-    markers: [],
-    loading: true,
-    mapReady: false,
-    satelliteMode: false,
-    newItemMarker: {
+    //FYI markers with lat === null or lon === null will still exist in this list. make sure, to filter them out when accessing markers
+    markers: [],  //contains markers of items in current survey, access by id and itemType. uid as key
+    loading: true, //indicates that map is loading markers (markers load once when survey loads for the first time)
+    mapReady: false, //onMapReady status from rn-maps
+    satelliteMode: false, // is satelliet view on/off
+    newItemMarker: { //on long press will activate this marker. used to create items with coordinates
         active: false,
         latitude: null,
         longitude: null,
     },
-    activeMarker: {
+    activeMarker: { //currently selected marker from markers. single marker that pops up when user selects marker from markers [].
         id: null,
         uid: null,
         markerType: null,

@@ -296,10 +296,6 @@ export const getHeader = (screen, params, navigation, dispatch, openMenu) => {
                         {
                             icon: 'plus',
                             onPress: () => navigation.navigate('CreateSurvey')
-                        },
-                        {
-                            icon: 'eye',
-                            onPress: () => navigation.navigate('DevScreen')
                         }
                     ]
                 }

@@ -1,11 +1,11 @@
 import React from 'react'
-import TextLine from '../../components/TextLine'
+import TextLine from '../../../../components/TextLine'
 import Header from '../../components/Header'
 import PotentialsView from '../PotentialsView'
 import Divider from '../Divider'
 import { PipeDiameterLabels } from '../../../../constants/labels'
 
-const RS = ({ data, potentialUnit, potentialHint, updatePotentialValue, validatePotential, subitemIndex, onEdit, pipelineList }) => {
+const RS = ({ data, potentialUnit, potentialHint, updatePotentialValue, validatePotential, subitemIndex, onEdit, pipelineList, onMultimeterPress, multimeterPaired }) => {
     const { name, type, wireColor, wireGauge, potentials, pipelineId, nps } = data
     const pipelineIndex = pipelineList.findIndex(({ id }) => id === pipelineId)
     return (
@@ -19,6 +19,8 @@ const RS = ({ data, potentialUnit, potentialHint, updatePotentialValue, validate
             <Divider
                 visible={potentials.length > 0 || ~pipelineIndex || nps !== null} />
             <PotentialsView
+                multimeterPaired={multimeterPaired}
+                onMultimeterPress={onMultimeterPress}
                 subitemIndex={subitemIndex}
                 updatePotentialValue={updatePotentialValue}
                 validatePotential={validatePotential}

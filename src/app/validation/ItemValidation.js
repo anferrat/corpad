@@ -1,4 +1,4 @@
-import {  object, array, string } from "yup";
+import { object, array, string } from "yup";
 import { ItemTypes } from "../../constants/global";
 import { Validation } from "../utils/Validation";
 
@@ -84,6 +84,14 @@ export class ItemValidation extends Validation {
         return this.validate(obj,
             object({
                 id: this.id.required(),
+                itemType: this.itemType.required()
+            })
+        )
+    }
+
+    getNearbyItems(obj) {
+        return this.validate(obj,
+            object({
                 itemType: this.itemType.required()
             })
         )

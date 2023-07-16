@@ -48,7 +48,7 @@ export class GetMapRegion {
                 return initialRegion
             else {
                 await this.permissions.location()
-                return this._getRegionFromPosition(await this.geolocationRepo.getCurrent(permission === 'granted'))
+                return this._getRegionFromPosition(await this.geolocationRepo.getCurrent())
             }
         }
         catch {

@@ -1,10 +1,10 @@
 import { Validation } from "../../utils/Validation"
-import { ItemStatuses, ItemTypes } from "../../../constants/global"
+import { ItemStatuses, ItemTypes, TestPointTypes } from "../../../constants/global"
 import { Error } from "../../utils/Error"
 import { object, mixed } from "yup"
 
 export class ItemSchema extends Validation {
-    constructor () {
+    constructor() {
         super()
     }
 
@@ -13,12 +13,12 @@ export class ItemSchema extends Validation {
             case ItemTypes.TEST_POINT:
                 return object({
                     name: this.name,
-                    testPointType: this.testPointType.nullable(),
+                    testPointType: mixed().nullable().oneOf(Object.values(TestPointTypes), 'testPointTypeMismatch').notOneOf([null], 'testPointTypeMismatch'),
                     location: this.location,
                     latitude: this.latitude,
                     longitude: this.longitude,
                     comment: this.comment,
-                    status: mixed().oneOf([ItemStatuses.ATTENTION, ItemStatuses.BAD, ItemStatuses.GOOD, ItemStatuses.UNKNOWN], 'statusMismatch').nullable(),
+                    status: mixed().nullable().oneOf([ItemStatuses.ATTENTION, ItemStatuses.BAD, ItemStatuses.GOOD, ItemStatuses.UNKNOWN], 'statusMismatch').notOneOf([null], 'statusMismatch'),
                 })
             case ItemTypes.RECTIFIER:
                 return object({
@@ -27,7 +27,7 @@ export class ItemSchema extends Validation {
                     latitude: this.latitude,
                     longitude: this.longitude,
                     comment: this.comment,
-                    status: mixed().oneOf([ItemStatuses.ATTENTION, ItemStatuses.BAD, ItemStatuses.GOOD, ItemStatuses.UNKNOWN], 'statusMismatch').nullable(),
+                    status: mixed().nullable().oneOf([ItemStatuses.ATTENTION, ItemStatuses.BAD, ItemStatuses.GOOD, ItemStatuses.UNKNOWN], 'statusMismatch').notOneOf([null], 'statusMismatch'),
                     model: this.smallText,
                     serialNumber: this.smallText,
                     powerSource: this.powerSource,

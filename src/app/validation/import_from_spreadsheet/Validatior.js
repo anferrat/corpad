@@ -42,7 +42,6 @@ export class Validatior {
             }
         }
         catch (err) {
-
             if (err.inner) {
                 warnings = err.inner.map(({ path, message, value }) => {
                     const currentValue = this._pathParser(path, item)

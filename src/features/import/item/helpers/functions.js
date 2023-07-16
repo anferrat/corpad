@@ -239,7 +239,7 @@ export const getTextByWarningType = (warning) => {
         case 'nameFormat':
             return `Name property ${warning?.originalValue} was converted to ${warning?.convertedValue}`
         case 'statusMismatch':
-            return 'Status is not defined. Unknown status was set.'
+            return 'Status is not defined. Default status was set.'
         case 'stringLengthMax40':
         case 'stringLengthMax80':
         case 'stringLengthMax300':

@@ -33,7 +33,8 @@ const SubitemProperties = ({ navigateToExportOverview }) => {
                 </View>
             </ScrollView>
             <BottomButton
-                icon={'arrow-circle-right-outline'}
+                iconPosition={'right'}
+                icon={'arrow-circle-right'}
                 onPress={onNextPress}
                 title={'Next'} />
         </>

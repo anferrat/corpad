@@ -13,6 +13,7 @@ import { SubitemRepository } from "../../repository/sqlite/SubitemRepository"
 import { SurveyRepository } from "../../repository/sqlite/SurveyRepository"
 import { TestPointRepository } from "../../repository/sqlite/TestPointRepository"
 import { DocumentPicker } from "../../services/other/DocumentPicker"
+import { Permissions } from "../../services/other/Permissions"
 import { Share } from "../../services/other/Share"
 import { SubitemFactory } from "../../services/other/SubitemFactory"
 import { WarningHandler } from "../../services/other/WarningHandler"
@@ -39,7 +40,7 @@ import { SurveyFileContentValidation } from "../../validation/survey_file_conten
 
 
 class SurveyFileController extends Controller {
-    constructor(fileSystemRepo, cloudFileSystemRepo, networkRepo, surveyFileListPresenter, surveyFileContentValidation, surveyRepo, settingRepo, subitemFactory, warningHandler, testPointRepo, rectifierRepo, pipelineRepo, subitemRepo, potentialTypeRepo, referenceCellRepo, potentialRepo, shareService) {
+    constructor(fileSystemRepo, cloudFileSystemRepo, networkRepo, surveyFileListPresenter, surveyFileContentValidation, surveyRepo, settingRepo, subitemFactory, warningHandler, testPointRepo, rectifierRepo, pipelineRepo, subitemRepo, potentialTypeRepo, referenceCellRepo, potentialRepo, shareService, permissions) {
         super()
 
         this.getLocalSurveyFileListService = new GetSurveyFileList(fileSystemRepo, surveyFileListPresenter)
@@ -65,7 +66,7 @@ class SurveyFileController extends Controller {
         this.getCloudSurveyFileLinkService = new GetCloudSurveyFileLink(cloudFileSystemRepo, networkRepo, shareService)
         this.copyCloudSurveyFileService = new CopyCloudSurveyFile(fileSystemRepo, cloudFileSystemRepo, networkRepo)
         this.copySurveyFileToCloudService = new CopySurveyFileToCloud(cloudFileSystemRepo, fileSystemRepo, networkRepo)
-        this.copySurveyFileToDownloadsService = new CopySurveyFileToDownloads(fileSystemRepo)
+        this.copySurveyFileToDownloadsService = new CopySurveyFileToDownloads(fileSystemRepo, permissions)
 
         this.createSurveyService = new CreateSurvey(surveyRepo, potentialTypeRepo, this.surveyLoadStatusService, pipelineRepo, referenceCellRepo, settingRepo)
         this.createSurveyFromTemplateService = new CreateSurveyFromTemplate(fileSystemRepo, surveyFileContentValidation, this.jsonImportService, this.surveyFileConverterInputService, this.surveyLoadStatusService)
@@ -173,7 +174,8 @@ const surveyFileController = new SurveyFileController(
     new PotentialTypeRepository(),
     new ReferenceCellRepository(),
     new PotentialRepository(),
-    new Share()
+    new Share(),
+    new Permissions()
 )
 
 export const getSurveyFileList = ({ isCloud }, onError, onSuccess) => surveyFileController.getList({ isCloud }, onError, onSuccess)

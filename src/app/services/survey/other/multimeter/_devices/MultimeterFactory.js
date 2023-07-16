@@ -2,7 +2,7 @@ import { MultimeterTypes } from "../../../../../../constants/global";
 import { Error, errors } from "../../../../../utils/Error";
 import { _PokitMultimeterService } from "./pokitPro/_PokitMultimeterService";
 
-export class _MultimeterFactory {
+export class MultimeterFactory {
     constructor(bluetoothRepo) {
         this.pokitProService = new _PokitMultimeterService(bluetoothRepo)
     }

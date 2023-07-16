@@ -10,8 +10,10 @@ import { getLocationAsync, fetchData, fetchIdList } from '../helpers/functions'
 import FlatList from './components/FlatList'
 import { primary } from '../../../styles/colors'
 import { EventRegister } from 'react-native-event-listeners'
+import { Button } from '@ui-kitten/components'
+import ListHeader from '../header/header/ListHeader'
 
-
+const indice =[0]
 const ItemList = ({ itemType, navigateToView }) => {
     const dispatch = useDispatch()
     const t = useSelector(state => getListStateByType(itemType, state))
@@ -131,6 +133,9 @@ const ItemList = ({ itemType, navigateToView }) => {
                 refreshing={t.settings.refreshing}
                 onRefresh={refreshHandler}
                 onEndReachedThreshold={6}
+                ListHeaderComponent={<ListHeader dataType={itemType} />}
+                stickyHeaderHiddenOnScroll={true}
+                stickyHeaderIndices={indice}
                 onEndReached={offsetHandler}
                 renderItem={renderItem}
                 ListFooterComponent={renderFooter} />

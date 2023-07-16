@@ -182,7 +182,9 @@ const InputFieldParamaters = ({ value, property, subitemIndex, potentialIndex, g
             <Button
                 onPress={onSaveHandler}
                 accessoryLeft={saveIcon}
-                style={styles.save}>Save</Button>
+                style={styles.save}>
+                Save
+            </Button>
         </>
     )
 }

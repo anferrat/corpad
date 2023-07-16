@@ -108,22 +108,21 @@ const Accessory = ({ accessory }) => {
 const BadgeComponent = ({ importType, empty, data, fields, fieldIndex, fieldIndexList }) => {
     if (empty)
         return null
-    else
-        if (importType === 1 || importType === 3)
-            return (
-                <ValuePreviewModal
-                    data={data}
-                    fields={fields}
-                    fieldIndex={fieldIndex}
-                    fieldIndexList={fieldIndexList}
-                    importType={importType}
-                />
-            )
-        else if (importType === 0)
-            return <Badge title={'Fixed value'} />
-        else if (importType === 2)
-            return <Badge title={'Default name'} />
-        else return null
+    else if (importType === 1 || importType === 3)
+        return (
+            <ValuePreviewModal
+                data={data}
+                fields={fields}
+                fieldIndex={fieldIndex}
+                fieldIndexList={fieldIndexList}
+                importType={importType}
+            />
+        )
+    else if (importType === 0)
+        return <Badge title={'Fixed value'} />
+    else if (importType === 2)
+        return <Badge title={'Default name'} />
+    else return null
 }
 
 export default React.memo(PropertyImportField)

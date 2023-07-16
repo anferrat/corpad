@@ -44,7 +44,7 @@ const styles = StyleSheet.create({
         borderRadius: 20,
         elevation: 2,
         marginRight: 12,
-        marginVertical: 10
+        marginVertical: 6
     },
     container: {
         flex: -1,

@@ -47,14 +47,14 @@ export class GeolocationRepository {
         return () => Geolocation.clearWatch(watchId)
     }
 
-    getGpsTimeAdjustment() {
+    getGpsTimeAdjustment(timeout = 10000) {
         return new Promise((resolve) => {
             GeolocationTime.getCurrentPosition(({ timestamp }) => {
                 resolve({
                     device: Date.now(),
                     gnss: timestamp
                 })
-            }, () => resolve({ device: null, gnss: null }), { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 })
+            }, () => resolve({ device: null, gnss: null }), { enableHighAccuracy: true, timeout, maximumAge: 0 })
         })
     }
 

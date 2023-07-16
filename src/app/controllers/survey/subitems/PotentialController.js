@@ -4,6 +4,7 @@ import { PotentialTypeRepository } from "../../../repository/sqlite/PotentialTyp
 import { ReferenceCellRepository } from "../../../repository/sqlite/ReferenceCellRepository"
 import { SettingRepository } from "../../../repository/sqlite/SettingRepository"
 import { UnitConverter } from "../../../services/other/UnitConverter"
+import { GetOnOffPotentialPair } from "../../../services/survey/other/multimeter/GetOnOffPotentialPair"
 import { CreatePotential } from "../../../services/survey/subitems/potentials/CreatePotential"
 import { DeletePotential } from "../../../services/survey/subitems/potentials/DeletePotential"
 import { GetPotentialList } from "../../../services/survey/subitems/potentials/GetPotentialList"
@@ -20,6 +21,7 @@ class PotentialController extends Controller {
         this.getPotentialListService = new GetPotentialList(potentialRepo, potentialTypeRepo, referenceCellRepo, settingRepo, unitConverter, potentialPresenter)
         this.updatePotentialService = new UpdatePotential(potentialRepo, unitConverter, potentialPresenter)
         this.updatePotentialListService = new UpdatePotentialList(potentialRepo, unitConverter, potentialPresenter)
+        this.getOnOffPotentialPairService = new GetOnOffPotentialPair(potentialRepo, potentialTypeRepo)
         this.validation = new PotentialValidation()
     }
 
@@ -57,6 +59,13 @@ class PotentialController extends Controller {
             return this.updatePotentialListService.execute(potentials, subitemId)
         })
     }
+
+    getOnOffPair(params, onError = null, onSuccess = null) {
+        return super.controllerHandler(onSuccess, onError, 655, async () => {
+            const { subitemId, potentialId } = this.validation.getOnOffPair(params)
+            return await this.getOnOffPotentialPairService.execute({ subitemId, potentialId })
+        })
+    }
 }
 
 const potentialController = new PotentialController(
@@ -77,3 +86,5 @@ export const updatePotential = (params, onError, onSuccess) => potentialControll
 export const getPotentialList = (params, onError, onSuccess) => potentialController.getList(params, onError, onSuccess)
 
 export const updatePotentialList = (params, onError, onSuccess) => potentialController.updateList(params, onError, onSuccess)
+
+export const getOnOffPotentialPair = ({ subitemId, potentialId }, onError, onSuccess) => potentialController.getOnOffPair({ subitemId, potentialId }, onError, onSuccess)

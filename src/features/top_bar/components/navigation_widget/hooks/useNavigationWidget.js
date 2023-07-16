@@ -14,8 +14,6 @@ const initLocation = {
     declination: null //in deg difference between Magnetic and True North
 }
 
-
-
 const initArroRotation = new Animated.Value(0)
 
 const useNavigationWidget = () => {

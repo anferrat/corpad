@@ -6,7 +6,7 @@ import { basic, basic300, control } from '../styles/colors'
 
 
 const BottomButton = (props) => {
-    const { onPress, title, icon, pack } = props
+    const { onPress, title, icon, pack, iconPosition } = props
     const [disabled, setDisabled] = useState(false)
 
     // Button at the bottom of the screen can be accidentally pressed when numeric keybord is shown, because there is a gap between buttons and the bottom of the screen (Pixel 4)
@@ -37,7 +37,8 @@ const BottomButton = (props) => {
             {...props}
             onPress={onPress}
             disabled={disabled || props.disabled}
-            accessoryLeft={accessory}
+            accessoryRight={iconPosition === 'right' ? accessory : null}
+            accessoryLeft={iconPosition === 'right' ? null : accessory}
             style={disabled || props.disabled ? styles.disabled : styles.active}>
             {title}
         </Button>

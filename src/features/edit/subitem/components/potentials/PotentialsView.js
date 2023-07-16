@@ -10,7 +10,10 @@ const PotentialsView = ({ subitemId, itemId }) => {
     const { potentialsData, selected, createPotentialHandler, deletePotentialHandler, updatePotentialHandler } = usePotentialsData({ subitemId, itemId })
     const { loading, potentials, referenceCells, potentialTypes, unit } = potentialsData
     return (
-        <LoadingView loading={loading} size={'small'} style={styles.loading}>
+        <LoadingView
+            loading={loading}
+            size={'small'}
+            style={styles.loading}>
             <View
                 style={styles.mainView}>
                 <Text

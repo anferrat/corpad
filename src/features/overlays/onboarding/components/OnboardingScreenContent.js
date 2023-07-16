@@ -46,20 +46,20 @@ export const lastVersionPages = [
     {
         backgroundColor: basic300,
         image: <Icon name='corpad-logo' fill={primary} pack='cp' style={styles.icon} />,
-        title: 'Updated to version 1.2',
+        title: 'Updated to version 1.3',
         subtitle: 'Take a look at the fantastic features that are included in this update.'
     },
     {
         backgroundColor: basic300,
-        image: <Icon name='file-text' fill={primary} style={styles.icon} />,
-        title: 'Import from spreadsheet',
-        subtitle: 'Using the new feature to import a complete property list from a spreadsheet, including support for various settings and units, can streamline your survey management.'
+        image: <Icon name='radio' fill={primary} style={styles.icon} />,
+        title: 'Digital multimeter',
+        subtitle: 'Bluetooth multimeter support added. Multimeter can be used to capture potentials directly from the app. Find more at corpad.ca/multimeters'
     },
     {
         backgroundColor: basic300,
-        image: <Icon name='compass' fill={primary} style={styles.icon} />,
-        title: 'Compass widget',
-        subtitle: 'Incorporating a navigation component that displays the direction towards the selected item can expedite the process of locating test points and rectifiers.'
+        image: <Icon name='options-2' fill={primary} style={styles.icon} />,
+        title: 'Export .csv and map search re-worked',
+        subtitle: 'Updated interface makes app faster and easier to use in field.'
     },
     {
         backgroundColor: basic300,

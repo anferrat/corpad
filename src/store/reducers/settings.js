@@ -1,5 +1,5 @@
 
-import { UPDATE_SETTING, LOAD_SETTINGS, SET_SURVEY_SAVING_STATUS, LOAD_SURVEY_SETTINGS, RESET_CURRENT_SURVEY_SETTINGS, LOAD_SESSION_STATE, UPDATE_ONBOARDING, SET_EXPORT_MODAL, UPDATE_LOADER, UPDATE_SESSION, UPDATE_NETWORK_STATUS, SET_SESSION_MODAL_VISIBLE, UPDATE_CURRENT_SURVEY_SETTINGS, SET_SETTINGS_ON_APP_LOAD, SET_SURVEY_SETTINGS, UPDATE_BOTTOM_SHEET_CONTENT, SET_BLUETOOTH_SCANNING, SET_BLUETOOTH_STATUS, SET_ACTIVE_MULTIMETER, SET_ACTIVE_MULTIMETER_STATUS, SET_TIME_ADJUSTMENT, SET_ACTIVE_MULTIMETER_SYNC_MODE } from "../actions/settings"
+import { UPDATE_SETTING, LOAD_SETTINGS, SET_SURVEY_SAVING_STATUS, LOAD_SURVEY_SETTINGS, RESET_CURRENT_SURVEY_SETTINGS, LOAD_SESSION_STATE, UPDATE_ONBOARDING, SET_EXPORT_MODAL, UPDATE_LOADER, UPDATE_SESSION, UPDATE_NETWORK_STATUS, SET_SESSION_MODAL_VISIBLE, UPDATE_CURRENT_SURVEY_SETTINGS, SET_SETTINGS_ON_APP_LOAD, SET_SURVEY_SETTINGS, UPDATE_BOTTOM_SHEET_CONTENT, SET_BLUETOOTH_SCANNING, SET_BLUETOOTH_STATUS, SET_ACTIVE_MULTIMETER, SET_ACTIVE_MULTIMETER_STATUS, SET_TIME_ADJUSTMENT, SET_ACTIVE_MULTIMETER_SETTINGS } from "../actions/settings"
 
 const initialState = {
     bottomSheetContent: {  //BottomSheet component
@@ -28,6 +28,8 @@ const initialState = {
         multimeterType: null,
         connected: false,
         syncMode: null,
+        delay: null,
+        firstCycle: null
     },
     timeAdjustment: {
         timeFix: false
@@ -134,7 +136,11 @@ const settings = (state = initialState, action) => {
                     id: multimeterPaired ? action.multimeter.peripheralId : null,
                     name: multimeterPaired ? action.multimeter.name : null,
                     multimeterType: multimeterPaired ? action.multimeter.type : null,
-                    syncMode: action.multimeter.syncMode
+                    syncMode: action.multimeter.syncMode,
+                    onTime: action.multimeter.onTime,
+                    offTime: action.multimeter.offTime,
+                    firstCycle: action.multimeter.fisrtCycle,
+                    delay: action.multimeter.delay,
                 }
             }
         }
@@ -284,12 +290,16 @@ const settings = (state = initialState, action) => {
                     connected: action.connected
                 }
             }
-        case SET_ACTIVE_MULTIMETER_SYNC_MODE:
+        case SET_ACTIVE_MULTIMETER_SETTINGS:
             return {
                 ...state,
                 activeMultimeter: {
                     ...state.activeMultimeter,
-                    syncMode: action.syncMode
+                    syncMode: action.syncMode,
+                    onTime: action.onTime,
+                    offTime: action.offTime,
+                    firstCycle: action.firstCycle,
+                    delay: action.delay,
                 }
             }
         case SET_TIME_ADJUSTMENT:

@@ -25,3 +25,7 @@ export const updatePotentialsAction = (subitemId, potentials) => {
 export const deleteSubitemAction = (subitemId) => {
     return { type: 'DELETE_SUBITEM', subitemId }
 }
+
+export const updatePotentialById = (subitemId, potentialId, value, valid) => {
+    return { type: 'UPDATE_POTENTIAL_BY_ID', subitemId, potentialId, value, valid }
+}

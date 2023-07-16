@@ -1,10 +1,11 @@
 import { Icon, Text } from '@ui-kitten/components'
 import React from 'react'
-import { View, StyleSheet } from 'react-native'
+import { View, StyleSheet, Linking, Pressable } from 'react-native'
 import { primary } from '../../../../../styles/colors'
 
 
 const MultimeterPlaceholder = () => {
+    const openLink = () => Linking.openURL('https://www.corpad.ca/multimeters')
     return (
         <View style={styles.container}>
             <Icon style={styles.icon}
@@ -19,12 +20,22 @@ const MultimeterPlaceholder = () => {
                 style={styles.description}>
                 Connect digital bluetooth multimeter in order to capture potential readings.
             </Text>
-            <Text
-                appearance='hint'
-                category='s2'
-                style={styles.description}>
-                Find supported multimeters at corpad.ca/multimeters.
-            </Text>
+            <View style={styles.text}>
+                <Text
+                    appearance='hint'
+                    category='s2'
+                    style={styles.description}>
+                    Find supported multimeters at
+                </Text>
+                <Pressable onPress={openLink}>
+                    <Text
+                        appearance='hint'
+                        status='primary'
+                        category='s2'
+                        style={styles.description}> corpad.ca/multimeters.
+                    </Text>
+                </Pressable>
+            </View>
         </View>
     )
 }
@@ -49,5 +60,8 @@ const styles = StyleSheet.create({
     description: {
         textAlign: 'center',
         paddingBottom: 24
+    },
+    text: {
+        flexDirection: 'row'
     }
 })

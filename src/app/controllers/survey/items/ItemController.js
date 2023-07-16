@@ -16,9 +16,12 @@ import { DeleteItemList } from "../../../services/survey/items/DeleteItemList"
 import { SurveyRepository } from "../../../repository/sqlite/SurveyRepository"
 import { SearchItem } from "../../../services/survey/items/SearchItems"
 import { ListPresenter } from "../../../presenters/ListPresenter"
+import { GetNearbyItems } from "../../../services/survey/items/GetNearbyItems"
+import { GeolocationCalculator } from "../../../services/other/GeolocationCalculator"
+import { GeolocationRepository } from "../../../repository/geolocation/GeolocationRepository"
 
 class ItemController extends Controller {
-    constructor(testPointRepo, rectifierRepo, pipelineRepo, surveyRepo, defaultNameRepo, basicPresenter, itemPresenter, listPresenter) {
+    constructor(testPointRepo, rectifierRepo, pipelineRepo, surveyRepo, defaultNameRepo, geolocationRepo, basicPresenter, itemPresenter, listPresenter) {
         super()
 
         this.validation = new ItemValidation()
@@ -30,6 +33,9 @@ class ItemController extends Controller {
         this.getIdListService = new GetItemIdList(testPointRepo, rectifierRepo, pipelineRepo)
         this.getDisplayListService = new GetItemListWithDisplayValues(testPointRepo, rectifierRepo, pipelineRepo)
         this.deleteItemListService = new DeleteItemList(testPointRepo, rectifierRepo, pipelineRepo)
+
+        this.geolocationCalculatorService = new GeolocationCalculator()
+        this.getNearbyItemsService = new GetNearbyItems(testPointRepo, rectifierRepo, geolocationRepo, this.geolocationCalculatorService)
     }
 
     create(params, onError = null, onSuccess = null) {
@@ -93,6 +99,13 @@ class ItemController extends Controller {
             return this.getDisplayListService.execute({ idList, displayedReading, itemType, readingTypeFilter })
         })
     }
+
+    getNearbyItems(params, onError = null, onSuccess = null,) {
+        return super.controllerHandler(onSuccess, onError, 614, async () => {
+            const { itemType } = this.validation.getNearbyItems(params)
+            return this.getNearbyItemsService.execute(itemType)
+        })
+    }
 }
 
 const itemController = new ItemController(
@@ -101,6 +114,7 @@ const itemController = new ItemController(
     new PipelineRepository(),
     new SurveyRepository(),
     new DefaultNameRepository(),
+    new GeolocationRepository(),
     new BasicPresenter(),
     new ItemPreseneter(),
     new ListPresenter())
@@ -120,3 +134,5 @@ export const getItemIdList = (params, onError, onSuccess) => itemController.getI
 export const getItemDisplayData = (params, onError, onSuccess) => itemController.getDisplayData(params, onError, onSuccess)
 
 export const searchItem = ({ keyword }, onError, onSuccess) => itemController.search({ keyword }, onError, onSuccess)
+
+export const getNearbyItems = ({ itemType }, onError, onSuccess) => itemController.getNearbyItems({ itemType }, onError, onSuccess)

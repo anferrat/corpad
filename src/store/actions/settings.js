@@ -20,7 +20,7 @@ export const SET_BLUETOOTH_STATUS = 'SET_BLUETOOTH_STATUS'
 export const SET_ACTIVE_MULTIMETER = 'SET_ACTIVE_MULTIMETER'
 export const SET_ACTIVE_MULTIMETER_STATUS = 'SET_ACTIVE_MULTIMETER_STATUS'
 export const SET_TIME_ADJUSTMENT = 'SET_ACTIVE_MULTIMETER_TIME_ADJUSTMENT'
-export const SET_ACTIVE_MULTIMETER_SYNC_MODE = 'SET_ACTIVE_MULTIMETER_SYNC_MODE'
+export const SET_ACTIVE_MULTIMETER_SETTINGS = 'SET_ACTIVE_MULTIMETER_SETTINGS'
 
 export const updateSetting = (setting, value) => {
     return { type: UPDATE_SETTING, setting: setting, value: value }
@@ -106,7 +106,7 @@ export const setGpsTimeAdjustment = (timeFix) => ({
     type: SET_TIME_ADJUSTMENT, timeFix
 })
 
-export const setMultimeterSyncMode = (syncMode) => ({
-    type: SET_ACTIVE_MULTIMETER_SYNC_MODE, syncMode
+export const setMultimeterSettings = (syncMode, onTime, offTime, delay, firstCycle) => ({
+    type: SET_ACTIVE_MULTIMETER_SETTINGS, syncMode, onTime, offTime, delay, firstCycle
 })
 

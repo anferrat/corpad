@@ -35,7 +35,6 @@ const ImportModal = ({ visible, hideModal }) => {
         })
     },
         [itemType, extraData, data, fields, defaultNames, item, subitems])
-
     return (
         <Modal
             backdropStyle={styles.backdrop}

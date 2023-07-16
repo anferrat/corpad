@@ -27,7 +27,8 @@ const StatusIcon = ({ updateStatus, status }) => {
     }, [])
 
     return (
-        <View style={styles.outerView}>
+        <View 
+        style={styles.outerView}>
             <Pressable
                 style={{ ...styles.button, backgroundColor: StatusColors[displayedStatus] }}
                 onLongPress={resetStatus}
@@ -53,27 +54,19 @@ const styles = StyleSheet.create({
         borderRadius: 20,
         overflow: 'hidden',
         elevation: 5,
-        flexBasis: 100,
-        marginTop: 4,
+        flexBasis: 120,
+        zIndex: 3
     },
     button: {
         height: 40,
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'center',
-        paddingHorizontal: 10
-    },
-    basicButton: {
-        backgroundColor: basic,
+        zIndex: 4
     },
     icon: {
         width: 15,
         height: 15,
-        marginRight: 8
-    },
-    text: {
-        marginLeft: 5,
-        color: 'white',
-        fontWeight: 'bold'
+        marginRight: 12
     }
 })

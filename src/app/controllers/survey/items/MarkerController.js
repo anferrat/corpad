@@ -6,6 +6,7 @@ import { SurveyRepository } from "../../../repository/sqlite/SurveyRepository"
 import { TestPointRepository } from "../../../repository/sqlite/TestPointRepository"
 import { FileNameGenerator } from "../../../services/other/FileNameGenerator"
 import { KmlParser } from "../../../services/other/KmlParser"
+import { Permissions } from "../../../services/other/Permissions"
 import { ExportMarkers } from "../../../services/survey/items/markers/ExportMarkers"
 import { GetMarker } from "../../../services/survey/items/markers/GetMarker"
 import { GetMarkerList } from "../../../services/survey/items/markers/GetMarkerList"
@@ -14,11 +15,11 @@ import { Controller } from "../../../utils/Controller"
 import { MarkerValidation } from "../../../validation/MarkerValidation"
 
 class MarkerController extends Controller {
-    constructor(testPointRepo, rectifierRepo, fileSystemRepo, basicPresenter, listPresenter, KmlParser, fileNameGenerator, surveyRepo) {
+    constructor(testPointRepo, rectifierRepo, fileSystemRepo, basicPresenter, listPresenter, KmlParser, fileNameGenerator, surveyRepo, permissions) {
         super()
         this.validation = new MarkerValidation()
         this.getMarkerService = new GetMarker(testPointRepo, rectifierRepo, basicPresenter)
-        this.getMarkerListService = new GetMarkerList(testPointRepo, rectifierRepo, listPresenter)
+        this.getMarkerListService = new GetMarkerList(testPointRepo, rectifierRepo, listPresenter, permissions)
         this.updateMarkerService = new UpdateMarker(testPointRepo, rectifierRepo, basicPresenter)
         this.exportMarkersService = new ExportMarkers(fileSystemRepo, KmlParser, fileNameGenerator, surveyRepo)
     }
@@ -59,7 +60,8 @@ const markerController = new MarkerController(
     new ListPresenter(),
     new KmlParser(),
     new FileNameGenerator(),
-    new SurveyRepository()
+    new SurveyRepository(),
+    new Permissions()
 )
 
 export const getMarker = ({ itemType, itemId }, onError, onSuccess) => markerController.getMarker({ itemType, itemId }, onError, onSuccess)

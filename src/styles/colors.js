@@ -5,6 +5,7 @@ export const success = "#43C150"
 export const warning = "#FFD311"
 export const danger = "#FF5D4F"
 export const basic = "#9ca9cb"
+export const basic1100 = "#141414"
 export const basic1000 = "#6a6a77"
 export const basic200 = "#f1f4fc"
 export const basic300 = '#e1e5ef'

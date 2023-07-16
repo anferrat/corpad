@@ -14,7 +14,7 @@ export class _SubitemHeaderConverter {
         const subTypeLabel = SubitemTypeLabels[subitemType]
         const suffix = typePropertyIndex ? `_${typePropertyIndex + 1}` : ''
         const propertyLabel = ExportSubitemPropertyLabels[property]
-        const unitSuffix = unit ? `, ${unit}` : ''
+        const unitSuffix = unit ? ` ${unit}` : ''
         return `${subTypeLabel}${suffix} - ${propertyLabel}${unitSuffix}`
     }
 

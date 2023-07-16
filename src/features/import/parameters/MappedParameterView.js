@@ -1,9 +1,9 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { View, StyleSheet, ScrollView } from 'react-native'
 import { useDispatch } from 'react-redux'
 import { Radio, Button, Text } from '@ui-kitten/components'
 import { globalStyle } from '../../../styles/styles'
-import Select from './components/Select'
+import Select from '../../../components/Select'
 import { saveIcon } from '../../../components/Icons'
 import { setImportProperty } from '../../../store/actions/importData'
 import { fieldProperties } from '../../../constants/fieldProperties'
@@ -35,6 +35,7 @@ const SelectFieldParamaters = (props) => {
             setImportType(0)
             setFieldIndex(null)
             setAttributeMap([])
+            setDefaultValue(null)
         }
     }, [attributeMap.length])
 
@@ -54,6 +55,8 @@ const SelectFieldParamaters = (props) => {
     const fieldIndexImportType = React.useCallback(() => {
         setImportType(1)
         setDefaultValue(null)
+        setFieldIndex(null)
+        setAttributeMap([])
     }, [])
 
     const onSaveHandler = async () => {
@@ -73,7 +76,6 @@ const SelectFieldParamaters = (props) => {
             }
         }
     }, [fieldIndex, attributeMap.length])
-
     return (
         <>
             <ScrollView contentContainerStyle={styles.mainView}>
@@ -84,7 +86,7 @@ const SelectFieldParamaters = (props) => {
                         checked={importType === 0}>
                         Use fixed value for each item
                     </Radio>
-                    <View style={importType !== 0 ? styles.hidden : styles.visible} >
+                    {importType === 0 ?
                         <Select
                             style={styles.field}
                             disabled={importType !== 0}
@@ -92,26 +94,24 @@ const SelectFieldParamaters = (props) => {
                             accessoryList={fieldProperties[props.property].accessoryList}
                             itemList={itemList}
                             selectedIndex={defaultValue}
-                            onSelect={setDefaultValue} />
-                    </View>
+                            onSelect={setDefaultValue} /> : null}
                     <Radio
                         style={styles.radio}
                         onChange={fieldIndexImportType}
                         checked={importType === 1}>
                         Use values from a column in data file
                     </Radio>
-                    <View style={importType === 0 ? styles.hidden : styles.visible}>
-                        <Select
-                            style={styles.field}
-                            disabled={importType !== 1}
-                            placeholder={'Select data column'}
-                            accessory={fileIcon}
-                            itemList={props.fields}
-                            selectedIndex={fieldIndex}
-                            onSelect={fieldIndexHandler} />
+                    {importType === 1 ? <><Select
+                        style={styles.field}
+                        disabled={importType !== 1}
+                        placeholder={'Select data column'}
+                        accessory={fileIcon}
+                        itemList={props.fields}
+                        selectedIndex={fieldIndex}
+                        onSelect={fieldIndexHandler} />
                         <MappingHint
                             visible={importType === 1} />
-                    </View>
+                    </> : null}
                 </View>
                 <View style={importType === 0 || fieldIndex === null ? styles.hidden : globalStyle.card}>
                     <AddMapComponent
@@ -129,7 +129,7 @@ const SelectFieldParamaters = (props) => {
                         itemListLabels={props.value.itemListLabels}
                         removeAttribute={removeAttribute} />
                 </View>
-            </ScrollView>
+            </ScrollView >
             <Button
                 onPress={onSaveHandler}
                 accessoryLeft={saveIcon}
@@ -138,7 +138,7 @@ const SelectFieldParamaters = (props) => {
     )
 }
 
-export default React.memo(SelectFieldParamaters, () => true)
+export default React.memo(SelectFieldParamaters)
 
 const styles = StyleSheet.create({
     field: {

@@ -15,7 +15,7 @@ export class SettingInitialization {
 
         const { pipelineNameAsDefault, defaultPotentialUnit, autoCreatePotentials, isSurveyNew, isCloud, originalHash, fileName, cloudId, lastSync, onboarding, multimeter } = settings
         const newOnboarding = new Onboarding(null, true, true, true, true, true, true)
-        const newMultimeter = new MultimeterSettings(null, null, null, 4000, 1000, 100, MultimeterSyncModes.HIGH_LOW, MultimeterCycles.OFF)
+        const newMultimeter = new MultimeterSettings(null, null, null, 4000, 1000, 100, MultimeterSyncModes.HIGH_LOW, MultimeterCycles.OFF, true)
         const newSettings = new AppSettings(
             pipelineNameAsDefault ?? true,
             defaultPotentialUnit ?? PotentialUnits.MILIVOLTS,

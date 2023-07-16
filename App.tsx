@@ -26,6 +26,7 @@ import { BottomSheet } from './src/bottom_sheet'
 import FullScreenLoader from './src/features/overlays/loader/Loader'
 import { ExportModal } from './src/features/overlays/export_modal/'
 import {SessionModal} from './src/features/overlays/session_modal/'
+import { MultimeterModal } from './src/features/overlays/multimeter'
 import { Animated } from 'react-native'
 
 
@@ -48,8 +49,8 @@ export const ScrollRef = createContext<MutableRefObject<any> | null>(null)
 
 ModalService.setShouldUseTopInsets = true
 
-export const version = '1.2'
-export const DEVELOPER_MODE_ON = true
+export const version = '1.3'
+export const DEVELOPER_MODE_ON = false
 
 function App(): JSX.Element {
   /*
@@ -76,6 +77,7 @@ scrolling ref - used to implement title scrolling animation inside View screen. 
                 <AppNavigator />
                   <BottomSheet ref={bottomSheet} />
                   <FullScreenLoader />
+                  <MultimeterModal />
                   <ExportModal 
                     navigationRef={navigationRef} />
                   <SessionModal />

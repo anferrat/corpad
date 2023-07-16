@@ -1,8 +1,8 @@
 import React from 'react'
 import { Text, Icon } from '@ui-kitten/components'
 import { View, StyleSheet } from 'react-native'
-import { basic, primary } from '../../../styles/colors'
-import Unit from '../../../components/Unit'
+import { basic, primary } from '../styles/colors'
+import Unit from './Unit'
 
 const TextLine = ({ value, title, icon, pack, fill, unit }) => {
 

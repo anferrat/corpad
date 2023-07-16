@@ -1,5 +1,5 @@
 import React from 'react'
-import TextLine from '../TextLine'
+import TextLine from '../../../../components/TextLine'
 import Header from '../Header'
 import Divider from '../Divider'
 import InputWithTitle from '../InputWithTitle'

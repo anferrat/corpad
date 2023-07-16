@@ -1,24 +1,16 @@
+const { getDefaultConfig, mergeConfig } = require('@react-native/metro-config');
+
 /**
  * Metro configuration for React Native
- * https://github.com/facebook/react-native
+ * https://facebook.github.io/metro/docs/configuration
  *
- * @format
+ * @type {import('metro-config').MetroConfig}
  */
-
-const MetroConfig = require('@ui-kitten/metro-config');
+const config = {};
 
 const evaConfig = {
   evaPackage: '@eva-design/eva',
   customMappingPath: './src/styles/mapping.json',
 };
 
-module.exports = MetroConfig.create(evaConfig, {
-  transformer: {
-    getTransformOptions: async () => ({
-      transform: {
-        experimentalImportSupport: false,
-        inlineRequires: true,
-      },
-    }),
-  },
-});
+module.exports = mergeConfig(getDefaultConfig(__dirname), config);

@@ -7,10 +7,11 @@ export class Permissions {
         this.ACCESS_FINE_LOCATION = PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION
         this.BLUETOOTH_SCAN = PermissionsAndroid.PERMISSIONS.BLUETOOTH_SCAN
         this.BLUETOOTH_CONNECT = PermissionsAndroid.PERMISSIONS.BLUETOOTH_CONNECT
-        this.BLUETOOTH = PermissionsAndroid.PERMISSIONS.BLUETOOTH
-        this.BLUETOOTH_ADMIN = PermissionsAndroid.PERMISSIONS.BLUETOOTH_ADMIN
+        this.BLUETOOTH = "android.permission.BLUETOOTH"
+        this.BLUETOOTH_ADMIN = "android.permission.BLUETOOTH_ADMIN"
+        this.WRITE_EXTERNAL_STORAGE = PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE
     }
-  
+
     async _isGranted(permission) {
         return (await PermissionsAndroid.request(permission) === PermissionsAndroid.RESULTS.GRANTED)
     }
@@ -20,6 +21,7 @@ export class Permissions {
     }
 
     async _bluetoothAndroid() {
+        console.log(Platform.Version, this.BLUETOOTH, this.ACCESS_FINE_LOCATION, this.BLUETOOTH_ADMIN)
         if (Platform.Version >= 31)
             return await this._isGrantedMultiple([this.BLUETOOTH_SCAN, this.BLUETOOTH_CONNECT])
         else
@@ -29,6 +31,13 @@ export class Permissions {
     async _locationAndroid() {
         if (Platform.Version >= 23) {
             return await this._isGranted(this.ACCESS_FINE_LOCATION)
+        }
+        else return true
+    }
+
+    async _storageAndroid() {
+        if (Platform.Version >= 19 && Platform.Version <= 29) {
+            return await this._isGranted(this.WRITE_EXTERNAL_STORAGE)
         }
         else return true
     }
@@ -45,6 +54,14 @@ export class Permissions {
     async location() {
         if (Platform.OS === 'android') {
             const granted = await this._locationAndroid()
+            if (!granted)
+                throw new Error(errors.PERMISSION, 'Unable to ontain location permission. You need to change location permission settings in order to use this feature.', 'Permission was not obtained', 902)
+        }
+    }
+
+    async storage() {
+        if (Platform.OS === 'android') {
+            const granted = await this._storageAndroid()
             if (!granted)
                 throw new Error(errors.PERMISSION, 'Unable to ontain location permission. You need to change location permission settings in order to use this feature.', 'Permission was not obtained', 902)
         }

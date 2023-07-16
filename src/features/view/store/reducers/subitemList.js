@@ -75,6 +75,31 @@ export function reducer(state, action) {
                     }].concat(state.subitems)
             })
         }
+        case 'UPDATE_POTENTIAL_BY_ID': {
+            const index = state.subitems.findIndex(({ id }) => id === action.subitemId)
+            if (~index) {
+                const potentialIndex = state.subitems[index].potentials.findIndex(({ id }) => id === action.potentialId)
+                if (~potentialIndex)
+                    return ({
+                        ...state,
+                        subitems:
+                            Object.assign([], state.subitems, {
+                                [index]: {
+                                    ...state.subitems[index],
+                                    potentials: Object.assign([], state.subitems[index].potentials, {
+                                        [potentialIndex]: {
+                                            ...state.subitems[index].potentials[potentialIndex],
+                                            value: action.value,
+                                            valid: action.valid
+                                        }
+                                    })
+                                }
+                            })
+                    })
+                else return state
+            }
+            else return state
+        }
         case 'DELETE_SUBITEM':
             return ({
                 ...state,
