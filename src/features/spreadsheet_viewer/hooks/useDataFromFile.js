@@ -25,7 +25,6 @@ export const useDataFromFile = (uri) => {
             const { response, status } = await loadCommaSeparatedFile({ path: uri })
             if (status === 200) {
                 const { rowLimitReached, fieldsLimitReached, fields, data } = response
-                console.log(data)
                 setValues({
                     loading: false,
                     data: getData(data, fields),

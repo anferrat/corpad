@@ -8,9 +8,7 @@ export class LoadCommaSeparatedFile {
 
     async execute(path) {
         const file = await this.fileSystemRepo.readFile(path)
-        console.log(file)
         const res = await this.parser.parse(file)
-        console.log(res)
         const { data, meta } = res
         const rowLimitReached = data.length > (this.MAX_ROWS)
         const fieldsLimitReached = meta.fields.length > (this.MAX_FIELDS)
