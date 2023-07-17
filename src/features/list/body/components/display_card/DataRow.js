@@ -1,7 +1,6 @@
 import React from 'react'
 import { View, StyleSheet } from 'react-native'
 import { Icon, Text } from '@ui-kitten/components'
-import { displayCard } from './styles/displayCardStyles'
 
 const DataRow = ({ value, pack, icon, fill }) => {
     if (value === null)

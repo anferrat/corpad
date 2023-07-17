@@ -21,7 +21,6 @@ export class Permissions {
     }
 
     async _bluetoothAndroid() {
-        console.log(Platform.Version, this.BLUETOOTH, this.ACCESS_FINE_LOCATION, this.BLUETOOTH_ADMIN)
         if (Platform.Version >= 31)
             return await this._isGrantedMultiple([this.BLUETOOTH_SCAN, this.BLUETOOTH_CONNECT])
         else
