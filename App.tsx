@@ -28,6 +28,7 @@ import { ExportModal } from './src/features/overlays/export_modal/'
 import {SessionModal} from './src/features/overlays/session_modal/'
 import { MultimeterModal } from './src/features/overlays/multimeter'
 import { Animated } from 'react-native'
+import { enableLatestRenderer } from 'react-native-maps'
 
 
 const rootReducer = combineReducers({
@@ -43,6 +44,7 @@ const rootReducer = combineReducers({
   importData: importData,
 })
 
+enableLatestRenderer()
 const store = createStore(rootReducer)
 export const BS = createContext<MutableRefObject<any> | null>(null)
 export const ScrollRef = createContext<MutableRefObject<any> | null>(null)

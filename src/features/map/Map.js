@@ -10,12 +10,8 @@ import NewItemView from './components/NewItem'
 import LoadingView from './components/LoadingView'
 import ControlBar from './components/ControlBar'
 import FocusAwareStatusBar from '../../components/FocusAwareStatusBar'
-import { enableLatestRenderer } from 'react-native-maps'
 import useMarkers from './hooks/useMarkers'
 import SearchBar from './SearchBar'
-
-
-enableLatestRenderer()
 
 const Map = ({ navigateToView, navigateToEdit }) => {
     const ref = useRef()

@@ -24,7 +24,7 @@ const styles = StyleSheet.create({
     defaultUnitView: {
         flexDirection: "row",
         alignItems: 'center',
-        paddingBottom: 24,
+        paddingBottom: 12,
     },
     text: {
         flex: 1,

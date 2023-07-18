@@ -2,7 +2,6 @@ import React from 'react'
 import { globalStyle } from '../styles/styles'
 import { View, StyleSheet } from 'react-native'
 import DataLoaderList from '../features/list/body/DataLoaderList'
-import ListHeader from '../features/list/header/header/ListHeader'
 import { control } from '../styles/colors'
 
 export default TestPointsScreen = ({ route, navigation }) => {

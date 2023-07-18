@@ -117,7 +117,6 @@ const useSurveyFiles = ({ isCloud, navigateToSurveyFileList }) => {
         dispatch(updateLoader(true, 'Creating link', fileName))
         await getCloudSurveyFileLink({ cloudId }, fileListErrorHandler)
         dispatch(updateLoader(false, null, null))
-
     }, [fileListErrorHandler])
 
     const copyToAlternateFolder = useCallback(async ({ path, cloudId, fileName }) => {

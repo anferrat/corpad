@@ -1,10 +1,10 @@
 import RNShare from 'react-native-share'
 
 export class Share {
-    constructor() { }
+    constructor() { } //strange behavior. seems like RNShare never resolves after calling methood, although share sheet still appears
 
     shareFile(url, mimeType) {
-        return RNShare.open({
+        RNShare.open({
             message: 'Share file',
             url: 'file://' + url,
             type: mimeType,
@@ -16,11 +16,11 @@ export class Share {
     }
 
     shareLink(link, title) {
-        return RNShare.open({
+        RNShare.open({
             title: title,
             url: link,
-            failOnCancel: false,
             showAppsToView: true,
+            failOnCancel: false,
         })
     }
 }

@@ -8,12 +8,7 @@ const marginLeft = Dimensions.get('window').width / (14 * 2.3) + 8
 const CycleDisplayView = ({ label, icon, value }) => {
     return (
         <View style={styles.container}>
-            <View style={styles.row}>
-                <Icon
-                    fill={primary}
-                    name={icon}
-                    pack='cp'
-                    style={{ ...styles.icon, marginLeft: marginLeft }} />
+            <View style={{ ...styles.row, marginLeft }}>
                 <Text category='label' appearance='hint'>{label}</Text>
             </View>
             <SevenSegmentView
