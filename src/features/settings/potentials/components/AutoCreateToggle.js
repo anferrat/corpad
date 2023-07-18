@@ -38,7 +38,7 @@ const styles = StyleSheet.create({
         flexDirection: "row",
         alignItems: 'center',
         justifyContent: 'space-between',
-        paddingBottom: 12,
+        paddingVertical: 12,
         paddingHorizontal: 12
     },
     subtitle: {

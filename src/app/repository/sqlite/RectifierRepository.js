@@ -158,7 +158,7 @@ export class RectifierRepository extends SQLiteRepository {
     async getDisplayListWithTargets(idList) {
         try {
             const result = await super.runSingleQueryTransaction(
-                `SELECT rectifiers.id AS itemId, rectifiers.uid AS itemUid, rectifiers.name AS itemName, rectifiers.timeModified, rectifiers.status, rectifiers.location, rectifiers.tapCoarse, rectifiers.tapFine, circuits.id, circuits.uid, circuits.name, '${SubitemTypes.CIRCUIT}' AS type, targetMin AS v2, targetMax AS v1 
+                `SELECT rectifiers.id AS itemId, rectifiers.uid AS itemUid, rectifiers.name AS itemName, rectifiers.timeModified, rectifiers.status, rectifiers.location, rectifiers.tapCoarse, rectifiers.tapFine, rectifiers.tapValue, rectifiers.tapSetting, circuits.id, circuits.uid, circuits.name, '${SubitemTypes.CIRCUIT}' AS type, targetMin AS v2, targetMax AS v1 
                 FROM rectifiers
                 LEFT JOIN circuits ON
                 rectifiers.id = circuits.rectifierId
