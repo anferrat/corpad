@@ -2,7 +2,7 @@ import { useCallback, useRef, useEffect } from 'react'
 import { EventRegister } from 'react-native-event-listeners'
 import { useSelector, useDispatch } from 'react-redux'
 import { getMarker, getMarkerList } from '../../../app/controllers/survey/items/MarkerController'
-import { getInitialMapRegion } from '../../../app/controllers/survey/other/GeolocationController'
+import { getInitialMapRegion, shareLocationWithExtarnalApp } from '../../../app/controllers/survey/other/GeolocationController'
 import { errorHandler } from '../../../helpers/error_handler'
 import { activateMarker, deleteMarker, loadMarkers, refreshMarkers, resetActiveMarkers, setActiveMarker, setMapReady, setNewItemMarker, toggleSatellite, updateMarker } from '../../../store/actions/map'
 import { updateMarker as updateMarkerRequest } from '../../../app/controllers/survey/items/MarkerController'
@@ -132,9 +132,11 @@ const useMarkers = ({ navigateToEdit, navigateToView, ref }) => {
         currentRegion.current.longitudeDelta = longitudeDelta
     }, [currentRegion])
 
-    const onUserLocationChange = useCallback(({ nativeEvent: { coordinate: { latitude, longitude } } }) => {
-        userLocation.current.latitude = latitude
-        userLocation.current.longitude = longitude
+    const onUserLocationChange = useCallback(({ nativeEvent }) => {
+        if (nativeEvent && nativeEvent.coordinate && nativeEvent.coordinate.latitide && nativeEvent.coordinate.longitude) {
+            userLocation.current.latitude = nativeEvent.cooerdinate.latitide
+            userLocation.current.longitude = nativeEvent.coordinate.longitude
+        }
     }, [userLocation])
 
     const onMapPress = useCallback(() => {
@@ -195,8 +197,14 @@ const useMarkers = ({ navigateToEdit, navigateToView, ref }) => {
 
     const shareActiveLocation = useCallback(() => {
         if (activeMarker.latitude && activeMarker.longitude)
-            extMapHandler(activeMarker.latitude, activeMarker.longitude)
-    }, [activeMarker.latitude, activeMarker.longitude])
+            shareLocationWithExtarnalApp({
+                latitude: activeMarker.latitude,
+                longitude: activeMarker.longitude,
+                name: activeMarker.name,
+                provider: 'google' //attempt to open in GoogleMaps if possible on iOS
+            },
+                er => errorHandler(er))
+    }, [activeMarker.latitude, activeMarker.longitude, activeMarker.name])
 
     const shareNewItemLocation = useCallback(() => {
         if (newItemMarker.latitude && newItemMarker.longitude)

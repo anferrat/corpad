@@ -66,20 +66,20 @@ export const AppNavigator = () => {
                 <Stack.Screen name='ExportSubitems' component={ExportSubitems} />
                 <Stack.Screen name='ExportOverview' component={ExportOverview} />
               </Stack.Group >
-              <Stack.Group screenOptions={{ presentation: 'modal' }}>
+              <Stack.Group screenOptions={{ animation: 'fade' }}>
                 <Stack.Screen name='Search' component={SearchBar} />
               </Stack.Group>
             </>
           ) : (
             <>
               <Stack.Screen name='Home' component={HomeBottomTabs} initialParams={{ homeScreenCloud: isCloud }} />
-              <Stack.Group screenOptions={{ presentation: 'modal' }}>
+              <Stack.Group screenOptions={{ animation: 'fade' }}>
                 <Stack.Screen name='CreateSurvey' component={CreateSurvey} />
               </Stack.Group>
             </>
           )
         }
-        <Stack.Group screenOptions={{ presentation: 'modal' }}>
+        <Stack.Group screenOptions={{ animation: 'fade' }}>
           <Stack.Screen name='Spreadsheet' component={Spreadsheet} initialParams={{ uri: null, title: null }} />
         </Stack.Group>
         <Stack.Group screenOptions={{ animation: 'fade_from_bottom' }}>

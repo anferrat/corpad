@@ -27,6 +27,7 @@ const PointMarker = ({ uid, id, name, onPress, updateMarkerHandler, onDragStart,
                 onDragStart={onDragStart}
                 onDragEnd={onDragEnd}
                 tracksViewChanges={false}
+                //isPreselected={true}
                 coordinate={{
                     latitude: latitude,
                     longitude: longitude

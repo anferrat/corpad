@@ -1,10 +1,10 @@
 import React from 'react'
-import { StyleSheet, View, StatusBar } from 'react-native'
+import { StyleSheet, View } from 'react-native'
 import ExportKmlButton from './buttons/ExportKmlButton'
 import SatelliteButton from './buttons/SatelliteButton'
 import MyLocationButton from './buttons/MyLocationButton'
 
-const ControlBar = ({ satelliteMode, zoomToUserLocation, toggleSatelliteMode, loading }) => {
+const Buttons = ({ satelliteMode, zoomToUserLocation, toggleSatelliteMode, loading }) => {
     return (
         <View style={styles.controlBar}>
             <MyLocationButton
@@ -19,13 +19,12 @@ const ControlBar = ({ satelliteMode, zoomToUserLocation, toggleSatelliteMode, lo
     )
 }
 
-export default React.memo(ControlBar)
+export default React.memo(Buttons)
 
 const styles = StyleSheet.create({
     controlBar: {
-        top: 70 + StatusBar.currentHeight,
-        position: 'absolute',
-        right: '5%',
+        top: 24,
+        right: '2.5%',
         alignSelf: 'flex-end',
         height: 180,
         justifyContent: 'space-between'

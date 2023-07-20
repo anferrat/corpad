@@ -6,7 +6,7 @@ const DataLoaderFlatList = (props) => {
         {...props}
         StickyHeaderComponent={props.StickyHeaderComponent}
         ListHeaderComponent={props.ListHeaderComponent}
-        contentContainerStyle={{...styles.container, ...props.contentContainerStyle}}
+        contentContainerStyle={{ ...styles.container, ...props.contentContainerStyle }}
         keyExtractor={props.keyExtractor}
         initialNumToRender={18}
         ListEmptyComponent={props.ListEmptyComponent}
@@ -21,6 +21,7 @@ const DataLoaderFlatList = (props) => {
         updateCellsBatchingPeriod={200}
         windowSize={21}
         ListFooterComponent={props.ListFooterComponent} />
+
 }
 
 export default React.memo(DataLoaderFlatList)

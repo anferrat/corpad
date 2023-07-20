@@ -4,6 +4,7 @@ import { Text, Icon } from '@ui-kitten/components'
 import Header from '../Header'
 import PoitentialListItem from './components/PoitentialListItem'
 import { basic } from '../../styles/colors'
+import { SafeAreaProvider } from 'react-native-safe-area-context'
 
 const PotentialTypesModal = ({ potentialTypes, itemList, onSelect, dismiss }) => {
     const displayList = potentialTypes.map((pt, i) => ({ index: i, potentialType: pt }))
@@ -20,7 +21,7 @@ const PotentialTypesModal = ({ potentialTypes, itemList, onSelect, dismiss }) =>
         ), [displayList, potentialTypes])
 
     return (
-        <>
+        <SafeAreaProvider>
             <Header
                 title='Select potential type'
                 onBackPress={dismiss} />
@@ -31,7 +32,7 @@ const PotentialTypesModal = ({ potentialTypes, itemList, onSelect, dismiss }) =>
                     <Text category='s2' appearance='hint'>Create custom potentials types in Settings {`->`} Potentials</Text>
                 </View>
             </ScrollView>
-        </>
+        </SafeAreaProvider>
     )
 }
 

@@ -1,4 +1,5 @@
 import { PermissionsAndroid, Platform } from 'react-native'
+import Geolocation from 'react-native-geolocation-service'
 import { Error, errors } from '../../utils/Error'
 
 export class Permissions {
@@ -55,6 +56,12 @@ export class Permissions {
             const granted = await this._locationAndroid()
             if (!granted)
                 throw new Error(errors.PERMISSION, 'Unable to ontain location permission. You need to change location permission settings in order to use this feature.', 'Permission was not obtained', 902)
+        }
+        else if (Platform.OS === 'ios') {
+            const granted = await Geolocation.requestAuthorization("whenInUse")
+            console.log(granted)
+            if (granted !== 'granted')
+                throw new Error(errors.PERMISSION, 'Unable to ontain location permission. You need to allow to use location to use this feature.', 'Permission was not obtained', 902)
         }
     }
 

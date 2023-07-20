@@ -1,5 +1,5 @@
 import React from 'react'
-import { View, StyleSheet, Linking } from 'react-native'
+import { View, StyleSheet, Linking, Platform } from 'react-native'
 import { Icon, Text, Divider, ListItem } from '@ui-kitten/components'
 import { version } from '../../../../App'
 import { primary } from '../../../styles/colors'
@@ -15,8 +15,7 @@ const About = (props) => {
             <View style={{ ...globalStyle.card, ...styles.card }}>
                 <View style={styles.logoView}>
                     <Icon name='corpad-logo' pack='cp' style={styles.logo} fill={primary} />
-                    <Text category='s2' appearance='hint' style={styles.text}>Corpad for Android. {`\n`}Version {version}</Text >
-
+                    <Text category='s2' appearance='hint' style={styles.text}>Corpad for {Platform.OS ==='ios' ? 'iOS' : (Platform.OS==='android' ? 'Android' : 'Web')}. {`\n`}Version {version}</Text >
                 </View>
                 <Divider />
                 <View style={styles.listView}>

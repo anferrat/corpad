@@ -5,6 +5,7 @@ import ListItem from './ListItem'
 import { SubitemTypes } from '../../../constants/global'
 import { SubitemTypeLabels } from '../../../constants/labels'
 import { SubitemTypeIconsFilled } from '../../../constants/icons'
+import { SafeAreaProvider } from 'react-native-safe-area-context'
 
 const SubitemTypeOptions = [
     SubitemTypes.PIPELINE,
@@ -36,14 +37,14 @@ const ModalContent = ({ onSelect, hideModal }) => {
     )), [onSelectHandler])
 
     return (
-        <>
+        <SafeAreaProvider>
             <Header
                 title='Select reading'
                 onBackPress={hideModal} />
             <ScrollView>
                 {renderItem(SubitemTypeOptions)}
             </ScrollView>
-        </>
+        </SafeAreaProvider>
     )
 }
 

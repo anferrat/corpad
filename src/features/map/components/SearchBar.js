@@ -1,10 +1,10 @@
 import React, { useEffect } from 'react'
 import { Pressable, Modal, StyleSheet, StatusBar, View } from 'react-native'
 import { Icon, Text } from '@ui-kitten/components'
-import { basic400, primary } from '../../styles/colors'
-import IconButton from '../../components/IconButton'
-import useMarkerSearch from './hooks/useMarkerSearch'
-import SearchModal from './components/search/SearchModal'
+import { basic400, primary } from '../../../styles/colors'
+import IconButton from '../../../components/IconButton'
+import useMarkerSearch from '../hooks/useMarkerSearch'
+import SearchModal from './search/SearchModal'
 
 const SearchBar = ({ setMarkerActive, resetActiveMarker, satelliteMode }) => {
     const { search, hideModal, showModal, openMenu, onChangeKeyword, showOnMap, resetKeyword } = useMarkerSearch({ setMarkerActive, resetActiveMarker })
@@ -82,8 +82,7 @@ const styles = StyleSheet.create({
         alignSelf: 'center',
         height: 45,
         backgroundColor: "#FFF",
-        position: 'absolute',
-        top: StatusBar.currentHeight + 5,
+        top: 12,
         borderWidth: 1,
         elevation: 5,
         borderRadius: 15,

@@ -167,6 +167,7 @@ const errorCodes = {
     820: 'Unable to stop scan for bluetooth devices',
     821: 'Unable to listen for disconnected bluetooth devices',
     822: `Unable to connect to multimeter. Don't forget to press button on multimeter to wake it up.`,
+    823: 'Unable to share location',
     900: 'Unable to obtain permission to proceed with operation.',
     901: 'Need permission to write to Downloads folder.',
     902: 'Location permission was not granted.',

@@ -29,6 +29,7 @@ export const CreateSurvey = () => {
     return (
         <>
             <ScrollView
+                bounces={false}
                 contentContainerStyle={styles.mainView}>
                 <NameEditInput
                     name={name}
@@ -74,7 +75,6 @@ export const CreateSurvey = () => {
 const styles = StyleSheet.create({
     mainView: {
         padding: 12,
-        flex: 1,
         backgroundColor: control,
         paddingBottom: 72
     },

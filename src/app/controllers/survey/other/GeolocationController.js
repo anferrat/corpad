@@ -9,18 +9,25 @@ import { WatchDistanseAndBearing } from "../../../services/location/WatchDistans
 import { GetDeclination } from "../../../services/location/GetDeclination"
 import { Permissions } from "../../../services/other/Permissions"
 import { TimeAdjustmentListener } from "../../../services/location/TimeAdjustmentListener"
+import { ShareLocationWithExtarnalApp } from "../../../services/location/ShareLocationWithExternalApp"
+import { Linking } from "../../../services/other/Linking"
+import { GeolocationValidation } from "../../../validation/GeolocationValidation"
 
 class GeolocationController extends Controller {
     constructor(geolocationRepo, geolocationCalculator, permissions) {
         super()
         this.geolocationRepo = geolocationRepo
         this.permissions = permissions
+        this.linkingService = new Linking()
         this.getCurrentPositionService = new GetCurrentPosition(geolocationRepo, permissions)
         this.watchPositionService = new WatchPosition(geolocationRepo)
         this.getMapRegionService = new GetMapRegion(geolocationRepo, geolocationCalculator, permissions)
         this.watchDistanceAndBearingService = new WatchDistanseAndBearing(geolocationRepo, geolocationCalculator)
         this.getDeclinationService = new GetDeclination(geolocationRepo)
         this.timeAdjustmentListenerService = new TimeAdjustmentListener(geolocationRepo, permissions)
+        this.shareLocationWithExternalAppService = new ShareLocationWithExtarnalApp(this.linkingService)
+
+        this.validation = new GeolocationValidation()
     }
 
     watch(callback, onError = null, onSuccess = null) {
@@ -66,6 +73,13 @@ class GeolocationController extends Controller {
             return this.getDeclinationService.execute(latitude, longitude)
         })
     }
+
+    shareWithExternalApp(params, onError = null, onSuccess = null) {
+        return super.callbackHandler(onSuccess, onError, 823, () => {
+            const { latitude, longitude, provider, name } = this.validation.shareWithExternalApp(params)
+            return this.shareLocationWithExternalAppService.execute(latitude, longitude, provider, name)
+        })
+    }
 }
 
 const geolocationController = new GeolocationController(
@@ -84,3 +98,5 @@ export const getInitialMapRegion = ({ markers }, onError, onSuccess) => geolocat
 export const getDeclination = ({ latitude, longitude }, onError, onSuccess) => geolocationController.getDeclination({ latitude, longitude }, onError, onSuccess)
 
 export const addTimeAdjustmentListener = (callback, onError, onSuccess) => geolocationController.addTimeAdjustmentListener(callback, onError, onSuccess)
+
+export const shareLocationWithExtarnalApp = ({ latitude, longitude, name, provider }) => geolocationController.shareWithExternalApp({ latitude, longitude, name, provider })
