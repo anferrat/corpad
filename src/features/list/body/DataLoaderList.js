@@ -13,7 +13,7 @@ import { EventRegister } from 'react-native-event-listeners'
 import { Button } from '@ui-kitten/components'
 import ListHeader from '../header/header/ListHeader'
 
-const indice =[0]
+const indice = [0]
 const ItemList = ({ itemType, navigateToView }) => {
     const dispatch = useDispatch()
     const t = useSelector(state => getListStateByType(itemType, state))
@@ -123,8 +123,11 @@ const ItemList = ({ itemType, navigateToView }) => {
     //Keep timeModified as part of the key. When card is updated, it will reset internal card state
     const keyExtractor = React.useCallback((item) => itemType + item.uid + item.timeModified, [itemType])
 
+    const Header = React.memo(() => <ListHeader dataType={itemType} />) //need to implement Animated container and scrolling it up and down on scroll
+
     return (
         <>
+            <Header />
             <FlatList
                 contentContainerStyle={styles.container}
                 keyExtractor={keyExtractor}
@@ -133,9 +136,8 @@ const ItemList = ({ itemType, navigateToView }) => {
                 refreshing={t.settings.refreshing}
                 onRefresh={refreshHandler}
                 onEndReachedThreshold={6}
-                ListHeaderComponent={<ListHeader dataType={itemType} />}
-                stickyHeaderHiddenOnScroll={true}
-                stickyHeaderIndices={indice}
+                //stickyHeaderHiddenOnScroll={false}
+                //stickyHeaderIndices={indice}
                 onEndReached={offsetHandler}
                 renderItem={renderItem}
                 ListFooterComponent={renderFooter} />

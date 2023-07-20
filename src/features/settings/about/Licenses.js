@@ -58,6 +58,7 @@ const Licenses = () => {
             renderSectionHeader={renderSectionHeader}
             renderSectionFooter={renderSectionFooter}
             ListHeaderComponent={renderListHeader}
+            stickySectionHeadersEnabled={false}
         />
     )
 }

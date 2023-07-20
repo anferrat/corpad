@@ -8,10 +8,9 @@ import MarkerInfo from './components/MarkerInfo'
 import NewItemMarker from './components/markers/NewItemMarker'
 import NewItemView from './components/NewItem'
 import LoadingView from './components/LoadingView'
-import ControlBar from './components/ControlBar'
 import FocusAwareStatusBar from '../../components/FocusAwareStatusBar'
 import useMarkers from './hooks/useMarkers'
-import SearchBar from './SearchBar'
+import ControlBar from './ControlBar'
 
 const Map = ({ navigateToView, navigateToEdit }) => {
     const ref = useRef()
@@ -106,16 +105,15 @@ const Map = ({ navigateToView, navigateToEdit }) => {
                 createItemHandler={createItemHandler} />
             <LoadingView
                 loading={loading} />
-            <SearchBar
-                satelliteMode={satelliteMode}
-                setMarkerActive={setMarkerActive}
-                resetActiveMarker={resetActiveMarker} />
             <ControlBar
                 loading={loading}
                 satelliteMode={satelliteMode}
+                setMarkerActive={setMarkerActive}
+                resetActiveMarker={resetActiveMarker}
                 toggleSatelliteMode={toggleSatelliteMode}
                 zoomToUserLocation={zoomToUserLocation}
-                animateToCoordinates={animateToCoordinates} />
+                animateToCoordinates={animateToCoordinates}
+            />
         </>
     )
 }

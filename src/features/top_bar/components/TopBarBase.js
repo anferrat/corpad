@@ -2,7 +2,7 @@ import React from 'react'
 import { View, StyleSheet, StatusBar } from 'react-native'
 import IconButton from '../../../components/IconButton'
 import { Text } from '@ui-kitten/components'
-import { basic200, basic300, control, primary } from '../../../styles/colors'
+import { basic300, control, primary } from '../../../styles/colors'
 import TopBarTitle from './TopBarTitle'
 import SurveyTitle from './SurveyTitle'
 import MainMenuTitle from './MainMenuTitle'
@@ -11,12 +11,18 @@ import EditTitle from './EditTitle'
 import CloudButton from './CloudButton'
 import NavigationWidget from './navigation_widget/'
 import EditSubitemTitle from './EditSubitemTitle'
+import { SafeAreaView } from 'react-native-safe-area-context'
+
+
 
 const TopBarBase = ({ left, right, title, isPrimary, navigation, noBorder }) => {
     const topBarStyle = isPrimary ? styles.primaryStyle : styles.defaultStyle
     const borderStyle = noBorder ? {} : styles.borderStyle
+
     return (
-        <View style={{ ...styles.topBar, ...topBarStyle, ...borderStyle }} >
+        <SafeAreaView
+            edges={['top']}
+            style={{ ...styles.topBar, ...topBarStyle, ...borderStyle }} >
             <StatusBar
                 barStyle={isPrimary ? 'light-content' : 'dark-content'}
                 translucent={true}
@@ -36,7 +42,7 @@ const TopBarBase = ({ left, right, title, isPrimary, navigation, noBorder }) => 
                     right={right}
                     isPrimary={isPrimary} />
             </View>
-        </View>
+        </SafeAreaView>
     )
 }
 const RightSide = ({ right, isPrimary }) => {
@@ -115,8 +121,7 @@ export default React.memo(TopBarBase)
 
 const styles = StyleSheet.create({
     topBar: {
-        height: StatusBar.currentHeight + 60,
-        paddingTop: StatusBar.currentHeight,
+        height: 80,
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'space-between',

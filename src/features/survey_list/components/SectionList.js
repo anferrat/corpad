@@ -8,6 +8,7 @@ const renderSectionHeader = ({ section }) => (
 
 const DataLoaderSectionList = ({ keyExtractor, sections, ListEmptyComponent, refreshing, onRefresh, renderItem, ListHeaderComponent, isEmpty }) => {
     return <SectionList
+        stickySectionHeadersEnabled={false}
         keyExtractor={keyExtractor}
         sections={isEmpty ? [] : sections}
         renderItem={renderItem}

@@ -4,6 +4,7 @@ import { Text } from '@ui-kitten/components'
 import Header from '../Header'
 import PoitentialListItem from './components/PoitentialListItem'
 import { ReferenceCellTypeLabels, ReferenceCellCodeLabels } from '../../constants/labels'
+import { SafeAreaProvider } from 'react-native-safe-area-context'
 
 const ReferenceCellModal = ({ referenceCellList, itemList, onSelect, dismiss, selectedTypeIndex }) => {
     const list = itemList.filter(rc => rc.potentialTypes.indexOf(selectedTypeIndex) !== -1)
@@ -25,7 +26,7 @@ const ReferenceCellModal = ({ referenceCellList, itemList, onSelect, dismiss, se
     }, [referenceCellList, onSelect])
 
     return (
-        <>
+        <SafeAreaProvider>
             <Header
                 title='Select reference cell'
                 onBackPress={dismiss} />
@@ -38,7 +39,7 @@ const ReferenceCellModal = ({ referenceCellList, itemList, onSelect, dismiss, se
                 </Text>
                 {genReferenceCellList(stationaryList)}
             </ScrollView>
-        </>
+        </SafeAreaProvider>
     )
 }
 

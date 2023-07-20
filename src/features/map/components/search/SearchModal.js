@@ -1,12 +1,14 @@
 import React, { useEffect, useRef } from 'react'
 import { Icon } from '@ui-kitten/components'
-import { View, StyleSheet, StatusBar, Keyboard, ActivityIndicator } from 'react-native'
+import { StyleSheet, ActivityIndicator } from 'react-native'
+import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context'
 import { FlashList } from '@shopify/flash-list'
 import IconButton from '../../../../components/IconButton'
 import Input from '../../../../components/Input'
 import { basic400, primary } from '../../../../styles/colors'
 import SearchItem from './SearchItem'
 import EmptyList from './EmptyList'
+
 
 
 const SearchModal = ({ hideModal, keyword, onChangeKeyword, markersFound, showOnMap, resetKeyword, searching }) => {
@@ -61,30 +63,32 @@ const SearchModal = ({ hideModal, keyword, onChangeKeyword, markersFound, showOn
 
     const keyExtractor = React.useCallback((item => item.uid), [])
     return (
-        <View style={styles.mainView}>
-            <Input
-                valid={true}
-                placeholder='Search by name'
-                onSubmitEditing={onSubmitEditing}
-                onChangeText={onChangeKeyword}
-                accessoryLeft={acessoryLeft}
-                accessoryRight={accessoryRight}
-                ref={inputRef}
-                style={styles.input}
-                value={keyword} />
-            <FlashList
-                ListEmptyComponent={
-                    <EmptyList searching={searching} />
-                }
-                keyboardDismissMode='on-drag'
-                keyboardShouldPersistTaps='handled'
-                contentContainerStyle={styles.flatList}
-                data={markersFound}
-                renderItem={renderItem}
-                keyExtractor={keyExtractor}
-                estimatedItemSize={50}
-            />
-        </View>
+        <SafeAreaProvider>
+            <SafeAreaView style={styles.mainView}>
+                <Input
+                    valid={true}
+                    placeholder='Search by name'
+                    onSubmitEditing={onSubmitEditing}
+                    onChangeText={onChangeKeyword}
+                    accessoryLeft={acessoryLeft}
+                    accessoryRight={accessoryRight}
+                    ref={inputRef}
+                    style={styles.input}
+                    value={keyword} />
+                <FlashList
+                    ListEmptyComponent={
+                        <EmptyList searching={searching} />
+                    }
+                    keyboardDismissMode='on-drag'
+                    keyboardShouldPersistTaps='handled'
+                    contentContainerStyle={styles.flatList}
+                    data={markersFound}
+                    renderItem={renderItem}
+                    keyExtractor={keyExtractor}
+                    estimatedItemSize={50}
+                />
+            </SafeAreaView>
+        </SafeAreaProvider>
     )
 }
 
@@ -93,7 +97,7 @@ export default React.memo(SearchModal)
 const styles = StyleSheet.create({
     mainView: {
         flex: 1,
-        marginTop: StatusBar.currentHeight + 5,
+        paddingTop: 12
     },
     input: {
         marginBottom: 0,
