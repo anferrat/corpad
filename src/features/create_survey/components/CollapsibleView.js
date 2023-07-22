@@ -4,11 +4,7 @@ import { Icon, Text } from '@ui-kitten/components'
 import { primary } from '../../../styles/colors'
 
 
-const CollapsibleView = ({ children }) => {
-    const [visible, setVisible] = useState(false)
-
-    const toggleView = () => setVisible(state => !state)
-
+const CollapsibleView = ({ children, visible, toggleView }) => {
     return (
         <>
             <Pressable
