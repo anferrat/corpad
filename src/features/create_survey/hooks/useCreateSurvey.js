@@ -15,6 +15,7 @@ const useCreateSurvey = () => {
     const [selectedSurveyIndex, setSelectedSurveyIndex] = useState(null)
     const [surveyList, setSurveyList] = useState([])
     const [surveyListLoading, setSurveyListLoading] = useState(true)
+    const [visible, setVisible] = useState(false)
     const isSigned = useSelector(state => state.settings.session.isSigned)
     const dispatch = useDispatch()
     const componentMounted = useRef(true)
@@ -54,6 +55,8 @@ const useCreateSurvey = () => {
 
     const toggleTemplateSetting = useCallback((index) => setIsBlank(!Boolean(index)), [])
 
+    const toggleView = () => setVisible(state => !state)
+
     const createSurveyHandler = useCallback(async () => {
         const { valid, value } = fieldValidation(name.name, 'name')
         if (valid) {
@@ -85,13 +88,15 @@ const useCreateSurvey = () => {
         surveyList,
         isSigned,
         surveyListLoading,
+        visible,
         onChangeName,
         onEndEditingName,
         setDeviceBased,
         setCloudBased,
         toggleTemplateSetting,
         setSelectedSurveyIndex,
-        createSurveyHandler
+        createSurveyHandler,
+        toggleView
     }
 }
 
