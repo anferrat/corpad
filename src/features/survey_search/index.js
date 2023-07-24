@@ -5,7 +5,7 @@ import { Icon, Divider, } from '@ui-kitten/components'
 import Input from '../../components/Input'
 import SingleIconButton from '../../components/IconButton'
 import ListItemSearch from './components/ListItemSearch'
-import { primary } from '../../styles/colors'
+import { control, primary } from '../../styles/colors'
 import useSurveySearch from './hooks/useSurveySearch'
 import EmptyResult from './components/EmptyResult'
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context'
@@ -87,6 +87,7 @@ export default SearchBar
 const styles = StyleSheet.create({
     mainView: {
         flex: 1,
+        backgroundColor: control
     },
     input: {
         flex: 1,
