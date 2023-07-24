@@ -4,8 +4,8 @@ import { Marker } from 'react-native-maps'
 import { getActiveMapIcon } from '../native_icons/mapIcons'
 
 
-const ActiveMarker = ({ itemType, markerType, id, uid, location, timeModified, timeCreated, status, latitude, longitude, name, comment, onDragStart, updateMarkerHandler }) => {
-    const marker = { uid, id, name, latitude, longitude, status, markerType, itemType, location, comment, timeModified, timeCreated }
+const ActiveMarker = ({ itemType, markerType, id, uid, location, timeModified, timeCreated, status, latitude, longitude, name, comment, testPointType, onDragStart, updateMarkerHandler }) => {
+    const marker = { uid, id, name, latitude, longitude, status, markerType, itemType, location, comment, timeModified, timeCreated, testPointType }
     const visible = latitude !== null && longitude !== null
 
     const onDragEnd = ({ nativeEvent: { coordinate: { latitude, longitude } } }) =>
