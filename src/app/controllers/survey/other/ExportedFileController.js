@@ -63,8 +63,7 @@ class ExportedFileController extends Controller {
     share(params, onError = null, onSuccess = null) {
         return super.controllerHandler(onSuccess, onError, 430, async () => {
             const { url, mimeType } = params
-            this.shareService.shareFile(url, mimeType)
-            return
+            return this.shareService.shareFile(url, mimeType)
         })
     }
 }

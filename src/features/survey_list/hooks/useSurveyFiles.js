@@ -1,12 +1,11 @@
 import { useCallback, useState, useRef, useEffect } from 'react'
-import { copyCloudSurveyFileToDevice, copySurveyFileToCloud, copySurveyFileToDownloads, deleteSurveyFile, getCloudSurveyFileLink, getSurveyFileList, loadSurveyFile } from '../../../app/controllers/survey/SurveyFileController'
+import { copyCloudSurveyFileToDevice, copySurveyFileToCloud, copySurveyFileToDownloads, deleteSurveyFile, getCloudSurveyFileLink, getSurveyFileList, loadSurveyFile, shareFile } from '../../../app/controllers/survey/SurveyFileController'
 import { errorHandler, warningHandler } from '../../../helpers/error_handler'
 import { useDispatch } from 'react-redux'
 import { setSurveySettings, updateLoader, updateSession } from '../../../store/actions/settings'
 import { EventRegister } from 'react-native-event-listeners'
 import { ToastAndroid } from 'react-native'
-import { shareFile } from '../../../app/controllers/survey/other/ExportedFileController'
-
+import { FileMimeTypes } from '../../../constants/global'
 
 
 const useSurveyFiles = ({ isCloud, navigateToSurveyFileList }) => {
@@ -109,9 +108,13 @@ const useSurveyFiles = ({ isCloud, navigateToSurveyFileList }) => {
         }
     }, [isCloud])
 
-    const shareSurveyFile = useCallback(async ({ path }) => {
-        await shareFile({ url: path, mimeType: 'application/json' })
-    }, [])
+    const shareSurveyFile = useCallback(async ({ path, cloudId, fileName }) => {
+        if (isCloud)
+            dispatch(updateLoader(true, 'Downloading file', fileName))
+        await shareFile({ path, cloudId, isCloud, mimeType: FileMimeTypes.JSON })
+        if (isCloud)
+            dispatch(updateLoader(false, null, null))
+    }, [isCloud])
 
     const shareSurveyLink = useCallback(async ({ cloudId, fileName }) => {
         dispatch(updateLoader(true, 'Creating link', fileName))

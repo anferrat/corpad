@@ -87,20 +87,6 @@ export class FileSystemRepository {
         }
     }
 
-    async getLocation(location) {
-        switch (location) {
-            case FileSystemLocations.SURVEYS:
-                return await this.createDirectory(this.surveysFolder)
-            case FileSystemLocations.EXPORTS:
-                return await this.createDirectory(this.exportsFolder)
-            case FileSystemLocations.DOWNLOADS:
-                return this.downloadsFolder
-            case FileSystemLocations.TEMP: //not used
-                return await this.createDirectory(this.tempFolder)
-            default:
-                throw new Error(errors.FILESYSTEM, `Unknown destination ${location}.`, 'Location doesnt exist', 406)
-        }
-    }
 
     async deleteFile(location, fileName) {
         const directory = await this.getLocation(location)
@@ -152,8 +138,40 @@ export class FileSystemRepository {
         }
     }
 
+    getLocationPath(location) {
+        switch (location) {
+            case FileSystemLocations.EXPORTS:
+                return this.exportsFolder
+            case FileSystemLocations.SURVEYS:
+                return this.surveysFolder
+            case FileSystemLocations.TEMP:
+                return this.tempFolder
+            case FileSystemLocations.DOWNLOADS:
+                return this.downloadsFolder
+            default:
+                throw new Error(errors.FILESYSTEM, `Unknown destination ${location}.`, 'Location doesnt exist', 406)
+        }
+    }
+
+    async getLocation(location) {
+        const path = this.getLocationPath(location)
+        if (location !== FileSystemLocations.DOWNLOADS)
+            return await this.createDirectory(path)
+        else return path
+    }
+
+    async removeDir(location) {
+        const path = this.getLocationPath(location)
+        try {
+            return await RNFS.unlink(path)
+        }
+        catch (er) {
+            throw new Error(errors.FILESYSTEM, `Unable to delete file/directory at ${path}`, er, 407)
+        }
+    }
+
     async unlink(path) {
-        //use when deleting Directories or when fileName is unknown
+        //use when deleting when fileName is unknown, probably just get rid of it
         try {
             await RNFS.unlink(path)
         }

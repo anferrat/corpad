@@ -1,6 +1,6 @@
 import React, { useRef } from "react"
 import useModal from "../../../../hooks/useModal"
-import { StyleSheet, Pressable, View, Animated } from "react-native"
+import { StyleSheet, Pressable, View, Animated, Platform } from "react-native"
 import { Text, Icon } from "@ui-kitten/components"
 import { basic } from "../../../../styles/colors"
 import { androidRipple, globalStyle } from '../../../../styles/styles'
@@ -22,6 +22,7 @@ const fileIcons = {
 
 const ExportedFileListItem = ({ deleteFile, removeFileFromList, saveToDownloads, shareFileHandler, openInHandler, path, name, type, size, timeModified, navigateToSpreadsheet }) => {
     const isKml = type !== 'text/csv'
+    const isAndroid = Platform.OS === 'android'
     const scale = useRef(new Animated.Value(1))
     const { hideModal, showModal, visible } = useModal()
 
@@ -40,24 +41,24 @@ const ExportedFileListItem = ({ deleteFile, removeFileFromList, saveToDownloads,
     }, [path, name])
 
     const handleSaveToDownloads = React.useCallback(async () => {
-        hideModal()
         await saveToDownloads(path)
+        hideModal()
     }, [path])
 
     const handleShareFile = React.useCallback(() => {
         hideModal()
         shareFileHandler(path, type)
-    }, [path, type])
+    }, [path, type, hideModal, shareFileHandler])
 
-    const handleOpenIn = React.useCallback(() => {
+    const handleOpenIn = React.useCallback(async () => {
+        await openInHandler(path, type)
         hideModal()
-        openInHandler(path, type)
     }, [path, type])
 
     const handlePreview = React.useCallback(() => {
-        hideModal()
         if (type === 'text/csv')
             navigateToSpreadsheet(path, name)
+        hideModal()
     }, [path, type, name, navigateToSpreadsheet])
 
     return (
@@ -104,14 +105,14 @@ const ExportedFileListItem = ({ deleteFile, removeFileFromList, saveToDownloads,
                             title={'Share'}
                             icon={'share-outline'}
                             onPress={handleShareFile} />
-                        <FileListItemMenuItem
+                        {isAndroid ? <FileListItemMenuItem
                             title={'Open in...'}
                             icon={'external-link-outline'}
-                            onPress={handleOpenIn} />
-                        <FileListItemMenuItem
+                            onPress={handleOpenIn} /> : null}
+                        {isAndroid ? <FileListItemMenuItem
                             title={'Save to Downloads'}
                             icon={'download-outline'}
-                            onPress={handleSaveToDownloads} />
+                            onPress={handleSaveToDownloads} /> : null}
                         <FileListItemMenuItem
                             status='danger'
                             title={'Delete'}

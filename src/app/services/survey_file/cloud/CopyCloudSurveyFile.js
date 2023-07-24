@@ -15,7 +15,7 @@ export class CopyCloudSurveyFile {
             const { file, fileName } = await this.cloudFileSystemRepo.readFile(cloudId)
             const content = JSON.stringify(file)
             const newFileName = await this.fileSystemRepo.getFileName(fileName, location)
-            await this.fileSystemRepo.writeFile(content, newFileName, location, false)
+            return await this.fileSystemRepo.writeFile(content, newFileName, location, false)
         }
         else throw new Error(errors.NETWORK, 'Unable to connect to internet', 'No internet', 102)
     }
@@ -26,5 +26,9 @@ export class CopyCloudSurveyFile {
 
     async executeToAppFolder(cloudId) {
         await this.execute(cloudId, FileSystemLocations.SURVEYS)
+    }
+
+    async executeToTemp(cloudId) {
+        return await this.execute(cloudId, FileSystemLocations.TEMP)
     }
 }

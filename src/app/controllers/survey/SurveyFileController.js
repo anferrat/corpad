@@ -37,6 +37,7 @@ import { ReadSurveyFile } from "../../services/survey_file/local/ReadSurveyFile"
 import { Controller } from "../../utils/Controller"
 import { SurveyFileValidation } from "../../validation/SurveyFileValidation"
 import { SurveyFileContentValidation } from "../../validation/survey_file_content/v1/SurveyFileContentValidation"
+import { FileMimeTypes } from "../../../constants/global"
 
 
 class SurveyFileController extends Controller {
@@ -70,6 +71,8 @@ class SurveyFileController extends Controller {
 
         this.createSurveyService = new CreateSurvey(surveyRepo, potentialTypeRepo, this.surveyLoadStatusService, pipelineRepo, referenceCellRepo, settingRepo)
         this.createSurveyFromTemplateService = new CreateSurveyFromTemplate(fileSystemRepo, surveyFileContentValidation, this.jsonImportService, this.surveyFileConverterInputService, this.surveyLoadStatusService)
+
+        this.shareService = shareService
 
         this.validation = new SurveyFileValidation()
     }
@@ -135,6 +138,18 @@ class SurveyFileController extends Controller {
         })
     }
 
+    shareFile(params, onError = null, onSuccess = null) {
+        return super.controllerHandler(onSuccess, onError, 430, async () => {
+            const { cloudId, path, isCloud, mimeType } = params
+            if (isCloud) {
+                const url = await this.copyCloudSurveyFileService.executeToTemp(cloudId)
+                return this.shareService.shareFile(url, mimeType)
+            }
+            else
+                return this.shareService.shareFile(path, mimeType)
+        })
+    }
+
     copyToDownloads(params, onError = null, onSuccess = null) {
         return super.controllerHandler(onSuccess, onError, 416, async () => {
             const { path, cloudId, isCloud } = params
@@ -195,3 +210,5 @@ export const copyCloudSurveyFileToDevice = ({ cloudId }, onError, onSuccess) => 
 export const copySurveyFileToDownloads = ({ cloudId, isCloud, path }, onError, onSuccess) => surveyFileController.copyToDownloads({ cloudId, isCloud, path }, onError, onSuccess)
 
 export const createSurvey = ({ isBlank, isCloud, path, name }, onError, onSuccess) => surveyFileController.create({ isBlank, isCloud, path, name }, onError, onSuccess)
+
+export const shareFile = ({ cloudId, path, isCloud, mimeType }, onError, onSuccess) => surveyFileController.shareFile({ cloudId, path, isCloud, mimeType }, onError, onSuccess)
