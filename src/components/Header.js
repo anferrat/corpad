@@ -7,8 +7,6 @@ import { SafeAreaView } from 'react-native-safe-area-context'
 
 const Header = ({ title, onBackPress }) => {
 
-
-
     useEffect(() => {
         //this status bar hack is nuts, just leaving it here
         setTimeout(() => StatusBar.setBarStyle('light-content'), 100)
@@ -19,7 +17,8 @@ const Header = ({ title, onBackPress }) => {
 
     return (
         <SafeAreaView
-            style={styles.topBar} >
+            edges={['top', 'left', 'right']}
+            style={styles.topBar}>
             <View style={styles.leftRow}>
                 <IconButton
                     iconName={'arrow-back-outline'}
@@ -37,13 +36,12 @@ export default Header
 
 const styles = StyleSheet.create({
     topBar: {
-        height: 70,
+        minHeight: 80,
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'space-between',
         paddingHorizontal: 12,
         backgroundColor: primary,
-        paddingVertical: 3,
         borderBottomColor: basic300,
         borderBottomWidth: 1,
     },

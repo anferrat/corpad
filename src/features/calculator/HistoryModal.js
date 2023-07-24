@@ -13,6 +13,7 @@ import { trashIcon } from '../../components/Icons'
 import { getCalculatorListByType } from '../../app/controllers/CalculatorController'
 import { CalculatorTypeIconPacks, CalculatorTypeIcons } from '../../constants/icons'
 import { CalculatorTypeTitleLabels } from '../../constants/labels'
+import { SafeAreaProvider } from 'react-native-safe-area-context'
 
 
 const HistoryModal = (props) => {
@@ -87,29 +88,31 @@ const HistoryModal = (props) => {
                 animationType="slide"
                 visible={visible}
                 onRequestClose={hideModal}>
-                <ModalTopBar
-                    onBackPress={hideModal}
-                    title='Saved calculations' />
-                <LoadingView loading={loading}>
-                    <FlatList
-                        ListEmptyComponent={<EmptyListComponent title={'No calculations found'} description={'After completing a calculation press save button to find it here.'} icon='list-outline' />}
-                        style={styles.flatList}
-                        contentContainerStyle={styles.container}
-                        data={historyList}
-                        renderItem={renderItem}
-                        keyExtractor={item => item.id}
-                    />
-                </LoadingView>
-                {historyList.length > 0 ?
-                    <Button
-                        accessoryLeft={trashIcon}
-                        style={styles.save}
-                        onPress={deleteAllHandler}
-                        disabled={loading}
+                <SafeAreaProvider>
+                    <ModalTopBar
+                        onBackPress={hideModal}
+                        title='Saved calculations' />
+                    <LoadingView loading={loading}>
+                        <FlatList
+                            ListEmptyComponent={<EmptyListComponent title={'No calculations found'} description={'After completing a calculation press save button to find it here.'} icon='list-outline' />}
+                            style={styles.flatList}
+                            contentContainerStyle={styles.container}
+                            data={historyList}
+                            renderItem={renderItem}
+                            keyExtractor={item => item.id}
+                        />
+                    </LoadingView>
+                    {historyList.length > 0 ?
+                        <Button
+                            accessoryLeft={trashIcon}
+                            style={styles.save}
+                            onPress={deleteAllHandler}
+                            disabled={loading}
 
 
-                    >Delete all</Button> : null
-                }
+                        >Delete all</Button> : null
+                    }
+                </SafeAreaProvider>
             </Modal>
         </>
     )

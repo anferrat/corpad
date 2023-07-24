@@ -1,18 +1,19 @@
 import React from 'react'
-import { Pressable, StyleSheet, ActivityIndicator, View, FlatList, StatusBar } from 'react-native'
+import { Pressable, StyleSheet, ActivityIndicator, View, StatusBar } from 'react-native'
 import { FlashList } from '@shopify/flash-list'
 import { Icon, Divider, } from '@ui-kitten/components'
 import Input from '../../components/Input'
 import SingleIconButton from '../../components/IconButton'
 import ListItemSearch from './components/ListItemSearch'
-import { control, primary } from '../../styles/colors'
+import { primary } from '../../styles/colors'
 import useSurveySearch from './hooks/useSurveySearch'
 import EmptyResult from './components/EmptyResult'
-import FocusAwareStatusBar from '../../components/FocusAwareStatusBar'
+import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context'
 
 
 export const SearchBar = ({ navigateToView }) => {
     const { keyword, loading, found, inputRef, dismiss, onChangeKeyword, resetSearch } = useSurveySearch()
+    const { top } = useSafeAreaInsets()
     const isKeywordEmpty = keyword === null
 
     const renderIcon = React.useCallback((props) => {
@@ -42,39 +43,42 @@ export const SearchBar = ({ navigateToView }) => {
         [navigateToView])
 
     return (
-        <View style={styles.mainView}>
-            <FocusAwareStatusBar
+        <>
+            <StatusBar
                 translucent={true}
                 backgroundColor={'transparent'}
                 barStyle={'dark-content'} />
-            <View style={styles.searchBar}>
-                <SingleIconButton
-                    style={styles.backIcon}
-                    iconName='arrow-back-outline'
-                    onPress={dismiss} />
-                <Input
-                    ref={inputRef}
-                    style={styles.input}
-                    value={keyword}
-                    returnKeyType='search'
-                    onChangeText={onChangeKeyword}
-                    placeholder='Search by name'
-                    valid={true}
-                    accessoryRight={renderIcon} />
-            </View>
-            <FlashList
-                estimatedItemSize={50}
-                keyboardShouldPersistTaps='handled'
-                keyboardDismissMode='on-drag'
-                contentContainerStyle={styles.container}
-                ListEmptyComponent={<EmptyResult loading={loading} isKeywordEmpty={isKeywordEmpty} />}
-                ItemSeparatorComponent={Divider}
-                ListFooterComponent={loading || isKeywordEmpty ? null : Divider}
-                keyExtractor={item => item.uid}
-                data={found}
-                renderItem={renderItem}
-            />
-        </View>
+            <SafeAreaView
+                style={styles.mainView}>
+                <View style={{ ...styles.searchBar, minHeight: 80 - top }}>
+                    <SingleIconButton
+                        style={styles.backIcon}
+                        iconName='arrow-back-outline'
+                        onPress={dismiss} />
+                    <Input
+                        ref={inputRef}
+                        style={styles.input}
+                        value={keyword}
+                        returnKeyType='search'
+                        onChangeText={onChangeKeyword}
+                        placeholder='Search by name'
+                        valid={true}
+                        accessoryRight={renderIcon} />
+                </View>
+                <FlashList
+                    estimatedItemSize={50}
+                    keyboardShouldPersistTaps='handled'
+                    keyboardDismissMode='on-drag'
+                    contentContainerStyle={styles.container}
+                    ListEmptyComponent={<EmptyResult loading={loading} isKeywordEmpty={isKeywordEmpty} />}
+                    ItemSeparatorComponent={Divider}
+                    ListFooterComponent={loading || isKeywordEmpty ? null : Divider}
+                    keyExtractor={item => item.uid}
+                    data={found}
+                    renderItem={renderItem}
+                />
+            </SafeAreaView>
+        </>
     )
 }
 
@@ -82,9 +86,7 @@ export default SearchBar
 
 const styles = StyleSheet.create({
     mainView: {
-        backgroundColor: control,
         flex: 1,
-        paddingTop: StatusBar.currentHeight
     },
     input: {
         flex: 1,
@@ -93,7 +95,6 @@ const styles = StyleSheet.create({
     searchBar: {
         paddingLeft: 6,
         paddingRight: 12,
-        paddingVertical: 6,
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'center',

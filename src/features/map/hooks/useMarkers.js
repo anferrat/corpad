@@ -133,8 +133,8 @@ const useMarkers = ({ navigateToEdit, navigateToView, ref }) => {
     }, [currentRegion])
 
     const onUserLocationChange = useCallback(({ nativeEvent }) => {
-        if (nativeEvent && nativeEvent.coordinate && nativeEvent.coordinate.latitide && nativeEvent.coordinate.longitude) {
-            userLocation.current.latitude = nativeEvent.cooerdinate.latitide
+        if (nativeEvent && nativeEvent.coordinate && nativeEvent.coordinate.latitude && nativeEvent.coordinate.longitude) {
+            userLocation.current.latitude = nativeEvent.coordinate.latitude
             userLocation.current.longitude = nativeEvent.coordinate.longitude
         }
     }, [userLocation])

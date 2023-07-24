@@ -10,13 +10,13 @@ import { ItemTypeLabels, TestPointTypeLabels } from '../../../constants/labels'
 
 
 const MarkerInfo = ({ viewActiveMarkerData, shareActiveLocation, zoomToCoordinates, id, itemType, name, latitude, longitude, status, location, markerType, testPointType }) => {
-    const visible = itemType !== null && id !== null && latitude !== null && longitude !== null && markerType
+    const visible = Boolean(itemType !== null && id !== null && latitude !== null && longitude !== null && markerType)
     const animateToActive = React.useCallback(() =>
         zoomToCoordinates(latitude, longitude),
         [latitude, longitude, zoomToCoordinates])
 
     const subtitle = visible ? (itemType === ItemTypes.TEST_POINT ? TestPointTypeLabels[testPointType] : ItemTypeLabels[itemType]) : 'Loading'
-
+    //console.log(itemType === ItemTypes.TEST_POINT)
     return (
         <MarkerInfoView
             onSharePress={shareActiveLocation}
