@@ -64,8 +64,8 @@ const useExportedFiles = () => {
         }
     }, [loading])
 
-    const shareFileHandler = useCallback((path, type) => {
-        shareFile({ url: path, mimeType: type })
+    const shareFileHandler = useCallback(async (path, type) => {
+        await shareFile({ url: path, mimeType: type })
     }, [])
 
     const openInHandler = useCallback((path, type) => {

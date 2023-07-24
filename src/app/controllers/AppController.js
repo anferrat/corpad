@@ -39,6 +39,7 @@ import { ReadExternalSurveyFile } from "../services/survey_file/local/ReadExtern
 import { SaveSurveyFile } from "../services/survey_file/local/SaveSurveyFile"
 import { Controller } from "../utils/Controller"
 import { SurveyFileContentValidation } from "../validation/survey_file_content/v1/SurveyFileContentValidation"
+import { FileSystemInitialization } from "../services/survey_file/local/FileSystemInitialization"
 
 class AppController extends Controller {
     constructor(surveyRepo, settingRepo, appRepo, defaultNameRepo, networkService, googleDriveAuthorizationService, testPointRepo, rectifierRepo, pipelineRepo, subitemRepo, potentialTypeRepo, referenceCellRepo, potentialRepo, fileSystemRepo, bluetoothRepo, surveyFileContentValidation, surveyFileConverterInput, surveyFileConverterOutput, cloudFileSystemRepo, warningHandler) {
@@ -68,7 +69,9 @@ class AppController extends Controller {
         this.multimeterFactory = new MultimeterFactory(bluetoothRepo)
         this.multimeterInitializationService = new MultimeterInitialization(bluetoothRepo, settingRepo, this.multimeterFactory)
 
-        this.appInitializationService = new AppInitialization(this.currentSurveyStatusService, networkService, googleDriveAuthorizationService, surveyRepo, this.multimeterInitializationService, this.defaultNameInitializationService, settingRepo, this.openExternalSurveyService, this.appSettingInitializationService, this.databaseInitializationService)
+        this.fileSystemInitializationService = new FileSystemInitialization(fileSystemRepo)
+
+        this.appInitializationService = new AppInitialization(this.currentSurveyStatusService, networkService, googleDriveAuthorizationService, surveyRepo, this.multimeterInitializationService, this.defaultNameInitializationService, settingRepo, this.openExternalSurveyService, this.appSettingInitializationService, this.databaseInitializationService, this.fileSystemInitializationService)
     }
 
 

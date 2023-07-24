@@ -1,5 +1,5 @@
 export class AppInitialization {
-    constructor(currentSurveyStatusService, networkService, authorizationService, surveyRepo, multimeterInitializationService, defaultNamesInitializationService, settingRepo, openExternalSurveyService, settingInitializationService, databaseInitializationService) {
+    constructor(currentSurveyStatusService, networkService, authorizationService, surveyRepo, multimeterInitializationService, defaultNamesInitializationService, settingRepo, openExternalSurveyService, settingInitializationService, databaseInitializationService, fileSystemInitializationService) {
         this.currentSurveyStatusService = currentSurveyStatusService
         this.networkService = networkService
         this.authorizationService = authorizationService
@@ -10,6 +10,7 @@ export class AppInitialization {
         this.openExternalSurveyService = openExternalSurveyService
         this.settingInitializationService = settingInitializationService
         this.databaseInitializationService = databaseInitializationService
+        this.fileSystemInitializationService = fileSystemInitializationService
     }
 
     async execute(initialUrl) {
@@ -27,6 +28,7 @@ export class AppInitialization {
             this.networkService.checkConnection(),
             this.authorizationService.checkSignInStatus(),
             this.defaultNamesInitializationService.execute(),
+            this.fileSystemInitializationService.execute()
         ])
 
         if (isLoaded)

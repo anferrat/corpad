@@ -1,5 +1,5 @@
 import React, { useRef, useState, useCallback } from 'react'
-import { View, StyleSheet, Pressable, Animated } from 'react-native'
+import { View, StyleSheet, Pressable, Animated, Platform } from 'react-native'
 import { Text, Icon, CircularProgressBar } from '@ui-kitten/components'
 import { basic, basic300 } from '../../../styles/colors'
 import { androidRipple } from '../../../styles/styles'
@@ -10,6 +10,7 @@ import SurveyFileListItemIconBar from './SurveyFileListItemIconBar'
 
 const SurveyFileListItem = ({ name, fileName, timeModified, tpCount, rectifierCount, pipelineCount, passedItems, cloudId, path, hash, isCloud, loadSurvey, deleteSurvey, removeSurveyFromList, shareSurveyLink, shareSurveyFile, copyToAlternateFolder, copyToDownloads }) => {
     const scale = useRef(new Animated.Value(1))
+    const isAndroid = Platform.OS === 'android'
     const [menuVisible, setMenuVisible] = useState(false)
 
     const showMenu = useCallback(() => setMenuVisible(true), [])
@@ -42,9 +43,8 @@ const SurveyFileListItem = ({ name, fileName, timeModified, tpCount, rectifierCo
 
     const handleShareSurveyFile = useCallback(() => {
         hideMenu()
-        shareSurveyFile({ path })
-
-    }, [path])
+        shareSurveyFile({ path, cloudId, fileName })
+    }, [path, cloudId, fileName])
 
     const handleCopyToDownloads = useCallback(() => {
         hideMenu()
@@ -118,18 +118,23 @@ const SurveyFileListItem = ({ name, fileName, timeModified, tpCount, rectifierCo
                         showMenu={showMenu}
                         hideMenu={hideMenu}
                         visible={menuVisible}>
-                        <SurveyFileListItemMenuItem
+                        {isAndroid ? <SurveyFileListItemMenuItem
                             onPress={handleCopyToDownloads}
                             title='Save to Downloads'
-                            icon='download-outline' />
+                            icon='download-outline' /> : null}
                         <SurveyFileListItemMenuItem
                             onPress={handleCopyToAlternateFolder}
                             title={`Copy to ${isCloud ? 'device' : 'cloud'}`}
                             icon={isCloud ? 'smartphone-outline' : 'cloud-download-outline'} />
                         <SurveyFileListItemMenuItem
-                            onPress={isCloud ? handleShareSurveyLink : handleShareSurveyFile}
-                            title={`Share ${isCloud ? 'link' : 'file'}`}
-                            icon='share-outline' />
+                            onPress={handleShareSurveyFile}
+                            title={`Share file`}
+                            icon={isAndroid ? 'share-outline' : 'external-link-outline'} />
+                        {isCloud ?
+                            <SurveyFileListItemMenuItem
+                                onPress={handleShareSurveyLink}
+                                title={`Share link`}
+                                icon={'link-2-outline'} /> : null}
                         <SurveyFileListItemMenuItem
                             status='danger'
                             onPress={handleDelete}
