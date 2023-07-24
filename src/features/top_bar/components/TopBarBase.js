@@ -121,7 +121,7 @@ export default React.memo(TopBarBase)
 
 const styles = StyleSheet.create({
     topBar: {
-        height: 80,
+        minHeight: 80,
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'space-between',

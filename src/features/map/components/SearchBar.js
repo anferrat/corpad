@@ -97,7 +97,8 @@ const styles = StyleSheet.create({
         marginHorizontal: 12
     },
     text: {
-        marginLeft: 4
+        marginLeft: 0,
+        marginTop: 2
     },
     search: {
         width: 23,

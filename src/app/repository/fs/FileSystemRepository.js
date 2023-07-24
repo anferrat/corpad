@@ -163,7 +163,10 @@ export class FileSystemRepository {
     async removeDir(location) {
         const path = this.getLocationPath(location)
         try {
-            return await RNFS.unlink(path)
+            const exist = await RNFS.exists(path)
+            if (exist)
+                return await RNFS.unlink(path)
+            else return true
         }
         catch (er) {
             throw new Error(errors.FILESYSTEM, `Unable to delete file/directory at ${path}`, er, 407)

@@ -51,7 +51,11 @@ const useNavigationWidget = () => {
                         longitude: pointLongitude
                     },
                         er => errorHandler(er))
-                    headingWatch = watchDeviceHeading(({ heading }) => setlocation(state => ({ ...state, heading })))
+                    headingWatch = watchDeviceHeading(({ heading }) => setlocation(state => ({ ...state, heading })),
+                        () => {
+                            hideModal()
+                            errorHandler(103)
+                        })
                 }
                 else {
                     setVisisble(false)

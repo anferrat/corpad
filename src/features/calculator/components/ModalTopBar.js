@@ -3,10 +3,11 @@ import { View, StyleSheet } from 'react-native'
 import { Text } from '@ui-kitten/components'
 import { primary } from '../../../styles/colors'
 import SingleIconButton from '../../../components/IconButton'
+import { SafeAreaView } from 'react-native-safe-area-context'
 
 const ModalTopBar = (props) => {
     return (
-        <View style={styles.topBarBackground}>
+        <SafeAreaView style={styles.topBarBackground}>
             <View style={styles.topBar}>
                 <SingleIconButton
                     color='#fff'
@@ -14,7 +15,7 @@ const ModalTopBar = (props) => {
                     onPress={props.onBackPress} />
                 <Text category='h5' status='control' style={styles.title} numberOfLines={1} ellipsizeMode={'tail'}>{props.title}</Text>
             </View>
-        </View>
+        </SafeAreaView>
     )
 }
 
@@ -26,23 +27,15 @@ const styles = StyleSheet.create({
         alignItems: 'center'
     },
     topBarBackground: {
-        height: 80,
-        paddingBottom: 10,
-        paddingTop: 30,
+        minHeight: 80,
         flexDirection: 'row',
-        elevation: 5,
         alignItems: 'center',
         justifyContent: 'space-between',
         paddingHorizontal: 12,
-        backgroundColor: '#fff',
         backgroundColor: primary,
-        paddingTop: 0,
-        paddingBottom: 0,
-        height: 60
     },
     title: {
         paddingLeft: 12,
-        paddingBottom: 5,
         flex: 1
     },
 })
