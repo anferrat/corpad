@@ -28,7 +28,7 @@ const useSubitemData = ({ itemId, subitemId, subitemType, isNew }) => {
             //deleting subitem if wasn't saved - need to change this behavior for later
             dispatch(resetSubitemState())
             if (deleteOnExit.current)
-                deleteSubitem({ id: subitemId, subitemType: subitemType })
+                deleteSubitem({ subitemId, subitemType, itemId })
         }
     }, [])
 

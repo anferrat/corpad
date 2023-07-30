@@ -18,16 +18,19 @@ export const CreateSurvey = () => {
         surveyList,
         isSigned,
         surveyListLoading,
+        visible,
         onChangeName,
         onEndEditingName,
         setDeviceBased,
         setCloudBased,
         toggleTemplateSetting,
         setSelectedSurveyIndex,
-        createSurveyHandler
+        createSurveyHandler,
+        toggleView
     } = useCreateSurvey()
     return (
-        <>
+        <View
+            style={styles.container}>
             <ScrollView
                 bounces={false}
                 contentContainerStyle={styles.mainView}>
@@ -53,7 +56,9 @@ export const CreateSurvey = () => {
                         subtitle='Survey is stored on your device, but also synced with your cloud storage. Requires internet and Google account.'
                         selected={isCloud} />
                 </View>
-                <CollapsibleView>
+                <CollapsibleView
+                    visible={visible}
+                    toggleView={toggleView}>
                     <TemplateSelector
                         surveyListLoading={surveyListLoading}
                         surveyList={surveyList}
@@ -68,14 +73,17 @@ export const CreateSurvey = () => {
                 icon='file-add-outline'
                 onPress={createSurveyHandler}
             />
-        </>
+        </View>
     )
 }
 
 const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+        backgroundColor: control,
+    },
     mainView: {
         padding: 12,
-        backgroundColor: control,
         paddingBottom: 72
     },
     surveyTypeView: {
