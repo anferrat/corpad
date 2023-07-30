@@ -1,14 +1,21 @@
-import { StyleSheet } from "react-native"
+import { Platform, StyleSheet } from "react-native"
 import { basic, basic300, success, warning, danger } from "../../../../../../styles/colors"
 
 export const displayCard = StyleSheet.create({
-    pressable: {
-        elevation: 5,
+    pressable: StyleSheet.compose({
         borderRadius: 6,
         margin: 6,
         overflow: 'hidden',
         backgroundColor: '#fff'
-    },
+    }, Platform.select({
+        android: {
+            elevation: 5,
+        },
+        default: {
+            borderWidth: 1,
+            borderColor: basic300
+        }
+    })),
     icon: {
         width: 20,
         height: 20,

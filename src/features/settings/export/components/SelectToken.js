@@ -1,13 +1,16 @@
 import React from 'react'
-import { View, StyleSheet, Pressable } from 'react-native'
+import { View, StyleSheet } from 'react-native'
 import { Text, Icon } from '@ui-kitten/components'
 import { basic, basic300, control, primary } from '../../../../styles/colors'
+import { androidRipple } from '../../../../styles/styles'
+import Pressable from '../../../../components/Pressable'
 
 const SelectToken = ({ onPress, selected, title, icon, pack }) => {
     return (
         <Pressable
+            android_ripple={androidRipple}
             onPress={onPress}
-            style={selected ? styles.containerSelected : styles.container}>
+            style={selected ? selectedContainerStyle : styles.container}>
             <View
                 style={styles.row}>
                 <Icon
@@ -30,11 +33,11 @@ const SelectToken = ({ onPress, selected, title, icon, pack }) => {
 
 export default SelectToken
 
-const containerStyles = StyleSheet.create({
+const styles = StyleSheet.create({
     container: {
         paddingVertical: 10,
         backgroundColor: control,
-        borderWidth: 0,
+        borderWidth: 1,
         borderColor: basic300,
         borderRadius: 20,
         paddingHorizontal: 12,
@@ -42,18 +45,12 @@ const containerStyles = StyleSheet.create({
         marginHorizontal: 4,
         marginBottom: 12,
         elevation: 2,
-        maxWidth: '32%',
+        maxWidth: '30%',
         flex: 1,
-      
-    }
-})
-
-const styles = StyleSheet.create({
-    container: StyleSheet.compose(containerStyles.container),
-    containerSelected: StyleSheet.compose(containerStyles.container,
-        {
-            backgroundColor: primary
-        }),
+    },
+    selected: {
+        backgroundColor: primary
+    },
     icon: {
         width: 20,
         height: 20,
@@ -70,4 +67,6 @@ const styles = StyleSheet.create({
         textAlign: 'center'
     }
 })
+
+const selectedContainerStyle = StyleSheet.compose(styles.container, styles.selected)
 

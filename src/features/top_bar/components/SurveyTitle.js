@@ -1,11 +1,12 @@
 import React from 'react'
-import { StyleSheet, View, Pressable } from 'react-native'
+import { StyleSheet, View } from 'react-native'
 import { useSelector } from 'react-redux'
 import { Text, Icon } from '@ui-kitten/components'
 import { androidRipple } from '../../../styles/styles'
 import { primary } from '../../../styles/colors'
 import { useNavigation } from '@react-navigation/native'
 import { hapticKeyboardPress } from '../../../native_libs/haptics'
+import Pressable from '../../../components/Pressable'
 
 const SurveyTitle = () => {
     const title = useSelector(state => state.settings.currentSurvey.name)

@@ -1,10 +1,11 @@
 import React from 'react'
 import { Text, Icon } from '@ui-kitten/components'
-import { StyleSheet, Pressable, View } from 'react-native'
+import { StyleSheet, View } from 'react-native'
 import { basic, primary } from '../../../styles/colors'
 import { androidRipple } from '../../../styles/styles'
 import { ItemTypeLabels } from '../../../constants/labels'
 import { StatusColors } from '../../../styles/colors'
+import Pressable from '../../../components/Pressable'
 
 const ListItemSearch = ({ id, name, markerType, status, itemType, navigateToView }) => {
 

@@ -1,7 +1,8 @@
 import React, { useState, useRef } from 'react'
-import { Animated, Easing, Pressable, View, StyleSheet } from 'react-native'
+import { Animated, Easing, View, StyleSheet } from 'react-native'
 import { Icon } from '@ui-kitten/components'
 import { primary, basic200, basic300 } from '../../../styles/colors'
+import Pressable from '../../../components/Pressable'
 
 const ExpandedBar = (props) => {
     const [barDisplayed, setBarDisplayed] = useState(false)

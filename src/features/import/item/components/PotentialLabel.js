@@ -1,8 +1,9 @@
 import React, { useState } from 'react'
-import { View, StyleSheet, Pressable } from 'react-native'
+import { View, StyleSheet } from 'react-native'
 import { Popover, Text, Icon } from '@ui-kitten/components'
-import { basic, basic300, control, primary200 } from '../../../../styles/colors'
+import { basic, basic300, control } from '../../../../styles/colors'
 import { androidRipple } from '../../../../styles/styles'
+import Pressable from '../../../../components/Pressable'
 
 
 const PotentialLabel = ({

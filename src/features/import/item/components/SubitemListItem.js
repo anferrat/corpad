@@ -1,13 +1,14 @@
 import React from 'react'
-import { StyleSheet, Pressable } from 'react-native'
+import { Platform, StyleSheet } from 'react-native'
 import { Layout, Icon, Text } from '@ui-kitten/components'
-import { basic } from '../../../../styles/colors'
+import { basic, basic300 } from '../../../../styles/colors'
 import { androidRipple } from '../../../../styles/styles'
 import { getSubitemName } from '../helpers/functions'
+import Pressable from '../../../../components/Pressable'
 
 const SubitemListItem = ({ onPress, index, type, typedIndex }) => {
     return (
-        <Layout style={styles.card}>
+        <Layout style={cardStyle}>
             <Pressable
                 style={styles.pressable}
                 onPress={onPress.bind(this, index, type)}
@@ -32,8 +33,16 @@ const styles = StyleSheet.create({
         borderRadius: 6,
         borderWidth: 0,
         margin: 6,
-        elevation: 5,
     },
+    cardPlatformSpecific: Platform.select({
+        android: {
+            elevation: 5
+        },
+        default: {
+            borderWidth: 1,
+            bordercolor: basic300
+        }
+    }),
     pressable: {
         padding: 12,
         backgroundColor: 'rgba(0,0,0,0)',
@@ -55,3 +64,5 @@ const styles = StyleSheet.create({
         backgroundColor: 'rgba(0,0,0,0)'
     }
 })
+
+const cardStyle = StyleSheet.compose(styles.card, styles.cardPlatformSpecific)

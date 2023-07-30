@@ -23,12 +23,13 @@ const SearchModal = ({ hideModal, keyword, onChangeKeyword, markersFound, showOn
         return () => clearTimeout(watch)
     }, [])
 
-    const acessoryLeft = React.useCallback(() => <IconButton
-        iconName={'arrow-back-outline'}
-        fill={primary}
-        onPress={hideModal}
-        style={styles.back}
-    />, [hideModal])
+    const acessoryLeft = React.useCallback(
+        () => <IconButton
+            iconName={'arrow-back-outline'}
+            fill={primary}
+            onPress={hideModal}
+            style={styles.back}
+        />, [hideModal])
 
     const accessoryRight = React.useCallback((props) => {
         if (searching)

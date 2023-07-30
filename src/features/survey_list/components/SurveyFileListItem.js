@@ -1,7 +1,8 @@
 import React, { useRef, useState, useCallback } from 'react'
-import { View, StyleSheet, Pressable, Animated, Platform } from 'react-native'
+import { View, StyleSheet, Animated, Platform } from 'react-native'
+import Pressable from '../../../components/Pressable'
 import { Text, Icon, CircularProgressBar } from '@ui-kitten/components'
-import { basic, basic300 } from '../../../styles/colors'
+import { basic, basic300, control } from '../../../styles/colors'
 import { androidRipple } from '../../../styles/styles'
 import { getFormattedDate } from '../../../helpers/functions'
 import SurveyFileListItemMenu from './SurveyFileListItemMenu'
@@ -66,7 +67,8 @@ const SurveyFileListItem = ({ name, fileName, timeModified, tpCount, rectifierCo
             }),
             transform: [{ scale: scale.current }]
         }}>
-            <Pressable style={styles.pressable}
+            <Pressable
+                style={styles.pressable}
                 android_ripple={androidRipple}
                 onPress={handleLoadSurvey}>
                 <View style={styles.mainView} >
@@ -170,13 +172,24 @@ const styles = StyleSheet.create({
         flex: 1,
         alignItems: 'center',
     },
-    pressable: {
-        elevation: 5,
-        backgroundColor: '#fff',
-        marginHorizontal: 6,
-        marginTop: 12,
-        borderRadius: 12
-    },
+    pressable: StyleSheet.flatten([
+        {
+            elevation: 5,
+            backgroundColor: control,
+            marginHorizontal: 6,
+            marginTop: 12,
+            borderRadius: 12
+        },
+        Platform.select({
+            android: {
+                elevation: 5
+            },
+            default: {
+                borderWidth: 1,
+                borderColor: basic300
+            }
+        })
+    ]),
     circle: {
         marginRight: 20,
     },

@@ -1,10 +1,11 @@
 import React, { useRef } from 'react'
-import { View, StyleSheet, Pressable, Animated } from 'react-native'
+import { View, StyleSheet, Animated } from 'react-native'
 import { Icon, Text } from '@ui-kitten/components'
 import { basic, primary, success } from '../../../styles/colors'
 import { globalStyle, androidRipple } from '../../../styles/styles'
 import SingleIconButton from '../../../components/IconButton'
 import { warningHandler } from '../../../helpers/error_handler'
+import Pressable from '../../../components/Pressable'
 
 const HistoryListItem = (props) => {
     const scale = useRef(new Animated.Value(1))

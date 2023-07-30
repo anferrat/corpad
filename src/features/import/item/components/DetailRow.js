@@ -1,9 +1,10 @@
 import React, { useState } from 'react'
-import { View, StyleSheet, Pressable } from 'react-native'
+import { View, StyleSheet } from 'react-native'
 import { Text, Icon } from '@ui-kitten/components'
 import IconButton from '../../../../components/IconButton'
 import { warning, danger, primary } from '../../../../styles/colors'
 import WarningPoints from './WarningPoints'
+import Pressable from '../../../../components/Pressable'
 
 const DetailRow = ({ index, warnings, success }) => {
     const [expanded, setExpanded] = useState(false)
@@ -11,7 +12,9 @@ const DetailRow = ({ index, warnings, success }) => {
     const expandAction = React.useCallback(() => { setExpanded(old => !old) }, [])
     return (
         <View style={styles.mainView}>
-            <Pressable style={styles.row} onPress={expandAction}>
+            <Pressable
+                style={styles.row}
+                onPress={expandAction}>
                 <View>
                     <View style={styles.title}>
                         <Icon name={'hash-outline'} style={{ width: 18, height: 18, marginRight: 6, marginTop: 2 }} fill={primary} />

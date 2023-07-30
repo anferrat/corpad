@@ -1,7 +1,9 @@
 import { Icon, Text } from '@ui-kitten/components'
 import React from 'react'
-import { View, StyleSheet, Linking, Pressable } from 'react-native'
+import { View, StyleSheet, Linking } from 'react-native'
 import { primary } from '../../../../../styles/colors'
+import Pressable from '../../../../../components/Pressable'
+import { androidRipple } from '../../../../../styles/styles'
 
 
 const MultimeterPlaceholder = () => {
@@ -27,7 +29,9 @@ const MultimeterPlaceholder = () => {
                     style={styles.description}>
                     Find supported multimeters at
                 </Text>
-                <Pressable onPress={openLink}>
+                <Pressable
+                    androidRipple={androidRipple}
+                    onPress={openLink}>
                     <Text
                         appearance='hint'
                         status='primary'

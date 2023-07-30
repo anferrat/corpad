@@ -1,5 +1,5 @@
 import React from 'react'
-import { Pressable, View, StyleSheet } from 'react-native'
+import { View, StyleSheet } from 'react-native'
 import { Text, Icon } from '@ui-kitten/components'
 import { basic } from '../../../styles/colors'
 import { androidRipple } from '../../../styles/styles'
@@ -7,6 +7,7 @@ import MarkerInfoView from './animated/MarkerInfoView'
 import { StatusColors } from '../../../styles/colors'
 import { ItemTypes } from '../../../constants/global'
 import { ItemTypeLabels, TestPointTypeLabels } from '../../../constants/labels'
+import Pressable from '../../../components/Pressable'
 
 
 const MarkerInfo = ({ viewActiveMarkerData, shareActiveLocation, zoomToCoordinates, id, itemType, name, latitude, longitude, status, location, markerType, testPointType }) => {

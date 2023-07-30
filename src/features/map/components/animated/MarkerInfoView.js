@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from 'react'
-import { StyleSheet, Animated, ActivityIndicator } from 'react-native'
-import { primary } from '../../../../styles/colors'
+import { StyleSheet, Animated, ActivityIndicator, Platform } from 'react-native'
+import { basic300, primary } from '../../../../styles/colors'
 import OpenInButton from '../buttons/OpenInButton'
 
 
@@ -63,7 +63,7 @@ const MarkerInfoView = ({ visible, onSharePress, children }) => {
 export default React.memo(MarkerInfoView)
 
 const styles = StyleSheet.create({
-    mainView: {
+    mainView: StyleSheet.flatten([{
         width: '90%',
         backgroundColor: 'white',
         position: 'absolute',
@@ -72,9 +72,17 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
         borderRadius: 6,
-        elevation: 5,
-        height:100,
-    },
+        height: 100,
+        overflow: 'hidden',
+    }, Platform.select({
+        android: {
+            elevation: 5,
+        },
+        default: {
+            borderWidth: 1,
+            borderColor: basic300
+        }
+    })]),
     buttonView: {
         position: 'absolute',
         right: '5%',

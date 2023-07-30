@@ -1,8 +1,9 @@
 import React from 'react'
-import { Pressable, View } from 'react-native'
+import { View } from 'react-native'
 import { androidRipple } from '../../../../../styles/styles'
 import { displayCard } from './styles/displayCardStyles'
 import ReadingRow from './ReadingRow'
+import Pressable from '../../../../../components/Pressable'
 
 
 const ReadingDisplay = ({ readingList, readingIndex, onPress, displayedReading, itemType }) => {

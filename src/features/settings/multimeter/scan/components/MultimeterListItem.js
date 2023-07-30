@@ -1,9 +1,10 @@
 import React, { useCallback } from "react"
-import { View, StyleSheet, Pressable, ActivityIndicator } from "react-native"
+import { View, StyleSheet, ActivityIndicator } from "react-native"
 import { Icon, Text } from "@ui-kitten/components"
 import { basic300, primary } from '../../../../../styles/colors'
 import { androidRipple } from "../../../../../styles/styles"
 import { MultimeterTypeLabels } from "../../../../../constants/labels"
+import Pressable from "../../../../../components/Pressable"
 
 
 const MultimeterListItem = ({ id, name, type, pair, pairing }) => {
