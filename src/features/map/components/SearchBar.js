@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react'
 import { Pressable, Modal, StyleSheet, StatusBar, View } from 'react-native'
 import { Icon, Text } from '@ui-kitten/components'
-import { basic400, primary } from '../../../styles/colors'
+import { basic400, control, primary } from '../../../styles/colors'
 import IconButton from '../../../components/IconButton'
 import useMarkerSearch from '../hooks/useMarkerSearch'
 import SearchModal from './search/SearchModal'
@@ -37,7 +37,7 @@ const SearchBar = ({ setMarkerActive, resetActiveMarker, satelliteMode }) => {
                     </Text>
                 </View>
                 <View
-                    style={styles.side}>
+                    style={styles.icons}>
                     {
                         isEmpty ? <Icon
                             name='search-outline'
@@ -49,7 +49,6 @@ const SearchBar = ({ setMarkerActive, resetActiveMarker, satelliteMode }) => {
                                 onPress={resetKeyword} />
                     }
                     <IconButton
-                        style={styles.button}
                         iconName={'more-vertical'}
                         onPress={openMenu}
                         size='small' />
@@ -81,7 +80,7 @@ const styles = StyleSheet.create({
         width: '95%',
         alignSelf: 'center',
         height: 45,
-        backgroundColor: "#FFF",
+        backgroundColor: control,
         top: 12,
         borderWidth: 1,
         elevation: 5,
@@ -97,7 +96,7 @@ const styles = StyleSheet.create({
         marginHorizontal: 12
     },
     text: {
-        marginLeft: 0,
+        marginLeft: 4,
         marginTop: 2
     },
     search: {
@@ -109,8 +108,9 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center'
     },
-    button: {
+    icons: {
+        flexDirection: 'row',
+        alignItems: 'center',
         marginRight: 12,
-
-    }
+    },
 })

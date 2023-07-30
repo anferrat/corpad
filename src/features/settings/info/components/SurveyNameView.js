@@ -53,6 +53,7 @@ const SurveyNameView = ({ name, inputText, updateSurveyName, resetNameInput, onC
                 backdropStyle={styles.backDrop}
                 visible={visible}>
                 <ScrollView
+                bounces={false}
                     keyboardShouldPersistTaps='handled'
                     style={styles.inputView}>
                     <Input

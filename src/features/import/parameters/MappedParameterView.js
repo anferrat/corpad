@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import { View, StyleSheet, ScrollView } from 'react-native'
 import { useDispatch } from 'react-redux'
 import { Radio, Button, Text } from '@ui-kitten/components'
@@ -13,6 +13,7 @@ import { getAttribute } from '../models/models'
 import { warningHandler } from '../../../helpers/error_handler'
 import { getFieldValues } from './helpers/functions'
 import MappingHint from './components/MappingHint'
+import BottomButton from '../../../components/BottomButton'
 
 const fileIcon = {
     icon: 'file-text-outline',
@@ -130,10 +131,10 @@ const SelectFieldParamaters = (props) => {
                         removeAttribute={removeAttribute} />
                 </View>
             </ScrollView >
-            <Button
-                onPress={onSaveHandler}
-                accessoryLeft={saveIcon}
-                style={styles.save}>Save</Button>
+            <BottomButton
+                title='Save'
+                icon='save'
+                onPress={onSaveHandler}/>
         </>
     )
 }
@@ -153,19 +154,6 @@ const styles = StyleSheet.create({
     },
     mainView: {
         paddingBottom: 72
-    },
-    save: {
-        position: 'absolute',
-        bottom: 10,
-        left: '2.5%',
-        height: 50,
-        width: '95%',
-        paddingHorizontal: 15,
-        shadowColor: '#000',
-        shadowOffset: { width: 0, height: 1 },
-        shadowOpacity: 0.8,
-        shadowRadius: 2,
-        elevation: 5,
     },
     hidden: {
         display: 'none'

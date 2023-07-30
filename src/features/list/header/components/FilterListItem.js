@@ -1,8 +1,9 @@
 import React from 'react'
-import { Pressable, StyleSheet, View } from 'react-native'
+import { StyleSheet, View } from 'react-native'
 import { basic, primary } from '../../../../styles/colors'
 import { Icon, Divider } from '@ui-kitten/components'
 import { androidRipple } from '../../../../styles/styles'
+import Pressable from '../../../../components/Pressable'
 
 
 const FilterListItem = (props) => {

@@ -1,8 +1,9 @@
 import React from 'react'
 import { Text, Icon } from '@ui-kitten/components'
-import { StyleSheet, Pressable, View } from 'react-native'
+import { StyleSheet, View } from 'react-native'
 import { primary, control } from '../../../styles/colors'
 import { androidRipple } from '../../../styles/styles'
+import Pressable from '../../Pressable'
 
 const ListItem = (props) => {
     return (

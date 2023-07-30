@@ -1,8 +1,9 @@
 import React from 'react'
-import { View, StyleSheet, Pressable } from 'react-native'
+import { View, StyleSheet } from 'react-native'
 import { Icon, Text } from '@ui-kitten/components'
-import { basic300, primary } from '../../../../styles/colors'
+import { basic300, control, primary } from '../../../../styles/colors'
 import { androidRipple } from '../../../../styles/styles'
+import Pressable from '../../../../components/Pressable'
 
 const OpenInButton = (props) => {
     return <View style={styles.wrapper} >
@@ -28,7 +29,7 @@ const styles = StyleSheet.create({
         overflow: 'hidden',
         borderRadius: 15,
         elevation: 5,
-        backgroundColor: '#fff',
+        backgroundColor: control,
         borderWidth: 1,
         borderColor: basic300
     },

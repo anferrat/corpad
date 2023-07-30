@@ -1,5 +1,5 @@
 import React from 'react'
-import { StyleSheet, View, Pressable } from 'react-native'
+import { StyleSheet, View } from 'react-native'
 import { Text, Icon } from '@ui-kitten/components'
 import { basic400, control, primary200, basic, warning, primary } from '../../../../styles/colors'
 import Badge from './Badge'
@@ -7,6 +7,7 @@ import { fieldProperties } from '../../../../constants/fieldProperties'
 import { getAccessory, getDisplayValue } from '../helpers/functions'
 import ValuePreviewModal from './ValuePreviewModal'
 import Unit from '../../../../components/Unit'
+import Pressable from '../../../../components/Pressable'
 
 const PropertyImportField = ({
     subitemIndex,

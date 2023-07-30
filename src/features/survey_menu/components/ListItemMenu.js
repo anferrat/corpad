@@ -1,8 +1,9 @@
 import React from 'react'
 import { Text, Icon } from '@ui-kitten/components'
-import { StyleSheet, Pressable, View, ActivityIndicator } from 'react-native'
+import { StyleSheet, View, ActivityIndicator } from 'react-native'
 import { basic, primary, StatusColors } from '../../../styles/colors'
 import { androidRipple } from '../../../styles/styles'
+import Pressable from '../../../components/Pressable'
 
 
 const ListItem = ({ status, icon, pack, title, subtitle, onPress, disabled, subtitleIcon, subtitleIconPack, subtitleIconColor }) => {
@@ -23,7 +24,6 @@ const ListItem = ({ status, icon, pack, title, subtitle, onPress, disabled, subt
                         {subtitleIcon ? <Icon name={subtitleIcon} fill={subtitleIconColor ?? basic} style={styles.subtitleIcon} pack={subtitleIconPack ?? 'cp'} /> : null}
                         <Text category='s2' appearance='hint'>{subtitle}</Text>
                     </View> : null}
-
             </View>
         </Pressable>
     )

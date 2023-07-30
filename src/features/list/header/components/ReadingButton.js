@@ -1,7 +1,8 @@
 import React from 'react'
-import { Pressable, StyleSheet } from 'react-native'
+import { StyleSheet } from 'react-native'
 import { androidRipple } from '../../../../styles/colors'
 import ReadingTitle from './ReadingTitle'
+import Pressable from '../../../../components/Pressable'
 
 const ReadingButton = (props) => {
     return (

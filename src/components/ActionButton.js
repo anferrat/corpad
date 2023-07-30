@@ -4,8 +4,9 @@ import { Button } from '@ui-kitten/components'
 import { Keyboard } from 'react-native'
 import { errorHandler } from '../helpers/error_handler'
 
+//Do not use, use Bottom button instead, 
 
-const MainActionButton = (props) => {
+const MainActionButton = (props) => { 
     const [buttonDisabled, setButtonDisabled] = useState(false)
 
     const onPressHandler = (valid, validAction, error) => {
@@ -53,10 +54,6 @@ const styles = StyleSheet.create({
         height: 50,
         width: '95%',
         paddingHorizontal: 15,
-        shadowColor: '#000',
-        shadowOffset: { width: 0, height: 1 },
-        shadowOpacity: 0.8,
-        shadowRadius: 2,
         elevation: 5,
     },
     disabled: {

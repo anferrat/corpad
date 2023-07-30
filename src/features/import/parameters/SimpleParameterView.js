@@ -13,6 +13,7 @@ import MultiSelect from '../../../components/MultiSelect'
 import { fieldProperties } from '../../../constants/fieldProperties'
 import Hint from '../../../components/Hint'
 import { parseIndex } from './helpers/functions'
+import BottomButton from '../../../components/BottomButton'
 
 const fileIcon = {
     icon: 'file-text-outline',
@@ -179,12 +180,10 @@ const InputFieldParamaters = ({ value, property, subitemIndex, potentialIndex, g
 
                 </View>
             </ScrollView>
-            <Button
+            <BottomButton
+                title='Save'
                 onPress={onSaveHandler}
-                accessoryLeft={saveIcon}
-                style={styles.save}>
-                Save
-            </Button>
+                icon='save' />
         </>
     )
 }
@@ -211,19 +210,6 @@ const styles = StyleSheet.create({
     },
     mainView: {
         paddingBottom: 12
-    },
-    save: {
-        position: 'absolute',
-        bottom: 10,
-        left: '2.5%',
-        height: 50,
-        width: '95%',
-        paddingHorizontal: 15,
-        shadowColor: '#000',
-        shadowOffset: { width: 0, height: 1 },
-        shadowOpacity: 0.8,
-        shadowRadius: 2,
-        elevation: 5,
     },
     selectView: {
         flexDirection: 'row'

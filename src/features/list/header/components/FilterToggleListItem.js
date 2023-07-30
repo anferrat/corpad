@@ -1,7 +1,8 @@
 import React from 'react'
-import { Pressable, StyleSheet } from 'react-native'
+import { StyleSheet } from 'react-native'
 import { Text } from '@ui-kitten/components'
 import { androidRipple } from '../../../../styles/styles'
+import Pressable from '../../../../components/Pressable'
 
 
 const FilterToggleListItem = (props) => {

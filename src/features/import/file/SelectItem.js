@@ -1,7 +1,7 @@
 import React from 'react'
 import { View, StyleSheet } from 'react-native'
 import { Text } from '@ui-kitten/components'
-import ItemCard from '../../../components/ItemCard'
+import ItemCard from './components/ItemCard'
 import { useDispatch, useSelector } from 'react-redux'
 import { setImportItemType } from '../../../store/actions/importData'
 import { ItemTypes } from '../../../constants/global'

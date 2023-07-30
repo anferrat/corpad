@@ -1,15 +1,16 @@
 
 import React from 'react'
-import { View, StyleSheet, Pressable } from 'react-native'
+import { View, StyleSheet, Platform } from 'react-native'
 import { Icon, Text } from '@ui-kitten/components'
-import { basic, basic200, control, primary, success } from '../../../styles/colors'
+import { basic, basic200, basic300, control, primary, success } from '../../../styles/colors'
 import { androidRipple } from '../../../styles/styles'
+import Pressable from '../../../components/Pressable'
 
 const OptionCard = ({ onPress, disabled, icon, pack, selected, hint, subtitle, title }) => {
 
     return (
         <Pressable
-            style={selected ? styles.mainViewSelected : styles.mainView}
+            style={selected ? mainViewSelectedStyle : mainViewStyle}
             android_ripple={androidRipple}
             onPress={onPress}
             disabled={disabled}>
@@ -55,21 +56,22 @@ const styles = StyleSheet.create({
     mainView: {
         flex: 1,
         marginHorizontal: 8,
-        elevation: 5,
         borderRadius: 6,
         paddingHorizontal: 8,
         paddingVertical: 12,
         alignItems: 'center',
         backgroundColor: control
     },
+    mainViewPlatformSpecific: Platform.select({
+        android: {
+            elevation: 5
+        },
+        default: {
+            borderWidth: 1,
+            borderColor: basic300
+        }
+    }),
     mainViewSelected: {
-        flex: 1,
-        marginHorizontal: 8,
-        elevation: 5,
-        borderRadius: 6,
-        paddingHorizontal: 8,
-        paddingVertical: 12,
-        alignItems: 'center',
         backgroundColor: basic200
     },
     icon: {
@@ -93,3 +95,7 @@ const styles = StyleSheet.create({
         textAlign: 'center'
     }
 })
+
+const mainViewStyle = StyleSheet.compose(styles.mainView, styles.mainViewPlatformSpecific)
+
+const mainViewSelectedStyle = StyleSheet.compose(mainViewStyle, styles.mainViewSelected)

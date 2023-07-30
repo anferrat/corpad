@@ -1,14 +1,15 @@
 import React from 'react'
 import { Text, Icon } from '@ui-kitten/components'
-import { StyleSheet, Pressable, View } from 'react-native'
-import { primary, basic, success, control, primary100, basic300 } from '../styles/colors'
-import { androidRipple } from '../styles/styles'
+import { Platform, StyleSheet, View } from 'react-native'
+import { primary, basic, success, control, primary100, basic300 } from '../../../../styles/colors'
+import { androidRipple } from '../../../../styles/styles'
+import Pressable from '../../../../components/Pressable'
 
 const ItemCard = ({ onPress, selected, icon, pack, title }) => {
     return (
         <Pressable
             android_ripple={androidRipple}
-            style={selected ? styles.pressableSelected : styles.pressable}
+            style={selected ? StyleSheet.compose(pressableStyle, styles.pressableSelected) : pressableStyle}
             onPress={onPress}>
             <Icon
                 name={'checkmark-circle-2'}
@@ -36,27 +37,25 @@ const ItemCard = ({ onPress, selected, icon, pack, title }) => {
 export default React.memo(ItemCard)
 
 const styles = StyleSheet.create({
-    pressableSelected: {
-        flex: 1,
-        padding: 12,
-        marginHorizontal: 6,
-        elevation: 5,
-        borderRadius: 6,
-        maxWidth: '33%',
-        borderColor: basic300,
-        borderWidth: 1,
-        backgroundColor: primary100
-    },
     pressable: {
         flex: 1,
         padding: 12,
         marginHorizontal: 6,
-        elevation: 5,
         borderRadius: 6,
         maxWidth: '33%',
-        borderColor: basic300,
-        borderWidth: 1,
-        backgroundColor: control
+        backgroundColor: control,
+    },
+    pressablePlatformSpecific: Platform.select({
+        android: {
+            elevation: 5
+        },
+        default: {
+            borderColor: basic300,
+            borderWidth: 1,
+        }
+    }),
+    pressableSelected: {
+        backgroundColor: primary100
     },
     innerPressable: {
         alignItems: 'center',
@@ -100,3 +99,5 @@ const styles = StyleSheet.create({
         display: 'none'
     }
 })
+
+const pressableStyle = StyleSheet.compose(styles.pressable, styles.pressablePlatformSpecific)

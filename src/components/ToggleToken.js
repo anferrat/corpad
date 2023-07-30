@@ -1,14 +1,15 @@
 import React from 'react'
-import { StyleSheet, Pressable, View } from 'react-native'
+import { Platform, StyleSheet, View } from 'react-native'
 import { Icon, Text } from '@ui-kitten/components'
 import { basic, basic300, basic400, control, primary } from '../styles/colors'
 import { androidRipple } from '../styles/styles'
+import Pressable from './Pressable'
 
 
 const ToggleToken = ({ checked, title, onPress, icon, pack }) => {
     const check = checked ? 'checkmark-circle-2' : 'radio-button-off-outline'
     return (
-        <View style={styles.wrapper}>
+        <View style={wrapperStyle}>
             <Pressable
                 android_ripple={androidRipple}
                 style={styles.container}
@@ -36,16 +37,24 @@ const ToggleToken = ({ checked, title, onPress, icon, pack }) => {
     )
 }
 
-export default ToggleToken
+export default React.memo(ToggleToken)
 
 const styles = StyleSheet.create({
     wrapper: {
         overflow: 'hidden',
         borderRadius: 20,
-        elevation: 2,
         marginRight: 12,
         marginVertical: 6
     },
+    wrapperPlatformSpecific: Platform.select({
+        android: {
+            elevation: 2
+        },
+        default: {
+            borderColor: basic300,
+            borderWidth: 1
+        }
+    }),
     container: {
         flex: -1,
         flexDirection: 'row',
@@ -53,8 +62,7 @@ const styles = StyleSheet.create({
         padding: 8,
         paddingRight: 12,
         borderRadius: 20,
-        borderColor: basic300,
-        maxWidth: 200,      
+        maxWidth: 200,
         backgroundColor: control
     },
     icon: {
@@ -66,3 +74,5 @@ const styles = StyleSheet.create({
         flex: -1
     }
 })
+
+const wrapperStyle = StyleSheet.compose(styles.wrapper, styles.wrapperPlatformSpecific)

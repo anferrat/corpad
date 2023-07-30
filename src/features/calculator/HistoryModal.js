@@ -14,6 +14,7 @@ import { getCalculatorListByType } from '../../app/controllers/CalculatorControl
 import { CalculatorTypeIconPacks, CalculatorTypeIcons } from '../../constants/icons'
 import { CalculatorTypeTitleLabels } from '../../constants/labels'
 import { SafeAreaProvider } from 'react-native-safe-area-context'
+import BottomButton from '../../components/BottomButton'
 
 
 const HistoryModal = (props) => {
@@ -103,14 +104,12 @@ const HistoryModal = (props) => {
                         />
                     </LoadingView>
                     {historyList.length > 0 ?
-                        <Button
-                            accessoryLeft={trashIcon}
-                            style={styles.save}
+                        <BottomButton
+                            icon='trash'
+                            title='Delete all'
                             onPress={deleteAllHandler}
                             disabled={loading}
-
-
-                        >Delete all</Button> : null
+                        /> : null
                     }
                 </SafeAreaProvider>
             </Modal>
@@ -152,17 +151,4 @@ const styles = StyleSheet.create({
     container: {
         paddingBottom: 72
     },
-    save: {
-        position: 'absolute',
-        bottom: 10,
-        left: '2.5%',
-        height: 50,
-        width: '95%',
-        paddingHorizontal: 15,
-        shadowColor: '#000',
-        shadowOffset: { width: 0, height: 1 },
-        shadowOpacity: 0.8,
-        shadowRadius: 2,
-        elevation: 5,
-    }
 })

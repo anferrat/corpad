@@ -1,8 +1,9 @@
 import React, { useState } from 'react'
-import { View, StyleSheet, Pressable } from 'react-native'
+import { View, StyleSheet } from 'react-native'
 import { Text, Icon } from '@ui-kitten/components'
 import { primary } from '../../../../styles/colors'
 import { androidRipple } from '../../../../styles/styles'
+import Pressable from '../../../../components/Pressable'
 
 const MappingHint = (props) => {
     const [visible, setVisible] = useState(false)

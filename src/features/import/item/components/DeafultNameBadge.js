@@ -1,11 +1,11 @@
 import React from 'react'
-import { View, StyleSheet } from 'react-native'
+import { View, StyleSheet, Platform } from 'react-native'
 import { Text } from '@ui-kitten/components'
-import { primary } from '../../../../styles/colors'
+import { basic300, primary } from '../../../../styles/colors'
 
 
 const DefaultBadge = () => (
-    <View style={styles.badge}>
+    <View style={badgeStyle}>
         <Text category='label' status='control' numberOfLines={1} ellipsizeMode={'tail'}>Default name</Text>
     </View>
 )
@@ -18,6 +18,16 @@ const styles = StyleSheet.create({
         backgroundColor: primary,
         paddingVertical: 4,
         paddingHorizontal: 8,
-        elevation: 5
     },
+    badgePlatformSpecific: Platform.select({
+        android: {
+            elevation: 5,
+        },
+        default: {
+            borderWidth: 1,
+            borderColor: basic300
+        }
+    }),
 })
+
+const badgeStyle = StyleSheet.compose(styles.badge, styles.badgePlatformSpecific)

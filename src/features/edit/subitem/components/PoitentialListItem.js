@@ -1,9 +1,10 @@
 import React from "react"
-import { View, StyleSheet, Pressable } from "react-native"
+import { View, StyleSheet } from "react-native"
 import { Icon, Text } from "@ui-kitten/components"
 import { basic, basic200, basic300, primary } from '../../../../styles/colors'
 import { androidRipple } from '../../../../styles/styles'
 import SingleIconButton from '../../../../components/IconButton'
+import Pressable from "../../../../components/Pressable"
 
 
 const PotentialListItem = (props) => {

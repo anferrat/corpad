@@ -1,8 +1,9 @@
 import React from 'react'
-import { View, StyleSheet, Pressable } from 'react-native'
+import { View, StyleSheet } from 'react-native'
 import { Icon, Text } from '@ui-kitten/components'
 import { basic } from '../../../../styles/colors'
 import { androidRipple } from '../../../../styles/styles'
+import Pressable from '../../../../components/Pressable'
 
 const InfoListItem = (props) => {
     return (

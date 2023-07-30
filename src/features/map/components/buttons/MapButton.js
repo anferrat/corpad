@@ -1,8 +1,9 @@
 import React from 'react'
-import { View, StyleSheet, Pressable, ActivityIndicator } from 'react-native'
+import { View, StyleSheet, ActivityIndicator } from 'react-native'
 import { Icon } from '@ui-kitten/components'
 import { basic300, control, primary } from '../../../../styles/colors'
 import { androidRipple } from '../../../../styles/styles'
+import Pressable from '../../../../components/Pressable'
 
 const MapButton = (props) => {
 

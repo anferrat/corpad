@@ -1,13 +1,14 @@
 import RNDocumentPicker from 'react-native-document-picker'
 import { Error, errors } from '../../utils/Error'
-import { FileMimeTypes, SurveyLoadingStatuses } from '../../../constants/global'
+import { FileMimeTypes, FileTypeIdentifiers, SurveyLoadingStatuses } from '../../../constants/global'
+import { Platform } from 'react-native'
 
 export class DocumentPicker {
     constructor() { }
 
     async execute(type) {
         try {
-            return await RNDocumentPicker.pickSingle({ allowMultiSelection: false, type })
+            return await RNDocumentPicker.pickSingle({ allowMultiSelection: false, type, })
         }
         catch (er) {
             if (er.code !== 'DOCUMENT_PICKER_CANCELED')
@@ -19,13 +20,17 @@ export class DocumentPicker {
     async pickSurveyFile(onStatusChanged) {
         if (onStatusChanged)
             onStatusChanged(SurveyLoadingStatuses.SELECTING)
-        const file = await this.execute(FileMimeTypes.JSON)
+        const file = await this.execute(Platform.select({
+            android: FileMimeTypes.JSON,
+            ios: FileTypeIdentifiers.JSON,
+            default: FileMimeTypes.JSON
+        }))
         if (onStatusChanged)
             onStatusChanged(SurveyLoadingStatuses.LOADING, file)
         return file
     }
 
     pickCommaSeparetedFile() {
-        return this.execute(FileMimeTypes.TEXT)
+        return this.execute(RNDocumentPicker.types.csv)
     }
 }

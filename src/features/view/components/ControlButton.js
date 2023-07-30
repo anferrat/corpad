@@ -1,7 +1,8 @@
 import React from 'react'
 import { Text, Icon } from '@ui-kitten/components'
-import { Pressable, View, StyleSheet } from 'react-native'
+import { Pressable as PressableDefault, View, StyleSheet } from 'react-native'
 import { basic, basic200, danger, primary, warning, success } from '../../../styles/colors'
+import Pressable from '../../../components/Pressable'
 
 const ripple = { color: basic }
 
@@ -16,7 +17,7 @@ const statusColors = {
 const ControlButton = ({ onPress, status, icon, label, hidden }) => {
     if (!hidden)
         return (
-            <Pressable
+            <PressableDefault
                 onPress={onPress} style={styles.pressable}>
                 <View style={styles.topView}>
                     <View
@@ -37,7 +38,7 @@ const ControlButton = ({ onPress, status, icon, label, hidden }) => {
                         {label}
                     </Text>
                 </View>
-            </Pressable >
+            </PressableDefault>
         )
     else return null
 }

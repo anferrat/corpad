@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react'
-import { Pressable, View, StyleSheet } from 'react-native'
+import { View, StyleSheet } from 'react-native'
 import { Text, Icon } from '@ui-kitten/components'
 import { androidRipple } from '../../../../../styles/styles'
 import { nextReading } from '../../../helpers/functions'
 import { basic300, success, warning, danger, basic, primary } from '../../../../../styles/colors'
 import { displayedReadingsValues } from '../../../helpers/functions'
+import Pressable from '../../../../../components/Pressable'
 
 //Optimized version of displaycard for flatList. ugly but works faster then DisplayCard. (DO NOT USE! Jan 22, 2023)
 

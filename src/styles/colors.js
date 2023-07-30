@@ -13,6 +13,7 @@ export const basic400 = '#d4d9ea'
 export const basic700 = '#888892'
 export const primary100 = '#E6EDFC'
 export const primary200 = '#CEDCF9'
+export const primary400 ='#95A8DD'
 export const success100 = "#E3FBDB"
 export const control = '#fff'
 

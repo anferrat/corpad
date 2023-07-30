@@ -1,6 +1,6 @@
 import React, { useRef } from "react"
 import useModal from "../../../../hooks/useModal"
-import { StyleSheet, Pressable, View, Animated, Platform } from "react-native"
+import { StyleSheet, View, Animated, Platform } from "react-native"
 import { Text, Icon } from "@ui-kitten/components"
 import { basic } from "../../../../styles/colors"
 import { androidRipple, globalStyle } from '../../../../styles/styles'
@@ -8,6 +8,7 @@ import FileListItemMenu from "./FileListItemMenu"
 import { getFormattedDate } from "../../../../helpers/functions"
 import { getFileSize } from "../helpers/functions"
 import FileListItemMenuItem from "./FileListItemMenuItem"
+import Pressable from "../../../../components/Pressable"
 
 const fileIcons = {
     'text/csv': {

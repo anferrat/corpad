@@ -317,6 +317,13 @@ export const FileMimeTypes = Object.freeze({
     TEXT: 'text/*'
 })
 
+export const FileTypeIdentifiers = Object.freeze({
+    CSV: 'public.comma-separated-values-text',
+    KML: 'public.xml',
+    JSON: 'public.json',
+    TEXT: 'public.plain-text',
+})
+
 export const FileExtensions = Object.freeze({
     CSV: 'csv',
     KML: 'kml',

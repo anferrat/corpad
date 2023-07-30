@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Pressable, View } from 'react-native'
+import { View } from 'react-native'
 import { displayCard } from './styles/displayCardStyles'
 import DisplayCardTitle from './Title'
 import StatusIndicator from './StatusIndicator'
@@ -7,7 +7,7 @@ import ReadingBar from './ReadingBar'
 import ReadingDisplay from './ReadingDisplay'
 import { nextReading, firstReading } from '../../../helpers/functions'
 import { androidRipple } from '../../../../../styles/styles'
-
+import Pressable from '../../../../../components/Pressable'
 
 const DisplayCard = ({ id, dataList, subtitle, timeModified, status, onPress, name, firstReadingIndex, displayedReading, icon, readingList, itemType }) => {
     const [readingIndex, setReadingIndex] = useState(() => firstReading(readingList))

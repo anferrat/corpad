@@ -1,7 +1,24 @@
 import { StyleSheet, Platform } from 'react-native'
-import { basic200, basic300 } from './colors'
+import { basic200, basic300, primary400 } from './colors'
 
 export const androidRipple = { color: basic200 }
+
+export const pressable = StyleSheet.create({
+    pressed: Platform.select({
+        android: {
+
+        },
+        default: {
+            backgroundColor: basic200
+        }
+    }),
+    pressedPrimary: Platform.select({
+        android: {},
+        default: {
+            backgroundColor: primary400
+        }
+    })
+})
 
 export const globalStyle = StyleSheet.create({
     screen: {

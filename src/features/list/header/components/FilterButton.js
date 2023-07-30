@@ -1,8 +1,9 @@
 import React from 'react'
-import { Pressable, StyleSheet } from 'react-native'
+import { StyleSheet } from 'react-native'
 import { Text, Icon } from '@ui-kitten/components'
 import { primary } from '../../../../styles/colors'
 import { androidRipple } from '../../../../styles/styles'
+import Pressable from '../../../../components/Pressable'
 
 const FilterButton = (props) => {
     return (
