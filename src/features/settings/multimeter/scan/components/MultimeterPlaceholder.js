@@ -59,9 +59,9 @@ const styles = StyleSheet.create({
     },
     description: {
         textAlign: 'center',
-        paddingBottom: 24
     },
     text: {
-        flexDirection: 'row'
+        paddingTop: 24,
+        paddingBottom: 24
     }
 })
