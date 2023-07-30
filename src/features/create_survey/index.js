@@ -29,7 +29,8 @@ export const CreateSurvey = () => {
         toggleView
     } = useCreateSurvey()
     return (
-        <>
+        <View
+            style={styles.container}>
             <ScrollView
                 contentContainerStyle={styles.mainView}>
                 <NameEditInput
@@ -71,14 +72,18 @@ export const CreateSurvey = () => {
                 icon='file-add-outline'
                 onPress={createSurveyHandler}
             />
-        </>
+        </View>
     )
 }
 
 const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+        backgroundColor: control,
+    },
     mainView: {
         padding: 12,
-        backgroundColor: control,
+
         paddingBottom: 72
     },
     surveyTypeView: {
