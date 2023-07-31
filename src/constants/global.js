@@ -334,7 +334,9 @@ export const FileExtensions = Object.freeze({
 export const SurveyLoadingStatuses = Object.freeze({
     SAVING: 'saving',
     LOADING: 'loading',
-    SELECTING: 'selecting'
+    SELECTING: 'selecting',
+    COMPLETED: 'completed',
+    ERROR: 'error'
 })
 
 export const CalculatorTypes = Object.freeze({

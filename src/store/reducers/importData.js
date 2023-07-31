@@ -8,7 +8,7 @@ const initialState = {
     fields: [],
     defaultNames: [],
     fileName: null,
-    uri: null,
+    path: null,
     item: getItem(initialItemType),
     subitems: [],
     itemType: initialItemType,
@@ -36,7 +36,7 @@ const importData = (state = initialState, action) => {
                 fields: action.fields,
                 data: action.data,
                 fileName: action.fileName,
-                uri: action.uri,
+                path: action.path,
                 defaultNames: action.defaultNames,
                 extraData: {
                     potentialTypes: action.potentialTypes,

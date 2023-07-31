@@ -7,7 +7,7 @@ import IconButton from '../../../components/IconButton'
 import useImportFile from './hooks/useImportFile'
 
 const FilePicker = ({ navigateToSpreadsheet }) => {
-    const { selectFile, resetFile, fileName, uri, rows, columns, loading } = useImportFile()
+    const { selectFile, resetFile, fileName, path, rows, columns, loading } = useImportFile()
 
     const ResetIcon = () => <IconButton
         onPress={resetFile}
@@ -30,7 +30,7 @@ const FilePicker = ({ navigateToSpreadsheet }) => {
     else return (
         <ListItem
             title={fileName}
-            onPress={navigateToSpreadsheet.bind(this, uri, fileName)}
+            onPress={navigateToSpreadsheet.bind(this, path, fileName)}
             description={`Rows: ${rows}, Columns: ${columns}`}
             accessoryLeft={file}
             accessoryRight={ResetIcon} />

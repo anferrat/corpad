@@ -40,9 +40,11 @@ import { SaveSurveyFile } from "../services/survey_file/local/SaveSurveyFile"
 import { Controller } from "../utils/Controller"
 import { SurveyFileContentValidation } from "../validation/survey_file_content/v1/SurveyFileContentValidation"
 import { FileSystemInitialization } from "../services/survey_file/local/FileSystemInitialization"
+import { SurveyFileListener } from "../services/app/SurveyFileListener"
+import { AppStateListener } from "../services/other/AppStateListenerService"
 
 class AppController extends Controller {
-    constructor(surveyRepo, settingRepo, appRepo, defaultNameRepo, networkService, googleDriveAuthorizationService, testPointRepo, rectifierRepo, pipelineRepo, subitemRepo, potentialTypeRepo, referenceCellRepo, potentialRepo, fileSystemRepo, bluetoothRepo, surveyFileContentValidation, surveyFileConverterInput, surveyFileConverterOutput, cloudFileSystemRepo, warningHandler) {
+    constructor(surveyRepo, settingRepo, appRepo, defaultNameRepo, networkService, googleDriveAuthorizationService, testPointRepo, rectifierRepo, pipelineRepo, subitemRepo, potentialTypeRepo, referenceCellRepo, potentialRepo, fileSystemRepo, bluetoothRepo, surveyFileContentValidation, surveyFileConverterInput, surveyFileConverterOutput, cloudFileSystemRepo, warningHandler, appStateListener) {
         super()
         this.linkingService = new Linking()
         this.networkService = networkService
@@ -71,22 +73,22 @@ class AppController extends Controller {
 
         this.fileSystemInitializationService = new FileSystemInitialization(fileSystemRepo)
 
-        this.appInitializationService = new AppInitialization(this.currentSurveyStatusService, networkService, googleDriveAuthorizationService, surveyRepo, this.multimeterInitializationService, this.defaultNameInitializationService, settingRepo, this.openExternalSurveyService, this.appSettingInitializationService, this.databaseInitializationService, this.fileSystemInitializationService)
+        this.surveyFileListenerService = new SurveyFileListener(this.linkingService, this.openExternalSurveyService, appStateListener)
+
+        this.appInitializationService = new AppInitialization(this.currentSurveyStatusService, googleDriveAuthorizationService, surveyRepo, this.multimeterInitializationService, this.defaultNameInitializationService, settingRepo, this.openExternalSurveyService, this.appSettingInitializationService, this.databaseInitializationService, this.fileSystemInitializationService, this.linkingService)
     }
 
 
     init(onError = null, onSuccess = null,) {
         return super.controllerHandler(onSuccess, onError, 107, async () => {
-            const url = await this.linkingService.getInitialUrl()
-            return await this.appInitializationService.execute(url)
+            return await this.appInitializationService.execute()
         })
     }
 
-    addFileUrlListener(onStatusChanged, onError, onSuccess) {
-        return this.linkingService.addUrlListener(url =>
-            super.controllerHandler(onSuccess, onError, 420, async () => {
-                return await this.openExternalSurveyService.execute(url, undefined, onStatusChanged)
-            }))
+    addFileUrlListener(callback, onError, onSuccess) {
+        return super.callbackHandler(onSuccess, onError, 420, () => {
+            return this.surveyFileListenerService.addListener(callback, onError, onSuccess)
+        })
     }
 
     addNetworkStatusListener(onInternetStatusChanged, onError, onSuccess) {
@@ -123,12 +125,13 @@ const appController = new AppController(
     new SurveyFileConverterInput(new SubitemFactory()),
     new SurveyFileConverterOutput(),
     new GoogleDriveFileSystemRepository(),
-    new WarningHandler()
+    new WarningHandler(),
+    new AppStateListener()
 )
 
 export const initializeApp = (onError, onSuccess) => appController.init(onError, onSuccess)
 
-export const addFileUrlListener = (onStatusChanged, onError, onSuccess) => appController.addFileUrlListener(onStatusChanged, onError, onSuccess)
+export const addFileUrlListener = (callback, onError, onSuccess) => appController.addFileUrlListener(callback, onError, onSuccess)
 
 export const addNetworkStatusListener = (onInternetStatusChanged, onError, onSuccess) => appController.addNetworkStatusListener(onInternetStatusChanged, onError, onSuccess)
 
