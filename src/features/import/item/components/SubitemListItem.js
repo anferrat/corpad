@@ -40,7 +40,7 @@ const styles = StyleSheet.create({
         },
         default: {
             borderWidth: 1,
-            bordercolor: basic300
+            borderColor: basic300
         }
     }),
     pressable: {

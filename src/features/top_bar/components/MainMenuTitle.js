@@ -12,7 +12,8 @@ const MainMenuTitle = () => {
         navigation.navigate('SettingDetails', { setting: 'about' })
     }
     return (
-        <Pressable onPress={goToAbout}>
+        <Pressable
+            onPress={goToAbout}>
             <Icon pack='cp' name='logo-text' style={styles.logo} fill={control} />
         </Pressable>
     )
@@ -22,7 +23,7 @@ export default MainMenuTitle
 
 const styles = StyleSheet.create({
     logo: {
-        width: 100,
-        height: 30,
-    }
+        width: 116,
+        height: 35,
+    },
 })

@@ -113,7 +113,7 @@ class SurveyFileController extends Controller {
         return super.controllerHandler(onSuccess, onError, 420, async () => {
             const { onStatusChanged } = params
             const file = await this.documentPickerService.pickSurveyFile(onStatusChanged)
-            return await this.loadExternalSurveyService.execute(file.uri)
+            return await this.loadExternalSurveyService.execute(decodeURI(file.uri))
         })
     }
 

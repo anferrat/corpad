@@ -1,9 +1,10 @@
 import React, { useCallback } from 'react'
-import { Pressable, View, StyleSheet } from 'react-native'
+import { View, StyleSheet } from 'react-native'
 import { Icon, Text } from '@ui-kitten/components'
 import { ItemTypeLabelsPlural } from '../../../../../constants/labels'
 import { ItemTypeIconsFilled } from '../../../../../constants/icons'
-import { control, basic, basic300, primary } from '../../../../../styles/colors'
+import { control, basic, primary, basic300 } from '../../../../../styles/colors'
+import Pressable from '../../../../../components/Pressable'
 
 const ItemSelectorCard = ({ onPress, selectedItemType, itemType }) => {
     const selected = selectedItemType === itemType
@@ -13,6 +14,7 @@ const ItemSelectorCard = ({ onPress, selectedItemType, itemType }) => {
 
     return (
         <Pressable
+            disabled={selected}
             onPress={onPressHandler}
             style={selected ? styles.containerSelected : styles.container}>
             <Icon
@@ -44,7 +46,9 @@ const containerStyles = StyleSheet.create({
         marginBottom: 6,
         flex: 1,
         justifyContent: 'center',
-        alignItems: 'center'
+        alignItems: 'center',
+        borderWidth: 1,
+        borderColor: basic300
     }
 })
 

@@ -2,6 +2,8 @@
 
 #import <React/RCTBundleURLProvider.h>
 
+#import <React/RCTLinkingManager.h>
+
 #import "RNSplashScreen.h"
 
 @implementation AppDelegate
@@ -19,6 +21,13 @@
   //Had to changed for splash screen here
   //return [super application:application didFinishLaunchingWithOptions:launchOptions];
   return didFinish;
+}
+
+- (BOOL)application:(UIApplication *)application
+   openURL:(NSURL *)url
+   options:(NSDictionary<UIApplicationOpenURLOptionsKey,id> *)options
+{
+  return [RCTLinkingManager application:application openURL:url options:options];
 }
 
 - (NSURL *)sourceURLForBridge:(RCTBridge *)bridge

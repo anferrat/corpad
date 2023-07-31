@@ -29,9 +29,13 @@ const useApp = () => {
   const dispatch = useDispatch()
 
   useEffect(() => {
+
+    const networkStatus = addNetworkStatusListener(isInternetOn => dispatch(updateNetworkStatus(isInternetOn)))
+
     //fileUrlListener - listens for opened survey files from outside the app and loads them into database
     const urlListener = addFileUrlListener(
       (status) => {
+        console.log(status)
         if (status === SurveyLoadingStatuses.SAVING)
           dispatch(updateLoader(true, 'Saving survey', null))
         else if (status === SurveyLoadingStatuses.LOADING) {
@@ -49,7 +53,8 @@ const useApp = () => {
       }
     )
 
-    const networkStatus = addNetworkStatusListener(isInternetOn => dispatch(updateNetworkStatus(isInternetOn)))
+
+
 
     const bluetoothStatus = addBluetoothStatusListener(isBluetoothOn => dispatch(setBluetoothStatus(isBluetoothOn)))
 
@@ -61,8 +66,8 @@ const useApp = () => {
       componentMounted.current = true
       const { status, response } = await initializeApp()
       if (status === 200) {
-        const { isLoaded, syncTime, name, fileName, isCloud, isSigned, userName, isInternetOn, onboarding, multimeter } = response
-        dispatch(setSettingsOnAppLoad(isLoaded, syncTime, name, fileName, isCloud, isSigned, userName, isInternetOn, onboarding, multimeter))
+        const { isLoaded, syncTime, name, fileName, isCloud, isSigned, userName, onboarding, multimeter } = response
+        dispatch(setSettingsOnAppLoad(isLoaded, syncTime, name, fileName, isCloud, isSigned, userName, onboarding, multimeter))
         if (componentMounted.current)
           setLoading(false)
       }
@@ -70,8 +75,8 @@ const useApp = () => {
     onAppLoad()
     return () => {
       componentMounted.current = false
-      if (urlListener)
-        urlListener.remove()
+      if (urlListener.response)
+        urlListener.response.remove()
       if (networkStatus)
         networkStatus()
       if (bluetoothStatus.response)

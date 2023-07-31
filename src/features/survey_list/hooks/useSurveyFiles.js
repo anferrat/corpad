@@ -125,7 +125,7 @@ const useSurveyFiles = ({ isCloud, navigateToSurveyFileList }) => {
     const copyToAlternateFolder = useCallback(async ({ path, cloudId, fileName }) => {
         //copies from device to cloud and cloud to device
         dispatch(updateLoader(true, isCloud ? 'Copying to device' : 'Copying to gdrive', fileName))
-        const { status, errorMessage } = await (isCloud ? copyCloudSurveyFileToDevice({ cloudId }) : copySurveyFileToCloud({ path }))
+        const { status, errorMessage } =  isCloud ? await copyCloudSurveyFileToDevice({ cloudId }) : await copySurveyFileToCloud({ path })
         if (status !== 200)
             fileListErrorHandler(status)
         else {

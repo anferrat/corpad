@@ -14,14 +14,14 @@ import EditSubitemTitle from './EditSubitemTitle'
 import { SafeAreaView } from 'react-native-safe-area-context'
 
 
-
+const edges = ['top']
 const TopBarBase = ({ left, right, title, isPrimary, navigation, noBorder }) => {
     const topBarStyle = isPrimary ? styles.primaryStyle : styles.defaultStyle
     const borderStyle = noBorder ? {} : styles.borderStyle
 
     return (
         <SafeAreaView
-            edges={['top']}
+            edges={edges}
             style={{ ...styles.topBar, ...topBarStyle, ...borderStyle }} >
             <StatusBar
                 barStyle={isPrimary ? 'light-content' : 'dark-content'}

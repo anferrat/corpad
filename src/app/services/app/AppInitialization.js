@@ -1,7 +1,6 @@
 export class AppInitialization {
-    constructor(currentSurveyStatusService, networkService, authorizationService, surveyRepo, multimeterInitializationService, defaultNamesInitializationService, settingRepo, openExternalSurveyService, settingInitializationService, databaseInitializationService, fileSystemInitializationService) {
+    constructor(currentSurveyStatusService, authorizationService, surveyRepo, multimeterInitializationService, defaultNamesInitializationService, settingRepo, openExternalSurveyService, settingInitializationService, databaseInitializationService, fileSystemInitializationService, linkingService) {
         this.currentSurveyStatusService = currentSurveyStatusService
-        this.networkService = networkService
         this.authorizationService = authorizationService
         this.surveyRepo = surveyRepo
         this.multimeterInitializationService = multimeterInitializationService
@@ -11,9 +10,10 @@ export class AppInitialization {
         this.settingInitializationService = settingInitializationService
         this.databaseInitializationService = databaseInitializationService
         this.fileSystemInitializationService = fileSystemInitializationService
+        this.linkingService = linkingService
     }
 
-    async execute(initialUrl) {
+    async execute() {
         //Creates tables, updates old tables to current schema
         await this.databaseInitializationService.execute()
 
@@ -23,17 +23,16 @@ export class AppInitialization {
         //Initialize bluetooth module
         await this.multimeterInitializationService.execute()
 
-        let [{ isLoaded, syncTime, name, fileName, isCloud }, isInternetOn, { isSigned, userName }] = await Promise.all([
+        let [{ isLoaded, syncTime, name, fileName, isCloud }, { isSigned, userName }, initialUrl] = await Promise.all([
             this.currentSurveyStatusService.execute(),
-            this.networkService.checkConnection(),
             this.authorizationService.checkSignInStatus(),
+            this.linkingService.getInitialUrl(),
             this.defaultNamesInitializationService.execute(),
-            this.fileSystemInitializationService.execute()
-        ])
+            this.fileSystemInitializationService.execute(),
 
+        ])
         if (isLoaded)
             await this.surveyRepo.clearEmptyValues()
-
         if (initialUrl !== null)
             try {
                 const loaded = await this.openExternalSurveyService.execute(initialUrl, isLoaded)
@@ -43,7 +42,9 @@ export class AppInitialization {
                 isCloud = loaded.isCloud ?? isCloud
                 isLoaded = loaded.isLoaded ?? isLoaded
             }
-            catch { }
+            catch (er) {
+                console.log(er)
+            }
 
 
         if (!isSigned) {
@@ -60,7 +61,6 @@ export class AppInitialization {
             isCloud: isCloud ?? null,
             isSigned,
             userName,
-            isInternetOn,
             onboarding: settings.onboarding,
             multimeter: settings.multimeter,
         }

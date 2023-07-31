@@ -9,13 +9,13 @@ import IconButton from '../../../../components/IconButton'
 
 const FileData = ({ navigateToSpreadsheet }) => {
     const fileName = useSelector(state => state.importData.fileName)
-    const uri = useSelector(state => state.importData.uri)
+    const path = useSelector(state => state.importData.path)
     const rows = useSelector(state => state.importData.data.length)
     const columns = useSelector(state => state.importData.fields.length)
 
     const renderIcon = React.useCallback(() => <IconButton
         iconName={'diagonal-arrow-right-up'}
-        onPress={navigateToSpreadsheet.bind(this, uri, fileName)}
+        onPress={navigateToSpreadsheet.bind(this, path, fileName)}
     />, [])
 
     return (

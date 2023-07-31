@@ -1,12 +1,12 @@
 export class ImportDataPresenter {
     constructor() { }
 
-    execute(fileName, uri, data, defaultNames, potentialTypes, pipelines, referenceCells, settings) {
+    execute(fileName, path, data, defaultNames, potentialTypes, pipelines, referenceCells, settings) {
         return {
             fields: data.meta.fields,
             data: data.data,
             fileName: fileName,
-            uri: uri,
+            path: path,
             defaultNames: defaultNames.map(name => ({ ...name })),
             potentialTypes: potentialTypes.map(type => ({ ...type })),
             pipelines: pipelines.map(pipeline => ({ ...pipeline })),

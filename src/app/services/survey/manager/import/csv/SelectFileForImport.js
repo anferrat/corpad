@@ -13,9 +13,10 @@ export class SelectFileForImport {
 
     async execute() {
         const { uri, name } = await this.documentPicker.pickCommaSeparetedFile()
+        const path = decodeURI(uri)
         const [fileData, defaultNames, potentialTypes, pipelines, referenceCells, settings] = await Promise.all(
             [
-                this.fileSystemRepo.readFile(uri),
+                this.fileSystemRepo.readFile(path),
                 this.defaultNameRepo.getAll(),
                 this.potentialTypeRepo.getAll(),
                 this.pipelineRepo.getAll(),
@@ -23,6 +24,6 @@ export class SelectFileForImport {
                 this.settingRepo.get()
             ])
         const data = await this.csvParser.parse(fileData)
-        return this.importDataPresenter.execute(name, uri, data, defaultNames, potentialTypes, pipelines, referenceCells, settings)
+        return this.importDataPresenter.execute(name, path, data, defaultNames, potentialTypes, pipelines, referenceCells, settings)
     }
 }

@@ -118,7 +118,6 @@ const settings = (state = initialState, action) => {
                     ...state.session,
                     isSigned: action.isSigned,
                     userName: action.userName,
-                    isInternetOn: action.isInternetOn,
                 },
                 onboarding: {
                     ...state.onboarding,

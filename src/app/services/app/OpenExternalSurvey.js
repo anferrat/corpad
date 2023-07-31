@@ -11,6 +11,7 @@ export class OpenExternalSurvey {
     }
 
     async execute(url, isLoaded = undefined, callback = undefined) {
+        const path = decodeURI(url)
         let surveyLoaded = isLoaded === undefined ? (await this.currentSurveyStatusService.execute()).isLoaded : isLoaded
         if (surveyLoaded) {
             const confirm = await this.warningHandler.execute('Another survey is active. It will be closed and changes will be saved. Would you like to proceed?', 'Proceed', 'Cancel')
@@ -22,7 +23,7 @@ export class OpenExternalSurvey {
                 try {
                     if (callback)
                         callback(SurveyLoadingStatuses.LOADING)
-                    return await this.loadExternalSurveyService.execute(url)
+                    return await this.loadExternalSurveyService.execute(path)
                 }
                 catch (er) {
                     this.warningHandler.executeWarning('Unable to load external survey file')
@@ -41,7 +42,7 @@ export class OpenExternalSurvey {
         else {
             if (callback)
                 callback(SurveyLoadingStatuses.LOADING)
-            return await this.loadExternalSurveyService.execute(url)
+            return await this.loadExternalSurveyService.execute(path)
         }
     }
 }

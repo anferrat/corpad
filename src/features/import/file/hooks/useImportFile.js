@@ -8,7 +8,7 @@ const useImportFile = () => {
     const dispatch = useDispatch()
     const [loading, setLoading] = useState(false)
     const fileName = useSelector(state => state.importData.fileName)
-    const uri = useSelector(state => state.importData.uri)
+    const path = useSelector(state => state.importData.path)
     const rows = useSelector(state => state.importData.data.length ?? null)
     const columns = useSelector(state => state.importData.fields.length)
 
@@ -16,8 +16,8 @@ const useImportFile = () => {
         setLoading(true)
         const { response, status } = await selectFileForImport()
         if (status === 200) {
-            const { pipelines, fields, data, referenceCells, fileName, uri, potentialTypes, defaultNames, autoCreatePotentials } = response
-            dispatch(setImportData(fields, data, fileName, defaultNames, uri, potentialTypes, referenceCells, pipelines, autoCreatePotentials))
+            const { pipelines, fields, data, referenceCells, fileName, path, potentialTypes, defaultNames, autoCreatePotentials } = response
+            dispatch(setImportData(fields, data, fileName, defaultNames, path, potentialTypes, referenceCells, pipelines, autoCreatePotentials))
         }
         else if (status !== 101)
             errorHandler(status)
@@ -33,7 +33,7 @@ const useImportFile = () => {
     return {
         loading,
         fileName,
-        uri,
+        path,
         rows,
         columns,
         selectFile,

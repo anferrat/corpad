@@ -78,8 +78,8 @@ export const setSessionModalVisible = (visible) => {
     return { type: SET_SESSION_MODAL_VISIBLE, visible }
 }
 
-export const setSettingsOnAppLoad = (isLoaded, syncTime, name, fileName, isCloud, isSigned, userName, isInternetOn, onboarding, multimeter) => {
-    return { type: SET_SETTINGS_ON_APP_LOAD, isLoaded, syncTime, name, fileName, isCloud, isSigned, userName, isInternetOn, onboarding, multimeter }
+export const setSettingsOnAppLoad = (isLoaded, syncTime, name, fileName, isCloud, isSigned, userName, onboarding, multimeter) => {
+    return { type: SET_SETTINGS_ON_APP_LOAD, isLoaded, syncTime, name, fileName, isCloud, isSigned, userName, onboarding, multimeter }
 }
 
 export const updateBottomSheetContent = (itemType, content) => ({

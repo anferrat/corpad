@@ -92,6 +92,7 @@ export class FileSystemRepository {
         const directory = await this.getLocation(location)
         try {
             const path = `${directory}/${fileName}`
+            console.log(path)
             if (await RNFS.exists(path))
                 if (!((await RNFS.stat(path)).isFile()))
                     await RNFS.unlink(path)
@@ -174,7 +175,7 @@ export class FileSystemRepository {
     }
 
     async unlink(path) {
-        //use when deleting when fileName is unknown, probably just get rid of it
+        //kinda repeats delete file, maybe get rid of it
         try {
             await RNFS.unlink(path)
         }

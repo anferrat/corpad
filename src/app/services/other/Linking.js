@@ -4,8 +4,8 @@ export class Linking {
     constructor() {
     }
 
-    getInitialUrl(url) {
-        return LinkingDefault.getInitialURL(url)
+    getInitialUrl() {
+        return LinkingDefault.getInitialURL()
     }
 
     addUrlListener(callback) {
