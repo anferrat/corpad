@@ -1,7 +1,7 @@
 import React, { useState, useRef } from 'react'
 import { Animated, Easing, View, StyleSheet } from 'react-native'
-import { Icon } from '@ui-kitten/components'
-import { primary, basic200, basic300 } from '../../../styles/colors'
+import { Icon, Text } from '@ui-kitten/components'
+import { primary, basic200, basic300, primary200, control } from '../../../styles/colors'
 import Pressable from '../../../components/Pressable'
 
 const ExpandedBar = (props) => {
@@ -49,7 +49,8 @@ const ExpandedBar = (props) => {
                 android_ripple={{ color: basic300 }}
                 onPress={toggleBar.bind(this, barDisplayed)}
                 style={styles.pressable}>
-                <Animated.View style={{ transform: [{ rotate: rotate }] }}>
+                <Text status='primary'>{barDisplayed ? 'Hide' : 'Show'} controls</Text>
+                <Animated.View style={{ transform: [{ rotate: rotate }], marginLeft: 12 }}>
                     <Icon name='arrow-ios-downward-outline' fill={primary} style={styles.icon} />
                 </Animated.View>
             </Pressable>
@@ -70,13 +71,14 @@ const styles = StyleSheet.create({
         alignItems: 'flex-start',
     },
     pressable: {
+        flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'center',
-        backgroundColor: basic200,
+        backgroundColor: control,
         height: 45
     },
     icon: {
         width: 25,
-        height: 25
+        height: 25,
     }
 })

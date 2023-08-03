@@ -1,6 +1,6 @@
 import React from 'react'
 import { BottomNavigation, BottomNavigationTab, Icon } from "@ui-kitten/components"
-import { SafeAreaView } from 'react-native'
+import { SafeAreaView } from 'react-native-safe-area-context'
 
 const MainMenuBottomTabs = (props) => {
     const { state, navigation, openBasicMenu } = props
@@ -34,7 +34,7 @@ const MainMenuBottomTabs = (props) => {
 
 
     return (
-        <SafeAreaView>
+        <SafeAreaView edges={['bottom']}>
             <BottomNavigation
                 onSelect={onSelect}
                 selectedIndex={state.index === 1 ? 0 : 1}>

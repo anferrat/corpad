@@ -1,7 +1,7 @@
 import React from 'react'
 import { Text, Icon } from '@ui-kitten/components'
-import { Pressable as PressableDefault, View, StyleSheet } from 'react-native'
-import { basic, basic200, danger, primary, warning, success } from '../../../styles/colors'
+import { Pressable as PressableDefault, View, StyleSheet, Platform } from 'react-native'
+import { basic, basic200, danger, primary, warning, success, basic300, basic400 } from '../../../styles/colors'
 import Pressable from '../../../components/Pressable'
 
 const ripple = { color: basic }
@@ -69,20 +69,26 @@ const styles = StyleSheet.create({
         textAlign: "center",
         fontWeight: 'bold'
     },
-    elevatedView: {
+    elevatedView: StyleSheet.compose({
         overflow: 'hidden',
         alignItems: 'center',
         borderRadius: 6,
         justifyContent: 'center',
-        borderColor: basic,
-        backgroundColor: basic200,
         height: 45,
         width: 45,
-        shadowColor: '#000',
-        shadowOffset: { width: 0, height: 1 },
-        shadowOpacity: 0.8,
-        shadowRadius: 2,
         elevation: 5,
         marginBottom: 10,
-    }
+    }, Platform.select({
+        ios: {
+            borderWidth: 1,
+            borderColor: basic400,
+        },
+        android: {
+            elevation: 5
+        },
+        default: {
+            borderWidth: 1,
+            borderColor: basic400,
+        }
+    }))
 })

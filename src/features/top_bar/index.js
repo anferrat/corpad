@@ -6,13 +6,14 @@ import { BS } from '../../../App'
 import { useBottomSheetNavigation } from '../../hooks/bottom_sheet/useBottomSheetNavigation'
 
 
-export const TopBar = React.memo(({ screen, params, navigation }) => {
+export const TopBar = React.memo(({ screen, params, navigation, topInset }) => {
     const dispatch = useDispatch()
     const bottomSheet = useContext(BS)
     const { openMenu } = useBottomSheetNavigation()
     const header = getHeader(screen, params, navigation, dispatch, openMenu)
     if (header.display)
         return <TopBarBase
+            topInset={topInset}
             noBorder={header?.noBorder}
             navigation={navigation}
             right={header.right}
@@ -21,9 +22,4 @@ export const TopBar = React.memo(({ screen, params, navigation }) => {
             isPrimary={header.isPrimary}
         />
     else return null
-}, () => {
-    /*
-    With ()=>true,  new header still renders with a new screen in stack, however it prevents header to re-render when switching between tabs, which is desired behavior
-    */
-    return false
 })

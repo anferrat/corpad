@@ -1,8 +1,8 @@
 import React from 'react'
-import { FlatList, StyleSheet } from 'react-native'
+import { FlatList, StyleSheet, Animated } from 'react-native'
 
 const DataLoaderFlatList = (props) => {
-    return <FlatList
+    return <Animated.FlatList
         {...props}
         StickyHeaderComponent={props.StickyHeaderComponent}
         ListHeaderComponent={props.ListHeaderComponent}

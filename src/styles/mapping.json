@@ -258,7 +258,7 @@
                                     },
                                     "hover": {
                                         "borderColor": "border-basic-color-4",
-                                        "backgroundColor": "background-basic-color-3"
+                                        "backgroundColor": "background-basic-color-1"
                                     },
                                     "disabled": {
                                         "borderColor": "border-basic-color-4",

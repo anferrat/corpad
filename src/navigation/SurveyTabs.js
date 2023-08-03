@@ -20,17 +20,14 @@ export default TabNavigator = () => {
                     openCreateMenu={openCreateMenu} />
             )}
             screenOptions={{
-                headerShown: true,
+                //insets has to be passed to header from the top, to avoid glitching when swicthing between screens
                 headerStatusBarHeight: insets.top,
-                headerStyle: {
-                    height: 80,
-                },
-                header: ({ route, navigation }) => <TopBar screen={route.name} params={route.params} navigation={navigation} />
+                header: ({ route, navigation, options }) => <TopBar screen={route.name} params={route.params} navigation={navigation} topInset={options.headerStatusBarHeight} />,
             }}>
             <Screen name='TestPoints' component={List} initialParams={{ itemType: 'TEST_POINT' }} />
             <Screen name='Pipelines' component={List} initialParams={{ itemType: 'PIPELINE' }} />
             <Screen name='Map' component={MapScreen} options={{ lazy: false }} />
-            <Screen name='Rectifiers' component={List} initialParams={{ itemType: 'RECTIFIER' }} options={{ headerStyle: { height: 80 } }} />
+            <Screen name='Rectifiers' component={List} initialParams={{ itemType: 'RECTIFIER' }} />
         </Navigator>
     )
 }
