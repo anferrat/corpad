@@ -10,11 +10,14 @@ const SheetHeader = (props) => (
                 onPress={props.backActionHandler}
                 iconName={'arrow-back-outline'} /> : null}
             <Text category='h4'
+                numberOfLines={1}
+                ellipsizeMode='tail'
                 style={styles.titleText}>
                 {props.title}
             </Text>
         </View>
         <Button
+            style={styles.button}
             appearance='ghost'
             onPress={props.onCloseHandler}>
             Close</Button>
@@ -28,13 +31,19 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         padding: 12,
+        flex: 1
     },
     titleText: {
         fontWeight: 'bold',
-        padding: 12
+        padding: 12,
     },
     titleRow: {
+        width: '100%',
         flexDirection: 'row',
         justifyContent: 'space-between'
+    },
+    button: {
+        flexBasis: 90,
+        marginLeft: 8
     }
 })
