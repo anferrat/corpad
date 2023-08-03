@@ -6,10 +6,10 @@ import { androidRipple } from '../../../../styles/styles'
 
 const FilterToggleListItem = (props) => {
     return (
-            <Pressable style={styles.listItem} android_ripple={androidRipple} disabled={props.disabled}>
-                <Text category='s1' numberOfLines={1} ellipsizeMode={'tail'}>{props.title}</Text>
-                {props.children}
-            </Pressable>
+        <Pressable style={styles.listItem} android_ripple={androidRipple} disabled={props.disabled}>
+            <Text category='s1' numberOfLines={1} ellipsizeMode={'tail'} style={styles.text}>{props.title}</Text>
+            {props.children}
+        </Pressable>
     )
 }
 export default React.memo(FilterToggleListItem)
@@ -21,5 +21,8 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
         paddingHorizontal: 24,
         height: 60,
+    },
+    text: {
+       paddingRight: 12
     }
 })
