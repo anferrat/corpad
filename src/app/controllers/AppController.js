@@ -63,7 +63,7 @@ class AppController extends Controller {
         this.saveCurrentSurveyService = new SaveCurrentSurvey(this.jsonExportService, surveyFileConverterOutput, settingRepo, surveyRepo, this.saveSurveyToFileService, this.saveSurveyToCloudFileService, warningHandler)
         this.resetCurrentSurveyService = new ResetCurrentSurvey(surveyRepo)
 
-        this.openExternalSurveyService = new OpenExternalSurvey(this.loadExternalSurveyService, this.saveCurrentSurveyService, warningHandler, this.currentSurveyStatusService, this.resetCurrentSurveyService)
+        this.openExternalSurveyService = new OpenExternalSurvey(this.loadExternalSurveyService, this.saveCurrentSurveyService, warningHandler, this.currentSurveyStatusService, this.resetCurrentSurveyService, fileSystemRepo)
 
         this.appSettingInitializationService = new SettingInitialization(settingRepo)
         this.databaseInitializationService = new DatabaseInitialization(appRepo)
