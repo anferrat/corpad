@@ -11,18 +11,15 @@ import EditTitle from './EditTitle'
 import CloudButton from './CloudButton'
 import NavigationWidget from './navigation_widget/'
 import EditSubitemTitle from './EditSubitemTitle'
-import { SafeAreaView } from 'react-native-safe-area-context'
 
 
-const edges = ['top']
-const TopBarBase = ({ left, right, title, isPrimary, navigation, noBorder }) => {
+const TopBarBase = ({ left, right, title, isPrimary, navigation, noBorder, topInset }) => {
     const topBarStyle = isPrimary ? styles.primaryStyle : styles.defaultStyle
     const borderStyle = noBorder ? {} : styles.borderStyle
 
     return (
-        <SafeAreaView
-            edges={edges}
-            style={{ ...styles.topBar, ...topBarStyle, ...borderStyle }} >
+        <View
+            style={{ ...styles.topBar, ...topBarStyle, ...borderStyle, paddingTop: topInset }} >
             <StatusBar
                 barStyle={isPrimary ? 'light-content' : 'dark-content'}
                 translucent={true}
@@ -42,7 +39,7 @@ const TopBarBase = ({ left, right, title, isPrimary, navigation, noBorder }) => 
                     right={right}
                     isPrimary={isPrimary} />
             </View>
-        </SafeAreaView>
+        </View>
     )
 }
 const RightSide = ({ right, isPrimary }) => {

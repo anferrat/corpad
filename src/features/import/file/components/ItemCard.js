@@ -9,7 +9,7 @@ const ItemCard = ({ onPress, selected, icon, pack, title }) => {
     return (
         <Pressable
             android_ripple={androidRipple}
-            style={selected ? StyleSheet.compose(pressableStyle, styles.pressableSelected) : pressableStyle}
+            style={selected ? pressableStyleSelected : pressableStyle}
             onPress={onPress}>
             <Icon
                 name={'checkmark-circle-2'}
@@ -101,3 +101,5 @@ const styles = StyleSheet.create({
 })
 
 const pressableStyle = StyleSheet.compose(styles.pressable, styles.pressablePlatformSpecific)
+
+const pressableStyleSelected = StyleSheet.compose(pressableStyle, styles.pressableSelected)

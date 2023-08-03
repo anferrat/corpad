@@ -1,5 +1,5 @@
-import React, { useEffect } from 'react'
-import { ActivityIndicator, StyleSheet, View } from 'react-native'
+import React, { useEffect, useRef } from 'react'
+import { ActivityIndicator, StyleSheet, View, Animated } from 'react-native'
 import { useSelector, useDispatch } from 'react-redux'
 import { loadListState, setOffset, setRefresh, deleteItemFromList, updateList, resetListState } from '../../../store/actions/list'
 import { getListStateByType } from '../../../helpers/functions'
@@ -10,13 +10,41 @@ import { getLocationAsync, fetchData, fetchIdList } from '../helpers/functions'
 import FlatList from './components/FlatList'
 import { primary } from '../../../styles/colors'
 import { EventRegister } from 'react-native-event-listeners'
-import { Button } from '@ui-kitten/components'
 import ListHeader from '../header/header/ListHeader'
 
-const indice = [0]
+const HEADER_HEIGHT = 40
+
 const ItemList = ({ itemType, navigateToView }) => {
     const dispatch = useDispatch()
     const t = useSelector(state => getListStateByType(itemType, state))
+    const headerRef = useRef(new Animated.Value(0))
+    const minScroll = 100;
+
+    const clampedScrollY = headerRef.current.interpolate({
+        inputRange: [minScroll, minScroll + 1],
+        outputRange: [0, 1],
+        extrapolateLeft: 'clamp',
+    });
+
+    const minusScrollY = Animated.multiply(clampedScrollY, -1);
+
+    const translateY = Animated.diffClamp(
+        minusScrollY,
+        -HEADER_HEIGHT+1,
+        0,
+    );
+
+    const translateList = translateY.interpolate({
+        inputRange: [-HEADER_HEIGHT, 0],
+        outputRange: [0, HEADER_HEIGHT],
+        extrapolate: 'clamp'
+    })
+
+    const opacity = translateY.interpolate({
+        inputRange: [-HEADER_HEIGHT, 0],
+        outputRange: [0.4, 1],
+        extrapolate: 'clamp',
+    });
 
     useEffect(() => {
         const onUpdateHandler = EventRegister.addEventListener('GLOBAL_ITEM_UPDATED', async (updated) => {
@@ -123,12 +151,13 @@ const ItemList = ({ itemType, navigateToView }) => {
     //Keep timeModified as part of the key. When card is updated, it will reset internal card state
     const keyExtractor = React.useCallback((item) => itemType + item.uid + item.timeModified, [itemType])
 
-    const Header = React.memo(() => <ListHeader dataType={itemType} />) //need to implement Animated container and scrolling it up and down on scroll
+    const Header = React.memo(() => <ListHeader dataType={itemType} translateY={translateY} opacity={opacity} />)
 
     return (
         <>
             <Header />
             <FlatList
+                style={{ transform: [{ translateY: translateList }] }}
                 contentContainerStyle={styles.container}
                 keyExtractor={keyExtractor}
                 ListEmptyComponent={renderEmptyListComponent}
@@ -140,7 +169,12 @@ const ItemList = ({ itemType, navigateToView }) => {
                 //stickyHeaderIndices={indice}
                 onEndReached={offsetHandler}
                 renderItem={renderItem}
-                ListFooterComponent={renderFooter} />
+                ListFooterComponent={renderFooter}
+                onScroll={Animated.event(
+                    [{ nativeEvent: { contentOffset: { y: headerRef.current } } }],
+                    { useNativeDriver: true }
+                )}
+            />
             <UpdatingView updating={t.settings.updating} />
         </>
     )

@@ -13,7 +13,5 @@ const evaConfig = {
   customMappingPath: './src/styles/mapping.json',
 };
 
-module.exports = async () => {
-  const defaultConfig = await mergeConfig(getDefaultConfig(__dirname), config);
-  return MetroConfig.create(evaConfig, defaultConfig)
-}
+module.exports = mergeConfig(getDefaultConfig(__dirname), config, MetroConfig.create(evaConfig));
+

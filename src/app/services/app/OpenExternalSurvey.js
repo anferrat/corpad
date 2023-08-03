@@ -15,7 +15,7 @@ export class OpenExternalSurvey {
         const path = this.fileSystemRepo.getPathFromUri(url)
         let surveyLoaded = isLoaded === undefined ? (await this.currentSurveyStatusService.execute()).isLoaded : isLoaded
         if (surveyLoaded) {
-            const confirm = await this.warningHandler.execute('Another survey is active. It will be closed and changes will be saved. Would you like to proceed?', 'Proceed', 'Cancel')
+            const confirm = await this.warningHandler.execute('Another survey is active. Opened survey will be closed and changes will be saved. Would you like to proceed?', 'Proceed', 'Cancel')
             if (confirm) {
                 if (callback)
                     callback(SurveyLoadingStatuses.SAVING)

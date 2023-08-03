@@ -104,7 +104,7 @@ const InputField = React.forwardRef((props, ref) => {
         else return null
     }, [props.valid, props.property])
 
-    const styleObject = React.useMemo(() => ({ ...props.style, paddingBottom: 12, borderWidth: props.disabled ? 0 : 1 }), [props.style, props.disabled])
+    const styleObject = React.useMemo(() => ({ ...props.style, paddingBottom: 12, borderWidth: props.disabled ? 0 : 1}), [props.style, props.disabled])
     const value = React.useMemo(() => toString(props.value), [props.value])
     const accessory = React.useMemo(() => <>
         <Unit unit={props.unit} disabled={props.disabled} />

@@ -17,7 +17,6 @@ const DataLoaderSectionList = ({ keyExtractor, sections, ListEmptyComponent, ref
         renderSectionHeader={renderSectionHeader}
         contentContainerStyle={styles.container}
         initialNumToRender={18}
-        removeClippedSubviews={true}
         refreshing={refreshing}
         onRefresh={onRefresh}
         onEndReachedThreshold={1}

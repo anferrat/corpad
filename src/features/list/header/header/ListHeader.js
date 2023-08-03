@@ -1,33 +1,36 @@
 import React from 'react'
-import { StyleSheet, View } from 'react-native'
+import { StyleSheet, View, Animated } from 'react-native'
 import SortingHeaderButton from './SortingHeaderButton'
 import ReadingsHeaderButton from './ReadingsHeaderButton'
 import FilterHeaderButton from './FilterHeaderButton'
 import { basic300 } from '../../../../styles/colors'
 import { useBottomSheetNavigation } from '../../../../hooks/bottom_sheet/useBottomSheetNavigation'
 
+
 const ListHeader = (props) => {
     const { openRectifierReadingMenu, openTestPointFilterMenu, openTestPointReadingMenu, openTestPointSortingMenu } = useBottomSheetNavigation()
-    
-        return (
-                <View style={styles.mainView}>
-                    <View style={styles.sorting}>
-                        <SortingHeaderButton
-                            dataType={props.dataType}
-                            openSheet={openTestPointSortingMenu} />
-                    </View>
-                    <View style={styles.filter}>
-                        <FilterHeaderButton
-                            dataType={props.dataType}
-                            openSheet={openTestPointFilterMenu} />
-                    </View>
-                    <View style={styles.reading}>
-                        <ReadingsHeaderButton
-                            dataType={props.dataType}
-                            openSheet={props.dataType === 'RECTIFIER' ? openRectifierReadingMenu : openTestPointReadingMenu} />
-                    </View>
-                </View>
-        )
+    const { translateY, opacity } = props
+
+    return (
+        <Animated.View
+            style={{ ...styles.mainView, opacity: opacity, transform: [{ translateY: translateY }] }}>
+            <View style={styles.sorting}>
+                <SortingHeaderButton
+                    dataType={props.dataType}
+                    openSheet={openTestPointSortingMenu} />
+            </View>
+            <View style={styles.filter}>
+                <FilterHeaderButton
+                    dataType={props.dataType}
+                    openSheet={openTestPointFilterMenu} />
+            </View>
+            <View style={styles.reading}>
+                <ReadingsHeaderButton
+                    dataType={props.dataType}
+                    openSheet={props.dataType === 'RECTIFIER' ? openRectifierReadingMenu : openTestPointReadingMenu} />
+            </View>
+        </Animated.View>
+    )
 }
 
 export default ListHeader
@@ -37,6 +40,11 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         backgroundColor: '#FFF',
         elevation: 5,
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        right: 0,
+        zIndex: 10,
         borderBottomWidth: 1,
         borderBottomColor: basic300
     },
