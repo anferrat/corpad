@@ -13,7 +13,8 @@ export class SelectFileForImport {
 
     async execute() {
         const { uri, name } = await this.documentPicker.pickCommaSeparetedFile()
-        const path = decodeURI(uri)
+        const path = this.fileSystemRepo.getPathFromUri(uri)
+        console.log(path)
         const [fileData, defaultNames, potentialTypes, pipelines, referenceCells, settings] = await Promise.all(
             [
                 this.fileSystemRepo.readFile(path),

@@ -1,6 +1,7 @@
 import RNFS from 'react-native-fs'
 import { Error, errors } from '../../utils/Error'
 import { FileSystemLocations } from '../../entities/survey/other/properties'
+import { Platform } from 'react-native'
 
 export class FileSystemRepository {
     constructor() {
@@ -191,5 +192,13 @@ export class FileSystemRepository {
         catch (er) {
             throw new Error(errors.FILESYSTEM, `Scan of ${path} failed`, er, 410)
         }
+    }
+
+   getPathFromUri(uri) {
+        //Fort android uri works for react-native-fs as argument for reading files, for ios - path
+        return Platform.select({
+            android: uri,
+            ios: decodeURI(uri)
+        })
     }
 }

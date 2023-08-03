@@ -38,6 +38,7 @@ import { Controller } from "../../utils/Controller"
 import { SurveyFileValidation } from "../../validation/SurveyFileValidation"
 import { SurveyFileContentValidation } from "../../validation/survey_file_content/v1/SurveyFileContentValidation"
 import { FileMimeTypes } from "../../../constants/global"
+import { LoadExternalSurveyFile } from "../../services/survey_file/local/LoadExternalSurveyFile"
 
 
 class SurveyFileController extends Controller {
@@ -63,6 +64,8 @@ class SurveyFileController extends Controller {
         this.loadExternalSurveyService = new LoadSurvey(this.jsonImportService, this.jsonAdvancedImportService, this.readExternalSurveyFileService, surveyFileContentValidation, surveyRepo, settingRepo, this.surveyFileConverterInputService, this.surveyLoadStatusService, warningHandler)
         this.loadSurveyFileService = new LoadSurvey(this.jsonImportService, this.jsonAdvancedImportService, this.readSurveyFileService, surveyFileContentValidation, surveyRepo, settingRepo, this.surveyFileConverterInputService, this.surveyLoadStatusService, warningHandler)
         this.loadCloudSurveyFileService = new LoadSurvey(this.jsonImportService, this.jsonAdvancedImportService, this.readCloudSurveyFileService, surveyFileContentValidation, surveyRepo, settingRepo, this.surveyFileConverterInputService, this.surveyLoadStatusService, warningHandler)
+
+        this.loadExternalSurveyFileService = new LoadExternalSurveyFile(this.loadExternalSurveyService, this.documentPickerService, fileSystemRepo)
 
         this.getCloudSurveyFileLinkService = new GetCloudSurveyFileLink(cloudFileSystemRepo, networkRepo, shareService)
         this.copyCloudSurveyFileService = new CopyCloudSurveyFile(fileSystemRepo, cloudFileSystemRepo, networkRepo)
@@ -112,8 +115,7 @@ class SurveyFileController extends Controller {
     loadExternalFile(params, onError = null, onSuccess = null) {
         return super.controllerHandler(onSuccess, onError, 420, async () => {
             const { onStatusChanged } = params
-            const file = await this.documentPickerService.pickSurveyFile(onStatusChanged)
-            return await this.loadExternalSurveyService.execute(decodeURI(file.uri))
+            return await this.loadExternalSurveyFileService.execute(onStatusChanged)
         })
     }
 
