@@ -1,12 +1,13 @@
 import React from 'react'
-import { Pressable, StyleSheet, View } from 'react-native'
+import { Platform, Pressable, StyleSheet, View } from 'react-native'
 import { Button, Divider, Icon, Text } from '@ui-kitten/components'
 import { success } from '../../../styles/colors'
-import { activity, openInIcon, shareIcon } from '../../../components/Icons'
+import { activity, file, openInIcon, shareIcon } from '../../../components/Icons'
 import useExportModal from './hooks/useExportModal'
 
 export const ExportModal = ({ navigationRef }) => {
     const { hideModal, navigateToExportedFiles, openInHandler, shareHandler, fileName, visible, loading } = useExportModal({ navigationRef })
+    const isAndroid = Platform.OS === 'android'
     return (
         <Pressable
             style={visible ? styles.mainView : styles.hidden}
@@ -26,25 +27,27 @@ export const ExportModal = ({ navigationRef }) => {
                     File {fileName} was created. Select an action below:
                 </Text>
                 <Divider />
-                <View
-                    style={styles.buttons}>
-                    <Button
-                        style={styles.button}
-                        onPress={navigateToExportedFiles}
-                        appearance='ghost'>
-                        View exported files
-                    </Button>
+                {isAndroid ? <>
+                    <View
+                        style={styles.buttons}>
+                        <Button
+                            style={styles.button}
+                            onPress={navigateToExportedFiles}
+                            appearance='ghost'>
+                            View exported files
+                        </Button>
 
-                </View>
-                <Text>or</Text>
+                    </View>
+                    <Text>or</Text>
+                </> : null}
                 <View
                     style={styles.buttons}>
                     <Button
                         style={styles.button}
-                        onPress={openInHandler}
-                        accessoryLeft={openInIcon}
+                        onPress={isAndroid ? openInHandler : navigateToExportedFiles}
+                        accessoryLeft={isAndroid ? openInIcon : file}
                         appearance='ghost'>
-                        Open in...
+                        {isAndroid ? 'Open in...' : 'View file'}
                     </Button>
                     <Button
                         style={styles.button}

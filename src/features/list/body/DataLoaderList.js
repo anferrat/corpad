@@ -30,7 +30,7 @@ const ItemList = ({ itemType, navigateToView }) => {
 
     const translateY = Animated.diffClamp(
         minusScrollY,
-        -HEADER_HEIGHT+1,
+        -HEADER_HEIGHT + 1,
         0,
     );
 
@@ -135,7 +135,8 @@ const ItemList = ({ itemType, navigateToView }) => {
         , [t.settings.displayedReading, navigateToView])
 
     const renderFooter = React.useCallback(() => { //spinner when next page is loading and counter
-        return <FooterLoader loadingMore={!t.settings.endReached && t.idList.length !== 0}
+        return <FooterLoader
+            loadingMore={!t.settings.endReached && t.idList.length !== 0}
             count={t.itemList.length}
             refreshing={t.settings.refreshing} />
     }, [t.settings.endReached, t.idList.length, t.settings.refreshing, t.itemList.length])
@@ -165,8 +166,6 @@ const ItemList = ({ itemType, navigateToView }) => {
                 refreshing={t.settings.refreshing}
                 onRefresh={refreshHandler}
                 onEndReachedThreshold={6}
-                //stickyHeaderHiddenOnScroll={false}
-                //stickyHeaderIndices={indice}
                 onEndReached={offsetHandler}
                 renderItem={renderItem}
                 ListFooterComponent={renderFooter}
@@ -195,6 +194,7 @@ const styles = StyleSheet.create({
         display: 'none'
     },
     container: {
-        flexGrow: 1
+        flexGrow: 1,
+        paddingBottom: 52
     }
 })

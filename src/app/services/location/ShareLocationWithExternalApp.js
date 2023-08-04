@@ -13,9 +13,10 @@ export class ShareLocationWithExtarnalApp {
         const googleSchema = `${this.mapSchema.google}${latitude},${longitude}(${label})`
         const iosSchema = `${this.mapSchema.ios}${label}@${latitude},${longitude}`
         if (Platform.OS === 'android')
-            return 'google'
+            return googleSchema
         else if (provider === 'google') {
             const googleMapsAvailable = await this.linkingService.canOpenUrl(googleSchema)
+            console.log(googleMapsAvailable)
             if (googleMapsAvailable)
                 return googleSchema
         }

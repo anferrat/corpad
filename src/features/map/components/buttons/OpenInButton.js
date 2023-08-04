@@ -1,23 +1,26 @@
 import React from 'react'
-import { View, StyleSheet } from 'react-native'
+import { View, StyleSheet, Platform } from 'react-native'
 import { Icon, Text } from '@ui-kitten/components'
 import { basic300, control, primary } from '../../../../styles/colors'
 import { androidRipple } from '../../../../styles/styles'
 import Pressable from '../../../../components/Pressable'
 
 const OpenInButton = (props) => {
+    const isAndroid = Platform.OS === 'android'
     return <View style={styles.wrapper} >
         <Pressable
             style={styles.pressable}
             android_ripple={androidRipple}
             onPress={props.onPress}
-            hitSlop={5}
             disabled={props.disabled}>
             <Icon
-                name={'share'}
+                name={isAndroid ? 'share' : 'share-ios'}
+                pack={isAndroid ? null : 'cp'}
                 style={styles.icon}
                 fill={primary} />
-            <Text category='s2'>Open in <Text status='primary' category='s2'>Maps</Text></Text>
+            <Text 
+            category='s2'>
+                Open in <Text status='primary' category='s2'>Maps</Text></Text>
         </Pressable>
     </View >
 }
@@ -44,7 +47,8 @@ const styles = StyleSheet.create({
     icon: {
         width: 20,
         height: 20,
-        marginRight: 12
+        marginRight: 12,
+        marginBottom: 3
     },
     primary: {
         borderWidth: 0,

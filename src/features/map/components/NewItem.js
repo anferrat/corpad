@@ -1,12 +1,14 @@
 import React, { useEffect, useRef, useState } from 'react'
 import MapButton from './buttons/MapButton'
 import NewItemView from './animated/NewItemView'
+import { Platform } from 'react-native'
 
 const NewItem = ({ createItemHandler, active, shareNewItemLocation }) => {
     const [loading, setLoading] = useState({
         TEST_POINT: false,
         RECTIFIER: false
     })
+    const isAndroid = Platform.OS === 'android'
 
     const componentMounted = useRef(true)
 
@@ -31,7 +33,8 @@ const NewItem = ({ createItemHandler, active, shareNewItemLocation }) => {
         <NewItemView
             visible={active}>
             <MapButton
-                icon='share'
+                icon={isAndroid ? 'share' : 'share-ios'}
+                pack={isAndroid ? null : 'cp'}
                 onPress={shareNewItemLocation} />
             <MapButton
                 icon={loading.TEST_POINT ? 'spinner' : 'TS-filled'}

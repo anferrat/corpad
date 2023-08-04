@@ -1,6 +1,6 @@
 import React from 'react'
 import { Icon } from '@ui-kitten/components'
-import { ActivityIndicator } from 'react-native'
+import { ActivityIndicator, Platform } from 'react-native'
 
 export const saveIcon = (props) => <Icon name='save' {...props} />
 export const addIcon = (props) => <Icon name='plus-circle-outline' {...props} />
@@ -35,7 +35,10 @@ export const file = (props) => <Icon {...props} name='file-text-outline' />
 export const importIcon = (props) => <Icon {...props} name='download-outline' />
 export const exportedFilesIcon = (props) => <Icon {...props} name='download' />
 export const openInIcon = (props) => <Icon {...props} name='external-link' />
-export const shareIcon = (props) => <Icon {...props} name='share' />
+export const shareIcon = (props) => <Icon {...props} name={Platform.select({
+    ios: 'share-ios', default: 'share'
+})} pack={Platform.select({ ios: 'cp', default: null })} />
+export const shareIosIcon = (props) => <Icon {...props} name='external-link' />
 export const refresh = (props) => <Icon {...props} name='refresh-outline' />
 export const checkmark = (props) => <Icon {...props} name='checkmark-outline' />
 export const calculator = (props) => <Icon name='calculator-filled' pack='cp' {...props} />
