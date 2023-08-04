@@ -1,9 +1,10 @@
 import React from 'react'
 import { BottomNavigation, BottomNavigationTab, Icon } from "@ui-kitten/components"
-import { SafeAreaView } from 'react-native-safe-area-context'
+import { useSafeAreaInsets } from 'react-native-safe-area-context'
 
 const MainMenuBottomTabs = (props) => {
     const { state, navigation, openBasicMenu } = props
+    const insets = useSafeAreaInsets()
 
     const onSelect = (i) => {
         if (i !== 2) {
@@ -34,15 +35,14 @@ const MainMenuBottomTabs = (props) => {
 
 
     return (
-        <SafeAreaView edges={['bottom']}>
-            <BottomNavigation
-                onSelect={onSelect}
-                selectedIndex={state.index === 1 ? 0 : 1}>
-                <BottomNavigationTab title='Device' icon={deviceIcon} />
-                <BottomNavigationTab title='Cloud' icon={cloudIcon} />
-                <BottomNavigationTab title='More' icon={moreIcon} />
-            </BottomNavigation>
-        </SafeAreaView>
+        <BottomNavigation
+            style={{ paddingBottom: insets.bottom }}
+            onSelect={onSelect}
+            selectedIndex={state.index === 1 ? 0 : 1}>
+            <BottomNavigationTab title='Device' icon={deviceIcon} />
+            <BottomNavigationTab title='Cloud' icon={cloudIcon} />
+            <BottomNavigationTab title='More' icon={moreIcon} />
+        </BottomNavigation>
     )
 }
 

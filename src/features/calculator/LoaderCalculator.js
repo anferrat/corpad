@@ -2,7 +2,6 @@ import React, { useState } from 'react'
 import { View, StyleSheet } from 'react-native'
 import { useDispatch } from 'react-redux'
 import { ScrollView } from 'react-native-gesture-handler'
-import MainActionButton from '../../components/ActionButton'
 import ResultView from './ResultView'
 import CalculatorComponent from './CalculatorComponent'
 import { initialCalculatorData, initialValidObject, validateAll, getResult } from './helpers'
@@ -12,6 +11,7 @@ import HistoryModal from './HistoryModal'
 import { setExportModal } from '../../store/actions/settings'
 import { deleteCalculator, deleteCalculatorsByType, saveCalculator, saveCalculatorDataToFile } from '../../app/controllers/CalculatorController'
 import { CalculatorTypeFileNameLabels } from '../../constants/labels'
+import BottomButton from '../../components/BottomButton'
 
 const LoaderCalculator = (props) => {
     const dispatch = useDispatch()
@@ -174,10 +174,11 @@ const LoaderCalculator = (props) => {
             />
         </ScrollView>
         {!data.disabled ?
-            <MainActionButton
+            <BottomButton
+                icon='calculator'
+                pack='cp'
                 title={'Calculate'}
                 onPress={calculateResult}
-                valid={true}
             /> : null}
     </>
 }

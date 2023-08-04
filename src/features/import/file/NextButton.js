@@ -1,15 +1,16 @@
 import React from 'react'
 import { useSelector } from 'react-redux'
-import ActionButton from '../../../components/ActionButton'
+import BottomButton from '../../../components/BottomButton'
 
 
 const NextButton = ({ onPress }) => {
-    const disabled = useSelector(state => state.importData.uri !== null)
+    const disabled = useSelector(state => state.importData.path !== null)
     const itemType = useSelector(state => state.importData.itemType)
-    return <ActionButton
+    return <BottomButton
         disabled={!disabled}
         title='Next'
-        valid={true}
+        icon='arrow-circle-right'
+        iconPosition='right'
         onPress={onPress.bind(this, itemType)} />
 }
 

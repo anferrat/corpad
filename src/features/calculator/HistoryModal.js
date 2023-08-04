@@ -7,14 +7,13 @@ import FlatList from './components/FlatList'
 import HistoryListItem from './components/HistoryListItem'
 import { getFormattedDate } from '../../helpers/functions'
 import EmptyListComponent from '../../components/EmptyListComponent'
-import ModalTopBar from './components/ModalTopBar'
 import LoadingView from '../../components/LoadingView'
-import { trashIcon } from '../../components/Icons'
 import { getCalculatorListByType } from '../../app/controllers/CalculatorController'
 import { CalculatorTypeIconPacks, CalculatorTypeIcons } from '../../constants/icons'
 import { CalculatorTypeTitleLabels } from '../../constants/labels'
 import { SafeAreaProvider } from 'react-native-safe-area-context'
 import BottomButton from '../../components/BottomButton'
+import Header from '../../components/Header'
 
 
 const HistoryModal = (props) => {
@@ -90,9 +89,9 @@ const HistoryModal = (props) => {
                 visible={visible}
                 onRequestClose={hideModal}>
                 <SafeAreaProvider>
-                    <ModalTopBar
+                    <Header
                         onBackPress={hideModal}
-                        title='Saved calculations' />
+                        title='Saved calculations'/>
                     <LoadingView loading={loading}>
                         <FlatList
                             ListEmptyComponent={<EmptyListComponent title={'No calculations found'} description={'After completing a calculation press save button to find it here.'} icon='list-outline' />}
@@ -146,7 +145,8 @@ const styles = StyleSheet.create({
         paddingTop: 6
     },
     button: {
-        marginVertical: 6
+        marginTop: 6,
+        marginBottom: 6
     },
     container: {
         paddingBottom: 72

@@ -1,6 +1,6 @@
 import React from 'react'
 import { BottomNavigation, BottomNavigationTab, Icon } from "@ui-kitten/components"
-import { SafeAreaView } from 'react-native'
+import { useSafeAreaInsets } from 'react-native-safe-area-context'
 
 const getTabIndex = (index) => index < 2 ? index : index + 1
 
@@ -8,7 +8,7 @@ const getStateIndex = (index) => index < 2 ? index : (index === 2 ? null : index
 
 const SurveyBottomTabs = (props) => {
     const { state, navigation, openCreateMenu } = props
-
+    const insets = useSafeAreaInsets()
 
     const selectedTab = getTabIndex(state.index)
 
@@ -43,8 +43,8 @@ const SurveyBottomTabs = (props) => {
     const addIcon = (props) => <Icon {...props} name='plus-square' />
 
     return (
-        <SafeAreaView>
             <BottomNavigation
+                style={{ paddingBottom: insets.bottom }}
                 onSelect={onSelect}
                 selectedIndex={selectedTab}>
                 <BottomNavigationTab title='Test points' icon={testPointIcon} />
@@ -53,7 +53,6 @@ const SurveyBottomTabs = (props) => {
                 <BottomNavigationTab title='Map' icon={mapIcon} />
                 <BottomNavigationTab title='Rectifiers' icon={rectifierIcon} />
             </BottomNavigation>
-        </SafeAreaView>
     )
 }
 

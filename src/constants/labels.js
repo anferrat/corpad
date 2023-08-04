@@ -129,9 +129,9 @@ export const SortingOptionLabels = Object.freeze({
 
 export const StatusLabels = Object.freeze({
     [ItemStatuses.GOOD]: 'Pass',
-    [ItemStatuses.ATTENTION]: 'Attention',
-    [ItemStatuses.BAD]: 'Issue',
-    [ItemStatuses.UNKNOWN]: 'Not checked'
+    [ItemStatuses.ATTENTION]: 'Alert',
+    [ItemStatuses.BAD]: 'Problem',
+    [ItemStatuses.UNKNOWN]: 'Unchecked'
 })
 
 export const PipeScheduleLabels = Object.freeze({
