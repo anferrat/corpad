@@ -3,10 +3,10 @@ import { View, StyleSheet, StatusBar } from 'react-native'
 import IconButton from './IconButton'
 import { Text } from '@ui-kitten/components'
 import { control, primary, basic300 } from '../styles/colors'
-import { SafeAreaView } from 'react-native-safe-area-context'
+import { useSafeAreaInsets } from 'react-native-safe-area-context'
 
 const Header = ({ title, onBackPress }) => {
-
+    const insets = useSafeAreaInsets()
     useEffect(() => {
         //this status bar hack is nuts, just leaving it here
         setTimeout(() => StatusBar.setBarStyle('light-content'), 100)
@@ -16,9 +16,8 @@ const Header = ({ title, onBackPress }) => {
     }, [])
 
     return (
-        <SafeAreaView
-            edges={['top', 'left', 'right']}
-            style={styles.topBar}>
+        <View
+            style={{ ...styles.topBar, minHeight: 60 + insets.top, paddingTop: insets.top }}>
             <View style={styles.leftRow}>
                 <IconButton
                     iconName={'arrow-back-outline'}
@@ -28,7 +27,7 @@ const Header = ({ title, onBackPress }) => {
             </View>
             <View style={styles.rightRow}>
             </View>
-        </SafeAreaView>
+        </View>
     )
 }
 
@@ -36,7 +35,6 @@ export default Header
 
 const styles = StyleSheet.create({
     topBar: {
-        minHeight: 80,
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'space-between',

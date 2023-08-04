@@ -1,6 +1,6 @@
 import React from 'react'
 import { globalStyle } from '../../styles/styles'
-import { SafeAreaView } from 'react-native'
+import { View } from 'react-native'
 import { FilePickerImport } from '../../features/import/file'
 
 export default ImportFilePicker = ({ navigation, route }) => {
@@ -10,11 +10,11 @@ export default ImportFilePicker = ({ navigation, route }) => {
         navigation.navigate('PipelineSurvey',
             { screen: itemType === 'TEST_POINT' ? 'TestPoints' : (itemType === 'RECTIFIER' ? 'Rectifiers' : 'Pipelines') })
     return (
-        <SafeAreaView style={globalStyle.screen}>
+        <View style={globalStyle.screen}>
             <FilePickerImport
                 navigateToList={navigateToList}
                 navigateToImportItem={navigateToImportItem}
                 navigateToSpreadsheet={navigateToSpreadsheet} />
-        </SafeAreaView>
+        </View>
     )
 }

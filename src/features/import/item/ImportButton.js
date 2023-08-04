@@ -1,6 +1,5 @@
 import React, { useContext, useState } from 'react'
-import ActionButton from '../../../components/ActionButton'
-import { diagBack, importIcon } from '../../../components/Icons'
+import BottomButton from '../../../components/BottomButton'
 import ImportModal from './ImportModal'
 import { ImportData } from './ImportDataProvider'
 
@@ -14,22 +13,20 @@ const ImportButton = () => {
     if (isItem)
         return (
             <>
-                <ActionButton
-                    icon={importIcon}
+                <BottomButton
+                    icon='download-outline'
                     title={'Import'}
-                    onPress={showModal}
-                    valid={true} />
+                    onPress={showModal} />
                 <ImportModal
                     visible={visible}
                     hideModal={hideModal} />
             </>
         )
     else return (
-        <ActionButton
-            icon={diagBack}
+        <BottomButton
+            icon='undo'
             title={'Back'}
-            onPress={goBack}
-            valid={true} />
+            onPress={goBack} />
     )
 }
 

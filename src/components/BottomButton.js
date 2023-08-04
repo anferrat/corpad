@@ -3,12 +3,14 @@ import { StyleSheet, ActivityIndicator } from 'react-native'
 import { Button, Icon } from '@ui-kitten/components'
 import { Keyboard } from 'react-native'
 import { basic, basic300, control } from '../styles/colors'
+import { useSafeAreaInsets } from 'react-native-safe-area-context'
 
 
 const BottomButton = (props) => {
     const { onPress, title, icon, pack, iconPosition } = props
     const [disabled, setDisabled] = useState(false)
-
+    const { bottom } = useSafeAreaInsets()
+    const style = disabled || props.disabled ? styles.disabled : styles.active
     // Button at the bottom of the screen can be accidentally pressed when numeric keybord is shown, because there is a gap between buttons and the bottom of the screen (Pixel 4)
     useEffect(() => {
         const removeShow = Keyboard.addListener("keyboardDidShow", disableButton)
@@ -39,7 +41,7 @@ const BottomButton = (props) => {
             disabled={disabled || props.disabled}
             accessoryRight={iconPosition === 'right' ? accessory : null}
             accessoryLeft={iconPosition === 'right' ? null : accessory}
-            style={disabled || props.disabled ? styles.disabled : styles.active}>
+            style={{ ...style, bottom: bottom + 10 }}>
             {title}
         </Button>
     )
@@ -51,7 +53,6 @@ const styles = StyleSheet.create({
     active:
     {
         position: 'absolute',
-        bottom: 10,
         left: '2.5%',
         height: 50,
         width: '95%',

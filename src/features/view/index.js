@@ -1,6 +1,6 @@
 import React, { useContext, useEffect } from 'react'
 import { Animated, StyleSheet } from 'react-native'
-import ActionButton from '../../components/ActionButton'
+import BottomButton from '../../components/BottomButton'
 import { diagBack } from '../../components/Icons'
 import { ScrollRef } from '../../../App'
 import ItemView from './ItemView'
@@ -42,11 +42,10 @@ const ViewItem = ({ itemId, itemType, navigateToEdit, navigateToEditSubitem, nav
                     itemType={itemType}
                     navigateToEditSubitem={navigateToEditSubitem} />
             </AnimatedKeyboardAwareScrollView>
-            <ActionButton
-                icon={diagBack}
+            <BottomButton
+                icon='undo'
                 title='Back'
-                onPress={goBack}
-                valid={true} />
+                onPress={goBack} />
         </>
     )
 }

@@ -19,7 +19,7 @@ const TopBarBase = ({ left, right, title, isPrimary, navigation, noBorder, topIn
 
     return (
         <View
-            style={{ ...styles.topBar, ...topBarStyle, ...borderStyle, paddingTop: topInset }} >
+            style={{ ...styles.topBar, ...topBarStyle, ...borderStyle, paddingTop: topInset, minHeight: 60 + topInset }} >
             <StatusBar
                 barStyle={isPrimary ? 'light-content' : 'dark-content'}
                 translucent={true}
@@ -118,7 +118,6 @@ export default React.memo(TopBarBase)
 
 const styles = StyleSheet.create({
     topBar: {
-        minHeight: 80,
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'space-between',

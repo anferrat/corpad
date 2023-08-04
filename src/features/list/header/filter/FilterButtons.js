@@ -4,10 +4,12 @@ import { useDispatch, useSelector } from 'react-redux'
 import { Button } from '@ui-kitten/components'
 import { filterHandler, resetFilters } from '../../../../store/actions/list'
 import { getListStateByType } from '../../../../helpers/functions'
+import { useSafeAreaInsets } from 'react-native-safe-area-context'
 
 
 const FilterButtons = (props) => {
     const dispatch = useDispatch()
+    const insets = useSafeAreaInsets()
     const displayReset = useSelector(state => getListStateByType(props.dataType, state).settings.filterCounter !== 0)
     const displayApply = useSelector(state => getListStateByType(props.dataType, state).settings.filterView !== 0)
 
@@ -21,10 +23,11 @@ const FilterButtons = (props) => {
         props.closeSheet()
     }
 
-    return <View style={styles.bottomBar}>
+    return <View
+        style={{ ...styles.bottomBar, paddingBottom: insets.bottom + 12 }}>
         <Button style={displayReset ? styles.button : styles.hidden} appearance='outline' onPress={resetFiltersHandler}>Clear filters</Button>
         <View style={displayReset ? styles.hidden : styles.button} />
-        <Button style={displayApply ? styles.button : styles.hidden}  onPress={activateFilters}>Apply</Button>
+        <Button style={displayApply ? styles.button : styles.hidden} onPress={activateFilters}>Apply</Button>
     </View>
 }
 
