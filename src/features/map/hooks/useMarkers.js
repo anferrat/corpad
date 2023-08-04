@@ -9,7 +9,6 @@ import { updateMarker as updateMarkerRequest } from '../../../app/controllers/su
 import { hapticMedium, hapticMap } from '../../../native_libs/haptics'
 import { useIsFocused } from '@react-navigation/native'
 import { createItem } from '../../../app/controllers/survey/items/ItemController'
-import { extMapHandler } from '../helpers/linking'
 import { roundCoord } from '../helpers/functions'
 
 const useMarkers = ({ navigateToEdit, navigateToView, ref }) => {
@@ -201,14 +200,20 @@ const useMarkers = ({ navigateToEdit, navigateToView, ref }) => {
                 latitude: activeMarker.latitude,
                 longitude: activeMarker.longitude,
                 name: activeMarker.name,
-                provider: 'google' //attempt to open in GoogleMaps if possible on iOS
+                //provider: 'google' //attempt to open in GoogleMaps if possible on iOS
             },
                 er => errorHandler(er))
     }, [activeMarker.latitude, activeMarker.longitude, activeMarker.name])
 
     const shareNewItemLocation = useCallback(() => {
         if (newItemMarker.latitude && newItemMarker.longitude)
-            extMapHandler(newItemMarker.latitude, newItemMarker.longitude)
+            shareLocationWithExtarnalApp({
+                latitude: newItemMarker.latitude,
+                longitude: newItemMarker.longitude,
+                name: 'Location'
+                //provider: 'google' //attempt to open in GoogleMaps if possible on iOS
+            },
+                er => errorHandler(er))
     }, [newItemMarker.latitude, newItemMarker.longitude])
 
     const viewActiveMarkerData = useCallback(() => {

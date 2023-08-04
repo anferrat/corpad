@@ -131,7 +131,9 @@ const SurveyFileListItem = ({ name, fileName, timeModified, tpCount, rectifierCo
                         <SurveyFileListItemMenuItem
                             onPress={handleShareSurveyFile}
                             title={`Share file`}
-                            icon={isAndroid ? 'share-outline' : 'external-link-outline'} />
+                            icon={isAndroid ? 'share-outline' : 'share-ios'}
+                            pack={isAndroid ? null : 'cp'}
+                        />
                         {isCloud ?
                             <SurveyFileListItemMenuItem
                                 onPress={handleShareSurveyLink}

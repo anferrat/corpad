@@ -104,7 +104,8 @@ const ExportedFileListItem = ({ deleteFile, removeFileFromList, saveToDownloads,
                                 onPress={handlePreview} /> : null}
                         <FileListItemMenuItem
                             title={'Share'}
-                            icon={'share-outline'}
+                            icon={isAndroid ? 'share-outline' : 'share-ios'}
+                            pack={isAndroid ? null : 'cp'}
                             onPress={handleShareFile} />
                         {isAndroid ? <FileListItemMenuItem
                             title={'Open in...'}
