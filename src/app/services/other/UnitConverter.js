@@ -65,7 +65,7 @@ export class UnitConverter {
         if (outputUnit === CurrentUnits.AMPS) {
             result = result.toFixed(3)
         } else {
-            result = result.toFixed(1)
+            result = result.toFixed(3)
         }
         return parseFloat(result)
     }

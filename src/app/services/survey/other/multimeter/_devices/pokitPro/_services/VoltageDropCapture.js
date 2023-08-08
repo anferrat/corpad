@@ -1,5 +1,6 @@
 import { MultimeterMeasurementTypes } from "../../../../../../../../constants/global"
 import { ByteConverter } from "../_helpers/ByteConverter"
+import { OverRangeChecker } from "../_helpers/OverRangeChecker"
 import { ValueConverter } from "../_helpers/ValueConverter"
 
 export class VoltageDropCapture {
@@ -10,6 +11,7 @@ export class VoltageDropCapture {
         this.bytes = bytes
         this.byteConverter = new ByteConverter()
         this.valueConverter = new ValueConverter(unitConverter)
+        this.rangeChecker = new OverRangeChecker()
     }
 
     startVoltageDropCapture(peripheralId, isAC = false) {
@@ -38,7 +40,12 @@ export class VoltageDropCapture {
                 characteristic === this.characteristics.MULTIMETER.READING &&
                 service === this.services.MULTIMETER) {
                 const reading = this.byteConverter.convertReading(value)
-                callback({ value: this.valueConverter.execute(MultimeterMeasurementTypes.VOLTAGE_DROP, reading.value) })
+                const convertedValue = this.valueConverter.execute(MultimeterMeasurementTypes.VOLTAGE_DROP, reading.value)
+                const overRange = this.rangeChecker(this.bytes.DC_VOLTS, value)
+                callback({
+                    value: convertedValue,
+                    overRange: overRange || this.rangeChecker.executeForConverted(convertedValue)
+                })
             }
         }).remove
     }

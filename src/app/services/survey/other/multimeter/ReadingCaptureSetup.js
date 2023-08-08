@@ -21,6 +21,10 @@ export class ReadingCaptureSetup {
                 return multimeterService.startCouponCurrentCapture(peripheralId)
             case MultimeterMeasurementTypes.CURRENT:
                 return multimeterService.startCurrentCapture(peripheralId)
+            case MultimeterMeasurementTypes.COUPON_CURRENT_AC:
+                return multimeterService.startAcCouponCurrentCapture(peripheralId)
+            case MultimeterMeasurementTypes.POTENTIALS_AC:
+                return multimeterService.startAcPotentialCapture(peripheralId)
             default: throw new Error(errors.GENERAL, 'No such measurement type for multimeter service')
         }
     }

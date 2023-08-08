@@ -14,7 +14,8 @@ const initPotentialFields = [{ potentialId: null, name: null, cycle: null }]
 const initValues = {
     [null]: null, //real time update
     [MultimeterCycles.ON]: 0.000, //on cycle update values recorded herer
-    [MultimeterCycles.OFF]: 0.000 //of cycle here
+    [MultimeterCycles.OFF]: 0.000, //of cycle here
+    overRange: false //trigges overRange display
 }
 
 const initField = {
@@ -48,7 +49,13 @@ const useMultimeterListener = () => {
 
     const modalVisible = useRef(false)
     //ready to capture - checks that minimum conditions are met in order for MM start accuiring data.
-    const readyToCapture = Boolean(visible && paired && connected && id && field.subitemId && (initField.measurementType !== MultimeterMeasurementTypes.POTENTIALS || potentialFields[0].potentialId))
+    const readyToCapture = Boolean(
+        visible &&
+        paired &&
+        connected &&
+        id &&
+        field.subitemId &&
+        ((initField.measurementType !== MultimeterMeasurementTypes.POTENTIALS && initField.measurementType !== MultimeterMeasurementTypes.POTENTIALS_AC) || potentialFields[0].potentialId))
 
     const onOffCaptureAvailable = potentialFields.length === 2
 
@@ -111,11 +118,13 @@ const useMultimeterListener = () => {
         if (readyToCapture)
             readingListener = addReadingListener(
                 //Value callback
-                ({ cycle, value }) => {
+                ({ cycle, value, overRange }) => {
+                    //console.log(overRange)
                     if (!onHold)
                         setValues(state => ({
                             ...state,
-                            [cycle !== undefined ? cycle : null]: value
+                            [cycle !== undefined ? cycle : null]: value,
+                            overRange,
                         }))
                 },
                 //mode switching callback

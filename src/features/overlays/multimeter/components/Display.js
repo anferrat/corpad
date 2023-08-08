@@ -6,21 +6,24 @@ import { MultimeterCycleLabels } from '../../../../constants/labels'
 import SevenSegmentView from '../../../../components/SevenSegmentDisplay'
 
 
-const Display = ({ onOffCaptureACtive, onOffCaptureAvailable, values }) => {
-    if (onOffCaptureACtive && onOffCaptureAvailable)
+const Display = ({ onOffCaptureActive, onOffCaptureAvailable, values }) => {
+    if (onOffCaptureActive && onOffCaptureAvailable)
         return (
             <View style={styles.container}>
                 <CycleDisplayView
                     label={MultimeterCycleLabels[MultimeterCycles.ON]}
                     value={values[MultimeterCycles.ON]}
+                    overRange={values.overRange}
                     icon='On' />
                 <CycleDisplayView
                     label={MultimeterCycleLabels[MultimeterCycles.OFF]}
                     value={values[MultimeterCycles.OFF]}
+                    overRange={values.overRange}
                     icon='Off' />
             </View>
         )
     else return <SevenSegmentView
+        overRange={values.overRange}
         value={values[null]} />
 }
 

@@ -21,17 +21,18 @@ const convertValue = (value) => {
 const width = Math.floor(Dimensions.get('window').width / 14)
 const height = Math.floor(Dimensions.get('window').width / 28)
 
-const SevenSegmentView = ({ value = 0, onColor, size }) => {
+const SevenSegmentView = ({ value = 0, onColor, size, overRange }) => {
+    console.log(overRange)
     const converted = convertValue(value)
     const valueString = converted.toFixed(4).slice(0, 6)
-    const isNegative = ~valueString.indexOf('-')
+    const isNegative = !overRange ? ~valueString.indexOf('-') : false
     const number = valueString.replace('-', '')
-    const pointIndex = getPointIndex(number)
+    const pointIndex = overRange ? 0 : getPointIndex(number)
     const digits = number.replace('.', '')
     const w = size === 'small' ? (width / 2.5) : width
     const h = size === 'small' ? (height / 2.5) : height
 
-    const values = Array.apply(null, new Array(4)).map((_, index) => digits[index] ?? '-')
+    const values = !overRange ? Array.apply(null, new Array(4)).map((_, index) => digits[index] ?? '-') : ['e', 'r', 'r', '_']
     return (
         <View
             style={styles.container}>

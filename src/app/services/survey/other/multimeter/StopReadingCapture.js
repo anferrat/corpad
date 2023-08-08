@@ -19,6 +19,10 @@ export class StopReadingCapture {
                 return multimeterService.stopCurrentCapture(peripheralId)
             case MultimeterMeasurementTypes.COUPON_CURRENT:
                 return multimeterService.stopCurrentCapture(peripheralId)
+            case MultimeterMeasurementTypes.COUPON_CURRENT_AC:
+                return multimeterService.stopAcCouponCurrentCapture(peripheralId)
+            case MultimeterMeasurementTypes.POTENTIALS_AC:
+                return multimeterService.stopAcPotentialCapture(peripheralId)
             default: throw new Error(errors.GENERAL, 'No such measurement type')
         }
     }

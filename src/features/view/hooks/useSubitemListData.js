@@ -5,7 +5,6 @@ import { getSubitemListData } from '../../../app/controllers/survey/subitems/Sub
 import { errorHandler } from '../../../helpers/error_handler'
 import { loadSubitemListDataAction, updateSubitemAction, deleteSubitemAction, updatePotentialsAction, refreshSubitemList } from '../store/actions/subitemList'
 import { EventRegister } from 'react-native-event-listeners'
-import { MultimeterMeasurementTypes } from '../../../constants/global'
 import { useSelector } from 'react-redux'
 
 
@@ -63,12 +62,6 @@ const useSubitemListData = ({ itemId, itemType }) => {
         }
     }, [loading])
 
-    const onMultimeterPress = useCallback((subitemId, potentialId) => {
-        EventRegister.emit('MULTIMETER_START_CAPTURE', { itemId, subitemId, potentialId, measurementType: MultimeterMeasurementTypes.POTENTIALS })
-    }, [itemId])
-
- 
-
     return {
         idMap,
         potentialUnit,
@@ -78,7 +71,6 @@ const useSubitemListData = ({ itemId, itemType }) => {
         loading,
         multimeterPaired,
         dispatch,
-        onMultimeterPress,
     }
 }
 

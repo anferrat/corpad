@@ -5,7 +5,7 @@ import PotentialsView from '../PotentialsView'
 import Divider from '../Divider'
 import InputWithTitle from '../InputWithTitle'
 import { CouponTypeLabels } from '../../../../constants/labels'
-import { MultimeterMeasurementTypes } from '../../../../constants/global'
+import { CouponTypes, MultimeterMeasurementTypes } from '../../../../constants/global'
 
 const areaUnit = {
     main: 'cm',
@@ -30,8 +30,9 @@ const CN = ({ data, validateCouponCurrent, updatePropertyValue, onEdit, subitemI
 
 
     const onMultimeterPressCurrent = React.useCallback(() => {
-        onMultimeterPress(MultimeterMeasurementTypes.COUPON_CURRENT)
-    }, [onMultimeterPress])
+        const isAC = couponType === CouponTypes.AC
+        onMultimeterPress(isAC ? MultimeterMeasurementTypes.COUPON_CURRENT_AC : MultimeterMeasurementTypes.COUPON_CURRENT)
+    }, [onMultimeterPress, couponType])
 
 
     return (
