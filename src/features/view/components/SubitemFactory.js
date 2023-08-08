@@ -35,9 +35,9 @@ const SubitemViewFactory = ({
     navigateToEditSubitem(subitem.id, false, subitem.type)
   }, [navigateToEditSubitem, subitem.id, subitem.type])
 
-  const onMultimeterPressHandler = React.useCallback((potentialId) => {
-    onMultimeterPress(subitem.id, potentialId)
-  }, [subitem.id, onMultimeterPress])
+  const onMultimeterPressHandler = React.useCallback((measurementType, potentialId = null) => {
+    onMultimeterPress(subitem.id, subitem.type, measurementType, potentialId)
+  }, [subitem.id, subitem.type, onMultimeterPress])
 
   switch (subitem.type) {
     case 'PL':
@@ -105,21 +105,26 @@ const SubitemViewFactory = ({
         <SH
           data={subitem}
           idMap={idMap}
+          multimeterPaired={multimeterPaired}
           subitemIndex={subitemIndex}
           onEdit={onEdit}
           updatePropertyValue={updatePropertyValue}
           validateCurrent={validateCurrent}
-          validateVoltageDrop={validateVoltageDrop} />
+          validateVoltageDrop={validateVoltageDrop}
+          onMultimeterPress={onMultimeterPressHandler}
+        />
       )
     case 'BD':
       return (
         <BD
           data={subitem}
           idMap={idMap}
+          multimeterPaired={multimeterPaired}
           subitemIndex={subitemIndex}
           onEdit={onEdit}
           updatePropertyValue={updatePropertyValue}
           validateCurrent={validateCurrent}
+          onMultimeterPress={onMultimeterPressHandler}
         />
       )
     case 'RS':
@@ -140,12 +145,14 @@ const SubitemViewFactory = ({
       return (
         <IK
           data={subitem}
+          multimeterPaired={multimeterPaired}
           idMap={idMap}
           subitemIndex={subitemIndex}
           onEdit={onEdit}
           updatePropertyValue={updatePropertyValue}
           validateCurrent={validateCurrent}
           updateShorted={updateShorted}
+          onMultimeterPress={onMultimeterPressHandler}
         />
       )
     case 'FC':
@@ -180,11 +187,13 @@ const SubitemViewFactory = ({
       return (
         <CT
           data={subitem}
+          multimeterPaired={multimeterPaired}
           subitemIndex={subitemIndex}
           onEdit={onEdit}
           updatePropertyValue={updatePropertyValue}
           validateCurrent={validateCurrent}
           validateVoltage={validateVoltage}
+          onMultimeterPress={onMultimeterPressHandler}
         />
       )
     default:

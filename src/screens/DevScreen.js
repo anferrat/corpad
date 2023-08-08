@@ -7,18 +7,35 @@ import FocusAwareStatusBar from '../components/FocusAwareStatusBar'
 import { generateTestPoints, resetDatabase } from '../app/controllers/DevController'
 import { potentialCaptureSetup, addPotentialListener, pairMultimeter } from '../app/controllers/MultimeterController'
 import { EventRegister } from 'react-native-event-listeners'
+import { _PokitMultimeterService } from '../app/services/survey/other/multimeter/_devices/pokitPro/_PokitMultimeterService'
+import { BluetoothRepository } from '../app/repository/bluetooth/BluetoothRepository'
+import { useSelector } from 'react-redux'
 
 
 export default DevScreen = ({ navigation, route }) => {
+  const id = useSelector(state => state.settings.activeMultimeter.id)
   const pairTestMultimeter = () => {
     pairMultimeter({ id: 'kkk', multimeterType: 'POKIT', name: 'PokitPro' })
   }
 
   const testCapture = () => {
-    EventRegister.emit('MULTIMETER_START_CAPTURE', {itemId: 1, subitemId: 1, potentialId: 1, measurementType: 'POTENTIALS'})
+    EventRegister.emit('MULTIMETER_START_CAPTURE', { itemId: 1, subitemId: 1, potentialId: 1, measurementType: 'POTENTIALS' })
   }
 
-  
+  const onTest = () => {
+
+
+  }
+
+  useEffect(() => {
+    const service = new _PokitMultimeterService(new BluetoothRepository())
+    const listener = service.statusListener(() => { }, { peripheralId: id })
+    return () => {
+      listener()
+    }
+  }, [])
+
+
   return (
     <SafeAreaView style={{ ...globalStyle.screen, paddingTop: StatusBar.currentHeight }}>
       <FocusAwareStatusBar barStyle={'dark-content'} backgroundColor='transparent' translucent={true} />

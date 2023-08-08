@@ -19,6 +19,7 @@ const SidesDisplay = ({ idMap, sideA, sideB, shorted, fromAtoB, value }) => {
             </View>
             <View style={styles.iconView}>
                 <Text
+                    numberOfLines={1}
                     status={shorted ? 'danger' : 'primary'}
                     category='p2'>
                     {value}

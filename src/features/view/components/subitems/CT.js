@@ -3,6 +3,7 @@ import TextLine from '../../../../components/TextLine'
 import Header from '../Header'
 import Divider from '../Divider'
 import InputWithTitle from '../InputWithTitle'
+import { MultimeterMeasurementTypes } from '../../../../constants/global'
 
 const getRatio = (ratioCurrent, ratioVoltage) => {
     if (ratioCurrent && ratioVoltage)
@@ -24,7 +25,7 @@ const targetDisplayHandler = (min, max) => {
         else return min + ' - ' + max
 }
 
-const CT = ({ data, validateVoltage, validateCurrent, updatePropertyValue, onEdit, subitemIndex }) => {
+const CT = ({ data, validateVoltage, validateCurrent, updatePropertyValue, onEdit, subitemIndex, multimeterPaired, onMultimeterPress }) => {
     const { name, type, voltage, current, targetMin, targetMax, valid, ratioCurrent, ratioVoltage } = data
 
     const targetDisplay = React.useMemo(() => targetDisplayHandler(targetMin, targetMax), [targetMin, targetMax])
@@ -38,6 +39,10 @@ const CT = ({ data, validateVoltage, validateCurrent, updatePropertyValue, onEdi
     const onChangeVoltage = React.useCallback((value) => updatePropertyValue(value, subitemIndex, 'voltage'), [subitemIndex, updatePropertyValue])
 
     const onEndEditingVoltage = React.useCallback(() => validateVoltage(subitemIndex, data), [subitemIndex, voltage, validateVoltage])
+
+    const onMultimeterPressHandler = React.useCallback(() => {
+        onMultimeterPress(MultimeterMeasurementTypes.VOLTAGE)
+    }, [onMultimeterPress])
 
     return (
         <>
@@ -56,6 +61,8 @@ const CT = ({ data, validateVoltage, validateCurrent, updatePropertyValue, onEdi
                 property='current'
                 unit={'A'} />
             <InputWithTitle
+                multimeterPaired={multimeterPaired}
+                onMultimeterPress={onMultimeterPressHandler}
                 onChangeText={onChangeVoltage}
                 onEndEditing={onEndEditingVoltage}
                 keyboardType='numeric'
@@ -64,7 +71,7 @@ const CT = ({ data, validateVoltage, validateCurrent, updatePropertyValue, onEdi
                 title='Voltage'
                 property='voltage'
                 unit={'V'} />
-            <TextLine title='Target' value={targetDisplay} unit='A'/>
+            <TextLine title='Target' value={targetDisplay} unit='A' />
             <TextLine title='Shunt ratio' value={shuntDisplay} />
         </>
     )

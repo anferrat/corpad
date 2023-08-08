@@ -14,34 +14,43 @@ import { UnpairMultimeter } from "../services/survey/other/multimeter/UnpairMult
 import { DisconnectMultimeter } from "../services/survey/other/multimeter/DisconnectMultimeter"
 import { MultimeterStatusListener } from "../services/survey/other/multimeter/MultimeterStatusListener"
 import { AppStateListener } from "../services/other/AppStateListenerService"
-import { PotentialCaptureSetup } from "../services/survey/other/multimeter/PotentialCaptureSetup"
-import { PotentialCaptureListener } from "../services/survey/other/multimeter/PotentialCaptureListener"
+import { ReadingCaptureSetup } from "../services/survey/other/multimeter/ReadingCaptureSetup"
+import { ReadingCaptureListener } from "../services/survey/other/multimeter/ReadingCaptureListener"
 import { Permissions } from "../services/other/Permissions"
 import { GeolocationRepository } from "../repository/geolocation/GeolocationRepository"
-import { StopPotentialCapture } from "../services/survey/other/multimeter/StopPotentialCapture"
-import { ButtonPressListener } from "../services/survey/other/multimeter/ButtonPressListener"
+import { StopReadingCapture } from "../services/survey/other/multimeter/StopReadingCapture"
 import { MultimeterFactory } from "../services/survey/other/multimeter/_devices/MultimeterFactory"
+import { GetOnOffPotentialPair } from "../services/survey/other/multimeter/GetOnOffPotentialPair"
+import { PotentialRepository } from "../repository/sqlite/PotentialRepository"
+import { PotentialTypeRepository } from "../repository/sqlite/PotentialTypeRepository"
+import { UnitConverter } from "../services/other/UnitConverter"
 
 class MultimeterController extends Controller {
-    constructor(bluetoothRepo, settingRepo, geolocationRepo, permissions) {
+    constructor(bluetoothRepo, settingRepo, geolocationRepo, potentialRepo, potentialTypeRepo, permissions, unitConverter) {
         super()
-        this.multimeterFactory = new MultimeterFactory(bluetoothRepo)
-        this.potentialCaptureSetupService = new PotentialCaptureSetup(settingRepo, permissions, this.multimeterFactory)
-        this.potentialCaptureListenerService = new PotentialCaptureListener(geolocationRepo, this.multimeterFactory)
+        this.multimeterFactory = new MultimeterFactory(bluetoothRepo, unitConverter)
+
+
         this.multimeterScanService = new MultimeterScan(bluetoothRepo, permissions)
         this.multimeterStopScanService = new MultimeterStopScan(bluetoothRepo, permissions)
         this.multimeterStopScanListenerService = new MultimeterStopScanListener(bluetoothRepo)
         this.multimeterScanListenerService = new MultimeterScanListener(bluetoothRepo)
+
         this.getMultimeterSettingsService = new GetMultimeterSettings(settingRepo)
         this.updateMultimeterSettingService = new UpdateMultimeterSettings(settingRepo)
+
         this.pairMultimeterService = new PairMultimeter(settingRepo, permissions, this.multimeterFactory)
         this.unpairMultimeterService = new UnpairMultimeter(settingRepo, permissions, this.multimeterFactory)
         this.connectMultimeterService = new ConnectMultimeter(settingRepo, permissions, this.multimeterFactory)
         this.disconnectMultimeterService = new DisconnectMultimeter(settingRepo, permissions, this.multimeterFactory)
         this.appStateListenerService = new AppStateListener()
+
         this.multimeterStatusListenerService = new MultimeterStatusListener(bluetoothRepo, settingRepo, this.appStateListenerService)
-        this.stopPotentialCaptureService = new StopPotentialCapture(this.multimeterFactory)
-        this.buttonPressListenerService = new ButtonPressListener(this.multimeterFactory)
+
+        this.getOnOffPotentialService = new GetOnOffPotentialPair(potentialRepo, potentialTypeRepo)
+        this.readingCaptureSetupService = new ReadingCaptureSetup(settingRepo, permissions, this.multimeterFactory, this.getOnOffPotentialService)
+        this.stopReadingCaptureService = new StopReadingCapture(this.multimeterFactory)
+        this.readingCaptureListenerService = new ReadingCaptureListener(geolocationRepo, this.multimeterFactory)
 
         this.validation = new MultimeterValidation()
     }
@@ -117,44 +126,42 @@ class MultimeterController extends Controller {
         })
     }
 
+
+    readingCaptureSetup(params, onError = null, onSuccess = null) {
+        return super.controllerHandler(onSuccess, onError, 654, async () => {
+            const { measurementType, potentialId, subitemId } = params
+            return await this.readingCaptureSetupService.execute({ measurementType, potentialId, subitemId })
+        })
+    }
+
+    stopReadingCapture(params, onError = null, onSuccess = null) {
+        return super.controllerHandler(onSuccess, onError, 654, async () => {
+            const { multimeterType, id, measurementType } = this.validation.stopReadingCapture(params)
+            return await this.stopReadingCaptureService.execute(id, multimeterType, measurementType)
+        })
+    }
+
+    addReadingListener(onValueChange, onModeChange, onButtonPress, data, onError = null, onSuccess = null) {
+        return super.callbackHandler(onSuccess, onError, 100, () => {
+            return this.readingCaptureListenerService.addListener(onValueChange, onModeChange, onButtonPress, data)
+        })
+    }
+
     addMultimeterStatusListener(callback, onError = null, onSuccess = null) {
         return super.callbackHandler(onSuccess, onError, 100, () => {
             return this.multimeterStatusListenerService.execute(callback)
         })
     }
-
-    potentialCaptureSetup(onError = null, onSuccess = null) {
-        return super.controllerHandler(onSuccess, onError, 654, async () => {
-            return await this.potentialCaptureSetupService.execute()
-        })
-    }
-
-    stopPotentialCapture(params, onError = null, onSuccess = null) {
-        return super.controllerHandler(onSuccess, onError, 654, async () => {
-            const { multimeterType, id } = this.validation.stopPotentialCapture(params)
-            return await this.stopPotentialCaptureService.execute(id, multimeterType)
-        })
-    }
-
-    addPotentialListener(callback, data, onError = null, onSuccess = null) {
-        return super.callbackHandler(onSuccess, onError, 100, () => {
-            return this.potentialCaptureListenerService.addListener(callback, data)
-        })
-    }
-
-    addButtonPressListener(callback, data, onError = null, onSuccess = null) {
-        return super.callbackHandler(onSuccess, onError, 100, () => {
-            return this.buttonPressListenerService.addListener(callback, data)
-        })
-    }
-
 }
 
 const multimeterController = new MultimeterController(
     new BluetoothRepository(),
     new SettingRepository(),
     new GeolocationRepository(),
-    new Permissions()
+    new PotentialRepository(),
+    new PotentialTypeRepository(),
+    new Permissions(),
+    new UnitConverter()
 )
 
 export const startMultimeterScan = async (onError, onSuccess) => await multimeterController.scan(onError, onSuccess)
@@ -181,10 +188,8 @@ export const disconnectMultimeter = (onError, onSuccess) => multimeterController
 
 export const addMultimeterStatusListener = (callback, onError, onSuccess) => multimeterController.addMultimeterStatusListener(callback, onError, onSuccess)
 
-export const potentialCaptureSetup = (onError, onSuccess) => multimeterController.potentialCaptureSetup(onError, onSuccess)
+export const readingCaptureSetup = ({ measurementType, potentialId, subitemId }, onError, onSuccess) => multimeterController.readingCaptureSetup({ measurementType, potentialId, subitemId }, onError, onSuccess)
 
-export const addPotentialListener = (callback, { peripheralId, type, onTime, offTime, syncMode, firstCycle }, onError, onSuccess) => multimeterController.addPotentialListener(callback, { peripheralId, type, onTime, offTime, syncMode, firstCycle }, onError, onSuccess)
+export const addReadingListener = (onValueChange, onModeChange, onButtonPress, { peripheralId, type, onTime, offTime, syncMode, firstCycle, measurementType }, onError, onSuccess) => multimeterController.addReadingListener(onValueChange, onModeChange, onButtonPress, { peripheralId, type, onTime, offTime, syncMode, firstCycle, measurementType }, onError, onSuccess)
 
-export const addButtonPressListener = (callback, { peripheralId, type }, onError, onSuccess) => multimeterController.addButtonPressListener(callback, { peripheralId, type }, onError, onSuccess)
-
-export const stopPotentialCapture = ({ id, multimeterType }, onError, onSuccess) => multimeterController.stopPotentialCapture({ id, multimeterType }, onError, onSuccess)
+export const stopReadingCapture = ({ id, multimeterType, measurementType }, onError, onSuccess) => multimeterController.stopReadingCapture({ id, multimeterType, measurementType }, onError, onSuccess)

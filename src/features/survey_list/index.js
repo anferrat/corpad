@@ -6,7 +6,7 @@ import SurveyFileListItem from './components/SurveyFileListItem'
 import SurveyFileListHeader from './components/SurveyFileListHeader'
 
 export const SurveyFileList = ({ navigateToCreateSurvey, isCloud, navigateToSurveyFileList }) => {
-    const { fileList, loading, initialLoad, refreshHandler, loadSurvey, deleteSurvey, removeSurveyFromList, shareSurveyLink, shareSurveyFile, copyToAlternateFolder, copyToDownloads } = useSurveyFiles({ isCloud, navigateToSurveyFileList })
+    const { fileList, loading, initialLoad, isSignedIn, refreshHandler, loadSurvey, deleteSurvey, removeSurveyFromList, shareSurveyLink, shareSurveyFile, copyToAlternateFolder, copyToDownloads } = useSurveyFiles({ isCloud, navigateToSurveyFileList })
 
     const isEmpty = [...fileList[0].data, ...fileList[1].data].length === 0
 
@@ -25,6 +25,7 @@ export const SurveyFileList = ({ navigateToCreateSurvey, isCloud, navigateToSurv
             pipelineCount={pipelineCount}
             passedItems={(tpCount + rectifierCount) === 0 ? 0 : good / (tpCount + rectifierCount)}
             timeModified={timeModified}
+            isSignedIn={isSignedIn}
             loadSurvey={loadSurvey}
             deleteSurvey={deleteSurvey}
             removeSurveyFromList={removeSurveyFromList}
@@ -33,7 +34,7 @@ export const SurveyFileList = ({ navigateToCreateSurvey, isCloud, navigateToSurv
             copyToAlternateFolder={copyToAlternateFolder}
             copyToDownloads={copyToDownloads}
         />
-    }, [])
+    }, [isSignedIn])
 
     const keyExtractor = React.useCallback(item => isCloud ? item.cloudId : item.filePath, [isCloud])
 

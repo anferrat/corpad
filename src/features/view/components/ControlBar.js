@@ -1,7 +1,9 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import ExpandedBar from './ExpandedBar'
 import ControlButton from './ControlButton'
 import { AddReadingModal } from '../../../components/AddReadingModal'
+import { ItemTypes } from '../../../constants/global'
+import { StatusBar } from 'react-native'
 
 const ControlBar = ({ createSubitem, deleteItem, itemType, displayOnMap, displayOnMapVisible, navigateToEdit }) => {
     const [visible, setVisible] = useState(false)
@@ -9,8 +11,10 @@ const ControlBar = ({ createSubitem, deleteItem, itemType, displayOnMap, display
     const hideModal = React.useCallback(() => setVisible(false), [])
 
     const createSubitemHandler = React.useCallback(() => {
-        itemType === 'TEST_POINT' ? setVisible(true) :
-            (itemType === 'RECTIFIER' ? createSubitem('CT') : null)
+        if (itemType === ItemTypes.TEST_POINT)
+            setVisible(true)
+        else if (itemType === ItemTypes.RECTIFIER)
+            createSubitem('CT')
     }, [setVisible, itemType])
 
     return (

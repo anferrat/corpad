@@ -1,11 +1,10 @@
 import React from 'react'
-import { StyleSheet, ScrollView } from 'react-native'
+import { ScrollView } from 'react-native'
 import Header from '../../Header'
 import ListItem from './ListItem'
 import { SubitemTypes } from '../../../constants/global'
 import { SubitemTypeLabels } from '../../../constants/labels'
 import { SubitemTypeIconsFilled } from '../../../constants/icons'
-import { SafeAreaProvider } from 'react-native-safe-area-context'
 
 const SubitemTypeOptions = [
     SubitemTypes.PIPELINE,
@@ -37,21 +36,15 @@ const ModalContent = ({ onSelect, hideModal }) => {
     )), [onSelectHandler])
 
     return (
-        <SafeAreaProvider>
+        <>
             <Header
                 title='Select reading'
                 onBackPress={hideModal} />
             <ScrollView>
                 {renderItem(SubitemTypeOptions)}
             </ScrollView>
-        </SafeAreaProvider>
+        </>
     )
 }
 
-export default React.memo(ModalContent)
-
-const styles = StyleSheet.create({
-    sectionTitle: {
-        padding: 6,
-    },
-})
+export default ModalContent

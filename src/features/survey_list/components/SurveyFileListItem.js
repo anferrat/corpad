@@ -9,7 +9,7 @@ import SurveyFileListItemMenu from './SurveyFileListItemMenu'
 import SurveyFileListItemMenuItem from './SurveyFileListItemMenuItem'
 import SurveyFileListItemIconBar from './SurveyFileListItemIconBar'
 
-const SurveyFileListItem = ({ name, fileName, timeModified, tpCount, rectifierCount, pipelineCount, passedItems, cloudId, path, hash, isCloud, loadSurvey, deleteSurvey, removeSurveyFromList, shareSurveyLink, shareSurveyFile, copyToAlternateFolder, copyToDownloads }) => {
+const SurveyFileListItem = ({ name, fileName, timeModified, tpCount, rectifierCount, pipelineCount, passedItems, cloudId, path, hash, isCloud, isSignedIn, loadSurvey, deleteSurvey, removeSurveyFromList, shareSurveyLink, shareSurveyFile, copyToAlternateFolder, copyToDownloads }) => {
     const scale = useRef(new Animated.Value(1))
     const isAndroid = Platform.OS === 'android'
     const [menuVisible, setMenuVisible] = useState(false)
@@ -124,10 +124,11 @@ const SurveyFileListItem = ({ name, fileName, timeModified, tpCount, rectifierCo
                             onPress={handleCopyToDownloads}
                             title='Save to Downloads'
                             icon='download-outline' /> : null}
-                        <SurveyFileListItemMenuItem
-                            onPress={handleCopyToAlternateFolder}
-                            title={`Copy to ${isCloud ? 'device' : 'cloud'}`}
-                            icon={isCloud ? 'smartphone-outline' : 'cloud-download-outline'} />
+                        {isSignedIn ?
+                            <SurveyFileListItemMenuItem
+                                onPress={handleCopyToAlternateFolder}
+                                title={`Copy to ${isCloud ? 'device' : 'cloud'}`}
+                                icon={isCloud ? 'smartphone-outline' : 'cloud-download-outline'} /> : null}
                         <SurveyFileListItemMenuItem
                             onPress={handleShareSurveyFile}
                             title={`Share file`}

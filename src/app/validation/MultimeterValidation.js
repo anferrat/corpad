@@ -41,11 +41,12 @@ export class MultimeterValidation extends Validation {
             }))
     }
 
-    stopPotentialCapture(obj) {
+    stopReadingCapture(obj) {
         return this.validate(obj,
             object({
                 multimeterType: this.multimeterType,
                 id: string(),
+                measurementType: this.measurementType
             }))
     }
 

@@ -1,6 +1,7 @@
 import React from 'react'
 import InputWithTitle from './InputWithTitle'
 import { PotentialUnitLabels, ReferenceCellCodeLabels } from '../../../constants/labels'
+import { MultimeterMeasurementTypes } from '../../../constants/global'
 
 const PotentialInput = ({ potentialId, name, referenceCellName, referenceCellType, value, valid, validatePotential, updatePotentialValue, unit, displayHint, subitemIndex, potentialIndex, onMultimeterPress, multimeterPaired }) => {
 
@@ -13,7 +14,7 @@ const PotentialInput = ({ potentialId, name, referenceCellName, referenceCellTyp
     }, [subitemIndex, potentialIndex])
 
     const onMultimeterPressHandler = React.useCallback(() => {
-        onMultimeterPress(potentialId)
+        onMultimeterPress(MultimeterMeasurementTypes.POTENTIALS, potentialId)
     }, [potentialId, onMultimeterPress])
 
     const unitComp = React.useMemo(() => ({
