@@ -1,5 +1,5 @@
 import { object, string, number, boolean, array, mixed } from 'yup'
-import { SubitemTypes, PipelineMaterials, PipelineProducts, CoarseFineOptions, PowerSources, TapOptions, ItemStatuses, ItemTypes, TestPointTypes, AnodeMaterials, CalculatorTypes, CouponTypes, DisplayedReadingOptions, IsolationTypes, ItemPropertyUpdateTypes, PermanentPotentialTypes, PipeDiameters, PotentialUnits, ReferenceCellTypes, SortingOptions, SubitemPropertyUpdateTypes, WireColors, WireGauges, MultimeterTypes, MultimeterSyncModes, MultimeterCycles } from '../../constants/global'
+import { SubitemTypes, PipelineMaterials, PipelineProducts, CoarseFineOptions, PowerSources, TapOptions, ItemStatuses, ItemTypes, TestPointTypes, AnodeMaterials, CalculatorTypes, CouponTypes, DisplayedReadingOptions, IsolationTypes, ItemPropertyUpdateTypes, PermanentPotentialTypes, PipeDiameters, PotentialUnits, ReferenceCellTypes, SortingOptions, SubitemPropertyUpdateTypes, WireColors, WireGauges, MultimeterTypes, MultimeterSyncModes, MultimeterCycles, MultimeterMeasurementTypes } from '../../constants/global'
 import { Error, errors } from "./Error"
 
 export class Validation {
@@ -48,6 +48,7 @@ export class Validation {
     multimeterSyncMode = mixed().oneOf(Object.values(MultimeterSyncModes))
     multimeterFirstCycle = mixed().oneOf(Object.values(MultimeterCycles))
     side = array().of(this.id)
+    measurementType = mixed().oneOf(Object.values(MultimeterMeasurementTypes))
     validate(value, schema) {
         try {
             return schema.validateSync(value)

@@ -2,12 +2,12 @@ import { useCallback, useEffect, useRef, useState } from "react"
 import { EventRegister } from "react-native-event-listeners"
 import useModal from "../../../../hooks/useModal"
 import { useSelector } from "react-redux"
-import { getOnOffPotentialPair } from "../../../../app/controllers/survey/subitems/PotentialController"
 import { MultimeterCycles, MultimeterMeasurementTypes, MultimeterSyncModes } from "../../../../constants/global"
 import { errorHandler } from "../../../../helpers/error_handler"
-import { addButtonPressListener, addPotentialListener, potentialCaptureSetup, stopPotentialCapture } from "../../../../app/controllers/MultimeterController"
+import { addReadingListener, readingCaptureSetup, stopReadingCapture } from "../../../../app/controllers/MultimeterController"
 import useOnOffCaptureActive from "./useOnOffCaptureActive"
 import { ToastAndroid } from "react-native"
+import { hapticMedium } from "../../../../native_libs/haptics"
 
 const initPotentialFields = [{ potentialId: null, name: null, cycle: null }]
 
@@ -20,6 +20,7 @@ const initValues = {
 const initField = {
     itemId: null,
     subitemId: null,
+    subitemType: null,
     measurementType: null,
 }
 
@@ -43,7 +44,7 @@ const useMultimeterListener = () => {
 
     const [captureButtonPressed, setCaptureButtonPressed] = useState(false) //state tracker for physical button press, when pressed runs effect to capture data. Dont use onCapture directly to avoid subscribe/unsubscribe on every value change.
 
-    const [setupCompleted, setSetupCompleted] = useState(setupCompleted) //tracks whether MM recieved BLE request to start capturimg data. Not a part of ready to capture, since we only want to send request twice (on modal mount and unmount)
+    const [setupCompleted, setSetupCompleted] = useState(false) //tracks whether MM recieved BLE request to start capturimg data. Not a part of ready to capture, since we only want to send request twice (on modal mount and unmount)
 
     const modalVisible = useRef(false)
     //ready to capture - checks that minimum conditions are met in order for MM start accuiring data.
@@ -61,45 +62,33 @@ const useMultimeterListener = () => {
 
     useEffect(() => {
         //Handles event from external field to capture data. Active when Multimeter is paired.
-        const startListener = EventRegister.addEventListener('MULTIMETER_START_CAPTURE', ({ itemId, subitemId, potentialId, measurementType }) => {
-            showModal()
+        const startListener = EventRegister.addEventListener('MULTIMETER_START_CAPTURE', ({ itemId, subitemId, subitemType, potentialId, measurementType }) => {
             const eventHandler = async () => {
-                if (measurementType === MultimeterMeasurementTypes.POTENTIALS) {
-                    //In case of potential field, we want to get on/off pair (with same ref cell) if available, therefore requesting it from db
-                    const pair = await getOnOffPotentialPair({ subitemId, potentialId })
-                    if (pair.status === 200) {
-                        //submit request to multimeter to initiate data capture. Includes request to connect to MM, and sendind byte data via BLE
-                        const setup = await potentialCaptureSetup()
-                        if (setup.status === 200) {
-                            setSetupCompleted(true) //always set this flag, since we need to send stopCapture message to MM even if modal was closed before setup finished
-                            if (modalVisible.current) {
-                                setField({ itemId, subitemId, measurementType })
-                                setPotentialFields(pair.response)
-                            }
-                        }
-                        else {
-                            hideModal()
-                            if (modalVisible.current)
-                                errorHandler(setup.status)
-                        }
-                    }
-                    else {
-                        hideModal()
-                        if (modalVisible.current)
-                            errorHandler(pair.status)
+                showModal()
+                const { status, response } = await readingCaptureSetup({ measurementType, subitemId, potentialId })
+                if (status === 200) {
+                    setSetupCompleted(measurementType) //always set this flag, since we need to send stopCapture message to MM even if modal was closed before setup finished
+                    if (modalVisible.current) {
+                        setField({ itemId, subitemId, measurementType, subitemType })
+                        if (response.potentialFields)
+                            setPotentialFields(response.potentialFields)
                     }
                 }
                 else {
-                    //other types are not supported yet. Good idea to move this logic to app, to a separate controller that starts capture based on measurementType
+                    hideModal()
+                    if (modalVisible.current)
+                        errorHandler(status)
                 }
             }
-            if (paired)
+
+            if (paired && connected)
                 eventHandler()
+            else errorHandler(802)
         })
         return () => {
             EventRegister.removeEventListener(startListener)
         }
-    }, [paired])
+    }, [paired, connected])
 
     const onModalClose = useCallback(() => {
         //reset to init state on modal close
@@ -118,32 +107,36 @@ const useMultimeterListener = () => {
 
     useEffect(() => {
         //Capture listener. when ready to capture listens for MM values and updates value state
-        let potentialListener
+        let readingListener
         if (readyToCapture)
-            potentialListener = addPotentialListener(({ cycle, value }) => {
-                if (!onHold)
-                    setValues(state => ({
-                        ...state,
-                        [cycle]: value
-                    }))
-            }, { peripheralId: id, type: multimeterType, onTime, offTime, syncMode: syncAvailable, firstCycle })
+            readingListener = addReadingListener(
+                //Value callback
+                ({ cycle, value }) => {
+                    if (!onHold)
+                        setValues(state => ({
+                            ...state,
+                            [cycle !== undefined ? cycle : null]: value
+                        }))
+                },
+                //mode switching callback
+                (measurementTypeSupported) => {
+                    if (!measurementTypeSupported) {
+                        onModalClose()
+                        errorHandler(824)
+                    }
+                },
+                //buttonPress callback
+                (isPressed) => {
+                    setCaptureButtonPressed(isPressed)
+                },
+                //data to pass to listener
+                { peripheralId: id, type: multimeterType, onTime, offTime, syncMode: syncAvailable, firstCycle, measurementType: field.measurementType })
         return () => {
-            if (potentialListener)
-                potentialListener.response()
+            if (readingListener && readingListener.response)
+                readingListener.response()
         }
     }, [readyToCapture, id, multimeterType, onTime, offTime, syncAvailable, firstCycle, onHold])
 
-    useEffect(() => {
-        //captures physical Button press and sets flag captureButtonPress to true
-        const buttonPressListener = addButtonPressListener(() => {
-            if (visible)
-                setCaptureButtonPressed(true)
-        }, { peripheralId: id, type: multimeterType })
-        return () => {
-            if (buttonPressListener.response)
-                buttonPressListener.response()
-        }
-    }, [visible, id, multimeterType])
 
     useEffect(() => {
         if (captureButtonPressed) {
@@ -156,7 +149,7 @@ const useMultimeterListener = () => {
             setSetupCompleted(false)
         return () => {
             if (setupCompleted) //send requset to MM when user leaving the modal
-                stopPotentialCapture({ id, multimeterType })
+                stopReadingCapture({ id, multimeterType, measurementType: setupCompleted })
         }
     }, [setupCompleted])
 
@@ -174,10 +167,13 @@ const useMultimeterListener = () => {
     const onCapture = useCallback(() => {
         if (setupCompleted && field.itemId && field.subitemId && field.measurementType) {
             ToastAndroid.showWithGravity('Captured', ToastAndroid.SHORT, ToastAndroid.CENTER)
+            hapticMedium()
             EventRegister.emit('MULTIMETER_CAPTURED_VALUES', {
                 measurementType: field.measurementType,
                 itemId: field.itemId,
                 subitemId: field.subitemId,
+                subitemType: field.subitemType,
+                value: values[null],
                 potentials: onOffCaptureActive && onOffCaptureAvailable ?
                     potentialFields.map(({ potentialId, cycle }) => ({
                         potentialId,

@@ -60,6 +60,9 @@ export class SurveyFileContentValidation extends Validation {
         return Object.values(SurveyFileDataFields)
             .every(key => data[key]
                 .every(row => {
+                    /* if (!this.surveyFileSchemas[key].isValidSync(row))
+                         console.log('table ', key, `values: ${row}`)
+                     */
                     return this.surveyFileSchemas[key]
                         .isValidSync(row)
                 }))

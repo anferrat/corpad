@@ -438,6 +438,7 @@ export const MultimeterCharacteristics = Object.freeze({
         },
         STATUS: {
             BUTTON_PRESS: '8fe5b5a9-b5b4-4a7b-8ff2-87224b970f89',
+            STATUS: '3dba36e1-6120-4706-8dfd-ed9c16e569b6'
         }
     }
 })
@@ -462,5 +463,15 @@ export const TimeUnits = Object.freeze({
 })
 
 export const MultimeterMeasurementTypes = Object.freeze({
-    POTENTIALS: "POTENTIALS"
+    POTENTIALS: "POTENTIALS",
+    VOLTAGE: 'VOLTAGE',
+    VOLTAGE_DROP: 'VOLTAGE_DROP',
+    COUPON_CURRENT: 'COUPON_CURRENT',
+    CURRENT: 'CURRENT'
+})
+
+export const MultimeterModes = Object.freeze({
+        VOLTS: 0,
+        SMALL_CURRENT: 1,
+        CURRENT: 2
 })

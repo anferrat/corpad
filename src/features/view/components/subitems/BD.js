@@ -3,9 +3,10 @@ import Header from '../Header'
 import Divider from '../Divider'
 import InputWithTitle from '../InputWithTitle'
 import SidesDisplay from '../SidesDisplay'
+import { MultimeterMeasurementTypes } from '../../../../constants/global'
 
 
-const BD = ({ data, updatePropertyValue, validateCurrent, subitemIndex, idMap, onEdit }) => {
+const BD = ({ data, updatePropertyValue, validateCurrent, subitemIndex, idMap, onEdit, onMultimeterPress, multimeterPaired }) => {
     const { type, name, fromAtoB, current, valid, sideA, sideB } = data
 
     const currentValue = valid.current && current !== null ? current + ' A' : null
@@ -18,13 +19,16 @@ const BD = ({ data, updatePropertyValue, validateCurrent, subitemIndex, idMap, o
         validateCurrent(subitemIndex, data)
     }, [subitemIndex, current, validateCurrent])
 
+    const onMultimeterPressHandler = React.useCallback(() => {
+        onMultimeterPress(MultimeterMeasurementTypes.CURRENT)
+    }, [onMultimeterPress])
+
     return (
         <>
             <Header
                 title={name}
                 icon={type}
-                onEdit={onEdit}
-            />
+                onEdit={onEdit} />
             <Divider
                 visible={true} />
             <SidesDisplay
@@ -36,6 +40,8 @@ const BD = ({ data, updatePropertyValue, validateCurrent, subitemIndex, idMap, o
             <Divider
                 visible={true} />
             <InputWithTitle
+                multimeterPaired={multimeterPaired}
+                onMultimeterPress={onMultimeterPressHandler}
                 keyboardType='numeric'
                 value={current}
                 valid={valid.current}

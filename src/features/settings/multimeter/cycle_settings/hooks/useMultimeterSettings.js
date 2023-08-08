@@ -6,6 +6,7 @@ import { standardCycleTimes } from '../helpers/standardCycleTimes'
 import { useDispatch } from 'react-redux'
 import { useNavigation } from '@react-navigation/native'
 import { setMultimeterSettings } from '../../../../../store/actions/settings'
+import { hapticKeyboardPress, hapticMedium } from '../../../../../native_libs/haptics'
 
 const useMultimeterSettings = () => {
     const [onTime, setOnTime] = useState({ value: null, valid: true })
@@ -67,6 +68,7 @@ const useMultimeterSettings = () => {
     const setStandardCycleTime = useCallback((on, off) => {
         setOnTime({ valid: true, value: on })
         setOffTime({ valid: true, value: off })
+        hapticKeyboardPress()
     }, [])
 
     const onFirstCycleChange = useCallback((value) => {
@@ -83,6 +85,7 @@ const useMultimeterSettings = () => {
             if (status === 200) {
                 dispatch(setMultimeterSettings(syncMode, onTime.value, offTime.value, delay.value, firstCycle))
                 navigation.goBack()
+                hapticMedium()
             }
             else errorHandler(status)
         }

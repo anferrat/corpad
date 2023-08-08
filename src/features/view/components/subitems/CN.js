@@ -5,6 +5,7 @@ import PotentialsView from '../PotentialsView'
 import Divider from '../Divider'
 import InputWithTitle from '../InputWithTitle'
 import { CouponTypeLabels } from '../../../../constants/labels'
+import { MultimeterMeasurementTypes } from '../../../../constants/global'
 
 const areaUnit = {
     main: 'cm',
@@ -26,6 +27,12 @@ const CN = ({ data, validateCouponCurrent, updatePropertyValue, onEdit, subitemI
     const onEndEditingCurrent = React.useCallback(() => validateCouponCurrent(subitemIndex, data), [subitemIndex, current, area])
 
     const pipeSubitem = idMap[pipelineCardId] ?? {}
+
+
+    const onMultimeterPressCurrent = React.useCallback(() => {
+        onMultimeterPress(MultimeterMeasurementTypes.COUPON_CURRENT)
+    }, [onMultimeterPress])
+
 
     return (
         <>
@@ -63,6 +70,8 @@ const CN = ({ data, validateCouponCurrent, updatePropertyValue, onEdit, subitemI
                 value={density}
                 unit={densityUnit} />
             <InputWithTitle
+                multimeterPaired={multimeterPaired}
+                onMultimeterPress={onMultimeterPressCurrent}
                 onEndEditing={onEndEditingCurrent}
                 onChangeText={onChangeCurrent}
                 keyboardType='numeric'

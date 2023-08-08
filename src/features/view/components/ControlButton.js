@@ -1,7 +1,7 @@
 import React from 'react'
 import { Text, Icon } from '@ui-kitten/components'
 import { Pressable as PressableDefault, View, StyleSheet, Platform } from 'react-native'
-import { basic, basic200, danger, primary, warning, success, basic300, basic400 } from '../../../styles/colors'
+import { basic, danger, primary, warning, success, basic400 } from '../../../styles/colors'
 import Pressable from '../../../components/Pressable'
 
 const ripple = { color: basic }
@@ -59,6 +59,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         height: 45,
         width: 45,
+        backgroundColor: '#fff'
     },
     icon: {
         width: 30,

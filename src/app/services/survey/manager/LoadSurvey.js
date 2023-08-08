@@ -59,23 +59,23 @@ export class LoadSurvey {
             }
             catch (er) {
                 //5. If fast import rejected, passing file down to advanced import
-                return await this._hardImport({ file, hash, cloudId, isCloud, isNew, fileName })
+                return await this._hardImport({ file, hash, cloudId, isCloud, isNew, fileName }, true)
             }
         }
         //5. If file corrupted, passing it down to advanced import, if invalid throwing Error
         else if (!valid)
             throw new Error(errors.GENERAL, 'This file is not supported', 'Validation failed', 411)
         else
-            return await this._hardImport({ file, hash, cloudId, isCloud, isNew, fileName })
+            return await this._hardImport({ file, hash, cloudId, isCloud, isNew, fileName }, false)
     }
 
 
-    async _hardImport({ file, hash, cloudId, isCloud, isNew, fileName }) {
+    async _hardImport({ file, hash, cloudId, isCloud, isNew, fileName }, confirmed = false) {
         //1. Get confirmation on file recovery (Some data will be filtered out after recovery)
-        const confirm = await this.warningHandler.execute(
+        const confirm = !confirmed ? await this.warningHandler.execute(
             'Survey file is corrupted. Opening this file may erase some of its content. If you encountered lost data after opening, use "Exit without saving" feature in Settings to avoid original file to be ovewritten. Contact support for help with recovering data.',
             'Proceed',
-            'Cancel')
+            'Cancel') : confirmed
         if (confirm) {
             try {
                 //2. Recover file, clear unwanted data

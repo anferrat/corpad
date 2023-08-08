@@ -3,12 +3,9 @@ import { useRef, useReducer, useEffect, useCallback } from 'react'
 import { reducer, initialState } from '../store/reducers/subitemList'
 import { getSubitemListData } from '../../../app/controllers/survey/subitems/SubitemController'
 import { errorHandler } from '../../../helpers/error_handler'
-import { loadSubitemListDataAction, updateSubitemAction, deleteSubitemAction, updatePotentialsAction, refreshSubitemList, updatePotentialById } from '../store/actions/subitemList'
+import { loadSubitemListDataAction, updateSubitemAction, deleteSubitemAction, updatePotentialsAction, refreshSubitemList } from '../store/actions/subitemList'
 import { EventRegister } from 'react-native-event-listeners'
-import { PotentialUnits, MultimeterMeasurementTypes } from '../../../constants/global'
-import { convertVolts } from '../../../app/controllers/survey/other/ConverterController'
-import fieldValidation from '../../../helpers/validation'
-import { updatePotential } from '../../../app/controllers/survey/subitems/PotentialController'
+import { MultimeterMeasurementTypes } from '../../../constants/global'
 import { useSelector } from 'react-redux'
 
 
@@ -29,7 +26,7 @@ const useSubitemListData = ({ itemId, itemType }) => {
         componentMounted.current = true
 
         const loadData = async () => {
-            const { response, status, errorMessage } = await getSubitemListData({ itemId, itemType }, er => errorHandler(er, navigation.goBack))
+            const { response, status } = await getSubitemListData({ itemId, itemType }, er => errorHandler(er, navigation.goBack))
             if (status === 200 && componentMounted.current)
                 dispatch(loadSubitemListDataAction(response.subitems, response.pipelineList, response.potentialUnit, response.referenceCells))
         }
@@ -70,28 +67,7 @@ const useSubitemListData = ({ itemId, itemType }) => {
         EventRegister.emit('MULTIMETER_START_CAPTURE', { itemId, subitemId, potentialId, measurementType: MultimeterMeasurementTypes.POTENTIALS })
     }, [itemId])
 
-    useEffect(() => {
-        const onMultimeterDataUpdate = EventRegister.addEventListener('MULTIMETER_CAPTURED_VALUES',
-            ({ measurementType, itemId, subitemId, potentials }) => {
-                if (measurementType === MultimeterMeasurementTypes.POTENTIALS && itemId === itemId) {
-                    potentials.forEach(({ value, potentialId }) => {
-                        const validation = fieldValidation(value, 'potential')
-                        const converted = convertVolts({ value: validation.value, inputUnit: PotentialUnits.VOLTS, outputUnit: potentialUnit }).response
-                        if (validation.valid) {
-                            updatePotential({ id: potentialId, value: validation.value, unit: PotentialUnits.VOLTS },
-                                er => errorHandler(er), //onError
-                                result => EventRegister.emit('POTENTIAL_UPDATED', result)) //onSuccess emit event for item update
-                            dispatch(updatePotentialById(subitemId, potentialId, converted, validation.valid))
-                        }
-                    })
-
-                }
-            })
-        return () => {
-            EventRegister.removeEventListener(onMultimeterDataUpdate)
-        }
-    }, [dispatch, potentialUnit])
-
+ 
 
     return {
         idMap,

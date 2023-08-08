@@ -1,7 +1,7 @@
 import { useCallback, useState, useRef, useEffect } from 'react'
 import { copyCloudSurveyFileToDevice, copySurveyFileToCloud, copySurveyFileToDownloads, deleteSurveyFile, getCloudSurveyFileLink, getSurveyFileList, loadSurveyFile, shareFile } from '../../../app/controllers/survey/SurveyFileController'
 import { errorHandler, warningHandler } from '../../../helpers/error_handler'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { setSurveySettings, updateLoader, updateSession } from '../../../store/actions/settings'
 import { EventRegister } from 'react-native-event-listeners'
 import { ToastAndroid } from 'react-native'
@@ -9,6 +9,7 @@ import { FileMimeTypes } from '../../../constants/global'
 
 
 const useSurveyFiles = ({ isCloud, navigateToSurveyFileList }) => {
+    const isSignedIn = useSelector(state => state.settings.session.isSigned)
     const [fileList, setFileList] = useState([
         {
             title: 'Today',
@@ -125,7 +126,7 @@ const useSurveyFiles = ({ isCloud, navigateToSurveyFileList }) => {
     const copyToAlternateFolder = useCallback(async ({ path, cloudId, fileName }) => {
         //copies from device to cloud and cloud to device
         dispatch(updateLoader(true, isCloud ? 'Copying to device' : 'Copying to gdrive', fileName))
-        const { status, errorMessage } =  isCloud ? await copyCloudSurveyFileToDevice({ cloudId }) : await copySurveyFileToCloud({ path })
+        const { status, errorMessage } = isCloud ? await copyCloudSurveyFileToDevice({ cloudId }) : await copySurveyFileToCloud({ path })
         if (status !== 200)
             fileListErrorHandler(status)
         else {
@@ -149,6 +150,7 @@ const useSurveyFiles = ({ isCloud, navigateToSurveyFileList }) => {
         fileList,
         loading,
         initialLoad,
+        isSignedIn,
         refreshHandler,
         loadSurvey,
         deleteSurvey,

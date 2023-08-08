@@ -27,6 +27,5 @@ export const FilePickerImport = ({ navigateToSpreadsheet, navigateToImportItem, 
 const styles = StyleSheet.create({
     scrollView: {
         paddingBottom: 72,
-        flex: 1
     }
 })

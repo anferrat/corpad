@@ -5,12 +5,13 @@ import SubitemViewFactory from './components/SubitemFactory'
 import { globalStyle } from '../../styles/styles'
 import LoadingView from '../../components/LoadingView'
 import useSubitemListActions from './hooks/useSubitemListActions'
+import useMultimeterDataListener from './hooks/useMultimeterDataListener'
 
 
 const SubitemListView = ({ itemId, itemType, navigateToEditSubitem }) => {
-    const { potentialUnit, potentialHint, subitems, pipelineList, loading, multimeterPaired, idMap, dispatch, onMultimeterPress } = useSubitemListData({ itemId, itemType })
+    const { potentialUnit, potentialHint, subitems, pipelineList, loading, multimeterPaired, idMap, dispatch } = useSubitemListData({ itemId, itemType })
     const { validatePotential, updatePotentialValue, updatePropertyValue, validateCouponCurrent, validateVoltageDrop, validateCurrent, updateShorted, validateVoltage } = useSubitemListActions(dispatch)
-
+    const { onMultimeterPress } = useMultimeterDataListener({ itemId, dispatch, potentialUnit })
     return (
         <LoadingView
             loading={loading}

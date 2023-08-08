@@ -4,6 +4,7 @@ import { startMultimeterScan, stopMultimeterScan, multimeterScanListener, multim
 import { setActiveMultimeter, setActiveMultimeterStatus } from '../../../../../store/actions/settings'
 import { errorHandler } from '../../../../../helpers/error_handler'
 import useModal from '../../../../../hooks/useModal'
+import { hapticMedium } from '../../../../../native_libs/haptics'
 
 const useActiveMultimeter = () => {
     const dispatch = useDispatch()
@@ -71,6 +72,7 @@ const useActiveMultimeter = () => {
             const { status } = await pairMultimeter({ id, multimeterType, name })
             if (status === 200) {
                 dispatch(setActiveMultimeter(true, id, name, multimeterType))
+                hapticMedium()
                 if (componentMounted.current)
                     setScannedDevices(state => state.filter((device => device.id !== id)))
             }
@@ -84,8 +86,10 @@ const useActiveMultimeter = () => {
 
     const unpairDevice = useCallback(async () => {
         const { status } = await unpairMultimeter()
-        if (status === 200)
+        if (status === 200) {
             dispatch(setActiveMultimeter(false, null, null, null, false))
+            hapticMedium()
+        }
         else errorHandler(status)
     }, [])
 

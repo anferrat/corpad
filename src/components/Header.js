@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import { View, StyleSheet, StatusBar } from 'react-native'
 import IconButton from './IconButton'
 import { Text } from '@ui-kitten/components'
@@ -7,27 +7,28 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context'
 
 const Header = ({ title, onBackPress }) => {
     const insets = useSafeAreaInsets()
-    useEffect(() => {
-        //this status bar hack is nuts, just leaving it here
-        setTimeout(() => StatusBar.setBarStyle('light-content'), 100)
-        return () => {
-            StatusBar.setBarStyle('dark-content')
-        }
-    }, [])
+
+    //You may ask wtf? try do it any other way, and then lets talk
+    StatusBar.setBarStyle('light-content')
 
     return (
-        <View
-            style={{ ...styles.topBar, minHeight: 60 + insets.top, paddingTop: insets.top }}>
-            <View style={styles.leftRow}>
-                <IconButton
-                    iconName={'arrow-back-outline'}
-                    onPress={onBackPress}
-                    color={control} />
-                <Text category='h5' ellipsizeMode='tail' numberOfLines={1} style={styles.title} status={'control'}>{title}</Text>
+        <>
+            {// Do I absolutely need this StatusBar here as well ? the answer is yes
+            }
+            <StatusBar barStyle='light-content' />
+            <View
+                style={{ ...styles.topBar, minHeight: 60 + insets.top, paddingTop: insets.top }}>
+                <View style={styles.leftRow}>
+                    <IconButton
+                        iconName={'arrow-back-outline'}
+                        onPress={onBackPress}
+                        color={control} />
+                    <Text category='h5' ellipsizeMode='tail' numberOfLines={1} style={styles.title} status={'control'}>{title}</Text>
+                </View>
+                <View style={styles.rightRow}>
+                </View>
             </View>
-            <View style={styles.rightRow}>
-            </View>
-        </View>
+        </>
     )
 }
 

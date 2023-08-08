@@ -1,3 +1,5 @@
+import { Error, errors } from "../../../../utils/Error"
+
 export class GetMultimeterSettings {
     constructor(settingRepo) {
         this.settingRepo = settingRepo
@@ -5,6 +7,8 @@ export class GetMultimeterSettings {
 
     async execute() {
         const { multimeter } = await this.settingRepo.get()
-        return multimeter
+        if (multimeter)
+            return multimeter
+        else throw new Error(errors.GENERAL, 'Multimeter settings are not initialized')
     }
 }
