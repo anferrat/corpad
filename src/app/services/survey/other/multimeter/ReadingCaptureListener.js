@@ -34,6 +34,10 @@ export class ReadingCaptureListener {
                 return multimeterService.voltageListener(callback, { peripheralId })
             case MultimeterMeasurementTypes.VOLTAGE_DROP:
                 return multimeterService.voltageDropListener(callback, { peripheralId })
+            case MultimeterMeasurementTypes.COUPON_CURRENT_AC:
+                return multimeterService.acCouponCurrentListener(callback, { peripheralId })
+            case MultimeterMeasurementTypes.POTENTIALS_AC:
+                return multimeterService.acPotentialListener(callback, { peripheralId })
             default:
                 throw new Error(errors.GENERAL, 'Measurement type is not supported', 'No such measurement type')
         }

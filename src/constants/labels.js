@@ -394,8 +394,10 @@ export const MeasurementTypeLabels = Object.freeze({
     [MultimeterMeasurementTypes.POTENTIALS]: 'DC Volts',
     [MultimeterMeasurementTypes.VOLTAGE]: 'DC Volts',
     [MultimeterMeasurementTypes.CURRENT]: 'DC Amps',
-    [MultimeterMeasurementTypes.COUPON_CURRENT]: 'DC Microamps',
+    [MultimeterMeasurementTypes.COUPON_CURRENT]: 'DC Miliamps',
     [MultimeterMeasurementTypes.VOLTAGE_DROP]: 'DC Milivolts',
+    [MultimeterMeasurementTypes.COUPON_CURRENT_AC]: 'AC Miliamps',
+    [MultimeterMeasurementTypes.POTENTIALS_AC]: 'AC Volts'
 })
 
 export const MultimeterCycleLabels = Object.freeze({

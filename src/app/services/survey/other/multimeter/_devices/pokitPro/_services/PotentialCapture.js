@@ -1,6 +1,7 @@
 import { ByteConverter } from "../_helpers/ByteConverter"
 import { MultimeterCycles, MultimeterMeasurementTypes } from "../../../../../../../../constants/global"
 import { ValueConverter } from "../_helpers/ValueConverter"
+import { OverRangeChecker } from "../_helpers/OverRangeChecker"
 
 export class PotentialCapture {
     constructor(bluetoothRepo, services, characteristics, bytes, cyclicalCaptureProcessor, highLowCaptureProcessor, gpsCaptureProcessor, unitConverter) {
@@ -10,6 +11,7 @@ export class PotentialCapture {
         this.bytes = bytes
         this.byteConverter = new ByteConverter()
         this.valueConverter = new ValueConverter(unitConverter)
+        this.rangeChecker = new OverRangeChecker()
         this.cyclicalCapture = cyclicalCaptureProcessor
         this.highLowCapture = highLowCaptureProcessor
         this.gpsCapture = gpsCaptureProcessor
@@ -41,7 +43,13 @@ export class PotentialCapture {
                 characteristic === this.characteristics.MULTIMETER.READING &&
                 service === this.services.MULTIMETER) {
                 const reading = this.byteConverter.convertReading(value)
-                callback({ cycle: null, value: this.valueConverter.execute(MultimeterMeasurementTypes.POTENTIALS, reading.value) })
+                const convertedValue = this.valueConverter.execute(MultimeterMeasurementTypes.POTENTIALS, reading.value)
+                const overRange = this.rangeChecker.executeForRaw(this.bytes.DC_VOLTAGE, value)
+                callback({
+                    overRange: overRange || this.rangeChecker.executeForConverted(convertedValue),
+                    cycle: null,
+                    value: convertedValue
+                })
             }
         }).remove
     }
@@ -49,10 +57,10 @@ export class PotentialCapture {
     syncedPotentialListener(callback, { peripheralId, onTime, offTime, firstCycle, getTimeAdjustment }) {
         let values = []
         let timestamps = []
-        const removeListener = this.realTimePotentialListener(({ value }) => {
+        const removeListener = this.realTimePotentialListener(({ value, overRange }) => {
             timestamps.push(Date.now())
             values.push(value)
-            callback(null, value)
+            callback({ cycle: null, value, overRange })
         }, { peripheralId })
 
         const timer = setInterval(() => {
@@ -71,9 +79,9 @@ export class PotentialCapture {
 
     highLowPotentialListener(callback, { peripheralId, onTime, offTime }) {
         let values = []
-        const removeListener = this.realTimePotentialListener(({ value }) => {
+        const removeListener = this.realTimePotentialListener(({ value, overRange }) => {
             values.push(value)
-            callback({ cycle: null, value: value })
+            callback({ cycle: null, value: value, overRange })
         }, { peripheralId })
 
         const timer = setInterval(() => {
@@ -90,9 +98,9 @@ export class PotentialCapture {
 
     cyclicalPotentialListener(callback, { peripheralId, onTime, offTime }) {
         let values = []
-        const removeListener = this.realTimePotentialListener(({ value }) => {
+        const removeListener = this.realTimePotentialListener(({ value, overRange }) => {
             values.push(value)
-            callback({ cycle: null, value })
+            callback({ cycle: null, value, overRange })
         }, { peripheralId })
 
         const timer = setInterval(() => {

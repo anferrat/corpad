@@ -10,7 +10,7 @@ const DisplayView = ({ onPlayHandler, onHoldHandler, values, onHold, onOffCaptur
     return (
         <View style={styles.container}>
             <Display
-                onOffCaptureACtive={onOffCaptureActive}
+                onOffCaptureActive={onOffCaptureActive}
                 onOffCaptureAvailable={onOffCaptureAvailable}
                 values={values} />
             <View style={styles.controls}>

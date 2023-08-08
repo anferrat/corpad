@@ -1,6 +1,7 @@
 
 import { MultimeterMeasurementTypes } from "../../../../../../../../constants/global"
 import { ByteConverter } from "../_helpers/ByteConverter"
+import { OverRangeChecker } from "../_helpers/OverRangeChecker"
 import { ValueConverter } from "../_helpers/ValueConverter"
 
 export class CurrentCapture {
@@ -11,6 +12,7 @@ export class CurrentCapture {
         this.bytes = bytes
         this.byteConverter = new ByteConverter()
         this.valueConverter = new ValueConverter(unitConverter)
+        this.rangeChecker = new OverRangeChecker()
     }
 
     startCurrentCapture(peripheralId) {
@@ -38,7 +40,12 @@ export class CurrentCapture {
                 characteristic === this.characteristics.MULTIMETER.READING &&
                 service === this.services.MULTIMETER) {
                 const reading = this.byteConverter.convertReading(value)
-                callback({ value: this.valueConverter.execute(MultimeterMeasurementTypes.CURRENT, reading.value) })
+                const overRange = this.rangeChecker.executeForRaw(this.bytes.DC_CURRENT)
+                const convertedValue = this.valueConverter.execute(MultimeterMeasurementTypes.CURRENT, reading.value)
+                callback({
+                    value: convertedValue,
+                    overRange: overRange || this.rangeChecker.executeForConverted(convertedValue)
+                })
             }
         }).remove
     }

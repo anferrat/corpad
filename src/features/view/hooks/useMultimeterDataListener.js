@@ -1,10 +1,10 @@
 import { useCallback, useEffect } from "react"
 import { EventRegister } from "react-native-event-listeners"
-import { MultimeterMeasurementTypes } from "../../../constants/global"
+import { CurrentUnits, MultimeterMeasurementTypes } from "../../../constants/global"
 import fieldValidation from '../../../helpers/validation'
 import { updatePotentialById } from "../store/actions/subitemList"
 import { PotentialUnits } from "../../../constants/global"
-import { convertVolts } from "../../../app/controllers/survey/other/ConverterController"
+import { convertVolts, convertAmps } from "../../../app/controllers/survey/other/ConverterController"
 import { updatePotential } from "../../../app/controllers/survey/subitems/PotentialController"
 import { getSubitemById, updateSubitem } from "../../../app/controllers/survey/subitems/SubitemController"
 import { calculateCouponDensity, currentCalculation } from "../../../helpers/functions"
@@ -26,6 +26,7 @@ const useMultimeterDataListener = ({ itemId, dispatch, potentialUnit }) => {
     const validateMeasuredValue = useCallback((value, measurementType) => {
         switch (measurementType) {
             case MultimeterMeasurementTypes.POTENTIALS:
+            case MultimeterMeasurementTypes.POTENTIALS_AC:
                 return fieldValidation(value, 'potential')
             case MultimeterMeasurementTypes.VOLTAGE:
                 return fieldValidation(value, 'voltage')
@@ -33,6 +34,7 @@ const useMultimeterDataListener = ({ itemId, dispatch, potentialUnit }) => {
                 return fieldValidation(value, 'voltageDrop')
             case MultimeterMeasurementTypes.COUPON_CURRENT:
             case MultimeterMeasurementTypes.CURRENT:
+            case MultimeterMeasurementTypes.COUPON_CURRENT_AC:
                 return fieldValidation(value, 'current')
             default: return { valid: false, value: null }
         }
@@ -40,10 +42,13 @@ const useMultimeterDataListener = ({ itemId, dispatch, potentialUnit }) => {
 
     const updateSubitemWithMeasuredValue = useCallback((subitem, measurementType, value) => {
         switch (measurementType) {
-            case MultimeterMeasurementTypes.COUPON_CURRENT: {
-                const currentDensity = calculateCouponDensity(value, subitem.area)
-                return updateSubitem({ ...subitem, current: value, density: currentDensity })
-            }
+            case MultimeterMeasurementTypes.COUPON_CURRENT:
+            case MultimeterMeasurementTypes.COUPON_CURRENT_AC:
+                {
+                    const convertedValue = convertAmps({ value: value, inputUnit: CurrentUnits.MILI_AMPS, outputUnit: CurrentUnits.MICRO_AMPS })
+                    const currentDensity = calculateCouponDensity(convertedValue.response, subitem.area)
+                    return updateSubitem({ ...subitem, current: convertedValue.response, density: currentDensity })
+                }
             case MultimeterMeasurementTypes.CURRENT:
                 return updateSubitem({ ...subitem, current: value })
             case MultimeterMeasurementTypes.VOLTAGE:
@@ -74,6 +79,7 @@ const useMultimeterDataListener = ({ itemId, dispatch, potentialUnit }) => {
             ({ measurementType, itemId, subitemId, subitemType, potentials, value }) => {
                 switch (measurementType) {
                     case MultimeterMeasurementTypes.POTENTIALS:
+                    case MultimeterMeasurementTypes.POTENTIALS_AC:
                         potentials.forEach(({ value, potentialId }) => validatePotentialById(value, subitemId, potentialId, measurementType))
                         break
                     default: validateSubitem(measurementType, subitemId, subitemType, value)

@@ -81,6 +81,24 @@ export class _PokitMultimeterService {
         return this.potentialCaptureService.cyclicalPotentialListener(callback, { peripheralId, onTime, offTime })
     }
 
+        /*
+    
+        AC POTENTIAL CAPTURE
+    
+        */
+
+    startAcPotentialCapture(peripheralId, isAC = true) {
+        return this.potentialCaptureService.startPotentialCapture(peripheralId, isAC)
+    }
+
+    stopAcPotentialCapture(peripheralId) {
+        return this.potentialCaptureService.stopPotentialCapture(peripheralId)
+    }
+
+    acPotentialListener(callback, { peripheralId }) {
+        return this.potentialCaptureService.realTimePotentialListener(callback, { peripheralId })
+    }
+
     /*
 
     CURRENT CAPTURE
@@ -176,13 +194,32 @@ export class _PokitMultimeterService {
         return this.couponCurrentCaptureService.couponCurrentListener(callback, { peripheralId })
     }
 
+    /*
+
+   AC COUPON CURRENT CAPTURE
+
+   */
+
+
+    startAcCouponCurrentCapture(peripheralId) {
+        return this.couponCurrentCaptureService.startCouponCurrentCapture(peripheralId, true)
+    }
+
+    stopAcCouponCurrentCapture(peripheralId) {
+        return this.couponCurrentCaptureService.stopCouponCurrentCapture(peripheralId)
+    }
+
+    acCouponCurrentListener(callback, { peripheralId }) {
+        return this.couponCurrentCaptureService.couponCurrentListener(callback, { peripheralId })
+    }
+
 
     measurementTypeSupportedByMode(mode, measurementType) {
         switch (mode) {
             case MultimeterModes.VOLTS:
-                return Boolean(~[MultimeterMeasurementTypes.VOLTAGE, MultimeterMeasurementTypes.VOLTAGE_DROP, MultimeterMeasurementTypes.POTENTIALS].indexOf(measurementType))
+                return Boolean(~[MultimeterMeasurementTypes.VOLTAGE, MultimeterMeasurementTypes.VOLTAGE_DROP, MultimeterMeasurementTypes.POTENTIALS, MultimeterMeasurementTypes.POTENTIALS_AC].indexOf(measurementType))
             case MultimeterModes.SMALL_CURRENT:
-                return measurementType === MultimeterMeasurementTypes.COUPON_CURRENT
+                return measurementType === MultimeterMeasurementTypes.COUPON_CURRENT || measurementType === MultimeterMeasurementTypes.COUPON_CURRENT_AC
             case MultimeterModes.CURRENT:
                 return measurementType === MultimeterMeasurementTypes.CURRENT
             default: return false

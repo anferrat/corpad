@@ -1,6 +1,7 @@
 import { ByteConverter } from "../_helpers/ByteConverter"
 import { MultimeterMeasurementTypes } from "../../../../../../../../constants/global"
 import { ValueConverter } from "../_helpers/ValueConverter"
+import { OverRangeChecker } from "../_helpers/OverRangeChecker"
 
 export class VoltageCapture {
     constructor(bluetoothRepo, services, characteristics, bytes, unitConverter) {
@@ -10,6 +11,7 @@ export class VoltageCapture {
         this.bytes = bytes
         this.byteConverter = new ByteConverter()
         this.valueConverter = new ValueConverter(unitConverter)
+        this.rangeChecker = new OverRangeChecker()
     }
 
     startVoltageCapture(peripheralId, isAC = false) {
@@ -38,7 +40,12 @@ export class VoltageCapture {
                 characteristic === this.characteristics.MULTIMETER.READING &&
                 service === this.services.MULTIMETER) {
                 const reading = this.byteConverter.convertReading(value)
-                callback({ cycle: null, value: this.valueConverter.execute(MultimeterMeasurementTypes.VOLTAGE, reading.value) })
+                const convertedValue = this.valueConverter.execute(MultimeterMeasurementTypes.VOLTAGE, reading.value)
+                const overRange = this.rangeChecker.executeForRaw(this.bytes.DC_VOLTAGE, value)
+                callback({
+                    value: convertedValue,
+                    overRange: overRange || this.rangeChecker.executeForConverted(convertedValue)
+                })
             }
         }).remove
     }
