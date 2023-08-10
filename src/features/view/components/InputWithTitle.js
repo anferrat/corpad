@@ -11,7 +11,7 @@ const InputWithTitle = (props) => {
         <View style={styles.mainView}>
             <Text style={styles.title} category='s1' numberOfLines={1} ellipsizeMode={'tail'}>{props.title}</Text>
             <View style={styles.input}>
-                {props.multimeterPaired ?
+                {props.multimeterAvailable ?
                     <IconButton
                         style={styles.button}
                         iconName='radio'

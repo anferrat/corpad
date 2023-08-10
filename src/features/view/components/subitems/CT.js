@@ -25,12 +25,14 @@ const targetDisplayHandler = (min, max) => {
         else return min + ' - ' + max
 }
 
-const CT = ({ data, validateVoltage, validateCurrent, updatePropertyValue, onEdit, subitemIndex, multimeterPaired, onMultimeterPress }) => {
+const CT = ({ data, validateVoltage, validateCurrent, updatePropertyValue, onEdit, subitemIndex, availableMeasurementTypes, onMultimeterPress }) => {
     const { name, type, voltage, current, targetMin, targetMax, valid, ratioCurrent, ratioVoltage } = data
 
     const targetDisplay = React.useMemo(() => targetDisplayHandler(targetMin, targetMax), [targetMin, targetMax])
 
     const shuntDisplay = React.useMemo(() => getRatio(ratioCurrent, ratioVoltage), [ratioCurrent, ratioVoltage])
+
+    const multimeterAvailable = ~availableMeasurementTypes.indexOf(MultimeterMeasurementTypes.VOLTAGE)
 
     const onChangeCurrent = React.useCallback((value) => updatePropertyValue(value, subitemIndex, 'current'), [subitemIndex, updatePropertyValue])
 
@@ -61,7 +63,7 @@ const CT = ({ data, validateVoltage, validateCurrent, updatePropertyValue, onEdi
                 property='current'
                 unit={'A'} />
             <InputWithTitle
-                multimeterPaired={multimeterPaired}
+                multimeterAvailable={multimeterAvailable}
                 onMultimeterPress={onMultimeterPressHandler}
                 onChangeText={onChangeVoltage}
                 onEndEditing={onEndEditingVoltage}

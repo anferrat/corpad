@@ -1,4 +1,6 @@
-export class _CyclicalCapture {
+import { MultimeterCycles } from "../../../../../../constants/global"
+
+export class _CyclicCapture {
     constructor() { }
 
     _getZeroDeviation(array) {
@@ -105,7 +107,7 @@ export class _CyclicalCapture {
             //get first stable value from the cycle values for on and off
             const on = this._getSignificantValue(onValues)
             const off = this._getSignificantValue(offValues)
-            return { on, off }
+            return [[MultimeterCycles.ON, on], [MultimeterCycles.OFF, off]]
         }
     }
 }

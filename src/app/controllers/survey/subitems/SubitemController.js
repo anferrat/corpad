@@ -2,6 +2,7 @@ import { BasicPresenter } from "../../../presenters/BasciPresenter"
 import { ListPresenter } from "../../../presenters/ListPresenter"
 import { PotentialPresenter } from "../../../presenters/PotentialPresenter"
 import { SubitemPresenter } from "../../../presenters/SubitemPresenter"
+import { BluetoothRepository } from "../../../repository/bluetooth/BluetoothRepository"
 import { DefaultNameRepository } from "../../../repository/sqlite/DefaultNameRepository"
 import { PipelineRepository } from "../../../repository/sqlite/PipelineRepository"
 import { PotentialRepository } from "../../../repository/sqlite/PotentialRepository"
@@ -13,6 +14,7 @@ import { SubitemRepository } from "../../../repository/sqlite/SubitemRepository"
 import { TestPointRepository } from "../../../repository/sqlite/TestPointRepository"
 import { SubitemFactory } from "../../../services/other/SubitemFactory"
 import { UnitConverter } from "../../../services/other/UnitConverter"
+import { MultimeterFactory } from "../../../services/survey/other/multimeter/_devices/MultimeterFactory"
 import { CreateSubitem } from "../../../services/survey/subitems/subitem/CreateSubitem"
 import { DeleteSubitem } from "../../../services/survey/subitems/subitem/DeleteSubitem"
 import { GetSubitemById } from "../../../services/survey/subitems/subitem/GetSubitemById"
@@ -22,12 +24,13 @@ import { Controller } from "../../../utils/Controller"
 import { SubitemValidation } from "../../../validation/SubitemValidation"
 
 class SubitemController extends Controller {
-    constructor(subitemRepo, testPointRepo, pipelineRepo, rectifierRepo, defaultNameRepo, settingRepo, referenceCellRepo, potentialTypeRepo, potentialRepo, subitemPresenter, listPresenter, basicPresenter, potentialPresenter, subitemFactory, unitConverter) {
+    constructor(subitemRepo, testPointRepo, pipelineRepo, rectifierRepo, defaultNameRepo, settingRepo, referenceCellRepo, potentialTypeRepo, potentialRepo, bluetoothRepo, subitemPresenter, listPresenter, basicPresenter, potentialPresenter, subitemFactory, unitConverter) {
         super()
+        this.multimeterFactory = new MultimeterFactory(bluetoothRepo)
         this.createSubitemService = new CreateSubitem(subitemRepo, basicPresenter, subitemFactory, settingRepo, referenceCellRepo, potentialTypeRepo, potentialRepo)
         this.deleteSubitemService = new DeleteSubitem(subitemRepo)
         this.getSubitemByIdService = new GetSubitemById(subitemRepo, defaultNameRepo, testPointRepo, rectifierRepo, pipelineRepo, settingRepo, subitemPresenter)
-        this.getSubitemListService = new GetSubitemList(testPointRepo, rectifierRepo, referenceCellRepo, potentialTypeRepo, pipelineRepo, settingRepo, listPresenter, subitemPresenter, potentialPresenter, unitConverter)
+        this.getSubitemListService = new GetSubitemList(testPointRepo, rectifierRepo, referenceCellRepo, potentialTypeRepo, pipelineRepo, settingRepo, this.multimeterFactory, listPresenter, subitemPresenter, potentialPresenter, unitConverter)
         this.updateSubitemService = new UpdateSubitem(subitemRepo, subitemPresenter, subitemFactory)
 
         this.validation = new SubitemValidation()
@@ -87,6 +90,7 @@ const subitemController = new SubitemController(
     new ReferenceCellRepository(),
     new PotentialTypeRepository(),
     new PotentialRepository(),
+    new BluetoothRepository(),
     new SubitemPresenter(),
     new ListPresenter(),
     new BasicPresenter(),

@@ -3,8 +3,8 @@ import { Error, errors } from "../../../../../utils/Error";
 import { _PokitMultimeterService } from "./pokitPro/_PokitMultimeterService";
 
 export class MultimeterFactory {
-    constructor(bluetoothRepo, unitConverter) {
-        this.pokitProService = new _PokitMultimeterService(bluetoothRepo, unitConverter)
+    constructor(bluetoothRepo) {
+        this.pokitProService = new _PokitMultimeterService(bluetoothRepo)
     }
 
     execute(multimeterType) {

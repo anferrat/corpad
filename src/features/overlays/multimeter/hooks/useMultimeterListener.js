@@ -118,28 +118,24 @@ const useMultimeterListener = () => {
         if (readyToCapture)
             readingListener = addReadingListener(
                 //Value callback
-                ({ cycle, value, overRange }) => {
-                    //console.log(overRange)
+                ({ cycle, value }) => {
                     if (!onHold)
                         setValues(state => ({
                             ...state,
                             [cycle !== undefined ? cycle : null]: value,
-                            overRange,
                         }))
-                },
-                //mode switching callback
-                (measurementTypeSupported) => {
-                    if (!measurementTypeSupported) {
-                        onModalClose()
-                        errorHandler(824)
-                    }
                 },
                 //buttonPress callback
                 (isPressed) => {
                     setCaptureButtonPressed(isPressed)
                 },
                 //data to pass to listener
-                { peripheralId: id, type: multimeterType, onTime, offTime, syncMode: syncAvailable, firstCycle, measurementType: field.measurementType })
+                { peripheralId: id, type: multimeterType, onTime, offTime, syncMode: syncAvailable, firstCycle, measurementType: field.measurementType },
+                (error) => {
+                    //onError callback
+                    onModalClose()
+                    errorHandler(error.code)
+                })
         return () => {
             if (readingListener && readingListener.response)
                 readingListener.response()

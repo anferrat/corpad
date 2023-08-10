@@ -170,6 +170,7 @@ const errorCodes = {
     822: `Unable to connect to multimeter. Don't forget to press button on multimeter to wake it up.`,
     823: 'Unable to share location',
     824: 'Adjust toggle on the side of multimeter to capture reading of this type.',
+    825: 'Measurement stopped, because over range value was detected. Fuse replacement may be required!',
     900: 'Unable to obtain permission to proceed with operation.',
     901: 'Need permission to write to Downloads folder.',
     902: 'Location permission was not granted.',

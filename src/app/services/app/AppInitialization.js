@@ -43,7 +43,6 @@ export class AppInitialization {
                 isLoaded = loaded.isLoaded ?? isLoaded
             }
             catch (er) {
-                console.log(er)
             }
 
 

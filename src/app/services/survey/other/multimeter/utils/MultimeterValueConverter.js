@@ -1,6 +1,6 @@
-import { CurrentUnits, MultimeterMeasurementTypes, PotentialUnits } from "../../../../../../../../constants/global";
+import { CurrentUnits, MultimeterMeasurementTypes, PotentialUnits } from "../../../../../../constants/global";
 
-export class ValueConverter {
+export class MultimeterValueConverter {
     constructor(unitConverter) {
         this.unitConverter = unitConverter
     }
@@ -10,7 +10,7 @@ export class ValueConverter {
         if (num < 10)
             return Number(number.toFixed(3))
         else if (num < 100)
-            return Number(number.toFixed(3))
+            return Number(number.toFixed(2))
         else if (num < 1000)
             return Number(number.toFixed(1))
         else return Math.floor(number)
@@ -20,7 +20,7 @@ export class ValueConverter {
         return Number(number.toFixed(1))
     }
 
-    execute(measurementType, value) {
+    execute(value, measurementType) {
         switch (measurementType) {
             case MultimeterMeasurementTypes.POTENTIALS:
             case MultimeterMeasurementTypes.CURRENT:

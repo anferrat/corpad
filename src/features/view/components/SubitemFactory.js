@@ -28,7 +28,7 @@ const SubitemViewFactory = ({
   validateVoltageDrop,
   validateCurrent,
   onMultimeterPress,
-  multimeterPaired,
+  availableMeasurementTypes,
 }) => {
 
   const onEdit = React.useCallback(() => {
@@ -44,7 +44,7 @@ const SubitemViewFactory = ({
       return (
         <PL
           data={subitem}
-          multimeterPaired={multimeterPaired}
+          availableMeasurementTypes={availableMeasurementTypes}
           subitemIndex={subitemIndex}
           pipelineList={pipelineList}
           onEdit={onEdit}
@@ -59,7 +59,7 @@ const SubitemViewFactory = ({
       return (
         <AN
           data={subitem}
-          multimeterPaired={multimeterPaired}
+          availableMeasurementTypes={availableMeasurementTypes}
           subitemIndex={subitemIndex}
           onEdit={onEdit}
           potentialUnit={potentialUnit}
@@ -73,7 +73,7 @@ const SubitemViewFactory = ({
       return (
         <RE
           data={subitem}
-          multimeterPaired={multimeterPaired}
+          availableMeasurementTypes={availableMeasurementTypes}
           subitemIndex={subitemIndex}
           onEdit={onEdit}
           potentialUnit={potentialUnit}
@@ -87,7 +87,7 @@ const SubitemViewFactory = ({
       return (
         <CN
           data={subitem}
-          multimeterPaired={multimeterPaired}
+          availableMeasurementTypes={availableMeasurementTypes}
           idMap={idMap}
           subitemIndex={subitemIndex}
           onEdit={onEdit}
@@ -105,7 +105,7 @@ const SubitemViewFactory = ({
         <SH
           data={subitem}
           idMap={idMap}
-          multimeterPaired={multimeterPaired}
+          availableMeasurementTypes={availableMeasurementTypes}
           subitemIndex={subitemIndex}
           onEdit={onEdit}
           updatePropertyValue={updatePropertyValue}
@@ -119,7 +119,7 @@ const SubitemViewFactory = ({
         <BD
           data={subitem}
           idMap={idMap}
-          multimeterPaired={multimeterPaired}
+          availableMeasurementTypes={availableMeasurementTypes}
           subitemIndex={subitemIndex}
           onEdit={onEdit}
           updatePropertyValue={updatePropertyValue}
@@ -131,7 +131,7 @@ const SubitemViewFactory = ({
       return (
         <RS
           data={subitem}
-          multimeterPaired={multimeterPaired}
+          availableMeasurementTypes={availableMeasurementTypes}
           subitemIndex={subitemIndex}
           pipelineList={pipelineList}
           onEdit={onEdit}
@@ -145,7 +145,7 @@ const SubitemViewFactory = ({
       return (
         <IK
           data={subitem}
-          multimeterPaired={multimeterPaired}
+          availableMeasurementTypes={availableMeasurementTypes}
           idMap={idMap}
           subitemIndex={subitemIndex}
           onEdit={onEdit}
@@ -159,7 +159,7 @@ const SubitemViewFactory = ({
       return (
         <FC
           data={subitem}
-          multimeterPaired={multimeterPaired}
+          availableMeasurementTypes={availableMeasurementTypes}
           subitemIndex={subitemIndex}
           onEdit={onEdit}
           potentialUnit={potentialUnit}
@@ -173,7 +173,7 @@ const SubitemViewFactory = ({
       return (
         <OT
           data={subitem}
-          multimeterPaired={multimeterPaired}
+          availableMeasurementTypes={availableMeasurementTypes}
           subitemIndex={subitemIndex}
           onEdit={onEdit}
           potentialUnit={potentialUnit}
@@ -187,7 +187,7 @@ const SubitemViewFactory = ({
       return (
         <CT
           data={subitem}
-          multimeterPaired={multimeterPaired}
+          availableMeasurementTypes={availableMeasurementTypes}
           subitemIndex={subitemIndex}
           onEdit={onEdit}
           updatePropertyValue={updatePropertyValue}

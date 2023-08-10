@@ -471,9 +471,3 @@ export const MultimeterMeasurementTypes = Object.freeze({
     COUPON_CURRENT_AC: 'COUPON_CURRENT_AC',
     POTENTIALS_AC: 'POTENTIALS_AC'
 })
-
-export const MultimeterModes = Object.freeze({
-    VOLTS: 0,
-    SMALL_CURRENT: 1,
-    CURRENT: 2
-})

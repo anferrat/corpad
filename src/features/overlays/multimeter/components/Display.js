@@ -13,17 +13,14 @@ const Display = ({ onOffCaptureActive, onOffCaptureAvailable, values }) => {
                 <CycleDisplayView
                     label={MultimeterCycleLabels[MultimeterCycles.ON]}
                     value={values[MultimeterCycles.ON]}
-                    overRange={values.overRange}
                     icon='On' />
                 <CycleDisplayView
                     label={MultimeterCycleLabels[MultimeterCycles.OFF]}
                     value={values[MultimeterCycles.OFF]}
-                    overRange={values.overRange}
                     icon='Off' />
             </View>
         )
     else return <SevenSegmentView
-        overRange={values.overRange}
         value={values[null]} />
 }
 

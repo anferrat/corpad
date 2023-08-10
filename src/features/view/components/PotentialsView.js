@@ -1,13 +1,13 @@
 import React from 'react'
 import PotentialInput from './PotentialInput'
 
-const PotentialsView = ({ unit, potentialHint, potentials, validatePotential, updatePotentialValue, subitemIndex, onMultimeterPress, multimeterPaired }) => {
+const PotentialsView = ({ unit, potentialHint, potentials, validatePotential, updatePotentialValue, subitemIndex, onMultimeterPress, availableMeasurementTypes }) => {
 
     return (
         <>
             {potentials?.map(({ id, uid, name, referenceCellName, referenceCellType, value, valid }, index) =>
                 <PotentialInput
-                    multimeterPaired={multimeterPaired}
+                    availableMeasurementTypes={availableMeasurementTypes}
                     onMultimeterPress={onMultimeterPress}
                     key={`PotentialInput - ${uid}`}
                     displayHint={potentialHint}

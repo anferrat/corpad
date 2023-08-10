@@ -14,7 +14,7 @@ const RE = ({
   subitemIndex,
   onEdit,
   onMultimeterPress,
-  multimeterPaired
+  availableMeasurementTypes
 }) => {
   const { name, type, wireColor, wireGauge, potentials, rcType } = data
   return (
@@ -28,7 +28,7 @@ const RE = ({
       <Divider
         visible={potentials.length > 0 || rcType !== null} />
       <PotentialsView
-        multimeterPaired={multimeterPaired}
+        availableMeasurementTypes={availableMeasurementTypes}
         onMultimeterPress={onMultimeterPress}
         subitemIndex={subitemIndex}
         updatePotentialValue={updatePotentialValue}

@@ -3,7 +3,7 @@ import { Potential } from "../../../../entities/survey/subitems/Potential"
 import { Error, errors } from "../../../../utils/Error"
 
 export class GetSubitemList {
-    constructor(testPointRepo, rectifierRepo, referenceCellRepo, potentialTypeRepo, pipelineRepo, settingRepo, listPresenter, subitemPresenter, potentialPresenter, unitConverter) {
+    constructor(testPointRepo, rectifierRepo, referenceCellRepo, potentialTypeRepo, pipelineRepo, settingRepo, multimeterFactory, listPresenter, subitemPresenter, potentialPresenter, unitConverter) {
         this.testPointRepo = testPointRepo
         this.rectifierRepo = rectifierRepo
         this.listPresenter = listPresenter
@@ -11,6 +11,7 @@ export class GetSubitemList {
         this.potentialTypeRepo = potentialTypeRepo
         this.pipelineRepo = pipelineRepo
         this.settingRepo = settingRepo
+        this.multimeterFactory = multimeterFactory
         this.subitemPresenter = subitemPresenter
         this.potentialPresenter = potentialPresenter
         this.unitConverter = unitConverter
@@ -35,7 +36,7 @@ export class GetSubitemList {
             this.settingRepo.get()
             ]
         else if (itemType === ItemTypes.RECTIFIER)
-            return [this.rectifierRepo.getSubitemsById(id), [], [], [], {}]
+            return [this.rectifierRepo.getSubitemsById(id), [], [], [], this.settingRepo.get()]
         else if (itemType = ItemTypes.PIPELINE)
             return [[], [], [], [], {}]
         else throw new Error(errors.GENERAL, `Item type ${itemType} is not supported.`)
@@ -50,6 +51,8 @@ export class GetSubitemList {
     async executeWithData(id, itemType) {
         const [subitems, referenceCells, potentialTypes, pipelineList, settings] = await Promise.all(this._getFullList(id, itemType))
         const potentialUnit = settings.defaultPotentialUnit ?? null
+        const { multimeter } = settings
+        const availableMeasurementTypes = multimeter.type ? this.multimeterFactory.execute(multimeter.type).getSupportedMeasurementTypes() : []
         subitems.forEach(subitem => {
             //Convert units to display potentials
             subitem.potentials.forEach(({ value }, index) => {
@@ -65,6 +68,6 @@ export class GetSubitemList {
 
         })
 
-        return this.subitemPresenter.executeWithList(subitems, pipelineList, referenceCells, potentialUnit)
+        return this.subitemPresenter.executeWithList(subitems, pipelineList, referenceCells, potentialUnit, availableMeasurementTypes)
     }
 }

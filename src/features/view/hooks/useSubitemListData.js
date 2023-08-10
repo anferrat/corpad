@@ -5,7 +5,6 @@ import { getSubitemListData } from '../../../app/controllers/survey/subitems/Sub
 import { errorHandler } from '../../../helpers/error_handler'
 import { loadSubitemListDataAction, updateSubitemAction, deleteSubitemAction, updatePotentialsAction, refreshSubitemList } from '../store/actions/subitemList'
 import { EventRegister } from 'react-native-event-listeners'
-import { useSelector } from 'react-redux'
 
 
 //local reducer is used here, mostly global one from redux is used
@@ -13,9 +12,8 @@ import { useSelector } from 'react-redux'
 const useSubitemListData = ({ itemId, itemType }) => {
     const navigation = useNavigation()
     const [state, dispatch] = useReducer(reducer, initialState)
-    const { potentialUnit, subitems, pipelineList, loading } = state
+    const { potentialUnit, subitems, pipelineList, loading, availableMeasurementTypes } = state
     const componentMounted = useRef(true)
-    const multimeterPaired = useSelector(state => state.settings.activeMultimeter.paired)
 
     const idMap = Object.fromEntries(state.subitems.map(({ id, name, type }) => ([id, { id, name, type }])))
     //in case of multiple reference cells, we display hint at potential field with ref cell name
@@ -27,7 +25,7 @@ const useSubitemListData = ({ itemId, itemType }) => {
         const loadData = async () => {
             const { response, status } = await getSubitemListData({ itemId, itemType }, er => errorHandler(er, navigation.goBack))
             if (status === 200 && componentMounted.current)
-                dispatch(loadSubitemListDataAction(response.subitems, response.pipelineList, response.potentialUnit, response.referenceCells))
+                dispatch(loadSubitemListDataAction(response.subitems, response.pipelineList, response.potentialUnit, response.referenceCells, response.availableMeasurementTypes))
         }
 
         if (loading)
@@ -69,7 +67,7 @@ const useSubitemListData = ({ itemId, itemType }) => {
         subitems,
         pipelineList,
         loading,
-        multimeterPaired,
+        availableMeasurementTypes,
         dispatch,
     }
 }

@@ -93,7 +93,6 @@ export class FileSystemRepository {
         const directory = await this.getLocation(location)
         try {
             const path = `${directory}/${fileName}`
-            console.log(path)
             if (await RNFS.exists(path))
                 if (!((await RNFS.stat(path)).isFile()))
                     await RNFS.unlink(path)

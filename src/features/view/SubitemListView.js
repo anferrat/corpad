@@ -9,7 +9,7 @@ import useMultimeterDataListener from './hooks/useMultimeterDataListener'
 
 
 const SubitemListView = ({ itemId, itemType, navigateToEditSubitem }) => {
-    const { potentialUnit, potentialHint, subitems, pipelineList, loading, multimeterPaired, idMap, dispatch } = useSubitemListData({ itemId, itemType })
+    const { potentialUnit, potentialHint, subitems, pipelineList, loading, availableMeasurementTypes, idMap, dispatch } = useSubitemListData({ itemId, itemType })
     const { validatePotential, updatePotentialValue, updatePropertyValue, validateCouponCurrent, validateVoltageDrop, validateCurrent, updateShorted, validateVoltage } = useSubitemListActions(dispatch)
     const { onMultimeterPress } = useMultimeterDataListener({ itemId, dispatch, potentialUnit })
     return (
@@ -22,7 +22,7 @@ const SubitemListView = ({ itemId, itemType, navigateToEditSubitem }) => {
                     style={globalStyle.card}>
                     <SubitemViewFactory
                         subitem={subitem}
-                        multimeterPaired={multimeterPaired}
+                        availableMeasurementTypes={availableMeasurementTypes}
                         idMap={idMap}
                         subitemIndex={index}
                         navigateToEditSubitem={navigateToEditSubitem}

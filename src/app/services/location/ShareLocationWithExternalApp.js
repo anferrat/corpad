@@ -16,7 +16,6 @@ export class ShareLocationWithExtarnalApp {
             return googleSchema
         else if (provider === 'google') {
             const googleMapsAvailable = await this.linkingService.canOpenUrl(googleSchema)
-            console.log(googleMapsAvailable)
             if (googleMapsAvailable)
                 return googleSchema
         }

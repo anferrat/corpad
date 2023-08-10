@@ -2,8 +2,8 @@ export const updatePotentialAction = (subitemIndex, potentialIndex, value, valid
     return { type: 'UPDATE_POTENTIAL', subitemIndex, potentialIndex, value, valid }
 }
 
-export const loadSubitemListDataAction = (subitems, pipelineList, potentialUnit, referenceCells) => {
-    return { type: 'LOAD_DATA', subitems, pipelineList, potentialUnit, referenceCells }
+export const loadSubitemListDataAction = (subitems, pipelineList, potentialUnit, referenceCells, availableMeasurementTypes) => {
+    return { type: 'LOAD_DATA', subitems, pipelineList, potentialUnit, referenceCells, availableMeasurementTypes }
 }
 
 export const updatePropertyAction = (subitemIndex, value, valid = {}) => {

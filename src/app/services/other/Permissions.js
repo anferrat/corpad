@@ -59,7 +59,6 @@ export class Permissions {
         }
         else if (Platform.OS === 'ios') {
             const granted = await Geolocation.requestAuthorization("whenInUse")
-            console.log(granted)
             if (granted !== 'granted')
                 throw new Error(errors.PERMISSION, 'Unable to ontain location permission. You need to allow to use location to use this feature.', 'Permission was not obtained', 902)
         }

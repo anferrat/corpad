@@ -8,13 +8,15 @@ import { MultimeterMeasurementTypes } from '../../../../constants/global'
 
 const getShuntRatio = (ratioVoltage, ratioCurrent) => ratioVoltage !== null && ratioCurrent !== null ? ratioVoltage + ' mV - ' + ratioCurrent + ' A' : null
 
-const SH = ({ data, validateVoltageDrop, updatePropertyValue, onEdit, idMap, subitemIndex, onMultimeterPress, multimeterPaired }) => {
+const SH = ({ data, validateVoltageDrop, updatePropertyValue, onEdit, idMap, subitemIndex, onMultimeterPress, availableMeasurementTypes }) => {
     const { factorSelected, name, type, factor, ratioVoltage, ratioCurrent, voltageDrop, current, sideA, sideB, fromAtoB, valid } = data
 
     const shuntRatio = React.useMemo(() => getShuntRatio(ratioVoltage, ratioCurrent),
         [ratioVoltage, ratioCurrent])
 
     const currentValue = current !== null ? current + ' A' : null
+
+    const multimeterAvailable = ~availableMeasurementTypes.indexOf(MultimeterMeasurementTypes.VOLTAGE_DROP)
 
     const onChangeVoltageDrop = React.useCallback((value) =>
         updatePropertyValue(value, subitemIndex, 'voltageDrop'),
@@ -49,7 +51,7 @@ const SH = ({ data, validateVoltageDrop, updatePropertyValue, onEdit, idMap, sub
                 unit={factorSelected ? 'A/mV' : null} />
             <InputWithTitle
                 onMultimeterPress={onMultimeterPressHandler}
-                multimeterPaired={multimeterPaired}
+                multimeterAvailable={multimeterAvailable}
                 onChangeText={onChangeVoltageDrop}
                 keyboardType='numeric'
                 value={voltageDrop}

@@ -6,10 +6,12 @@ import SidesDisplay from '../SidesDisplay'
 import { MultimeterMeasurementTypes } from '../../../../constants/global'
 
 
-const BD = ({ data, updatePropertyValue, validateCurrent, subitemIndex, idMap, onEdit, onMultimeterPress, multimeterPaired }) => {
+const BD = ({ data, updatePropertyValue, validateCurrent, subitemIndex, idMap, onEdit, onMultimeterPress, availableMeasurementTypes }) => {
     const { type, name, fromAtoB, current, valid, sideA, sideB } = data
 
     const currentValue = valid.current && current !== null ? current + ' A' : null
+
+    const multimeterAvailable = ~availableMeasurementTypes.indexOf(MultimeterMeasurementTypes.CURRENT)
 
     const onChangeCurrent = React.useCallback((value) => {
         updatePropertyValue(value, subitemIndex, 'current')
@@ -22,6 +24,7 @@ const BD = ({ data, updatePropertyValue, validateCurrent, subitemIndex, idMap, o
     const onMultimeterPressHandler = React.useCallback(() => {
         onMultimeterPress(MultimeterMeasurementTypes.CURRENT)
     }, [onMultimeterPress])
+
 
     return (
         <>
@@ -40,7 +43,7 @@ const BD = ({ data, updatePropertyValue, validateCurrent, subitemIndex, idMap, o
             <Divider
                 visible={true} />
             <InputWithTitle
-                multimeterPaired={multimeterPaired}
+                multimeterAvailable={multimeterAvailable}
                 onMultimeterPress={onMultimeterPressHandler}
                 keyboardType='numeric'
                 value={current}

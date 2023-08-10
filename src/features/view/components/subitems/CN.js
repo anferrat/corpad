@@ -19,8 +19,10 @@ const densityUnit = {
     format: 'super'
 }
 
-const CN = ({ data, validateCouponCurrent, updatePropertyValue, onEdit, subitemIndex, idMap, updatePotentialValue, validatePotential, potentialUnit, potentialHint, onMultimeterPress, multimeterPaired }) => {
+const CN = ({ data, validateCouponCurrent, updatePropertyValue, onEdit, subitemIndex, idMap, updatePotentialValue, validatePotential, potentialUnit, potentialHint, onMultimeterPress, availableMeasurementTypes }) => {
     const { type, name, current, area, density, pipelineCardId, valid, potentials, couponType, wireColor, wireGauge } = data
+
+    const measurementType = couponType === CouponTypes.AC ? MultimeterMeasurementTypes.COUPON_CURRENT_AC : MultimeterMeasurementTypes.COUPON_CURRENT
 
     const onChangeCurrent = React.useCallback((value) => updatePropertyValue(value, subitemIndex, 'current'), [updatePropertyValue, subitemIndex])
 
@@ -28,11 +30,11 @@ const CN = ({ data, validateCouponCurrent, updatePropertyValue, onEdit, subitemI
 
     const pipeSubitem = idMap[pipelineCardId] ?? {}
 
+    const multimeterAvailable = ~availableMeasurementTypes.indexOf(measurementType)
 
     const onMultimeterPressCurrent = React.useCallback(() => {
-        const isAC = couponType === CouponTypes.AC
-        onMultimeterPress(isAC ? MultimeterMeasurementTypes.COUPON_CURRENT_AC : MultimeterMeasurementTypes.COUPON_CURRENT)
-    }, [onMultimeterPress, couponType])
+        onMultimeterPress(measurementType)
+    }, [onMultimeterPress, measurementType])
 
 
     return (
@@ -46,7 +48,7 @@ const CN = ({ data, validateCouponCurrent, updatePropertyValue, onEdit, subitemI
             <Divider
                 visible={true} />
             <PotentialsView
-                multimeterPaired={multimeterPaired}
+                availableMeasurementTypes={availableMeasurementTypes}
                 onMultimeterPress={onMultimeterPress}
                 subitemIndex={subitemIndex}
                 updatePotentialValue={updatePotentialValue}
@@ -71,7 +73,7 @@ const CN = ({ data, validateCouponCurrent, updatePropertyValue, onEdit, subitemI
                 value={density}
                 unit={densityUnit} />
             <InputWithTitle
-                multimeterPaired={multimeterPaired}
+                multimeterAvailable={multimeterAvailable}
                 onMultimeterPress={onMultimeterPressCurrent}
                 onEndEditing={onEndEditingCurrent}
                 onChangeText={onChangeCurrent}
