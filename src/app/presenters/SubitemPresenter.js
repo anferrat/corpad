@@ -48,12 +48,13 @@ export class SubitemPresenter {
         }
     }
 
-    executeWithList(subitems, pipelineList, referenceCells, potentialUnit) {
+    executeWithList(subitems, pipelineList, referenceCells, potentialUnit, availableMeasurementTypes) {
         return {
             subitems: subitems.map(subitem => ({ ...subitem, valid: this._getValidObject(subitem) })),
             pipelineList: pipelineList.map(({ id, name }) => ({ id, name })),
             potentialUnit: potentialUnit,
-            referenceCells: referenceCells
+            referenceCells: referenceCells,
+            availableMeasurementTypes
         }
     }
 }

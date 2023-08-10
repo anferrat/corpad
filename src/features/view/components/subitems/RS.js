@@ -5,7 +5,7 @@ import PotentialsView from '../PotentialsView'
 import Divider from '../Divider'
 import { PipeDiameterLabels } from '../../../../constants/labels'
 
-const RS = ({ data, potentialUnit, potentialHint, updatePotentialValue, validatePotential, subitemIndex, onEdit, pipelineList, onMultimeterPress, multimeterPaired }) => {
+const RS = ({ data, potentialUnit, potentialHint, updatePotentialValue, validatePotential, subitemIndex, onEdit, pipelineList, onMultimeterPress, availableMeasurementTypes }) => {
     const { name, type, wireColor, wireGauge, potentials, pipelineId, nps } = data
     const pipelineIndex = pipelineList.findIndex(({ id }) => id === pipelineId)
     return (
@@ -19,7 +19,7 @@ const RS = ({ data, potentialUnit, potentialHint, updatePotentialValue, validate
             <Divider
                 visible={potentials.length > 0 || ~pipelineIndex || nps !== null} />
             <PotentialsView
-                multimeterPaired={multimeterPaired}
+                availableMeasurementTypes={availableMeasurementTypes}
                 onMultimeterPress={onMultimeterPress}
                 subitemIndex={subitemIndex}
                 updatePotentialValue={updatePotentialValue}

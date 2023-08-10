@@ -144,7 +144,6 @@ export class SurveyRepository extends SQLiteRepository {
             ])
         }
         catch (err) {
-            console.log(err)
             throw new Error(errors.DATABASE, `Unable to import survey file`, err)
         }
     }

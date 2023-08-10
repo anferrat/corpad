@@ -5,7 +5,7 @@ import PotentialsView from '../PotentialsView'
 import Divider from '../Divider'
 import { AnodeMaterialLabels } from '../../../../constants/labels'
 
-const AN = ({ data, potentialUnit, potentialHint, updatePotentialValue, validatePotential, subitemIndex, onEdit, onMultimeterPress, multimeterPaired }) => {
+const AN = ({ data, potentialUnit, potentialHint, updatePotentialValue, validatePotential, subitemIndex, onEdit, onMultimeterPress, availableMeasurementTypes }) => {
     const { name, type, wireColor, wireGauge, potentials, anodeMaterial } = data
     const dividerVisible = potentials.length > 0 || anodeMaterial !== null
     return (
@@ -18,7 +18,7 @@ const AN = ({ data, potentialUnit, potentialHint, updatePotentialValue, validate
                 onEdit={onEdit} />
             <Divider visible={dividerVisible} />
             <PotentialsView
-                multimeterPaired={multimeterPaired}
+                availableMeasurementTypes={availableMeasurementTypes}
                 onMultimeterPress={onMultimeterPress}
                 subitemIndex={subitemIndex}
                 updatePotentialValue={updatePotentialValue}

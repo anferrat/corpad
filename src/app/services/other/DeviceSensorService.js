@@ -7,7 +7,6 @@ export class DeviceSensorService {
 
     watchOrientation(callback, onError) {
         const remove = Sensors.orientation.subscribe(({ yaw }) => callback({ heading: ((yaw * 180 / Math.PI) + 360) % 360 }), (er) => {
-            console.log(er)
             if (onError)
                 onError(er)
         })

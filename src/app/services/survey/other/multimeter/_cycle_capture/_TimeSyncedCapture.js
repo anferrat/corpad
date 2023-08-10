@@ -1,6 +1,6 @@
 import { MultimeterCycles } from "../../../../../../constants/global"
 
-export class _GPSCapture {
+export class _TimeSyncedCapture {
     constructor() {
     }
 

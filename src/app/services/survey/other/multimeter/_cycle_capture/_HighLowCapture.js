@@ -1,3 +1,5 @@
+import { MultimeterCycles } from "../../../../../../constants/global"
+
 export class _HighLowCapture {
     constructor() {
     }
@@ -14,7 +16,7 @@ export class _HighLowCapture {
                 else if (array[i] > max)
                     max = array[i]
             }
-            return { on: min, off: max }
+            return [[MultimeterCycles.ON, min], [MultimeterCycles.OFF, max]]
         }
     }
 }

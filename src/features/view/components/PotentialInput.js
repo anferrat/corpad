@@ -3,7 +3,7 @@ import InputWithTitle from './InputWithTitle'
 import { PotentialUnitLabels, ReferenceCellCodeLabels } from '../../../constants/labels'
 import { MultimeterMeasurementTypes } from '../../../constants/global'
 
-const PotentialInput = ({ potentialId, name, referenceCellName, referenceCellType, value, valid, validatePotential, updatePotentialValue, unit, displayHint, subitemIndex, potentialIndex, onMultimeterPress, multimeterPaired }) => {
+const PotentialInput = ({ potentialId, name, referenceCellName, referenceCellType, value, valid, validatePotential, updatePotentialValue, unit, displayHint, subitemIndex, potentialIndex, onMultimeterPress, availableMeasurementTypes }) => {
 
     const onEndEditing = React.useCallback(() => {
         validatePotential(value, unit, subitemIndex, potentialId, potentialIndex)
@@ -12,6 +12,8 @@ const PotentialInput = ({ potentialId, name, referenceCellName, referenceCellTyp
     const onChangeText = React.useCallback((text) => {
         updatePotentialValue(text, subitemIndex, potentialIndex)
     }, [subitemIndex, potentialIndex])
+
+    const multimeterAvailable = ~availableMeasurementTypes.indexOf(MultimeterMeasurementTypes.POTENTIALS)
 
     const onMultimeterPressHandler = React.useCallback(() => {
         onMultimeterPress(MultimeterMeasurementTypes.POTENTIALS, potentialId)
@@ -25,7 +27,7 @@ const PotentialInput = ({ potentialId, name, referenceCellName, referenceCellTyp
     return (
         <InputWithTitle
             onMultimeterPress={onMultimeterPressHandler}
-            multimeterPaired={multimeterPaired}
+            multimeterAvailable={multimeterAvailable}
             onEndEditing={onEndEditing}
             onChangeText={onChangeText}
             keyboardType='numeric'

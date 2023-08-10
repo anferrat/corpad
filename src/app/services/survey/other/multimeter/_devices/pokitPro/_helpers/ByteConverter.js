@@ -1,11 +1,23 @@
 import { Buffer } from "buffer";
 
 export class ByteConverter {
-    constructor() { }
-//converts byte data to/from multimeter
+    constructor(settings) {
+        this.settings = settings
+    }
+    //converts byte data to/from multimeter
 
     convertDataToWrite(byteArray) {
         return Buffer.from(byteArray).toJSON().data
+    }
+
+    convertMultimeterServiceSettings(measurementSettings, range = 0, updateInterval = 0) {
+        const buf = Buffer.from([0x00, 0x00, 0x00, 0x00, 0x00, 0x00])
+        if (measurementSettings !== this.settings.IDLE) {
+            buf.writeUint8(measurementSettings)
+            buf.writeUint8(range, 1)
+            buf.writeUint32LE(updateInterval, 2)
+        }
+        return buf.toJSON().data
     }
 
     convertStatus(statusByteArray) {

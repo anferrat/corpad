@@ -4,6 +4,7 @@ export const initialState = {
     pipelineList: [],
     referenceCells: [],
     potentialUnit: null,
+    availableMeasurementTypes: [] //Measurement types that connected multimeter can capture
 }
 
 export function reducer(state, action) {
@@ -15,6 +16,7 @@ export function reducer(state, action) {
                 pipelineList: action.pipelineList,
                 potentialUnit: action.potentialUnit,
                 referenceCells: action.referenceCells,
+                availableMeasurementTypes: action.availableMeasurementTypes,
             }
         case 'UPDATE_POTENTIAL':
             return ({

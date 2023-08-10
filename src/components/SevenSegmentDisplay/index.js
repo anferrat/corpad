@@ -22,7 +22,6 @@ const width = Math.floor(Dimensions.get('window').width / 14)
 const height = Math.floor(Dimensions.get('window').width / 28)
 
 const SevenSegmentView = ({ value = 0, onColor, size, overRange }) => {
-    console.log(overRange)
     const converted = convertValue(value)
     const valueString = converted.toFixed(4).slice(0, 6)
     const isNegative = !overRange ? ~valueString.indexOf('-') : false
