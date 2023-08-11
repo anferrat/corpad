@@ -2,7 +2,7 @@ import React from 'react'
 import { Animated, StyleSheet, View } from 'react-native'
 import { Text, Icon, Modal, Button } from '@ui-kitten/components'
 import IconButton from '../../../../components/IconButton'
-import { basic, control, primary } from '../../../../styles/colors'
+import { basic, basic300, control, primary } from '../../../../styles/colors'
 import useNavigationWidget from './hooks/useNavigationWidget'
 import ListItem from './components/ListItem'
 import { getDistance } from './helpers/functions'
@@ -64,6 +64,7 @@ const NavigationWidget = () => {
                             </View>
                         </LoadingView>
                         <Button
+                            style={styles.closeButton}
                             onPress={hideModal}
                             appearance='ghost'>
                             Close
@@ -118,16 +119,19 @@ const styles = StyleSheet.create({
     },
     container: {
         backgroundColor: control,
-        height: 250,
+        height: 280,
         borderRadius: 10,
         paddingTop: 12,
-        justifyContent: 'center'
+        justifyContent: 'center',
+        borderWidth: 1,
+        borderColor: basic300
     },
 
     titleContainer: {
         width: '100%',
         flexDirection: 'row',
         paddingHorizontal: 12,
+        paddingVertical: 6
     },
     title: {
         flex: 1,
@@ -136,5 +140,8 @@ const styles = StyleSheet.create({
         flex: 1,
         paddingHorizontal: 12,
 
+    },
+    closeButton: {
+        height: 60
     }
 })

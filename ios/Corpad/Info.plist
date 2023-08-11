@@ -65,6 +65,8 @@
 			</dict>
 		</dict>
 	</dict>
+	<key>NSBluetoothAlwaysUsageDescription</key>
+	<string>You need to enable bluetooth for this app, in order to use multimeter peripherals.</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>You need to grant location permissions to use device GPS</string>
 	<key>UILaunchStoryboardName</key>

@@ -6,11 +6,13 @@ import { errorHandler } from '../../../../../helpers/error_handler'
 import useModal from '../../../../../hooks/useModal'
 import { hapticMedium } from '../../../../../native_libs/haptics'
 
+const initialState = []
+
 const useActiveMultimeter = () => {
     const dispatch = useDispatch()
     const activeMultimeter = useSelector(state => state.settings.activeMultimeter)
     const isBluetoothOn = useSelector(state => state.settings.bluetooth.isBluetoothOn)
-    const [scannedDevices, setScannedDevices] = useState([])
+    const [scannedDevices, setScannedDevices] = useState(initialState)
     const [pairingId, setPairingId] = useState(null)
     const [connecting, setConnecting] = useState(false)
     const [scanning, setScanning] = useState(false)
@@ -24,9 +26,12 @@ const useActiveMultimeter = () => {
     useEffect(() => {
         const deviceListener = multimeterScanListener({
             onDiscovered: (id, name, type, rssi) => {
-                const exists = ~scannedDevices.findIndex(device => device.id === id)
-                if (!exists)
-                    setScannedDevices(state => state.concat({ id, name, type, rssi }))
+                setScannedDevices(state => {
+                    const exists = ~state.findIndex(device => device.id === id)
+                    if (!exists)
+                        return state.concat({ id, name, type, rssi })
+                    else return state
+                })
             },
             pairedId: activeMultimeter.id
         })
@@ -34,7 +39,7 @@ const useActiveMultimeter = () => {
             if (deviceListener.response)
                 deviceListener.response.remove()
         }
-    }, [scannedDevices, activeMultimeter.id])
+    }, [activeMultimeter.id])
 
 
     useEffect(() => {
@@ -125,7 +130,7 @@ const useActiveMultimeter = () => {
             const { status } = await startMultimeterScan()
             if (status === 200) {
                 if (componentMounted.current) {
-                    setScannedDevices([])
+                    setScannedDevices(initialState)
                     setScanning(true)
                     scanningRef.current = true
                 }

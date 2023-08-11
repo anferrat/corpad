@@ -6,7 +6,6 @@ import { basic400, control, primary } from '../../../../styles/colors'
 import LoadingView from '../../../../components/LoadingView'
 
 const LocationModal = ({ visible, hideModal, updateLatAndLon }) => {
-    //Pretty horrible modal from ui kitten. had to split into two components for animation to work
     return (
         <Modal
             style={styles.modal}
@@ -45,12 +44,12 @@ const LocationModalContent = ({ hideModal, updateLatAndLon }) => {
             </View>
             <LoadingView loading={latitude === null && longitude === null}>
                 <View style={styles.coords}>
-                    <View style={styles.values}>
+                    <View style={styles.valueTitles}>
                         <Text appearance='hint' category='label' style={styles.text}>Latitude:</Text>
-                        <Text category='p1' style={styles.textValue}>{latitude}</Text>
+                        <Text appearance='hint' category='label' style={styles.text}>Longitude:</Text>
                     </View>
                     <View style={styles.values}>
-                        <Text appearance='hint' category='label' style={styles.text}>Longitude:</Text>
+                        <Text category='p1' style={styles.textValue}>{latitude}</Text>
                         <Text category='p1' style={styles.textValue}>{longitude}</Text>
                     </View>
                 </View>
@@ -88,18 +87,24 @@ const styles = StyleSheet.create({
     },
 
     coords: {
-        flex: 1
+        flex: 1,
+        flexDirection: 'row',
+        paddingBottom: 12
     },
     textValue: {
         textTransform: 'lowercase',
         fontWeight: 'bold',
         textAlign: 'center',
-        flex: 1
+      flexBasis: 22
+       
     },
     values: {
-        flex: 1,
-        flexDirection: 'row',
-        alignItems: 'center'
+        alignItems: 'center',
+        flex: 1
+    },
+    valueTitles: {
+        alignItems: 'flex-start',
+        flex: -1
     },
     buttons: {
         flexDirection: 'row',
@@ -110,9 +115,8 @@ const styles = StyleSheet.create({
         width: '47.5%'
     },
     text: {
-        flexBasis: 70,
-        lineHeight: 35,
-        textTransform: 'uppercase'
+        textTransform: 'uppercase',
+        flexBasis: 24
     },
     accuracy: {
         flex: 1,

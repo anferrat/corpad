@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { Input, Text, Popover, Icon } from '@ui-kitten/components'
 import { basic200 } from '../styles/colors'
 import { primary, basic } from '../styles/colors'
-import { View, StyleSheet, Pressable } from 'react-native'
+import { View, StyleSheet, Pressable, Platform } from 'react-native'
 
 const InvalidPropertyCaptionLabels = Object.freeze({
     name: 'Name must only contain following characters: A-z, 0-9, -._() and be less than 40 characters',
@@ -104,7 +104,7 @@ const InputField = React.forwardRef((props, ref) => {
         else return null
     }, [props.valid, props.property])
 
-    const styleObject = React.useMemo(() => ({ ...props.style, paddingBottom: 12, borderWidth: props.disabled ? 0 : 1}), [props.style, props.disabled])
+    const styleObject = React.useMemo(() => ({ ...props.style, paddingBottom: 12, borderWidth: props.disabled ? 0 : 1 }), [props.style, props.disabled])
     const value = React.useMemo(() => toString(props.value), [props.value])
     const accessory = React.useMemo(() => <>
         <Unit unit={props.unit} disabled={props.disabled} />
@@ -118,6 +118,11 @@ const InputField = React.forwardRef((props, ref) => {
             caption={renderCaption}
             accessoryRight={accessory}
             {...props}
+            keyboardType={props.keyboardType !== 'numeric' ? props.keyboardType : Platform.select({
+                android: 'numeric',
+                ios: 'numbers-and-punctuation',
+                default: 'numeric'
+            })}
             onChangeText={onChangeText}
             ref={ref}
             selectTextOnFocus={true}
