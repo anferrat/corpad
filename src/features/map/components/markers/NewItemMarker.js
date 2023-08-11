@@ -30,6 +30,6 @@ export default NewItemMarker
 
 const styles = StyleSheet.create({
     marker: {
-        zIndex: 1
+        zIndex: 2
     }
 })

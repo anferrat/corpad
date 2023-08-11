@@ -52,7 +52,7 @@ export class GetSubitemList {
         const [subitems, referenceCells, potentialTypes, pipelineList, settings] = await Promise.all(this._getFullList(id, itemType))
         const potentialUnit = settings.defaultPotentialUnit ?? null
         const { multimeter } = settings
-        const availableMeasurementTypes = multimeter.type ? this.multimeterFactory.execute(multimeter.type).getSupportedMeasurementTypes() : []
+        const availableMeasurementTypes = multimeter && multimeter.type ? this.multimeterFactory.execute(multimeter.type).getSupportedMeasurementTypes() : []
         subitems.forEach(subitem => {
             //Convert units to display potentials
             subitem.potentials.forEach(({ value }, index) => {

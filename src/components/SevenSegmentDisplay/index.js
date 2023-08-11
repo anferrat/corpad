@@ -28,8 +28,8 @@ const SevenSegmentView = ({ value = 0, onColor, size, overRange }) => {
     const number = valueString.replace('-', '')
     const pointIndex = overRange ? 0 : getPointIndex(number)
     const digits = number.replace('.', '')
-    const w = size === 'small' ? (width / 2.5) : width
-    const h = size === 'small' ? (height / 2.5) : height
+    const w = size === 'small' ? Math.floor(width / 2.5) : width
+    const h = size === 'small' ? Math.floor(height / 2.5) : height
 
     const values = !overRange ? Array.apply(null, new Array(4)).map((_, index) => digits[index] ?? '-') : ['e', 'r', 'r', '_']
     return (

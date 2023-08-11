@@ -40,7 +40,7 @@ export default React.memo(ActiveMarker)
 
 const styles = StyleSheet.create({
     marker: {
-        zIndex: 1,
+        zIndex: 1000,
         alignItems: 'center',
         justifyContent: 'flex-end',
         width: 40,

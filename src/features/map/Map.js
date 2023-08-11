@@ -65,6 +65,7 @@ const Map = ({ navigateToView, navigateToEdit }) => {
                 showsBuildings={false}
                 showsIndoors={false}
                 style={styles.map}>
+
                 {markers.map(m =>
                     <PointMarker
                         key={m.uid}

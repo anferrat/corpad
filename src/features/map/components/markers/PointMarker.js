@@ -1,4 +1,5 @@
 import React from 'react'
+import { StyleSheet } from 'react-native'
 import { Marker } from 'react-native-maps'
 import { getMapIcon } from '../native_icons/mapIcons'
 
@@ -27,7 +28,9 @@ const PointMarker = ({ uid, id, name, onPress, updateMarkerHandler, onDragStart,
                 onDragStart={onDragStart}
                 onDragEnd={onDragEnd}
                 tracksViewChanges={false}
-                //isPreselected={true}
+                style={styles.marker}
+                stopPropagation={true}
+                isPreselected={true}
                 coordinate={{
                     latitude: latitude,
                     longitude: longitude
@@ -38,3 +41,9 @@ const PointMarker = ({ uid, id, name, onPress, updateMarkerHandler, onDragStart,
 }
 
 export default React.memo(PointMarker)
+
+const styles = StyleSheet.create({
+    marker: {
+        zIndex: 1
+    }
+})

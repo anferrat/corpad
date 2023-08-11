@@ -6,7 +6,7 @@ import { MultimeterCycles, MultimeterMeasurementTypes, MultimeterSyncModes } fro
 import { errorHandler } from "../../../../helpers/error_handler"
 import { addReadingListener, readingCaptureSetup, stopReadingCapture } from "../../../../app/controllers/MultimeterController"
 import useOnOffCaptureActive from "./useOnOffCaptureActive"
-import { ToastAndroid } from "react-native"
+import { ToastAndroid, Platform } from "react-native"
 import { hapticMedium } from "../../../../native_libs/haptics"
 
 const initPotentialFields = [{ potentialId: null, name: null, cycle: null }]
@@ -171,7 +171,8 @@ const useMultimeterListener = () => {
 
     const onCapture = useCallback(() => {
         if (setupCompleted && field.itemId && field.subitemId && field.measurementType) {
-            ToastAndroid.showWithGravity('Captured', ToastAndroid.SHORT, ToastAndroid.CENTER)
+            if (Platform.OS === 'android')
+                ToastAndroid.showWithGravity('Captured', ToastAndroid.SHORT, ToastAndroid.CENTER)
             hapticMedium()
             EventRegister.emit('MULTIMETER_CAPTURED_VALUES', {
                 measurementType: field.measurementType,

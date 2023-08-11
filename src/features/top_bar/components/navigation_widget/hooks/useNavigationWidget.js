@@ -91,7 +91,7 @@ const useNavigationWidget = () => {
             else
                 Animated.timing(arrowRotation.current, {
                     toValue: angle,
-                    duration: 100,
+                    duration: 250,
                     useNativeDriver: true
                 }).start()
             if (loading)
