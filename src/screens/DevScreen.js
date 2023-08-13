@@ -1,14 +1,13 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect} from 'react'
 import { globalStyle } from '../styles/styles'
 import { SafeAreaView, StatusBar } from 'react-native'
 import { Button, Text } from '@ui-kitten/components'
 import { TestRepository } from '../app/repository/sqlite/TestRepo'
 import FocusAwareStatusBar from '../components/FocusAwareStatusBar'
 import { generateTestPoints, resetDatabase } from '../app/controllers/DevController'
-import { potentialCaptureSetup, addPotentialListener, pairMultimeter } from '../app/controllers/MultimeterController'
+import {  pairMultimeter } from '../app/controllers/MultimeterController'
 import { EventRegister } from 'react-native-event-listeners'
 import { _PokitMultimeterService } from '../app/services/survey/other/multimeter/_devices/pokitPro/_PokitMultimeterService'
-import { BluetoothRepository } from '../app/repository/bluetooth/BluetoothRepository'
 import { useSelector } from 'react-redux'
 
 
@@ -22,18 +21,6 @@ export default DevScreen = ({ navigation, route }) => {
     EventRegister.emit('MULTIMETER_START_CAPTURE', { itemId: 1, subitemId: 1, potentialId: 1, measurementType: 'POTENTIALS' })
   }
 
-  const onTest = () => {
-
-
-  }
-
-  useEffect(() => {
-    const service = new _PokitMultimeterService(new BluetoothRepository())
-    const listener = service.statusListener(() => { }, { peripheralId: id })
-    return () => {
-      listener()
-    }
-  }, [])
 
 
   return (

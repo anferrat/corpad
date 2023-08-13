@@ -22,6 +22,7 @@ const useExportModal = ({ navigationRef }) => {
         if (!loading) {
             setLoading(true)
             await openFileIn({ url: fileUrl, mimeType: mimeType })
+            hideModal()
             setLoading(false)
         }
     }
@@ -30,6 +31,7 @@ const useExportModal = ({ navigationRef }) => {
         if (!loading) {
             setLoading(true)
             await shareFile({ url: fileUrl, mimeType: mimeType })
+            hideModal()
             setLoading(false)
         }
     }

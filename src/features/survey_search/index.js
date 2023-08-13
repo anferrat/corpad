@@ -36,7 +36,7 @@ export const SearchBar = ({ navigateToView }) => {
             id={id}
             name={name}
             status={status}
-            markerType={markerType}
+            markerType={`${markerType}-filled`}
             itemType={itemType}
             navigateToView={navigateToView} />
     },
@@ -48,9 +48,9 @@ export const SearchBar = ({ navigateToView }) => {
                 translucent={true}
                 backgroundColor={'transparent'}
                 barStyle={'dark-content'} />
-            <SafeAreaView
+            <View
                 style={styles.mainView}>
-                <View style={{ ...styles.searchBar, minHeight: 80 - top }}>
+                <View style={{ ...styles.searchBar, minHeight: 60 + top, paddingTop: top }}>
                     <SingleIconButton
                         style={styles.backIcon}
                         iconName='arrow-back-outline'
@@ -77,7 +77,7 @@ export const SearchBar = ({ navigateToView }) => {
                     data={found}
                     renderItem={renderItem}
                 />
-            </SafeAreaView>
+            </View>
         </>
     )
 }

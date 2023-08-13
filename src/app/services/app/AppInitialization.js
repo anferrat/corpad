@@ -20,8 +20,9 @@ export class AppInitialization {
         //Get settings, reset the ones are not found.
         const settings = await this.settingInitializationService.execute()
 
-        //Initialize bluetooth module
-        await this.multimeterInitializationService.execute()
+        //Initialize bluetooth module, only if onboarding is not displayed, otherwise initialize it after onboarding update. (No notification should be displayed during onboarding)
+        if (!settings.onboarding.main)
+            await this.multimeterInitializationService.execute()
 
         let [{ isLoaded, syncTime, name, fileName, isCloud }, { isSigned, userName }, initialUrl] = await Promise.all([
             this.currentSurveyStatusService.execute(),

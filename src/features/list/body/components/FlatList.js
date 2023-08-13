@@ -10,7 +10,6 @@ const DataLoaderFlatList = (props) => {
         keyExtractor={props.keyExtractor}
         initialNumToRender={18}
         ListEmptyComponent={props.ListEmptyComponent}
-        removeClippedSubviews={true}
         data={props.data}
         refreshing={props.refreshing}
         onRefresh={props.onRefresh}

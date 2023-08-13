@@ -49,8 +49,7 @@ export const ExportedFilesList = ({ navigateToSpreadsheet }) => {
                 title='Delete all'
                 disabled={deleteButtonDisabled}
                 icon={'trash'}
-                onPress={deleteAll}
-            />
+                onPress={deleteAll} />
         </>
     )
 }

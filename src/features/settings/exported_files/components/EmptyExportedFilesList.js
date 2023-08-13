@@ -28,7 +28,7 @@ const EmptyExportedFilesList = () => {
     )
 }
 
-export default React.memo(EmptyExportedFilesList, () => true)
+export default React.memo(EmptyExportedFilesList)
 
 const styles = StyleSheet.create({
     mainView: {

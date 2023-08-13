@@ -18,17 +18,18 @@ const IsolationView = ({ shorted, current, valid, update, validate, updateShorte
                 onChange={updateShortedHandler}>
                 Shorted
             </Toggle>
-            <Input
-                onChangeText={onChangeCurrent}
-                onEndEditing={onEndEditing}
-                maxLength={8}
-                keyboardType='numeric'
-                unit={'A'}
-                property='current'
-                label='Shorting current'
-                style={shorted ? styles.input : styles.hidden}
-                valid={valid}
-                value={current} />
+            {shorted ?
+                <Input
+                    onChangeText={onChangeCurrent}
+                    onEndEditing={onEndEditing}
+                    maxLength={8}
+                    keyboardType='numeric'
+                    unit={'A'}
+                    property='current'
+                    label='Shorting current'
+                    style={styles.input}
+                    valid={valid}
+                    value={current} /> : null}
         </View>
     )
 }
