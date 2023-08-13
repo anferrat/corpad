@@ -60,12 +60,10 @@ export class AppRepository extends SQLiteRepository {
                     this.runQuery(tx, "SELECT name FROM sqlite_schema WHERE type='table' AND name='settings'")
                 ])
                 const schemaTableExists = Boolean(schema.rows.length)
-                console.log('schemaTableExists ', schemaTableExists)
                 const settingsTableExists = Boolean(settings.rows.length)
-                console.log('settingsTableExists ', settingsTableExists)
                 if (schemaTableExists && settingsTableExists)
                     return null //impossible case, request schema adjustment just in case 
-                else if (settingsTableExists && !schemaTableExists) //null schema has all the tables initiated, except or shemaVersion table
+                else if (settingsTableExists && !schemaTableExists) //null schema has main tables initiated, except or shemaVersion table
                     return null
                 else if (!settingsTableExists && !schemaTableExists) //tables don't exists yet, new tables will be created with latest schema, no need to adjust
                     return schemaVersion
@@ -82,10 +80,8 @@ export class AppRepository extends SQLiteRepository {
         //when decided to update database schema u need:
         //1. Update schema version in config file
         //2. Write transaction for each previous schema version with queries to achive result schema
-        //3. Dont forget to update schema version to the latest at the end of transaction
-
+        //3. Update create table queries. In case of adding new tables without changing existed, schema update is not needed. 
         //Current schema version 1. 
-        console.log(currentSchemaVersion)
         if (currentSchemaVersion !== schemaVersion)
             try {
                 switch (currentSchemaVersion) {
