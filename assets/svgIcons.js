@@ -153,19 +153,16 @@ const ColorCircleDouble = (props) => (
 )
 
 const FN = (props) => (
-  <Svg
-    xmlns="http://www.w3.org/2000/svg"
-    viewBox="0 0 24 24"
-    style={{
-      enableBackground: "new 0 0 24 24",
-    }}
-    xmlSpace="preserve"
-    {...props}
-  >
-    <Path d="M14 9.5h-4c-.6 0-1 .4-1 1s.4 1 1 1h4c.6 0 1-.4 1-1s-.4-1-1-1z" />
-    <Path d="M18 4h-1V3c0-.6-.4-1-1-1s-1 .4-1 1v1H9V3c0-.6-.4-1-1-1s-1 .4-1 1v1H6C4.3 4 3 5.3 3 7v12c0 1.7 1.3 3 3 3h12c1.7 0 3-1.3 3-3V7c0-1.7-1.3-3-3-3zm1 6v9c0 .6-.4 1-1 1H6c-.6 0-1-.4-1-1V7c0-.6.4-1 1-1h1v1c0 .6.4 1 1 1s1-.4 1-1V6h6v1c0 .6.4 1 1 1s1-.4 1-1V6h1c.6 0 1 .4 1 1v3z" />
-    <Path d="M14 13h-4c-.6 0-1 .4-1 1s.4 1 1 1h4c.6 0 1-.4 1-1s-.4-1-1-1zM14 16.5h-4c-.6 0-1 .4-1 1s.4 1 1 1h4c.6 0 1-.4 1-1s-.4-1-1-1z" />
-  </Svg>
+  <Svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" {...props}>
+  <G data-name="Layer 2">
+    <G data-name="message-square">
+      <Circle cx={12} cy={11} r={1} />
+      <Circle cx={16} cy={11} r={1} />
+      <Circle cx={8} cy={11} r={1} />
+      <Path d="M19 3H5a3 3 0 0 0-3 3v15a1 1 0 0 0 .51.87A1 1 0 0 0 3 22a1 1 0 0 0 .51-.14L8 19.14a1 1 0 0 1 .55-.14H19a3 3 0 0 0 3-3V6a3 3 0 0 0-3-3zm1 13a1 1 0 0 1-1 1H8.55a3 3 0 0 0-1.55.43l-3 1.8V6a1 1 0 0 1 1-1h14a1 1 0 0 1 1 1z" />
+    </G>
+  </G>
+</Svg>
 )
 
 const OT = (props) => (

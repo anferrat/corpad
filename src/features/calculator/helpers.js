@@ -268,7 +268,7 @@ export const getResult = (data, calculatorType, isMetric) => {
                         }))
                     },
                     exportedObject: [
-                        [`Spacing, ${unit}`, 'Resistance, ohm', 'Average resistivity, ohm-cm', 'Layer resistance, ohm', 'Layer resistivity, ohm-cm'],
+                        [`Spacing ${unit}`, 'Resistance ohm', 'Average resistivity ohm-cm', 'Layer resistance ohm', 'Layer resistivity ohm-cm'],
                         ...layersCalculated.map(l => [l.spacing, l.resistance, l.resistivityAverage, l.layerResistance, l.layerResistivity])
                     ],
                     label: `${layers.length} layer${layers.length === 1 ? '' : 's'}, 0 - ${layers[layers.length - 1].spacing} ${unit}`
@@ -303,7 +303,7 @@ export const getResult = (data, calculatorType, isMetric) => {
                         ]
                     },
                     exportedObject: [
-                        ['Shunt ratio', 'Shunt factor, A/mV', 'Shunt resistance, ohm', 'Voltage drop, mV', 'Current, A'],
+                        ['Shunt ratio', 'Shunt factor A/mV', 'Shunt resistance ohm', 'Voltage drop mV', 'Current A'],
                         [`${ratioVoltage} mV - ${ratioCurrent} A`, factor, resistance, data.voltageDrop, shuntCurrent]
                     ],
                     label: `${ratioVoltage} mV - ${ratioCurrent} A`
@@ -347,7 +347,7 @@ export const getResult = (data, calculatorType, isMetric) => {
                 },
                 exportedObject:
                     [
-                        [`Pipe segment length, ${unit}`, 'Pipe diameter', 'Pipe OD, in', 'Wall thickness, in', `Pipe weight, ${weightUnit}`, 'Steel resistivity, microohm-cm', 'Pipe segment resistance, ohm', 'Current, A'],
+                        [`Pipe segment length ${unit}`, 'Pipe diameter', 'Pipe OD in', 'Wall thickness in', `Pipe weight ${weightUnit}`, 'Steel resistivity microohm-cm', 'Pipe segment resistance ohm', 'Current A'],
                         [data.distance, npsList[data.npsIndex], od, pipeThickness, weight, '14.3', resistance, current]
                     ],
                 label: `${data.distance} ${unit},  ${current} A`
@@ -380,7 +380,7 @@ export const getResult = (data, calculatorType, isMetric) => {
                 },
                 exportedObject:
                     [
-                        ['Voltage drop (OFF), mV', 'Test current, A', 'Voltage drop (ON), mV', 'Resistance, mOhm', 'Calibration factor, A/mV', 'Current, A'],
+                        ['Voltage drop (OFF) mV', 'Test current A', 'Voltage drop (ON) mV', 'Resistance mOhm', 'Calibration factor A/mV', 'Current A'],
                         [data.voltageDrop.off, data.current, data.voltageDrop.on, resistance, calibrationFactor, current]
                     ],
                 label: `${fixRealValue(resistance)} m\u03A9, ${current} A`
@@ -451,11 +451,11 @@ export const getResult = (data, calculatorType, isMetric) => {
                         ],
                     },
                     exportedObject: [
-                        [' ', 'Current (ON), A', 'Current (OFF), A', 'Potentials (ON), mV', 'Potentials (OFF), mV', 'Soil resistivity, ohm-cm'],
+                        [' ', 'Current (ON) A', 'Current (OFF) A', 'Potentials (ON) mV', 'Potentials (OFF) mV', 'Soil resistivity ohm-cm'],
                         ['Test point 1 - Start', data.start.current.on, data.start.current.off, data.start.potential.on, data.start.potential.off, data.start.resistivity],
                         ['Test point 2 - End', data.end.current.on, data.end.current.off, data.end.potential.on, data.end.potential.off, data.end.resistivity],
                         [''],
-                        [`Pipe segment length, ${unit}`, 'Pipe diameter', `Pipe OD, ${unit}`, 'Voltage difference(avg.), mV', 'Current picked up by pipeline, A', 'Pipe-to-earth resistance, ohm', 'Overall conductance, S', `Specific resistance, ohm-${unit}2`, `Specific conductance, ohm/${unit}2`, 'Average soil resistivity, ohm-cm', `Normilized conductance,  ohm-${unit}2`, 'Coating quality'],
+                        [`Pipe segment length ${unit}`, 'Pipe diameter' `Pipe OD ${unit}`, 'Voltage difference(avg.) mV', 'Current picked up by pipeline A', 'Pipe-to-earth resistance ohm', 'Overall conductance S', `Specific resistance ohm-${unit}2`, `Specific conductance ohm/${unit}2`, 'Average soil resistivity ohm-cm', `Normilized conductance ohm-${unit}2`, 'Coating quality'],
                         [data.spacing, npsValue, od, deltaE, deltaI, resistance, conductance, specificResistance, specificConductance, averageResistivity, normilizedConductance, quality]
                     ],
                     label: `${npsValue}, ${data.spacing} ${unit}`
@@ -489,7 +489,7 @@ export const getResult = (data, calculatorType, isMetric) => {
                         }]
                 },
                 exportedObject: [
-                    ['Initial reference cell', `Initial potential, mV(${referenceCellCodes[data.initialType]})`, 'Target reference cell', 'Coefficient, V', `Converted potential, mV(${referenceCellCodes[data.targetType]})`],
+                    ['Initial reference cell', `Initial potential mV(${referenceCellCodes[data.initialType]})`, 'Target reference cell', 'Coefficient V', `Converted potential mV(${referenceCellCodes[data.targetType]})`],
                     [referenceCellElectrodes[data.initialType], data.potential, referenceCellElectrodes[data.targetType], coefficient, resultPotential]
                 ],
                 label: `${referenceCellCodes[data.initialType]} -> ${referenceCellCodes[data.targetType]}`,

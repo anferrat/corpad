@@ -165,7 +165,7 @@ class SurveyFileController extends Controller {
     async create(params, onError = null, onSuccess = null) {
         return super.controllerHandler(onSuccess, onError, 415, async () => {
             const { isBlank, isCloud, path, name } = params
-            if (isBlank)
+            if (isBlank || path === null)
                 return await this.createSurveyService.execute(name, isCloud)
             else
                 return await this.createSurveyFromTemplateService.execute(name, isCloud, path)

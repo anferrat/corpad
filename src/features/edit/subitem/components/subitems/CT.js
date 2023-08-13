@@ -70,8 +70,7 @@ const CT = ({ data, update, validate }) => {
                     ratioVoltage={ratioVoltage}
                     ratioCurrent={ratioCurrent}
                     voltageDrop={voltageDrop}
-                    valid={validShuntObject}
-                />
+                    valid={validShuntObject} />
             </View>
         </>
     )

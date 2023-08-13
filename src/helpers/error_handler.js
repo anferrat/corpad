@@ -62,7 +62,7 @@ const errorCodes = {
     406: 'Uknown directory location.',
     407: 'Unable to delete file',
     408: 'Unable to read file',
-    409: 'Unable to create filename',
+    409: 'Unable to create filename. Please change survey name and try again.',
     410: 'Unable to get file stats',
     411: 'Unable to read directory',
     415: 'Unable to create new survey.',

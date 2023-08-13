@@ -71,8 +71,7 @@ export const CreateSurvey = () => {
             <BottomButton
                 title='Create'
                 icon='file-add-outline'
-                onPress={createSurveyHandler}
-            />
+                onPress={createSurveyHandler} />
         </View>
     )
 }

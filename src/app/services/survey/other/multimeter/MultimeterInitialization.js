@@ -9,10 +9,10 @@ export class MultimeterInitialization {
     async execute() {
         try {
             await this.bluetoothRepo.init()
-            await this.bluetoothRepo.checkState()
             const { multimeter } = await this.settingRepo.get()
             const { peripheralId, type } = multimeter
             if (peripheralId !== null && peripheralId) {
+                await this.bluetoothRepo.checkState()
                 const multimeterSrvice = this.multimeterFactory.execute(type)
                 setTimeout(async () => {
                     try {

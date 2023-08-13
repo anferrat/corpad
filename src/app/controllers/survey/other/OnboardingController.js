@@ -4,12 +4,18 @@ import { MarkOnboardingOverlayVisited } from "../../../services/survey/other/onb
 import { MarkOnboardingVisited } from "../../../services/survey/other/onboarding/MarkOnboardingVisited"
 import { Controller } from "../../../utils/Controller"
 import { ONBOARDING_VERSION } from "../../../config/Onboarding"
+import { MultimeterInitialization } from "../../../services/survey/other/multimeter/MultimeterInitialization"
+import { BluetoothRepository } from "../../../repository/bluetooth/BluetoothRepository"
+import { MultimeterFactory } from "../../../services/survey/other/multimeter/_devices/MultimeterFactory"
 
 class OnboardingController extends Controller {
-    constructor(settingRepo) {
+    constructor(settingRepo, bluetoothRepo) {
         super()
-        this.markOnboardingVisitedService = new MarkOnboardingVisited(settingRepo)
+        this.multimeterFactory = new MultimeterFactory(bluetoothRepo)
+        this.multimeterInitializationService = new MultimeterInitialization(bluetoothRepo, settingRepo, this.multimeterFactory)
+        this.markOnboardingVisitedService = new MarkOnboardingVisited(settingRepo, this.multimeterInitializationService)
         this.markOnboardingOverlayVisitedService = new MarkOnboardingOverlayVisited(settingRepo)
+
     }
 
     markOnboardingCompleted(onError = null, onSuccess = null) {
@@ -31,7 +37,8 @@ class OnboardingController extends Controller {
 }
 
 const onboardingController = new OnboardingController(
-    new SettingRepository()
+    new SettingRepository(),
+    new BluetoothRepository()
 )
 
 export const markOnboardingCompleted = (onError, onSuccess) => onboardingController.markOnboardingCompleted(onError, onSuccess)

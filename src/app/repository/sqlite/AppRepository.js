@@ -29,8 +29,14 @@ export class AppRepository extends SQLiteRepository {
 
             await super.runMultiQueryTransaction(tx => [
                 super.runQuery(tx, `CREATE TABLE IF NOT EXISTS sides (id INTEGER PRIMARY KEY NOT NULL, sideAId INT, sideBId INT, parentCardId INT, FOREIGN KEY(parentCardId) REFERENCES cards(id) ON DELETE CASCADE, FOREIGN KEY(sideAId) REFERENCES cards(id) ON DELETE CASCADE, FOREIGN KEY(sideBId) REFERENCES cards(id) ON DELETE CASCADE)`, []),
-                super.runQuery(tx, `CREATE TABLE IF NOT EXISTS potentials (id INTEGER PRIMARY KEY NOT NULL, cardId INTEGER NOT NULL, uid TEXT, value REAL, type INTEGER NOT NULL, oldValue REAL, unit TEXT, portableReferenceId INTEGER, permanentReferenceId INTEGER, FOREIGN KEY(portableReferenceId) REFERENCES referenceCells(id) ON DELETE CASCADE, FOREIGN KEY(type) REFERENCES potentialTypes(id) ON DELETE CASCADE, FOREIGN KEY(cardId) REFERENCES cards(id) ON DELETE CASCADE, FOREIGN KEY(permanentReferenceId) REFERENCES cards(id) ON DELETE CASCADE)`, [])
+                super.runQuery(tx, `CREATE TABLE IF NOT EXISTS potentials (id INTEGER PRIMARY KEY NOT NULL, cardId INTEGER NOT NULL, uid TEXT, value REAL, type INTEGER NOT NULL, oldValue REAL, unit TEXT, portableReferenceId INTEGER, permanentReferenceId INTEGER, FOREIGN KEY(portableReferenceId) REFERENCES referenceCells(id) ON DELETE CASCADE, FOREIGN KEY(type) REFERENCES potentialTypes(id) ON DELETE CASCADE, FOREIGN KEY(cardId) REFERENCES cards(id) ON DELETE CASCADE, FOREIGN KEY(permanentReferenceId) REFERENCES cards(id) ON DELETE CASCADE)`, []),
             ])
+
+            await this.runMultiQueryTransaction(tx => [
+                this.runQuery(tx, 'DELETE FROM schemaVersion', []),
+                this.runQuery(tx, 'INSERT INTO schemaVersion (version) VALUES(?)', [schemaVersion])
+            ])
+
         }
         catch (er) {
             throw new Error(errors.DATABASE, 'Unable to create database tables', er)
@@ -41,40 +47,61 @@ export class AppRepository extends SQLiteRepository {
     async getSchemaVersion() {
         try {
             const { rows } = await super.runSingleQueryTransaction('SELECT * FROM schemaVersion LIMIT 1', [])
-            if (rows.length === 0)
-                return null
-            else
+            if (rows.length !== 0)
                 return rows.item(0).version
+            else {
+                throw 'Need to check if schema is null, or tables are not created yet'
+            }
         }
         catch (er) {
-            //no errros should be thrown while adjusting schemas
+            try {
+                const [schema, settings] = await super.runMultiQueryTransaction(tx => [
+                    this.runQuery(tx, "SELECT name FROM sqlite_schema WHERE type='table' AND name='schemaVersion'"),
+                    this.runQuery(tx, "SELECT name FROM sqlite_schema WHERE type='table' AND name='settings'")
+                ])
+                const schemaTableExists = Boolean(schema.rows.length)
+                console.log('schemaTableExists ', schemaTableExists)
+                const settingsTableExists = Boolean(settings.rows.length)
+                console.log('settingsTableExists ', settingsTableExists)
+                if (schemaTableExists && settingsTableExists)
+                    return null //impossible case, request schema adjustment just in case 
+                else if (settingsTableExists && !schemaTableExists) //null schema has all the tables initiated, except or shemaVersion table
+                    return null
+                else if (!settingsTableExists && !schemaTableExists) //tables don't exists yet, new tables will be created with latest schema, no need to adjust
+                    return schemaVersion
+                else return null //impossible case
+            }
+            catch (er) {
+                return null
+            }
         }
     }
 
 
-    async adjustDatabaseSchema(version) {
+    async adjustDatabaseSchema(currentSchemaVersion) {
         //when decided to update database schema u need:
         //1. Update schema version in config file
         //2. Write transaction for each previous schema version with queries to achive result schema
         //3. Dont forget to update schema version to the latest at the end of transaction
-        try {
-            switch (version) {
-                case null:
-                    return await this.runMultiQueryTransaction(tx => [
-                        this.runQuery(tx, 'ALTER TABLE settings ADD multimeter TEXT'),
-                        this.runQuery(tx, 'ALTER TABLE potentials ADD oldValue REAL'),
-                        this.runQuery(tx, 'ALTER TABLE cards ADD oldCurrent REAL'),
-                        this.runQuery(tx, 'ALTER TABLE cards ADD oldVoltageDrop REAL'),
-                        //Always include schema version update at the end of transaction
-                        this.runQuery(tx, 'DELETE FROM schemaVersion', []),
-                        this.runQuery(tx, 'INSERT INTO schemaVersion (version) VALUES(?)', [schemaVersion])
-                    ])
-            }
-        }
-        catch (er) {
-            //no Errros thrown while adjusting schemas
-        }
 
+        //Current schema version 1. 
+        console.log(currentSchemaVersion)
+        if (currentSchemaVersion !== schemaVersion)
+            try {
+                switch (currentSchemaVersion) {
+                    case null:
+                        return await this.runMultiQueryTransaction(tx => [
+                            this.runQuery(tx, 'ALTER TABLE settings ADD multimeter TEXT'),
+                            this.runQuery(tx, 'ALTER TABLE potentials ADD oldValue REAL'),
+                            this.runQuery(tx, 'ALTER TABLE cards ADD oldCurrent REAL'),
+                            this.runQuery(tx, 'ALTER TABLE cards ADD oldVoltageDrop REAL'),
+                        ])
+                }
+            }
+            catch (er) {
+                console.log(er)
+                //no Errros thrown while adjusting schemas
+            }
     }
 
     async fullResetDevOnly() {

@@ -45,17 +45,19 @@ const IK = ({ data, updateShorted, updatePropertyValue, validateCurrent, onEdit,
                     onChange={onToggle}>
                     <Text>{IsolationShortedLabels[IsolationShorted.SHORTED]}</Text>
                 </Toggle>
-                <View style={shorted ? styles.input : styles.hidden}>
-                    <Input
-                        onChangeText={onChangeCurrent}
-                        onEndEditing={onEndEditingCurrent}
-                        keyboardType='numeric'
-                        value={current}
-                        valid={valid.current}
-                        property='current'
-                        label='Current'
-                        unit={'A'} />
-                </View>
+                {shorted ?
+                    <View style={styles.input}>
+                        <Input
+                            onChangeText={onChangeCurrent}
+                            onEndEditing={onEndEditingCurrent}
+                            keyboardType='numeric'
+                            value={current}
+                            valid={valid.current}
+                            property='current'
+                            label='Current'
+                            unit={'A'} />
+                    </View> :
+                    null}
             </View>
         </>
     )
@@ -72,9 +74,6 @@ const styles = StyleSheet.create({
     input: {
         marginLeft: 24,
         flex: 1
-    },
-    hidden: {
-        display: 'none',
     },
     toggle: {
         height: 80

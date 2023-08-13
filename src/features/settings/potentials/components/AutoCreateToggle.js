@@ -48,8 +48,5 @@ const styles = StyleSheet.create({
     titleView: {
         flex: 1,
         paddingRight: 36
-    },
-    hidden: {
-        display: "none"
     }
 })

@@ -41,23 +41,24 @@ const TemplateSelector = ({ surveyList, toggleTemplateSetting, isBlank, selected
                     </View>
                 </Radio>
             </RadioGroup>
-            <View
-                style={isBlank ? styles.hidden : {}}>
-                {surveyListLoading ?
-                    <View style={styles.selectLoadingView}>
-                        <ActivityIndicator size='small' color={primary} />
-                        <Text style={styles.loadingText} appearance='hint'>Loading survey list... </Text>
-                    </View>
-                    :
-                    <Select
-                        placeholder={placeholder}
-                        accessory={accessory}
-                        label='Base survey'
-                        selectedIndex={selectedSurveyindex}
-                        onSelect={setSelectedSurveyIndex}
-                        itemList={surveyList} />
-                }
-            </View>
+            {!isBlank ?
+                <View style={styles.selectView}>
+                    {surveyListLoading ?
+                        <View style={styles.selectLoadingView}>
+                            <ActivityIndicator size='small' color={primary} />
+                            <Text style={styles.loadingText} appearance='hint'>Loading survey list... </Text>
+                        </View>
+                        :
+                        <Select
+                            placeholder={placeholder}
+                            accessory={accessory}
+                            label='Base survey'
+                            selectedIndex={selectedSurveyindex}
+                            onSelect={setSelectedSurveyIndex}
+                            itemList={surveyList} />
+                    }
+                </View> :
+                null}
         </>
     )
 }
@@ -69,16 +70,15 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         marginTop: 24,
     },
-    hidden: {
-        display: 'none',
-        height: 300
-    },
     selectLoadingView: {
         justifyContent: 'center',
         alignItems: 'center',
         height: 50,
         flexDirection: 'row',
         marginTop: 12
+    },
+    selectView: {
+      
     },
     loadingText: {
         marginLeft: 12

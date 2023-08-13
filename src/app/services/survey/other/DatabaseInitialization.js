@@ -4,8 +4,9 @@ export class DatabaseInitialization {
     }
 
     async execute() {
-        await this.appRepo.createTables()
+        //check schema version BEFORE creating tables. 
         const schemaVersion = await this.appRepo.getSchemaVersion()
+        await this.appRepo.createTables()
         await this.appRepo.adjustDatabaseSchema(schemaVersion)
     }
 }
