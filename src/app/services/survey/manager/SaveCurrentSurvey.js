@@ -1,9 +1,9 @@
 import { errors } from "../../../utils/Error"
+import { guid } from "../../../utils/guid"
 
 export class SaveCurrentSurvey {
-    constructor(surveyJsonExportService, surveyFileConverter, settingRepo, surveyRepo, saveSurveyToFileService, saveSurveyToCloudFileService, warningHandler) {
+    constructor(surveyJsonExportService, settingRepo, surveyRepo, saveSurveyToFileService, saveSurveyToCloudFileService, warningHandler) {
         this.surveyJsonExportService = surveyJsonExportService
-        this.surveyFileConverter = surveyFileConverter
         this.settingRepo = settingRepo
         this.surveyRepo = surveyRepo
         this.saveSurveyToFileService = saveSurveyToFileService
@@ -12,7 +12,7 @@ export class SaveCurrentSurvey {
     }
 
     async execute() {
-        const [surveyFile, { isSurveyNew, cloudId, isCloud, originalHash, fileName }, { name }] = await Promise.all([
+        const [surveyFile, { isSurveyNew, cloudId, isCloud, originalHash, fileName }, { name, uid }] = await Promise.all([
             this.surveyJsonExportService.execute(),
             this.settingRepo.get(),
             this.surveyRepo.getSurvey()
@@ -23,17 +23,11 @@ export class SaveCurrentSurvey {
         //Generate new file name if survey is new, and fileName does not exist
         const surveyFileName = isSurveyNew ? `${name}.json` : fileName
 
-        //Convert surveyFile object to v1 format (by default)
-        const file = this.surveyFileConverter.execute(surveyFile)
-
-        //Convert to string to write to file
-        const content = JSON.stringify(file)
-
         //Write to file using correct service
         const saved = !isCloud ?
-            await this.saveSurveyToFileService.execute(content, surveyFileName, isSurveyNew, originalHash)
+            await this.saveSurveyToFileService.execute(surveyFile, surveyFileName, isSurveyNew, originalHash, uid)
             :
-            await this._saveCloudSurvey(content, surveyFileName, isSurveyNew, cloudId)
+            await this._saveCloudSurvey(surveyFile, surveyFileName, isSurveyNew, cloudId)
 
         //savedAsLocal shows if cloud survey was converted to local. If so, updates isCloud setting
         const { savedAsLocal } = saved
@@ -49,25 +43,29 @@ export class SaveCurrentSurvey {
         }
     }
 
-    async _saveCloudSurvey(content, fileName, isSurveyNew, cloudId) {
+    async _saveCloudSurvey(surveyFile, fileName, isSurveyNew, cloudId, uid) {
         try {
             //Attempt to save survey to cloud
             return {
-                ...(await this.saveSurveyToCloudFileService.execute(content, fileName, isSurveyNew, cloudId)),
+                ...(await this.saveSurveyToCloudFileService.execute(surveyFile, fileName, isSurveyNew, cloudId, uid)),
                 savedAsLocal: false
             }
         }
         catch (er) {
+            console.log(er)
             //if fails, prompt to save survey locally
             const saveAsLocal = await this.warningHandler.execute(`Unable to save survey to cloud drive. It may happen because you have don't have internet connection or are signed out of you account. You try again later, or save a copy of the survey to the device instead.`,
                 'Save copy to the device', 'Try later')
-            if (saveAsLocal)
+            if (saveAsLocal) {
                 //if accepted, use local saveSurvey service to write
+                const newSurveyUid = guid()
+                surveyFile.survey.reset(newSurveyUid)
                 return {
-                    ...(await this.saveSurveyToFileService.execute(content, fileName, true, null)),
+                    ...(await this.saveSurveyToFileService.execute(surveyFile, fileName, true, null)),
                     savedAsLocal: true
                 }
-            //if declined throw 101 status
+                //if declined throw 101 status
+            }
             else throw new Error(errors.GENERAL, 'Cloud survey export was cancelled', 'Saving cancelled', 101)
         }
     }

@@ -9,16 +9,16 @@ export class UpdatePotentialList {
     }
 
     async execute({ potentials, referenceCells, potentialTypes, unit }, subitemId) {
-        const convertedPotentials = potentials.map(({ id, uid, potentialTypeId, isPortable, referenceCellId, value }) => {
+        const convertedPotentials = potentials.map(({ id, uid, potentialTypeId, isPortable, referenceCellId, value, prevValue }) => {
             const convertedValue = this.unitConverter.convertVolts(value, unit, PotentialUnits.VOLTS)
-            return new Potential(id, uid, subitemId, convertedValue, potentialTypeId, referenceCellId, isPortable)
+            return new Potential(id, uid, subitemId, convertedValue, potentialTypeId, referenceCellId, isPortable, prevValue)
         })
 
         const result = await this.potentialRepo.updateList(convertedPotentials, subitemId)
 
-        const convertedToOriginal = result.map(({ id, uid, subitemId, value, referenceCellId, potentialType, isPortableReference }) => {
+        const convertedToOriginal = result.map(({ id, uid, subitemId, value, referenceCellId, potentialType, isPortableReference, prevValue }) => {
             const convertedValue = this.unitConverter.convertVolts(value, PotentialUnits.VOLTS, unit)
-            return new Potential(id, uid, subitemId, convertedValue, potentialType, referenceCellId, isPortableReference)
+            return new Potential(id, uid, subitemId, convertedValue, potentialType, referenceCellId, isPortableReference, prevValue)
         })
         return this.potentialPresenter.executeWithList(convertedToOriginal, potentialTypes, referenceCells, unit)
     }

@@ -38,8 +38,10 @@ export class SurveyRepository extends SQLiteRepository {
                 super.runQuery(tx, `DELETE FROM testPoints`, []),
                 super.runQuery(tx, `DELETE FROM rectifiers`, []),
                 super.runQuery(tx, `DELETE FROM pipelines`, []),
+                super.runQuery(tx, 'DELETE FROM mapLayers', []),
                 super.runQuery(tx, `DELETE FROM potentialTypes`, []),
                 super.runQuery(tx, 'DELETE FROM referenceCells', []),
+                super.runQuery(tx, 'DELETE FROM assets', []),
                 super.runQuery(tx, `DELETE FROM cards`, []),
                 super.runQuery(tx, `DELETE FROM circuits`, []),
                 super.runQuery(tx, `DELETE FROM potentials`, []),
@@ -101,7 +103,7 @@ export class SurveyRepository extends SQLiteRepository {
         }
     }
 
-    async import({ testPoints, pipelines, rectifiers, cards, circuits, potentials, potentialTypes, survey, referenceCells, sides }) {
+    async import({ testPoints, pipelines, rectifiers, cards, circuits, potentials, potentialTypes, survey, referenceCells, sides, assets, mapLayers }) {
         /*
         Fast import -min. number of insert request to import a survey. Fails on error. Fast but messy
         boolConverter - important to wrap Boolean values before inserting to database. Null is legit option for boolean values when field is not used (cards table). Bool values stored as 0 and 1
@@ -119,25 +121,32 @@ export class SurveyRepository extends SQLiteRepository {
 
                 pipelines.length > 0 ? this.runQuery(tx, `INSERT INTO pipelines(id, uid, name, nps, material, coating, licenseNumber, timeCreated, timeModified, product, comment) VALUES ${pipelines.map(() => `(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`).join(', ')}`, pipelines.map(({ id, uid, name, nps, material, coating, licenseNumber, timeCreated, timeModified, product, comment }) => [id, uid, name, nps, material, boolConverter(coating), licenseNumber, timeCreated, timeModified, product, comment]).flat()) : null,
 
-                potentialTypes.length > 0 ? this.runQuery(tx, `INSERT INTO potentialTypes (id, uid, name, permType) VALUES ${potentialTypes.map(() => `(?, ?, ?, ?)`).join(', ')}`, potentialTypes.map(({ id, uid, name, type }) => [id, uid, name, type]).flat()) : null,
+                potentialTypes.length > 0 ? this.runQuery(tx, `INSERT INTO potentialTypes (id, uid, name, permType, isAc) VALUES ${potentialTypes.map(() => `(?, ?, ?, ?, ?)`).join(', ')}`, potentialTypes.map(({ id, uid, name, type, isAc }) => [id, uid, name, type, boolConverter(isAc)]).flat()) : null,
 
                 this.runQuery(tx, `INSERT INTO referenceCells (id, uid, rcType, name, mainReference) VALUES ${referenceCells.map(() => '(?,?,?,?,?)').join(',')}`, referenceCells.map(({ id, uid, rcType, name, isMainReference }) => [id, uid, rcType, name, boolConverter(isMainReference)]).flat()),
 
-                cards.length > 0 ? this.runQuery(tx, `INSERT INTO cards(id, testPointId, uid, type, name, anodeMaterial, wireColor, wireGauge, fromAtoB, current, currentUnit, pipelineId, pipelineCardId, couponType, density, area, description, isolationType, shorted, rcType, nps, ratioCurrent, ratioVoltage, factorSelected, factor, voltageDrop) VALUES 
-                ${cards.map(() => `(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`).join(', ')}`,
-                    cards.map(({ id, uid, parentId, type, name, anodeMaterial, wireColor, wireGauge, fromAtoB, current, currentUnit, pipelineId, pipelineCardId, couponType, density, area, description, isolationType, shorted, rcType, nps, ratioCurrent, ratioVoltage, factorSelected, factor, voltageDrop }) => [id, parentId, uid, type, name, anodeMaterial ?? null, wireColor ?? null, wireGauge ?? null, boolConverter(fromAtoB), current ?? null, currentUnit ?? null, pipelineId ?? null, pipelineCardId ?? null, couponType ?? null, density ?? null, area ?? null, description ?? null, isolationType ?? null, boolConverter(shorted), rcType ?? null, nps ?? null, ratioCurrent ?? null, ratioVoltage ?? null, boolConverter(factorSelected), factor ?? null, voltageDrop ?? null]).flat()) : null,
+                mapLayers.length > 0 ? this.runQuery(tx, `INSERT INTO mapLayers (id, uid, name, timeCreated, timeModified, comment, strokeColor, strokeWidth, fillColor, visible, data) VALUES ${mapLayers.map(() => '(?,?,?,?,?,?,?,?,?,?,?)')}`, mapLayers.map(({ id, uid, name, timeCreated, timeModified, comment, strokeColor, strokeWidth, fillColor, visible, data }) => [id, uid, name, timeCreated, timeModified, comment, strokeColor, strokeWidth, fillColor, visible, data]).flat()) : null,
+
+                assets.length > 0 ? this.runQuery(tx, `INSERT INTO assets (id, uid, timeCreated, timeModified, comment, fileName, mediaType, testPointId, rectifierId) VALUES ${assets.map(() => '(?,?,?,?,?,?,?,?,?)')}`, assets.map(({ id, uid, timeCreated, timeModified, comment, fileName, mediaType, parentType, parentId }) => {
+                    const testPointId = parentType === ItemTypes.TEST_POINT ? parentId : null
+                    const rectifierId = parentType === ItemTypes.RECTIFIER ? parentId : null
+                    return [id, uid, timeCreated, timeModified, comment, fileName, mediaType, testPointId, rectifierId]
+                }).flat()) : null,
+
+                cards.length > 0 ? this.runQuery(tx, `INSERT INTO cards(id, testPointId, uid, type, name, anodeMaterial, wireColor, wireGauge, fromAtoB, current, currentUnit, pipelineId, pipelineCardId, couponType, density, area, description, isolationType, shorted, rcType, nps, ratioCurrent, ratioVoltage, factorSelected, factor, voltageDrop, oldCurrent, oldVoltageDrop) VALUES 
+                ${cards.map(() => `(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`).join(', ')}`,
+                    cards.map(({ id, uid, parentId, type, name, anodeMaterial, wireColor, wireGauge, fromAtoB, current, currentUnit, pipelineId, pipelineCardId, couponType, density, area, description, isolationType, shorted, rcType, nps, ratioCurrent, ratioVoltage, factorSelected, factor, voltageDrop, prevCurrent, prevVoltageDrop }) => [id, parentId, uid, type, name, anodeMaterial ?? null, wireColor ?? null, wireGauge ?? null, boolConverter(fromAtoB), current ?? null, currentUnit ?? null, pipelineId ?? null, pipelineCardId ?? null, couponType ?? null, density ?? null, area ?? null, description ?? null, isolationType ?? null, boolConverter(shorted), rcType ?? null, nps ?? null, ratioCurrent ?? null, ratioVoltage ?? null, boolConverter(factorSelected), factor ?? null, voltageDrop ?? null, prevCurrent ?? null, prevVoltageDrop ?? null]).flat()) : null,
 
                 circuits.length > 0 ? this.runQuery(tx, `INSERT INTO circuits (id, uid, name, rectifierId, ratioCurrent, ratioVoltage, voltageDrop, current, voltage, targetMin, targetMax) VALUES
                     ${circuits.map(() => `(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`).join(', ')}`, circuits.map(({ id, parentId, uid, name, ratioCurrent, ratioVoltage, voltageDrop, current, voltage, targetMin, targetMax }) =>
                     [id, uid, name, parentId, ratioCurrent, ratioVoltage, voltageDrop, current, voltage, targetMin, targetMax]).flat()) : null,
 
-                potentials.length > 0 ? this.runQuery(tx, `INSERT INTO potentials (id, cardId, uid, value, type, portableReferenceId, permanentReferenceId) VALUES ${potentials.map(() => `(?,?,?,?,?,?,?)`).join(', ')}`,
-                    potentials.map(({ id, uid, subitemId, value, potentialType, isPortableReference, referenceCellId }) => {
+                potentials.length > 0 ? this.runQuery(tx, `INSERT INTO potentials (id, cardId, uid, value, type, portableReferenceId, permanentReferenceId, oldValue) VALUES ${potentials.map(() => `(?,?,?,?,?,?,?,?)`).join(', ')}`,
+                    potentials.map(({ id, uid, subitemId, value, potentialType, isPortableReference, referenceCellId, prevValue }) => {
                         const portableReferenceId = isPortableReference ? referenceCellId : null
                         const permanentReferenceId = isPortableReference ? null : referenceCellId
-                        return [id, subitemId, uid, value, potentialType, portableReferenceId, permanentReferenceId]
+                        return [id, subitemId, uid, value, potentialType, portableReferenceId, permanentReferenceId, prevValue]
                     }).flat()) : null,
-
 
                 sides.length > 0 ? this.runQuery(tx, `INSERT INTO sides (sideAId, sideBId, parentCardId) VALUES ${sides.map(() => `(?,?,?)`)}`,
                     sides.map(({ parentId, sideAId, sideBId }) => [sideAId, sideBId, parentId]).flat()) : null

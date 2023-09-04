@@ -8,7 +8,7 @@ import { basic } from '../../../styles/colors'
 import { getItemIcon, getItemName } from './helpers/functions'
 import { errorHandler, warningHandler } from '../../../helpers/error_handler'
 import { diagBack } from '../../../components/Icons'
-import { deleteItemList } from '../../../app/controllers/survey/items/ItemController'
+import { deleteItem } from '../../../app/controllers/survey/items/ItemController'
 import { updateSetting } from '../../../store/actions/settings'
 import { setRefresh } from '../../../store/actions/list'
 import { refreshMarkers } from '../../../store/actions/map'
@@ -21,17 +21,18 @@ const LastImportView = ({ navigateToList }) => {
         const confirm = await warningHandler(60, 'Undo', 'Cancel')
         if (confirm) {
             dispatch(updateSetting('loader', { title: `Deleting ${getItemName(itemType, idList.length)}...`, visible: true }))
-            await deleteItemList({
-                itemType: itemType,
-                idList: idList
-            },
-                (code) => errorHandler(code),
-                () => {
-                    dispatch(updateSetting('lastImport'))
-                    dispatch(setRefresh(itemType))
-                    dispatch(refreshMarkers())
-                    navigateToList(itemType)
-                })
+            const result = await Promise.all(idList.map((id) => deleteItem({ itemType, id })))
+            const isSuccess = result.every(({ status }) => status === 200)
+            if (isSuccess) {
+                dispatch(updateSetting('lastImport'))
+                dispatch(setRefresh(itemType))
+                dispatch(refreshMarkers())
+                navigateToList(itemType)
+            }
+            else {
+                const error = result.find(({ status }) => status !== 200)
+                errorHandler(error.status)
+            }
             dispatch(updateSetting('loader'))
         }
     }, [dispatch, itemType, idList])

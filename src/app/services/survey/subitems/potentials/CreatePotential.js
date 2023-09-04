@@ -12,7 +12,7 @@ export class CreatePotential {
         const refCell = referenceCells[referenceCellIndex]
         const potentialType = potentialTypes[potentialTypeIndex]
         if (refCell && potentialType) {
-            const potential = new Potential(null, guid(), subitemId, null, potentialType.id, refCell.id, refCell.isPortable)
+            const potential = new Potential(null, guid(), subitemId, null, potentialType.id, refCell.id, refCell.isPortable, null)
             return this.potentialPresenter.execute(potential, potentialType, refCell)
         }
         else throw new Error(errors.GENERAL, `Unable to create potential based on provided data.`)

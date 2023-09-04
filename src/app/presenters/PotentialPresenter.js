@@ -14,7 +14,7 @@ export class PotentialPresenter {
             potentialTypes: potentialTypes.map(pt => ({ ...pt })),
             referenceCells: referenceCells.map(rc => ({ ...rc })),
             unit: unit,
-            potentials: potentials.map(({ id, uid, value, referenceCellId, potentialType, isPortableReference }) => {
+            potentials: potentials.map(({ id, uid, value, referenceCellId, potentialType, isPortableReference, prevValue }) => {
                 const referenceCell = this._getRefCell(referenceCellId, isPortableReference, referenceCells)
                 const potType = this._getPotentialType(potentialType, potentialTypes)
                 return ({
@@ -27,6 +27,7 @@ export class PotentialPresenter {
                     referenceCellType: referenceCell.rcType,
                     isPortable: isPortableReference,
                     value: value,
+                    prevValue: prevValue,
                     valid: true,
                 })
             })
@@ -35,7 +36,7 @@ export class PotentialPresenter {
 
 
     execute(potential, potType, referenceCell) {
-        const { id, uid, value, referenceCellId, potentialType, isPortableReference } = potential
+        const { id, uid, value, referenceCellId, potentialType, isPortableReference, prevValue } = potential
         return ({
             id: id,
             uid: uid,
@@ -47,6 +48,7 @@ export class PotentialPresenter {
             isPortable: isPortableReference,
             value: value,
             valid: true,
+            prevValue: prevValue
         })
     }
 

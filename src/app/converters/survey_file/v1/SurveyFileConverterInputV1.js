@@ -7,11 +7,12 @@ import { Survey } from "../../../entities/survey/other/Survey";
 import { Circuit } from "../../../entities/survey/subitems/Circuit";
 import { Potential } from "../../../entities/survey/subitems/Potential";
 import { PipelineSurveyFile } from "../../../entities/survey/survey/PipelineSurveyFile";
-import { SurveyFileDataFields } from "../../../../constants/global";
+import { SurveyFileDataFields } from "../../../../constants/survey_file_schema_constants/v1";
+import { guid } from "../../../utils/guid";
 
 const convertBool = (bool) => bool === null ? null : Boolean(bool)
 
-export class SurveyFileConverterInput {
+export class SurveyFileConverterInputV1 {
     constructor(subitemFactory) {
         this.subitemFactory = subitemFactory
     }
@@ -33,7 +34,7 @@ export class SurveyFileConverterInput {
 
     _createPotentialType(dataRow) {
         const [id, uid, name, custom, type] = dataRow
-        return new PotentialType(id, uid, name, type)
+        return new PotentialType(id, uid, name, type, false)
     }
 
     _createReferenceCell(dataRow) {
@@ -43,14 +44,19 @@ export class SurveyFileConverterInput {
 
     _createSurvey(dataRow) {
         const [uid, name, technician] = dataRow
-        return new Survey(uid, name, technician)
+    /*
+        Due to design error, survey uids were not unique in the past in cases when user creates new survey from template, copies surveys between cloud and local storage, or loads survey from external storage.
+        With introduction v2 format, uid must be unique in order for assets to work correctly, therefore, every v1 file onLoad, will be assigned new uid, that will presist in v2 version and will be unique for all cases including listed above.
+        Since uid is not used for anything in survey file v1, it is an acceptable easy fix. 
+    */
+        return new Survey(guid(), name, technician)
     }
 
     _createPotential(dataRow) {
         const [id, subitemId, uid, value, type, unit, portableReferenceId, permanentReferenceId] = dataRow
         const isPortable = portableReferenceId !== null
         const referenceCellId = isPortable ? portableReferenceId : permanentReferenceId
-        return new Potential(id, uid, subitemId, value, type, referenceCellId, isPortable)
+        return new Potential(id, uid, subitemId, value, type, referenceCellId, isPortable, null)
     }
 
     _convertSides(data) {
@@ -72,7 +78,7 @@ export class SurveyFileConverterInput {
         const [id, testPointId, uid, type, name, anodeMaterial, wireColor, wireGauge, fromAtoB, current, currentUnit, pipelineId, pipelineCardId, couponType, density, area, description, isolationType, shorted, rcType, nps, ratioCurrent, ratioVoltage, factorSelected, factor, voltageDrop] = dataRow
         const subitemSides = sides[id] ?? {}
         const { sideA, sideB } = subitemSides
-        return this.subitemFactory.execute(id, uid, name, type, testPointId, anodeMaterial, wireGauge, wireColor, convertBool(fromAtoB), current, sideA, sideB, ratioCurrent, ratioVoltage, null, null, null, voltageDrop, pipelineCardId, couponType, density, area, isolationType, convertBool(shorted), pipelineId, rcType, nps, factor, convertBool(factorSelected), description)
+        return this.subitemFactory.execute(id, uid, name, type, testPointId, anodeMaterial, wireGauge, wireColor, convertBool(fromAtoB), current, sideA, sideB, ratioCurrent, ratioVoltage, null, null, null, voltageDrop, pipelineCardId, couponType, density, area, isolationType, convertBool(shorted), pipelineId, rcType, nps, factor, convertBool(factorSelected), description, null, null)
     }
 
     _createCircuit(dataRow) {
@@ -83,7 +89,6 @@ export class SurveyFileConverterInput {
 
 
     execute(surveyObject) {
-
         const { data } = surveyObject
         const sides = this._convertSides(data[SurveyFileDataFields.SIDES])
         const testPoints = data[SurveyFileDataFields.TEST_POINTS].map(this._createTestPoint)
@@ -94,6 +99,7 @@ export class SurveyFileConverterInput {
         const potentials = data[SurveyFileDataFields.POTENTIALS].map(this._createPotential)
         const subitems = [...data[SurveyFileDataFields.CARDS].map(data => this._createSubitem(data, sides)), ...data[SurveyFileDataFields.CIRCUITS].map(this._createCircuit)]
         const survey = this._createSurvey(data[SurveyFileDataFields.SURVEY][0])
-        return new PipelineSurveyFile(survey, testPoints, rectifiers, pipelines, potentialTypes, referenceCells, subitems, potentials)
+        //version 1 file doesn't support assets and mapLayers
+        return new PipelineSurveyFile(survey, testPoints, rectifiers, pipelines, potentialTypes, referenceCells, subitems, potentials, [], [])
     }
 }

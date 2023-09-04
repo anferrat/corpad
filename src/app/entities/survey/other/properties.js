@@ -184,7 +184,8 @@ export const FileSystemLocations = Object.freeze({
     SURVEYS: 'surveys',
     EXPORTS: 'exports',
     DOWNLOADS: 'downloads',
-    TEMP: 'temp'
+    TEMP: 'temp',
+    ASSETS: 'assets'
 })
 
 export const FileMimeTypes = Object.freeze({

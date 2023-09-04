@@ -1,4 +1,4 @@
-v1 Pipeline survey file structure. (need to work on implementing better structured JSON in future)
+v1 Pipeline survey file structure. (old schema for first gen survey files)
         data:{
             survey: Array of ['uid', 'name', 'technician'],
             testPoints: Array of [`id`, 'uid', 'name', 'location', 'latitude', 'longitude', 'comment', 'testPointType', 'status', 'timeCreated', 'timeModified'],

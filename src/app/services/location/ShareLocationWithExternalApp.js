@@ -1,6 +1,6 @@
 import { Platform } from "react-native"
 
-export class ShareLocationWithExtarnalApp {
+export class ShareLocationWithExternalApp {
     constructor(linkingService) {
         this.linkingService = linkingService
         this.mapSchema = {

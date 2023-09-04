@@ -7,6 +7,8 @@ import { ReferenceCellValidation } from "../../../validation/ReferenceCellValida
 import { ReferenceCellRepository } from "../../../repository/sqlite/ReferenceCellRepository"
 import { BasicPresenter } from "../../../presenters/BasciPresenter"
 import { ListPresenter } from "../../../presenters/ListPresenter"
+import { referenceCellRepo } from "../../_instances/repositories"
+import { basicPresenter, listPresenter } from "../../_instances/presenters"
 
 class ReferenceCellController extends Controller {
     constructor(referenceCellRepository, basicPresenter, listPresenter) {
@@ -47,9 +49,9 @@ class ReferenceCellController extends Controller {
 }
 
 const referenceCellController = new ReferenceCellController(
-    new ReferenceCellRepository(),
-    new BasicPresenter(),
-    new ListPresenter())
+    referenceCellRepo,
+    basicPresenter,
+    listPresenter)
 
 export const getAllReferenceCells = (onError, onSuccess) => referenceCellController.getAll(onError, onSuccess)
 

@@ -19,10 +19,11 @@ export class CreateSurvey {
     async execute(name, isCloud) {
         const isLoaded = await this.surveyLoadStatusService.execute()
         if (!isLoaded.isLoaded) {
+            const surveyUid = guid()
             const currentTime = Date.now()
             const pipeline = new Pipeline(null, guid(), 'Pipeline', currentTime, currentTime, null, null, null, true, null, null, null)
-            const potentialTypes = Object.values(PermanentPotentialTypes).map(type => new PotentialType(null, guid(), PermanentPotentialTypeLabels[type], type))
-            const survey = new Survey(guid(), name, 'Wade Watts')
+            const potentialTypes = Object.values(PermanentPotentialTypes).map(type => new PotentialType(null, guid(), PermanentPotentialTypeLabels[type], type, false))
+            const survey = new Survey(surveyUid, name, 'Wade Watts')
             const referenceCell = new ReferenceCell(null, guid(), ReferenceCellTypes.COPPER_SULFATE, 'RC1', true)
             const syncTime = null
             const fileName = null
@@ -38,11 +39,12 @@ export class CreateSurvey {
                 name,
                 fileName,
                 isCloud,
+                uid: surveyUid
             }
         }
         else {
-            const { name, fileName, isCloud, syncTime } = isLoaded
-            return { name, fileName, isCloud, syncTime }
+            const { name, fileName, isCloud, syncTime, uid } = isLoaded
+            return { name, fileName, isCloud, syncTime, uid }
         }
     }
 

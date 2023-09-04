@@ -1,4 +1,5 @@
 import { FileSystemLocations } from "../../../../constants/global"
+import { SurveyFile } from "../../../entities/survey/other/SurveyFile"
 
 export class GetSurveyFileList {
     constructor(fileSystemRepo, surveyFileListPresenter) {
@@ -6,7 +7,7 @@ export class GetSurveyFileList {
         this.surveyFileListPresenter = surveyFileListPresenter
     }
 
-    async _getMetaDataFromFile(path) {
+    async _getSurveyFile(path, filename) {
         try {
             const [file, hash, stat] = await Promise.all([
                 this.fileSystemRepo.readFile(path),
@@ -14,9 +15,10 @@ export class GetSurveyFileList {
                 this.fileSystemRepo.getStat(path)
             ])
             const surveyObject = JSON.parse(file)
-            const fileName = path.substring(path.lastIndexOf('/') + 1, path.length)
             const timeModified = stat.mtime.getTime()
-            return this.surveyFileListPresenter.executeForLocalFile(surveyObject, fileName, timeModified, path, hash)
+            const surveyFile = new SurveyFile(filename, false, hash, path, null, timeModified, surveyObject)
+            surveyFile.getMetaData()
+            return this.surveyFileListPresenter.execute(surveyFile)
         }
         catch (er) {
             return null
@@ -25,11 +27,13 @@ export class GetSurveyFileList {
 
     async execute() {
         const files = await this.fileSystemRepo.readDir(FileSystemLocations.SURVEYS)
-     
+
         const surveys = files
-            .filter(item => item.name.endsWith('.json') && item.isFile())
-            .sort((a, b) => b?.mtime.getTime() - a?.mtime.getTime())
-           
-        return this.surveyFileListPresenter.executeForSurveyList(await Promise.all(surveys.map(({ path }) => this._getMetaDataFromFile(path))))
+            .filter(item => item.filename.endsWith('.json') && item.isFile)
+            .sort((a, b) => b.timeModified - a.timeModified)
+
+        return this.surveyFileListPresenter.executeForList(
+            await Promise.all(surveys.map(({ path, filename }) => this._getSurveyFile(path, filename)))
+        )
     }
 }

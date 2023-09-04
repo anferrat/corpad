@@ -1,12 +1,15 @@
 import { object, string, number, boolean, array, mixed } from 'yup'
-import { SubitemTypes, PipelineMaterials, PipelineProducts, CoarseFineOptions, PowerSources, TapOptions, ItemStatuses, ItemTypes, TestPointTypes, AnodeMaterials, CalculatorTypes, CouponTypes, DisplayedReadingOptions, IsolationTypes, ItemPropertyUpdateTypes, PermanentPotentialTypes, PipeDiameters, PotentialUnits, ReferenceCellTypes, SortingOptions, SubitemPropertyUpdateTypes, WireColors, WireGauges, MultimeterTypes, MultimeterSyncModes, MultimeterCycles, MultimeterMeasurementTypes } from '../../constants/global'
+import { SubitemTypes, PipelineMaterials, PipelineProducts, CoarseFineOptions, PowerSources, TapOptions, ItemStatuses, ItemTypes, TestPointTypes, AnodeMaterials, CalculatorTypes, CouponTypes, DisplayedReadingOptions, IsolationTypes, ItemPropertyUpdateTypes, PermanentPotentialTypes, PipeDiameters, PotentialUnits, ReferenceCellTypes, SortingOptions, SubitemPropertyUpdateTypes, WireColors, WireGauges, MultimeterTypes, MultimeterSyncModes, MultimeterCycles, MultimeterMeasurementTypes, StrokeColors, StrokeWidths, MediaTypes } from '../../constants/global'
 import { Error, errors } from "./Error"
 
 export class Validation {
     name = string('nameString').matches(/^[-a-zA-Z0-9_.\s() ]*$/, { message: 'nameFormat' }).max(40, 'stringLengthMax40').min(1, 'stringLengthMin').trim()
     id = number('Id must be a number').positive('Id must be a positive number').integer('Id must be integer value')
+    pipelineId = this.id.nullable()
+    pipelineCardId = this.id.nullable()
     index = number('Index must be a number').integer('Index must be integer value')
     uid = string('uid must be a string').min(10, 'uid must have at least 10 characters')
+    fileName = string('fileName must be a string').min(10, 'fileName must have at least 10 characters')
     bool = boolean().nullable()
     longitude = number('numberValue').min(-180, 'numberValue').max(180, 'numberValue').nullable()
     latitude = number().min(-90, 'numberValue').max(90, 'numberValue').nullable()
@@ -49,6 +52,9 @@ export class Validation {
     multimeterFirstCycle = mixed().oneOf(Object.values(MultimeterCycles))
     side = array().of(this.id)
     measurementType = mixed().oneOf(Object.values(MultimeterMeasurementTypes))
+    strokeColor = mixed().oneOf(Object.values(StrokeColors))
+    strokeWidth = mixed().oneOf(Object.values(StrokeWidths))
+    mediaType = mixed().oneOf(Object.values(MediaTypes))
     validate(value, schema) {
         try {
             return schema.validateSync(value)

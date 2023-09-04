@@ -103,13 +103,13 @@ export class GenerateItem {
             case SubitemTypes.BOND:
                 {
                     const { sideA, sideB } = getSides(firstOrderSubitems, [SubitemTypes.TEST_LEAD, SubitemTypes.PIPELINE, SubitemTypes.ANODE, SubitemTypes.RISER])
-                    subitem = new Bond(null, itemId, guid(), `Bond${index}`, this.getRandomItem([true, false]), this.getRandomFloat(0, 3), sideA, sideB)
+                    subitem = new Bond(null, itemId, guid(), `Bond${index}`, this.getRandomItem([true, false]), this.getRandomFloat(0, 3), sideA, sideB, this.getRandomFloat(0, 3))
                     break
                 }
             case SubitemTypes.SHUNT:
                 {
                     const { sideA, sideB } = getSides(firstOrderSubitems, [SubitemTypes.TEST_LEAD, SubitemTypes.PIPELINE, SubitemTypes.ANODE, SubitemTypes.RISER])
-                    subitem = new Shunt(null, itemId, guid(), `Shunt${index}`, this.getRandomFloat(0, 300), null, null, true, null, this.getRandomFloat(0, 5), this.getRandomItem([true, false]), sideA, sideB)
+                    subitem = new Shunt(null, itemId, guid(), `Shunt${index}`, this.getRandomFloat(0, 300), null, null, true, null, this.getRandomFloat(0, 5), this.getRandomItem([true, false]), sideA, sideB, this.getRandomFloat(0, 5))
                     break
                 }
             case SubitemTypes.ISOLATION:
@@ -123,7 +123,7 @@ export class GenerateItem {
                 {
                     const pipelineSubitems = firstOrderSubitems.filter(({ type }) => type === SubitemTypes.PIPELINE || type === SubitemTypes.RISER)
                     const pipelineSubitemId = pipelineSubitems.length === 0 ? null : this.getRandomItem(pipelineSubitems).id
-                    subitem = new Coupon(null, itemId, guid(), `Coupon${index + 1}`, pipelineSubitemId, this.getRandomItem(WireGauges), this.getRandomItem(WireColors), this.getRandomItem(CouponTypes), this.getRandomInt(0, 100), null, this.getRandomInt(50, 150))
+                    subitem = new Coupon(null, itemId, guid(), `Coupon${index + 1}`, pipelineSubitemId, this.getRandomItem(WireGauges), this.getRandomItem(WireColors), this.getRandomItem(CouponTypes), this.getRandomInt(0, 100), null, this.getRandomInt(50, 150), this.getRandomInt(50, 150))
                     break
                 }
         }
@@ -135,7 +135,7 @@ export class GenerateItem {
         const permanentTypes = [PermanentPotentialTypes.ON, PermanentPotentialTypes.OFF, PermanentPotentialTypes.DEPOL]
         const types = potentialTypes.filter(({ type }) => ~permanentTypes.indexOf(type))
         const mainReferenceId = referenceCells.find(({ isMainReference }) => isMainReference).id
-        const potentials = types.map(({ id }) => new Potential(null, guid(), subitemId, this.getRandomFloat(0, 3), id, mainReferenceId, true))
+        const potentials = types.map(({ id }) => new Potential(null, guid(), subitemId, this.getRandomFloat(0, 3), id, mainReferenceId, true, this.getRandomFloat(0, 3)))
         return await Promise.all(potentials.map(potential => this.potentialRepo.create(potential)))
     }
 

@@ -9,7 +9,7 @@ import SurveyFileListItemMenu from './SurveyFileListItemMenu'
 import SurveyFileListItemMenuItem from './SurveyFileListItemMenuItem'
 import SurveyFileListItemIconBar from './SurveyFileListItemIconBar'
 
-const SurveyFileListItem = ({ name, fileName, timeModified, tpCount, rectifierCount, pipelineCount, passedItems, cloudId, path, hash, isCloud, isSignedIn, loadSurvey, deleteSurvey, removeSurveyFromList, shareSurveyLink, shareSurveyFile, copyToAlternateFolder, copyToDownloads }) => {
+const SurveyFileListItem = ({ name, uid, fileName, timeModified, tpCount, rectifierCount, pipelineCount, passedItems, cloudId, path, hash, isCloud, isSignedIn, loadSurvey, deleteSurvey, removeSurveyFromList, shareSurveyLink, shareSurveyFile, copyToAlternateFolder, copyToDownloads }) => {
     const scale = useRef(new Animated.Value(1))
     const isAndroid = Platform.OS === 'android'
     const [menuVisible, setMenuVisible] = useState(false)
@@ -20,7 +20,7 @@ const SurveyFileListItem = ({ name, fileName, timeModified, tpCount, rectifierCo
 
     const handleDelete = React.useCallback(async () => {
         hideMenu()
-        const success = await deleteSurvey({ path, cloudId, hash, fileName })
+        const success = await deleteSurvey({ path, cloudId, hash, fileName, uid })
         if (success) {
             Animated.timing(scale.current, {
                 toValue: 0,
@@ -28,7 +28,7 @@ const SurveyFileListItem = ({ name, fileName, timeModified, tpCount, rectifierCo
                 useNativeDriver: false
             }).start(() => removeSurveyFromList({ path, cloudId }))
         }
-    }, [path, cloudId, hash, fileName])
+    }, [path, cloudId, hash, fileName, uid])
 
     const handleLoadSurvey = useCallback(() => {
         hideMenu()

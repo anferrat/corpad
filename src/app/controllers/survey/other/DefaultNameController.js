@@ -5,6 +5,8 @@ import { GetDefaulNameList } from "../../../services/survey/other/default_names/
 import { UpdateDefaultNames } from "../../../services/survey/other/default_names/UpdateDefaultNames"
 import { Controller } from "../../../utils/Controller"
 import { DefaultNameValidation } from "../../../validation/DefaultNameValidation"
+import { defaultNamePresenter } from "../../_instances/presenters"
+import { defaultNameRepo, settingRepo } from "../../_instances/repositories"
 
 class DefaultNameController extends Controller {
     constructor(defaultNameRepo, settingRepo, defaultNamePresenter) {
@@ -31,9 +33,9 @@ class DefaultNameController extends Controller {
 }
 
 const defaultNameController = new DefaultNameController(
-    new DefaultNameRepository(),
-    new SettingRepository(),
-    new DefaultNamePresenter()
+    defaultNameRepo,
+    settingRepo,
+    defaultNamePresenter
 )
 
 export const getDefaultNameList = (onError, onSuccess) => defaultNameController.getList(onError, onSuccess)

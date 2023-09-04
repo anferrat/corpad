@@ -22,22 +22,25 @@ export class CreateSurveyFromTemplate {
                 throw new Error(errors.VALIDATION, 'Survey file corrupted, unable to use it as template', 'Corrupted survey file', 413)
             else {
                 //4. Convert to surveyFile
-                const surveyFile = this.surveyFileConverter.execute(file)
-                //5. Reset surveyFile (potential values, statuses and some subitem values will be reset to null)
-                surveyFile.resetValues()
+                const version = this.validation.getVersion(file)
+                const surveyFile = this.surveyFileConverter.execute(file, version)
+                //5. Reset surveyFile (potential values, statuses and some subitem values will be reset to null, new survey uid is assigned)
+                const newSurveyUid = guid()
+                surveyFile.resetValues(newSurveyUid)
                 //6. Import to database with fast method.
                 await this.jsonImportService.execute(surveyFile)
                 return {
                     name,
                     fileName: null,
                     syncTime: null,
-                    isCloud
+                    isCloud,
+                    uid: newSurveyUid
                 }
             }
         }
         else {
-            const { name, fileName, syncTime, isCloud } = isLoaded
-            return { name, fileName, syncTime, isCloud }
+            const { name, fileName, syncTime, isCloud, uid } = isLoaded
+            return { name, fileName, syncTime, isCloud, uid }
         }
     }
 }

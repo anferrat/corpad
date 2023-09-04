@@ -88,15 +88,6 @@ export class PipelineRepository extends SQLiteRepository {
         }
     }
 
-    async deleteList(idList) {
-        try {
-            await super.runSingleQueryTransaction(`DELETE FROM pipelines WHERE id IN ${this.convertArrayToInStatement(idList)}`)
-        }
-        catch (err) {
-            throw new Error(errors.DATABASE, `Unable to delete pipeline list ${idList}`, err)
-        }
-    }
-
     async update(pipeline) {
         try {
             const { id, name, timeModified, comment, nps, material, coating, licenseNumber, product } = pipeline

@@ -1,33 +1,19 @@
 import { ImportConverter } from "../../converters/import_from_spreadsheet/ImportConverter"
-import { ImportDataPresenter } from "../../presenters/ImportDataPresenter"
-import { FileSystemRepository } from "../../repository/fs/FileSystemRepository"
-import { DefaultNameRepository } from "../../repository/sqlite/DefaultNameRepository"
-import { PipelineRepository } from "../../repository/sqlite/PipelineRepository"
-import { PotentialRepository } from "../../repository/sqlite/PotentialRepository"
-import { PotentialTypeRepository } from "../../repository/sqlite/PotentialTypeRepository"
-import { RectifierRepository } from "../../repository/sqlite/RectifierRepository"
-import { ReferenceCellRepository } from "../../repository/sqlite/ReferenceCellRepository"
-import { SettingRepository } from "../../repository/sqlite/SettingRepository"
-import { SubitemRepository } from "../../repository/sqlite/SubitemRepository"
-import { TestPointRepository } from "../../repository/sqlite/TestPointRepository"
-import { CommaSeparatedFileParser } from "../../services/other/CommaSeparatedFileParser"
-import { DocumentPicker } from "../../services/other/DocumentPicker"
-import { SubitemFactory } from "../../services/other/SubitemFactory"
-import { UnitConverter } from "../../services/other/UnitConverter"
 import { ImportSpreadsheetData } from "../../services/survey/manager/import/csv/ImportSpreadsheetData"
 import { SelectFileForImport } from "../../services/survey/manager/import/csv/SelectFileForImport"
 import { Controller } from "../../utils/Controller"
 import { ImportValidation } from "../../validation/import_from_spreadsheet/ImportValidation"
+import { commaSeparatedFileParser, documentPicker, subitemFactory, unitConverter } from "../_instances/general_services"
+import { importDataPresenter } from "../_instances/presenters"
+import { defaultNameRepo, fileSystemRepo, pipelineRepo, potentialRepo, potentialTypeRepo, rectifierRepo, referenceCellRepo, settingRepo, subitemRepo, testPointRepo } from "../_instances/repositories"
 
 class ImportController extends Controller {
-    constructor(importDataConverter, importDataValidator, testPointRepository, rectifierRepository, pipelineRepository, potentialRepository, subitemRepository, subitemFactory, unitConverter, fileSystemRepo, defaultNameRepo, potentialTypeRepo, referenceCellRepo, settingRepo, importDataPresenter) {
+    constructor(importDataConverter, importDataValidator, testPointRepository, rectifierRepository, pipelineRepository, potentialRepository, subitemRepository, subitemFactory, unitConverter, fileSystemRepo, defaultNameRepo, potentialTypeRepo, referenceCellRepo, settingRepo, importDataPresenter, documentPicker, csvParser) {
         super()
         this.importDataConverter = importDataConverter
         this.importDataValidator = importDataValidator
-        this.documentPicker = new DocumentPicker()
-        this.csvParser = new CommaSeparatedFileParser()
         this.importSpreadsheetData = new ImportSpreadsheetData(testPointRepository, rectifierRepository, pipelineRepository, subitemRepository, potentialRepository, subitemFactory, unitConverter)
-        this.selectFileForImportService = new SelectFileForImport(fileSystemRepo, this.documentPicker, this.csvParser, defaultNameRepo, potentialTypeRepo, pipelineRepository, referenceCellRepo, settingRepo, importDataPresenter)
+        this.selectFileForImportService = new SelectFileForImport(fileSystemRepo, documentPicker, csvParser, defaultNameRepo, potentialTypeRepo, pipelineRepository, referenceCellRepo, settingRepo, importDataPresenter)
     }
 
     importData(params, onError = null, onSuccess = null) {
@@ -49,19 +35,21 @@ class ImportController extends Controller {
 const importController = new ImportController(
     new ImportConverter(),
     new ImportValidation(),
-    new TestPointRepository(),
-    new RectifierRepository(),
-    new PipelineRepository(),
-    new PotentialRepository(),
-    new SubitemRepository(),
-    new SubitemFactory(),
-    new UnitConverter(),
-    new FileSystemRepository(),
-    new DefaultNameRepository(),
-    new PotentialTypeRepository(),
-    new ReferenceCellRepository(),
-    new SettingRepository(),
-    new ImportDataPresenter()
+    testPointRepo,
+    rectifierRepo,
+    pipelineRepo,
+    potentialRepo,
+    subitemRepo,
+    subitemFactory,
+    unitConverter,
+    fileSystemRepo,
+    defaultNameRepo,
+    potentialTypeRepo,
+    referenceCellRepo,
+    settingRepo,
+    importDataPresenter,
+    documentPicker,
+    commaSeparatedFileParser
 )
 
 

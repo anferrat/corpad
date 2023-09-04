@@ -1,33 +1,21 @@
-import { ListPresenter } from "../../presenters/ListPresenter"
-import { FileSystemRepository } from "../../repository/fs/FileSystemRepository"
-import { PipelineRepository } from "../../repository/sqlite/PipelineRepository"
-import { PotentialRepository } from "../../repository/sqlite/PotentialRepository"
-import { PotentialTypeRepository } from "../../repository/sqlite/PotentialTypeRepository"
-import { RectifierRepository } from "../../repository/sqlite/RectifierRepository"
-import { ReferenceCellRepository } from "../../repository/sqlite/ReferenceCellRepository"
-import { SubitemRepository } from "../../repository/sqlite/SubitemRepository"
-import { SurveyRepository } from "../../repository/sqlite/SurveyRepository"
-import { TestPointRepository } from "../../repository/sqlite/TestPointRepository"
-import { CommaSeparatedFileParser } from "../../services/other/CommaSeparatedFileParser"
-import { FileNameGenerator } from "../../services/other/FileNameGenerator"
 import { ExportToSpreadsheet } from "../../services/survey/manager/export/csv/ExportToSpreadsheet"
 import { GetExportItemProperties } from "../../services/survey/manager/export/csv/GetExportItemProperties"
 import { GetExportPotentailPropertiesData } from "../../services/survey/manager/export/csv/GetExportPotentialPropertiesData"
 import { GetExportSubitemProperties } from "../../services/survey/manager/export/csv/GetExportSubitemProperties"
 import { Controller } from "../../utils/Controller"
+import { commaSeparatedFileParser, fileNameGenerator } from "../_instances/general_services"
+import { listPresenter } from "../_instances/presenters"
+import { fileSystemRepo, pipelineRepo, potentialRepo, potentialTypeRepo, rectifierRepo, referenceCellRepo, surveyRepo, testPointRepo } from "../_instances/repositories"
 
 
 class ExportController extends Controller {
-    constructor(pipelineRepo, referenceCellRepo, potentialtypeRepo, listPresenter, testPointRepo, rectifierRepo, potentialRepo, potentialTypeRepo, fileSystemRepo, surveyRepo) {
+    constructor(pipelineRepo, referenceCellRepo, potentialtypeRepo, listPresenter, testPointRepo, rectifierRepo, potentialRepo, potentialTypeRepo, fileSystemRepo, surveyRepo, csvParser, fileNameGenerator) {
         super()
         this.getExportItemPropertiesService = new GetExportItemProperties()
         this.getPotentialPropertiesDataService = new GetExportPotentailPropertiesData(pipelineRepo, referenceCellRepo, potentialtypeRepo, listPresenter)
         this.getExportSubitemPropertiesService = new GetExportSubitemProperties()
 
-        this.csvParser = new CommaSeparatedFileParser()
-        this.fileNameGenerator = new FileNameGenerator()
-
-        this.exportToSpreadsheetService = new ExportToSpreadsheet(surveyRepo, testPointRepo, rectifierRepo, pipelineRepo, potentialRepo, potentialTypeRepo, fileSystemRepo, this.csvParser, this.fileNameGenerator)
+        this.exportToSpreadsheetService = new ExportToSpreadsheet(surveyRepo, testPointRepo, rectifierRepo, pipelineRepo, potentialRepo, potentialTypeRepo, fileSystemRepo, csvParser, fileNameGenerator)
     }
 
     getItemProperties(params, onError = null, onSuccess = null) {
@@ -60,16 +48,18 @@ class ExportController extends Controller {
 }
 
 const exportController = new ExportController(
-    new PipelineRepository(),
-    new ReferenceCellRepository(),
-    new PotentialTypeRepository(),
-    new ListPresenter(),
-    new TestPointRepository(),
-    new RectifierRepository(),
-    new PotentialRepository(),
-    new PotentialTypeRepository(),
-    new FileSystemRepository(),
-    new SurveyRepository()
+    pipelineRepo,
+    referenceCellRepo,
+    potentialTypeRepo,
+    listPresenter,
+    testPointRepo,
+    rectifierRepo,
+    potentialRepo,
+    potentialTypeRepo,
+    fileSystemRepo,
+    surveyRepo,
+    commaSeparatedFileParser,
+    fileNameGenerator
 )
 
 

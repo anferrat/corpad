@@ -8,11 +8,12 @@ import MoreOptionsSheet from '../features/navigation/more_options/MoreOptionsShe
 import useBottomSheetContent from './hooks/useBottomSheet'
 import Router from './components/Router'
 import Route from './components/Route'
+import ImagePickerView from '../features/image_picker'
 
 //implemented as single screen, possible to have embeded navigator inside
 
 const BottomSheetContent = () => {
-    const { selectedRoute, navigateToImport, navigateToEdit, navigateToSettings, navigateToExport, navigateToExportedFiles, navigateToCalculatorList, navigateToMultimeter, closeSheet } = useBottomSheetContent()
+    const { selectedRoute, params, navigateToImport, navigateToEdit, navigateToSettings, navigateToExport, navigateToExportedFiles, navigateToCalculatorList, navigateToMultimeter, closeSheet } = useBottomSheetContent()
     return (
         <Router
             selectedRoute={selectedRoute}>
@@ -63,6 +64,12 @@ const BottomSheetContent = () => {
                     navigateToExportedFiles={navigateToExportedFiles}
                     navigateToCalculatorList={navigateToCalculatorList}
                     closeSheet={closeSheet} />
+            </Route>
+            <Route
+                routeKey='IMAGE_PICKER'>
+                <ImagePickerView
+                    closeSheet={closeSheet}
+                    params={params} />
             </Route>
         </Router>
     )

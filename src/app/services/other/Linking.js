@@ -9,19 +9,21 @@ export class Linking {
     }
 
     addUrlListener(callback) {
-        return LinkingDefault.addEventListener('url', ({ url }) => callback(url))
-    }
+        return LinkingDefault.addEventListener('url', (data) => {
+            return callback(data.url)
+        })
+}
 
-    openUrl(url) {
-        return LinkingDefault.openURL(url)
-    }
+openUrl(url) {
+    return LinkingDefault.openURL(url)
+}
 
     async canOpenUrl(url) {
-        try {
-            return await LinkingDefault.canOpenURL(url)
-        }
-        catch {
-            return false
-        }
+    try {
+        return await LinkingDefault.canOpenURL(url)
     }
+    catch {
+        return false
+    }
+}
 }

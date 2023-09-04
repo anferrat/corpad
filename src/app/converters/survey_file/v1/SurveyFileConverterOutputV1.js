@@ -1,8 +1,9 @@
-import { SubitemTypes, SurveyFileDataFields } from "../../../../constants/global"
+import { SubitemTypes } from "../../../../constants/global"
+import { SurveyFileDataFields } from "../../../../constants/survey_file_schema_constants/v1"
 
 const convertBool = (bool) => bool === null || bool === undefined ? null : Number(bool)
 
-export class SurveyFileConverterOutput {
+export class SurveyFileConverterOutputV1 {
     constructor() {
         this.SURVEY_FILE_VERSION = 1
         this.SURVEY_FILE_TYPE = 'plsv'

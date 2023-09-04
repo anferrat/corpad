@@ -8,7 +8,7 @@ import { useSelector } from "react-redux"
 const useBottomSheetContent = () => {
     const bottomSheet = useContext(BS)
     const navigation = useNavigation()
-    const { itemType, content } = useSelector(state => state.settings.bottomSheetContent)
+    const { itemType, content, params } = useSelector(state => state.settings.bottomSheetContent)
     const selectedRoute = Object.keys(BOTTOM_SHEET_VIEWS)
         .find(key =>
             BOTTOM_SHEET_VIEWS[key].content === content && BOTTOM_SHEET_VIEWS[key].itemType === itemType)
@@ -74,6 +74,7 @@ const useBottomSheetContent = () => {
     }, [navigation, closeSheet])
 
     return {
+        params,
         selectedRoute,
         navigateToImport,
         navigateToEdit,

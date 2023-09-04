@@ -19,7 +19,8 @@ export class SurveyFileValidation extends Validation {
                 isCloud: this.bool.required(),
                 path: string().nullable(),
                 cloudId: string().nullable(),
-                hash: string().nullable()
+                hash: string().nullable(),
+                uid: this.uid
             }))
     }
 
@@ -29,6 +30,7 @@ export class SurveyFileValidation extends Validation {
                 isCloud: this.bool.required(),
                 path: string().nullable(),
                 cloudId: string().nullable(),
+                uid: this.uid
             }))
     }
 

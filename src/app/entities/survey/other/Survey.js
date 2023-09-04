@@ -4,4 +4,8 @@ export class Survey {
         this.name = name
         this.technician = technician
     }
+
+    reset(uid) {
+        this.uid = uid
+    }
 }

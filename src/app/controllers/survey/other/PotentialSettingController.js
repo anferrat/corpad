@@ -9,11 +9,12 @@ import { UpdateAutoCreatePotentials } from "../../../services/survey/other/poten
 import { GetPotentialSettingData } from "../../../services/survey/other/potential_types/GetPotentialSettingData"
 import { SettingRepository } from "../../../repository/sqlite/SettingRepository"
 import { DeletePotentialType } from "../../../services/survey/other/potential_types/DeletePotentialType"
+import { potentialTypeRepo, settingRepo } from "../../_instances/repositories"
+import { basicPresenter, potentialTypePresenter } from "../../_instances/presenters"
 
 class PotentialSettingController extends Controller {
     constructor(potentialTypeRepo, settingRepo, basicPresenter, potentialTypePresenter) {
         super()
-
         this.createPotentialTypeServie = new CreatePotentialType(potentialTypeRepo, basicPresenter)
         this.deletePotentialTypeService = new DeletePotentialType(potentialTypeRepo)
         this.updatePotentialUnitService = new UpdatePotentialUnit(settingRepo)
@@ -59,10 +60,10 @@ class PotentialSettingController extends Controller {
 }
 
 const potentialSettingController = new PotentialSettingController(
-    new PotentialTypeRepository(),
-    new SettingRepository(),
-    new BasicPresenter(),
-    new PotentialTypePresenter())
+    potentialTypeRepo,
+    settingRepo,
+    basicPresenter,
+    potentialTypePresenter)
 
 export const getPotentialSettingData = (onError, onSuccess) => potentialSettingController.getData(onError, onSuccess)
 

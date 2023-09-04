@@ -12,7 +12,8 @@ export const BOTTOM_SHEET_VIEWS = {
     TEST_POINT_SORTING: { itemType: 'TEST_POINT', content: 'sorting', index: 4 },
     TEST_POINT_READINGS: { itemType: 'TEST_POINT', content: 'readings', index: 4 },
     RECTIFIER_READINGS: { itemType: 'RECTIFIER', content: 'readings', index: 1 },
-    BASIC_MENU: { itemType: null, content: 'moreOptions', index: 0 }
+    BASIC_MENU: { itemType: null, content: 'moreOptions', index: 0 },
+    IMAGE_PICKER: { itemType: null, content: 'imagePicker', index: 0 }
 }
 
 
@@ -20,11 +21,11 @@ export const useBottomSheetNavigation = () => {
     const bottomSheet = useContext(BS)
     const dispatch = useDispatch()
 
-    const openBottomSheet = useCallback(({ itemType, content, index }) => {
+    const openBottomSheet = useCallback(({ itemType, content, index }, params = {}) => {
         if (bottomSheet.current.snapToIndex)
             bottomSheet.current.snapToIndex(index)
         else errorHandler(108)
-        dispatch(updateBottomSheetContent(itemType, content))
+        dispatch(updateBottomSheetContent(itemType, content, params))
     }, [])
 
     const openBasicMenu = () => openBottomSheet(BOTTOM_SHEET_VIEWS.BASIC_MENU)
@@ -39,6 +40,8 @@ export const useBottomSheetNavigation = () => {
 
     const openRectifierReadingMenu = () => openBottomSheet(BOTTOM_SHEET_VIEWS.RECTIFIER_READINGS)
 
+    const openImagePicker = ({ itemType, itemId }) => openBottomSheet(BOTTOM_SHEET_VIEWS.IMAGE_PICKER, { itemType, itemId })
+
     const openMenu = () => openBottomSheet(BOTTOM_SHEET_VIEWS.MENU)
 
     return {
@@ -48,7 +51,8 @@ export const useBottomSheetNavigation = () => {
         openTestPointReadingMenu,
         openTestPointSortingMenu,
         openRectifierReadingMenu,
-        openMenu
+        openMenu,
+        openImagePicker
     }
 }
 

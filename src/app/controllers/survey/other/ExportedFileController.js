@@ -1,23 +1,21 @@
-import { ListPresenter } from "../../../presenters/ListPresenter"
-import { FileSystemRepository } from "../../../repository/fs/FileSystemRepository"
-import { CommaSeparatedFileParser } from "../../../services/other/CommaSeparatedFileParser"
-import { OpenInExternalApp } from "../../../services/other/OpenInExternalApp"
-import { Share } from "../../../services/other/Share"
 import { CopyExportedFileToDownloads } from "../../../services/survey/other/exported_files/CopyExportedFileToDownloads"
 import { DeleteExportedFile } from "../../../services/survey/other/exported_files/DeleteExportedFile"
 import { GetExportedFileList } from "../../../services/survey/other/exported_files/GetExportedFileList"
 import { LoadCommaSeparatedFile } from "../../../services/survey/other/exported_files/LoadCommaSeparatedFile"
 import { Controller } from "../../../utils/Controller"
+import { commaSeparatedFileParser, openInExternalAppService, permissions, shareService } from "../../_instances/general_services"
+import { listPresenter } from "../../_instances/presenters"
+import { fileSystemRepo } from "../../_instances/repositories"
 
 class ExportedFileController extends Controller {
-    constructor(fileSystemRepo, listPresenter, csvParser) {
+    constructor(fileSystemRepo, listPresenter, csvParser, permissions, shareService, openInExternalAppService) {
         super()
-        this.copyExportedFileToDownloadsService = new CopyExportedFileToDownloads(fileSystemRepo)
+        this.copyExportedFileToDownloadsService = new CopyExportedFileToDownloads(fileSystemRepo, permissions)
         this.deleteExportedFileService = new DeleteExportedFile(fileSystemRepo)
         this.getExportedFileListService = new GetExportedFileList(fileSystemRepo, listPresenter)
         this.loadCommaSeparatedFileService = new LoadCommaSeparatedFile(fileSystemRepo, csvParser)
-        this.openInExternalAppService = new OpenInExternalApp()
-        this.shareService = new Share()
+        this.openInExternalAppService = openInExternalAppService
+        this.shareService = shareService
     }
 
     getList(onError = null, onSuccess = null) {
@@ -69,9 +67,12 @@ class ExportedFileController extends Controller {
 }
 
 const exportedFileController = new ExportedFileController(
-    new FileSystemRepository(),
-    new ListPresenter(),
-    new CommaSeparatedFileParser()
+    fileSystemRepo,
+    listPresenter,
+    commaSeparatedFileParser,
+    permissions,
+    shareService,
+    openInExternalAppService
 )
 
 export const getExportedFileList = (onError, onSuccess) => exportedFileController.getList(onError, onSuccess)

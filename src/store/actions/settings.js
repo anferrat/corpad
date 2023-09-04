@@ -1,7 +1,7 @@
 export const UPDATE_SETTING = 'UPDATE_SETTING'
 export const LOAD_SETTINGS = 'LOAD_SETTINGS'
 export const SET_SURVEY_SAVING_STATUS = 'SET_SURVEY_SAVING_STATUS'
-export const LOAD_SURVEY_SETTINGS = 'LOAD_SURVEY_SETTINGS'
+export const UPDATE_SURVEY_NAME = 'UPDATE_SURVEY_NAME'
 export const RESET_CURRENT_SURVEY_SETTINGS = 'RESET_CURRENT_SURVEY_SETTINGS'
 export const LOAD_SESSION_STATE = 'LOAD_SESSION_STATE'
 export const UPDATE_ONBOARDING = 'UPDATE_ONBOARDING'
@@ -46,12 +46,12 @@ export const resetCurrentSurveySettings = () => {
     return { type: RESET_CURRENT_SURVEY_SETTINGS }
 }
 
-export const loadSurveySettings = (settings) => {
-    return { type: LOAD_SURVEY_SETTINGS, name: settings.name, fileName: settings.fileName, syncTime: settings.syncTime, isCloudSurvey: settings.isCloudSurvey }
+export const updateSurveyName = (name) => {
+    return { type: UPDATE_SURVEY_NAME, name }
 }
 
-export const setSurveySettings = (name, fileName, syncTime, isCloudSurvey, isLoaded) => ({
-    type: SET_SURVEY_SETTINGS, name, fileName, syncTime, isCloudSurvey, isLoaded
+export const setSurveySettings = (name, fileName, syncTime, isCloudSurvey, isLoaded, uid) => ({
+    type: SET_SURVEY_SETTINGS, name, fileName, syncTime, isCloudSurvey, isLoaded, uid
 })
 
 export const loadSession = (session) => {
@@ -78,12 +78,12 @@ export const setSessionModalVisible = (visible) => {
     return { type: SET_SESSION_MODAL_VISIBLE, visible }
 }
 
-export const setSettingsOnAppLoad = (isLoaded, syncTime, name, fileName, isCloud, isSigned, userName, onboarding, multimeter) => {
-    return { type: SET_SETTINGS_ON_APP_LOAD, isLoaded, syncTime, name, fileName, isCloud, isSigned, userName, onboarding, multimeter }
+export const setSettingsOnAppLoad = (isLoaded, syncTime, name, uid, fileName, isCloud, isSigned, userName, onboarding, multimeter) => {
+    return { type: SET_SETTINGS_ON_APP_LOAD, isLoaded, syncTime, name, uid, fileName, isCloud, isSigned, userName, onboarding, multimeter }
 }
 
-export const updateBottomSheetContent = (itemType, content) => ({
-    type: UPDATE_BOTTOM_SHEET_CONTENT, itemType, content
+export const updateBottomSheetContent = (itemType, content, params) => ({
+    type: UPDATE_BOTTOM_SHEET_CONTENT, itemType, content, params
 })
 
 export const setActiveMultimeter = (paired, id, name, multimeterType, connected = undefined) => ({

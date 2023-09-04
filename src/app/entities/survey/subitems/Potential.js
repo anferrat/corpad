@@ -1,7 +1,7 @@
-import { PotentialUnits } from "../other/properties"
+import { PotentialUnits } from "../../../../constants/global"
 
 export class Potential {
-    constructor(id, uid, subitemId, value, potentialType, referenceCellId, isPortableReference) {
+    constructor(id, uid, subitemId, value, potentialType, referenceCellId, isPortableReference, prevValue) {
         this.id = id
         this.uid = uid
         this.subitemId = subitemId
@@ -9,7 +9,7 @@ export class Potential {
         this.referenceCellId = referenceCellId
         this.potentialType = potentialType
         this.isPortableReference = isPortableReference
-        this.prevValue = null
+        this.prevValue = prevValue
     }
     static unit = PotentialUnits.VOLTS
 

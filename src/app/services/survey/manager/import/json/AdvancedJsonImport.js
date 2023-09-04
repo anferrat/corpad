@@ -1,7 +1,7 @@
 import { SubitemTypes } from "../../../../../../constants/global"
 
 export class AdvancedJsonImport {
-    constructor(testPointRepo, rectifierRepo, pipelineRepo, subitemRepo, potentialTypeRepo, surveyRepo, referenceCellRepo, potentialRepo) {
+    constructor(testPointRepo, rectifierRepo, pipelineRepo, subitemRepo, potentialTypeRepo, surveyRepo, referenceCellRepo, potentialRepo, mapLayerRepo, assetRepo) {
         this.surveyRepo = surveyRepo
         this.testPointImport = new ImportAll(testPointRepo)
         this.rectifierImport = new ImportAll(rectifierRepo)
@@ -10,10 +10,12 @@ export class AdvancedJsonImport {
         this.potentialImport = new ImportAll(potentialRepo)
         this.potentialTypeImport = new ImportAll(potentialTypeRepo)
         this.referenceCellImport = new ImportAll(referenceCellRepo)
+        this.mapLayerImport = new ImportAll(mapLayerRepo)
+        this.assetImport = new ImportAll(assetRepo)
     }
 
     async execute(surveyFile) {
-        const { testPoints, subitems, rectifiers, pipelines, potentialTypes, referenceCells, potentials, survey } = surveyFile
+        const { testPoints, subitems, rectifiers, pipelines, potentialTypes, referenceCells, potentials, survey, mapLayers, assets } = surveyFile
 
         //Ensure main reference cell exist
         const mainReferenceExist = referenceCells.some(({ isMainReference }) => isMainReference)
@@ -22,7 +24,7 @@ export class AdvancedJsonImport {
 
         //Importing in 3 steps in order to keep reference for other items: 
         // 1 - items and extras
-        // 2 - subitems
+        // 2 - subitems and assets
         // 3 - potentials
         await Promise.all([
             this.surveyRepo.create(survey),
@@ -30,14 +32,18 @@ export class AdvancedJsonImport {
             this.rectifierImport.execute(rectifiers),
             this.pipelineImport.execute(pipelines),
             this.potentialTypeImport.execute(potentialTypes),
-            this.referenceCellImport.execute(referenceCells)
+            this.referenceCellImport.execute(referenceCells),
+            this.mapLayerImport.execute(mapLayers)
         ])
 
 
         //Coupon subitem must be inserted first, because it references PIPELINE/RISER subitem, therefore sorting COUPON to appear firts when importing
         subitems.sort((a, b) => a.type === SubitemTypes.COUPON && b.type !== SubitemTypes.COUPON ? -1 : (a.type !== SubitemTypes.COUPON && b.type === SubitemTypes.COUPON ? 1 : 0))
 
-        await this.subitemImport.execute(subitems)
+        await Promise.all([
+            this.subitemImport.execute(subitems),
+            this.assetImport.execute(assets)
+        ])
         await this.potentialImport.execute(potentials)
     }
 }

@@ -1,10 +1,10 @@
-import { UnitConverter } from "../../../services/other/UnitConverter"
 import { Controller } from "../../../utils/Controller"
+import { unitConverter } from "../../_instances/general_services"
 
 class ConverterController extends Controller {
-    constructor() {
+    constructor(unitConverter) {
         super()
-        this.converterService = new UnitConverter()
+        this.converterService = unitConverter
     }
 
     convertVolts({ value, inputUnit, outputUnit }, onError = null, onSuccess = null) {
@@ -20,7 +20,7 @@ class ConverterController extends Controller {
     }
 }
 
-const converterController = new ConverterController()
+const converterController = new ConverterController(unitConverter)
 
 export const convertAmps = ({ value, inputUnit, outputUnit }, onError, onSuccess) => converterController.convertAmps({ value, inputUnit, outputUnit }, onError, onSuccess)
 

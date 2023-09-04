@@ -15,7 +15,7 @@ import { Potential } from "../../../entities/survey/subitems/Potential"
 //DO NOT CHANGE these class methods by itself. they are tightly coupled with queries in subitemRepo. 
 
 export class SubitemResponseProcessor {
-    constructor () { }
+    constructor() { }
 
     generateArrayWithSides(length, item) {
         let result = []
@@ -55,7 +55,7 @@ export class SubitemResponseProcessor {
                 if (value.sideBId !== null)
                     savedValue.sideB.push(value.sideBId)
                 else if (value.potentialId !== null) {
-                    const { potentialId, potentialTypeId, potentialValue, permanentReferenceId, portableReferenceId, potentialUid, id } = value
+                    const { potentialId, potentialTypeId, potentialValue, potentialOldValue, permanentReferenceId, portableReferenceId, potentialUid, id } = value
                     const isPortable = permanentReferenceId === null
                     savedValue.potentials.push({
                         id: potentialId,
@@ -64,7 +64,8 @@ export class SubitemResponseProcessor {
                         type: potentialTypeId,
                         value: potentialValue,
                         referenceCellId: isPortable ? portableReferenceId : permanentReferenceId,
-                        isPortable: isPortable
+                        isPortable: isPortable,
+                        prevValue: potentialOldValue,
                     })
                 }
             if (i === length - 1) {
@@ -75,8 +76,8 @@ export class SubitemResponseProcessor {
     }
 
     getPotentialsFromTableData(data) {
-        return data.potentials.map(({ id, uid, type, value, referenceCellId, isPortable, cardId }) =>
-            new Potential(id, uid, cardId, value, type, referenceCellId, isPortable))
+        return data.potentials.map(({ id, uid, type, value, referenceCellId, isPortable, cardId, prevValue }) =>
+            new Potential(id, uid, cardId, value, type, referenceCellId, isPortable, prevValue))
     }
 
 
@@ -99,18 +100,18 @@ export class SubitemResponseProcessor {
                 }
             case SubitemTypes.COUPON:
                 {
-                    const { id, testPointId, uid, name, pipelineCardId, wireGauge, wireColor, couponType, current, density, area } = data
-                    return new Coupon(id, testPointId, uid, name, pipelineCardId, wireGauge, wireColor, couponType, current, density, area)
+                    const { id, testPointId, uid, name, pipelineCardId, wireGauge, wireColor, couponType, current, density, area, oldCurrent } = data
+                    return new Coupon(id, testPointId, uid, name, pipelineCardId, wireGauge, wireColor, couponType, current, density, area, oldCurrent)
                 }
             case SubitemTypes.BOND:
                 {
-                    const { id, testPointId, uid, name, fromAtoB, current, sideA, sideB } = data
-                    return new Bond(id, testPointId, uid, name, fromAtoB, current, sideA, sideB)
+                    const { id, testPointId, uid, name, fromAtoB, current, sideA, sideB, oldCurrent } = data
+                    return new Bond(id, testPointId, uid, name, fromAtoB, current, sideA, sideB, oldCurrent)
                 }
             case SubitemTypes.SHUNT:
                 {
-                    const { id, testPointId, uid, name, factor, ratioVoltage, ratioCurrent, factorSelected, current, voltageDrop, fromAtoB, sideA, sideB } = data
-                    return new Shunt(id, testPointId, uid, name, factor, ratioVoltage, ratioCurrent, factorSelected, current, voltageDrop, fromAtoB, sideA, sideB)
+                    const { id, testPointId, uid, name, factor, ratioVoltage, ratioCurrent, factorSelected, current, voltageDrop, fromAtoB, sideA, sideB, oldVoltageDrop } = data
+                    return new Shunt(id, testPointId, uid, name, factor, ratioVoltage, ratioCurrent, factorSelected, current, voltageDrop, fromAtoB, sideA, sideB, oldVoltageDrop)
                 }
             case SubitemTypes.RISER:
                 {

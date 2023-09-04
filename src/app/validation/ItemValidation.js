@@ -89,20 +89,22 @@ export class ItemValidation extends Validation {
         )
     }
 
+    getItemPhotos(obj) {
+        return this.validate(obj,
+            object({
+                itemId: this.id.required(),
+                itemType: this.itemType.required(),
+                surveyUid: this.uid,
+            })
+        )
+    }
+
     getNearbyItems(obj) {
         return this.validate(obj,
             object({
                 itemType: this.itemType.required()
             })
         )
-    }
-
-    deleteItemList(obj) {
-        return this.validate(obj,
-            object({
-                idList: array().of(this.id).required(),
-                itemType: this.itemType.required()
-            }))
     }
 
     getById(obj) {

@@ -47,7 +47,7 @@ export default React.memo(ControlButton)
 
 const styles = StyleSheet.create({
     pressable: {
-        marginHorizontal: 6,
+        marginHorizontal: 8,
     },
     topView: {
         alignItems: 'center',

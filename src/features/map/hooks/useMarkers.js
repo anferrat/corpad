@@ -83,7 +83,7 @@ const useMarkers = ({ navigateToEdit, navigateToView, ref }) => {
             EventRegister.removeEventListener(onDeleteHandler)
             EventRegister.removeEventListener(onDisplayHandler)
         }
-    }, [loading])
+    }, [loading, activeMarkerRef, dispatch])
 
     useEffect(() => () => {
         dispatch(refreshMarkers())

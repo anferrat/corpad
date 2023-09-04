@@ -2,13 +2,15 @@ import RNDocumentPicker from 'react-native-document-picker'
 import { Error, errors } from '../../utils/Error'
 import { FileMimeTypes, FileTypeIdentifiers, SurveyLoadingStatuses } from '../../../constants/global'
 import { Platform } from 'react-native'
+import { ExternalFile } from '../../entities/survey/other/ExternalFile'
 
 export class DocumentPicker {
     constructor() { }
 
     async execute(type) {
         try {
-            return await RNDocumentPicker.pickSingle({ allowMultiSelection: false, type })
+            const { fileCopyUri, uri, name } = await RNDocumentPicker.pickSingle({ allowMultiSelection: false, type, copyTo: 'cachesDirectory' })
+            return new ExternalFile(fileCopyUri ? fileCopyUri : uri, name)
         }
         catch (er) {
             if (er.code !== 'DOCUMENT_PICKER_CANCELED')
@@ -19,9 +21,9 @@ export class DocumentPicker {
 
     async pickSurveyFile() {
         return await this.execute(Platform.select({
-            android: FileMimeTypes.JSON,
-            ios: FileTypeIdentifiers.JSON,
-            default: FileMimeTypes.JSON
+            android: `*/*`,
+            ios: FileTypeIdentifiers.ITEM,
+            default: `*/*`
         }))
     }
 
@@ -31,5 +33,9 @@ export class DocumentPicker {
             ios: FileTypeIdentifiers.CSV,
             default: FileMimeTypes.CSV
         }))
+    }
+
+    pickImage() {
+        return this.execute(RNDocumentPicker.types.images)
     }
 }

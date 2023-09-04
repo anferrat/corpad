@@ -1,6 +1,3 @@
-import { TestPointRepository } from "../../../repository/sqlite/TestPointRepository"
-import { RectifierRepository } from "../../../repository/sqlite/RectifierRepository"
-import { PipelineRepository } from "../../../repository/sqlite/PipelineRepository"
 import { Controller } from "../../../utils/Controller"
 import { ItemValidation } from "../../../validation/ItemValidation"
 import { CreateItem } from "../../../services/survey/items/CreateItem"
@@ -9,30 +6,26 @@ import { UpdateItem } from "../../../services/survey/items/UpdateItem"
 import { GetItem } from "../../../services/survey/items/GetItemById"
 import { GetItemIdList } from "../../../services/survey/items/GetItemIdList"
 import { GetItemListWithDisplayValues } from "../../../services/survey/items/GetItemListWithDisplayValues"
-import { DefaultNameRepository } from "../../../repository/sqlite/DefaultNameRepository"
-import { BasicPresenter } from "../../../presenters/BasciPresenter"
-import { ItemPreseneter } from "../../../presenters/ItemPresenter"
-import { DeleteItemList } from "../../../services/survey/items/DeleteItemList"
-import { SurveyRepository } from "../../../repository/sqlite/SurveyRepository"
 import { SearchItem } from "../../../services/survey/items/SearchItems"
-import { ListPresenter } from "../../../presenters/ListPresenter"
 import { GetNearbyItems } from "../../../services/survey/items/GetNearbyItems"
 import { GeolocationCalculator } from "../../../services/other/GeolocationCalculator"
-import { GeolocationRepository } from "../../../repository/geolocation/GeolocationRepository"
+import { GetItemPhotos } from "../../../services/survey/items/GetItemPhotos"
+import { assetRepo, defaultNameRepo, fileSystemRepo, geolocationRepo, pipelineRepo, rectifierRepo, surveyRepo, testPointRepo } from "../../_instances/repositories"
+import { basicPresenter, itemPresenter, listPresenter } from "../../_instances/presenters"
 
 class ItemController extends Controller {
-    constructor(testPointRepo, rectifierRepo, pipelineRepo, surveyRepo, defaultNameRepo, geolocationRepo, basicPresenter, itemPresenter, listPresenter) {
+    constructor(testPointRepo, rectifierRepo, pipelineRepo, surveyRepo, defaultNameRepo, geolocationRepo, fileSystemRepo, assetRepo, basicPresenter, itemPresenter, listPresenter) {
         super()
 
         this.validation = new ItemValidation()
         this.createItemService = new CreateItem(testPointRepo, rectifierRepo, pipelineRepo, basicPresenter)
-        this.deleteItemService = new DeleteItem(testPointRepo, rectifierRepo, pipelineRepo)
+        this.deleteItemService = new DeleteItem(testPointRepo, rectifierRepo, pipelineRepo, assetRepo, fileSystemRepo)
         this.updateItemService = new UpdateItem(testPointRepo, rectifierRepo, pipelineRepo, itemPresenter)
         this.getItemService = new GetItem(testPointRepo, rectifierRepo, pipelineRepo, defaultNameRepo, basicPresenter, itemPresenter)
         this.searchItemService = new SearchItem(surveyRepo, listPresenter)
         this.getIdListService = new GetItemIdList(testPointRepo, rectifierRepo, pipelineRepo)
         this.getDisplayListService = new GetItemListWithDisplayValues(testPointRepo, rectifierRepo, pipelineRepo)
-        this.deleteItemListService = new DeleteItemList(testPointRepo, rectifierRepo, pipelineRepo)
+        this.getItemPhotosService = new GetItemPhotos(assetRepo, fileSystemRepo)
 
         this.geolocationCalculatorService = new GeolocationCalculator()
         this.getNearbyItemsService = new GetNearbyItems(testPointRepo, rectifierRepo, geolocationRepo, this.geolocationCalculatorService)
@@ -50,14 +43,6 @@ class ItemController extends Controller {
         return super.controllerHandler(onSuccess, onError, 601, async () => {
             const { id, itemType } = this.validation.deleteItem(params)
             return this.deleteItemService.execute(id, itemType)
-        }
-        )
-    }
-
-    deleteList(params, onError = null, onSuccess = null) {
-        return super.controllerHandler(onSuccess, onError, 632, async () => {
-            const { idList, itemType } = this.validation.deleteItemList(params)
-            return this.deleteItemListService.execute(idList, itemType)
         }
         )
     }
@@ -106,24 +91,31 @@ class ItemController extends Controller {
             return this.getNearbyItemsService.execute(itemType)
         })
     }
+
+    getItemPhotos(params, onError = null, onSuccess = null,) {
+        return super.controllerHandler(onSuccess, onError, 656, async () => {
+            const { itemId, itemType, surveyUid } = this.validation.getItemPhotos(params)
+            return this.getItemPhotosService.execute(itemId, itemType, surveyUid)
+        })
+    }
 }
 
 const itemController = new ItemController(
-    new TestPointRepository(),
-    new RectifierRepository(),
-    new PipelineRepository(),
-    new SurveyRepository(),
-    new DefaultNameRepository(),
-    new GeolocationRepository(),
-    new BasicPresenter(),
-    new ItemPreseneter(),
-    new ListPresenter())
+    testPointRepo,
+    rectifierRepo,
+    pipelineRepo,
+    surveyRepo,
+    defaultNameRepo,
+    geolocationRepo,
+    fileSystemRepo,
+    assetRepo,
+    basicPresenter,
+    itemPresenter,
+    listPresenter)
 
 export const createItem = ({ itemType, latitude, longitude }, onError, onSuccess) => itemController.create({ itemType, latitude, longitude }, onError, onSuccess)
 
 export const deleteItem = (params, onError, onSuccess) => itemController.delete(params, onError, onSuccess)
-
-export const deleteItemList = (params, onError, onSuccess) => itemController.deleteList(params, onError, onSuccess)
 
 export const getItemById = (params, onError, onSuccess) => itemController.getById(params, onError, onSuccess)
 
@@ -136,3 +128,5 @@ export const getItemDisplayData = (params, onError, onSuccess) => itemController
 export const searchItem = ({ keyword }, onError, onSuccess) => itemController.search({ keyword }, onError, onSuccess)
 
 export const getNearbyItems = ({ itemType }, onError, onSuccess) => itemController.getNearbyItems({ itemType }, onError, onSuccess)
+
+export const getItemPhotos = ({ itemId, itemType, surveyUid }, onError, onSuccess) => itemController.getItemPhotos({ itemType, itemId, surveyUid }, onError, onSuccess)

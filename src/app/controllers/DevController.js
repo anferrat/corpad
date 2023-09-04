@@ -1,12 +1,6 @@
-import { AppRepository } from "../repository/sqlite/AppRepository"
-import { PipelineRepository } from "../repository/sqlite/PipelineRepository"
-import { PotentialRepository } from "../repository/sqlite/PotentialRepository"
-import { PotentialTypeRepository } from "../repository/sqlite/PotentialTypeRepository"
-import { ReferenceCellRepository } from "../repository/sqlite/ReferenceCellRepository"
-import { SubitemRepository } from "../repository/sqlite/SubitemRepository"
-import { TestPointRepository } from "../repository/sqlite/TestPointRepository"
 import { GenerateItem } from "../services/survey/other/GenerateItemDev"
 import { Controller } from "../utils/Controller"
+import { appRepo, pipelineRepo, potentialRepo, potentialTypeRepo, referenceCellRepo, subitemRepo, testPointRepo } from "./_instances/repositories"
 
 
 class DevController extends Controller {
@@ -32,13 +26,13 @@ class DevController extends Controller {
 }
 
 const devController = new DevController(
-    new TestPointRepository(),
-    new SubitemRepository(),
-    new PotentialRepository(),
-    new PipelineRepository(),
-    new PotentialTypeRepository(),
-    new ReferenceCellRepository(),
-    new AppRepository()
+    testPointRepo,
+    subitemRepo,
+    potentialRepo,
+    pipelineRepo,
+    potentialTypeRepo,
+    referenceCellRepo,
+    appRepo
 )
 
 

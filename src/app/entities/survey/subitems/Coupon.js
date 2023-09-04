@@ -2,7 +2,7 @@ import { ItemTypes, AreaUnits, CurrentUnits, SubitemTypes } from "../../../../co
 import { Subitem } from "./Subitem"
 
 export class Coupon extends Subitem {
-    constructor(id, parentId, uid, name, pipelineCardId, wireGauge, wireColor, couponType, current, density, area) {
+    constructor(id, parentId, uid, name, pipelineCardId, wireGauge, wireColor, couponType, current, density, area, prevCurrent) {
         super(id, parentId, uid, SubitemTypes.COUPON, ItemTypes.TEST_POINT, name)
         this.pipelineCardId = pipelineCardId
         this.wireColor = wireColor
@@ -11,6 +11,7 @@ export class Coupon extends Subitem {
         this.current = current
         this.density = density
         this.area = area
+        this.prevCurrent = prevCurrent
     }
     static areaUnit = AreaUnits.CENTIMETER_SQUARE
     static currentUnit = CurrentUnits.MICRO_AMPS
@@ -23,6 +24,7 @@ export class Coupon extends Subitem {
     }
 
     reset() {
+        this.prevCurrent = this.current
         this.current = null
         this.density = null
     }

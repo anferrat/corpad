@@ -21,7 +21,7 @@ export class CreateSubitem {
     _createPotentialByPermType(subitemId, permType, potentialTypes, referenceCell) {
         const potentialTypeId = this._getPotentialIdByType(potentialTypes, permType)
         if (potentialTypeId !== null && referenceCell) {
-            const potential = new Potential(null, guid(), subitemId, null, potentialTypeId, referenceCell.id, true)
+            const potential = new Potential(null, guid(), subitemId, null, potentialTypeId, referenceCell.id, true, null)
             return this.potentialRepo.create(potential)
         }
         else return null
