@@ -1,3 +1,4 @@
+import { SurveyFile } from "../../../entities/survey/other/SurveyFile"
 import { Error, errors } from "../../../utils/Error"
 
 export class GetCloudSurveyFileList {
@@ -7,14 +8,12 @@ export class GetCloudSurveyFileList {
         this.networkRepo = networkRepo
     }
 
-    async _getMetaDataFromFile(cloudId, modifiedTime, name) {
+    async _getSurveyFile(cloudId, timeModified, name) {
         try {
-
             const { file } = await this.cloudFileSystemRepo.readFile(cloudId)
-            const timeModified = new Date(modifiedTime).getTime()
-
-            return this.surveyFileListPresenter.executeForCloudFile(file, name, timeModified, cloudId)
-
+            const surveyFile = new SurveyFile(name, true, null, null, cloudId, timeModified, file)
+            surveyFile.getMetaData()
+            return this.surveyFileListPresenter.execute(surveyFile)
         }
         catch (er) {
             return null
@@ -24,12 +23,14 @@ export class GetCloudSurveyFileList {
     async execute() {
         const internetOn = this.networkRepo.checkConnection()
         if (internetOn) {
-            const { files } = await this.cloudFileSystemRepo.readAppFolder()
+            const files = await this.cloudFileSystemRepo.readAppFolder()
             const surveys = files
                 .filter(({ name }) => name.endsWith('.json'))
-                .sort((a, b) => new Date(b?.modifiedTime).getTime() - new Date(a?.modifiedTime).getTime())
+                .sort((a, b) => b.timeModified - a.timeModified)
 
-            return this.surveyFileListPresenter.executeForSurveyList(await Promise.all(surveys.map(({ modifiedTime, name, id }) => this._getMetaDataFromFile(id, modifiedTime, name))))
+            return this.surveyFileListPresenter.executeForList(
+                await Promise.all(surveys.map(({ timeModified, name, cloudId }) =>
+                    this._getSurveyFile(cloudId, timeModified, name))))
         }
         else throw new Error(errors.NETWORK, 'Unable to connect to internet', 'No Internet', 102)
     }

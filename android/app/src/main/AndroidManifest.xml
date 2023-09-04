@@ -39,8 +39,11 @@
             <data
               android:mimeType="application/json"
               android:host="*"
-              android:pathPattern=".*\\.json"
-            />
+              android:pathPattern=".*\\.json"/>
+            <data 
+              android:mimeType="application/octet-stream"
+              android:host="*"
+              android:pathPattern=".*\\.corpad"/>
         </intent-filter>
       </activity>
       <meta-data

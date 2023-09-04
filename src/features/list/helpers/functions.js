@@ -44,6 +44,8 @@ const itemDataHandler = (type, value) => {
             return value
         case DisplayCardDataTypes.TAP:
             return getTapSettings(value.setting, value.coarse, value.fine, value.value)
+        case DisplayCardDataTypes.ASSETS:
+            return `Images: ${value}`
         default: return null
     }
 }
@@ -150,6 +152,10 @@ export const dataListIcons = {
     },
     3: {
         icon: 'options-outline',
+        pack: null
+    },
+    4: {
+        icon: 'image-outline',
         pack: null
     }
 }

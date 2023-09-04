@@ -8,7 +8,7 @@ export class CreatePotentialType {
     }
 
     async execute(name) {
-        const potentialType = new PotentialType(null, guid(), name, null)
+        const potentialType = new PotentialType(null, guid(), name, null, false)
         return this.basicPresenter.execute(await this.potentialTypeRepo.create(potentialType))
     }
 }

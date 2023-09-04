@@ -2,12 +2,13 @@ import { Subitem } from "./Subitem"
 import { ItemTypes, SubitemTypes, CurrentUnits } from "../../../../constants/global"
 
 export class Bond extends Subitem {
-    constructor(id, parentId, uid, name, fromAtoB, current, sideA, sideB) {
+    constructor(id, parentId, uid, name, fromAtoB, current, sideA, sideB, prevCurrent) {
         super(id, parentId, uid, SubitemTypes.BOND, ItemTypes.TEST_POINT, name,)
         this.current = current
-        this.fromAtoB = fromAtoB
+        this.fromAtoB = Boolean(fromAtoB)
         this.sideA = sideA
         this.sideB = sideB
+        this.prevCurrent = prevCurrent
     }
     static currentUnit = CurrentUnits.AMPS
 
@@ -19,6 +20,7 @@ export class Bond extends Subitem {
     }
 
     reset() {
+        this.prevCurrent = this.current
         this.current = null
         this.fromAtoB = true
     }

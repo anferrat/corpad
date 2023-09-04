@@ -24,6 +24,7 @@ const warningCodes = {
     45: 'Are you sure you want to delete all exported files?',
     46: 'Are you sure you want to delete this calculation?',
     47: 'You will delete all saved calculations of this type including the one currently opened. Do you want to continue?',
+    48: 'Are you sure that you want to delete this photo?',
     51: 'All mapped values will be deleted. Do you wish to proceed?',
     52: 'You have no mapped attributes for this property, therefore property will have no value for all imported items. Do you want to continue?',
     53: 'Are you sure you want to delete this rectifier?',
@@ -82,6 +83,8 @@ const errorCodes = {
     429: 'Unable to export file',
     430: 'Unable to share file',
     431: 'Unable to save calculator data to file.',
+    432: 'Unable to add photo',
+    433: 'Unable to delete photo',
     503: 'Multimeter data is invalid for this field. If this issue presist, please contact support.',
     505: 'Some of the data is invalid. Please check entered values and try again.',
     506: 'Name must only contain following characters: A-z, 0-9, -._() and be at least 2 characters long',
@@ -136,6 +139,7 @@ const errorCodes = {
     653: 'Unable to change pairing settings',
     654: 'Unable to initiate multimeter capture.',
     655: 'Unable to get potential pair.',
+    656: 'Unable to get item assets',
     700: 'Unable to complete Google Drive operation.',
     701: 'Unable to read/create cloud app directory',
     702: 'Unable to read cloud app directory',
@@ -171,10 +175,13 @@ const errorCodes = {
     823: 'Unable to share location',
     824: 'Adjust toggle on the side of multimeter to capture reading of this type.',
     825: 'Measurement stopped, because over range value was detected. Fuse replacement may be required!',
+    826: 'Camera is not available',
+    827: 'Image library is not available.',
     900: 'Unable to obtain permission to proceed with operation.',
     901: 'Need permission to write to Downloads folder.',
     902: 'Location permission was not granted.',
     903: 'You need to grant bluetooth permission to use this feature.',
+    904: 'You need to grant camera permission to use this feature.'
 }
 
 const getErrorTitle = (error) => errorTitles[error - (error % 100)] ?? errorTitles[100]

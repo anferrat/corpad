@@ -11,10 +11,10 @@ export class CouponRepository extends SQLiteRepository {
 
     async getAll() {
         try {
-            const result = await this.runSingleQueryTransaction('SELECT id, testPointId, uid, name, pipelineCardId, couponType, current, density, area, wireColor, wireGauge FROM cards WHERE type=?', [SubitemTypes.COUPON])
+            const result = await this.runSingleQueryTransaction('SELECT id, testPointId, uid, name, pipelineCardId, couponType, current, density, area, wireColor, wireGauge, oldCurrent FROM cards WHERE type=?', [SubitemTypes.COUPON])
             return this.generateArray(result.rows.length, result.rows.item)
-                .map(({ id, testPointId, uid, name, pipelineCardId, couponType, current, density, area, wireColor, wireGauge }) =>
-                    new Coupon(id, testPointId, uid, name, pipelineCardId, wireGauge, wireColor, couponType, current, density, area))
+                .map(({ id, testPointId, uid, name, pipelineCardId, couponType, current, density, area, wireColor, wireGauge, oldCurrent }) =>
+                    new Coupon(id, testPointId, uid, name, pipelineCardId, wireGauge, wireColor, couponType, current, density, area, oldCurrent))
         }
         catch (err) {
             throw new Error(errors.DATABASE, 'Unable to get all coupons', err)
@@ -23,11 +23,11 @@ export class CouponRepository extends SQLiteRepository {
 
     async create(coupon) {
         try {
-            const { id, uid, parentId, type, name, pipelineCardId, couponType, current, density, area, wireColor, wireGauge } = coupon
+            const { id, uid, parentId, type, name, pipelineCardId, couponType, current, density, area, wireColor, wireGauge, prevCurrent } = coupon
             const result = await this.runSingleQueryTransaction(
-                'INSERT INTO cards (id, uid, testPointId, type, name, pipelineCardId, couponType, current, density, area, wireColor, wireGauge) VALUES (?,?,?,?,?,?,?,?,?,?,?,?)',
-                [id, uid, parentId, type, name, pipelineCardId, couponType, current, density, area, wireColor, wireGauge])
-            return new Coupon(result.insertId, parentId, uid, name, pipelineCardId, wireGauge, wireColor, couponType, current, density, area)
+                'INSERT INTO cards (id, uid, testPointId, type, name, pipelineCardId, couponType, current, density, area, wireColor, wireGauge, oldCurrent) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)',
+                [id, uid, parentId, type, name, pipelineCardId, couponType, current, density, area, wireColor, wireGauge, prevCurrent])
+            return new Coupon(result.insertId, parentId, uid, name, pipelineCardId, wireGauge, wireColor, couponType, current, density, area, prevCurrent)
         }
         catch (err) {
             throw new Error(errors.DATABASE, `Unable to create coupon`, err)
@@ -36,9 +36,9 @@ export class CouponRepository extends SQLiteRepository {
 
     async getById(id) {
         try {
-            const result = await this.runSingleQueryTransaction('SELECT testPointId, uid, name, pipelineCardId, couponType, current, density, area, wireColor, wireGauge FROM cards WHERE id=? AND type=?', [id, SubitemTypes.COUPON])
-            const { testPointId, uid, name, pipelineCardId, couponType, current, density, area, wireColor, wireGauge } = result.rows.item(0)
-            return new Coupon(id, testPointId, uid, name, pipelineCardId, wireGauge, wireColor, couponType, current, density, area)
+            const result = await this.runSingleQueryTransaction('SELECT testPointId, uid, name, pipelineCardId, couponType, current, density, area, wireColor, wireGauge, oldCurrent FROM cards WHERE id=? AND type=?', [id, SubitemTypes.COUPON])
+            const { testPointId, uid, name, pipelineCardId, couponType, current, density, area, wireColor, wireGauge, oldCurrent } = result.rows.item(0)
+            return new Coupon(id, testPointId, uid, name, pipelineCardId, wireGauge, wireColor, couponType, current, density, area, oldCurrent)
         }
         catch (err) {
             throw new Error(errors.DATABASE, `Unable to get coupon with id ${id}`, err)

@@ -2,12 +2,18 @@ import { Error, errors } from "../../utils/Error"
 import { GoogleDriveAuthorizationRepository } from "./GoogleDriveAuthorizationRepository"
 import { gdrive } from "../../config/cloud_drive"
 import { ListQueryBuilder, MimeTypes } from "@robinbobin/react-native-google-drive-api-wrapper"
+import { GoogleDriveFileTransferManager } from "./GoogleDriveFileTransferManager"
+import { CloudFile } from "../../entities/survey/other/CloudFile"
 
 
 export class GoogleDriveFileSystemRepository {
     constructor() {
         this.googleDriveAuth = new GoogleDriveAuthorizationRepository()
-        this.APPLICATION_FOLDER = 'Corpad'
+        this.fileTransferManager = new GoogleDriveFileTransferManager()
+        this.APPLICATION_FOLDER_NAME = 'Corpad'
+        this.ASSET_FOLDER_NAME = 'assets'
+        this.appFolderId = undefined
+        this.assetFolderId = undefined
     }
 
     async authHandler(request) {
@@ -29,49 +35,124 @@ export class GoogleDriveFileSystemRepository {
         }
     }
 
+    async createFolder(name, parents) {
+        try {
+            const folder = await this.authHandler(async () => await gdrive.files.newMetadataOnlyUploader()
+                .setRequestBody({
+                    name: name,
+                    parents: parents,
+                    mimeType: MimeTypes.FOLDER,
+                })
+                .execute())
+            return folder.id
+        }
+        catch (er) {
+            throw new Error(errors.GOOGLE_DRIVE, 'Unable to create folder', er)
+        }
+    }
+
     async getAppFolderId() {
         //returns id of Corpad folder on users cloud, if it doesnt exist, creates one and returns id
-        try {
-            const list = await this.authHandler(async () => await gdrive.files.list({
-                q: new ListQueryBuilder()
-                    .e('name', this.APPLICATION_FOLDER)
-            }))
-            if (list?.files.length === 0) {
-                const createFolderId = await this.authHandler(async () => await gdrive.files.newMetadataOnlyUploader()
-                    .setRequestBody({
-                        name: this.APPLICATION_FOLDER,
-                        parents: ['root'],
-                        mimeType: MimeTypes.FOLDER,
-                    })
-                    .execute())
-                return {
-                    folderId: createFolderId.id
+        if (this.appFolderId)
+            return this.appFolderId
+        else
+            try {
+                const list = await this.authHandler(async () => await gdrive.files.list({
+                    q: new ListQueryBuilder()
+                        .e('name', this.APPLICATION_FOLDER_NAME)
+                }))
+                if (list?.files.length === 0) {
+                    const createFolderId = await this.createFolder(this.APPLICATION_FOLDER_NAME, ['root'])
+                    this.appFolderId = createFolderId
+                    return createFolderId
+                }
+                else {
+                    this.appFolderId = list.files[0].id
+                    return list.files[0].id
                 }
             }
-            else return {
-                folderId: list.files[0].id
+            catch (er) {
+                throw new Error(errors.GOOGLE_DRIVE, 'Unable to get id of app folder', er, er.code ?? 701)
+            }
+    }
+
+    async getAssetFolderId() {
+        if (this.assetFolderId)
+            return this.assetFolderId
+        else try {
+            const appFolderId = await this.getAppFolderId()
+            const list = await this.authHandler(async () => await gdrive.files.list({
+                q: new ListQueryBuilder()
+                    .e('name', this.ASSET_FOLDER_NAME)
+                    .and()
+                    .in(appFolderId, 'parents')
+                    .and()
+                    .e('mimeType', MimeTypes.FOLDER)
+                    .and()
+                    .e('trashed', false)
+            }))
+            if (list && list.files && list.files.length) {
+                this.assetFolderId = list.files[0].id
+                return list.files[0].id
+            }
+            else {
+                const assetFolderId = await this.createFolder(this.ASSET_FOLDER_NAME, [appFolderId])
+                this.assetFolderId = assetFolderId
+                return assetFolderId
             }
         }
         catch (er) {
-            throw new Error(errors.GOOGLE_DRIVE, 'Unable to get id of app folder', er, er.code ?? 701)
+            throw new Error(errors.GOOGLE_DRIVE, 'Unable to get asset folder id', er)
         }
     }
 
     async readAppFolder() {
+        const folderId = await this.getAppFolderId()
         try {
-            const { folderId } = await this.getAppFolderId()
-            return (await this.authHandler(async () => await gdrive.files.list({
-                fields: "files/id,files/name,files/modifiedTime",
+            const { files } = await this.authHandler(async () => await gdrive.files.list({
+                fields: "files/id,files/name,files/modifiedTime,files/size",
                 q: new ListQueryBuilder()
                     .in(folderId, 'parents')
                     .and()
                     .e('trashed', false)
             }))
-            )
+            return files.map(file => new CloudFile(file.name, file.id, [folderId], new Date(file.modifiedTime).getTime(), file.size))
         }
         catch (er) {
             throw new Error(errors.GOOGLE_DRIVE, 'Unable to read app folder', er, er.code ?? 702)
         }
+    }
+
+    async getSurveyAssetFolderId(uid) {
+        try {
+            const assetFolderId = await this.getAssetFolderId()
+            const list = await this.authHandler(async () => await gdrive.files.list({
+                q: new ListQueryBuilder()
+                    .e('name', uid)
+                    .and()
+                    .in(assetFolderId, 'parents')
+                    .and()
+                    .e('mimeType', MimeTypes.FOLDER)
+            }))
+            if (list && list.files && list.files.length)
+                return list.files[0].id
+            else {
+                return await this.createFolder(uid, [assetFolderId])
+            }
+        }
+        catch (er) {
+            throw new Error(errors.GOOGLE_DRIVE, 'Unable to get survey asset folder id', er)
+        }
+    }
+
+    async readSurveyAssetFolder(uid) {
+        const surveyAssetFolderId = await this.getSurveyAssetFolderId(uid)
+        const { files } = await this.authHandler(async () => await gdrive.files.list({
+            fields: "files/id,files/name,files/modifiedTime,files/size",
+            q: new ListQueryBuilder()
+                .in(surveyAssetFolderId, 'parents')
+        }))
+        return files.map(({ id, name, modifiedTime, size }) => new CloudFile(name, id, [surveyAssetFolderId], new Date(modifiedTime).getTime(), size))
     }
 
     async isFileExist(fileId) {
@@ -85,7 +166,7 @@ export class GoogleDriveFileSystemRepository {
     }
 
     async createFile(name, content) {
-        const { folderId } = await this.getAppFolderId()
+        const folderId = await this.getAppFolderId()
         try {
             const { id } = (await this.authHandler(async () => await gdrive.files.newMultipartUploader()
                 .setData(content, MimeTypes.JSON)
@@ -125,6 +206,22 @@ export class GoogleDriveFileSystemRepository {
     async deleteFile(fileId) {
         try {
             return await this.authHandler(async () => await gdrive.files.delete(fileId))
+        }
+        catch (er) {
+            throw new Error(errors.GOOGLE_DRIVE, 'Unable to delete file', er, er.code ?? 706)
+        }
+    }
+
+    async deleteFiles(cloudFileList) {
+        try {
+            for (let i = 0; i < cloudFileList.length; i++) {
+                try {
+                    await this.authHandler(async () => await gdrive.files.delete(cloudFileList[i].cloudId))
+                }
+                catch (er) {
+                    throw `Error delete file with index ${i}`
+                }
+            }
         }
         catch (er) {
             throw new Error(errors.GOOGLE_DRIVE, 'Unable to delete file', er, er.code ?? 706)
@@ -171,6 +268,21 @@ export class GoogleDriveFileSystemRepository {
         catch (er) {
             throw new Error(errors.GOOGLE_DRIVE, 'Unable to get file web link', er, er.code ?? 708)
         }
+    }
+
+
+    async download(cloudId, destinationPath) {
+        const { jobId, promise } = this.fileTransferManager.download(cloudId, destinationPath)
+        const { statusCode } = await promise
+        if (statusCode !== 200)
+            throw new Error(errors.GOOGLE_DRIVE, 'Unable to download a file', statusCode)
+    }
+
+    async upload(filepath, filename, parents, mimeType) {
+        const { jobId, promise } = await this.fileTransferManager.upload(filepath, filename, parents, mimeType)
+        const { statusCode } = await promise
+        if (statusCode !== 200)
+            throw new Error(errors.GOOGLE_DRIVE, 'Unable to upload file', statusCode)
     }
 
 }

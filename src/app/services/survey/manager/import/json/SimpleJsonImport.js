@@ -7,7 +7,7 @@ export class SimpleJsonImport {
 
     async execute(surveyFile) {
 
-        const { testPoints, pipelines, rectifiers, subitems, potentials, potentialTypes, survey, referenceCells } = surveyFile
+        const { testPoints, pipelines, rectifiers, subitems, potentials, potentialTypes, survey, referenceCells, assets, mapLayers } = surveyFile
 
         //Getting circuits from subitems (stored inside separate table)
         const circuits = subitems.filter(({ type }) => type === SubitemTypes.CIRCUIT)
@@ -30,7 +30,7 @@ export class SimpleJsonImport {
         const mainReferenceExist = referenceCells.some(({ isMainReference }) => isMainReference)
         if (!mainReferenceExist && referenceCells[0])
             referenceCells[0].makeMainReference()
-        await this.surveyRepo.import({ testPoints, rectifiers, pipelines, cards, circuits, potentialTypes, survey, referenceCells, potentials, sides })
+        await this.surveyRepo.import({ testPoints, rectifiers, pipelines, cards, circuits, potentialTypes, survey, referenceCells, potentials, sides, assets, mapLayers })
     }
 
 }

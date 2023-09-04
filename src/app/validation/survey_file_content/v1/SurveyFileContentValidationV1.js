@@ -1,8 +1,8 @@
 import { array, mixed, object, tuple, string } from "yup";
-import { SurveyFileDataFields } from "../../../../constants/global"
+import { SurveyFileDataFields } from "../../../../constants/survey_file_schema_constants/v1"
 import { Validation } from "../../../utils/Validation";
 
-export class SurveyFileContentValidation extends Validation {
+export class SurveyFileContentValidationV1 extends Validation {
     constructor() {
         super()
         this.booleanNumber = mixed().oneOf([0, 1, null]).nullable()

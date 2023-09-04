@@ -1,5 +1,3 @@
-import { BluetoothRepository } from "../repository/bluetooth/BluetoothRepository"
-import { SettingRepository } from "../repository/sqlite/SettingRepository"
 import { ConnectMultimeter } from "../services/survey/other/multimeter/ConnectMultimeter"
 import { GetMultimeterSettings } from "../services/survey/other/multimeter/GetMultimeterSettings"
 import { MultimeterScan } from "../services/survey/other/multimeter/MultimeterScan"
@@ -13,21 +11,17 @@ import { MultimeterValidation } from "../validation/MultimeterValidation"
 import { UnpairMultimeter } from "../services/survey/other/multimeter/UnpairMultimeter"
 import { DisconnectMultimeter } from "../services/survey/other/multimeter/DisconnectMultimeter"
 import { MultimeterStatusListener } from "../services/survey/other/multimeter/MultimeterStatusListener"
-import { AppStateListener } from "../services/other/AppStateListenerService"
 import { ReadingCaptureSetup } from "../services/survey/other/multimeter/ReadingCaptureSetup"
 import { ReadingCaptureListener } from "../services/survey/other/multimeter/ReadingCaptureListener"
-import { Permissions } from "../services/other/Permissions"
-import { GeolocationRepository } from "../repository/geolocation/GeolocationRepository"
 import { StopReadingCapture } from "../services/survey/other/multimeter/StopReadingCapture"
 import { MultimeterFactory } from "../services/survey/other/multimeter/_devices/MultimeterFactory"
 import { GetOnOffPotentialPair } from "../services/survey/other/multimeter/GetOnOffPotentialPair"
-import { PotentialRepository } from "../repository/sqlite/PotentialRepository"
-import { PotentialTypeRepository } from "../repository/sqlite/PotentialTypeRepository"
-import { UnitConverter } from "../services/other/UnitConverter"
 import { MultimeterValueConverter } from "../services/survey/other/multimeter/utils/MultimeterValueConverter"
+import { bluetoothRepo, geolocationRepo, potentialRepo, potentialTypeRepo, settingRepo } from "./_instances/repositories"
+import { appStateListener, permissions, unitConverter } from "./_instances/general_services"
 
 class MultimeterController extends Controller {
-    constructor(bluetoothRepo, settingRepo, geolocationRepo, potentialRepo, potentialTypeRepo, permissions, unitConverter) {
+    constructor(bluetoothRepo, settingRepo, geolocationRepo, potentialRepo, potentialTypeRepo, permissions, unitConverter, appStateListener) {
         super()
         this.multimeterFactory = new MultimeterFactory(bluetoothRepo)
 
@@ -44,9 +38,9 @@ class MultimeterController extends Controller {
         this.unpairMultimeterService = new UnpairMultimeter(settingRepo, permissions, this.multimeterFactory)
         this.connectMultimeterService = new ConnectMultimeter(settingRepo, permissions, this.multimeterFactory)
         this.disconnectMultimeterService = new DisconnectMultimeter(settingRepo, permissions, this.multimeterFactory)
-        this.appStateListenerService = new AppStateListener()
 
-        this.multimeterStatusListenerService = new MultimeterStatusListener(bluetoothRepo, settingRepo, this.appStateListenerService)
+
+        this.multimeterStatusListenerService = new MultimeterStatusListener(bluetoothRepo, settingRepo, appStateListener)
 
         this.getOnOffPotentialService = new GetOnOffPotentialPair(potentialRepo, potentialTypeRepo)
         this.readingCaptureSetupService = new ReadingCaptureSetup(settingRepo, permissions, this.multimeterFactory, this.getOnOffPotentialService)
@@ -160,13 +154,14 @@ class MultimeterController extends Controller {
 }
 
 const multimeterController = new MultimeterController(
-    new BluetoothRepository(),
-    new SettingRepository(),
-    new GeolocationRepository(),
-    new PotentialRepository(),
-    new PotentialTypeRepository(),
-    new Permissions(),
-    new UnitConverter()
+    bluetoothRepo,
+    settingRepo,
+    geolocationRepo,
+    potentialRepo,
+    potentialTypeRepo,
+    permissions,
+    unitConverter,
+    appStateListener
 )
 
 export const startMultimeterScan = async (onError, onSuccess) => await multimeterController.scan(onError, onSuccess)

@@ -50,4 +50,15 @@ export class SurveyFileListPresenter {
             earlier: surveyList.filter(data => this._filterbyDate(data, false))
         }
     }
+
+    executeForList(surveyFileList) {
+        return {
+            today: surveyFileList.filter(data => this._filterbyDate(data, true)),
+            earlier: surveyFileList.filter(data => this._filterbyDate(data, false))
+        }
+    }
+
+    execute(surveyFile) {
+        return { ...surveyFile }
+    }
 }

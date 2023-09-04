@@ -12,8 +12,8 @@ export class PotentialTypeRepository extends SQLiteRepository {
         try {
             const result = await super.runSingleQueryTransaction(`SELECT * from potentialTypes`)
             return super.generateArray(result.rows.length, result.rows.item)
-                .map(({ id, uid, name, permType }) =>
-                    new PotentialType(id, uid, name, permType)
+                .map(({ id, uid, name, permType, isAC }) =>
+                    new PotentialType(id, uid, name, permType, isAC)
                 )
         }
         catch (er) {
@@ -23,10 +23,10 @@ export class PotentialTypeRepository extends SQLiteRepository {
 
     async create(potentialType) {
         try {
-            const { id, uid, name, type } = potentialType
-            const result = await super.runSingleQueryTransaction(`INSERT INTO ${this.tableName} (id, uid, name, permType, custom) VALUES (?,?,?,?,?)`,
-                [id, uid, name, type, Number(!type)])
-            return new PotentialType(result.insertId, uid, name, type)
+            const { id, uid, name, type, isAc } = potentialType
+            const result = await super.runSingleQueryTransaction(`INSERT INTO ${this.tableName} (id, uid, name, permType, custom, isAc) VALUES (?,?,?,?,?,?)`,
+                [id, uid, name, type, Number(!type), isAc])
+            return new PotentialType(result.insertId, uid, name, type, isAc)
         }
         catch (er) {
             throw new Error(errors.DATABASE, `Unable to create potentialType`, er)

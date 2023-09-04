@@ -61,15 +61,6 @@ export class RectifierRepository extends SQLiteRepository {
         }
     }
 
-    async deleteList(idList) {
-        try {
-            await super.runSingleQueryTransaction(`DELETE FROM rectifiers WHERE id IN ${this.convertArrayToInStatement(idList)}`)
-        }
-        catch (err) {
-            throw new Error(errors.DATABASE, `Unable to delete rectifier list ${idList}`, err)
-        }
-    }
-
     async update(rectifier) {
         const { id, timeModified, status, name, location, latitude, longitude, comment, model, serialNumber, powerSource, acVoltage, acCurrent, tapSetting, tapValue, tapCoarse, tapFine, maxVoltage, maxCurrent } = rectifier
         try {
@@ -142,7 +133,11 @@ export class RectifierRepository extends SQLiteRepository {
     async getDisplayListWithCurrentAndVoltage(idList) {
         try {
             const result = await super.runSingleQueryTransaction(
-                `SELECT rectifiers.id AS itemId, rectifiers.uid AS itemUid, rectifiers.name AS itemName, rectifiers.timeModified, rectifiers.status, rectifiers.location, rectifiers.tapCoarse, rectifiers.tapFine, rectifiers.tapValue, rectifiers.tapSetting, circuits.id, circuits.uid, circuits.name, '${SubitemTypes.CIRCUIT}' AS type, circuits.current AS v1, circuits.voltage AS v2 
+                `SELECT rectifiers.id AS itemId, rectifiers.uid AS itemUid, rectifiers.name AS itemName, rectifiers.timeModified, rectifiers.status, rectifiers.location, rectifiers.tapCoarse, rectifiers.tapFine, rectifiers.tapValue, rectifiers.tapSetting, (
+                    SELECT COUNT(*) 
+                    FROM assets 
+                    WHERE assets.rectifierId = rectifiers.id
+                ) AS assetCount, circuits.id, circuits.uid, circuits.name, '${SubitemTypes.CIRCUIT}' AS type, circuits.current AS v1, circuits.voltage AS v2 
                 FROM rectifiers
                 LEFT JOIN circuits ON
                 rectifiers.id = circuits.rectifierId
@@ -158,7 +153,12 @@ export class RectifierRepository extends SQLiteRepository {
     async getDisplayListWithTargets(idList) {
         try {
             const result = await super.runSingleQueryTransaction(
-                `SELECT rectifiers.id AS itemId, rectifiers.uid AS itemUid, rectifiers.name AS itemName, rectifiers.timeModified, rectifiers.status, rectifiers.location, rectifiers.tapCoarse, rectifiers.tapFine, rectifiers.tapValue, rectifiers.tapSetting, circuits.id, circuits.uid, circuits.name, '${SubitemTypes.CIRCUIT}' AS type, targetMin AS v2, targetMax AS v1 
+                `SELECT rectifiers.id AS itemId, rectifiers.uid AS itemUid, rectifiers.name AS itemName, rectifiers.timeModified, rectifiers.status, rectifiers.location, rectifiers.tapCoarse, rectifiers.tapFine, rectifiers.tapValue, rectifiers.tapSetting, (
+                    SELECT COUNT(*) 
+                    FROM assets 
+                    WHERE assets.rectifierId = rectifiers.id
+                ) AS assetCount, 
+                circuits.id, circuits.uid, circuits.name, '${SubitemTypes.CIRCUIT}' AS type, targetMin AS v2, targetMax AS v1 
                 FROM rectifiers
                 LEFT JOIN circuits ON
                 rectifiers.id = circuits.rectifierId

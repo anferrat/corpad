@@ -6,7 +6,7 @@ export class GetCurrentSurveyStatus {
 
     async execute() {
         try {
-            const [{ name }, { isCloud, lastSync, fileName }] = await Promise.all([
+            const [{ name, uid }, { isCloud, lastSync, fileName }] = await Promise.all([
                 this.surveyRepo.getSurvey(),
                 await this.settingRepo.get()
             ])
@@ -15,7 +15,8 @@ export class GetCurrentSurveyStatus {
                 syncTime: lastSync,
                 name: name,
                 fileName: fileName,
-                isCloud: isCloud
+                isCloud: isCloud,
+                uid: uid,
             }
         }
         catch (er) {
@@ -24,7 +25,8 @@ export class GetCurrentSurveyStatus {
                 syncTime: null,
                 name: null,
                 fileName: null,
-                isCloud: false
+                isCloud: false,
+                uid: null,
             }
         }
     }

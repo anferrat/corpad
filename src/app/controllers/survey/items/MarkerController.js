@@ -1,18 +1,12 @@
-import { BasicPresenter } from "../../../presenters/BasciPresenter"
-import { ListPresenter } from "../../../presenters/ListPresenter"
-import { FileSystemRepository } from "../../../repository/fs/FileSystemRepository"
-import { RectifierRepository } from "../../../repository/sqlite/RectifierRepository"
-import { SurveyRepository } from "../../../repository/sqlite/SurveyRepository"
-import { TestPointRepository } from "../../../repository/sqlite/TestPointRepository"
-import { FileNameGenerator } from "../../../services/other/FileNameGenerator"
-import { KmlParser } from "../../../services/other/KmlParser"
-import { Permissions } from "../../../services/other/Permissions"
 import { ExportMarkers } from "../../../services/survey/items/markers/ExportMarkers"
 import { GetMarker } from "../../../services/survey/items/markers/GetMarker"
 import { GetMarkerList } from "../../../services/survey/items/markers/GetMarkerList"
 import { UpdateMarker } from "../../../services/survey/items/markers/UpdateMarker"
 import { Controller } from "../../../utils/Controller"
 import { MarkerValidation } from "../../../validation/MarkerValidation"
+import { fileNameGenerator, kmlParser, permissions } from "../../_instances/general_services"
+import { basicPresenter, listPresenter } from "../../_instances/presenters"
+import { fileSystemRepo, rectifierRepo, surveyRepo, testPointRepo } from "../../_instances/repositories"
 
 class MarkerController extends Controller {
     constructor(testPointRepo, rectifierRepo, fileSystemRepo, basicPresenter, listPresenter, KmlParser, fileNameGenerator, surveyRepo, permissions) {
@@ -53,15 +47,15 @@ class MarkerController extends Controller {
 }
 
 const markerController = new MarkerController(
-    new TestPointRepository(),
-    new RectifierRepository(),
-    new FileSystemRepository(),
-    new BasicPresenter(),
-    new ListPresenter(),
-    new KmlParser(),
-    new FileNameGenerator(),
-    new SurveyRepository(),
-    new Permissions()
+    testPointRepo,
+    rectifierRepo,
+    fileSystemRepo,
+    basicPresenter,
+    listPresenter,
+    kmlParser,
+    fileNameGenerator,
+    surveyRepo,
+    permissions
 )
 
 export const getMarker = ({ itemType, itemId }, onError, onSuccess) => markerController.getMarker({ itemType, itemId }, onError, onSuccess)

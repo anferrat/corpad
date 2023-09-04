@@ -12,10 +12,10 @@ export class PotentialRepository extends SQLiteRepository {
         try {
             const result = await super.runSingleQueryTransaction(`SELECT * from ${this.tableName}`, [])
             return super.generateArray(result.rows.length, result.rows.item)
-                .map(({ id, uid, value, cardId, type, permanentReferenceId, portableReferenceId }) => {
+                .map(({ id, uid, value, cardId, type, permanentReferenceId, portableReferenceId, oldValue }) => {
                     const isPortable = permanentReferenceId === null
                     const refCellId = isPortable ? portableReferenceId : permanentReferenceId
-                    return new Potential(id, uid, cardId, value, type, refCellId, isPortable)
+                    return new Potential(id, uid, cardId, value, type, refCellId, isPortable, oldValue)
                 })
         }
         catch (err) {
@@ -26,15 +26,15 @@ export class PotentialRepository extends SQLiteRepository {
     async getBySubitemId(subitemId) {
         try {
             const result = await super.runSingleQueryTransaction(
-                `SELECT potentials.id, potentials.uid, potentials.value, potentials.cardId, potentials.type, potentials.permanentReferenceId, potentials.portableReferenceId from ${this.tableName} 
+                `SELECT potentials.id, potentials.uid, potentials.value, potentials.cardId, potentials.type, potentials.permanentReferenceId, potentials.portableReferenceId, potentials.oldValue from ${this.tableName} 
                 INNER JOIN potentialTypes ON potentialTypes.id = potentials.type
                 WHERE potentials.cardId=? 
                 ORDER BY potentials.permanentReferenceId, potentials.portableReferenceId, potentialTypes.id`, [subitemId])
             return super.generateArray(result.rows.length, result.rows.item)
-                .map(({ id, uid, value, cardId, type, permanentReferenceId, portableReferenceId }) => {
+                .map(({ id, uid, value, cardId, type, permanentReferenceId, portableReferenceId, oldValue }) => {
                     const isPortable = permanentReferenceId === null
                     const refCellId = isPortable ? portableReferenceId : permanentReferenceId
-                    return new Potential(id, uid, cardId, value, type, refCellId, isPortable)
+                    return new Potential(id, uid, cardId, value, type, refCellId, isPortable, oldValue)
                 })
         }
         catch (er) {
@@ -44,11 +44,11 @@ export class PotentialRepository extends SQLiteRepository {
 
     async create(potential) {
         try {
-            const { id, uid, referenceCellId, isPortableReference, potentialType, subitemId, value } = potential
+            const { id, uid, referenceCellId, isPortableReference, potentialType, subitemId, value, prevValue } = potential
             const refField = isPortableReference ? 'portableReferenceId' : 'permanentReferenceid'
-            const result = await super.runSingleQueryTransaction(`INSERT INTO ${this.tableName} (id, uid, cardId, type, ${refField}, value) VALUES (?,?,?,?,?,?)`,
-                [id, uid, subitemId, potentialType, referenceCellId, value])
-            return new Potential(result.insertId, uid, subitemId, value, potentialType, referenceCellId, isPortableReference)
+            const result = await super.runSingleQueryTransaction(`INSERT INTO ${this.tableName} (id, uid, cardId, type, ${refField}, value, oldValue) VALUES (?,?,?,?,?,?,?)`,
+                [id, uid, subitemId, potentialType, referenceCellId, value, prevValue])
+            return new Potential(result.insertId, uid, subitemId, value, potentialType, referenceCellId, isPortableReference, prevValue)
         }
         catch (er) {
             throw new Error(errors.DATABASE, `Unable to create potential with ${isPortableReference ? '' : 'non-'}portable referenceCellId ${referenceCellId}, potentialType with id ${potentialTypeId} for subitem with id ${subitemId} and value ${value}`, er)
@@ -75,19 +75,19 @@ export class PotentialRepository extends SQLiteRepository {
             const [onDelete, onInsert, onSelect] = await super.runMultiQueryTransaction(tx => [
                 this.runQuery(tx, `DELETE FROM potentials WHERE cardId = ? `, [subitemId]),
                 potentials.length > 0 ? this.runQuery(tx,
-                    `INSERT INTO potentials (id, uid, cardId, type, portableReferenceId, permanentReferenceid, value) 
-                                VALUES ${potentials.map(({ id, uid, subitemId, potentialType, referenceCellId, value, isPortableReference }) =>
-                        `(${id}, "${uid}", ${subitemId}, ${potentialType}, ${isPortableReference ? referenceCellId : null}, ${!isPortableReference ? referenceCellId : null}, ${value})`).join(', ')} `) : null,
-                this.runQuery(tx, `SELECT potentials.id, potentials.uid, potentials.value, potentials.type, potentials.permanentReferenceId, potentials.portableReferenceId  from potentials 
+                    `INSERT INTO potentials (id, uid, cardId, type, portableReferenceId, permanentReferenceid, value, oldValue) 
+                                VALUES ${potentials.map(({ id, uid, subitemId, potentialType, referenceCellId, value, isPortableReference, prevValue }) =>
+                        `(${id}, "${uid}", ${subitemId}, ${potentialType}, ${isPortableReference ? referenceCellId : null}, ${!isPortableReference ? referenceCellId : null}, ${value}, ${prevValue})`).join(', ')} `) : null,
+                this.runQuery(tx, `SELECT potentials.id, potentials.uid, potentials.value, potentials.type, potentials.permanentReferenceId, potentials.portableReferenceId, potentials.oldValue FROM potentials 
             INNER JOIN potentialTypes ON potentialTypes.id = potentials.type
             WHERE potentials.cardId=? 
             ORDER BY potentials.permanentReferenceId, potentials.portableReferenceId, potentialTypes.id`, [subitemId])
             ])
             return super.generateArray(onSelect.rows.length, onSelect.rows.item)
-                .map(({ id, uid, value, cardId, type, permanentReferenceId, portableReferenceId }) => {
+                .map(({ id, uid, value, cardId, type, permanentReferenceId, portableReferenceId, oldValue }) => {
                     const isPortable = permanentReferenceId === null
                     const refCellId = isPortable ? portableReferenceId : permanentReferenceId
-                    return new Potential(id, uid, cardId, value, type, refCellId, isPortable)
+                    return new Potential(id, uid, cardId, value, type, refCellId, isPortable, oldValue)
                 })
         }
         catch (er) {

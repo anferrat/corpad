@@ -74,15 +74,6 @@ export class TestPointRepository extends SQLiteRepository {
         }
     }
 
-    async deleteList(idList) {
-        try {
-            await super.runSingleQueryTransaction(`DELETE FROM testPoints WHERE id IN ${this.convertArrayToInStatement(idList)}`)
-        }
-        catch (err) {
-            throw new Error(errors.DATABASE, `Unable to delete test point list ${idList}`, err)
-        }
-    }
-
     async update(testPoint) {
         const { id, name, location, latitude, longitude, comment, testPointType, status, timeModified } = testPoint
         try {
@@ -138,7 +129,7 @@ export class TestPointRepository extends SQLiteRepository {
     async getSubitemsWithPotentialsById(id) {
         try {
             const { rows } = await super.runSingleQueryTransaction(
-                `SELECT cards.*, potentials.id AS potentialId, potentials.uid AS potentialUid, potentials.value AS potentialValue, potentials.type AS potentialTypeId, potentials.permanentReferenceId, potentials.portableReferenceId, sides.sideAId, sides.sideBId FROM cards 
+                `SELECT cards.*, potentials.id AS potentialId, potentials.uid AS potentialUid, potentials.value AS potentialValue, potentials.oldValue AS potentialOldValue, potentials.type AS potentialTypeId, potentials.permanentReferenceId, potentials.portableReferenceId, sides.sideAId, sides.sideBId FROM cards 
                 LEFT JOIN sides 
                 ON cards.id = sides.parentCardId
                 LEFT JOIN potentials
@@ -185,6 +176,11 @@ export class TestPointRepository extends SQLiteRepository {
             const idListQuery = `testPoints.id IN ${super.convertArrayToInStatement(idList)}`
             const result = await super.runSingleQueryTransaction(`
         SELECT testPoints.id AS itemId, testPoints.testPointType, testPoints.status, testPoints.name AS itemName, testPoints.timeModified, testPoints.uid AS itemUid, testPoints.location, cards.id, cards.uid, cards.name, cards.type, 
+        (
+            SELECT COUNT(*) 
+            FROM assets 
+            WHERE assets.testPointId = testPoints.id
+        ) AS assetCount,
         MAX(
             CASE WHEN potentialTypes.permType = ? AND referenceCells.mainReference = 1 THEN potentials.value END) AS v1,
         MAX(
@@ -202,12 +198,18 @@ export class TestPointRepository extends SQLiteRepository {
         ${idListQuery}
         GROUP BY cards.id
         UNION ALL 
-        SELECT testPoints.id AS itemId, testPoints.testPointType, testPoints.status, testPoints.name AS itemName, testPoints.timeModified, testPoints.uid AS itemUid, testPoints.location, cards.id, cards.uid, cards.name, cards.type, potentials.value AS v1, potentials.value AS v2 
+        SELECT testPoints.id AS itemId, testPoints.testPointType, testPoints.status, testPoints.name AS itemName, testPoints.timeModified, testPoints.uid AS itemUid, testPoints.location, 
+        cards.id, cards.uid, cards.name, cards.type, 
+        (
+            SELECT COUNT(*) 
+            FROM assets 
+            WHERE assets.testPointId = testPoints.id
+        ) AS assetCount, potentials.value AS v1, potentials.value AS v2
         FROM testPoints
         LEFT JOIN cards ON
         testPoints.id = cards.testPointId AND ${filterQuery}
         LEFT JOIN potentials ON
-        potentials.cardId = cards.id 
+        potentials.cardId = cards.id
         WHERE potentials.cardId IS NULL AND 
         ${idListQuery}
         ORDER BY testPoints.id`,
@@ -222,7 +224,12 @@ export class TestPointRepository extends SQLiteRepository {
     async getDisplayListWithCurrentDensity({ idList, readingTypeFilter }) {
         try {
             const result = await super.runSingleQueryTransaction(
-                `SELECT testPoints.id AS itemId, testPoints.testPointType, testPoints.status, testPoints.name AS itemName, testPoints.timeModified, testPoints.uid AS itemUid, testPoints.location, cards.id, cards.uid, cards.name, cards.type, density AS v1 
+                `SELECT testPoints.id AS itemId, testPoints.testPointType, testPoints.status, testPoints.name AS itemName, testPoints.timeModified, testPoints.uid AS itemUid, testPoints.location, (
+                    SELECT COUNT(*) 
+                    FROM assets 
+                    WHERE assets.testPointId = testPoints.id
+                ) AS assetCount,
+                 cards.id, cards.uid, cards.name, cards.type, density AS v1 
             FROM testPoints
             LEFT JOIN cards ON
             testPoints.id = cards.testPointId AND cards.type NOT IN ${super.convertArrayToInStatement(readingTypeFilter)}
@@ -237,7 +244,11 @@ export class TestPointRepository extends SQLiteRepository {
     async getDisplayListWithCurrent({ idList, readingTypeFilter }) {
         try {
             const result = await super.runSingleQueryTransaction(
-                `SELECT testPoints.id AS itemId, testPoints.testPointType, testPoints.status, testPoints.name AS itemName, testPoints.timeModified, testPoints.uid AS itemUid, testPoints.location, cards.id, cards.uid, cards.name, cards.type,
+                `SELECT testPoints.id AS itemId, testPoints.testPointType, testPoints.status, testPoints.name AS itemName, testPoints.timeModified, testPoints.uid AS itemUid, testPoints.location, (
+                    SELECT COUNT(*) 
+                    FROM assets 
+                    WHERE assets.testPointId = testPoints.id
+                ) AS assetCount, cards.id, cards.uid, cards.name, cards.type,
             CASE WHEN type = ? OR type = ? THEN current END AS v1 
             FROM testPoints
             LEFT JOIN cards ON
@@ -255,7 +266,11 @@ export class TestPointRepository extends SQLiteRepository {
     async getDisplayListWithShortingCurrent({ idList, readingTypeFilter }) {
         try {
             const result = await super.runSingleQueryTransaction(
-                `SELECT testPoints.id AS itemId, testPoints.testPointType, testPoints.status, testPoints.name AS itemName, testPoints.timeModified, testPoints.uid AS itemUid, testPoints.location, cards.id, cards.uid, cards.name, cards.type, 
+                `SELECT testPoints.id AS itemId, testPoints.testPointType, testPoints.status, testPoints.name AS itemName, testPoints.timeModified, testPoints.uid AS itemUid, testPoints.location, (
+                    SELECT COUNT(*) 
+                    FROM assets 
+                    WHERE assets.testPointId = testPoints.id
+                ) AS assetCount, cards.id, cards.uid, cards.name, cards.type, 
                 CASE WHEN type = ? THEN current END AS v2,
                 CASE WHEN type = ? THEN shorted END AS v1
                 FROM testPoints

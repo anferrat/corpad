@@ -3,7 +3,7 @@ import { useRef, useState, useEffect, useCallback } from 'react'
 import { useDispatch } from 'react-redux'
 import { getSurveyInfo, updateSurveyName as updateSurveynameRequest } from '../../../../app/controllers/survey/other/SurveyInfoController'
 import { errorHandler } from '../../../../helpers/error_handler'
-import { loadSurveySettings } from '../../../../store/actions/settings'
+import { updateSurveyName as updateSurveyNameState } from '../../../../store/actions/settings'
 import fieldValidation from '../../../../helpers/validation'
 
 
@@ -103,7 +103,7 @@ const useSurveyInfo = () => {
                     name: response,
                     text: response
                 })
-                dispatch(loadSurveySettings({ name: response }))
+                dispatch(updateSurveyNameState(response))
             }
         }
         else {

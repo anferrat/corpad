@@ -1,6 +1,6 @@
-import { GoogleDriveAuthorizationRepository } from "../../repository/cloud_drive/GoogleDriveAuthorizationRepository"
 import { GoogleDriveAuthorization } from "../../services/authorization/GoogleDriveAuthorization"
 import { Controller } from "../../utils/Controller"
+import { googleDriveAuthorizationRepo } from "../_instances/repositories"
 
 class GoogleDriveAuthorizationController extends Controller {
     constructor(googleDriveAuthorizationRepo) {
@@ -23,7 +23,7 @@ class GoogleDriveAuthorizationController extends Controller {
 
 }
 
-const authController = new GoogleDriveAuthorizationController(new GoogleDriveAuthorizationRepository())
+const authController = new GoogleDriveAuthorizationController(googleDriveAuthorizationRepo)
 
 export const signInToGoogleDrive = (onError, onSuccess) => authController.signIn(onError, onSuccess)
 

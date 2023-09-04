@@ -13,7 +13,7 @@ const ExpandedBar = (props) => {
     })
 
     const rotate = height.interpolate({
-        inputRange: [0, 90],
+        inputRange: [0, 110],
         outputRange: ['0deg', '180deg'],
     })
     const toggleBar = (bar) => {
@@ -25,7 +25,7 @@ const ExpandedBar = (props) => {
     }
 
     const openBarAnimation = () => Animated.timing(height, {
-        toValue: 90,
+        toValue: 110,
         duration: 200,
         useNativeDriver: false,
         easing: Easing.linear
@@ -75,7 +75,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
         backgroundColor: control,
-        height: 45
+        height: 50
     },
     icon: {
         width: 25,

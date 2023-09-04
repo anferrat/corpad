@@ -66,8 +66,8 @@ const useCreateSurvey = () => {
             await createSurvey(
                 { isBlank, isCloud, path, name },
                 (er) => errorHandler(er),
-                ({ name, fileName, isCloud, syncTime }) =>
-                    dispatch(setSurveySettings(name, fileName, syncTime, isCloud, true)))
+                ({ name, fileName, isCloud, syncTime, uid }) =>
+                    dispatch(setSurveySettings(name, fileName, syncTime, isCloud, true, uid)))
             dispatch(updateLoader(false, null, null))
         }
         else {

@@ -2,17 +2,18 @@ import { ItemTypes, SubitemTypes, CurrentUnits, FactorUnits, PotentialUnits } fr
 import { Subitem } from "./Subitem";
 
 export class Shunt extends Subitem {
-    constructor(id, parentId, uid, name, factor, ratioVoltage, ratioCurrent, factorSelected, current, voltageDrop, fromAtoB, sideA, sideB) {
+    constructor(id, parentId, uid, name, factor, ratioVoltage, ratioCurrent, factorSelected, current, voltageDrop, fromAtoB, sideA, sideB, prevVoltageDrop) {
         super(id, parentId, uid, SubitemTypes.SHUNT, ItemTypes.TEST_POINT, name)
         this.factor = factor
         this.ratioVoltage = ratioVoltage
         this.ratioCurrent = ratioCurrent
-        this.factorSelected = factorSelected
+        this.factorSelected = Boolean(factorSelected)
         this.current = current
         this.voltageDrop = voltageDrop
-        this.fromAtoB = fromAtoB
+        this.fromAtoB = Boolean(fromAtoB)
         this.sideA = sideA
         this.sideB = sideB
+        this.prevVoltageDrop = prevVoltageDrop
     }
     static currentUnit = CurrentUnits.AMPS
     static voltageDropUnit = PotentialUnits.MILIVOLTS
@@ -34,6 +35,7 @@ export class Shunt extends Subitem {
     }
 
     reset() {
+        this.prevVoltageDrop = this.voltageDrop
         this.current = null
         this.voltageDrop = null
         this.fromAtoB = true

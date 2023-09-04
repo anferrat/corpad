@@ -79,13 +79,15 @@ export class ItemResponseProcessor {
         let savedValue
         for (i = 0; i < result.rows.length; i++) {
             let value = result.rows.item(i)
+            console.log(value)
             if (value?.itemId !== savedValue?.itemId) {
                 if (savedValue)
                     map.set(savedValue.itemId, savedValue)
                 savedValue = { ...value, readingList: [], dataMap: {} }
-
                 if (value?.timeModified)
                     savedValue.dataMap[DisplayCardDataTypes.TIME_MODIFIED] = value.timeModified
+                if (value?.assetCount)
+                    savedValue.dataMap[DisplayCardDataTypes.ASSETS] = value.assetCount
                 if (value?.location !== null && value?.location !== undefined)
                     savedValue.dataMap[DisplayCardDataTypes.LOCATION] = value.location
                 if (value?.material !== null && value?.material !== undefined)

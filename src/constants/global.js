@@ -103,6 +103,7 @@ export const DisplayCardDataTypes = Object.freeze({
     MATERIAL: 1,
     LOCATION: 2,
     TAP: 3,
+    ASSETS: 4,
 })
 
 export const OnboardingScreens = Object.freeze({
@@ -307,14 +308,21 @@ export const FileSystemLocations = Object.freeze({
     SURVEYS: 'surveys',
     EXPORTS: 'exports',
     DOWNLOADS: 'downloads',
-    TEMP: 'temp'
+    TEMP: 'temp',
+    ASSETS: 'assets',
+    TEMP_ASSETS: 'temp_assets',
+    CURRENT_ASSETS: 'current_assets',
+    TEMP_SURVEY: 'temp_survey',
+    TEMP_DOWNLOADS: 'temp_downloads',
 })
 
 export const FileMimeTypes = Object.freeze({
     CSV: 'text/csv',
     KML: 'application/vnd.google-earth.kml+xml',
     JSON: 'application/json',
-    TEXT: 'text/*'
+    TEXT: 'text/*',
+    IMAGE: 'image/*',
+    ZIP: 'application/zip'
 })
 
 export const FileTypeIdentifiers = Object.freeze({
@@ -322,6 +330,7 @@ export const FileTypeIdentifiers = Object.freeze({
     KML: 'public.xml',
     JSON: 'public.json',
     TEXT: 'public.plain-text',
+    ITEM: 'public.item',
 })
 
 export const FileExtensions = Object.freeze({
@@ -470,4 +479,43 @@ export const MultimeterMeasurementTypes = Object.freeze({
     CURRENT: 'CURRENT',
     COUPON_CURRENT_AC: 'COUPON_CURRENT_AC',
     POTENTIALS_AC: 'POTENTIALS_AC'
+})
+
+export const MediaTypes = Object.freeze({
+    IMAGE: 0,
+    //Not supported
+    //RECORDING: 1,
+    //VIDEO: 2
+})
+
+export const StrokeColors = Object.freeze({
+    YELLOW: 0,
+    RED: 1,
+    GREEN: 2,
+    BLUE: 3,
+    BLACK: 4,
+    PURPLE: 5,
+    ORANGE: 6
+})
+
+export const StrokeWidths = Object.freeze({
+    _05PT: 0,
+    _1PT: 1,
+    _1_5PT: 2,
+    _2PT: 3,
+    _3PT: 4
+})
+
+export const ImageSources = Object.freeze({
+    CAMERA: 'CAMERA',
+    LIBRARY: 'LIBRARY',
+    STORAGE: 'STORAGE'
+})
+
+export const ExternalFileTypes = Object.freeze({
+    SURVEY_WITH_ASSETS: 'surey_with_assets',
+    SURVEY: 'survey',
+    IMAGE: 'image',
+    COMMA_SEPARATED_TEXT: 'comma_separated_text',
+    UNKNOWN_FILE: 'unknown_file' //when file url recieved from Android intent, it recieved as document provider content schema
 })

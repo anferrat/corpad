@@ -1,3 +1,6 @@
+import { ExternalFileTypes } from "../../../constants/global"
+import { ExternalFile } from "../../entities/survey/other/ExternalFile"
+
 export class AppInitialization {
     constructor(currentSurveyStatusService, authorizationService, surveyRepo, multimeterInitializationService, defaultNamesInitializationService, settingRepo, openExternalSurveyService, settingInitializationService, databaseInitializationService, fileSystemInitializationService, linkingService) {
         this.currentSurveyStatusService = currentSurveyStatusService
@@ -24,7 +27,7 @@ export class AppInitialization {
         if (!settings.onboarding.main)
             await this.multimeterInitializationService.execute()
 
-        let [{ isLoaded, syncTime, name, fileName, isCloud }, { isSigned, userName }, initialUrl] = await Promise.all([
+        let [{ isLoaded, syncTime, name, fileName, isCloud, uid }, { isSigned, userName }, initialUrl] = await Promise.all([
             this.currentSurveyStatusService.execute(),
             this.authorizationService.checkSignInStatus(),
             this.linkingService.getInitialUrl(),
@@ -36,12 +39,17 @@ export class AppInitialization {
             await this.surveyRepo.clearEmptyValues()
         if (initialUrl !== null)
             try {
-                const loaded = await this.openExternalSurveyService.execute(initialUrl, isLoaded)
-                syncTime = loaded.syncTime ?? syncTime
-                name = loaded.name ?? name
-                fileName = loaded.fileName ?? fileName
-                isCloud = loaded.isCloud ?? isCloud
-                isLoaded = loaded.isLoaded ?? isLoaded
+                const file = new ExternalFile(initialUrl)
+                const fileType = file.getFileType()
+                if (fileType === ExternalFileTypes.SURVEY_WITH_ASSETS || ExternalFileTypes.SURVEY) {
+                    const loaded = await this.openExternalSurveyService.execute(file, isLoaded)
+                    syncTime = loaded.syncTime ?? syncTime
+                    name = loaded.name ?? name
+                    fileName = loaded.fileName ?? fileName
+                    isCloud = loaded.isCloud ?? isCloud
+                    isLoaded = loaded.isLoaded ?? isLoaded
+                    uid = loaded.uid ?? uid
+                }
             }
             catch (er) {
             }
@@ -57,6 +65,7 @@ export class AppInitialization {
             isLoaded,
             syncTime: syncTime ?? null,
             name: name ?? null,
+            uid: uid,
             fileName: fileName ?? null,
             isCloud: isCloud ?? null,
             isSigned,

@@ -1,17 +1,15 @@
-import { SettingRepository } from "../../../repository/sqlite/SettingRepository"
-import { GetVersion } from "../../../services/survey/other/onboarding/GetVersion"
 import { MarkOnboardingOverlayVisited } from "../../../services/survey/other/onboarding/MarkOnboardingOverlayVisited"
 import { MarkOnboardingVisited } from "../../../services/survey/other/onboarding/MarkOnboardingVisited"
 import { Controller } from "../../../utils/Controller"
 import { ONBOARDING_VERSION } from "../../../config/Onboarding"
 import { MultimeterInitialization } from "../../../services/survey/other/multimeter/MultimeterInitialization"
-import { BluetoothRepository } from "../../../repository/bluetooth/BluetoothRepository"
-import { MultimeterFactory } from "../../../services/survey/other/multimeter/_devices/MultimeterFactory"
+import { bluetoothRepo, settingRepo } from "../../_instances/repositories"
+import { multimeterFactory } from "../../_instances/general_services"
 
 class OnboardingController extends Controller {
-    constructor(settingRepo, bluetoothRepo) {
+    constructor(settingRepo, bluetoothRepo, multimeterFactory) {
         super()
-        this.multimeterFactory = new MultimeterFactory(bluetoothRepo)
+        this.multimeterFactory = multimeterFactory
         this.multimeterInitializationService = new MultimeterInitialization(bluetoothRepo, settingRepo, this.multimeterFactory)
         this.markOnboardingVisitedService = new MarkOnboardingVisited(settingRepo, this.multimeterInitializationService)
         this.markOnboardingOverlayVisitedService = new MarkOnboardingOverlayVisited(settingRepo)
@@ -37,8 +35,9 @@ class OnboardingController extends Controller {
 }
 
 const onboardingController = new OnboardingController(
-    new SettingRepository(),
-    new BluetoothRepository()
+    settingRepo,
+    bluetoothRepo,
+    multimeterFactory
 )
 
 export const markOnboardingCompleted = (onError, onSuccess) => onboardingController.markOnboardingCompleted(onError, onSuccess)

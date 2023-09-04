@@ -1,18 +1,16 @@
 import { SurveyLoadingStatuses } from "../../../../constants/global"
 
-export class LoadExternalSurveyFile {
-    constructor(loadSurveyService, documentPickerService, fileSystemRepo) {
+export class PickExternalSurveyFile {
+    constructor(loadSurveyService, documentPickerService) {
         this.loadSurveyService = loadSurveyService
         this.documentPickerService = documentPickerService
-        this.fileSystemRepo = fileSystemRepo
     }
 
     async execute(callback) {
         callback(SurveyLoadingStatuses.SELECTING)
         const file = await this.documentPickerService.pickSurveyFile()
         callback(SurveyLoadingStatuses.LOADING, file)
-        const path = this.fileSystemRepo.getPathFromUri(file.uri)
-        const meta = await this.loadSurveyService.execute(path)
+        const meta = await this.loadSurveyService.execute(file)
         callback(SurveyLoadingStatuses.COMPLETED)
         return meta
     }

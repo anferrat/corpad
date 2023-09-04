@@ -1,5 +1,5 @@
 import React, { useContext, useEffect } from 'react'
-import { Animated, StyleSheet } from 'react-native'
+import { Animated, StatusBar, StyleSheet } from 'react-native'
 import BottomButton from '../../components/BottomButton'
 import { diagBack } from '../../components/Icons'
 import { ScrollRef } from '../../../App'

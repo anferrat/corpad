@@ -28,7 +28,6 @@ import ExportPotentials from '../screens/export/Potentials'
 import ExportSubitems from '../screens/export/Subitems'
 import ExportOverview from '../screens/export/Overview'
 import CycleSettings from '../screens/settings/CycleSettings'
-import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { MultimeterModal } from '../features/overlays/multimeter'
 
 
@@ -36,7 +35,6 @@ const Stack = createNativeStackNavigator()
 
 export const AppNavigator = () => {
   const { loading, isCloud, isLoaded, isOnboardingVisible } = useApp()
-  const insets = useSafeAreaInsets()
   if (loading)
     return <SplashScreen />
   else
@@ -48,7 +46,7 @@ export const AppNavigator = () => {
             headerShown: true,
             animation: 'fade',
             //insets has to be passed to header from the top, to avoid glitching when swicthing between screens
-            header: ({ route, navigation }) => <TopBar screen={route.name} params={route.params} navigation={navigation} topInset={insets.top} />,
+            header: ({ route, navigation }) => <TopBar screen={route.name} params={route.params} navigation={navigation} topInset={21.7777} />,
           }}>
           {isOnboardingVisible ? <Stack.Screen name='Onboarding' component={OnboardingScreen} /> : null}
           {

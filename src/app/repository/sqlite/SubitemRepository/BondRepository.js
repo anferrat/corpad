@@ -13,10 +13,10 @@ export class BondRepository extends SQLiteRepository {
 
     async getAll() {
         try {
-            const result = await this.runSingleQueryTransaction(`SELECT cards.id, cards.testPointId, cards.uid, cards.name, cards.fromAtoB, sides.sideAId, sides.sideBId, cards.current FROM cards LEFT JOIN sides ON cards.id = sides.parentCardId WHERE cards.type = ? ORDER BY cards.id`, [SubitemTypes.BOND])
+            const result = await this.runSingleQueryTransaction(`SELECT cards.id, cards.testPointId, cards.uid, cards.name, cards.fromAtoB, sides.sideAId, sides.sideBId, cards.current, cards.oldCurrent FROM cards LEFT JOIN sides ON cards.id = sides.parentCardId WHERE cards.type = ? ORDER BY cards.id`, [SubitemTypes.BOND])
             return this.responseProcessor.generateArrayWithSides(result.rows.length, result.rows.item).map(
-                ({ id, testPointId, uid, name, fromAtoB, current, sideA, sideB }) =>
-                    new Bond(id, testPointId, uid, name, fromAtoB, current, sideA, sideB))
+                ({ id, testPointId, uid, name, fromAtoB, current, sideA, sideB, oldCurrent }) =>
+                    new Bond(id, testPointId, uid, name, fromAtoB, current, sideA, sideB, oldCurrent))
         }
         catch (err) {
             throw new Error(errors.DATABASE, `Unable to get all bonds`, err)
@@ -25,13 +25,13 @@ export class BondRepository extends SQLiteRepository {
 
     async create(bond) {
         try {
-            const { id, uid, parentId, name, type, fromAtoB, current, sideA, sideB } = bond
+            const { id, uid, parentId, name, type, fromAtoB, current, sideA, sideB, prevCurrent } = bond
             const sides = sideA.map(side => ({ sideA: side, sideB: null })).concat(sideB.map(side => ({ sideB: side, sideA: null })))
-            const result = await super.runSingleQueryTransaction(`INSERT INTO cards (id, uid, testPointId, type,  name, fromAtoB, current) VALUES (?,?,?,?,?,?,?)`,
-                [id, uid, parentId, type, name, fromAtoB, current])
+            const result = await super.runSingleQueryTransaction(`INSERT INTO cards (id, uid, testPointId, type,  name, fromAtoB, current, oldCurrent) VALUES (?,?,?,?,?,?,?,?)`,
+                [id, uid, parentId, type, name, fromAtoB, current, prevCurrent])
             if (sides.length > 0)
                 await super.runSingleQueryTransaction(`INSERT INTO sides (sideAId, sideBId, parentCardId) VALUES ${sides.map(side => `(${side.sideA}, ${side.sideB}, ${result.insertId})`).join()}`)
-            return new Bond(result.insertId, parentId, uid, name, fromAtoB, current, sideA, sideB)
+            return new Bond(result.insertId, parentId, uid, name, fromAtoB, current, sideA, sideB, prevCurrent)
         }
         catch (err) {
             throw new Error(errors.DATABASE, `Unable to create bond`, err)
@@ -41,15 +41,15 @@ export class BondRepository extends SQLiteRepository {
     async getById(id) {
         try {
             const [result, sideAresult, sideBresult] = await super.runMultiQueryTransaction(tx => [
-                this.runQuery(tx, `SELECT testPointId, uid, name, fromAtoB, current FROM cards WHERE id = ? AND type = ?`, [id, SubitemTypes.BOND]),
+                this.runQuery(tx, `SELECT testPointId, uid, name, fromAtoB, current, oldCurrent FROM cards WHERE id = ? AND type = ?`, [id, SubitemTypes.BOND]),
                 this.runQuery(tx, `SELECT * FROM sides WHERE parentCardId = ? AND sideAId IS NOT NULL`, [id]),
                 this.runQuery(tx, `SELECT * FROM sides WHERE parentCardId = ? AND sideBId IS NOT NULL`, [id])
             ])
             const sideA = this.generateArray(sideAresult.rows.length, sideAresult.rows.item).map(side => side.sideAId)
             const sideB = this.generateArray(sideBresult.rows.length, sideBresult.rows.item).map(side => side.sideBId)
-            const { testPointId, uid, name, fromAtoB, current } = result.rows.item(0)
+            const { testPointId, uid, name, fromAtoB, current, oldCurrent } = result.rows.item(0)
 
-            return new Bond(id, testPointId, uid, name, fromAtoB, current, sideA, sideB)
+            return new Bond(id, testPointId, uid, name, fromAtoB, current, sideA, sideB, oldCurrent)
         }
         catch (err) {
             throw new Error(errors.DATABASE, `Unable to get bond with id ${id}`, err)

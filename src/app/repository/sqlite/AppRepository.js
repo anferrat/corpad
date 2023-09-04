@@ -19,17 +19,19 @@ export class AppRepository extends SQLiteRepository {
                 super.runQuery(tx, 'CREATE TABLE IF NOT EXISTS testPoints (id INTEGER PRIMARY KEY NOT NULL, uid Text, name TEXT, location TEXT, latitude REAL, longitude REAL, comment TEXT, testPointType INTEGER, status INTEGER, timeCreated INTEGER, timeModified INTEGER)', []),
                 super.runQuery(tx, 'CREATE TABLE IF NOT EXISTS pipelines (id INTEGER PRIMARY KEY NOT NULL, uid TEXT, name TEXT, nps INTEGER, material INTEGER, coating BOOLEAN, licenseNumber TEXT, timeCreated INTEGER, timeModified INTEGER, product INTEGER, comment TEXT)', []),
                 super.runQuery(tx, `CREATE TABLE IF NOT EXISTS referenceCells (id INTEGER PRIMARY KEY NOT NULL, uid TEXT, rcType INTEGER, name TEXT, mainReference BOOLEAN)`, []),
-                super.runQuery(tx, 'CREATE TABLE IF NOT EXISTS potentialTypes (id INTEGER PRIMARY KEY NOT NULL, uid TEXT NOT NULL, name TEXT NOT NULL, custom BOOLEAN, permType TEXT)', [])
+                super.runQuery(tx, 'CREATE TABLE IF NOT EXISTS potentialTypes (id INTEGER PRIMARY KEY NOT NULL, uid TEXT NOT NULL, name TEXT NOT NULL, custom BOOLEAN, permType TEXT, isAc BOOLEAN)', []),
+                super.runQuery(tx, `CREATE TABLE IF NOT EXISTS mapLayers (id INTEGER PRIMARY KEY NOT NULL, uid TEXT NOT NULL, name TEXT, timeCreated INTEGER, timeModified INTEGER, comment TEXT, strokeColor INTEGER, strokeWidth INTEGER, fillColor INTEGER, visible BOOLEAN DEFAULT 1, data TEXT)`, []),
             ])
 
             await super.runMultiQueryTransaction(tx => [
                 super.runQuery(tx, `CREATE TABLE IF NOT EXISTS circuits (id INTEGER PRIMARY KEY NOT NULL, uid Text, name TEXT, rectifierId INTEGER, ratioCurrent REAL, ratioVoltage REAL, voltageDrop REAL, current REAL, voltage REAL, targetMin REAL, targetMax REAL, FOREIGN KEY(rectifierId) REFERENCES rectifiers(id) ON DELETE CASCADE)`, []),
-                super.runQuery(tx, `CREATE TABLE IF NOT EXISTS cards (id INTEGER PRIMARY KEY NOT NULL, testPointId INTEGER NOT NULL, uid TEXT, type TEXT, name TEXT, anodeMaterial INTEGER, wireColor INTEGER, wireGauge INTEGER, fromAtoB BOOLEAN, current REAL, currentUnit TEXT, pipelineId INT, pipelineCardId INT, couponType INTEGER, density REAL, area REAL, description TEXT, isolationType INTEGER, shorted BOOLEAN, rcType INTEGER, nps INTEGER, ratioCurrent REAL, ratioVoltage REAL, factorSelected BOOLEAN, factor REAL, voltageDrop REAL, oldCurrent REAL, oldVoltageDrop REAL, FOREIGN KEY(testPointId) REFERENCES testPoints(id) ON DELETE CASCADE, FOREIGN KEY(pipelineId) REFERENCES pipelines(id) ON DELETE SET NULL, FOREIGN KEY(pipelineCardId) REFERENCES cards(id) ON DELETE SET NULL)`, [])
+                super.runQuery(tx, `CREATE TABLE IF NOT EXISTS cards (id INTEGER PRIMARY KEY NOT NULL, testPointId INTEGER NOT NULL, uid TEXT, type TEXT, name TEXT, anodeMaterial INTEGER, wireColor INTEGER, wireGauge INTEGER, fromAtoB BOOLEAN, current REAL, currentUnit TEXT, pipelineId INT, pipelineCardId INT, couponType INTEGER, density REAL, area REAL, description TEXT, isolationType INTEGER, shorted BOOLEAN, rcType INTEGER, nps INTEGER, ratioCurrent REAL, ratioVoltage REAL, factorSelected BOOLEAN, factor REAL, voltageDrop REAL, oldCurrent REAL, oldVoltageDrop REAL, FOREIGN KEY(testPointId) REFERENCES testPoints(id) ON DELETE CASCADE, FOREIGN KEY(pipelineId) REFERENCES pipelines(id) ON DELETE SET NULL, FOREIGN KEY(pipelineCardId) REFERENCES cards(id) ON DELETE SET NULL)`, []),
+                super.runQuery(tx, 'CREATE TABLE IF NOT EXISTS assets (id INTEGER PRIMARY KEY NOT NULL, uid TEXT NOT NULL, timeCreated INTEGER, timeModified INTEGER, comment TEXT, fileName TEXT, mediaType INTEGER, testPointId INTEGER, rectifierId INTEGER, loaded BOOLEAN, FOREIGN KEY(rectifierId) REFERENCES rectifiers(id) ON DELETE CASCADE, FOREIGN KEY(testPointId) REFERENCES testPoints(id) ON DELETE CASCADE )', []),
             ])
 
             await super.runMultiQueryTransaction(tx => [
                 super.runQuery(tx, `CREATE TABLE IF NOT EXISTS sides (id INTEGER PRIMARY KEY NOT NULL, sideAId INT, sideBId INT, parentCardId INT, FOREIGN KEY(parentCardId) REFERENCES cards(id) ON DELETE CASCADE, FOREIGN KEY(sideAId) REFERENCES cards(id) ON DELETE CASCADE, FOREIGN KEY(sideBId) REFERENCES cards(id) ON DELETE CASCADE)`, []),
-                super.runQuery(tx, `CREATE TABLE IF NOT EXISTS potentials (id INTEGER PRIMARY KEY NOT NULL, cardId INTEGER NOT NULL, uid TEXT, value REAL, type INTEGER NOT NULL, oldValue REAL, unit TEXT, portableReferenceId INTEGER, permanentReferenceId INTEGER, FOREIGN KEY(portableReferenceId) REFERENCES referenceCells(id) ON DELETE CASCADE, FOREIGN KEY(type) REFERENCES potentialTypes(id) ON DELETE CASCADE, FOREIGN KEY(cardId) REFERENCES cards(id) ON DELETE CASCADE, FOREIGN KEY(permanentReferenceId) REFERENCES cards(id) ON DELETE CASCADE)`, []),
+                super.runQuery(tx, `CREATE TABLE IF NOT EXISTS potentials (id INTEGER PRIMARY KEY NOT NULL, cardId INTEGER NOT NULL, uid TEXT, value REAL, type INTEGER NOT NULL, oldValue REAL, timeModified INTEGER, unit TEXT, portableReferenceId INTEGER, permanentReferenceId INTEGER, FOREIGN KEY(portableReferenceId) REFERENCES referenceCells(id) ON DELETE CASCADE, FOREIGN KEY(type) REFERENCES potentialTypes(id) ON DELETE CASCADE, FOREIGN KEY(cardId) REFERENCES cards(id) ON DELETE CASCADE, FOREIGN KEY(permanentReferenceId) REFERENCES cards(id) ON DELETE CASCADE)`, []),
             ])
 
             await this.runMultiQueryTransaction(tx => [
@@ -81,18 +83,29 @@ export class AppRepository extends SQLiteRepository {
         //1. Update schema version in config file
         //2. Write transaction for each previous schema version with queries to achive result schema
         //3. Update create table queries. In case of adding new tables without changing existed, schema update is not needed. 
-        //Current schema version 1. 
+        //Current schema version 2. 
         if (currentSchemaVersion !== schemaVersion)
             try {
                 switch (currentSchemaVersion) {
                     case null:
                         return await this.runMultiQueryTransaction(tx => [
+                            //to v1
                             this.runQuery(tx, 'ALTER TABLE settings ADD multimeter TEXT'),
                             this.runQuery(tx, 'ALTER TABLE potentials ADD oldValue REAL'),
                             this.runQuery(tx, 'ALTER TABLE cards ADD oldCurrent REAL'),
                             this.runQuery(tx, 'ALTER TABLE cards ADD oldVoltageDrop REAL'),
+                            //to v2
+                            this.runQuery(tx, 'ALTER TABLE potentials ADD timeModified INTEGER'),
+                            this.runQuery(tx, 'ALTER TABLE potentialTypes ADD isAc BOOLEAN DEFAULT 0'),
+                        ])
+                    case 1:
+                        return await this.runMultiQueryTransaction(tx => [
+                            //to v2
+                            this.runQuery(tx, 'ALTER TABLE potentials ADD timeModified INTEGER'),
+                            this.runQuery(tx, 'ALTER TABLE potentialTypes ADD isAc BOOLEAN DEFAULT 0'),
                         ])
                 }
+
             }
             catch (er) {
                 console.log(er)
@@ -106,6 +119,7 @@ export class AppRepository extends SQLiteRepository {
                 super.runQuery(tx, 'DROP TABLE IF EXISTS potentials', []),
                 super.runQuery(tx, 'DROP TABLE IF EXISTS sides', []),
                 super.runQuery(tx, 'DROP TABLE IF EXISTS cards', []),
+                super.runQuery(tx, 'DROP TABLE IF EXISTS assets', []),
                 super.runQuery(tx, 'DROP TABLE IF EXISTS circuits', []),
                 super.runQuery(tx, `DROP TABLE IF EXISTS survey`, []),
                 super.runQuery(tx, `DROP TABLE IF EXISTS schemaVersion`, []),
@@ -116,6 +130,7 @@ export class AppRepository extends SQLiteRepository {
                 super.runQuery(tx, 'DROP TABLE IF EXISTS calculators', []),
                 super.runQuery(tx, `DROP TABLE IF EXISTS potentialTypes`, []),
                 super.runQuery(tx, 'DROP TABLE IF EXISTS settings', []),
+                super.runQuery(tx, 'DROP TABLE IF EXISTS mapLayers', []),
                 super.runQuery(tx, 'DROP TABLE IF EXISTS defaultNames', []),
             ])
         }

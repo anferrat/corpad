@@ -46,8 +46,8 @@ const useApp = () => {
         er !== 101 ? errorHandler(er) : null
         dispatch(updateLoader(false, null, null))
       },
-      ({ name, fileName, syncTime, isCloud, isLoaded }) => {
-        dispatch(setSurveySettings(name, fileName, syncTime, isCloud, isLoaded))
+      ({ name, fileName, syncTime, isCloud, isLoaded, uid }) => {
+        dispatch(setSurveySettings(name, fileName, syncTime, isCloud, isLoaded, uid))
         dispatch(updateLoader(false, null, null))
       }
     )
@@ -65,8 +65,8 @@ const useApp = () => {
       componentMounted.current = true
       const { status, response } = await initializeApp()
       if (status === 200) {
-        const { isLoaded, syncTime, name, fileName, isCloud, isSigned, userName, onboarding, multimeter } = response
-        dispatch(setSettingsOnAppLoad(isLoaded, syncTime, name, fileName, isCloud, isSigned, userName, onboarding, multimeter))
+        const { isLoaded, syncTime, name, uid, fileName, isCloud, isSigned, userName, onboarding, multimeter } = response
+        dispatch(setSettingsOnAppLoad(isLoaded, syncTime, name, uid, fileName, isCloud, isSigned, userName, onboarding, multimeter))
         if (componentMounted.current)
           setLoading(false)
       }

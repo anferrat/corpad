@@ -1,10 +1,11 @@
 
-import { UPDATE_SETTING, LOAD_SETTINGS, SET_SURVEY_SAVING_STATUS, LOAD_SURVEY_SETTINGS, RESET_CURRENT_SURVEY_SETTINGS, LOAD_SESSION_STATE, UPDATE_ONBOARDING, SET_EXPORT_MODAL, UPDATE_LOADER, UPDATE_SESSION, UPDATE_NETWORK_STATUS, SET_SESSION_MODAL_VISIBLE, UPDATE_CURRENT_SURVEY_SETTINGS, SET_SETTINGS_ON_APP_LOAD, SET_SURVEY_SETTINGS, UPDATE_BOTTOM_SHEET_CONTENT, SET_BLUETOOTH_SCANNING, SET_BLUETOOTH_STATUS, SET_ACTIVE_MULTIMETER, SET_ACTIVE_MULTIMETER_STATUS, SET_TIME_ADJUSTMENT, SET_ACTIVE_MULTIMETER_SETTINGS } from "../actions/settings"
+import { UPDATE_SETTING, LOAD_SETTINGS, SET_SURVEY_SAVING_STATUS, UPDATE_SURVEY_NAME, RESET_CURRENT_SURVEY_SETTINGS, LOAD_SESSION_STATE, UPDATE_ONBOARDING, SET_EXPORT_MODAL, UPDATE_LOADER, UPDATE_SESSION, UPDATE_NETWORK_STATUS, SET_SESSION_MODAL_VISIBLE, UPDATE_CURRENT_SURVEY_SETTINGS, SET_SETTINGS_ON_APP_LOAD, SET_SURVEY_SETTINGS, UPDATE_BOTTOM_SHEET_CONTENT, SET_BLUETOOTH_SCANNING, SET_BLUETOOTH_STATUS, SET_ACTIVE_MULTIMETER, SET_ACTIVE_MULTIMETER_STATUS, SET_TIME_ADJUSTMENT, SET_ACTIVE_MULTIMETER_SETTINGS } from "../actions/settings"
 
 const initialState = {
     bottomSheetContent: {  //BottomSheet component
         itemType: 'TEST_POINT',
-        content: 'sorting'
+        content: 'sorting',
+        params: {},
     },
     lastImport: {
         itemType: null,
@@ -57,6 +58,7 @@ const initialState = {
     //all currentSurvey props are only for DISPLAY purposes. don't use it for operations with data
     currentSurvey: {
         name: null, // survey name for display purposes only, database 'surveyName' setting is primary for any data related operations
+        uid: null, //survey unique id, used as folder name for assets
         fileName: null, //file name of current survey. mainly used to be displayed when saving or loading file. the one in db settings has priority over this one
         isLoaded: false, //survey is loaded. if not it'll display survey list screen, if yes it'll display testPoint list
         isCloudSurvey: false, //is current survey on cloud
@@ -109,6 +111,7 @@ const settings = (state = initialState, action) => {
                 currentSurvey: {
                     ...state.currentSurvey,
                     name: action.name,
+                    uid: action.uid,
                     fileName: action.fileName,
                     isLoaded: action.isLoaded,
                     lastSyncTime: action.syncTime,
@@ -148,7 +151,8 @@ const settings = (state = initialState, action) => {
                 ...state,
                 bottomSheetContent: {
                     itemType: action.itemType,
-                    content: action.content
+                    content: action.content,
+                    params: action.params
                 }
             }
         case UPDATE_CURRENT_SURVEY_SETTINGS:
@@ -178,22 +182,17 @@ const settings = (state = initialState, action) => {
                     fileName: action.fileName,
                     isCloudSurvey: action.isCloudSurvey,
                     lastSyncTime: action.syncTime,
-                    isLoaded: action.isLoaded
+                    isLoaded: action.isLoaded,
+                    uid: action.uid,
                 }
             }
-        case LOAD_SURVEY_SETTINGS:
+        case UPDATE_SURVEY_NAME:
             return {
                 ...state,
                 currentSurvey: {
-                    name: action.name ?? state.currentSurvey.name,
-                    fileName: action.fileName ?? state.currentSurvey.fileName,
-                    isLoaded: true,
-                    homeScreenCloud: action.homeScreenCloud ?? state.currentSurvey.homeScreenCloud,
-                    isCloudSurvey: action.isCloudSurvey ?? state.currentSurvey.isCloudSurvey,
-                    savingInProgress: false,
-                    lastSyncTime: action.syncTime ?? state.currentSurvey.lastSyncTime
-                },
-                loader: initialState.loader
+                    ...state.currentSurvey,
+                    name: action.name
+                }
             }
         case LOAD_SESSION_STATE:
             return {

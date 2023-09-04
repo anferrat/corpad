@@ -1,7 +1,9 @@
 import RNFS from 'react-native-fs'
+import { zip, unzip } from 'react-native-zip-archive'
 import { Error, errors } from '../../utils/Error'
-import { FileSystemLocations } from '../../entities/survey/other/properties'
+import { FileSystemLocations } from '../../../constants/global'
 import { Platform } from 'react-native'
+import { File } from '../../entities/survey/other/File'
 
 export class FileSystemRepository {
     constructor() {
@@ -10,12 +12,17 @@ export class FileSystemRepository {
         this.surveysFolder = `${RNFS.DocumentDirectoryPath}/surveys`
         this.exportsFolder = `${RNFS.DocumentDirectoryPath}/exports`
         this.tempFolder = `${RNFS.DocumentDirectoryPath}/temp`
+        this.assetsFolder = `${RNFS.DocumentDirectoryPath}/assets`
+        this.currentAssetsFolder = `${RNFS.DocumentDirectoryPath}/assets/current`
+        this.tempSurveyFolder = `${RNFS.DocumentDirectoryPath}/temp/survey`
+        this.tempSurveyAssetsFolder = `${RNFS.DocumentDirectoryPath}/temp/survey/assets`
+        this.tempDownloadsFolder = `${RNFS.DocumentDirectoryPath}/downloads`
     }
 
-    async writeFile(content, name, location, overwrite = true) {
+    async writeFile(content, name, location, overwrite = true, uid = null) {
         try {
             //add permissions for DOWNLOADS FOLDER
-            const directoryPath = await this.getLocation(location)
+            const directoryPath = await this.getLocation(location, uid)
             const filePath = directoryPath + '/' + name
             // check if ok to overwrite
             if ((await RNFS.exists(filePath)) && !overwrite)
@@ -36,27 +43,45 @@ export class FileSystemRepository {
         }
     }
 
-    async copyFile(fileName, filePath, destinationLocation) {
+    async copyFile(filePath, destinationPath) {
         try {
             //check if there is enough free space
-            const freeSpace = (await RNFS.getFSInfo()).freeSpace
-            if (!isNaN(freeSpace) && freeSpace !== null && freeSpace < ((await RNFS.stat(filePath)).size + 10485760)) //content size + 10MB
-                throw new Error(errors.FILESYSTEM, `Not enough space on disk.`, 'Not enough space', 402)
-
+            if (!filePath.startsWith(`content://com.android`)) {
+                const freeSpace = (await RNFS.getFSInfo()).freeSpace
+                if (!isNaN(freeSpace) && freeSpace !== null && freeSpace < ((await RNFS.stat(filePath)).size + 10485760)) //content size + 10MB
+                    throw new Error(errors.FILESYSTEM, `Not enough space on disk.`, 'Not enough space', 402)
+            }
             //write file
-            const directory = await this.getLocation(destinationLocation)
-            const fileNameCorrected = await this.getFileName(fileName, destinationLocation)
-            await RNFS.copyFile(filePath, `${directory}/${fileNameCorrected}`)
+            await RNFS.copyFile(filePath, destinationPath)
         }
         catch (er) {
             throw new Error(errors.FILESYSTEM, 'Error while copying file', er, 404)
         }
     }
 
-    async getFileName(fileName, location) {
+    async copyFiles(destinationFolder, fileList) {
+        let copiedFiles = []
+        try {
+            const freeSpace = (await RNFS.getFSInfo()).freeSpace
+            const requiredSpace = fileList.reduce((a, b) => a + b.size, 0)
+            if (freeSpace < requiredSpace + 10000)
+                throw 'Not enough space'
+            else
+                return await Promise.all(fileList.map(async ({ filename, path }) => {
+                    await RNFS.copyFile(path, `${destinationFolder}/${filename}`)
+                    copiedFiles.push(filename)
+                }))
+        }
+        catch (er) {
+            copiedFiles.forEach((filename) => RNFS.unlink(`${destinationFolder}/${filename}`))
+            throw new Error(errors.FILESYSTEM, 'Error while copying files', er, 404)
+        }
+    }
+
+    async getFileName(fileName, location, uid = null) {
         const MAX_FILE_INDEX = 10
         //returns fileName or (index)fileName  in case of file with same name in same location
-        const directory = await this.getLocation(location)
+        const directory = await this.getLocation(location, uid)
         try {
             if (!(await RNFS.exists(directory + '/' + fileName)))
                 return fileName
@@ -76,11 +101,8 @@ export class FileSystemRepository {
     async createDirectory(dir) {
         try {
             //Check if dir exists and not a file and return
-            if (await RNFS.exists(dir))
-                if (!((await RNFS.stat(dir)).isFile()))
-                    return dir
-            //if dir doesn't exists create and return
-            await RNFS.mkdir(dir)
+            if (!await RNFS.exists(dir) || (await RNFS.stat(dir)).isFile())
+                await RNFS.mkdir(dir)
             return dir
         }
         catch (er) {
@@ -88,14 +110,12 @@ export class FileSystemRepository {
         }
     }
 
-
-    async deleteFile(location, fileName) {
-        const directory = await this.getLocation(location)
+    async deleteFile(location, fileName, uid = null) {
+        const directory = await this.getLocation(location, uid)
         try {
             const path = `${directory}/${fileName}`
-            if (await RNFS.exists(path))
-                if (!((await RNFS.stat(path)).isFile()))
-                    await RNFS.unlink(path)
+            if (await RNFS.exists(path) && (await RNFS.stat(path)).isFile())
+                await RNFS.unlink(path)
         }
         catch (er) {
             throw new Error(errors.FILESYSTEM, `Unable to delete ${fileName} in direcory ${directory}`, er, 407)
@@ -129,17 +149,19 @@ export class FileSystemRepository {
         }
     }
 
-    async readDir(location) {
-        const dir = await this.getLocation(location)
+    async readDir(location, uid = null) {
+        const dir = await this.getLocation(location, uid)
         try {
-            return await RNFS.readDir(dir)
+            const files = await RNFS.readDir(dir)
+            return files.map((file) => new File(file.name, file.mtime.getTime(), file.path, file.size, file.isFile()))
         }
         catch (er) {
             throw new Error(errors.FILESYSTEM, `Unable to read directory at ${dir}`, er, 411)
         }
     }
 
-    getLocationPath(location) {
+    _getLocationPath(location, uid = null) {
+        //Internal use only
         switch (location) {
             case FileSystemLocations.EXPORTS:
                 return this.exportsFolder
@@ -149,20 +171,38 @@ export class FileSystemRepository {
                 return this.tempFolder
             case FileSystemLocations.DOWNLOADS:
                 return this.downloadsFolder
+            case FileSystemLocations.TEMP_DOWNLOADS:
+                return this.tempDownloadsFolder
+            case FileSystemLocations.TEMP_SURVEY:
+                return this.tempSurveyFolder
+            case FileSystemLocations.TEMP_ASSETS:
+                return this.tempSurveyAssetsFolder
+            case FileSystemLocations.CURRENT_ASSETS:
+                return this.currentAssetsFolder
+            case FileSystemLocations.ASSETS:
+                if (uid)
+                    return `${this.assetsFolder}/${uid}`
             default:
                 throw new Error(errors.FILESYSTEM, `Unknown destination ${location}.`, 'Location doesnt exist', 406)
         }
     }
 
-    async getLocation(location) {
-        const path = this.getLocationPath(location)
+    async getLocation(location, uid = null) {
+        //returns path of FileSystemLocation constants. creates directory if not exists
+        const path = this._getLocationPath(location, uid)
+        if (location === FileSystemLocations.ASSETS || location === FileSystemLocations.CURRENT_ASSETS)
+            await this.createDirectory(this.assetsFolder)
+        if (location === FileSystemLocations.TEMP_SURVEY || location === FileSystemLocations.TEMP_ASSETS)
+            await this.createDirectory(this.tempFolder)
+        if (location === FileSystemLocations.TEMP_ASSETS)
+            await this.createDirectory(this.tempSurveyFolder)
         if (location !== FileSystemLocations.DOWNLOADS)
             return await this.createDirectory(path)
         else return path
     }
 
-    async removeDir(location) {
-        const path = this.getLocationPath(location)
+    async removeDir(location, uid) {
+        const path = this._getLocationPath(location, uid)
         try {
             const exist = await RNFS.exists(path)
             if (exist)
@@ -193,11 +233,30 @@ export class FileSystemRepository {
         }
     }
 
-   getPathFromUri(uri) {
-        //Fort android uri works for react-native-fs as argument for reading files, for ios - path
+    getPathFromUri(uri) {
+        //For android uri works for react-native-fs as argument for reading files, for ios - path
         return Platform.select({
             android: uri,
             ios: decodeURI(uri)
         })
+    }
+
+    async zip(folderPath, targetPath) {
+        try {
+            return await zip(folderPath, targetPath)
+        }
+        catch (er) {
+            throw new Error(errors.FILESYSTEM, 'Uable to zip folder', er)
+        }
+    }
+
+    async unzip(sourcePath, folderPath) {
+        try {
+            return await unzip(sourcePath, folderPath)
+        }
+        catch (er) {
+            console.log(er)
+            throw new Error(errors.FILESYSTEM, 'Uable to unzip file', er)
+        }
     }
 }

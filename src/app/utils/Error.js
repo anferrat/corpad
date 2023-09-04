@@ -17,5 +17,6 @@ export const errors = Object.freeze({
     LOCATION: 'LocationError',
     PERMISSION: 'PermissionError',
     VALIDATION: 'ValidationError',
-    BLUETOOTH: 'BluetoothError'
+    BLUETOOTH: 'BluetoothError',
+    CAMERA: 'CameraError'
 })

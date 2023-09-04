@@ -1,14 +1,9 @@
 import { Controller } from "../../../utils/Controller"
-import { ReferenceCellRepository } from "../../../repository/sqlite/ReferenceCellRepository"
 import { GetSurveyInfo } from "../../../services/survey/other/survey_info/GetSurveyInfo"
-import { TestPointRepository } from "../../../repository/sqlite/TestPointRepository"
-import { RectifierRepository } from "../../../repository/sqlite/RectifierRepository"
-import { PipelineRepository } from "../../../repository/sqlite/PipelineRepository"
-import { PotentialRepository } from "../../../repository/sqlite/PotentialRepository"
-import { GeolocationCalculator } from "../../../services/other/GeolocationCalculator"
 import { SurveyValidation } from "../../../validation/SurveyValidation"
 import { UpdateSurveyName } from "../../../services/survey/other/survey_info/UpdateSurveyName"
-import { SurveyRepository } from "../../../repository/sqlite/SurveyRepository"
+import { pipelineRepo, potentialRepo, rectifierRepo, referenceCellRepo, surveyRepo, testPointRepo } from "../../_instances/repositories"
+import { geolocationCalculator } from "../../_instances/general_services"
 
 class SurveyInfoController extends Controller {
     constructor(testPointRepo, rectifierRepo, pipelineRepo, potentialRepo, referenceCellRepo, geolocationCalculator, surveyRepo) {
@@ -34,13 +29,13 @@ class SurveyInfoController extends Controller {
 }
 
 const surveyInfoController = new SurveyInfoController(
-    new TestPointRepository(),
-    new RectifierRepository(),
-    new PipelineRepository(),
-    new PotentialRepository(),
-    new ReferenceCellRepository(),
-    new GeolocationCalculator(),
-    new SurveyRepository()
+    testPointRepo,
+    rectifierRepo,
+    pipelineRepo,
+    potentialRepo,
+    referenceCellRepo,
+    geolocationCalculator,
+    surveyRepo
 )
 
 export const getSurveyInfo = (onError, onSuccess) => surveyInfoController.getInfo(onError, onSuccess)

@@ -1,81 +1,49 @@
-import { SurveyFileConverterInput } from "../../converters/survey_file/v1/SurveyFileConverterInput"
-import { SurveyFileListPresenter } from "../../presenters/SurveyFileListPresenter"
-import { GoogleDriveFileSystemRepository } from "../../repository/cloud_drive/GoogleDriveFileSystemRepository"
-import { FileSystemRepository } from "../../repository/fs/FileSystemRepository"
-import { NetworkRepository } from "../../repository/network/NetworkRepository"
-import { PipelineRepository } from "../../repository/sqlite/PipelineRepository"
-import { PotentialRepository } from "../../repository/sqlite/PotentialRepository"
-import { PotentialTypeRepository } from "../../repository/sqlite/PotentialTypeRepository"
-import { RectifierRepository } from "../../repository/sqlite/RectifierRepository"
-import { ReferenceCellRepository } from "../../repository/sqlite/ReferenceCellRepository"
-import { SettingRepository } from "../../repository/sqlite/SettingRepository"
-import { SubitemRepository } from "../../repository/sqlite/SubitemRepository"
-import { SurveyRepository } from "../../repository/sqlite/SurveyRepository"
-import { TestPointRepository } from "../../repository/sqlite/TestPointRepository"
-import { DocumentPicker } from "../../services/other/DocumentPicker"
-import { Permissions } from "../../services/other/Permissions"
-import { Share } from "../../services/other/Share"
-import { SubitemFactory } from "../../services/other/SubitemFactory"
-import { WarningHandler } from "../../services/other/WarningHandler"
-import { CreateSurvey } from "../../services/survey/manager/CreateSurvey"
-import { CreateSurveyFromTemplate } from "../../services/survey/manager/CreateSurveyFromTemplate"
-import { GetCurrentSurveyStatus } from "../../services/survey/manager/GetCurrentSurveyStatus"
-import { LoadSurvey } from "../../services/survey/manager/LoadSurvey"
-import { AdvancedJsonImport } from "../../services/survey/manager/import/json/AdvancedJsonImport"
-import { SimpleJsonImport } from "../../services/survey/manager/import/json/SimpleJsonImport"
-import { CopyCloudSurveyFile } from "../../services/survey_file/cloud/CopyCloudSurveyFile"
 import { DeleteCloudSurveyFile } from "../../services/survey_file/cloud/DeleteCloudSurveyFile"
 import { GetCloudSurveyFileLink } from "../../services/survey_file/cloud/GetCloudSurveyFileLink"
 import { GetCloudSurveyFileList } from "../../services/survey_file/cloud/GetCloudSurveyFileList"
-import { ReadCloudSurveyfile } from "../../services/survey_file/cloud/ReadCloudSurveyFile"
 import { CopySurveyFileToCloud } from "../../services/survey_file/local/CopySurveyFileToCloud"
-import { CopySurveyFileToDownloads } from "../../services/survey_file/local/CopySurveyFileToDownloads"
 import { DeleteSurveyFile } from "../../services/survey_file/local/DeleteSurveyFile"
 import { GetSurveyFileList } from "../../services/survey_file/local/GetSurveyFileList"
-import { ReadExternalSurveyFile } from "../../services/survey_file/local/ReadExternalSurveyFile"
-import { ReadSurveyFile } from "../../services/survey_file/local/ReadSurveyFile"
 import { Controller } from "../../utils/Controller"
 import { SurveyFileValidation } from "../../validation/SurveyFileValidation"
-import { SurveyFileContentValidation } from "../../validation/survey_file_content/v1/SurveyFileContentValidation"
-import { FileMimeTypes } from "../../../constants/global"
-import { LoadExternalSurveyFile } from "../../services/survey_file/local/LoadExternalSurveyFile"
+import { PickExternalSurveyFile } from "../../services/survey_file/local/PickExternalSurveyFile"
+import { fileSystemRepo, googleDriveFileSystemRepo, networkRepo } from "../_instances/repositories"
+import { assetFileDownloadControl, convertFileToSurveyService, createSurveyFromTemplateService, createSurveyService, deleteAssetsService, downloadFiles, exportCloudSurveyFile, exportSurveyFile, loadCloudSurveyFileService, loadExternalSurveyFileService, loadLocalSurveyFileService, uploadAssets } from "../_instances/survey_file"
+import { surveyFileListPresenter } from "../_instances/presenters"
+import { documentPicker, permissions, shareService } from "../_instances/general_services"
+import { surveyFileConverterOutput } from "../_instances/converters"
+import { ShareSurveyFile } from "../../services/survey_file/local/ShareSurveyFile"
+import { SaveSurveyFileToDownloads } from "../../services/survey_file/local/SaveSurveyFileToDownloads"
+import { CopyCloudSurveyFileToLocal } from "../../services/survey_file/cloud/CopyCloudSurveyFileToLocal"
 
 
 class SurveyFileController extends Controller {
-    constructor(fileSystemRepo, cloudFileSystemRepo, networkRepo, surveyFileListPresenter, surveyFileContentValidation, surveyRepo, settingRepo, subitemFactory, warningHandler, testPointRepo, rectifierRepo, pipelineRepo, subitemRepo, potentialTypeRepo, referenceCellRepo, potentialRepo, shareService, permissions) {
+    constructor(fileSystemRepo, cloudFileSystemRepo, networkRepo, loadLocalSurveyFileService, loadCloudSurveyFileService, loadExternalServiceFileService, createSurveyService, createSurveyFromTemplateService, surveyFileListPresenter, shareService, permissions, documentPicker, convertFileToSurveyService, surveyFileConverterOutput, uploadAssets, downloadFiles, exportSurveyFile, exportCloudSurveyFile, deleteAssetsService, assetFileDownloadControl) {
         super()
 
         this.getLocalSurveyFileListService = new GetSurveyFileList(fileSystemRepo, surveyFileListPresenter)
         this.getCloudSurveyFileListService = new GetCloudSurveyFileList(cloudFileSystemRepo, surveyFileListPresenter, networkRepo)
-        this.deleteCloudSurveyFileService = new DeleteCloudSurveyFile(cloudFileSystemRepo, networkRepo)
-        this.deleteSurveyFileService = new DeleteSurveyFile(fileSystemRepo)
+        this.deleteCloudSurveyFileService = new DeleteCloudSurveyFile(cloudFileSystemRepo, networkRepo, deleteAssetsService)
+        this.deleteSurveyFileService = new DeleteSurveyFile(fileSystemRepo, deleteAssetsService)
 
-        this.readExternalSurveyFileService = new ReadExternalSurveyFile(fileSystemRepo)
-        this.readSurveyFileService = new ReadSurveyFile(fileSystemRepo)
-        this.readCloudSurveyFileService = new ReadCloudSurveyfile(cloudFileSystemRepo, networkRepo)
+        this.loadSurveyFileService = loadLocalSurveyFileService
+        this.loadCloudSurveyFileService = loadCloudSurveyFileService
 
-        this.surveyLoadStatusService = new GetCurrentSurveyStatus(surveyRepo, settingRepo)
-        this.surveyFileConverterInputService = new SurveyFileConverterInput(subitemFactory)
-        this.documentPickerService = new DocumentPicker()
-
-        this.jsonImportService = new SimpleJsonImport(surveyRepo)
-        this.jsonAdvancedImportService = new AdvancedJsonImport(testPointRepo, rectifierRepo, pipelineRepo, subitemRepo, potentialTypeRepo, surveyRepo, referenceCellRepo, potentialRepo)
-
-        this.loadExternalSurveyService = new LoadSurvey(this.jsonImportService, this.jsonAdvancedImportService, this.readExternalSurveyFileService, surveyFileContentValidation, surveyRepo, settingRepo, this.surveyFileConverterInputService, this.surveyLoadStatusService, warningHandler)
-        this.loadSurveyFileService = new LoadSurvey(this.jsonImportService, this.jsonAdvancedImportService, this.readSurveyFileService, surveyFileContentValidation, surveyRepo, settingRepo, this.surveyFileConverterInputService, this.surveyLoadStatusService, warningHandler)
-        this.loadCloudSurveyFileService = new LoadSurvey(this.jsonImportService, this.jsonAdvancedImportService, this.readCloudSurveyFileService, surveyFileContentValidation, surveyRepo, settingRepo, this.surveyFileConverterInputService, this.surveyLoadStatusService, warningHandler)
-
-        this.loadExternalSurveyFileService = new LoadExternalSurveyFile(this.loadExternalSurveyService, this.documentPickerService, fileSystemRepo)
+        this.pickExternalSurveyFileService = new PickExternalSurveyFile(loadExternalServiceFileService, documentPicker)
 
         this.getCloudSurveyFileLinkService = new GetCloudSurveyFileLink(cloudFileSystemRepo, networkRepo, shareService)
-        this.copyCloudSurveyFileService = new CopyCloudSurveyFile(fileSystemRepo, cloudFileSystemRepo, networkRepo)
-        this.copySurveyFileToCloudService = new CopySurveyFileToCloud(cloudFileSystemRepo, fileSystemRepo, networkRepo)
-        this.copySurveyFileToDownloadsService = new CopySurveyFileToDownloads(fileSystemRepo, permissions)
+        this.copySurveyFileToCloudService = new CopySurveyFileToCloud(cloudFileSystemRepo, fileSystemRepo, networkRepo, convertFileToSurveyService, surveyFileConverterOutput, uploadAssets)
+        this.copyCloudSurveyFileService = new CopyCloudSurveyFileToLocal(cloudFileSystemRepo, fileSystemRepo, networkRepo, convertFileToSurveyService, surveyFileConverterOutput, downloadFiles, assetFileDownloadControl)
 
-        this.createSurveyService = new CreateSurvey(surveyRepo, potentialTypeRepo, this.surveyLoadStatusService, pipelineRepo, referenceCellRepo, settingRepo)
-        this.createSurveyFromTemplateService = new CreateSurveyFromTemplate(fileSystemRepo, surveyFileContentValidation, this.jsonImportService, this.surveyFileConverterInputService, this.surveyLoadStatusService)
+        this.createSurveyService = createSurveyService
+        this.createSurveyFromTemplateService = createSurveyFromTemplateService
 
-        this.shareService = shareService
+        this.shareCloudSurveyFile = new ShareSurveyFile(exportCloudSurveyFile, fileSystemRepo, shareService)
+        this.saveCloudSurveyFileToDownloads = new SaveSurveyFileToDownloads(exportCloudSurveyFile, fileSystemRepo, permissions)
+
+        this.shareSurveyFile = new ShareSurveyFile(exportSurveyFile, fileSystemRepo, shareService)
+
+        this.saveSurveyFileToDownloads = new SaveSurveyFileToDownloads(exportSurveyFile, fileSystemRepo, permissions)
 
         this.validation = new SurveyFileValidation()
     }
@@ -94,11 +62,11 @@ class SurveyFileController extends Controller {
 
     deleteFile(params, onError = null, onSuccess = null) {
         return super.controllerHandler(onSuccess, onError, 422, async () => {
-            const { isCloud, path, hash, cloudId } = this.validation.deleteFile(params)
+            const { isCloud, path, hash, cloudId, uid } = this.validation.deleteFile(params)
             if (isCloud)
-                return await this.deleteCloudSurveyFileService.execute(cloudId)
+                return await this.deleteCloudSurveyFileService.execute(cloudId, uid)
             else
-                return await this.deleteSurveyFileService.execute(path, hash)
+                return await this.deleteSurveyFileService.execute(path, hash, uid)
         })
     }
 
@@ -112,10 +80,10 @@ class SurveyFileController extends Controller {
         })
     }
 
-    loadExternalFile(params, onError = null, onSuccess = null) {
+    pickExternalFile(params, onError = null, onSuccess = null) {
         return super.controllerHandler(onSuccess, onError, 420, async () => {
             const { onStatusChanged } = params
-            return await this.loadExternalSurveyFileService.execute(onStatusChanged)
+            return await this.pickExternalSurveyFileService.execute(onStatusChanged)
         })
     }
 
@@ -129,7 +97,7 @@ class SurveyFileController extends Controller {
     copyToDevice(params, onError = null, onSuccess = null) {
         return super.controllerHandler(onSuccess, onError, 418, async () => {
             const { cloudId } = params
-            return await this.copyCloudSurveyFileService.executeToAppFolder(cloudId)
+            return await this.copyCloudSurveyFileService.execute(cloudId)
         })
     }
 
@@ -142,13 +110,11 @@ class SurveyFileController extends Controller {
 
     shareFile(params, onError = null, onSuccess = null) {
         return super.controllerHandler(onSuccess, onError, 430, async () => {
-            const { cloudId, path, isCloud, mimeType } = params
-            if (isCloud) {
-                const url = await this.copyCloudSurveyFileService.executeToTemp(cloudId)
-                return this.shareService.shareFile(url, mimeType)
-            }
+            const { cloudId, path, isCloud } = params
+            if (isCloud)
+                return await this.shareCloudSurveyFile.execute(cloudId)
             else
-                return this.shareService.shareFile(path, mimeType)
+                return await this.shareSurveyFile.execute(path)
         })
     }
 
@@ -156,9 +122,9 @@ class SurveyFileController extends Controller {
         return super.controllerHandler(onSuccess, onError, 416, async () => {
             const { path, cloudId, isCloud } = params
             if (isCloud)
-                return await this.copyCloudSurveyFileService.executeToDownloads(cloudId)
+                return await this.saveCloudSurveyFileToDownloads.execute(cloudId)
             else
-                return await this.copySurveyFileToDownloadsService.execute(path)
+                return await this.saveSurveyFileToDownloads.execute(path)
         })
     }
 
@@ -175,33 +141,35 @@ class SurveyFileController extends Controller {
 }
 
 const surveyFileController = new SurveyFileController(
-    new FileSystemRepository(),
-    new GoogleDriveFileSystemRepository(),
-    new NetworkRepository(),
-    new SurveyFileListPresenter(),
-    new SurveyFileContentValidation(),
-    new SurveyRepository(),
-    new SettingRepository(),
-    new SubitemFactory(),
-    new WarningHandler(),
-    new TestPointRepository(),
-    new RectifierRepository(),
-    new PipelineRepository(),
-    new SubitemRepository(),
-    new PotentialTypeRepository(),
-    new ReferenceCellRepository(),
-    new PotentialRepository(),
-    new Share(),
-    new Permissions()
+    fileSystemRepo,
+    googleDriveFileSystemRepo,
+    networkRepo,
+    loadLocalSurveyFileService,
+    loadCloudSurveyFileService,
+    loadExternalSurveyFileService,
+    createSurveyService,
+    createSurveyFromTemplateService,
+    surveyFileListPresenter,
+    shareService,
+    permissions,
+    documentPicker,
+    convertFileToSurveyService,
+    surveyFileConverterOutput,
+    uploadAssets,
+    downloadFiles,
+    exportSurveyFile,
+    exportCloudSurveyFile,
+    deleteAssetsService,
+    assetFileDownloadControl
 )
 
 export const getSurveyFileList = ({ isCloud }, onError, onSuccess) => surveyFileController.getList({ isCloud }, onError, onSuccess)
 
-export const deleteSurveyFile = ({ isCloud, path, hash, cloudId }, onError, onSuccess) => surveyFileController.deleteFile({ isCloud, path, hash, cloudId }, onError, onSuccess)
+export const deleteSurveyFile = ({ isCloud, path, hash, cloudId, uid }, onError, onSuccess) => surveyFileController.deleteFile({ isCloud, path, hash, cloudId, uid }, onError, onSuccess)
 
 export const loadSurveyFile = ({ isCloud, path, cloudId }, onError, onSuccess) => surveyFileController.loadFile({ isCloud, path, cloudId }, onError, onSuccess)
 
-export const loadExternalSurveyFile = (onError, onSuccess) => surveyFileController.loadExternalFile(onError, onSuccess)
+export const pickExternalSurveyFile = (onError, onSuccess) => surveyFileController.pickExternalFile(onError, onSuccess)
 
 export const getCloudSurveyFileLink = ({ cloudId }, onError, onSuccess) => surveyFileController.getFileLink({ cloudId }, onError, onSuccess)
 

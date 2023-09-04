@@ -49,6 +49,16 @@ const useItemData = ({ itemId, itemType, navigateToMap, navigateToEditSubitem })
                 dispatch(loadViewState(item))
         })
 
+        const assetAddedHandler = EventRegister.addEventListener('ASSET_ADDED', async (asset) => {
+            if (asset.parentId === itemId && asset.parentType === itemType)
+                dispatch(submitViewProperty(asset.timeModified, 'timeModified'))
+        })
+
+        const assetRemovedHandler = EventRegister.addEventListener('ASSET_REMOVED', async (data) => {
+            if (data.itemId === itemId && data.itemType === itemType)
+                dispatch(submitViewProperty(data.currentTime, 'timeModified'))
+        })
+
         const subitemDeleteHandler = EventRegister.addEventListener('SUBITEM_DELETED', (data) => {
             if (itemId === data.itemId)
                 dispatch(submitViewProperty(data.timeModified, 'timeModified'))
@@ -69,6 +79,8 @@ const useItemData = ({ itemId, itemType, navigateToMap, navigateToEditSubitem })
             EventRegister.removeEventListener(subitemDeleteHandler)
             EventRegister.removeEventListener(subitemUpdateHandler)
             EventRegister.removeEventListener(potentialUpdateHandler)
+            EventRegister.removeEventListener(assetAddedHandler)
+            EventRegister.removeEventListener(assetRemovedHandler)
             componentMounted.current = false
             if (updateTracker.current.itemUpdated)
                 EventRegister.emit('GLOBAL_ITEM_UPDATED', { itemId, itemType })

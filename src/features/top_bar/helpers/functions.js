@@ -297,7 +297,11 @@ export const getHeader = (screen, params, navigation, dispatch, openMenu) => {
                             icon: 'plus',
                             onPress: () => navigation.navigate('CreateSurvey')
                         }
-                    ]
+                    ].concat(DEVELOPER_MODE_ON ? {
+                        icon: 'eye',
+                        onPress: () => navigation.navigate('DevScreen')
+                    } : []
+                    )
                 }
             case 'CreateSurvey':
                 return {

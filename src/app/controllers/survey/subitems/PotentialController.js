@@ -1,9 +1,3 @@
-import { PotentialPresenter } from "../../../presenters/PotentialPresenter"
-import { PotentialRepository } from "../../../repository/sqlite/PotentialRepository"
-import { PotentialTypeRepository } from "../../../repository/sqlite/PotentialTypeRepository"
-import { ReferenceCellRepository } from "../../../repository/sqlite/ReferenceCellRepository"
-import { SettingRepository } from "../../../repository/sqlite/SettingRepository"
-import { UnitConverter } from "../../../services/other/UnitConverter"
 import { GetOnOffPotentialPair } from "../../../services/survey/other/multimeter/GetOnOffPotentialPair"
 import { CreatePotential } from "../../../services/survey/subitems/potentials/CreatePotential"
 import { DeletePotential } from "../../../services/survey/subitems/potentials/DeletePotential"
@@ -12,6 +6,9 @@ import { UpdatePotential } from "../../../services/survey/subitems/potentials/Up
 import { UpdatePotentialList } from "../../../services/survey/subitems/potentials/UpdatePotentialList"
 import { Controller } from "../../../utils/Controller"
 import { PotentialValidation } from "../../../validation/PotentialValidation"
+import { unitConverter } from "../../_instances/general_services"
+import { potentialPresenter } from "../../_instances/presenters"
+import { potentialRepo, potentialTypeRepo, referenceCellRepo, settingRepo } from "../../_instances/repositories"
 
 class PotentialController extends Controller {
     constructor(potentialRepo, settingRepo, potentialPresenter, unitConverter, potentialTypeRepo, referenceCellRepo) {
@@ -69,12 +66,12 @@ class PotentialController extends Controller {
 }
 
 const potentialController = new PotentialController(
-    new PotentialRepository,
-    new SettingRepository(),
-    new PotentialPresenter(),
-    new UnitConverter(),
-    new PotentialTypeRepository(),
-    new ReferenceCellRepository()
+    potentialRepo,
+    settingRepo,
+    potentialPresenter,
+    unitConverter,
+    potentialTypeRepo,
+    referenceCellRepo
 )
 
 export const createPotential = (params, onError, onSuccess) => potentialController.create(params, onError, onSuccess)

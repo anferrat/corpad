@@ -2,30 +2,28 @@
 import { Controller } from "../../../utils/Controller"
 import { GetCurrentPosition } from "../../../services/location/GetCurrentPosition"
 import { WatchPosition } from "../../../services/location/WatchPosition"
-import { GeolocationRepository } from "../../../repository/geolocation/GeolocationRepository"
 import { GetMapRegion } from "../../../services/location/GetMapRegion"
-import { GeolocationCalculator } from "../../../services/other/GeolocationCalculator"
 import { WatchDistanseAndBearing } from "../../../services/location/WatchDistanseAndBearing"
 import { GetDeclination } from "../../../services/location/GetDeclination"
-import { Permissions } from "../../../services/other/Permissions"
 import { TimeAdjustmentListener } from "../../../services/location/TimeAdjustmentListener"
-import { ShareLocationWithExtarnalApp } from "../../../services/location/ShareLocationWithExternalApp"
-import { Linking } from "../../../services/other/Linking"
+import { ShareLocationWithExternalApp } from "../../../services/location/ShareLocationWithExternalApp"
 import { GeolocationValidation } from "../../../validation/GeolocationValidation"
+import { geolocationRepo } from "../../_instances/repositories"
+import { geolocationCalculator, linkingService, permissions } from "../../_instances/general_services"
 
 class GeolocationController extends Controller {
-    constructor(geolocationRepo, geolocationCalculator, permissions) {
+    constructor(geolocationRepo, geolocationCalculator, permissions, linkingService) {
         super()
         this.geolocationRepo = geolocationRepo
         this.permissions = permissions
-        this.linkingService = new Linking()
+        this.linkingService = linkingService
         this.getCurrentPositionService = new GetCurrentPosition(geolocationRepo, permissions)
         this.watchPositionService = new WatchPosition(geolocationRepo)
         this.getMapRegionService = new GetMapRegion(geolocationRepo, geolocationCalculator, permissions)
         this.watchDistanceAndBearingService = new WatchDistanseAndBearing(geolocationRepo, geolocationCalculator)
         this.getDeclinationService = new GetDeclination(geolocationRepo)
         this.timeAdjustmentListenerService = new TimeAdjustmentListener(geolocationRepo, permissions)
-        this.shareLocationWithExternalAppService = new ShareLocationWithExtarnalApp(this.linkingService)
+        this.shareLocationWithExternalAppService = new ShareLocationWithExternalApp(this.linkingService)
 
         this.validation = new GeolocationValidation()
     }
@@ -83,7 +81,10 @@ class GeolocationController extends Controller {
 }
 
 const geolocationController = new GeolocationController(
-    new GeolocationRepository(), new GeolocationCalculator(), new Permissions())
+    geolocationRepo,
+    geolocationCalculator,
+    permissions,
+    linkingService)
 
 export const getLocationPermission = (onError, onSuccess) => geolocationController.getPermission(onError, onSuccess)
 

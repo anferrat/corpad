@@ -1,28 +1,22 @@
 import { Controller } from "../utils/Controller"
-import { BasicPresenter } from "../presenters/BasciPresenter"
-import { ListPresenter } from "../presenters/ListPresenter"
-import { FileSystemRepository } from "../repository/fs/FileSystemRepository"
-import { CalculatorRepository } from "../repository/sqlite/CalculatorRepository"
 import { DeleteCalculator } from "../services/calculator/DeleteCalculator"
 import { GetCalculator } from "../services/calculator/GetCalculator"
 import { GetCalculatorListByType } from "../services/calculator/GetCalculatorListByType"
 import { SaveCalculator } from "../services/calculator/SaveCalculator"
 import { WriteCalculatorToFile } from "../services/calculator/WriteCalculatorToFile"
-import { CommaSeparatedFileParser } from "../services/other/CommaSeparatedFileParser"
-import { FileNameGenerator } from "../services/other/FileNameGenerator"
 import { CalculatorValidation } from "../validation/CalculatorValidation"
+import { calculatorRepo, fileSystemRepo } from "./_instances/repositories"
+import { basicPresenter, listPresenter } from "./_instances/presenters"
+import { commaSeparatedFileParser, fileNameGenerator } from "./_instances/general_services"
 
 class CalculatorController extends Controller {
-    constructor(calculatorRepo, fileSystemRepo, listPresenter, basicPresenter) {
+    constructor(calculatorRepo, fileSystemRepo, listPresenter, basicPresenter, commaSeparatedFileParser, fileNameGenerator) {
         super()
-        this.commaSeparatedFileParserService = new CommaSeparatedFileParser()
-        this.fileNameGeneratorService = new FileNameGenerator()
-
         this.saveCalculatorService = new SaveCalculator(calculatorRepo, basicPresenter)
         this.deleteCalculatorService = new DeleteCalculator(calculatorRepo)
         this.getCalculatorService = new GetCalculator(calculatorRepo, basicPresenter)
         this.getCalculatorListByTypeService = new GetCalculatorListByType(calculatorRepo, listPresenter)
-        this.writeCalculatorToFile = new WriteCalculatorToFile(fileSystemRepo, this.commaSeparatedFileParserService, this.fileNameGeneratorService)
+        this.writeCalculatorToFile = new WriteCalculatorToFile(fileSystemRepo, commaSeparatedFileParser, fileNameGenerator)
 
         this.validation = new CalculatorValidation()
     }
@@ -71,10 +65,12 @@ class CalculatorController extends Controller {
 }
 
 const calculatorController = new CalculatorController(
-    new CalculatorRepository(),
-    new FileSystemRepository(),
-    new ListPresenter(),
-    new BasicPresenter(),
+    calculatorRepo,
+    fileSystemRepo,
+    listPresenter,
+    basicPresenter,
+    commaSeparatedFileParser,
+    fileNameGenerator
 )
 
 

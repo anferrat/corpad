@@ -73,21 +73,21 @@ const useSurveyFiles = ({ isCloud, navigateToSurveyFileList }) => {
     const loadSurvey = useCallback(async ({ path, cloudId, fileName }) => {
         const displayPath = isCloud ? `gdrive/Corpad/${fileName}` : path
         dispatch(updateLoader(true, 'Loading file', displayPath))
-        const { response, status, errorMessage } = await loadSurveyFile({ isCloud, path, cloudId })
+        const { response, status } = await loadSurveyFile({ isCloud, path, cloudId })
         if (status === 200)
-            dispatch(setSurveySettings(response.name, response.fileName, response.syncTime, response.isCloud, response.isLoaded))
+            dispatch(setSurveySettings(response.name, response.fileName, response.syncTime, response.isCloud, response.isLoaded, response.uid))
         else if (status !== 101)
             fileListErrorHandler(status)
         dispatch(updateLoader(false, null, null))
     }, [isCloud, fileListErrorHandler])
 
-    const deleteSurvey = useCallback(async ({ path, cloudId, hash, fileName }) => {
+    const deleteSurvey = useCallback(async ({ path, cloudId, hash, fileName, uid }) => {
         //Returns true if file delete successfuly and false if not. (for onRemove animation)
         const confirm = await warningHandler(43, 'Delete')
         if (confirm) {
             const displayPath = isCloud ? `gdrive/Corpad/${fileName}` : path
             dispatch(updateLoader(isCloud, 'Deleteing file', displayPath))
-            const { status } = await deleteSurveyFile({ isCloud, path, hash, cloudId }, fileListErrorHandler)
+            const { status } = await deleteSurveyFile({ isCloud, path, hash, cloudId, uid }, fileListErrorHandler)
             dispatch(updateLoader(false, null, null))
             return status === 200
         }
