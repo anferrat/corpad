@@ -3,7 +3,7 @@ import { useState, useRef, useEffect } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import useOnboardingScreen from "./useOnboardingScreen"
 import { addBluetoothStatusListener, addFileUrlListener, addNetworkStatusListener, initializeApp } from "../../app/controllers/AppController"
-import { resetCurrentSurveySettings, setActiveMultimeterStatus, setBluetoothStatus, setSettingsOnAppLoad, setSurveySettings, updateLoader, updateNetworkStatus } from "../../store/actions/settings"
+import { hideLoader, resetCurrentSurveySettings, setActiveMultimeterStatus, setBluetoothStatus, setSettingsOnAppLoad, setSurveySettings, updateLoader, updateNetworkStatus } from "../../store/actions/settings"
 import { errorHandler } from "../../helpers/error_handler"
 import { SurveyLoadingStatuses } from "../../constants/global"
 import { addMultimeterStatusListener } from "../../app/controllers/MultimeterController"
@@ -36,19 +36,19 @@ const useApp = () => {
     const urlListener = addFileUrlListener(
       (status) => {
         if (status === SurveyLoadingStatuses.SAVING)
-          dispatch(updateLoader(true, 'Saving survey', null))
+          dispatch(updateLoader('Saving survey', null))
         else if (status === SurveyLoadingStatuses.LOADING) {
           dispatch(resetCurrentSurveySettings())
-          dispatch(updateLoader(true, 'Loading file', null))
+          dispatch(updateLoader('Loading file', null))
         }
       },
       (er) => {
         er !== 101 ? errorHandler(er) : null
-        dispatch(updateLoader(false, null, null))
+        dispatch(hideLoader())
       },
       ({ name, fileName, syncTime, isCloud, isLoaded, uid }) => {
         dispatch(setSurveySettings(name, fileName, syncTime, isCloud, isLoaded, uid))
-        dispatch(updateLoader(false, null, null))
+        dispatch(hideLoader())
       }
     )
 

@@ -1,4 +1,4 @@
-import { ItemTypes, SubitemTypes, PipeDiameters, WireColors, TestPointTypes, PermanentPotentialTypes, SortingOptions, ItemStatuses, PipeSchedules, WireGauges, CurrentUnits, AreaUnits, CurrentDensityUnits, FactorUnits, PotentialUnits, AnodeMaterials, ReferenceCellTypes, IsolationTypes, CouponTypes, PipelineMaterials, PipelineProducts, PowerSources, TapOptions, CoarseFineOptions, ExportItemProperties, ExportSubitemProperties, CalculatorTypes, PipelineCoating, IsolationShorted, MultimeterTypes, TimeUnits, MultimeterMeasurementTypes, MultimeterCycles, MultimeterSyncModes } from "./global"
+import { ItemTypes, SubitemTypes, PipeDiameters, WireColors, TestPointTypes, PermanentPotentialTypes, SortingOptions, ItemStatuses, PipeSchedules, WireGauges, CurrentUnits, AreaUnits, CurrentDensityUnits, FactorUnits, PotentialUnits, AnodeMaterials, ReferenceCellTypes, IsolationTypes, CouponTypes, PipelineMaterials, PipelineProducts, PowerSources, TapOptions, CoarseFineOptions, ExportItemProperties, ExportSubitemProperties, CalculatorTypes, PipelineCoating, IsolationShorted, MultimeterTypes, TimeUnits, MultimeterMeasurementTypes, MultimeterCycles, MultimeterSyncModes, ImageSources } from "./global"
 
 export const DefaultNames = Object.freeze({
     [ItemTypes.TEST_POINT]: 'TP',
@@ -410,4 +410,10 @@ export const MultimeterSyncModeLabels = Object.freeze({
     [MultimeterSyncModes.GPS]: 'GPS',
     [MultimeterSyncModes.HIGH_LOW]: 'High/Low',
     [MultimeterSyncModes.CYCLED]: 'Shift'
+})
+
+export const ImageSourceLabels = Object.freeze({
+    [ImageSources.CAMERA]: 'Camera',
+    [ImageSources.LIBRARY]: 'Library',
+    [ImageSources.STORAGE]: 'Storage'
 })

@@ -38,6 +38,7 @@ export class ItemValidation extends Validation {
                         testPointType: this.testPointType.required(),
                         status: this.status,
                         defaultName: this.name,
+                        imageUris: array().of(string()).required()
                     }))
             case ItemTypes.RECTIFIER:
                 return this.validate(obj,
@@ -61,7 +62,8 @@ export class ItemValidation extends Validation {
                         tapCoarse: this.coarseFineValue,
                         tapFine: this.coarseFineValue,
                         maxVoltage: this.number,
-                        maxCurrent: this.number
+                        maxCurrent: this.number,
+                        imageUris: array().of(string()).required()
                     }))
             case ItemTypes.PIPELINE:
                 return this.validate(obj,
@@ -94,7 +96,6 @@ export class ItemValidation extends Validation {
             object({
                 itemId: this.id.required(),
                 itemType: this.itemType.required(),
-                surveyUid: this.uid,
             })
         )
     }

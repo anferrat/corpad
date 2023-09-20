@@ -1,5 +1,5 @@
 import React from 'react'
-import { FlatList, StyleSheet, Animated } from 'react-native'
+import { StyleSheet, Animated } from 'react-native'
 
 const DataLoaderFlatList = (props) => {
     return <Animated.FlatList
@@ -11,8 +11,7 @@ const DataLoaderFlatList = (props) => {
         initialNumToRender={18}
         ListEmptyComponent={props.ListEmptyComponent}
         data={props.data}
-        refreshing={props.refreshing}
-        onRefresh={props.onRefresh}
+        refreshControl={props.refreshControl}
         onEndReachedThreshold={1}
         onEndReached={props.onEndReached}
         renderItem={props.renderItem}

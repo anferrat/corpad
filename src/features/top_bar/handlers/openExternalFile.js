@@ -1,4 +1,4 @@
-import { setSurveySettings, updateLoader } from "../../../store/actions/settings"
+import { hideLoader, setSurveySettings, updateLoader } from "../../../store/actions/settings"
 import { pickExternalSurveyFile } from "../../../app/controllers/survey/SurveyFileController"
 import { errorHandler } from "../../../helpers/error_handler"
 
@@ -7,9 +7,9 @@ export const openExternalSurvey = async (dispatch) => {
     const { status, response } = await pickExternalSurveyFile({
         onStatusChanged: (status, data) => {
             if (status === 'selecting')
-                dispatch(updateLoader(true, 'Selecting file...'))
+                dispatch(updateLoader('Selecting file...'))
             else if (status === 'loading') {
-                dispatch(updateLoader(true, 'Loading file', data.name))
+                dispatch(updateLoader('Loading file', data.name))
             }
         }
     },
@@ -18,6 +18,6 @@ export const openExternalSurvey = async (dispatch) => {
         const { name, fileName, isCloud, syncTime, uid } = response
         dispatch(setSurveySettings(name, fileName, syncTime, isCloud, true, uid))
     }
-    dispatch(updateLoader(false, null, null))
+    dispatch(hideLoader())
 }
 

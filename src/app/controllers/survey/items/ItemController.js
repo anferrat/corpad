@@ -21,11 +21,13 @@ class ItemController extends Controller {
         this.createItemService = new CreateItem(testPointRepo, rectifierRepo, pipelineRepo, basicPresenter)
         this.deleteItemService = new DeleteItem(testPointRepo, rectifierRepo, pipelineRepo, assetRepo, fileSystemRepo)
         this.updateItemService = new UpdateItem(testPointRepo, rectifierRepo, pipelineRepo, itemPresenter)
-        this.getItemService = new GetItem(testPointRepo, rectifierRepo, pipelineRepo, defaultNameRepo, basicPresenter, itemPresenter)
+
         this.searchItemService = new SearchItem(surveyRepo, listPresenter)
         this.getIdListService = new GetItemIdList(testPointRepo, rectifierRepo, pipelineRepo)
         this.getDisplayListService = new GetItemListWithDisplayValues(testPointRepo, rectifierRepo, pipelineRepo)
         this.getItemPhotosService = new GetItemPhotos(assetRepo, fileSystemRepo)
+
+        this.getItemService = new GetItem(testPointRepo, rectifierRepo, pipelineRepo, this.getItemPhotosService, defaultNameRepo, basicPresenter, itemPresenter)
 
         this.geolocationCalculatorService = new GeolocationCalculator()
         this.getNearbyItemsService = new GetNearbyItems(testPointRepo, rectifierRepo, geolocationRepo, this.geolocationCalculatorService)
@@ -94,8 +96,8 @@ class ItemController extends Controller {
 
     getItemPhotos(params, onError = null, onSuccess = null,) {
         return super.controllerHandler(onSuccess, onError, 656, async () => {
-            const { itemId, itemType, surveyUid } = this.validation.getItemPhotos(params)
-            return this.getItemPhotosService.execute(itemId, itemType, surveyUid)
+            const { itemId, itemType } = this.validation.getItemPhotos(params)
+            return this.getItemPhotosService.execute(itemId, itemType)
         })
     }
 }
@@ -129,4 +131,4 @@ export const searchItem = ({ keyword }, onError, onSuccess) => itemController.se
 
 export const getNearbyItems = ({ itemType }, onError, onSuccess) => itemController.getNearbyItems({ itemType }, onError, onSuccess)
 
-export const getItemPhotos = ({ itemId, itemType, surveyUid }, onError, onSuccess) => itemController.getItemPhotos({ itemType, itemId, surveyUid }, onError, onSuccess)
+export const getItemPhotos = ({ itemId, itemType }, onError, onSuccess) => itemController.getItemPhotos({ itemType, itemId }, onError, onSuccess)

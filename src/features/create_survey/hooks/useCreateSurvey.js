@@ -2,7 +2,7 @@ import { useState, useCallback, useEffect, useRef } from 'react'
 import fieldValidation from '../../../helpers/validation'
 import { useDispatch, useSelector } from 'react-redux'
 import { createSurvey, getSurveyFileList } from '../../../app/controllers/survey/SurveyFileController'
-import { setSessionModalVisible, setSurveySettings, updateLoader } from '../../../store/actions/settings'
+import { hideLoader, setSessionModalVisible, setSurveySettings, updateLoader } from '../../../store/actions/settings'
 import { errorHandler } from '../../../helpers/error_handler'
 
 const useCreateSurvey = () => {
@@ -61,14 +61,14 @@ const useCreateSurvey = () => {
         const { valid, value } = fieldValidation(name.name, 'name')
         if (valid) {
             const name = value === null ? 'New survey' : value
-            dispatch(updateLoader(true, 'Creating survey', `Name: ${name}`))
+            dispatch(updateLoader('Creating survey', `Name: ${name}`))
             const path = surveyList[selectedSurveyIndex] ? surveyList[selectedSurveyIndex].path : null
             await createSurvey(
                 { isBlank, isCloud, path, name },
                 (er) => errorHandler(er),
                 ({ name, fileName, isCloud, syncTime, uid }) =>
                     dispatch(setSurveySettings(name, fileName, syncTime, isCloud, true, uid)))
-            dispatch(updateLoader(false, null, null))
+            dispatch(hideLoader())
         }
         else {
             errorHandler(506)

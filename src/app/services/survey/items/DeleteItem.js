@@ -25,7 +25,7 @@ export class DeleteItem {
 
     async execute(id, itemType) {
         const assets = await this.assetRepo.getByItemId(id, itemType)
-        await Promise.all(assets.map(({ fileName }) => this.fileSystemRepo.deleteFile(FileSystemLocations.ASSETS, fileName)))
+        await Promise.all(assets.map(({ fileName }) => this.fileSystemRepo.deleteFile(FileSystemLocations.CURRENT_ASSETS, fileName)))
         await this._deleteItem(itemType, id)
     }
 }

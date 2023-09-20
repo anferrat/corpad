@@ -12,7 +12,7 @@ export class ReadCloudSurveyFile {
     }
 
 
-    async execute(cloudId) {
+    async execute(cloudId, onDownload) {
         const internetOn = await this.networkRepo.checkConnection()
         if (internetOn) {
             const { file, fileName } = await this.cloudFileSystemRepo.readFile(cloudId)
@@ -22,7 +22,8 @@ export class ReadCloudSurveyFile {
             const cloudAssetFiles = await this.cloudFileSystemRepo.readSurveyAssetFolder(surveyFile.survey.uid)
             const { cloudFilesToDownload, missingAssets, localFilesToCopy } = await this.assetFileDownloadControl.execute(surveyFile.assets, cloudAssetFiles, localAssetFiles)
             //add warning message for missing assets
-            await this.downloadFiles.execute(cloudFilesToDownload, currentAssetFolderPath, ({ total, current }) => console.log(`total: ${total}, current: ${current}`))
+            console.log(onDownload)
+            await this.downloadFiles.execute(cloudFilesToDownload, currentAssetFolderPath, ({ total, current }) => onDownload ? onDownload(total, current + 1) : null)
             await this.fileSystemRepo.copyFiles(currentAssetFolderPath, localFilesToCopy)
             return {
                 fileName,

@@ -21,10 +21,10 @@ export class CopySurveyFileToCloud {
         }
     }
 
-    async _copyAssets(oldUid, newUid) {
+    async _copyAssets(oldUid, newUid, onUpload) {
         //1. Upload all assets from local to cloud
         const localAssetFiles = await this.fileSystemRepo.readDir(FileSystemLocations.ASSETS, oldUid)
-        await this.uploadAssetsService.execute(localAssetFiles, newUid, ({ total, current }) => console.log(`total: ${total}, current: ${current}`))
+        await this.uploadAssetsService.execute(localAssetFiles, newUid, ({ total, current }) => onUpload ? onUpload(total, current + 1) : null)
         //2. Copy all assets to local asset folder with new uid. Avoids downloading files in future when accessing cloud file 
         try {
             const newLocalAssetPath = await this.fileSystemRepo.getLocation(FileSystemLocations.ASSETS, newUid)
@@ -37,7 +37,7 @@ export class CopySurveyFileToCloud {
 
 
 
-    async execute(path) {
+    async execute(path, onUpload) {
         //1. Check if internet is on
         const internetOn = await this.networkRepo.checkConnection()
         if (internetOn) {
@@ -58,7 +58,7 @@ export class CopySurveyFileToCloud {
             //8. Write text file to cloud
             await this.cloudFileSystemRepo.createFile(fileName, content)
             //9. Copy assets 
-            await this._copyAssets(oldUid, newUid)
+            await this._copyAssets(oldUid, newUid, onUpload)
         }
         else throw new Error(errors.NETWORK, 'Unable to connect to internet', 'No internet', 102)
     }

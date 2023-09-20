@@ -1,9 +1,10 @@
 import React from 'react'
 import { StyleSheet } from 'react-native'
-import Pressable from '../../../../components/Pressable'
-import { androidRipple } from '../../../../styles/styles'
+import Pressable from '../../../../../components/Pressable'
+import { androidRipple } from '../../../../../styles/styles'
 import { Icon, Text } from '@ui-kitten/components'
-import { primary } from '../../../../styles/colors'
+import { primary } from '../../../../../styles/colors'
+import { dimensions } from './size'
 
 
 const AddPhotoButton = ({ onPress, limitReached }) => {
@@ -34,8 +35,8 @@ export default AddPhotoButton
 
 const styles = StyleSheet.create({
     container: {
-        width: 120,
-        height: 120,
+        width: dimensions.length,
+        height: dimensions.length,
         alignItems: 'center',
         justifyContent: 'center',
         borderWidth: 1,

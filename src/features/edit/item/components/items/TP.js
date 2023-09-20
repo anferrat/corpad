@@ -9,18 +9,20 @@ import { globalStyle } from '../../../../../styles/styles'
 import { TestPointTypes } from '../../../../../constants/global'
 import { TestPointTypeLabels } from '../../../../../constants/labels'
 import { TestPointTypeIcons } from '../../../../../constants/icons'
+import PhotoView from '../photos/PhotoView'
 
 const testPointTypes = Object.values(TestPointTypes).map(type => ({ item: TestPointTypeLabels[type], index: type }))
 const testPointAccessoryList = testPointTypes.map(({ index }) => ({ icon: TestPointTypeIcons[index], pack: 'cp' }))
 
 
 const TestPointView = ({ data, createSubitem, itemType, update, validate, updateLatAndLon }) => {
-    const { name, status, testPointType, latitude, longitude, location, comment, defaultName, valid } = data
+    const { id, name, status, testPointType, latitude, longitude, location, comment, defaultName, valid, imageUris } = data
     return (
         <>
             <StatusView
                 update={update}
                 status={status} />
+
             <View style={globalStyle.card}>
                 <Input
                     update={update}
@@ -68,6 +70,10 @@ const TestPointView = ({ data, createSubitem, itemType, update, validate, update
                     value={comment}
                     property='comment'
                     placeholder='Type your comments here' />
+                <PhotoView
+                    itemId={id}
+                    itemType={itemType}
+                    imageUris={imageUris} />
                 <View style={styles.button}>
                     <CreateSubitemButton
                         title={'Add reading'}

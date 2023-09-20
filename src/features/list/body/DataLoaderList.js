@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from 'react'
-import { ActivityIndicator, StyleSheet, View, Animated } from 'react-native'
+import { ActivityIndicator, StyleSheet, View, Animated, RefreshControl } from 'react-native'
 import { useSelector, useDispatch } from 'react-redux'
 import { loadListState, setOffset, setRefresh, deleteItemFromList, updateList, resetListState } from '../../../store/actions/list'
 import { getListStateByType } from '../../../helpers/functions'
@@ -24,7 +24,7 @@ const ItemList = ({ itemType, navigateToView }) => {
         inputRange: [minScroll, minScroll + 1],
         outputRange: [0, 1],
         extrapolateLeft: 'clamp',
-    });
+    })
 
     const minusScrollY = Animated.multiply(clampedScrollY, -1);
 
@@ -32,19 +32,13 @@ const ItemList = ({ itemType, navigateToView }) => {
         minusScrollY,
         -HEADER_HEIGHT + 1,
         0,
-    );
-
-    const translateList = translateY.interpolate({
-        inputRange: [-HEADER_HEIGHT, 0],
-        outputRange: [0, HEADER_HEIGHT],
-        extrapolate: 'clamp'
-    })
+    )
 
     const opacity = translateY.interpolate({
         inputRange: [-HEADER_HEIGHT, 0],
-        outputRange: [0.4, 1],
+        outputRange: [1, 1],
         extrapolate: 'clamp',
-    });
+    })
 
     useEffect(() => {
         const onUpdateHandler = EventRegister.addEventListener('GLOBAL_ITEM_UPDATED', async (updated) => {
@@ -152,19 +146,25 @@ const ItemList = ({ itemType, navigateToView }) => {
     //Keep timeModified as part of the key. When card is updated, it will reset internal card state
     const keyExtractor = React.useCallback((item) => itemType + item.uid + item.timeModified, [itemType])
 
-    const Header = React.memo(() => <ListHeader dataType={itemType} translateY={translateY} opacity={opacity} />)
+    const Header = React.memo(() => <ListHeader
+        dataType={itemType}
+        translateY={translateY}
+        opacity={opacity} />)
 
     return (
         <>
             <Header />
             <FlatList
-                style={{ transform: [{ translateY: translateList }] }}
                 contentContainerStyle={styles.container}
                 keyExtractor={keyExtractor}
                 ListEmptyComponent={renderEmptyListComponent}
                 data={t.itemList}
-                refreshing={t.settings.refreshing}
-                onRefresh={refreshHandler}
+                refreshControl={<RefreshControl
+                    progressViewOffset={40}
+                    onRefresh={refreshHandler}
+                    refreshing={t.settings.refreshing}
+                    colors={[primary]}
+                />}
                 onEndReachedThreshold={6}
                 onEndReached={offsetHandler}
                 renderItem={renderItem}
@@ -195,6 +195,7 @@ const styles = StyleSheet.create({
     },
     container: {
         flexGrow: 1,
-        paddingBottom: 52
+        paddingBottom: 52,
+        marginTop: 40
     }
 })

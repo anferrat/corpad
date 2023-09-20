@@ -1,4 +1,5 @@
 import { Error, errors } from "../../../utils/Error"
+import { guid } from "../../../utils/guid"
 
 export class CreateSurveyFromTemplate {
     constructor(fileSystemRepo, validation, jsonImportService, surveyFileConverter, surveyLoadStatusService) {

@@ -1,6 +1,5 @@
 import React from 'react'
-import { StyleSheet, FlatList } from 'react-native'
-import AddPhotoButton from './AddPhotoButton'
+import { StyleSheet, FlatList, View } from 'react-native'
 import PhotoListItem from './PhotoListItem'
 import ImageView from './ImageView'
 import IconLine from '../IconLine'
@@ -16,12 +15,8 @@ const getItemLayout = (data, index) => {
 
 const keyExtractor = (item) => item.fileName
 
-const PhotoListView = ({ onAddPhoto, onPhotoPress, photos, onImageViewClose, imageView, limitReached, onDeletePhoto, listRef, isVisible, onSharePhoto }) => {
-    const addButton = () =>
-        <AddPhotoButton
-            onPress={onAddPhoto}
-            limitReached={limitReached} />
-
+const PhotoListView = ({ onPhotoPress, photos, onImageViewClose, imageView, onDeletePhoto, listRef, isVisible, onSharePhoto }) => {
+ 
     const uriList = React.useMemo(() => photos.map(({ source }) => source), [photos])
 
     const renderItem = React.useCallback(({ item, index }) => {
@@ -33,7 +28,8 @@ const PhotoListView = ({ onAddPhoto, onPhotoPress, photos, onImageViewClose, ima
     }, [onPhotoPress])
     if (isVisible)
         return (
-            <>
+            <View
+                style={styles.mainView}>
                 {photos.length > 0 ? <IconLine
                     value={`Images (${photos.length}/6)`}
                     icon={'image-outline'} /> : null}
@@ -46,7 +42,6 @@ const PhotoListView = ({ onAddPhoto, onPhotoPress, photos, onImageViewClose, ima
                     data={photos}
                     contentContainerStyle={styles.container}
                     horizontal={true}
-
                     showsHorizontalScrollIndicator={false} />
                 <ImageView
                     images={uriList}
@@ -55,7 +50,7 @@ const PhotoListView = ({ onAddPhoto, onPhotoPress, photos, onImageViewClose, ima
                     onDeletePhoto={onDeletePhoto}
                     onSharePhoto={onSharePhoto}
                 />
-            </>
+            </View>
         )
     else return null
 }
@@ -63,6 +58,9 @@ const PhotoListView = ({ onAddPhoto, onPhotoPress, photos, onImageViewClose, ima
 export default PhotoListView
 
 const styles = StyleSheet.create({
+    mainView: {
+        paddingBottom: 0
+    },
     container: {
         flexGrow: 1,
         marginTop: 12,

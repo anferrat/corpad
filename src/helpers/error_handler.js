@@ -16,7 +16,7 @@ const errorTitles = {
 
 const warningCodes = {
     10: 'Are you sure you want to proceed?',
-    12: 'Are you sure you want to exit to the main screen? Any changes that you have made to the survey will be lost.',
+    12: 'Are you sure you want to exit to the main screen? Any changes that you have made to the survey without saving will be lost.',
     21: 'Deleting this potential type will also delete ALL potential readings of this type in every test point within the survey. This action cannot be reversed, proceed with caution.',
     22: 'Deleting reference cell will also delete ALL potential fields and readings that uses this reference. This action cannot be reversed.',
     43: 'Are you sure you want to delete this survey file?',
@@ -50,6 +50,7 @@ const errorCodes = {
     110: 'Unable to listen for bluetooth state',
     111: 'No items to export.',
     112: 'Unable to obtain user location.',
+    113: 'Survey is currently being saved. Please wait until operation is completed.',
     301: 'Unable to update network status.',
     302: 'Unable to complete operation. Need to sign in.',
     303: 'Unable to sign in with Google Account',

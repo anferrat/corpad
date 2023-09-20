@@ -21,13 +21,23 @@ export const SET_ACTIVE_MULTIMETER = 'SET_ACTIVE_MULTIMETER'
 export const SET_ACTIVE_MULTIMETER_STATUS = 'SET_ACTIVE_MULTIMETER_STATUS'
 export const SET_TIME_ADJUSTMENT = 'SET_ACTIVE_MULTIMETER_TIME_ADJUSTMENT'
 export const SET_ACTIVE_MULTIMETER_SETTINGS = 'SET_ACTIVE_MULTIMETER_SETTINGS'
+export const UPDATE_LOADER_PROGRESS = 'UPDATE_LOADER_PROGRESS'
+export const HIDE_LOADER = 'HIDE_LOADER'
 
 export const updateSetting = (setting, value) => {
     return { type: UPDATE_SETTING, setting: setting, value: value }
 }
 
-export const updateLoader = (visible, title, text) => (
-    { type: UPDATE_LOADER, visible: visible, title, text }
+export const updateLoader = (title, text) => (
+    { type: UPDATE_LOADER, title, text }
+)
+
+export const updateLoaderProgress = (visible, title, total, count) => (
+    { type: UPDATE_LOADER_PROGRESS, visible: visible, title, total, count }
+)
+
+export const hideLoader = () => (
+    { type: HIDE_LOADER }
 )
 
 export const loadSettings = (settings) => {

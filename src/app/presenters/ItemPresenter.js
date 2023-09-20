@@ -37,13 +37,14 @@ export class ItemPreseneter {
                     comment: true,
                     licenseNumber: true
                 }
-            default: throw new Error(errors.GENERAL, `No such item type as ${itemType}`,'Wrong item type', 109)
+            default: throw new Error(errors.GENERAL, `No such item type as ${itemType}`, 'Wrong item type', 109)
         }
     }
 
-    execute(item, defaultName) {
+    execute(item, defaultName, photos) {
         return {
             ...item,
+            imageUris: photos.map(({ source }) => source.uri),
             defaultName: defaultName,
             valid: this._getValidObject(item.itemType)
         }

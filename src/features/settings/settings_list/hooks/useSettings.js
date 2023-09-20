@@ -4,20 +4,24 @@ import { resetCurrentSurveySettings, updateLoader } from "../../../../store/acti
 import { resetSurvey } from "../../../../app/controllers/survey/SurveyController"
 import { errorHandler, warningHandler } from "../../../../helpers/error_handler"
 import { hapticMedium } from "../../../../native_libs/haptics"
+import { useSelector } from "react-redux"
 
 const useSettings = () => {
+    const savingInProgress = useSelector(state => state.settings.currentSurvey.savingInProgress)
     const navigation = useNavigation()
     const dispatch = useDispatch()
 
     const onExit = async () => {
-        hapticMedium()
-        const confirm = await warningHandler(12, 'Exit', 'Cancel')
-        if (confirm) {
-            dispatch(updateLoader(true, 'Exiting survey'))
-            await resetSurvey(er => errorHandler(er))
-            dispatch(resetCurrentSurveySettings())
-            dispatch(updateLoader(false, null, null))
+        if (!savingInProgress) {
+            hapticMedium()
+            const confirm = await warningHandler(12, 'Exit', 'Cancel')
+            if (confirm) {
+                dispatch(updateLoader('Exiting survey'))
+                await resetSurvey(er => errorHandler(er))
+                dispatch(resetCurrentSurveySettings())
+            }
         }
+        else errorHandler(113)
     }
 
     const navigateToDetails = (screen) => {

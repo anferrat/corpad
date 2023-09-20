@@ -10,9 +10,10 @@ export class UploadAssets {
         await this.cloudFileSystemRepo.getAssetFolderId()
         const surveyAssetFolder = await this.cloudFileSystemRepo.getSurveyAssetFolderId(uid)
         for (let i = 0; i < fileList.length; i++) {
+            callback({ total: fileList.length, current: i })
             const { filename, path } = fileList[i]
             await this.cloudFileSystemRepo.upload(path, filename, [surveyAssetFolder], FileMimeTypes.IMAGE)
-            callback({ total: fileList.length, current: i })
         }
+        callback({ total: 0, current: 0 })
     }
 }
