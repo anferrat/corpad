@@ -1,13 +1,15 @@
 import { useRef, useEffect, useCallback } from "react"
 import { useSelector, useDispatch } from "react-redux"
 import { errorHandler } from "../../../../helpers/error_handler"
-import { loadEditState, resetEditState, resetState, updateCurrentCoordinates, updateEditItemProperty, updateTapSetting, validateProperty } from "../../../../store/actions/item"
+import { addEditImage, loadEditState, resetEditState, resetState, updateCurrentCoordinates, updateEditItemProperty, updateTapSetting, validateProperty } from "../../../../store/actions/item"
 import { useNavigation } from "@react-navigation/native"
 import { deleteItem, getItemById, updateItem } from "../../../../app/controllers/survey/items/ItemController"
 import { EventRegister } from "react-native-event-listeners"
 import { createSubitem as createSubitemRequest } from "../../../../app/controllers/survey/subitems/SubitemController"
+import { updateItemPhotos } from "../../../../app/controllers/survey/other/MediaController"
 
 const useItemData = ({ itemId, itemType, isNew, navigateToView, navigateToSubitem }) => {
+
     const item = useSelector(state => state.item.edit)
     const loading = useSelector(state => state.item.edit.loading)
     const navigation = useNavigation()
@@ -15,19 +17,24 @@ const useItemData = ({ itemId, itemType, isNew, navigateToView, navigateToSubite
     const deleteOnExit = useRef(isNew)
     const componentMounted = useRef(true)
 
+
     useEffect(() => {
         componentMounted.current === true
         const loadData = async () => {
-            const { status, response } = await getItemById({ id: itemId, itemType }, er => errorHandler(er, navigation.goBack))
+            const { status, response } = await getItemById({ id: itemId, itemType })
             if (status === 200 && componentMounted.current)
                 dispatch(loadEditState(response))
+            else
+                errorHandler(status, navigation.goBack)
         }
+
         if (loading)
             loadData()
     }, [loading])
 
     useEffect(() => {
         const onSaveHandler = EventRegister.addEventListener('onItemSave', async (item) => {
+            const images = await updateItemPhotos({ imageUris: item.imageUris, itemId, itemType }, er => errorHandler(er))
             const { status } = await updateItem(
                 { itemType, ...item },
                 er => errorHandler(er),
@@ -36,7 +43,7 @@ const useItemData = ({ itemId, itemType, isNew, navigateToView, navigateToSubite
                     EventRegister.emit('GLOBAL_ITEM_UPDATED', { itemId, itemType })
                 }
             )
-            if (status === 200) {
+            if (status === 200 && images.status === 200) {
                 deleteOnExit.current = false
                 navigateToView()
             }
@@ -44,9 +51,16 @@ const useItemData = ({ itemId, itemType, isNew, navigateToView, navigateToSubite
                 dispatch(updateEditItemProperty(false, 'saving'))
             }
         })
+
+        const onPhotoAdded = EventRegister.addEventListener('PHOTO_ADDED', (photo) => {
+            if (photo.itemId === itemId && photo.itemType === itemType) {
+                dispatch(addEditImage(photo.uri))
+            }
+        })
         return () => {
             dispatch(resetEditState())
             EventRegister.removeEventListener(onSaveHandler)
+            EventRegister.removeEventListener(onPhotoAdded)
             componentMounted.current = false
             if (deleteOnExit.current) {
                 deleteItem({ id: itemId, itemType })

@@ -1,3 +1,5 @@
+export const PHOTO_LIMIT = 6
+
 export const ItemTypes = Object.freeze({
     TEST_POINT: 'TEST_POINT',
     PIPELINE: 'PIPELINE',

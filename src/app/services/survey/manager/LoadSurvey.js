@@ -10,7 +10,7 @@ export class LoadSurvey {
         this.warningHandler = warningHandler
     }
 
-    async execute(fileId) {
+    async execute(fileId, onDownload) {
         //fileId - is path in case of local survey, cloudId in case of cloud survey, instance of ExternalFile in case of external survey
 
         // 1. Checking isLoaded. If there is already survey loaded returning its value instead of ovewriting database
@@ -18,7 +18,7 @@ export class LoadSurvey {
         if (!loaded.isLoaded) {
 
             //2. Reading file and importing Json
-            const { hash, cloudId, isCloud, isNew, fileName, name, uid } = await this._importJson(fileId)
+            const { hash, cloudId, isCloud, isNew, fileName, name, uid } = await this._importJson(fileId, onDownload)
             const syncTime = isNew ? null : Date.now()
 
             //3. Updating settings with new meta data
@@ -38,9 +38,9 @@ export class LoadSurvey {
         }
     }
 
-    async _importJson(fileId) {
+    async _importJson(fileId, onDownload) {
         //1. Read file from different sources and get surveyFile and info
-        const { surveyFile, hash, cloudId, isCloud, isNew, fileName, isRecovered } = await this.readSurveyFileService.execute(fileId)
+        const { surveyFile, hash, cloudId, isCloud, isNew, fileName, isRecovered } = await this.readSurveyFileService.execute(fileId, onDownload)
         try {
             //2. Attemt to fast-import file (faster, but fails if even one error is found)
             await this.jsonImportService.execute(surveyFile)

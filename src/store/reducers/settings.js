@@ -1,5 +1,5 @@
 
-import { UPDATE_SETTING, LOAD_SETTINGS, SET_SURVEY_SAVING_STATUS, UPDATE_SURVEY_NAME, RESET_CURRENT_SURVEY_SETTINGS, LOAD_SESSION_STATE, UPDATE_ONBOARDING, SET_EXPORT_MODAL, UPDATE_LOADER, UPDATE_SESSION, UPDATE_NETWORK_STATUS, SET_SESSION_MODAL_VISIBLE, UPDATE_CURRENT_SURVEY_SETTINGS, SET_SETTINGS_ON_APP_LOAD, SET_SURVEY_SETTINGS, UPDATE_BOTTOM_SHEET_CONTENT, SET_BLUETOOTH_SCANNING, SET_BLUETOOTH_STATUS, SET_ACTIVE_MULTIMETER, SET_ACTIVE_MULTIMETER_STATUS, SET_TIME_ADJUSTMENT, SET_ACTIVE_MULTIMETER_SETTINGS } from "../actions/settings"
+import { UPDATE_SETTING, LOAD_SETTINGS, SET_SURVEY_SAVING_STATUS, UPDATE_SURVEY_NAME, RESET_CURRENT_SURVEY_SETTINGS, LOAD_SESSION_STATE, UPDATE_ONBOARDING, SET_EXPORT_MODAL, UPDATE_LOADER, UPDATE_SESSION, UPDATE_NETWORK_STATUS, SET_SESSION_MODAL_VISIBLE, UPDATE_CURRENT_SURVEY_SETTINGS, SET_SETTINGS_ON_APP_LOAD, SET_SURVEY_SETTINGS, UPDATE_BOTTOM_SHEET_CONTENT, SET_BLUETOOTH_SCANNING, SET_BLUETOOTH_STATUS, SET_ACTIVE_MULTIMETER, SET_ACTIVE_MULTIMETER_STATUS, SET_TIME_ADJUSTMENT, SET_ACTIVE_MULTIMETER_SETTINGS, UPDATE_LOADER_PROGRESS, HIDE_LOADER } from "../actions/settings"
 
 const initialState = {
     bottomSheetContent: {  //BottomSheet component
@@ -15,7 +15,13 @@ const initialState = {
     loader: { //Loader component
         title: null,
         text: null,
-        visible: false
+        visible: false,
+        progress: {
+            visible: false,
+            title: null,
+            total: 0,
+            count: 0
+        }
     },
     exportModal: { // ExportModalComponent
         visible: false,
@@ -84,10 +90,29 @@ const settings = (state = initialState, action) => {
             return {
                 ...state,
                 loader: {
+                    ...state.loader,
                     title: action.title ?? state.loader.title,
                     text: action.text ?? state.loader.text,
-                    visible: action.visible ?? state.loader.visible
+                    visible: true
                 }
+            }
+        case UPDATE_LOADER_PROGRESS:
+            return {
+                ...state,
+                loader: {
+                    ...state.loader,
+                    progress: {
+                        visible: action.visible,
+                        title: action.title,
+                        total: action.total,
+                        count: action.count
+                    }
+                }
+            }
+        case HIDE_LOADER:
+            return {
+                ...state,
+                loader: initialState.loader,
             }
         case LOAD_SETTINGS:
             return {

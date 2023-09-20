@@ -9,10 +9,11 @@ export class DownloadFiles {
     async execute(cloudFileList, destinationFolderPath, callback) {
         const tempFolderPath = await this.fileSystemRepo.getLocation(FileSystemLocations.TEMP_DOWNLOADS)
         for (let i = 0; i < cloudFileList.length; i++) {
+            callback({ total: cloudFileList.length, current: i + 1 })
             const { cloudId, name } = cloudFileList[i]
             await this.cloudFileSystemRepo.download(cloudId, `${tempFolderPath}/file.download`)
             await this.fileSystemRepo.copyFile(`${tempFolderPath}/file.download`, `${destinationFolderPath}/${name}`)
-            callback({ total: cloudFileList.length, current: i + 1 })
         }
+        callback({ total: 0, current: 0 })
     }
 }

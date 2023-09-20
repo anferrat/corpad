@@ -1,4 +1,4 @@
-import { object, string } from "yup"
+import { object, string, mixed } from "yup"
 import { Validation } from "../utils/Validation"
 
 export class SurveyFileValidation extends Validation {
@@ -30,7 +30,7 @@ export class SurveyFileValidation extends Validation {
                 isCloud: this.bool.required(),
                 path: string().nullable(),
                 cloudId: string().nullable(),
-                uid: this.uid
+                onDownload: mixed()
             }))
     }
 

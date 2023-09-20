@@ -3,20 +3,28 @@ import { useBottomSheetNavigation } from "../../../hooks/bottom_sheet/useBottomS
 import { getItemPhotos } from "../../../app/controllers/survey/items/ItemController"
 import { errorHandler, warningHandler } from "../../../helpers/error_handler"
 import { EventRegister } from "react-native-event-listeners"
-import { deletePhotoFromAssets, sharePhoto } from "../../../app/controllers/survey/other/MediaController"
+import { addPhotoToAssets, deletePhotoFromAssets, sharePhoto } from "../../../app/controllers/survey/other/MediaController"
 import { FileMimeTypes, ItemTypes } from "../../../constants/global"
-import { useSelector } from "react-redux"
-
-const PHOTO_LIMIT = 6
+import { useDispatch } from "react-redux"
+import { updateLoader, hideLoader } from "../../../store/actions/settings"
+import { ImageSourceLabels } from "../../../constants/labels"
+import { useIsFocused } from "@react-navigation/native"
+import { PHOTO_LIMIT } from "../../../constants/global"
 
 const usePhotos = ({ itemId, itemType }) => {
     const listRef = useRef()
-    const surveyUid = useSelector(state => state.settings.currentSurvey.uid)
+    const isFocused = useIsFocused()
+    const dispatch = useDispatch()
     const [photos, setPhotos] = useState([])
     const [imageView, setImageView] = useState({
         index: 0,
         visible: false
     })
+
+    const scrollToStart = useCallback(() => {
+        if (listRef.current.scrollToIndex)
+            listRef.current.scrollToIndex({ index: 0, animated: true })
+    }, [])
 
     const limitReached = photos.length >= PHOTO_LIMIT
     const isVisible = itemType !== ItemTypes.PIPELINE
@@ -25,38 +33,47 @@ const usePhotos = ({ itemId, itemType }) => {
 
     useEffect(() => {
         const loadData = async () => {
-            const { status, response } = await getItemPhotos({ itemId, itemType, surveyUid })
+            const { status, response } = await getItemPhotos({ itemId, itemType })
             if (status === 200) {
                 setPhotos(response)
+                console.log(response.length)
+                if (response.length > 0)
+                    scrollToStart()
             }
             else
                 errorHandler(status)
         }
-        loadData()
-        const onPhotoAdd = EventRegister.addEventListener('ASSET_ADDED', (asset) => {
-            const { parentId, parentType } = asset
-            if (parentId === itemId && parentType === itemType) {
-                setPhotos(state => [asset].concat(state))
-                if (listRef.current.scrollToIndex)
-                    listRef.current.scrollToIndex({ index: 0, animated: true })
+        if (isFocused)
+            loadData()
+
+        const onPhotoAdd = EventRegister.addEventListener('PHOTO_ADDED', async (photo) => {
+            if (photo.itemId === itemId && photo.itemType === itemType && isFocused) {
+                dispatch(updateLoader('Adding image', ImageSourceLabels[photo.imageSource]))
+                const { status, response } = await addPhotoToAssets({ uri: photo.uri, name: photo.name, itemId, itemType })
+                if (status === 200) {
+                    setPhotos(state => [response].concat(state))
+                    EventRegister.emit('ASSET_ADDED', response)
+                    scrollToStart()
+                }
+                else errorHandler(status)
+                dispatch(hideLoader())
             }
         })
 
         const onPhotoRemoved = EventRegister.addEventListener('ASSET_REMOVED', (item) => {
-            if (item.itemId === itemId && item.itemType === itemType) {
+            if (item.itemId === itemId && item.itemType === itemType && isFocused) {
                 setPhotos(state => {
-                    if (state.length > 1 && listRef.current.scrollToIndex)
-                        listRef.current.scrollToIndex({ index: 0, animated: true })
+                    if (state.length > 1)
+                        scrollToStart()
                     return state.filter(({ id }) => id !== item.assetId)
                 })
-                setImageView({ index: 0, visible: false })
             }
         })
         return () => {
             EventRegister.removeEventListener(onPhotoAdd)
             EventRegister.removeEventListener(onPhotoRemoved)
         }
-    }, [])
+    }, [isFocused])
 
 
 
@@ -71,10 +88,14 @@ const usePhotos = ({ itemId, itemType }) => {
     const onDeletePhoto = async () => {
         if (imageView.visible) {
             const confirm = await warningHandler(48, 'Delete', 'Cancel')
-            if (confirm)
-                deletePhotoFromAssets({ assetId: photos[imageView.index].id, fileName: photos[imageView.index].fileName, parentId: itemId, parentType: itemType, surveyUid },
+            if (confirm) {
+                setImageView({ index: 0, visible: false })
+                dispatch(updateLoader('Deleting photo'))
+                await deletePhotoFromAssets({ assetId: photos[imageView.index].id, fileName: photos[imageView.index].fileName, parentId: itemId, parentType: itemType },
                     er => errorHandler(er),
                     ({ currentTime }) => EventRegister.emit('ASSET_REMOVED', { assetId: photos[imageView.index].id, itemType, itemId, currentTime }))
+                dispatch(hideLoader())
+            }
         }
     }
 

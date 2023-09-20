@@ -27,7 +27,7 @@ export class AssetRepository extends SQLiteRepository {
     async getByItemId(itemId, itemType) {
         try {
             const itemIdField = itemType === ItemTypes.TEST_POINT ? 'testPointId' : 'rectifierId'
-            const result = await this.runSingleQueryTransaction(`SELECT * FROM assets WHERE ${itemIdField}=? ORDER BY timeModified`, [itemId])
+            const result = await this.runSingleQueryTransaction(`SELECT * FROM assets WHERE ${itemIdField}=? ORDER BY timeModified DESC`, [itemId])
             return this.generateArray(result.rows.length, result.rows.item).map(({ id, uid, comment, mediaType, fileName, timeCreated, timeModified }) =>
                 new Asset(id, uid, comment, fileName, mediaType, timeCreated, timeModified, itemType, itemId))
         }
@@ -63,5 +63,21 @@ export class AssetRepository extends SQLiteRepository {
         }
     }
 
-
+    async update(assets, parentType, parentId) {
+       
+        try {
+            const itemIdField = parentType === ItemTypes.TEST_POINT ? 'testPointId' : 'rectifierId'
+            await super.runMultiQueryTransaction(tx => ([
+                super.runQuery(tx, `DELETE FROM assets WHERE ${itemIdField}=?`, [parentId]),
+                assets.length > 0 ? assets.map(asset => {
+                    const { id, uid, comment, mediaType, fileName, timeCreated, timeModified } = asset
+                    return super.runQuery(tx, `INSERT INTO assets (id, uid, comment, mediaType, fileName, timeCreated, timeModified, ${itemIdField}) VALUES (?,?,?,?,?,?,?,?)`, [id, uid, comment, mediaType, fileName, timeCreated, timeModified, parentId])
+                }) : null
+            ]))
+            console.log('success')
+        }
+        catch (er) {
+            throw new Error(errors.DATABASE, 'Unable to update assets', er)
+        }
+    }
 }

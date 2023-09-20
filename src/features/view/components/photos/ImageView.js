@@ -1,5 +1,5 @@
 import React from 'react'
-import { View, StyleSheet, StatusBar } from 'react-native'
+import { StyleSheet, StatusBar } from 'react-native'
 import ImageViewDefault from 'react-native-image-viewing'
 import ImageViewControlBar from './ImageViewControlBar'
 

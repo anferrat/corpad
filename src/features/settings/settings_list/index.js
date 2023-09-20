@@ -8,6 +8,7 @@ import useSettings from './hooks/useSettings'
 export const SettingsList = () => {
     const {
         onExit,
+        exitEnabled,
         navigateToExport,
         navigateToAbout,
         navigateToPotentials,
@@ -87,7 +88,7 @@ export const SettingsList = () => {
             <ListItem
                 icon='log-out'
                 title='Exit without saving'
-                subtitle='Exit to the main screen. All changes made after last sync will not be saved in file. Use with caution.'
+                subtitle={'Exit to the main screen. All changes made after last sync will not be saved in file. Use with caution.'}
                 onPress={onExit} />
         </ScrollView>
     )

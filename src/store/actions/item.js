@@ -12,6 +12,8 @@ export const UPDATE_TAP_SETTING = 'UPDATE_TAP_SETTING'
 export const RESET_EDIT_STATE = 'RESET_EDIT_STATE'
 export const VALIDATE_VIEW_PROPERTY = 'VALIDATE_VIEW_PROPERTY'
 export const SUBMIT_VIEW_PROPERTY = 'SUBMIT_VIEW_PROPERTY'
+export const ADD_EDIT_IMAGE = 'ADD_EDIT_IMAGE'
+export const DELETE_EDIT_IMAGE = 'DELETE_EDIT_IMAGE'
 
 export const updateEditItemProperty = (value, property, valid = undefined) => {
     return { type: UPDATE_EDIT_ITEM_PROPERTY, value: value, property: property, valid: valid }
@@ -44,6 +46,14 @@ export const saveState = () => {
 export const updateViewProperty = (value, property) => {
     return { type: UPDATE_VIEW_PROPERTY, value: value, property: property }
 }
+
+export const addEditImage = (uri) => (
+    { type: ADD_EDIT_IMAGE, uri }
+)
+
+export const deleteEditImage = (index) => (
+    { type: DELETE_EDIT_IMAGE, index }
+)
 
 export const submitViewProperty = (value, property, timeModified = undefined) => {
     return { type: SUBMIT_VIEW_PROPERTY, value: value, property: property, timeModified }

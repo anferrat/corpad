@@ -11,7 +11,7 @@ export class SaveCurrentSurvey {
         this.warningHandler = warningHandler
     }
 
-    async execute() {
+    async execute(onUpload) {
         const [surveyFile, { isSurveyNew, cloudId, isCloud, originalHash, fileName }, { name, uid }] = await Promise.all([
             this.surveyJsonExportService.execute(),
             this.settingRepo.get(),
@@ -27,7 +27,7 @@ export class SaveCurrentSurvey {
         const saved = !isCloud ?
             await this.saveSurveyToFileService.execute(surveyFile, surveyFileName, isSurveyNew, originalHash, uid)
             :
-            await this._saveCloudSurvey(surveyFile, surveyFileName, isSurveyNew, cloudId)
+            await this._saveCloudSurvey(surveyFile, surveyFileName, isSurveyNew, cloudId, onUpload)
 
         //savedAsLocal shows if cloud survey was converted to local. If so, updates isCloud setting
         const { savedAsLocal } = saved
@@ -43,16 +43,15 @@ export class SaveCurrentSurvey {
         }
     }
 
-    async _saveCloudSurvey(surveyFile, fileName, isSurveyNew, cloudId, uid) {
+    async _saveCloudSurvey(surveyFile, fileName, isSurveyNew, cloudId, uid, onUpload) {
         try {
             //Attempt to save survey to cloud
             return {
-                ...(await this.saveSurveyToCloudFileService.execute(surveyFile, fileName, isSurveyNew, cloudId, uid)),
+                ...(await this.saveSurveyToCloudFileService.execute(surveyFile, fileName, isSurveyNew, cloudId, uid, onUpload)),
                 savedAsLocal: false
             }
         }
         catch (er) {
-            console.log(er)
             //if fails, prompt to save survey locally
             const saveAsLocal = await this.warningHandler.execute(`Unable to save survey to cloud drive. It may happen because you have don't have internet connection or are signed out of you account. You try again later, or save a copy of the survey to the device instead.`,
                 'Save copy to the device', 'Try later')

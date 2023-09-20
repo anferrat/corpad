@@ -9,7 +9,7 @@ import SurveyFileListItemMenu from './SurveyFileListItemMenu'
 import SurveyFileListItemMenuItem from './SurveyFileListItemMenuItem'
 import SurveyFileListItemIconBar from './SurveyFileListItemIconBar'
 
-const SurveyFileListItem = ({ name, uid, fileName, timeModified, tpCount, rectifierCount, pipelineCount, passedItems, cloudId, path, hash, isCloud, isSignedIn, loadSurvey, deleteSurvey, removeSurveyFromList, shareSurveyLink, shareSurveyFile, copyToAlternateFolder, copyToDownloads }) => {
+const SurveyFileListItem = ({ name, uid, fileName, timeModified, tpCount, rectifierCount, pipelineCount, passedItems, cloudId, path, hash, isCloud, isSignedIn, loadSurvey, deleteSurvey, removeSurveyFromList, shareSurveyFile, copyToAlternateFolder, copyToDownloads }) => {
     const scale = useRef(new Animated.Value(1))
     const isAndroid = Platform.OS === 'android'
     const [menuVisible, setMenuVisible] = useState(false)
@@ -36,28 +36,22 @@ const SurveyFileListItem = ({ name, uid, fileName, timeModified, tpCount, rectif
 
     }, [path, cloudId, fileName])
 
-    const handleShareSurveyLink = useCallback(() => {
-        hideMenu()
-        shareSurveyLink({ cloudId, fileName })
-
-    }, [cloudId, fileName])
-
     const handleShareSurveyFile = useCallback(() => {
         hideMenu()
-        shareSurveyFile({ path, cloudId, fileName })
-    }, [path, cloudId, fileName])
+        shareSurveyFile({ path, cloudId, name })
+    }, [path, cloudId, name])
 
     const handleCopyToDownloads = useCallback(() => {
         hideMenu()
-        copyToDownloads({ path, cloudId, fileName })
+        copyToDownloads({ path, cloudId, name })
 
-    }, [path, cloudId, fileName])
+    }, [path, cloudId, name])
 
     const handleCopyToAlternateFolder = useCallback(() => {
         hideMenu()
-        copyToAlternateFolder({ path, cloudId, fileName })
+        copyToAlternateFolder({ path, cloudId, name })
 
-    }, [path, cloudId, fileName])
+    }, [path, cloudId, name])
 
     return (
         <Animated.View style={{
@@ -135,11 +129,6 @@ const SurveyFileListItem = ({ name, uid, fileName, timeModified, tpCount, rectif
                             icon={isAndroid ? 'share-outline' : 'share-ios'}
                             pack={isAndroid ? null : 'cp'}
                         />
-                        {isCloud ?
-                            <SurveyFileListItemMenuItem
-                                onPress={handleShareSurveyLink}
-                                title={`Share link`}
-                                icon={'link-2-outline'} /> : null}
                         <SurveyFileListItemMenuItem
                             status='danger'
                             onPress={handleDelete}

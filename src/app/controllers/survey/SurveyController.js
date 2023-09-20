@@ -9,17 +9,19 @@ class SurveyController extends Controller {
 
     }
 
-    async saveAndReset(onError = null, onSuccess = null) {
+    async saveAndReset(params, onError = null, onSuccess = null) {
         return super.controllerHandler(onSuccess, onError, 104, async () => {
-            const { fileName, isCloud, syncTime, cloudId } = await this.saveCurrentSurveyService.execute()
+            const { onUpload } = params
+            const { fileName, isCloud, syncTime, cloudId } = await this.saveCurrentSurveyService.execute(onUpload)
             await this.resetCurrentSurveyService.execute()
             return { fileName, isCloud, syncTime, cloudId }
         })
     }
 
-    async save(onError = null, onSuccess = null) {
+    async save(params, onError = null, onSuccess = null) {
         return super.controllerHandler(onSuccess, onError, 105, async () => {
-            return await this.saveCurrentSurveyService.execute()
+            const { onUpload } = params
+            return await this.saveCurrentSurveyService.execute(onUpload)
         })
     }
 
@@ -35,8 +37,8 @@ const surveyController = new SurveyController(
     resetCurrentSurveyService
 )
 
-export const saveAndResetSurvey = (onError, onSuccess) => surveyController.saveAndReset(onError, onSuccess)
+export const saveAndResetSurvey = ({ onUpload }, onError, onSuccess) => surveyController.saveAndReset({ onUpload }, onError, onSuccess)
 
-export const saveSurvey = (onError, onSuccess) => surveyController.save(onError, onSuccess)
+export const saveSurvey = ({ onUpload }, onError, onSuccess) => surveyController.save({ onUpload }, onError, onSuccess)
 
 export const resetSurvey = (onError, onSuccess) => surveyController.reset(onError, onSuccess)

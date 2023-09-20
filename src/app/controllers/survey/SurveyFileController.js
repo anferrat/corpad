@@ -72,9 +72,9 @@ class SurveyFileController extends Controller {
 
     loadFile(params, onError = null, onSuccess = null) {
         return super.controllerHandler(onSuccess, onError, 423, async () => {
-            const { isCloud, path, cloudId } = this.validation.loadFile(params)
+            const { isCloud, path, cloudId, onDownload } = this.validation.loadFile(params)
             if (isCloud)
-                return await this.loadCloudSurveyFileService.execute(cloudId)
+                return await this.loadCloudSurveyFileService.execute(cloudId, onDownload)
             else
                 return await this.loadSurveyFileService.execute(path)
         })
@@ -96,23 +96,23 @@ class SurveyFileController extends Controller {
 
     copyToDevice(params, onError = null, onSuccess = null) {
         return super.controllerHandler(onSuccess, onError, 418, async () => {
-            const { cloudId } = params
-            return await this.copyCloudSurveyFileService.execute(cloudId)
+            const { cloudId, onDownload } = params
+            return await this.copyCloudSurveyFileService.execute(cloudId, onDownload)
         })
     }
 
     copyToCloud(params, onError = null, onSuccess = null) {
         return super.controllerHandler(onSuccess, onError, 417, async () => {
-            const { path } = params
-            return await this.copySurveyFileToCloudService.execute(path)
+            const { path, onUpload } = params
+            return await this.copySurveyFileToCloudService.execute(path, onUpload)
         })
     }
 
     shareFile(params, onError = null, onSuccess = null) {
         return super.controllerHandler(onSuccess, onError, 430, async () => {
-            const { cloudId, path, isCloud } = params
+            const { cloudId, path, isCloud, onDownload } = params
             if (isCloud)
-                return await this.shareCloudSurveyFile.execute(cloudId)
+                return await this.shareCloudSurveyFile.execute(cloudId, onDownload)
             else
                 return await this.shareSurveyFile.execute(path)
         })
@@ -120,9 +120,9 @@ class SurveyFileController extends Controller {
 
     copyToDownloads(params, onError = null, onSuccess = null) {
         return super.controllerHandler(onSuccess, onError, 416, async () => {
-            const { path, cloudId, isCloud } = params
+            const { path, cloudId, isCloud, onDownload } = params
             if (isCloud)
-                return await this.saveCloudSurveyFileToDownloads.execute(cloudId)
+                return await this.saveCloudSurveyFileToDownloads.execute(cloudId, onDownload)
             else
                 return await this.saveSurveyFileToDownloads.execute(path)
         })
@@ -167,18 +167,18 @@ export const getSurveyFileList = ({ isCloud }, onError, onSuccess) => surveyFile
 
 export const deleteSurveyFile = ({ isCloud, path, hash, cloudId, uid }, onError, onSuccess) => surveyFileController.deleteFile({ isCloud, path, hash, cloudId, uid }, onError, onSuccess)
 
-export const loadSurveyFile = ({ isCloud, path, cloudId }, onError, onSuccess) => surveyFileController.loadFile({ isCloud, path, cloudId }, onError, onSuccess)
+export const loadSurveyFile = ({ isCloud, path, cloudId, onDownload }, onError, onSuccess) => surveyFileController.loadFile({ isCloud, path, cloudId, onDownload }, onError, onSuccess)
 
 export const pickExternalSurveyFile = (onError, onSuccess) => surveyFileController.pickExternalFile(onError, onSuccess)
 
 export const getCloudSurveyFileLink = ({ cloudId }, onError, onSuccess) => surveyFileController.getFileLink({ cloudId }, onError, onSuccess)
 
-export const copySurveyFileToCloud = ({ path }, onError, onSuccess) => surveyFileController.copyToCloud({ path }, onError, onSuccess)
+export const copySurveyFileToCloud = ({ path, onUpload }, onError, onSuccess) => surveyFileController.copyToCloud({ path, onUpload }, onError, onSuccess)
 
-export const copyCloudSurveyFileToDevice = ({ cloudId }, onError, onSuccess) => surveyFileController.copyToDevice({ cloudId }, onError, onSuccess)
+export const copyCloudSurveyFileToDevice = ({ cloudId, onDownload }, onError, onSuccess) => surveyFileController.copyToDevice({ cloudId, onDownload }, onError, onSuccess)
 
-export const copySurveyFileToDownloads = ({ cloudId, isCloud, path }, onError, onSuccess) => surveyFileController.copyToDownloads({ cloudId, isCloud, path }, onError, onSuccess)
+export const copySurveyFileToDownloads = ({ cloudId, isCloud, path, onDownload }, onError, onSuccess) => surveyFileController.copyToDownloads({ cloudId, isCloud, path, onDownload }, onError, onSuccess)
 
 export const createSurvey = ({ isBlank, isCloud, path, name }, onError, onSuccess) => surveyFileController.create({ isBlank, isCloud, path, name }, onError, onSuccess)
 
-export const shareFile = ({ cloudId, path, isCloud, mimeType }, onError, onSuccess) => surveyFileController.shareFile({ cloudId, path, isCloud, mimeType }, onError, onSuccess)
+export const shareFile = ({ cloudId, path, isCloud, onDownload }, onError, onSuccess) => surveyFileController.shareFile({ cloudId, path, isCloud, onDownload }, onError, onSuccess)

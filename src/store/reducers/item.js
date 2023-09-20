@@ -1,4 +1,4 @@
-import { RESET_RUN_SAVE_EFFECT, RESET_STATE, UPDATE_EDIT_ITEM_PROPERTY, LOAD_VIEW_STATE, LOAD_EDIT_STATE, SAVE_STATE, UPDATE_VIEW_PROPERTY, UPDATE_EDIT_DATA, VALIDATE_PROPERTY, UPDATE_CURRENT_COORDINATES, UPDATE_TAP_SETTING, RESET_EDIT_STATE, VALIDATE_VIEW_PROPERTY, SUBMIT_VIEW_PROPERTY } from "../actions/item"
+import { RESET_RUN_SAVE_EFFECT, RESET_STATE, UPDATE_EDIT_ITEM_PROPERTY, LOAD_VIEW_STATE, LOAD_EDIT_STATE, SAVE_STATE, UPDATE_VIEW_PROPERTY, UPDATE_EDIT_DATA, VALIDATE_PROPERTY, UPDATE_CURRENT_COORDINATES, UPDATE_TAP_SETTING, RESET_EDIT_STATE, VALIDATE_VIEW_PROPERTY, SUBMIT_VIEW_PROPERTY, ADD_EDIT_IMAGE, DELETE_EDIT_IMAGE } from "../actions/item"
 import fieldValidation from '../../helpers/validation'
 
 const initialState = {
@@ -39,6 +39,22 @@ const item = (state = initialState, action) => {
                 }
             }
             else return state
+        case ADD_EDIT_IMAGE:
+            return {
+                ...state,
+                edit: {
+                    ...state.edit,
+                    imageUris: [action.uri].concat(state.edit.imageUris)
+                }
+            }
+        case DELETE_EDIT_IMAGE:
+            return {
+                ...state,
+                edit: {
+                    ...state.edit,
+                    imageUris: state.edit.imageUris.filter((_, index) => index !== action.index)
+                }
+            }
         case UPDATE_CURRENT_COORDINATES:
             if (state.edit.hasOwnProperty('latitude') && state.edit.hasOwnProperty('longitude')) {
                 const lat = fieldValidation(action.latitude, 'latitude')
@@ -117,12 +133,7 @@ const item = (state = initialState, action) => {
             else return state
         case LOAD_VIEW_STATE:
             return {
-                edit: {
-                    ...state.edit,
-                    ...action.itemObject,
-                    loading: false,
-                    saving: false
-                },
+                ...state,
                 view: {
                     ...state.view,
                     ...action.itemObject,

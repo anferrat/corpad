@@ -5,7 +5,7 @@ import { errorHandler } from "../../../../helpers/error_handler"
 import { ItemTypeIconsFilled } from "../../../../constants/icons"
 import { ItemTypeLabelsPlural, SortingOptionLabels } from "../../../../constants/labels"
 import { FileMimeTypes, ItemTypes } from "../../../../constants/global"
-import { setExportModal, updateLoader } from "../../../../store/actions/settings"
+import { hideLoader, setExportModal, updateLoader } from "../../../../store/actions/settings"
 import { resetExport } from "../../../../store/actions/export"
 
 const useExportLabels = (navigateToExportItem) => {
@@ -72,17 +72,17 @@ const useExportLabels = (navigateToExportItem) => {
     }, [])
 
     const exportToSpreadsheet = useCallback(async () => {
-        dispatch(updateLoader(true, 'Exporting', 'Creating new .csv file'))
+        dispatch(updateLoader('Exporting', 'Creating new .csv file'))
         const { response, status, errorMessage } = await exportSurveyToSpreadsheet({ itemType, sorting, itemProperties, exportPotentials, referenceCellId, potentialTypeIdList, selectedSubitemTypes, pipelineIdList, groupPotentialsByPipeline, subitemProperties })
         if (status === 200) {
             navigateToExportItem()
             dispatch(resetExport())
-            dispatch(updateLoader(false, null, null))
+            dispatch(hideLoader())
             dispatch(setExportModal(true, response, FileMimeTypes.CSV))
         }
         else {
             errorHandler(status)
-            dispatch(updateLoader(false, null, null))
+            dispatch(hideLoader())
         }
     }, [dispatch, navigateToExportItem, itemType, sorting, itemProperties, exportPotentials, referenceCellId, potentialTypeIdList, selectedSubitemTypes, pipelineIdList, groupPotentialsByPipeline, subitemProperties])
 

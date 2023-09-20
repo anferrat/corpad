@@ -14,19 +14,19 @@ export class ExportCloudSurveyFile {
         this.compressTempSurveyService = compressTempSurveyService
     }
 
-    async _copyAssets(assets, uid) {
-        const cloudFileList = this.cloudFileSystemRepo.readSurveyAssetFolder(uid)
+    async _copyAssets(assets, uid, onDownload) {
+        const cloudFileList = await this.cloudFileSystemRepo.readSurveyAssetFolder(uid)
         const { missingAssets } = this.assetFileDownloadControl.execute(assets, cloudFileList, [])
         const confirm = missingAssets.length === 0 || await this.warningHandler.execute(`Survey has ${missingAssets.length} missing assets (e.g. photos). It is possible that some of the assets was not yet uploaded, or there was un error in the past when saving survey. If you continue, the missing assets will be removed from exported the survey.`, 'Continue', 'Cancel')
         if (confirm) {
             const tempSurveyAssetFolder = await this.fileSystemRepo.getLocation(FileSystemLocations.TEMP_ASSETS)
-            await this.downloadFiles.execute(cloudFileList, tempSurveyAssetFolder, ({ total, current }) => console.log(`total: ${total}, current: ${current}`))
+            await this.downloadFiles.execute(cloudFileList, tempSurveyAssetFolder, ({ total, current }) => onDownload ? onDownload(total, current + 1) : null)
         }
         else throw new Error(errors.GENERAL, 'Unable to copy assets', 'User cancelled operation', 101)
     }
 
 
-    async execute(cloudId) {
+    async execute(cloudId, onDownload) {
         const internetOn = await this.networkRepo.checkConnection()
         if (internetOn) {
             const { file, fileName } = await this.cloudFileSystemRepo.readFile(cloudId)
@@ -38,9 +38,9 @@ export class ExportCloudSurveyFile {
                     path: await this.fileSystemRepo.writeFile(surveyFileContent, fileName, FileSystemLocations.TEMP, true)
                 }
             else {
-                await this._copyAssets(surveyFile.assets, surveyFile.survey.uid)
+                await this._copyAssets(surveyFile.assets, surveyFile.survey.uid, onDownload)
                 await this.fileSystemRepo.writeFile(surveyFileContent, 'survey.json', FileSystemLocations.TEMP_SURVEY, true)
-                const zipPath = this.compressTempSurveyService.execute(fileName)
+                const zipPath = await this.compressTempSurveyService.execute(fileName)
                 return {
                     mimeType: FileMimeTypes.ZIP,
                     path: zipPath

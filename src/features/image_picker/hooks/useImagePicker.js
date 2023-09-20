@@ -1,30 +1,24 @@
 import { EventRegister } from "react-native-event-listeners"
-import { addPhotoToAssets } from "../../../app/controllers/survey/other/MediaController"
+import { getNewPhoto } from "../../../app/controllers/survey/other/MediaController"
 import { errorHandler } from "../../../helpers/error_handler"
 import { ImageSources } from "../../../constants/global"
-import { useDispatch, useSelector } from 'react-redux'
-import { updateLoader } from "../../../store/actions/settings"
 
 const useImagePicker = ({ itemId, itemType }, closeSheet) => {
-    const dispatch = useDispatch()
-    const surveyUid = useSelector(state => state.settings.currentSurvey.uid)
-    const addPhoto = async (imageSource, subtitle) => {
+    const addPhoto = (imageSource) => {
         closeSheet()
-        dispatch(updateLoader(true, 'Adding image', subtitle))
-        await addPhotoToAssets({ itemId, itemType, imageSource, surveyUid },
+        getNewPhoto({ imageSource },
             (er) => {
                 if (er !== 101)
                     errorHandler(er)
             },
-            (asset) => EventRegister.emit('ASSET_ADDED', asset))
-        dispatch(updateLoader(false, null, null))
+            ({ uri, name }) => EventRegister.emit('PHOTO_ADDED', { uri, name, itemId, itemType, imageSource }))
     }
 
-    const addPhotoFromLibrary = () => addPhoto(ImageSources.LIBRARY, 'Library')
+    const addPhotoFromLibrary = () => addPhoto(ImageSources.LIBRARY)
 
-    const addPhotoFromCamera = () => addPhoto(ImageSources.CAMERA, 'Camera')
+    const addPhotoFromCamera = () => addPhoto(ImageSources.CAMERA)
 
-    const addPhotoFromStorage = () => addPhoto(ImageSources.STORAGE, 'Storage')
+    const addPhotoFromStorage = () => addPhoto(ImageSources.STORAGE)
 
     return {
         addPhotoFromLibrary,

@@ -26,7 +26,7 @@ export default ItemView
 
 const styles = StyleSheet.create({
     card: {
-       ...globalStyle.card,
+        ...globalStyle.card,
         minHeight: 200
     }
 })

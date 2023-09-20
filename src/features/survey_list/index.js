@@ -6,7 +6,7 @@ import SurveyFileListItem from './components/SurveyFileListItem'
 import SurveyFileListHeader from './components/SurveyFileListHeader'
 
 export const SurveyFileList = ({ navigateToCreateSurvey, isCloud, navigateToSurveyFileList }) => {
-    const { fileList, loading, initialLoad, isSignedIn, refreshHandler, loadSurvey, deleteSurvey, removeSurveyFromList, shareSurveyLink, shareSurveyFile, copyToAlternateFolder, copyToDownloads } = useSurveyFiles({ isCloud, navigateToSurveyFileList })
+    const { fileList, loading, initialLoad, isSignedIn, refreshHandler, loadSurvey, deleteSurvey, removeSurveyFromList, shareSurveyFile, copyToAlternateFolder, copyToDownloads } = useSurveyFiles({ isCloud, navigateToSurveyFileList })
 
     const isEmpty = [...fileList[0].data, ...fileList[1].data].length === 0
 
@@ -29,7 +29,6 @@ export const SurveyFileList = ({ navigateToCreateSurvey, isCloud, navigateToSurv
             loadSurvey={loadSurvey}
             deleteSurvey={deleteSurvey}
             removeSurveyFromList={removeSurveyFromList}
-            shareSurveyLink={shareSurveyLink}
             shareSurveyFile={shareSurveyFile}
             copyToAlternateFolder={copyToAlternateFolder}
             copyToDownloads={copyToDownloads}
