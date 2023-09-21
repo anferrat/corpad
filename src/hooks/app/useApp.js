@@ -2,8 +2,8 @@
 import { useState, useRef, useEffect } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import useOnboardingScreen from "./useOnboardingScreen"
-import { addBluetoothStatusListener, addFileUrlListener, addNetworkStatusListener, initializeApp } from "../../app/controllers/AppController"
-import { hideLoader, resetCurrentSurveySettings, setActiveMultimeterStatus, setBluetoothStatus, setSettingsOnAppLoad, setSurveySettings, updateLoader, updateNetworkStatus } from "../../store/actions/settings"
+import { addFileUrlListener, addNetworkStatusListener, initializeApp } from "../../app/controllers/AppController"
+import { resetCurrentSurveySettings, setActiveMultimeterStatus, setSettingsOnAppLoad, setSurveySettings, updateLoader, updateNetworkStatus } from "../../store/actions/settings"
 import { errorHandler } from "../../helpers/error_handler"
 import { SurveyLoadingStatuses } from "../../constants/global"
 import { addMultimeterStatusListener } from "../../app/controllers/MultimeterController"
@@ -51,11 +51,6 @@ const useApp = () => {
         dispatch(hideLoader())
       }
     )
-
-
-
-
-    const bluetoothStatus = addBluetoothStatusListener(isBluetoothOn => dispatch(setBluetoothStatus(isBluetoothOn)))
 
     const multimeterListener = addMultimeterStatusListener(({ isConnected }) => dispatch(setActiveMultimeterStatus(isConnected)))
 
