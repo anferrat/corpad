@@ -19,6 +19,7 @@ import { GetOnOffPotentialPair } from "../services/survey/other/multimeter/GetOn
 import { MultimeterValueConverter } from "../services/survey/other/multimeter/utils/MultimeterValueConverter"
 import { bluetoothRepo, geolocationRepo, potentialRepo, potentialTypeRepo, settingRepo } from "./_instances/repositories"
 import { appStateListener, permissions, unitConverter } from "./_instances/general_services"
+import { CheckBleState } from "../services/survey/other/multimeter/CheckBleState"
 
 class MultimeterController extends Controller {
     constructor(bluetoothRepo, settingRepo, geolocationRepo, potentialRepo, potentialTypeRepo, permissions, unitConverter, appStateListener) {
@@ -49,6 +50,8 @@ class MultimeterController extends Controller {
         this.multimeterValueConverterService = new MultimeterValueConverter(unitConverter)
 
         this.readingCaptureListenerService = new ReadingCaptureListener(geolocationRepo, this.multimeterFactory, this.multimeterValueConverterService)
+
+        this.checkBleStateService = new CheckBleState(bluetoothRepo)
 
         this.validation = new MultimeterValidation()
     }
@@ -139,6 +142,12 @@ class MultimeterController extends Controller {
         })
     }
 
+    checkState(onError = null, onSuccess = null) {
+        return super.controllerHandler(onSuccess, onError, 100, async () => {
+            return await this.checkBleStateService.execute()
+        })
+    }
+
     addReadingListener(onCapture, onButtonPress, data, onError = null, onSuccess = null) {
         return super.callbackHandler(onSuccess, onError, 654, () => {
             const { peripheralId, type, onTime, offTime, syncMode, firstCycle, measurementType } = data
@@ -193,3 +202,5 @@ export const readingCaptureSetup = ({ measurementType, potentialId, subitemId },
 export const addReadingListener = (onCapture, onButtonPress, { peripheralId, type, onTime, offTime, syncMode, firstCycle, measurementType }, onError, onSuccess) => multimeterController.addReadingListener(onCapture, onButtonPress, { peripheralId, type, onTime, offTime, syncMode, firstCycle, measurementType }, onError, onSuccess)
 
 export const stopReadingCapture = ({ id, multimeterType, measurementType }, onError, onSuccess) => multimeterController.stopReadingCapture({ id, multimeterType, measurementType }, onError, onSuccess)
+
+export const checkBleState = (onError, onSuccess) => multimeterController.checkState(onError, onSuccess)

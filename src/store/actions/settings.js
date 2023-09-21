@@ -16,7 +16,6 @@ export const SET_SURVEY_SETTINGS = 'SET_SURVEY_SETTINGS'
 export const SET_INTERNET_ON = 'SET_INTERNET_ON'
 export const UPDATE_BOTTOM_SHEET_CONTENT = 'UPDATE_BOTTOM_SHEET_CONTENT'
 export const SET_BLUETOOTH_SCANNING = 'SET_BLUETOOTH_SCANNING'
-export const SET_BLUETOOTH_STATUS = 'SET_BLUETOOTH_STATUS'
 export const SET_ACTIVE_MULTIMETER = 'SET_ACTIVE_MULTIMETER'
 export const SET_ACTIVE_MULTIMETER_STATUS = 'SET_ACTIVE_MULTIMETER_STATUS'
 export const SET_TIME_ADJUSTMENT = 'SET_ACTIVE_MULTIMETER_TIME_ADJUSTMENT'
@@ -106,10 +105,6 @@ export const setActiveMultimeterStatus = (connected) => ({
 
 export const setBluetoothScanning = (scanning) => ({
     type: SET_BLUETOOTH_SCANNING, scanning
-})
-
-export const setBluetoothStatus = (isBluetoothOn) => ({
-    type: SET_BLUETOOTH_STATUS, isBluetoothOn
 })
 
 export const setGpsTimeAdjustment = (timeFix) => ({

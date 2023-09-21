@@ -5,6 +5,8 @@ import { Error, errors } from '../../utils/Error'
 
 export class BluetoothRepository {
     constructor() {
+        this.onState = 'on'
+        this.offState = 'off'
     }
 
     async init() {

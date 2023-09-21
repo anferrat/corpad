@@ -20,7 +20,7 @@ const MultimeterPlaceholder = () => {
             <Text
                 appearance='hint'
                 style={styles.description}>
-                Connect digital bluetooth multimeter in order to capture potential readings.
+                Connect digital bluetooth multimeter in order to capture readings.
             </Text>
             <View style={styles.text}>
                 <Text

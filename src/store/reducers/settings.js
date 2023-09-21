@@ -1,5 +1,5 @@
 
-import { UPDATE_SETTING, LOAD_SETTINGS, SET_SURVEY_SAVING_STATUS, UPDATE_SURVEY_NAME, RESET_CURRENT_SURVEY_SETTINGS, LOAD_SESSION_STATE, UPDATE_ONBOARDING, SET_EXPORT_MODAL, UPDATE_LOADER, UPDATE_SESSION, UPDATE_NETWORK_STATUS, SET_SESSION_MODAL_VISIBLE, UPDATE_CURRENT_SURVEY_SETTINGS, SET_SETTINGS_ON_APP_LOAD, SET_SURVEY_SETTINGS, UPDATE_BOTTOM_SHEET_CONTENT, SET_BLUETOOTH_SCANNING, SET_BLUETOOTH_STATUS, SET_ACTIVE_MULTIMETER, SET_ACTIVE_MULTIMETER_STATUS, SET_TIME_ADJUSTMENT, SET_ACTIVE_MULTIMETER_SETTINGS, UPDATE_LOADER_PROGRESS, HIDE_LOADER } from "../actions/settings"
+import { UPDATE_SETTING, LOAD_SETTINGS, SET_SURVEY_SAVING_STATUS, UPDATE_SURVEY_NAME, RESET_CURRENT_SURVEY_SETTINGS, LOAD_SESSION_STATE, UPDATE_ONBOARDING, SET_EXPORT_MODAL, UPDATE_LOADER, UPDATE_SESSION, UPDATE_NETWORK_STATUS, SET_SESSION_MODAL_VISIBLE, UPDATE_CURRENT_SURVEY_SETTINGS, SET_SETTINGS_ON_APP_LOAD, SET_SURVEY_SETTINGS, UPDATE_BOTTOM_SHEET_CONTENT, SET_BLUETOOTH_SCANNING, SET_ACTIVE_MULTIMETER, SET_ACTIVE_MULTIMETER_STATUS, SET_TIME_ADJUSTMENT, SET_ACTIVE_MULTIMETER_SETTINGS, UPDATE_LOADER_PROGRESS, HIDE_LOADER } from "../actions/settings"
 
 const initialState = {
     bottomSheetContent: {  //BottomSheet component
@@ -43,7 +43,6 @@ const initialState = {
     },
     bluetooth: {
         scanning: false,
-        isBluetoothOn: false,
     },
     session: {
         userName: null,
@@ -275,14 +274,6 @@ const settings = (state = initialState, action) => {
                     visible: action.visible ?? state.exportModal.visible,
                     fileUrl: action.fileUrl ?? state.exportModal.fileUrl,
                     mimeType: action.mimeType ?? state.exportModal.mimeType,
-                }
-            }
-        case SET_BLUETOOTH_STATUS:
-            return {
-                ...state,
-                bluetooth: {
-                    ...state.bluetooth,
-                    isBluetoothOn: action.isBluetoothOn
                 }
             }
         case SET_BLUETOOTH_SCANNING:
