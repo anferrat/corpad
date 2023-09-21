@@ -1,6 +1,7 @@
 import { useCallback, useState, useEffect, useRef } from 'react'
 import { useDispatch, useSelector } from "react-redux"
-import { startMultimeterScan, stopMultimeterScan, multimeterScanListener, multimeterStopScanListener, pairMultimeter, unpairMultimeter, connectMultimeter, disconnectMultimeter, addMultimeterStatusListener } from '../../../../../app/controllers/MultimeterController'
+import { startMultimeterScan, stopMultimeterScan, multimeterScanListener, multimeterStopScanListener, pairMultimeter, unpairMultimeter, connectMultimeter, disconnectMultimeter, addMultimeterStatusListener, checkBleState } from '../../../../../app/controllers/MultimeterController'
+import { addBluetoothStatusListener } from '../../../../../app/controllers/AppController'
 import { setActiveMultimeter, setActiveMultimeterStatus } from '../../../../../store/actions/settings'
 import { errorHandler } from '../../../../../helpers/error_handler'
 import useModal from '../../../../../hooks/useModal'
@@ -11,7 +12,7 @@ const initialState = []
 const useActiveMultimeter = () => {
     const dispatch = useDispatch()
     const activeMultimeter = useSelector(state => state.settings.activeMultimeter)
-    const isBluetoothOn = useSelector(state => state.settings.bluetooth.isBluetoothOn)
+    const [isBluetoothOn, setIsBluetoothOn] = useState(false)
     const [scannedDevices, setScannedDevices] = useState(initialState)
     const [pairingId, setPairingId] = useState(null)
     const [connecting, setConnecting] = useState(false)
@@ -45,10 +46,19 @@ const useActiveMultimeter = () => {
     useEffect(() => {
         componentMounted.current = true
         //listens for when scan was stopped
+
+        const getBleState = async () => {
+            const isOn = await checkBleState()
+            setIsBluetoothOn(isOn.response)
+        }
+
+        getBleState()
         const stopScan = multimeterStopScanListener(() => {
             setScanning(false)
             scanningRef.current = true
         })
+
+
 
         const connectedDevices = addMultimeterStatusListener(({ isConnected }) => {
             if (isConnected) {
@@ -57,12 +67,16 @@ const useActiveMultimeter = () => {
             }
         })
 
+        const bluetoothListener = addBluetoothStatusListener((isOn) => setIsBluetoothOn(isOn))
+
         return () => {
             componentMounted.current = false
             if (stopScan.response)
                 stopScan.response.remove()
             if (connectedDevices.response)
                 connectedDevices.response()
+            if (bluetoothListener.response)
+                bluetoothListener.response.remove()
             if (scanningRef.current)
                 stopMultimeterScan()
         }

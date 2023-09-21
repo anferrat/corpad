@@ -102,39 +102,41 @@ const SelectFieldParamaters = (props) => {
                         checked={importType === 1}>
                         Use values from a column in data file
                     </Radio>
-                    {importType === 1 ? <><Select
-                        style={styles.field}
-                        disabled={importType !== 1}
-                        placeholder={'Select data column'}
-                        accessory={fileIcon}
-                        itemList={props.fields}
-                        selectedIndex={fieldIndex}
-                        onSelect={fieldIndexHandler} />
+                    {importType === 1 ? <>
+                        <Select
+                            style={styles.field}
+                            disabled={importType !== 1}
+                            placeholder={'Select data column'}
+                            accessory={fileIcon}
+                            itemList={props.fields}
+                            selectedIndex={fieldIndex}
+                            onSelect={fieldIndexHandler} />
                         <MappingHint
                             visible={importType === 1} />
                     </> : null}
                 </View>
-                <View style={importType === 0 || fieldIndex === null ? styles.hidden : globalStyle.card}>
-                    <AddMapComponent
-                        property={props.property}
-                        fieldIndex={fieldIndex}
-                        addAttribute={addAttribute}
-                        itemList={itemList}
-                        fieldValues={fieldValues}
-                        attributeMap={attributeMap} />
-                    <Text category='h6'>Mapped attributes</Text>
-                    <AttributeMapper
-                        property={props.property}
-                        attributeMap={attributeMap}
-                        fieldValues={fieldValues}
-                        itemListLabels={props.value.itemListLabels}
-                        removeAttribute={removeAttribute} />
-                </View>
+                {importType === 0 || fieldIndex === null ? null :
+                    <View style={globalStyle.card}>
+                        <AddMapComponent
+                            property={props.property}
+                            fieldIndex={fieldIndex}
+                            addAttribute={addAttribute}
+                            itemList={itemList}
+                            fieldValues={fieldValues}
+                            attributeMap={attributeMap} />
+                        <Text category='h6'>Mapped attributes</Text>
+                        <AttributeMapper
+                            property={props.property}
+                            attributeMap={attributeMap}
+                            fieldValues={fieldValues}
+                            itemListLabels={props.value.itemListLabels}
+                            removeAttribute={removeAttribute} />
+                    </View>}
             </ScrollView >
             <BottomButton
                 title='Save'
                 icon='save'
-                onPress={onSaveHandler}/>
+                onPress={onSaveHandler} />
         </>
     )
 }

@@ -1,11 +1,10 @@
 import React, { useState } from 'react'
 import { View, StyleSheet, ScrollView } from 'react-native'
 import { useDispatch } from 'react-redux'
-import { Radio, Button } from '@ui-kitten/components'
+import { Radio } from '@ui-kitten/components'
 import { globalStyle } from '../../../styles/styles'
 import InputField from '../../../components/Input'
 import SelectField from './components/Select'
-import { saveIcon } from '../../../components/Icons'
 import { setImportProperty } from '../../../store/actions/importData'
 import fieldValidation from '../../../helpers/validation'
 import { errorHandler } from '../../../helpers/error_handler'
@@ -96,7 +95,7 @@ const InputFieldParamaters = ({ value, property, subitemIndex, potentialIndex, g
                         checked={importType === 0}>
                         Use fixed value for each imported item
                     </Radio>
-                    <View style={importType !== 0 ? styles.hidden : styles.visible}>
+                    {importType !== 0 ? null :
                         <InputField
                             style={styles.field}
                             unit={defaultUnit}
@@ -106,35 +105,36 @@ const InputFieldParamaters = ({ value, property, subitemIndex, potentialIndex, g
                             value={defaultValue}
                             onChangeText={setDefaultValue}
                             onEndEditing={validateDefaultValue}
-                            valid={valid} />
-                    </View>
+                            valid={valid} />}
                     <Radio
                         style={styles.radio}
                         onChange={fieldIndexImportType}
                         checked={importType === 1}>
                         Use values from a column in data file
                     </Radio>
-                    <View style={importType !== 1 ? styles.hidden : styles.visible}>
-                        <View style={styles.selectView}>
-                            <SelectField
-                                style={styles.field}
-                                disabled={importType !== 1}
-                                placeholder={'Select data column'}
-                                itemList={fields}
-                                selectedIndex={fieldIndex}
-                                onSelect={setFieldIndex}
-                                accessory={fileIcon} />
-                            {unitList.length > 0 ?
+                    {importType !== 1 ? null :
+                        <>
+                            <View style={styles.selectView}>
                                 <SelectField
-                                    style={styles.unitSelect}
-                                    disabled={importType !== 1 || unitList.length === 1}
-                                    placeholder={'Unit'}
-                                    selectedIndex={unit}
-                                    itemList={unitList}
-                                    onSelect={setUnit} /> : null}
-                        </View>
-                        <Hint hidden={unitList.length === 0 || importType !== 1} text='Unit must match the one used in spreadsheet' />
-                    </View>
+                                    style={styles.field}
+                                    disabled={importType !== 1}
+                                    placeholder={'Select data column'}
+                                    itemList={fields}
+                                    selectedIndex={fieldIndex}
+                                    onSelect={setFieldIndex}
+                                    accessory={fileIcon} />
+                                {unitList.length > 0 ?
+                                    <SelectField
+                                        style={styles.unitSelect}
+                                        disabled={importType !== 1 || unitList.length === 1}
+                                        placeholder={'Unit'}
+                                        selectedIndex={unit}
+                                        itemList={unitList}
+                                        onSelect={setUnit} /> : null}
+                            </View>
+                            <Hint hidden={unitList.length === 0 || importType !== 1} text='Unit must match the one used in spreadsheet' />
+                        </>
+                    }
                     {property === 'name' ?
                         <>
                             <Radio
@@ -143,7 +143,7 @@ const InputFieldParamaters = ({ value, property, subitemIndex, potentialIndex, g
                                 checked={importType === 2}>
                                 Use default name values
                             </Radio>
-                            <View style={importType !== 2 || subitemIndex !== null ? styles.hidden : styles.visible}>
+                            {importType !== 2 || subitemIndex !== null ? null :
                                 <InputField
                                     style={styles.field}
                                     placeholder={'1'}
@@ -154,7 +154,7 @@ const InputFieldParamaters = ({ value, property, subitemIndex, potentialIndex, g
                                     onChangeText={setDefaultValue}
                                     onEndEditing={setIndex}
                                     valid={true} />
-                            </View>
+                            }
                         </>
                         : null}
 
@@ -166,16 +166,14 @@ const InputFieldParamaters = ({ value, property, subitemIndex, potentialIndex, g
                                 checked={importType === 3}>
                                 Merge values from two or more columns in data file
                             </Radio>
-                            <View style={importType !== 3 ? styles.hidden : styles.visible}>
-                                <MultiSelect
-                                    disabled={importType !== 3}
-                                    placeholder={'Select data columns'}
-                                    style={styles.field}
-                                    itemList={fields}
-                                    selectedItems={fieldIndexList}
-                                    onSelect={setFieldIndexList}
-                                />
-                            </View>
+                            {importType === 3 ? <MultiSelect
+                                disabled={importType !== 3}
+                                placeholder={'Select data columns'}
+                                style={styles.field}
+                                itemList={fields}
+                                selectedItems={fieldIndexList}
+                                onSelect={setFieldIndexList}
+                            /> : null}
                         </> : null}
 
                 </View>
