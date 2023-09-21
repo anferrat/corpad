@@ -12,9 +12,8 @@ const useItemPhotos = ({ itemId, itemType, imageUris }) => {
     const [imageViewIndex, setImageViewIndex] = useState(0)
     const limitReached = imageUris.length >= PHOTO_LIMIT
 
-    const onAddPhoto = useCallback(() => {
-        console.log('hahaha')
-        openImagePicker({ itemType, itemId })}, [])
+    const onAddPhoto = useCallback(() => openImagePicker({ itemType, itemId }), [])
+
 
     const onDeletePhoto = useCallback((index) => {
         dispatch(deleteEditImage(index))
