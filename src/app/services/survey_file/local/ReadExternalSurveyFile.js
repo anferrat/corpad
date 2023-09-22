@@ -1,7 +1,6 @@
 import { ExternalFileTypes, FileSystemLocations } from "../../../../constants/global"
 import { Error, errors } from "../../../utils/Error"
 import { guid } from "../../../utils/guid"
-import RNFS from 'react-native-fs'
 
 export class ReadExternalSurveyFile {
     constructor(fileSystemRepo, convertFileToSurveyService) {

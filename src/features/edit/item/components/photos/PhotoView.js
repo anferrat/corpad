@@ -21,6 +21,7 @@ const PhotoView = ({ itemId, itemType, imageUris }) => {
     const { onAddPhoto, onDeletePhoto, photoListRef, imageViewVisible, imageViewIndex, closeImageView, limitReached, onPhotoPress } = useItemPhotos({ itemId, itemType, imageUris })
     const renderItem = useCallback(({ item, index }) => (
         <PhotoListItem
+            onDelete={onDeletePhoto}
             onPress={onPhotoPress}
             index={index}
             uri={item} />
@@ -61,7 +62,6 @@ const styles = StyleSheet.create({
     },
     container: {
         flexGrow: 1,
-        marginTop: 12,
         alignItems: 'center',
         justifyContent: 'center',
         paddingHorizontal: 12

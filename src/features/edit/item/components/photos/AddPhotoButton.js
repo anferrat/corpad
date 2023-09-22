@@ -42,7 +42,8 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         borderColor: primary,
         borderStyle: 'dashed',
-        borderRadius: 15
+        borderRadius: 15,
+        marginTop: 12
     },
     icon: {
         width: 25,

@@ -9,12 +9,12 @@ import CreateSubitemButton from '../CreateSubitemButton'
 import { globalStyle } from '../../../../../styles/styles'
 import { PowerSources } from '../../../../../constants/global'
 import { PowerSourceLabels } from '../../../../../constants/labels'
+import PhotoView from '../photos/PhotoView'
 
 const powerSourceList = Object.values(PowerSources).map(source => ({ item: PowerSourceLabels[source], index: source }))
 
-
 const RT = ({ data, createSubitem, itemType, update, validate, updateLatAndLon, updateTap }) => {
-    const { name, status, defaultName, valid, latitude, longitude, location, maxCurrent, maxVoltage, model, serialNumber, powerSource, comment, tapSetting, tapValue, tapCoarse, tapFine } = data
+    const { id, name, status, defaultName, valid, latitude, longitude, location, maxCurrent, maxVoltage, model, serialNumber, powerSource, comment, tapSetting, tapValue, tapCoarse, tapFine, imageUris } = data
     return (
         <>
             <StatusView
@@ -121,6 +121,10 @@ const RT = ({ data, createSubitem, itemType, update, validate, updateLatAndLon, 
                         property='comment'
                         value={comment} />
                 </View>
+                <PhotoView
+                    itemId={id}
+                    itemType={itemType}
+                    imageUris={imageUris} />
                 <View style={styles.button}>
                     <CreateSubitemButton
                         title={'Add circuit'}

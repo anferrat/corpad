@@ -1,6 +1,6 @@
 import React from 'react'
 import { View, StyleSheet, ScrollView } from 'react-native'
-import { RadioGroup } from '@ui-kitten/components'
+import { RadioGroup, CheckBox } from '@ui-kitten/components'
 import Radio from './components/Radio'
 import { globalStyle } from '../../../styles/styles'
 import ItemSelectorCard from './components/item/ItemSelectorCard'
@@ -10,6 +10,7 @@ import ItemPropertySelector from './components/item/ItemPropertySelector'
 import BottomButton from '../../../components/BottomButton'
 import { ItemTypes, SortingOptions } from '../../../constants/global'
 import { SortingOptionLabels } from '../../../constants/labels'
+import CheckBoxText from './components/item/CheckBoxText'
 
 //filter sorting by location. N/A for here
 const sortingValues = Object.values(SortingOptions).filter(sorting => sorting !== SortingOptions.NEAREST)
@@ -24,6 +25,9 @@ const ItemProperties = ({ navigateToExportOverview, navigateToExportPotentials, 
         onSelectSorting,
         toggleItemProperty,
         onNextPress,
+        assetOptionAvailable,
+        includeAssets,
+        setIncludeAssets
     } = useExportItemProperties({ navigateToExportPotentials, navigateToExportSubitems, navigateToExportOverview })
 
     return (
@@ -43,6 +47,19 @@ const ItemProperties = ({ navigateToExportOverview, navigateToExportPotentials, 
                                 onPress={onSelectItemType}
                             />)}
                     </View>
+                    {assetOptionAvailable ? <>
+                        <Title
+                            name={'IMAGES'} />
+                        <View style={styles.checkbox}>
+                            <CheckBox
+                                checked={includeAssets}
+                                onChange={setIncludeAssets}>
+                            </CheckBox>
+                            <CheckBoxText>
+                               Export images
+                            </CheckBoxText>
+                        </View>
+                    </> : null}
                     <Title
                         name={'SORTING'} />
                     <RadioGroup
@@ -56,6 +73,7 @@ const ItemProperties = ({ navigateToExportOverview, navigateToExportPotentials, 
                             </Radio>
                         ))}
                     </RadioGroup>
+
                     <Title
                         name={'ITEM PROPERTIES'} />
                     <ItemPropertySelector
@@ -94,6 +112,9 @@ const styles = StyleSheet.create({
     },
     scrollView: {
         paddingBottom: 72
+    },
+    checkbox: {
+        flexDirection: 'row',
+        marginBottom: 12
     }
-
 })

@@ -1,8 +1,9 @@
-import { SET_EXPORT_ITEM_PROPERTIES, SET_EXPORT_ITEM_TYPE, SET_EXPORT_SORTING, RESET_EXPORT, SET_EXPORT_REFERENCE_CELL_ID, SET_EXPORT_POTENTIAL_TYPE_ID, SET_EXPORT_POTENTIAL_DEFAULT_VALUES, SET_EXPORT_SUBITEM_TYPE, SET_EXPORT_PIPELINE, SET_EXPORT_POTENTIALS, SET_EXPORT_POTENTAILS_PIPELINE_GROUPING, SET_EXPORT_SUBITEM_PROPERTIES } from '../actions/export'
+import { SET_EXPORT_ITEM_PROPERTIES, SET_EXPORT_ITEM_TYPE, SET_EXPORT_SORTING, RESET_EXPORT, SET_EXPORT_REFERENCE_CELL_ID, SET_EXPORT_POTENTIAL_TYPE_ID, SET_EXPORT_POTENTIAL_DEFAULT_VALUES, SET_EXPORT_SUBITEM_TYPE, SET_EXPORT_PIPELINE, SET_EXPORT_POTENTIALS, SET_EXPORT_POTENTAILS_PIPELINE_GROUPING, SET_EXPORT_SUBITEM_PROPERTIES, SET_INCLUDE_ASSETS } from '../actions/export'
 
 const initialState = {
     itemType: 'TEST_POINT',
     sorting: 0,
+    includeAssets: true,
     exportPotentials: true,
     exportSubitems: false,
     itemProperties: ['name'],
@@ -60,6 +61,11 @@ const exportSurvey = (state = initialState, action) => {
                 ...state,
                 sorting: action.sorting
             }
+        case SET_INCLUDE_ASSETS:
+            return {
+                ...state,
+                includeAssets: action.isChecked
+            }
         case SET_EXPORT_POTENTIALS:
             return {
                 ...state,
@@ -104,7 +110,8 @@ const exportSurvey = (state = initialState, action) => {
             return {
                 ...initialState,
                 itemType: state.itemType,
-                sorting: state.sorting
+                sorting: state.sorting,
+                includeAssets: state.includeAssets,
             }
         default:
             return state

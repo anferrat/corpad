@@ -12,7 +12,7 @@ export class PipelineSurveyFile {
         this.mapLayers = mapLayers
     }
 
-    resetValues(surveyUid) {
+    resetValues(surveyUid, surveyName) {
         this.testPoints.forEach(testPoint => {
             testPoint.reset()
         })
@@ -30,6 +30,11 @@ export class PipelineSurveyFile {
         })
 
         this.survey.reset(surveyUid)
+        this.survey.setName(surveyName)
+    }
+
+    resetAssets() {
+        this.assets = []
     }
 }
 

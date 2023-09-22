@@ -4,7 +4,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import ImageControlButton from './ImageControlButton'
 
 
-const ImageViewControlBar = ({ onDeletePhoto, onSharePhoto }) => {
+const ImageViewControlBar = ({ onDeletePhoto, onSharePhoto, onSavePhoto }) => {
     const insets = useSafeAreaInsets()
     const isAndroid = Platform.OS === "android"
     return (
@@ -16,7 +16,7 @@ const ImageViewControlBar = ({ onDeletePhoto, onSharePhoto }) => {
                 title={'Share'} />
             {isAndroid ? <ImageControlButton
                 icon={'download'}
-                onPress={() => { }}
+                onPress={onSavePhoto}
                 title={'Save'} /> : null}
             <ImageControlButton
                 icon={'trash'}

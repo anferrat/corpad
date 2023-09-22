@@ -1,16 +1,26 @@
 import { Error, errors } from "../../../utils/Error"
 import { guid } from "../../../utils/guid"
+import { FileSystemLocations } from "../../../../constants/global"
 
 export class CreateSurveyFromTemplate {
-    constructor(fileSystemRepo, validation, jsonImportService, surveyFileConverter, surveyLoadStatusService) {
+    constructor(fileSystemRepo, validation, jsonImportService, surveyFileConverter, surveyLoadStatusService, settingRepo) {
         this.fileSystemRepo = fileSystemRepo
         this.validation = validation
         this.jsonImportService = jsonImportService
         this.surveyFileConverter = surveyFileConverter
         this.surveyLoadStatusService = surveyLoadStatusService
+        this.settingRepo = settingRepo
     }
 
-    async execute(name, isCloud, path) {
+    async _copyAssets(includeAssets, uid) {
+        if (includeAssets) {
+            const currentAssetsFolderPath = await this.fileSystemRepo.getLocation(FileSystemLocations.CURRENT_ASSETS)
+            const localAssetFiles = await this.fileSystemRepo.readDir(FileSystemLocations.ASSETS, uid)
+            await this.fileSystemRepo.copyFiles(currentAssetsFolderPath, localAssetFiles)
+        }
+    }
+
+    async execute(name, isCloud, path, includeAssets) {
         const isLoaded = await this.surveyLoadStatusService.execute()
         // 1. Checking isLoaded. If there is already survey loaded returning its value instead of ovewriting database
         if (!isLoaded.isLoaded) {
@@ -27,9 +37,15 @@ export class CreateSurveyFromTemplate {
                 const surveyFile = this.surveyFileConverter.execute(file, version)
                 //5. Reset surveyFile (potential values, statuses and some subitem values will be reset to null, new survey uid is assigned)
                 const newSurveyUid = guid()
-                surveyFile.resetValues(newSurveyUid)
+                const originalUid = surveyFile.survey.uid
+                surveyFile.resetValues(newSurveyUid, name)
+                if (!includeAssets)
+                    surveyFile.resetAssets()
                 //6. Import to database with fast method.
                 await this.jsonImportService.execute(surveyFile)
+                //7. Copy assets from original survey to current asset folder
+                await this._copyAssets(includeAssets, originalUid)
+                await this.settingRepo.updateSurveySettings({ isSurveyNew: 1, isCloud, originalHash: null, fileName: null, cloudId: null, lastSync: null })
                 return {
                     name,
                     fileName: null,

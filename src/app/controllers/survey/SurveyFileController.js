@@ -130,11 +130,11 @@ class SurveyFileController extends Controller {
 
     async create(params, onError = null, onSuccess = null) {
         return super.controllerHandler(onSuccess, onError, 415, async () => {
-            const { isBlank, isCloud, path, name } = params
+            const { isBlank, isCloud, path, name, includeAssets } = params
             if (isBlank || path === null)
                 return await this.createSurveyService.execute(name, isCloud)
             else
-                return await this.createSurveyFromTemplateService.execute(name, isCloud, path)
+                return await this.createSurveyFromTemplateService.execute(name, isCloud, path, includeAssets)
         })
     }
 
@@ -179,6 +179,6 @@ export const copyCloudSurveyFileToDevice = ({ cloudId, onDownload }, onError, on
 
 export const copySurveyFileToDownloads = ({ cloudId, isCloud, path, onDownload }, onError, onSuccess) => surveyFileController.copyToDownloads({ cloudId, isCloud, path, onDownload }, onError, onSuccess)
 
-export const createSurvey = ({ isBlank, isCloud, path, name }, onError, onSuccess) => surveyFileController.create({ isBlank, isCloud, path, name }, onError, onSuccess)
+export const createSurvey = ({ isBlank, isCloud, path, name, includeAssets }, onError, onSuccess) => surveyFileController.create({ isBlank, isCloud, path, name, includeAssets }, onError, onSuccess)
 
 export const shareFile = ({ cloudId, path, isCloud, onDownload }, onError, onSuccess) => surveyFileController.shareFile({ cloudId, path, isCloud, onDownload }, onError, onSuccess)

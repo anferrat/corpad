@@ -10,7 +10,7 @@ import { assetFileSaveControl, assetFileUploadControl, uploadAssets } from "./su
 
 const surveyJsonExportService = new SurveyJsonExport(surveyRepo, testPointRepo, rectifierRepo, pipelineRepo, subitemRepo, potentialRepo, potentialTypeRepo, referenceCellRepo, mapLayerRepo, assetRepo)
 
-const saveSurveyFileService = new SaveSurveyFile(fileSystemRepo, surveyFileConverterOutput, assetFileSaveControl)
+const saveSurveyFileService = new SaveSurveyFile(fileSystemRepo, surveyFileConverterOutput, assetFileSaveControl, warningHandler)
 
 const saveCloudSurveyFileService = new SaveCloudSurveyFile(googleDriveFileSystemRepo, networkRepo, surveyFileConverterOutput, assetFileUploadControl, uploadAssets, fileSystemRepo, warningHandler, assetFileSaveControl)
 

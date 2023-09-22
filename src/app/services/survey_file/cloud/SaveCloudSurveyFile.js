@@ -13,37 +13,69 @@ export class SaveCloudSurveyFile {
         this.assetFileSaveControl = assetFileSaveControl
     }
 
-    async _saveAssets(assets, uid, onUpload) {
+    async _saveSurveyFile(surveyFile, fileName, isSurveyNew, cloudId) {
+        const isNewFile = isSurveyNew || !(await this.cloudFileSystemRepo.isFileExist(cloudId))
+        const surveyFileContent = JSON.stringify(this.surveyFileConverterOutput.execute(surveyFile))
+        return isNewFile ?
+            await this.cloudFileSystemRepo.createFile(fileName, surveyFileContent)
+            :
+            await this.cloudFileSystemRepo.updateFile(cloudId, surveyFileContent)
+    }
+
+    async _assetControl(uid, assets) {
         const cloudAssetList = await this.cloudFileSystemRepo.readSurveyAssetFolder(uid)
-        const surveyAssetFolderPath = await this.fileSystemRepo.getLocation(FileSystemLocations.ASSETS, uid)
         const surveyAssetFiles = await this.fileSystemRepo.readDir(FileSystemLocations.ASSETS, uid)
         const localAssetFiles = await this.fileSystemRepo.readDir(FileSystemLocations.CURRENT_ASSETS)
         const { localFilesToUpload, cloudFilesToDelete, missingAssets } = this.assetFileUploadControl.execute(assets, cloudAssetList, localAssetFiles)
-        const removeMissingAssets = missingAssets.length !== 0 ? await this.warningHandler.execute(`There are ${missingAssets.length} assets (e.g. photos). Would you like to remove them from the survey`, 'Remove', 'Leave as is') : false
-        await this.uploadAssets.execute(localFilesToUpload, uid, ({ total, current }) => onUpload ? onUpload(total, current + 1) : null)
-        await this.cloudFileSystemRepo.deleteFiles(cloudFilesToDelete)
         const { localFilesToCopy, localFilesToDelete } = await this.assetFileSaveControl.execute(assets, localAssetFiles, surveyAssetFiles)
-        await Promise.all(localFilesToDelete.map(({ path }) => this.fileSystemRepo.unlink(path)))
-        await this.fileSystemRepo.copyFiles(surveyAssetFolderPath, localFilesToCopy)
+        const removeMissingAssets = missingAssets.length !== 0 && await this.warningHandler.execute(`There are ${missingAssets.length} missing images found in this survey. Would you like to remove records of them from the survey?`, 'Remove', 'Leave as is')
         return {
+            localFilesToUpload,
+            cloudFilesToDelete,
             missingAssets,
-            removeMissingAssets
+            removeMissingAssets,
+            localFilesToCopy,
+            localFilesToDelete
         }
+    }
+
+    async _uploadAssetFiles(localFilesToUpload, uid, onUpload) {
+        await this.uploadAssets.execute(localFilesToUpload, uid,
+            ({ total, current }) => onUpload ? onUpload(total, current + 1) : null)
+    }
+
+    async _deleteAssetFiles(cloudFilesToDelete, localFilesToDelete) {
+        await this.cloudFileSystemRepo.deleteFiles(cloudFilesToDelete)
+        await Promise.all(localFilesToDelete.map(({ path }) => this.fileSystemRepo.unlink(path)))
+    }
+
+    async _copyAssetFiles(uid, localFilesToCopy) {
+        const surveyAssetFolderPath = await this.fileSystemRepo.getLocation(FileSystemLocations.ASSETS, uid)
+        await this.fileSystemRepo.copyFiles(surveyAssetFolderPath, localFilesToCopy)
+    }
+
+    _deleteMissingAssets(surveyFile, missingAssets, removeMissingAssets) {
+        if (removeMissingAssets)
+            surveyFile.assets = surveyFile.assets.filter(({ id }) => !~missingAssets.findIndex((missingAsset) => missingAsset.id === id))
     }
 
     async execute(surveyFile, fileName, isSurveyNew, cloudId, onUpload) {
         const internetOn = await this.networkRepo.checkConnection()
         if (internetOn) {
-            const createNew = isSurveyNew || !(await this.cloudFileSystemRepo.isFileExist(cloudId))
-            const { missingAssets, removeMissingAssets } = await this._saveAssets(surveyFile.assets, surveyFile.survey.uid, onUpload)
-            if (removeMissingAssets) {
-                surveyFile.assets = surveyFile.assets.filter(({ id }) => !~missingAssets.findIndex((missingAsset) => missingAsset.id === id))
-            }
-            const surveyFileContent = JSON.stringify(this.surveyFileConverterOutput.execute(surveyFile))
-            const { fileId } = createNew ?
-                await this.cloudFileSystemRepo.createFile(fileName, surveyFileContent)
-                :
-                await this.cloudFileSystemRepo.updateFile(cloudId, surveyFileContent)
+            const {
+                localFilesToUpload,
+                cloudFilesToDelete,
+                missingAssets,
+                removeMissingAssets,
+                localFilesToCopy,
+                localFilesToDelete
+            } = await this._assetControl(surveyFile.survey.uid, surveyFile.assets)
+            this._deleteMissingAssets(surveyFile, missingAssets, removeMissingAssets)
+            const { fileId } = await this._saveSurveyFile(surveyFile, fileName, isSurveyNew, cloudId)
+            await Promise.all([
+                this._uploadAssetFiles(localFilesToUpload, surveyFile.survey.uid, onUpload),
+                this._deleteAssetFiles(cloudFilesToDelete, localFilesToDelete),
+                this._copyAssetFiles(surveyFile.survey.uid, localFilesToCopy)])
             return {
                 fileName: fileName,
                 cloudId: fileId,

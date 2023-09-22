@@ -44,8 +44,7 @@ const PotentialProperties = ({ navigateToExportSubitems }) => {
                 <View style={styles.container}>
                     <CheckBox
                         checked={exportPotentials}
-                        onChange={toggleExportPotentials}
-                        style={styles.checkBox}>
+                        onChange={toggleExportPotentials}>
                         <CheckBoxText>Export potentials</CheckBoxText>
                     </CheckBox>
                     <ViewContainer hidden={!exportPotentials}>

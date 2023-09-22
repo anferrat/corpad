@@ -9,9 +9,9 @@ export class GetExportedFileList {
 
     async execute() {
         const dir = await this.fileSystemRepo.readDir(FileSystemLocations.EXPORTS)
-        const files = dir.filter(({ filename, isFile }) => (filename.endsWith('.csv') || filename.endsWith('.kml')) && isFile)
+        const files = dir.filter(({ filename, isFile }) => (filename.endsWith('.csv') || filename.endsWith('.kml')) || filename.endsWith('.zip') && isFile)
             .sort((a, b) => b.timeModified - a.timeModified)
-            .map(({ timeModified, filename, path, size }) => new ExportedFile(filename, path, size, timeModified, filename.endsWith('.csv') ? FileMimeTypes.CSV : FileMimeTypes.KML))
+            .map(({ timeModified, filename, path, size }) => new ExportedFile(filename, path, size, timeModified, filename.endsWith('.csv') ? FileMimeTypes.CSV : (filename.endsWith('.zip') ? FileMimeTypes.ZIP : FileMimeTypes.KML)))
         return this.listPresenter.execute(files)
     }
 }

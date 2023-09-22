@@ -10,6 +10,7 @@ export const RESET_EXPORT = 'RESET_EXPORT'
 export const SET_EXPORT_POTENTIALS = 'SET_EXPORT_POTENTIALS'
 export const SET_EXPORT_POTENTAILS_PIPELINE_GROUPING = 'SET_EXPORT_POTENTAILS_PIPELINE_GROUPING'
 export const SET_EXPORT_SUBITEM_PROPERTIES = 'SET_EXPORT_SUBITEM_PROPERTIES'
+export const SET_INCLUDE_ASSETS = 'SET_INCLUDE_ASSETS'
 
 export const setExportItemType = (itemType) =>
     ({ type: SET_EXPORT_ITEM_TYPE, itemType })
@@ -47,6 +48,10 @@ export const toggleExportSubitemProperty = (subitemType, subitemProperty) => (
 
 export const toggleExportPipeline = (pipelineId) => (
     { type: SET_EXPORT_PIPELINE, pipelineId }
+)
+
+export const toggleIncludeAssets = (isChecked) => (
+    { type: SET_INCLUDE_ASSETS, isChecked }
 )
 
 export const resetExport = () =>
