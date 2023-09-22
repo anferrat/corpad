@@ -15,7 +15,6 @@ export class CopyCloudSurveyFileToLocal {
 
 
     async _copyAssets(oldUid, newUid, assets, onDownload) {
-        console.log(onDownload)
         const localAssetFiles = await this.fileSystemRepo.readDir(FileSystemLocations.ASSETS, oldUid)
         const cloudAssetFiles = await this.cloudFileSystemRepo.readSurveyAssetFolder(oldUid)
         const { cloudFilesToDownload } = this.assetFileDownloadControl.execute(assets, cloudAssetFiles, localAssetFiles)

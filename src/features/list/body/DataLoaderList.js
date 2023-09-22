@@ -18,7 +18,7 @@ const ItemList = ({ itemType, navigateToView }) => {
     const dispatch = useDispatch()
     const t = useSelector(state => getListStateByType(itemType, state))
     const headerRef = useRef(new Animated.Value(0))
-    const minScroll = 100;
+    const minScroll = 0;
 
     const clampedScrollY = headerRef.current.interpolate({
         inputRange: [minScroll, minScroll + 1],

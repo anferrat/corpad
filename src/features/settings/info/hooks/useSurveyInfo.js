@@ -54,7 +54,7 @@ const useSurveyInfo = () => {
         componentMounted.current = true
         getSurveyInfo(
             (er) => errorHandler(er, navigation.goBack),
-            ({ surveyName, lastUpdated, mainReference, pipelineCount, potentialCount, rectifierCount, tpCount, testPointStatusCount, rectifierStatusCount, surveyRadius }) => {
+            ({ surveyName, lastUpdated, mainReference, pipelineCount, potentialCount, rectifierCount, tpCount, testPointStatusCount, rectifierStatusCount, surveyRadius, assetCount }) => {
                 if (componentMounted.current)
                     setData({
                         loading: false,
@@ -81,7 +81,8 @@ const useSurveyInfo = () => {
                             lastUpdated: lastUpdated,
                             mainReference: mainReference,
                             surveyRadius: surveyRadius,
-                            potentials: potentialCount
+                            potentials: potentialCount,
+                            assetCount: assetCount
                         }
                     })
                 setSurveyName({

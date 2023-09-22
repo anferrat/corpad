@@ -60,14 +60,10 @@ export class SurveyFileContentValidationV2 extends Validation {
                         .every(row => {
                             if (key === DataFields.SUBITEMS) {
                                 const typeValid = this.subitemType.isValidSync(row[3])
-
                                 if (typeValid) {
-                                    if (!this.subitemSchemas[row[3]].isValidSync(row))
-                                        console.log('invalid ', row)
                                     return this.subitemSchemas[row[3]].isValidSync(row)
                                 }
                                 else {
-                                    console.log('type invalid')
                                     return typeValid
                                 }
                             }
@@ -77,8 +73,6 @@ export class SurveyFileContentValidationV2 extends Validation {
                                         this.surveyFileSchemas[key].validateSync(row)
                                     }
                                     catch (er) {
-                                        console.log('table ', key, `values: ${row}`, '')
-                                        console.log(er)
                                     }
                                 }
                                 return this.surveyFileSchemas[key]
