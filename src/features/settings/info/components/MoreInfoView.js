@@ -6,7 +6,7 @@ import { ReferenceCellCodeLabels } from '../../../../constants/labels'
 
 
 const MoreInfoView = ({ extraInfo }) => {
-    const { lastUpdated, mainReference, surveyRadius, potentials } = extraInfo
+    const { lastUpdated, mainReference, surveyRadius, potentials, assetCount } = extraInfo
     return (
         <>
             {mainReference ?
@@ -30,9 +30,14 @@ const MoreInfoView = ({ extraInfo }) => {
                 value={getDistance(surveyRadius)} />
             <InfoListItem
                 title={'Potentials'}
-                subtitle={'Total numbr of readings'}
+                subtitle={'Total number of readings'}
                 icon={'grid'}
                 value={potentials} />
+            <InfoListItem
+                title={'Images'}
+                subtitle={'Number of image assets'}
+                icon={'image'}
+                value={assetCount} />
         </>
     )
 }

@@ -255,7 +255,6 @@ export class FileSystemRepository {
             return await unzip(sourcePath, folderPath)
         }
         catch (er) {
-            console.log(er)
             throw new Error(errors.FILESYSTEM, 'Uable to unzip file', er)
         }
     }

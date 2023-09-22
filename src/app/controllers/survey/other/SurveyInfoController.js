@@ -2,13 +2,13 @@ import { Controller } from "../../../utils/Controller"
 import { GetSurveyInfo } from "../../../services/survey/other/survey_info/GetSurveyInfo"
 import { SurveyValidation } from "../../../validation/SurveyValidation"
 import { UpdateSurveyName } from "../../../services/survey/other/survey_info/UpdateSurveyName"
-import { pipelineRepo, potentialRepo, rectifierRepo, referenceCellRepo, surveyRepo, testPointRepo } from "../../_instances/repositories"
+import { assetRepo, pipelineRepo, potentialRepo, rectifierRepo, referenceCellRepo, surveyRepo, testPointRepo } from "../../_instances/repositories"
 import { geolocationCalculator } from "../../_instances/general_services"
 
 class SurveyInfoController extends Controller {
-    constructor(testPointRepo, rectifierRepo, pipelineRepo, potentialRepo, referenceCellRepo, geolocationCalculator, surveyRepo) {
+    constructor(testPointRepo, rectifierRepo, pipelineRepo, potentialRepo, referenceCellRepo, geolocationCalculator, surveyRepo, assetRepo) {
         super()
-        this.getSurveyInfoService = new GetSurveyInfo(testPointRepo, rectifierRepo, pipelineRepo, potentialRepo, referenceCellRepo, surveyRepo, geolocationCalculator)
+        this.getSurveyInfoService = new GetSurveyInfo(testPointRepo, rectifierRepo, pipelineRepo, potentialRepo, referenceCellRepo, surveyRepo, assetRepo, geolocationCalculator)
         this.updateSurveyNameService = new UpdateSurveyName(surveyRepo)
         this.validation = new SurveyValidation()
     }
@@ -35,7 +35,8 @@ const surveyInfoController = new SurveyInfoController(
     potentialRepo,
     referenceCellRepo,
     geolocationCalculator,
-    surveyRepo
+    surveyRepo,
+    assetRepo
 )
 
 export const getSurveyInfo = (onError, onSuccess) => surveyInfoController.getInfo(onError, onSuccess)

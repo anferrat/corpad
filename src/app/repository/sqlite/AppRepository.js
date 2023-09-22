@@ -108,7 +108,6 @@ export class AppRepository extends SQLiteRepository {
 
             }
             catch (er) {
-                console.log(er)
                 //no Errros thrown while adjusting schemas
             }
     }

@@ -1,7 +1,7 @@
 import { ItemStatuses } from "../../../../../constants/global"
 
 export class GetSurveyInfo {
-    constructor(testPointRepo, rectifierRepo, pipelineRepo, potentialRepo, referenceCellRepo, surveyRepo, geolocationCalculator) {
+    constructor(testPointRepo, rectifierRepo, pipelineRepo, potentialRepo, referenceCellRepo, surveyRepo, assetRepo, geolocationCalculator) {
         this.testPointRepo = testPointRepo
         this.rectifierRepo = rectifierRepo
         this.pipelineRepo = pipelineRepo
@@ -9,16 +9,18 @@ export class GetSurveyInfo {
         this.referenceCellRepo = referenceCellRepo
         this.geolocationCalculator = geolocationCalculator
         this.surveyRepo = surveyRepo
+        this.assetRepo = assetRepo
     }
 
     async execute() {
-        const [testPoints, rectifiers, pipelines, potentials, mainReference, survey] = await Promise.all([
+        const [testPoints, rectifiers, pipelines, potentials, mainReference, survey, assets] = await Promise.all([
             this.testPointRepo.getAll(),
             this.rectifierRepo.getAll(),
             this.pipelineRepo.getAll(),
             this.potentialRepo.getAll(),
             this.referenceCellRepo.getMainReference(),
             this.surveyRepo.getSurvey(),
+            this.assetRepo.getAll()
         ])
         const tpCount = testPoints.length
         const pipelineCount = pipelines.length
@@ -28,9 +30,9 @@ export class GetSurveyInfo {
         const testPointStatusCount = this._getStatusCount(testPoints)
         const rectifierStatusCount = this._getStatusCount(rectifiers)
         const surveyRadius = this._getRadius(testPoints, rectifiers)
-
+        const assetCount = assets.length
         return {
-            surveyName: survey.name, tpCount, pipelineCount, rectifierCount, potentialCount, lastUpdated, testPointStatusCount, rectifierStatusCount, surveyRadius, mainReference: { ...mainReference }
+            surveyName: survey.name, tpCount, pipelineCount, rectifierCount, potentialCount, lastUpdated, testPointStatusCount, rectifierStatusCount, surveyRadius, assetCount, mainReference: { ...mainReference }
         }
     }
 

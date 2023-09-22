@@ -29,7 +29,7 @@ export default DevScreen = ({ navigation, route }) => {
     const manager = new GoogleDriveFileTransferManager()
     const { jobId, promise } = manager.upload(`${RNFS.DocumentDirectoryPath}/surveys/kuku3.json`, 'kuku3.json', ['1N2ek1TMnwn6R2t-CSqV5cNvrLlgwMY5V'], 'application/json')
     //'1H0L-GYu4zULBis9zeKbs46EA2gljUf8s', `${RNFS.DocumentDirectoryPath}/surveys/kuku3.json`)
-    console.log(await promise)
+    //console.log(await promise)
   }
 
   const testZip = async () => {
@@ -37,10 +37,8 @@ export default DevScreen = ({ navigation, route }) => {
     const tempPath = await fileSystemRepo.getLocation(FileSystemLocations.TEMP)
     try {
       const res = await fileSystemRepo.zip(`${tempSurveyPath}`, `${tempPath}/Test22.zip`)
-      console.log(res)
     }
     catch (er) {
-      console.log(er)
     }
   }
 
@@ -48,10 +46,8 @@ export default DevScreen = ({ navigation, route }) => {
     const tempSurveyPath = await fileSystemRepo.getLocation(FileSystemLocations.TEMP_SURVEY)
     try {
       const res = await fileSystemRepo.unzip(`${RNFS.DocumentDirectoryPath}/MySurvey23.zip`, tempSurveyPath)
-      console.log(res)
     }
     catch (er) {
-      console.log(er)
     }
   }
 

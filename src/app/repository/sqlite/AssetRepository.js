@@ -74,7 +74,6 @@ export class AssetRepository extends SQLiteRepository {
                     return super.runQuery(tx, `INSERT INTO assets (id, uid, comment, mediaType, fileName, timeCreated, timeModified, ${itemIdField}) VALUES (?,?,?,?,?,?,?,?)`, [id, uid, comment, mediaType, fileName, timeCreated, timeModified, parentId])
                 }) : null
             ]))
-            console.log('success')
         }
         catch (er) {
             throw new Error(errors.DATABASE, 'Unable to update assets', er)

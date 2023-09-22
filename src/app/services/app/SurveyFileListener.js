@@ -20,7 +20,6 @@ export class SurveyFileListener {
                 }
             }
             catch (er) {
-                console.log(er)
                 onError(er.code)
             }
         })
