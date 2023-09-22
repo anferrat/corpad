@@ -12,6 +12,7 @@ const useCreateSurvey = () => {
     })
     const [isCloud, setIsCloud] = useState(false)
     const [isBlank, setIsBlank] = useState(true)
+    const [includeAssets, setIncludeAssets] = useState(true)
     const [selectedSurveyIndex, setSelectedSurveyIndex] = useState(null)
     const [surveyList, setSurveyList] = useState([])
     const [surveyListLoading, setSurveyListLoading] = useState(true)
@@ -64,7 +65,7 @@ const useCreateSurvey = () => {
             dispatch(updateLoader('Creating survey', `Name: ${name}`))
             const path = surveyList[selectedSurveyIndex] ? surveyList[selectedSurveyIndex].path : null
             await createSurvey(
-                { isBlank, isCloud, path, name },
+                { isBlank, isCloud, path, name, includeAssets },
                 (er) => errorHandler(er),
                 ({ name, fileName, isCloud, syncTime, uid }) =>
                     dispatch(setSurveySettings(name, fileName, syncTime, isCloud, true, uid)))
@@ -77,7 +78,7 @@ const useCreateSurvey = () => {
                 valid: valid
             })
         }
-    }, [name.name, isBlank, isCloud, surveyList, selectedSurveyIndex])
+    }, [name.name, isBlank, isCloud, surveyList, selectedSurveyIndex, includeAssets])
 
     return {
         name: name.name,
@@ -89,6 +90,8 @@ const useCreateSurvey = () => {
         isSigned,
         surveyListLoading,
         visible,
+        includeAssets,
+        setIncludeAssets,
         onChangeName,
         onEndEditingName,
         setDeviceBased,

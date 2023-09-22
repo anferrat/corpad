@@ -19,6 +19,8 @@ export const CreateSurvey = () => {
         isSigned,
         surveyListLoading,
         visible,
+        includeAssets,
+        setIncludeAssets,
         onChangeName,
         onEndEditingName,
         setDeviceBased,
@@ -62,6 +64,8 @@ export const CreateSurvey = () => {
                     <TemplateSelector
                         surveyListLoading={surveyListLoading}
                         surveyList={surveyList}
+                        includeAssets={includeAssets}
+                        setIncludeAssets={setIncludeAssets}
                         toggleTemplateSetting={toggleTemplateSetting}
                         isBlank={isBlank}
                         selectedSurveyindex={selectedSurveyIndex}

@@ -73,8 +73,6 @@ const useApp = () => {
         urlListener.response.remove()
       if (networkStatus)
         networkStatus()
-      if (bluetoothStatus.response)
-        bluetoothStatus.response.remove()
       if (multimeterListener.response)
         multimeterListener.response()
     }

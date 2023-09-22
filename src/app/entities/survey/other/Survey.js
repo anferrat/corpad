@@ -8,4 +8,8 @@ export class Survey {
     reset(uid) {
         this.uid = uid
     }
+
+    setName(name){
+        this.name = name
+    }
 }

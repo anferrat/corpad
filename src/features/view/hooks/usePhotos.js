@@ -3,16 +3,20 @@ import { useBottomSheetNavigation } from "../../../hooks/bottom_sheet/useBottomS
 import { getItemPhotos } from "../../../app/controllers/survey/items/ItemController"
 import { errorHandler, warningHandler } from "../../../helpers/error_handler"
 import { EventRegister } from "react-native-event-listeners"
-import { addPhotoToAssets, deletePhotoFromAssets, sharePhoto } from "../../../app/controllers/survey/other/MediaController"
-import { FileMimeTypes, ItemTypes } from "../../../constants/global"
+import { addPhotoToAssets, deletePhotoFromAssets, savePhotoToDownloads, sharePhoto } from "../../../app/controllers/survey/other/MediaController"
+import { ItemTypes } from "../../../constants/global"
 import { useDispatch } from "react-redux"
 import { updateLoader, hideLoader } from "../../../store/actions/settings"
 import { ImageSourceLabels } from "../../../constants/labels"
 import { useIsFocused } from "@react-navigation/native"
 import { PHOTO_LIMIT } from "../../../constants/global"
+import { Platform, ToastAndroid } from "react-native"
+import { useSelector } from "react-redux"
 
 const usePhotos = ({ itemId, itemType }) => {
     const listRef = useRef()
+    const name = useSelector(state => state.item.view.name ?? 'Error')
+    const componentMounted = useRef(true)
     const isFocused = useIsFocused()
     const dispatch = useDispatch()
     const [photos, setPhotos] = useState([])
@@ -32,13 +36,21 @@ const usePhotos = ({ itemId, itemType }) => {
     const { openImagePicker } = useBottomSheetNavigation()
 
     useEffect(() => {
+        componentMounted.current = true
+        return () => {
+            componentMounted.current = false
+        }
+    }, [])
+
+    useEffect(() => {
         const loadData = async () => {
             const { status, response } = await getItemPhotos({ itemId, itemType })
             if (status === 200) {
-                setPhotos(response)
-                console.log(response.length)
-                if (response.length > 0)
-                    scrollToStart()
+                if (componentMounted.current) {
+                    setPhotos(response)
+                    if (response.length > 0)
+                        scrollToStart()
+                }
             }
             else
                 errorHandler(status)
@@ -82,7 +94,15 @@ const usePhotos = ({ itemId, itemType }) => {
 
     const onSharePhoto = async () => {
         if (imageView.visible)
-            sharePhoto({ uri: photos[imageView.index].source.uri, mimeType: FileMimeTypes.IMAGE })
+            sharePhoto({ uri: photos[imageView.index].source.uri })
+    }
+
+    const onSavePhoto = async () => {
+        if (imageView.visible) {
+            const { status } = await savePhotoToDownloads({ path: photos[imageView.index].source.uri, name }, er => errorHandler(er))
+            if (Platform.OS === 'android' && status === 200)
+                ToastAndroid.showWithGravity('Saved to Downloads', 1000, ToastAndroid.BOTTOM)
+        }
     }
 
     const onDeletePhoto = async () => {
@@ -121,7 +141,8 @@ const usePhotos = ({ itemId, itemType }) => {
         onDeletePhoto,
         onImageViewClose,
         onPhotoPress,
-        onSharePhoto
+        onSharePhoto,
+        onSavePhoto
     }
 }
 

@@ -29,6 +29,8 @@ const Overview = ({ navigateToExportItem }) => {
         groupPotentialsByPipeline,
         selectedSubitemTypes,
         showOther,
+        includeAssets,
+        assetOptionAvailable
     } = useExportLabels(navigateToExportItem)
     return (
         <>
@@ -48,6 +50,14 @@ const Overview = ({ navigateToExportItem }) => {
                             {itemTypeLabel}
                         </PropertyElement>
                     </Display>
+                    {assetOptionAvailable ?
+                        <Display
+                            property={'Include images:'}>
+                            <PropertyElement
+                                icon={includeAssets ? 'checkmark' : 'close'}>
+                                {includeAssets ? 'Yes' : 'No'}
+                            </PropertyElement>
+                        </Display> : null}
                     <Display
                         property={'Sorting:'}>
                         <PropertyElement>

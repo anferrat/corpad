@@ -1,6 +1,6 @@
 import React from 'react'
 import { View, StyleSheet, ActivityIndicator } from 'react-native'
-import { RadioGroup, Radio, Text } from '@ui-kitten/components'
+import { RadioGroup, Radio, Text, CheckBox } from '@ui-kitten/components'
 import Select from '../../../components/Select'
 import { primary } from '../../../styles/colors'
 
@@ -9,7 +9,7 @@ const accessory = {
     icon: 'file-outline'
 }
 
-const TemplateSelector = ({ surveyList, toggleTemplateSetting, isBlank, selectedSurveyindex, setSelectedSurveyIndex, surveyListLoading }) => {
+const TemplateSelector = ({ surveyList, toggleTemplateSetting, isBlank, selectedSurveyindex, setSelectedSurveyIndex, surveyListLoading, includeAssets, setIncludeAssets }) => {
     const placeholder = surveyList.length > 0 ? 'Select survey' : 'No local surveys found'
     return (
         <>
@@ -26,7 +26,7 @@ const TemplateSelector = ({ surveyList, toggleTemplateSetting, isBlank, selected
                         <Text
                             category={'s2'}
                             appearance='hint'>
-                            Create an empty survey with general settings
+                            Create an empty survey with default items
                         </Text>
                     </View>
                 </Radio>
@@ -57,6 +57,12 @@ const TemplateSelector = ({ surveyList, toggleTemplateSetting, isBlank, selected
                             onSelect={setSelectedSurveyIndex}
                             itemList={surveyList} />
                     }
+                    <CheckBox
+                        checked={includeAssets}
+                        onChange={setIncludeAssets}
+                        style={styles.checkbox}>
+                        Include images from existing survey
+                    </CheckBox>
                 </View> :
                 null}
         </>
@@ -78,9 +84,12 @@ const styles = StyleSheet.create({
         marginTop: 12
     },
     selectView: {
-      
+
     },
     loadingText: {
         marginLeft: 12
+    },
+    checkbox: {
+        marginTop: 12
     }
 })

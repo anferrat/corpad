@@ -15,7 +15,7 @@ const getItemLayout = (data, index) => {
 
 const keyExtractor = (item) => item.fileName
 
-const PhotoListView = ({ onPhotoPress, photos, onImageViewClose, imageView, onDeletePhoto, listRef, isVisible, onSharePhoto }) => {
+const PhotoListView = ({ onPhotoPress, photos, onImageViewClose, imageView, onDeletePhoto, listRef, isVisible, onSharePhoto, onSavePhoto }) => {
  
     const uriList = React.useMemo(() => photos.map(({ source }) => source), [photos])
 
@@ -49,6 +49,7 @@ const PhotoListView = ({ onPhotoPress, photos, onImageViewClose, imageView, onDe
                     onImageViewClose={onImageViewClose}
                     onDeletePhoto={onDeletePhoto}
                     onSharePhoto={onSharePhoto}
+                    onSavePhoto={onSavePhoto}
                 />
             </View>
         )

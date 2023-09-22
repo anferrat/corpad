@@ -9,20 +9,24 @@ import { getFormattedDate } from "../../../../helpers/functions"
 import { getFileSize } from "../helpers/functions"
 import FileListItemMenuItem from "./FileListItemMenuItem"
 import Pressable from "../../../../components/Pressable"
+import { FileMimeTypes } from "../../../../constants/global"
 
 const fileIcons = {
-    'text/csv': {
+    [FileMimeTypes.CSV]: {
         icon: 'file-text-outline',
         pack: null,
     },
-    'application/vnd.google-earth.kml+xml': {
+    [FileMimeTypes.KML]: {
         icon: 'kml-file',
         pack: 'cp'
+    },
+    [FileMimeTypes.ZIP]: {
+        icon: 'archive-outline',
     }
 }
 
 const ExportedFileListItem = ({ deleteFile, removeFileFromList, saveToDownloads, shareFileHandler, openInHandler, path, name, type, size, timeModified, navigateToSpreadsheet }) => {
-    const isKml = type !== 'text/csv'
+    const isCsv = type === FileMimeTypes.CSV
     const isAndroid = Platform.OS === 'android'
     const scale = useRef(new Animated.Value(1))
     const { hideModal, showModal, visible } = useModal()
@@ -72,7 +76,7 @@ const ExportedFileListItem = ({ deleteFile, removeFileFromList, saveToDownloads,
         }}>
             <Pressable
                 style={styles.mainView}
-                onPress={isKml ? handleShareFile : handlePreview}
+                onPress={isCsv ? handlePreview : handleShareFile}
                 android_ripple={androidRipple}>
                 <View
                     style={styles.topView}>
@@ -86,7 +90,7 @@ const ExportedFileListItem = ({ deleteFile, removeFileFromList, saveToDownloads,
                         <Text
                             category="p1"
                             numberOfLines={1}
-                            ellipsizeMode={'tail'}>
+                            ellipsizeMode={'middle'}>
                             {name}</Text>
                         <Text
                             category="c1"
@@ -97,7 +101,7 @@ const ExportedFileListItem = ({ deleteFile, removeFileFromList, saveToDownloads,
                         showMenu={showModal}
                         hideMenu={hideModal}
                         visible={visible}>
-                        {!isKml ?
+                        {isCsv ?
                             <FileListItemMenuItem
                                 title={'Preview'}
                                 icon={'eye-outline'}

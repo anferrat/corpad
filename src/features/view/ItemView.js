@@ -11,7 +11,7 @@ import usePhotos from './hooks/usePhotos'
 
 const ItemView = ({ itemId, itemType, navigateToMap, navigateToEditSubitem, navigateToEdit }) => {
     const { item, loading, displayOnMapVisible, submit, update, createSubitem, deleteItem, displayOnMap } = useItemData({ itemId, itemType, navigateToMap, navigateToEditSubitem })
-    const { onAddPhoto, onPhotoPress, onImageViewClose, onDeletePhoto, onSharePhoto, photos, imageView, limitReached, listRef, isVisible } = usePhotos({ itemId, itemType })
+    const { onAddPhoto, onPhotoPress, onImageViewClose, onDeletePhoto, onSharePhoto, onSavePhoto, photos, imageView, limitReached, listRef, isVisible } = usePhotos({ itemId, itemType })
     const updateStatus = (value) => submit(value, 'status')
 
     return (
@@ -29,6 +29,7 @@ const ItemView = ({ itemId, itemType, navigateToMap, navigateToEditSubitem, navi
                     onImageViewClose={onImageViewClose}
                     onDeletePhoto={onDeletePhoto}
                     onSharePhoto={onSharePhoto}
+                    onSavePhoto={onSavePhoto}
                     imageView={imageView}
                     limitReached={limitReached}
                     photos={photos}

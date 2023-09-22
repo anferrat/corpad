@@ -65,5 +65,5 @@ export const loadExternalSurveyFileService = new LoadSurvey(jsonImportService, a
 
 export const createSurveyService = new CreateSurvey(surveyRepo, potentialTypeRepo, currentSurveyStatusService, pipelineRepo, referenceCellRepo, settingRepo)
 
-export const createSurveyFromTemplateService = new CreateSurveyFromTemplate(fileSystemRepo, surveyFileValidation, jsonImportService, surveyFileConverterInput, currentSurveyStatusService)
+export const createSurveyFromTemplateService = new CreateSurveyFromTemplate(fileSystemRepo, surveyFileValidation, jsonImportService, surveyFileConverterInput, currentSurveyStatusService, settingRepo)
 

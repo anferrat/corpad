@@ -1,20 +1,23 @@
 import { AddPhotoToAssets } from "../../../services/survey/other/photos/AddPhotoToAssets"
 import { DeletePhotoFromAssets } from "../../../services/survey/other/photos/DeletePhotoFromAssets"
 import { GetNewPhoto } from "../../../services/survey/other/photos/GetNewPhoto"
+import { SavePhotoToDownloads } from "../../../services/survey/other/photos/SavePhotoToDownloads"
+import { SharePhoto } from "../../../services/survey/other/photos/SharePhoto"
 import { UpdateItemPhotos } from "../../../services/survey/other/photos/UpdateItemPhotos"
 import { Controller } from "../../../utils/Controller"
 import { createAssetFileService, deleteAssetFileService } from "../../_instances/assets"
-import { documentPicker, imagePicker, shareService } from "../../_instances/general_services"
+import { documentPicker, imagePicker, permissions, shareService } from "../../_instances/general_services"
 import { assetRepo, fileSystemRepo } from "../../_instances/repositories"
 
 class MediaController extends Controller {
-    constructor(fileSystemRepo, assetRepo, imagePicker, documentPicker, shareService, createAssetFileService, deleteAssetFileService) {
+    constructor(fileSystemRepo, assetRepo, imagePicker, documentPicker, shareService, createAssetFileService, deleteAssetFileService, permissions) {
         super()
         this.addPhotoToAssetsService = new AddPhotoToAssets(assetRepo, fileSystemRepo, createAssetFileService)
         this.deletePhotoFromAssetsService = new DeletePhotoFromAssets(deleteAssetFileService, assetRepo)
         this.getNewPhotoService = new GetNewPhoto(imagePicker, documentPicker)
         this.updateItemPhotosService = new UpdateItemPhotos(assetRepo, fileSystemRepo, createAssetFileService, deleteAssetFileService)
-        this.shareService = shareService
+        this.sharePhotoService = new SharePhoto(shareService)
+        this.savePhotoToDownloadsService = new SavePhotoToDownloads(fileSystemRepo, permissions)
     }
 
     addPhotoToAssets(params, onError = null, onSuccess = null) {
@@ -33,8 +36,15 @@ class MediaController extends Controller {
 
     sharePhoto(params, onError = null, onSuccess = null) {
         return super.controllerHandler(onSuccess, onError, 430, async () => {
-            const { uri, mimeType } = params
-            return this.shareService.shareFile(uri, mimeType)
+            const { uri } = params
+            return this.sharePhotoService.execute(uri)
+        })
+    }
+
+    savePhotoToDownloads(params, onError = null, onSuccess = null) {
+        return super.controllerHandler(onSuccess, onError, 430, async () => {
+            const { path, name } = params
+            return this.savePhotoToDownloadsService.execute(path, name)
         })
     }
 
@@ -62,15 +72,18 @@ const mediaController = new MediaController(
     documentPicker,
     shareService,
     createAssetFileService,
-    deleteAssetFileService
+    deleteAssetFileService,
+    permissions
 )
 
 export const addPhotoToAssets = ({ uri, name, itemId, itemType }, onError, onSuccess) => mediaController.addPhotoToAssets({ uri, name, itemId, itemType }, onError, onSuccess)
 
 export const deletePhotoFromAssets = ({ assetId, fileName, parentType, parentId }, onError, onSuccess) => mediaController.deletePhotoFromAssets({ assetId, fileName, parentType, parentId }, onError, onSuccess)
 
-export const sharePhoto = ({ uri, mimeType }, onError, onSuccess) => mediaController.sharePhoto({ uri, mimeType }, onError, onSuccess)
+export const sharePhoto = ({ uri }, onError, onSuccess) => mediaController.sharePhoto({ uri }, onError, onSuccess)
+
+export const savePhotoToDownloads = ({ path, name }, onError, onSuccess) => mediaController.savePhotoToDownloads({ path, name }, onError, onSuccess)
 
 export const getNewPhoto = ({ imageSource }, onError, onSuccess) => mediaController.getNewPhoto({ imageSource }, onError, onSuccess)
 
-export const updateItemPhotos = ({ imageUris, itemId, itemType }, onError, onSuccess)=> mediaController.updateItemPhotos({ imageUris, itemId, itemType }, onError, onSuccess)
+export const updateItemPhotos = ({ imageUris, itemId, itemType }, onError, onSuccess) => mediaController.updateItemPhotos({ imageUris, itemId, itemType }, onError, onSuccess)
