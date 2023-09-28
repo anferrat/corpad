@@ -8,5 +8,6 @@ export class FileSystemInitialization {
     async execute() {
         await this.fileSystemRepo.removeDir(FileSystemLocations.TEMP)
         await this.fileSystemRepo.removeDir(FileSystemLocations.TEMP_DOWNLOADS)
+        await this.fileSystemRepo.removeDir(FileSystemLocations.CACHE)
     }
 }

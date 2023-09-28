@@ -316,6 +316,7 @@ export const FileSystemLocations = Object.freeze({
     CURRENT_ASSETS: 'current_assets',
     TEMP_SURVEY: 'temp_survey',
     TEMP_DOWNLOADS: 'temp_downloads',
+    CACHE: 'cache'
 })
 
 export const FileMimeTypes = Object.freeze({
@@ -520,4 +521,10 @@ export const ExternalFileTypes = Object.freeze({
     IMAGE: 'image',
     COMMA_SEPARATED_TEXT: 'comma_separated_text',
     UNKNOWN_FILE: 'unknown_file' //when file url recieved from Android intent, it recieved as document provider content schema
+})
+
+export const MapLayerFeatures = Object.freeze({
+    POINT: 'Point',
+    LINE: 'LineString',
+    POLYGON: 'Polygon'
 })

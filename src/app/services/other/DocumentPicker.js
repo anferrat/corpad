@@ -38,4 +38,12 @@ export class DocumentPicker {
     pickImage() {
         return this.execute(RNDocumentPicker.types.images)
     }
+
+    pickGeoFile() {
+        return this.execute(Platform.select({
+            android: FileMimeTypes.KML,
+            ios: FileTypeIdentifiers.CSV,
+            default: FileMimeTypes.CSV
+        }))
+    }
 }

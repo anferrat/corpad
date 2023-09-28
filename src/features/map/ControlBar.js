@@ -4,7 +4,7 @@ import { SafeAreaView } from 'react-native-safe-area-context'
 import SearchBar from './components/SearchBar'
 import Buttons from './components/Buttons'
 
-const ControlBar = ({ setMarkerActive, resetActiveMarker, satelliteMode, toggleSatelliteMode, zoomToUserLocation, animateToCoordinates }) => {
+const ControlBar = ({ setMarkerActive, resetActiveMarker, satelliteMode, toggleSatelliteMode, zoomToUserLocation, animateToCoordinates, navigateToViewMapLayer }) => {
     return (
         <SafeAreaView
             pointerEvents={'box-none'}
@@ -17,6 +17,7 @@ const ControlBar = ({ setMarkerActive, resetActiveMarker, satelliteMode, toggleS
             <Buttons
                 satelliteMode={satelliteMode}
                 toggleSatelliteMode={toggleSatelliteMode}
+                navigateToViewMapLayer={navigateToViewMapLayer}
                 zoomToUserLocation={zoomToUserLocation}
                 animateToCoordinates={animateToCoordinates} />
         </SafeAreaView>

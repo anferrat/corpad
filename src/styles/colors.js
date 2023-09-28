@@ -1,4 +1,4 @@
-import { ItemStatuses, WireColors } from "../constants/global"
+import { ItemStatuses, StrokeColors, WireColors } from "../constants/global"
 
 export const primary = "#7186C7"
 export const success = "#43C150"
@@ -13,7 +13,7 @@ export const basic400 = '#d4d9ea'
 export const basic700 = '#888892'
 export const primary100 = '#E6EDFC'
 export const primary200 = '#CEDCF9'
-export const primary400 ='#95A8DD'
+export const primary400 = '#95A8DD'
 export const success100 = "#E3FBDB"
 export const control = '#fff'
 
@@ -45,4 +45,14 @@ export const StatusStatuses = Object.freeze({
     [ItemStatuses.GOOD]: 'success',
     [ItemStatuses.UNKNOWN]: 'basic',
     [ItemStatuses.NO_STATUS]: 'basic'
+})
+
+export const MapLayerStrokeColors = Object.freeze({
+    [StrokeColors.BLACK]: '#1c1d20',
+    [StrokeColors.BLUE]: '#3390e3',
+    [StrokeColors.GREEN]: '#0a7340',
+    [StrokeColors.ORANGE]: '#FCAA71',
+    [StrokeColors.PURPLE]: 'cc8899',
+    [StrokeColors.RED]: '#bd4131',
+    [StrokeColors.YELLOW]: '#c2b942'
 })

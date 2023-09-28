@@ -1,10 +1,10 @@
 import React from 'react'
 import { StyleSheet, View } from 'react-native'
-import ExportKmlButton from './buttons/ExportKmlButton'
+import MapSettingButton from './buttons/MapSettingButton'
 import SatelliteButton from './buttons/SatelliteButton'
 import MyLocationButton from './buttons/MyLocationButton'
 
-const Buttons = ({ satelliteMode, zoomToUserLocation, toggleSatelliteMode, loading }) => {
+const Buttons = ({ satelliteMode, zoomToUserLocation, toggleSatelliteMode, navigateToViewMapLayer }) => {
     return (
         <View style={styles.controlBar}>
             <MyLocationButton
@@ -12,8 +12,8 @@ const Buttons = ({ satelliteMode, zoomToUserLocation, toggleSatelliteMode, loadi
             <SatelliteButton
                 toggleSatelliteMode={toggleSatelliteMode}
                 satelliteMode={satelliteMode} />
-            <ExportKmlButton
-                loading={loading} />
+            <MapSettingButton
+                navigateToViewMapLayer={navigateToViewMapLayer} />
         </View>
 
     )

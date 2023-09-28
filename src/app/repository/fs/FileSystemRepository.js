@@ -17,6 +17,7 @@ export class FileSystemRepository {
         this.tempSurveyFolder = `${RNFS.DocumentDirectoryPath}/temp/survey`
         this.tempSurveyAssetsFolder = `${RNFS.DocumentDirectoryPath}/temp/survey/assets`
         this.tempDownloadsFolder = `${RNFS.DocumentDirectoryPath}/downloads`
+        this.cacheFolder = RNFS.CachesDirectoryPath
     }
 
     async writeFile(content, name, location, overwrite = true, uid = null) {
@@ -179,6 +180,8 @@ export class FileSystemRepository {
                 return this.tempSurveyAssetsFolder
             case FileSystemLocations.CURRENT_ASSETS:
                 return this.currentAssetsFolder
+            case FileSystemLocations.CACHE:
+                return this.cacheFolder
             case FileSystemLocations.ASSETS:
                 if (uid)
                     return `${this.assetsFolder}/${uid}`
@@ -196,7 +199,7 @@ export class FileSystemRepository {
             await this.createDirectory(this.tempFolder)
         if (location === FileSystemLocations.TEMP_ASSETS)
             await this.createDirectory(this.tempSurveyFolder)
-        if (location !== FileSystemLocations.DOWNLOADS)
+        if (location !== FileSystemLocations.DOWNLOADS && location !== FileSystemLocations.CACHE)
             return await this.createDirectory(path)
         else return path
     }
