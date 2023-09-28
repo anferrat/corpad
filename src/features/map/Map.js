@@ -11,8 +11,9 @@ import LoadingView from './components/LoadingView'
 import FocusAwareStatusBar from '../../components/FocusAwareStatusBar'
 import useMarkers from './hooks/useMarkers'
 import ControlBar from './ControlBar'
+import GeoJsonLayers from './components/GeoJsonLayers'
 
-const Map = ({ navigateToView, navigateToEdit }) => {
+const Map = ({ navigateToView, navigateToEdit, navigateToViewMapLayer }) => {
     const ref = useRef()
     const {
         markers,
@@ -65,7 +66,7 @@ const Map = ({ navigateToView, navigateToEdit }) => {
                 showsBuildings={false}
                 showsIndoors={false}
                 style={styles.map}>
-
+                <GeoJsonLayers />
                 {markers.map(m =>
                     <PointMarker
                         key={m.uid}
@@ -109,6 +110,7 @@ const Map = ({ navigateToView, navigateToEdit }) => {
             <ControlBar
                 loading={loading}
                 satelliteMode={satelliteMode}
+                navigateToViewMapLayer={navigateToViewMapLayer}
                 setMarkerActive={setMarkerActive}
                 resetActiveMarker={resetActiveMarker}
                 toggleSatelliteMode={toggleSatelliteMode}

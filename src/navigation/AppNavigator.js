@@ -29,6 +29,8 @@ import ExportSubitems from '../screens/export/Subitems'
 import ExportOverview from '../screens/export/Overview'
 import CycleSettings from '../screens/settings/CycleSettings'
 import { MultimeterModal } from '../features/overlays/multimeter'
+import EditMapLayer from '../screens/map_layer/Edit'
+import ViewMapLayer from '../screens/map_layer/View'
 
 
 const Stack = createNativeStackNavigator()
@@ -54,7 +56,8 @@ export const AppNavigator = () => {
               <>
                 <Stack.Screen name='PipelineSurvey' component={SurveyBottomTabs} options={{ headerShown: false }} />
                 <Stack.Screen name='ViewItem' component={ViewItem} />
-
+                <Stack.Screen name='EditMapLayer' component={EditMapLayer} />
+                <Stack.Screen name='ViewMapLayer' component={ViewMapLayer} />
                 <Stack.Screen name='EditItem' component={EditItem} />
                 <Stack.Screen name='EditSubitem' component={EditSubitem} />
                 <Stack.Group screenOptions={{

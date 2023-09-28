@@ -1,5 +1,6 @@
 import { StyleSheet, Platform } from 'react-native'
 import { basic200, basic300, primary400 } from './colors'
+import { StrokeWidths } from '../constants/global'
 
 export const androidRipple = { color: basic200 }
 
@@ -62,4 +63,12 @@ export const globalStyle = StyleSheet.create({
             zIndex: 1
         }
     })
-}) 
+})
+
+export const StrokeWidthValues = Object.freeze({
+    [StrokeWidths._05PT]: 1,
+    [StrokeWidths._1PT]: 2,
+    [StrokeWidths._1_5PT]: 3,
+    [StrokeWidths._2PT]: 4,
+    [StrokeWidths._3PT]: 6,
+})

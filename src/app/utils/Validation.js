@@ -1,5 +1,5 @@
 import { object, string, number, boolean, array, mixed } from 'yup'
-import { SubitemTypes, PipelineMaterials, PipelineProducts, CoarseFineOptions, PowerSources, TapOptions, ItemStatuses, ItemTypes, TestPointTypes, AnodeMaterials, CalculatorTypes, CouponTypes, DisplayedReadingOptions, IsolationTypes, ItemPropertyUpdateTypes, PermanentPotentialTypes, PipeDiameters, PotentialUnits, ReferenceCellTypes, SortingOptions, SubitemPropertyUpdateTypes, WireColors, WireGauges, MultimeterTypes, MultimeterSyncModes, MultimeterCycles, MultimeterMeasurementTypes, StrokeColors, StrokeWidths, MediaTypes } from '../../constants/global'
+import { SubitemTypes, PipelineMaterials, PipelineProducts, CoarseFineOptions, PowerSources, TapOptions, ItemStatuses, ItemTypes, TestPointTypes, AnodeMaterials, CalculatorTypes, CouponTypes, DisplayedReadingOptions, IsolationTypes, ItemPropertyUpdateTypes, PermanentPotentialTypes, PipeDiameters, PotentialUnits, ReferenceCellTypes, SortingOptions, SubitemPropertyUpdateTypes, WireColors, WireGauges, MultimeterTypes, MultimeterSyncModes, MultimeterCycles, MultimeterMeasurementTypes, StrokeColors, StrokeWidths, MediaTypes, MapLayerFeatures } from '../../constants/global'
 import { Error, errors } from "./Error"
 
 export class Validation {
@@ -55,6 +55,7 @@ export class Validation {
     strokeColor = mixed().oneOf(Object.values(StrokeColors))
     strokeWidth = mixed().oneOf(Object.values(StrokeWidths))
     mediaType = mixed().oneOf(Object.values(MediaTypes))
+    mapLayerFeatures = array().of(mixed().oneOf(Object.values(MapLayerFeatures)))
     validate(value, schema) {
         try {
             return schema.validateSync(value)

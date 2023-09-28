@@ -13,6 +13,8 @@ import { GoogleDriveFileTransferManager } from '../app/repository/cloud_drive/Go
 import RNFS from 'react-native-fs'
 import { fileSystemRepo } from '../app/controllers/_instances/repositories'
 import { FileSystemLocations } from '../constants/global'
+import { readGeoFile } from '../app/controllers/survey/other/MapLayerController'
+import { errorHandler } from '../helpers/error_handler'
 
 
 export default DevScreen = ({ navigation, route }) => {
@@ -32,25 +34,12 @@ export default DevScreen = ({ navigation, route }) => {
     //console.log(await promise)
   }
 
-  const testZip = async () => {
-    const tempSurveyPath = await fileSystemRepo.getLocation(FileSystemLocations.TEMP_SURVEY)
-    const tempPath = await fileSystemRepo.getLocation(FileSystemLocations.TEMP)
-    try {
-      const res = await fileSystemRepo.zip(`${tempSurveyPath}`, `${tempPath}/Test22.zip`)
-    }
-    catch (er) {
-    }
+  const testKml = () => {
+    readGeoFile((er, errorMessage) => {
+      errorHandler(er)
+      console.log(errorMessage)
+    })
   }
-
-  const testUnzip = async () => {
-    const tempSurveyPath = await fileSystemRepo.getLocation(FileSystemLocations.TEMP_SURVEY)
-    try {
-      const res = await fileSystemRepo.unzip(`${RNFS.DocumentDirectoryPath}/MySurvey23.zip`, tempSurveyPath)
-    }
-    catch (er) {
-    }
-  }
-
 
 
   return (
@@ -62,8 +51,7 @@ export default DevScreen = ({ navigation, route }) => {
       <Button onPress={resetDatabase} appearance='ghost'>Reset DB</Button>
       <Button onPress={testCapture} appearance='ghost'>TEST potential capture</Button>
       <Button onPress={pairTestMultimeter} appearance='ghost'>Pair blank multimeter (restart required)</Button>
-      <Button onPress={testZip} appearance='ghost'>Test zip</Button>
-      <Button onPress={testUnzip} appearance='ghost'>Test unzip</Button>
+      <Button onPress={testKml} appearance='ghost'>Test KML parser</Button>
     </SafeAreaView>
   )
 }

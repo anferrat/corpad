@@ -37,11 +37,13 @@ export class SaveSurveyFile {
     }
 
     async _copyNewAssetFiles(uid, localFilesToCopy) {
+        console.log(localFilesToCopy)
         const surveyAssetFolderPath = await this.fileSystemRepo.getLocation(FileSystemLocations.ASSETS, uid)
         await this.fileSystemRepo.copyFiles(surveyAssetFolderPath, localFilesToCopy)
     }
 
     async _deleteOldAssetFiles(localFilesToDelete) {
+        console.log(localFilesToDelete)
         await Promise.all(localFilesToDelete.map(({ path }) => this.fileSystemRepo.unlink(path)))
     }
 

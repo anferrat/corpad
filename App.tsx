@@ -28,6 +28,7 @@ import { ExportModal } from './src/features/overlays/export_modal/'
 import {SessionModal} from './src/features/overlays/session_modal/'
 import { Animated } from 'react-native'
 import { enableLatestRenderer } from 'react-native-maps'
+import mapLayers from './src/store/reducers/mapLayers'
 
 
 const rootReducer = combineReducers({
@@ -41,6 +42,7 @@ const rootReducer = combineReducers({
   settings: settings,
   export: exportSurvey,
   importData: importData,
+  mapLayers: mapLayers
 })
 
 enableLatestRenderer()

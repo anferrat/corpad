@@ -1,4 +1,4 @@
-import { ItemTypes, SubitemTypes, PipeDiameters, WireColors, TestPointTypes, PermanentPotentialTypes, SortingOptions, ItemStatuses, PipeSchedules, WireGauges, CurrentUnits, AreaUnits, CurrentDensityUnits, FactorUnits, PotentialUnits, AnodeMaterials, ReferenceCellTypes, IsolationTypes, CouponTypes, PipelineMaterials, PipelineProducts, PowerSources, TapOptions, CoarseFineOptions, ExportItemProperties, ExportSubitemProperties, CalculatorTypes, PipelineCoating, IsolationShorted, MultimeterTypes, TimeUnits, MultimeterMeasurementTypes, MultimeterCycles, MultimeterSyncModes, ImageSources } from "./global"
+import { ItemTypes, SubitemTypes, PipeDiameters, WireColors, TestPointTypes, PermanentPotentialTypes, SortingOptions, ItemStatuses, PipeSchedules, WireGauges, CurrentUnits, AreaUnits, CurrentDensityUnits, FactorUnits, PotentialUnits, AnodeMaterials, ReferenceCellTypes, IsolationTypes, CouponTypes, PipelineMaterials, PipelineProducts, PowerSources, TapOptions, CoarseFineOptions, ExportItemProperties, ExportSubitemProperties, CalculatorTypes, PipelineCoating, IsolationShorted, MultimeterTypes, TimeUnits, MultimeterMeasurementTypes, MultimeterCycles, MultimeterSyncModes, ImageSources, MapLayerFeatures, StrokeColors, StrokeWidths } from "./global"
 
 export const DefaultNames = Object.freeze({
     [ItemTypes.TEST_POINT]: 'TP',
@@ -416,4 +416,28 @@ export const ImageSourceLabels = Object.freeze({
     [ImageSources.CAMERA]: 'Camera',
     [ImageSources.LIBRARY]: 'Library',
     [ImageSources.STORAGE]: 'Storage'
+})
+
+export const MapLayerFeatureLabels = Object.freeze({
+    [MapLayerFeatures.POINT]: 'Point',
+    [MapLayerFeatures.LINE]: 'Line',
+    [MapLayerFeatures.POLYGON]: 'Polygon'
+})
+
+export const StrokeColorLabels = Object.freeze({
+    [StrokeColors.BLACK]: 'Black',
+    [StrokeColors.BLUE]: 'Blue',
+    [StrokeColors.GREEN]: 'Green',
+    [StrokeColors.ORANGE]: 'Orange',
+    [StrokeColors.PURPLE]: 'Purple',
+    [StrokeColors.RED]: 'Red',
+    [StrokeColors.YELLOW]: 'Yellow'
+})
+
+export const StrokeWidthLabels = Object.freeze({
+    [StrokeWidths._05PT]: '1 px',
+    [StrokeWidths._1PT]: '2 px',
+    [StrokeWidths._1_5PT]: '3 px',
+    [StrokeWidths._2PT]: '4 px',
+    [StrokeWidths._3PT]: '6 px'
 })
