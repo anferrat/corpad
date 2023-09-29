@@ -5,17 +5,22 @@ import { version } from '../../../../App'
 import { primary } from '../../../styles/colors'
 import { globalStyle } from '../../../styles/styles'
 import { ScrollView } from 'react-native-gesture-handler'
+import { errorHandler } from '../../../helpers/error_handler'
 
 const About = (props) => {
     const linkedin = (props) => <Icon {...props} name='linkedin' />
     const twitter = (props) => <Icon {...props} name='twitter' />
-    const linkHandler = (link) => Linking.openURL(link)
+    const linkHandler = async (link) => {
+        if (await Linking.canOpenURL(link))
+            Linking.openURL(link)
+        else errorHandler(100)
+    }
     return (
         <ScrollView >
             <View style={{ ...globalStyle.card, ...styles.card }}>
                 <View style={styles.logoView}>
                     <Icon name='corpad-logo' pack='cp' style={styles.logo} fill={primary} />
-                    <Text category='s2' appearance='hint' style={styles.text}>Corpad for {Platform.OS ==='ios' ? 'iOS' : (Platform.OS==='android' ? 'Android' : 'Web')}. {`\n`}Version {version}</Text >
+                    <Text category='s2' appearance='hint' style={styles.text}>Corpad for {Platform.OS === 'ios' ? 'iOS' : (Platform.OS === 'android' ? 'Android' : 'Web')}. {`\n`}Version {version}</Text >
                 </View>
                 <Divider />
                 <View style={styles.listView}>
