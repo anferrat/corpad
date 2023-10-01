@@ -7,7 +7,11 @@ const LoadingView = (props) => {
     if (!props.loading)
         return props.children
     else
-        return <View style={{ ...styles.emptyView, ...props.style }}><ActivityIndicator size={props.size ?? 'large'} color={primary} /></View>
+        return <View style={{ ...styles.emptyView, ...props.style }}>
+            <ActivityIndicator
+                size={props.size ?? 'large'}
+                color={primary} />
+        </View>
 }
 
 const styles = StyleSheet.create({

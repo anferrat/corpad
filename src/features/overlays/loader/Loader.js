@@ -4,6 +4,7 @@ import { Text } from '@ui-kitten/components'
 import { useSelector } from 'react-redux'
 import { primary } from '../../../styles/colors'
 import LoaderProgressBar from './LoaderProgressBar'
+import WaveActivityIndicator from '../../../components/WaveActivityIndicator'
 
 const Loader = () => {
     const text = useSelector(state => state.settings.loader.text)
@@ -35,8 +36,7 @@ const Loader = () => {
                             total={total}
                             count={count}
                         /> :
-                        <ActivityIndicator
-                            size='large'
+                        <WaveActivityIndicator
                             color={primary} />
                     }
                 </View>
@@ -58,7 +58,7 @@ const styles = StyleSheet.create({
         borderRadius: 12,
         backgroundColor: '#fff',
         width: '80%',
-        maxWidth: 500,
+        maxWidth: 600,
         justifyContent: 'center',
         alignItems: 'center',
         padding: 12
