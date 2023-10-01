@@ -10,6 +10,7 @@ import { errorHandler } from '../../../helpers/error_handler'
 const About = (props) => {
     const linkedin = (props) => <Icon {...props} name='linkedin' />
     const twitter = (props) => <Icon {...props} name='twitter' />
+    const email = (props) => <Icon {...props} name='email' />
     const linkHandler = async (link) => {
         if (await Linking.canOpenURL(link))
             Linking.openURL(link)
@@ -28,9 +29,9 @@ const About = (props) => {
                     <ListItem title={'Terms and conditions'} onPress={linkHandler.bind(this, 'https://www.corpad.ca/legal/terms-and-conditions')} />
                     <ListItem title={'Licenses'} onPress={props.navigateToLicenses} />
                 </View>
-                <ListItem title={'Support'} description='andrei@corpad.ca' onPress={linkHandler.bind(this, 'mailto:andrei@corpad.ca')} />
+                <ListItem title={'Support'} description='andrei@corpad.ca'  accessoryRight={email} onPress={linkHandler.bind(this, 'mailto:andrei@corpad.ca')} />
                 <ListItem title={'Created by'} description='Andrei Lomtev' accessoryRight={linkedin} onPress={linkHandler.bind(this, 'https://www.linkedin.com/in/andrei-lomtev/')} />
-                <ListItem title={'Follow on Twitter'} description='@CorpadCorrosion' accessoryRight={twitter} onPress={linkHandler.bind(this, 'https://twitter.com/CorpadCorrosion')} />
+                <ListItem title={'Follow on X'} description='@CorpadCorrosion' accessoryRight={twitter} onPress={linkHandler.bind(this, 'https://twitter.com/CorpadCorrosion')} />
             </View>
         </ScrollView>
     )
