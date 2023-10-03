@@ -7,16 +7,17 @@ import { UpdateMapLayer } from "../../../services/survey/other/mapLayers/UpdateM
 import { Controller } from "../../../utils/Controller"
 import { MapLayerValidation } from "../../../validation/MapLayerValidation"
 import { documentPicker, geoParser } from "../../_instances/general_services"
+import { mapLayerPresenter } from "../../_instances/presenters"
 import { fileSystemRepo, mapLayerRepo } from "../../_instances/repositories"
 
 class MapLayerController extends Controller {
-    constructor(mapLayerRepo, geoParser, documentPicker, fileSystemRepo) {
+    constructor(mapLayerRepo, geoParser, documentPicker, fileSystemRepo, mapLayerPresenter) {
         super()
         this.loadNewMapLayerService = new ReadExternalGeoFile(geoParser, documentPicker, fileSystemRepo)
-        this.getMapLayerListService = new GetMapLayerList(mapLayerRepo)
-        this.createMapLayerService = new CreateMapLayer(mapLayerRepo)
+        this.getMapLayerListService = new GetMapLayerList(mapLayerRepo, mapLayerPresenter)
+        this.createMapLayerService = new CreateMapLayer(mapLayerRepo, mapLayerPresenter)
         this.updateMapLayerService = new UpdateMapLayer(mapLayerRepo)
-        this.getMapLayerDataService = new GetMapLayerData(mapLayerRepo)
+        this.getMapLayerDataService = new GetMapLayerData(mapLayerRepo, mapLayerPresenter)
         this.deleteMapLayerService = new DeleteMapLayer(mapLayerRepo)
 
         this.validation = new MapLayerValidation()
@@ -36,8 +37,8 @@ class MapLayerController extends Controller {
 
     create(params, onError = null, onSuccess = null) {
         return super.controllerHandler(onSuccess, onError, 657, async () => {
-            const { name, width, color, data, comment, features, defaultName } = this.validation.create(params)
-            return this.createMapLayerService.execute({ name, width, color, data, comment, features, defaultName })
+            const { name, width, color, data, comment, defaultName } = this.validation.create(params)
+            return this.createMapLayerService.execute({ name, width, color, data, comment, defaultName })
         })
     }
 
@@ -68,14 +69,15 @@ const mapLayerController = new MapLayerController(
     mapLayerRepo,
     geoParser,
     documentPicker,
-    fileSystemRepo
+    fileSystemRepo,
+    mapLayerPresenter
 )
 
 export const readGeoFile = (onError, onSuccess) => mapLayerController.readGeoFile(onError, onSuccess)
 
 export const getMapLayerList = (onError, onSuccess) => mapLayerController.getList(onError, onSuccess)
 
-export const createMapLayer = ({ name, defaultName, width, color, data, comment, features }, onError, onSuccess) => mapLayerController.create({ name, defaultName, width, color, data, comment, features }, onError, onSuccess)
+export const createMapLayer = ({ name, defaultName, width, color, data, comment }, onError, onSuccess) => mapLayerController.create({ name, defaultName, width, color, data, comment }, onError, onSuccess)
 
 export const updateMapLayer = ({ id, name, defaultName, width, color, comment, visible }, onError, onSuccess) => mapLayerController.update({ id, name, defaultName, width, color, comment, visible }, onError, onSuccess)
 

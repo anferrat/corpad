@@ -17,14 +17,12 @@ const EditMapLayer = ({ isNew, layerId }) => {
         loading,
         colorList,
         widthList,
-        layerFeatures,
         onChangeName,
         onChangeComment,
         onEndEditingName,
         onEndEditingComment,
         onSelectColor,
         onSelectWidth,
-        onSelectLayerFeature,
         onSave,
         onSelectFile
     } = useEditMapLayer({ isNew, layerId })
@@ -40,8 +38,6 @@ const EditMapLayer = ({ isNew, layerId }) => {
                         <GeoFileImportView
                             filename={geoFile.filename}
                             size={geoFile.size}
-                            features={layerFeatures}
-                            onSelectFeature={onSelectLayerFeature}
                             onSelectFile={onSelectFile}
                         />
                     </View> : null}

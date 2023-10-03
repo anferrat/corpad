@@ -8,7 +8,6 @@ export class MapLayerRepository extends SQLiteRepository {
     }
 
     async getById(id) {
-        console.log(id)
         try {
             const result = await this.runSingleQueryTransaction('SELECT * from mapLayers WHERE id=?', [id])
             const { uid, name, comment, timeCreated, timeModified, strokeColor, strokeWidth, fillColor, data, visible } = result.rows.item(0)
@@ -33,7 +32,7 @@ export class MapLayerRepository extends SQLiteRepository {
     async create(mapLayer) {
         try {
             const { id, uid, name, comment, timeCreated, timeModified, strokeColor, strokeWidth, fillColor, data, visible } = mapLayer
-            const result = await this.runSingleQueryTransaction('INSERT INTO mapLayers (id, uid, name, comment, timeCreated, timeModified, strokeColor, strokeWidth, fillColor, data, visible) VALUES (?,?,?,?,?,?,?,?,?,?,?)', [id, uid, name, comment, timeCreated, timeModified, strokeColor, strokeWidth, fillColor, JSON.stringify(data), visible])
+            const result = await this.runSingleQueryTransaction('INSERT INTO mapLayers (id, uid, name, comment, timeCreated, timeModified, strokeColor, strokeWidth, fillColor, data, visible) VALUES (?,?,?,?,?,?,?,?,?,?,?)', [id, uid, name, comment, timeCreated, timeModified, strokeColor, strokeWidth, fillColor, data, visible])
             return new MapLayer(result.insertId, uid, name, comment, timeCreated, timeModified, strokeColor, strokeWidth, fillColor, data, visible)
         }
         catch (er) {

@@ -42,7 +42,6 @@ const styles = StyleSheet.create({
         width: '100%'
     },
     button: {
-        height: 42,
         width: 125
     },
     hidden: {
