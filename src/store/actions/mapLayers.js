@@ -10,8 +10,8 @@ export const toggleMapLayer = (index, isVisible) => (
     { type: TOGGLE_MAP_LAYER, index, isVisible }
 )
 
-export const addMapLayer = (layerId, name, comment, color, width) => ({
-    type: ADD_MAP_LAYER, layerId, name, comment, color, width
+export const addMapLayer = (layerId, name, comment, color, width, data, featureCount) => ({
+    type: ADD_MAP_LAYER, layerId, name, comment, color, width, data, featureCount
 })
 
 export const deleteMapLayer = (index) => ({

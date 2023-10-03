@@ -17,7 +17,7 @@ export class ReadExternalGeoFile {
         const content = await this.fileSystemRepo.readFile(file.uri)
         return {
             filename: file.name,
-            data: this.geoParser.toGeoJson(content, FileMimeTypes.KML),
+            data:this.geoParser.toGeoJson(content, FileMimeTypes.KML), //as string
             size: size
         }
     }

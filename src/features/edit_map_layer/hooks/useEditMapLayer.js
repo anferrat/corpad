@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from "react"
-import { MapLayerFeatures, StrokeColors, StrokeWidths } from "../../../constants/global"
+import { StrokeColors, StrokeWidths } from "../../../constants/global"
 import { createMapLayer, getMapLayerById, readGeoFile, updateMapLayer as updateMapLayerRequest } from "../../../app/controllers/survey/other/MapLayerController"
 import { errorHandler } from "../../../helpers/error_handler"
 import { useNavigation } from "@react-navigation/native"
@@ -25,8 +25,6 @@ const useEditMapLayer = ({ isNew, layerId }) => {
         visible: true
     })
 
-    const [layerFeatures, setLayerFeatures] = useState([MapLayerFeatures.LINE, MapLayerFeatures.POINT, MapLayerFeatures.POLYGON])
-
     const [valid, setValid] = useState({
         name: true,
         comment: true
@@ -37,8 +35,7 @@ const useEditMapLayer = ({ isNew, layerId }) => {
         size: 0,
         data: {}
     })
-    if (geoFile?.data?.features)
-        console.log(geoFile?.data?.features[0].geometry.geometries)
+
     const [loading, setLoading] = useState(true)
 
     const onChangeName = useCallback((value) => setData(state => ({ ...state, name: value })), [])
@@ -87,11 +84,10 @@ const useEditMapLayer = ({ isNew, layerId }) => {
             const { name, defaultName, comment, colorIndex, widthIndex, visible } = data
             if (isNew) {
                 if (geoFile.filename)
-                    await createMapLayer({ name, defaultName, comment, width: widthList[widthIndex].value, color: colorList[colorIndex].value, data: geoFile.data, features: layerFeatures },
+                    await createMapLayer({ name, defaultName, comment, width: widthList[widthIndex].value, color: colorList[colorIndex].value, data: geoFile.data },
                         er => errorHandler(er),
                         (response) => {
-                            dispatch(addMapLayer(response.id, response.name, response.comment, response.strokeColor, response.strokeWidth))
-                            EventRegister.emit('map_layer_changed_visibility', { isVisible: true, layerId: response.id })
+                            dispatch(addMapLayer(response.id, response.name, response.comment, response.strokeColor, response.strokeWidth, response.data, response.featureCount))
                             navigation.goBack()
                         })
                 else errorHandler(513)
@@ -116,18 +112,6 @@ const useEditMapLayer = ({ isNew, layerId }) => {
             }))
         setLoading(false)
     }, [])
-
-    const onSelectLayerFeature = useCallback((feature) => {
-        setLayerFeatures(state => {
-            const isExists = ~state.indexOf(feature)
-            if (isExists)
-                return state.filter(f => f !== feature)
-            else
-                return state.concat(feature)
-
-        })
-    }, [])
-
 
     useEffect(() => {
         const loadData = async () => {
@@ -156,14 +140,12 @@ const useEditMapLayer = ({ isNew, layerId }) => {
         loading,
         colorList,
         widthList,
-        layerFeatures,
         onChangeName,
         onChangeComment,
         onEndEditingName,
         onEndEditingComment,
         onSelectColor,
         onSelectWidth,
-        onSelectLayerFeature,
         onSave,
         onSelectFile
     }

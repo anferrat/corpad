@@ -4,35 +4,21 @@ import useMapLayerData from '../hooks/useMapLayerData'
 import { Geojson } from 'react-native-maps'
 import { MapLayerStrokeColors } from '../../../styles/colors'
 import { StrokeWidthValues } from '../../../styles/styles'
+import { getActiveMapIcon, getMapIcon } from './native_icons/mapIcons'
 
 
 const GeoJsonLayers = () => {
-    const { layers, layerData } = useMapLayerData()
-    const getData = (data) => {
-        console.log(data)
-        try {
-            if (data)
-                return JSON.parse(data)
-            else return {
-                type: 'FeatureCollection',
-                features: []
-            }
-        }
-        catch (er) {
-            console.log('Error', er)
-            return {
-                type: 'FeatureCollection',
-                features: []
-            }
-        }
-    }
+    const { layers } = useMapLayerData()
+
     return (
         <>
-            {layers.map(({ width, color, id }) =>
+            {layers.filter(({ visible }) => Boolean(visible)).map(({ width, color, id, data }) =>
                 <Geojson
+                    onPress={() => console.log('ksksk')}
                     key={id}
+                    image={getMapIcon()}
                     strokeColor={MapLayerStrokeColors[color]}
-                    geojson={getData(layerData[id])}
+                    geojson={data}
                     fillColor={MapLayerStrokeColors[color]}
                     strokeWidth={StrokeWidthValues[width]}
                 />)}

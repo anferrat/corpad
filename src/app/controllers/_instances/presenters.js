@@ -3,6 +3,7 @@ import { DefaultNamePresenter } from "../../presenters/DefaultNamePresenter";
 import { ImportDataPresenter } from "../../presenters/ImportDataPresenter";
 import { ItemPreseneter } from "../../presenters/ItemPresenter";
 import { ListPresenter } from "../../presenters/ListPresenter";
+import { MapLayerPresenter } from "../../presenters/MapLayerPresenter";
 import { PotentialPresenter } from "../../presenters/PotentialPresenter";
 import { PotentialTypePresenter } from "../../presenters/PotentialTypePresenter";
 import { SubitemPresenter } from "../../presenters/SubitemPresenter";
@@ -25,3 +26,5 @@ export const potentialTypePresenter = new PotentialTypePresenter()
 export const subitemPresenter = new SubitemPresenter()
 
 export const surveyFileListPresenter = new SurveyFileListPresenter()
+
+export const mapLayerPresenter =new MapLayerPresenter()

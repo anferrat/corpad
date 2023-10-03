@@ -52,7 +52,7 @@ export const MapLayerStrokeColors = Object.freeze({
     [StrokeColors.BLUE]: '#3390e3',
     [StrokeColors.GREEN]: '#0a7340',
     [StrokeColors.ORANGE]: '#FCAA71',
-    [StrokeColors.PURPLE]: 'cc8899',
+    [StrokeColors.PURPLE]: '#cc8899',
     [StrokeColors.RED]: '#bd4131',
     [StrokeColors.YELLOW]: '#c2b942'
 })

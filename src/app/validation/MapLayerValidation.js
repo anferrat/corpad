@@ -14,7 +14,6 @@ export class MapLayerValidation extends Validation {
                 color: this.strokeColor,
                 width: this.strokeWidth,
                 data: mixed(),
-                features: this.mapLayerFeatures,
                 defaultName: this.name,
             }))
     }

@@ -3,19 +3,14 @@ import React from 'react'
 import { View, StyleSheet } from 'react-native'
 import { file, plusCircle } from '../../../components/Icons'
 import { getFileSize } from '../../../helpers/functions'
-import { MapLayerFeatures } from '../../../constants/global'
-import FeatureCheckBox from './FeatureCheckBox'
 
-const featureList = Object.values(MapLayerFeatures)
-
-const GeoFileImportView = ({ filename, size, features, onSelectFeature, onSelectFile }) => {
+const GeoFileImportView = ({ filename, size, onSelectFile }) => {
     if (filename) {
         const { value, unit } = getFileSize(size)
         return (
             <>
                 <Text category='label' appearance='hint'>Importing file</Text>
                 <View style={styles.container}>
-
                     <ListItem
                         style={styles.listItem}
                         accessoryLeft={file}
@@ -23,15 +18,6 @@ const GeoFileImportView = ({ filename, size, features, onSelectFeature, onSelect
                         description={`${value} ${unit}`}
                         disabled={true}
                     />
-                </View>
-                <Text category='label' appearance='hint'>Include features</Text>
-                <View style={styles.tokens}>
-                    {featureList.map((feature) => <FeatureCheckBox
-                        key={feature}
-                        onChange={onSelectFeature}
-                        feature={feature}
-                        checked={Boolean(~features.indexOf(feature))}
-                    />)}
                 </View>
             </>
         )

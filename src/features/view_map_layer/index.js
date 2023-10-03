@@ -24,7 +24,7 @@ export const ViewMapLayer = ({ navigateToEditMapLayer, goBack }) => {
                             appearance='hint'
                             category='label'>Displayed map layers</Text>
                     </View>
-                    {layers.map(({ id, name, comment, color, width, visible }, index) => <MapLayerListItem
+                    {layers.map(({ id, name, comment, color, width, visible, featureCount }, index) => <MapLayerListItem
                         key={id}
                         layerId={id}
                         width={width}
@@ -33,6 +33,7 @@ export const ViewMapLayer = ({ navigateToEditMapLayer, goBack }) => {
                         selected={visible}
                         color={color}
                         comment={comment}
+                        featureCount={featureCount}
                         onEdit={onEdit}
                         onDelete={onDelete}
                         onSelect={onToggle}

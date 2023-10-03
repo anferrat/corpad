@@ -4,6 +4,7 @@ import { deleteMapLayer, toggleMapLayer } from "../../../store/actions/mapLayers
 import { EventRegister } from "react-native-event-listeners"
 import { deleteMapLayer as deleteMapLayerRequest, updateMapLayer } from "../../../app/controllers/survey/other/MapLayerController"
 import { errorHandler } from "../../../helpers/error_handler"
+import { hideLoader, updateLoader } from "../../../store/actions/settings"
 
 const useMapLayers = ({ navigateToEditMapLayer }) => {
     const layers = useSelector(state => state.mapLayers.layers)
@@ -22,12 +23,13 @@ const useMapLayers = ({ navigateToEditMapLayer }) => {
     }, [])
 
     const onToggle = useCallback(async (layerId, name, color, comment, width, index, isVisible) => {
-        dispatch(toggleMapLayer(index, isVisible))
+        dispatch(updateLoader('Applying map layer'))
         const { status } = await updateMapLayer({ id: layerId, defaultName: name, name, width, color, comment, visible: isVisible })
         if (status === 200)
-            EventRegister.emit('map_layer_changed_visibility', { isVisible, layerId})
+            dispatch(toggleMapLayer(index, isVisible))
         else
             dispatch(toggleMapLayer(index, !isVisible))
+        dispatch(hideLoader())
     }, [])
 
     const onAddLayer = useCallback(() => {

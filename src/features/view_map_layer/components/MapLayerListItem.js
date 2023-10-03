@@ -6,10 +6,10 @@ import { edit, trashIcon } from '../../../components/Icons'
 import { androidRipple } from '../../../styles/styles'
 import useModal from '../../../hooks/useModal'
 import IconButton from '../../../components/IconButton'
-import { MapLayerStrokeColors} from '../../../styles/colors'
+import { MapLayerStrokeColors } from '../../../styles/colors'
 
 
-const MapLayerListItem = ({ layerId, name, index, selected, color, comment, onEdit, onDelete, onSelect, width }) => {
+const MapLayerListItem = ({ layerId, name, index, selected, color, comment, featureCount, onEdit, onDelete, onSelect, width }) => {
     const { visible, hideModal, showModal } = useModal(false)
 
     const onEditHandler = React.useCallback(() => {
@@ -44,12 +44,18 @@ const MapLayerListItem = ({ layerId, name, index, selected, color, comment, onEd
                 <View style={styles.content}>
                     <View style={styles.titleView}>
                         <Icon
-                            name={'brush-outline'}
+                            name={'layers'}
                             fill={MapLayerStrokeColors[color] ?? '#000000'}
                             style={styles.circle} />
                         <Text category='h6'>{name}</Text>
                     </View>
-
+                    <View
+                        style={styles.subtitleView}>
+                        <Text
+                            category={'s2'}
+                            appearance='hint'
+                            style={styles.comment}>Features: {featureCount} | Width: 2</Text>
+                    </View>
                     {comment ?
                         <View
                             style={styles.subtitleView}>
