@@ -1,4 +1,4 @@
-import { TOGGLE_MAP_LAYER, ADD_MAP_LAYER, DELETE_MAP_LAYER, UPDATE_MAP_LAYER, LOAD_MAP_LAYERS, RESET_MAP_LAYERS } from "../actions/mapLayers"
+import { TOGGLE_MAP_LAYER, ADD_MAP_LAYER, DELETE_MAP_LAYER, UPDATE_MAP_LAYER, LOAD_MAP_LAYERS, RESET_MAP_LAYERS, DELETE_MAP_LAYER_BY_ID } from "../actions/mapLayers"
 
 const initialState = {
     layers: [],
@@ -28,7 +28,15 @@ const mapLayers = (state = initialState, action) => {
                 ...state,
                 layers: state.layers.filter((_, index) => index !== action.index)
             }
-
+        case DELETE_MAP_LAYER_BY_ID: {
+            const layerIndex = state.layers.findIndex(({ id }) => id === action.layerId)
+            if (~layerIndex)
+                return {
+                    ...state,
+                    layers: state.layers.filter((_, index) => index !== layerIndex)
+                }
+            else return state
+        }
         case UPDATE_MAP_LAYER:
             const layerIndex = state.layers.findIndex(({ id }) => id === action.layerId)
             if (~layerIndex)

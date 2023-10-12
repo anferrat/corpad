@@ -1,6 +1,7 @@
 export const TOGGLE_MAP_LAYER = 'TOGGLE_MAP_LAYER'
 export const ADD_MAP_LAYER = 'ADD_MAP_LAYER'
 export const DELETE_MAP_LAYER = 'DELETE_MAP_LAYER'
+export const DELETE_MAP_LAYER_BY_ID = 'DELETE_MAP_LAYER_BY_ID'
 export const LOAD_MAP_LAYERS = 'LOAD_MAP_LAYERS'
 export const UPDATE_MAP_LAYER = 'UPDATE_MAP_LAYER'
 export const RESET_MAP_LAYERS = 'RESET_MAP_LAYERS'
@@ -16,6 +17,10 @@ export const addMapLayer = (layerId, name, comment, color, width, data, featureC
 
 export const deleteMapLayer = (index) => ({
     type: DELETE_MAP_LAYER, index
+})
+
+export const deleteMapLayerById = (layerId) => ({
+    type: DELETE_MAP_LAYER_BY_ID, layerId
 })
 
 export const loadMapLayers = (layers) => ({
