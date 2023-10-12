@@ -8,7 +8,7 @@ export class CreateMapLayer {
     }
 
     async execute({ name, width, color, data, comment, defaultName }) {
-        console.log(typeof data)
+        console.log(data.features)
         const currentTime = Date.now()
         const newName = name ? name : defaultName
         const mapLayer = new MapLayer(null, guid(), newName, comment, currentTime, currentTime, color, width, color, JSON.stringify(data), true)
