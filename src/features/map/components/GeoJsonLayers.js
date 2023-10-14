@@ -4,24 +4,54 @@ import useMapLayerData from '../hooks/useMapLayerData'
 import { Geojson } from 'react-native-maps'
 import { MapLayerStrokeColors } from '../../../styles/colors'
 import { StrokeWidthValues } from '../../../styles/styles'
-import { getActiveMapIcon, getMapIcon } from './native_icons/mapIcons'
+import { getPointIcon } from './native_icons/mapIcons'
+import MapLayerPointMarker from './markers/MapLayerPointMarker'
+import ActiveMapLayerPointMarker from './markers/ActiveMapLayerPointMarker'
 
 
 const GeoJsonLayers = () => {
-    const { layers } = useMapLayerData()
-
+    const { layers,
+        activeMarkerLayerId,
+        activeMarkerIndex,
+        activeMarkerColor,
+        activeMarkerLatitude,
+        activeMarkerLongitude,
+        onMapLayerMarkerPress } = useMapLayerData()
     return (
         <>
-            {layers.filter(({ visible }) => Boolean(visible)).map(({ width, color, id, data }) =>
-                <Geojson
-                    onPress={() => console.log('ksksk')}
-                    key={id}
-                    image={getMapIcon()}
-                    strokeColor={MapLayerStrokeColors[color]}
-                    geojson={data}
-                    fillColor={MapLayerStrokeColors[color]}
-                    strokeWidth={StrokeWidthValues[width]}
-                />)}
+            <ActiveMapLayerPointMarker
+                layerId={activeMarkerLayerId}
+                color={activeMarkerColor}
+                latitude={activeMarkerLatitude}
+                longitude={activeMarkerLongitude}
+            />
+            {layers.filter(({ visible }) => Boolean(visible)).map(({ width, color, id, data, points, name }) => {
+                return <React.Fragment
+                    key={id}>
+                    {points.map((point, index) => {
+                        return <MapLayerPointMarker
+                            key={`Layer_${id}_index${index}`}
+                            active={activeMarkerLayerId === id && index === activeMarkerIndex}
+                            latitude={point.latitude}
+                            longitude={point.longitude}
+                            color={color}
+                            onPress={onMapLayerMarkerPress}
+                            layerId={id}
+                            layerName={name}
+                            index={index}
+                            name={point.name}
+                        />
+                    }
+                    )}
+                    <Geojson
+                        image={getPointIcon(false, color)}
+                        strokeColor={MapLayerStrokeColors[color]}
+                        geojson={data}
+                        fillColor={MapLayerStrokeColors[color]}
+                        strokeWidth={StrokeWidthValues[width]} />
+                </React.Fragment>
+            }
+            )}
         </>
 
     )

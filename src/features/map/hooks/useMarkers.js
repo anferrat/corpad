@@ -15,7 +15,7 @@ const useMarkers = ({ navigateToEdit, navigateToView, ref }) => {
     const map = useSelector(state => state.map)
     const isFocused = useIsFocused()
     const dispatch = useDispatch()
-    const { loading, activeMarker, markers, newItemMarker, satelliteMode } = map
+    const { loading, activeMarker, markers, newItemMarker, satelliteMode, activeMapLayerMarker } = map
     const currentRegion = useRef({
         latitudeDelta: 0.0135,
         longitudeDelta: 0.0135,
@@ -140,9 +140,9 @@ const useMarkers = ({ navigateToEdit, navigateToView, ref }) => {
 
     const onMapPress = useCallback(() => {
         //Reseting active and newItem markers if selected
-        if (activeMarker.id !== null || newItemMarker.active)
+        if (activeMarker.id !== null || newItemMarker.active || activeMapLayerMarker.layerId !== null)
             dispatch(resetActiveMarkers())
-    }, [activeMarker.id !== null, newItemMarker.active, dispatch])
+    }, [activeMarker.id !== null, newItemMarker.active, dispatch, activeMapLayerMarker.layerId !== null])
 
     const updateMarkerHandler = useCallback(async (marker, lat, lon) => {
 
@@ -194,16 +194,16 @@ const useMarkers = ({ navigateToEdit, navigateToView, ref }) => {
         }
     }, [navigateToEdit, newItemMarker.latitude, newItemMarker.longitude])
 
-    const shareActiveLocation = useCallback(() => {
-        if (activeMarker.latitude && activeMarker.longitude)
+    const shareActiveLocation = useCallback((latitude, longitude, name) => {
+        if (latitude && longitude)
             shareLocationWithExtarnalApp({
-                latitude: activeMarker.latitude,
-                longitude: activeMarker.longitude,
-                name: activeMarker.name,
+                latitude,
+                longitude,
+                name
                 //provider: 'google' //attempt to open in GoogleMaps if possible on iOS
             },
                 er => errorHandler(er))
-    }, [activeMarker.latitude, activeMarker.longitude, activeMarker.name])
+    }, [])
 
     const shareNewItemLocation = useCallback(() => {
         if (newItemMarker.latitude && newItemMarker.longitude)

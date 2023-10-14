@@ -1,4 +1,4 @@
-import { LOAD_MARKERS, REFRESH_MARKERS, DELETE_MARKER, UPDATE_MARKER, SET_ACTIVE_MARKER, SET_NEW_ITEM_MARKER, TOGGLE_SATELLITE_MODE, ACTIVATE_MARKER, RESET_ACTIVE_MARKERS, SET_MAP_READY } from "../actions/map"
+import { LOAD_MARKERS, REFRESH_MARKERS, DELETE_MARKER, UPDATE_MARKER, SET_ACTIVE_MARKER, SET_NEW_ITEM_MARKER, TOGGLE_SATELLITE_MODE, ACTIVATE_MARKER, RESET_ACTIVE_MARKERS, SET_MAP_READY, SET_ACTIVE_MAP_LAYER_MARKER, RESET_ACTIVE_MAP_LAYER_MARKER } from "../actions/map"
 
 const initialState = {
     //FYI markers with lat === null or lon === null will still exist in this list. make sure, to filter them out when accessing markers
@@ -25,6 +25,15 @@ const initialState = {
         latitude: null,
         longitude: null,
         testPointType: null
+    },
+    activeMapLayerMarker: { //currently selected marker from mapLayers. Some map layers markers can be selected in order to view their properties
+        layerId: null,
+        latitude: null,
+        longitude: null,
+        layerName: null,
+        index: null,
+        name: null,
+        color: null,
     }
 }
 
@@ -45,18 +54,21 @@ const map = (state = initialState, action) => {
                     longitude: action.longitude,
                 },
                 activeMarker: initialState.activeMarker,
+                activeMapLayerMarker: initialState.activeMapLayerMarker
             }
         case ACTIVATE_MARKER:
             return {
                 ...state,
                 activeMarker: action.marker,
                 newItemMarker: initialState.newItemMarker,
+                activeMapLayerMarker: initialState.activeMapLayerMarker
             }
         case RESET_ACTIVE_MARKERS:
             return {
                 ...state,
                 activeMarker: initialState.activeMarker,
-                newItemMarker: initialState.newItemMarker
+                newItemMarker: initialState.newItemMarker,
+                activeMapLayerMarker: initialState.activeMapLayerMarker
             }
         case SET_ACTIVE_MARKER: {
             const markerIndex = state.markers.findIndex(({ id, itemType }) => id === action.itemId && itemType === action.itemType)
@@ -64,6 +76,7 @@ const map = (state = initialState, action) => {
                 ...state,
                 activeMarker: ~markerIndex ? state.markers[markerIndex] : state.activeMarker,
                 newItemMarker: initialState.newItemMarker,
+                activeMapLayerMarker: initialState.activeMapLayerMarker
             }
         }
         case UPDATE_MARKER: {
@@ -106,6 +119,28 @@ const map = (state = initialState, action) => {
                 ...state,
                 mapReady: true
             }
+        case SET_ACTIVE_MAP_LAYER_MARKER:
+            return {
+                ...state,
+                activeMapLayerMarker: {
+                    layerId: action.layerId,
+                    latitude: action.latitude,
+                    longitude: action.longitude,
+                    layerName: action.layerName,
+                    index: action.index,
+                    name: action.name,
+                    color: action.color,
+                },
+                activeMarker: initialState.activeMarker,
+                newItemMarker: initialState.newItemMarker
+            }
+        case RESET_ACTIVE_MAP_LAYER_MARKER:
+            if (action.layerId === state.activeMapLayerMarker.layerId)
+                return {
+                    ...state,
+                    activeMapLayerMarker: initialState.activeMapLayerMarker
+                }
+            else return state
         default:
             return state
     }

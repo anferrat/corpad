@@ -8,6 +8,7 @@ import { PotentialPresenter } from "../../presenters/PotentialPresenter";
 import { PotentialTypePresenter } from "../../presenters/PotentialTypePresenter";
 import { SubitemPresenter } from "../../presenters/SubitemPresenter";
 import { SurveyFileListPresenter } from "../../presenters/SurveyFileListPresenter";
+import { geoJsonPointExtractor } from "./converters";
 
 export const basicPresenter = new BasicPresenter()
 
@@ -27,4 +28,4 @@ export const subitemPresenter = new SubitemPresenter()
 
 export const surveyFileListPresenter = new SurveyFileListPresenter()
 
-export const mapLayerPresenter =new MapLayerPresenter()
+export const mapLayerPresenter = new MapLayerPresenter(geoJsonPointExtractor)

@@ -8,6 +8,7 @@ import { StrokeColorLabels, StrokeWidthLabels } from "../../../constants/labels"
 import { EventRegister } from "react-native-event-listeners"
 import { useDispatch } from "react-redux"
 import { addMapLayer, updateMapLayer } from "../../../store/actions/mapLayers"
+import { resetActiveMapLayerMarker } from "../../../store/actions/map"
 
 const colorList = Object.values(StrokeColors).map((color, index) => ({ index, item: StrokeColorLabels[color], value: color }))
 
@@ -87,7 +88,7 @@ const useEditMapLayer = ({ isNew, layerId }) => {
                     await createMapLayer({ name, defaultName, comment, width: widthList[widthIndex].value, color: colorList[colorIndex].value, data: geoFile.data },
                         er => errorHandler(er),
                         (response) => {
-                            dispatch(addMapLayer(response.id, response.name, response.comment, response.strokeColor, response.strokeWidth, response.data, response.featureCount))
+                            dispatch(addMapLayer(response.id, response.name, response.comment, response.strokeColor, response.strokeWidth, response.data, response.featureCount, response.points))
                             navigation.goBack()
                         })
                 else errorHandler(513)
@@ -97,6 +98,7 @@ const useEditMapLayer = ({ isNew, layerId }) => {
                     er => errorHandler(er),
                     (response) => {
                         dispatch(updateMapLayer(layerId, response.name, response.comment, response.strokeColor, response.strokeWidth))
+                        dispatch(resetActiveMapLayerMarker(layerId))
                         navigation.goBack()
                     })
         }
