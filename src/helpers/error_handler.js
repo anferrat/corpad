@@ -33,7 +33,8 @@ const warningCodes = {
     56: 'Are you sure you want to delete this reading?',
     57: 'Are you sure you want to delete this circuit?',
     59: 'Are you sure you want to delete this import setting?',
-    60: 'Previously imported items will be deleted, this action cannot be reverted. Would you like to undo last import?'
+    60: 'Previously imported items will be deleted, this action cannot be reverted. Would you like to undo last import?',
+    61: 'Are you sure you want to delete this layer?'
 }
 
 const errorCodes = {
@@ -86,7 +87,7 @@ const errorCodes = {
     431: 'Unable to save calculator data to file.',
     432: 'Unable to add photo',
     433: 'Unable to delete photo',
-    434: 'Unable to open GIS file. File has to be less than 5MB.',
+    434: 'Unable to open GIS file. File has to be less than 3MB.',
     435: 'Unable to open GIS file.',
     503: 'Multimeter data is invalid for this field. If this issue presist, please contact support.',
     505: 'Some of the data is invalid. Please check entered values and try again.',

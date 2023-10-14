@@ -9,6 +9,7 @@ import { EventRegister } from "react-native-event-listeners"
 import { useDispatch } from "react-redux"
 import { addMapLayer, updateMapLayer } from "../../../store/actions/mapLayers"
 import { resetActiveMapLayerMarker } from "../../../store/actions/map"
+import { hapticMedium } from "../../../native_libs/haptics"
 
 const colorList = Object.values(StrokeColors).map((color, index) => ({ index, item: StrokeColorLabels[color], value: color }))
 
@@ -84,6 +85,7 @@ const useEditMapLayer = ({ isNew, layerId }) => {
         if (isValid) {
             const { name, defaultName, comment, colorIndex, widthIndex, visible } = data
             if (isNew) {
+                hapticMedium()
                 if (geoFile.filename)
                     await createMapLayer({ name, defaultName, comment, width: widthList[widthIndex].value, color: colorList[colorIndex].value, data: geoFile.data },
                         er => errorHandler(er),

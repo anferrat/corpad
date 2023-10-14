@@ -6,14 +6,14 @@ import { ReadExternalGeoFile } from "../../../services/survey/other/mapLayers/Re
 import { UpdateMapLayer } from "../../../services/survey/other/mapLayers/UpdateMapLayer"
 import { Controller } from "../../../utils/Controller"
 import { MapLayerValidation } from "../../../validation/MapLayerValidation"
-import { documentPicker, geoParser } from "../../_instances/general_services"
+import { documentPicker, geoParser, warningHandler } from "../../_instances/general_services"
 import { mapLayerPresenter } from "../../_instances/presenters"
 import { fileSystemRepo, mapLayerRepo } from "../../_instances/repositories"
 
 class MapLayerController extends Controller {
-    constructor(mapLayerRepo, geoParser, documentPicker, fileSystemRepo, mapLayerPresenter) {
+    constructor(mapLayerRepo, geoParser, documentPicker, fileSystemRepo, mapLayerPresenter, warningHandler) {
         super()
-        this.loadNewMapLayerService = new ReadExternalGeoFile(geoParser, documentPicker, fileSystemRepo)
+        this.loadNewMapLayerService = new ReadExternalGeoFile(geoParser, documentPicker, fileSystemRepo, warningHandler)
         this.getMapLayerListService = new GetMapLayerList(mapLayerRepo, mapLayerPresenter)
         this.createMapLayerService = new CreateMapLayer(mapLayerRepo, mapLayerPresenter)
         this.updateMapLayerService = new UpdateMapLayer(mapLayerRepo)
@@ -70,7 +70,8 @@ const mapLayerController = new MapLayerController(
     geoParser,
     documentPicker,
     fileSystemRepo,
-    mapLayerPresenter
+    mapLayerPresenter,
+    warningHandler
 )
 
 export const readGeoFile = (onError, onSuccess) => mapLayerController.readGeoFile(onError, onSuccess)
