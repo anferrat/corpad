@@ -18,6 +18,7 @@ const mapLayers = (state = initialState, action) => {
                         width: action.width,
                         comment: action.comment,
                         data: action.data,
+                        points: action.points,
                         featureCount: action.featureCount,
                         visible: true
                     })
@@ -59,7 +60,7 @@ const mapLayers = (state = initialState, action) => {
             return {
                 ...state,
                 layers: action.layers.map(({
-                    id, name, comment, strokeColor, strokeWidth, visible, data, featureCount
+                    id, name, comment, strokeColor, strokeWidth, visible, data, featureCount, points
                 }) => ({
                     id,
                     name,
@@ -68,6 +69,7 @@ const mapLayers = (state = initialState, action) => {
                     width: strokeWidth,
                     visible,
                     data: data,
+                    points: points,
                     featureCount: featureCount
                 })),
                 loading: false

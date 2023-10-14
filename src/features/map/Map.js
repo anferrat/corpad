@@ -97,10 +97,10 @@ const Map = ({ navigateToView, navigateToEdit, navigateToViewMapLayer }) => {
                     longitude={newItemMarker.longitude} />
             </MapView >
             <MarkerInfo
-                viewActiveMarkerData={viewActiveMarkerData}
+                navigateToView={navigateToView}
+                navigateToMapLayerPointView={() => { }}
                 shareActiveLocation={shareActiveLocation}
-                zoomToCoordinates={zoomToCoordinates}
-                {...activeMarker} />
+                zoomToCoordinates={zoomToCoordinates} />
             <NewItemView
                 shareNewItemLocation={shareNewItemLocation}
                 active={newItemMarker.active}

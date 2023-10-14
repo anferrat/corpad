@@ -1,10 +1,10 @@
 import { useCallback } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import { deleteMapLayer, toggleMapLayer } from "../../../store/actions/mapLayers"
-import { EventRegister } from "react-native-event-listeners"
 import { deleteMapLayer as deleteMapLayerRequest, updateMapLayer } from "../../../app/controllers/survey/other/MapLayerController"
 import { errorHandler } from "../../../helpers/error_handler"
 import { hideLoader, updateLoader } from "../../../store/actions/settings"
+import { resetActiveMapLayerMarker } from "../../../store/actions/map"
 
 const useMapLayers = ({ navigateToEditMapLayer }) => {
     const layers = useSelector(state => state.mapLayers.layers)
@@ -17,18 +17,19 @@ const useMapLayers = ({ navigateToEditMapLayer }) => {
         const { status } = await deleteMapLayerRequest({ id: layerId }, er => errorHandler(er))
         if (status === 200) {
             dispatch(deleteMapLayer(index))
-            EventRegister.emit('map_layer_changed_visibility', { isVisible: false, layerId })
+            dispatch(resetActiveMapLayerMarker(layerId))
         }
 
     }, [])
 
     const onToggle = useCallback(async (layerId, name, color, comment, width, index, isVisible) => {
-        dispatch(updateLoader('Applying map layer'))
+        dispatch(updateLoader('Applying new settings'))
         const { status } = await updateMapLayer({ id: layerId, defaultName: name, name, width, color, comment, visible: isVisible })
-        if (status === 200)
+        if (status === 200) {
             dispatch(toggleMapLayer(index, isVisible))
-        else
-            dispatch(toggleMapLayer(index, !isVisible))
+            if (!isVisible)
+                dispatch(resetActiveMapLayerMarker(layerId))
+        }
         dispatch(hideLoader())
     }, [])
 

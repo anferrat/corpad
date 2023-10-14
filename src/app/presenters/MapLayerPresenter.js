@@ -1,5 +1,7 @@
 export class MapLayerPresenter {
-    constructor() { }
+    constructor(geoJsonPointExtractor) {
+        this.geoJsonPointExtractor = geoJsonPointExtractor
+    }
 
     _parseData(data) {
         try {
@@ -15,9 +17,11 @@ export class MapLayerPresenter {
 
     execute(layer) {
         const data = this._parseData(layer.data)
+        const { geoJson, points } = this.geoJsonPointExtractor.execute(data)
         return {
             ...layer,
-            data,
+            data: geoJson,
+            points,
             featureCount: data["features"].length
         }
     }

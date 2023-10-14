@@ -9,6 +9,8 @@ export const TOGGLE_SATELLITE_MODE = 'TOGGLE_SATELLITE_MODE'
 export const ACTIVATE_MARKER = 'ACTIVATE_MARKER'
 export const RESET_ACTIVE_MARKERS = 'RESET_ACTIVE_MARKERS'
 export const SET_MAP_READY = 'SET_MAP_READY'
+export const SET_ACTIVE_MAP_LAYER_MARKER = 'SET_ACTIVE_MAP_LAYER_MARKER'
+export const RESET_ACTIVE_MAP_LAYER_MARKER = 'RESET_ACTIVE_MAP_LAYER_MARKER'
 
 export const loadMarkers = (list) => {
     return { type: LOAD_MARKERS, list: list }
@@ -37,6 +39,14 @@ export const setActiveMarker = (itemId, itemType) => {
 export const activateMarker = (marker) => {
     return { type: ACTIVATE_MARKER, marker }
 }
+
+export const setActiveMapLayerMarker = (layerId, layerName, index, color, latitude, longitude, name) => (
+    { type: SET_ACTIVE_MAP_LAYER_MARKER, layerId, layerName, index, color, latitude, longitude, name }
+)
+
+export const resetActiveMapLayerMarker = (layerId) => (
+    { type: RESET_ACTIVE_MAP_LAYER_MARKER, layerId }
+)
 
 export const toggleSatellite = () => {
     return { type: TOGGLE_SATELLITE_MODE }

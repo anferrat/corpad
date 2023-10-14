@@ -4,36 +4,36 @@ import { Text, Icon } from '@ui-kitten/components'
 import { basic } from '../../../styles/colors'
 import { androidRipple } from '../../../styles/styles'
 import MarkerInfoView from './animated/MarkerInfoView'
-import { StatusColors } from '../../../styles/colors'
-import { ItemTypes } from '../../../constants/global'
-import { ItemTypeLabels, TestPointTypeLabels } from '../../../constants/labels'
 import Pressable from '../../../components/Pressable'
+import useActiveMarkerInfo from '../hooks/useActiveMarkerInfo'
 
 
-const MarkerInfo = ({ viewActiveMarkerData, shareActiveLocation, zoomToCoordinates, id, itemType, name, latitude, longitude, status, location, markerType, testPointType }) => {
-    const visible = Boolean(itemType !== null && id !== null && latitude !== null && longitude !== null && markerType)
-    const animateToActive = React.useCallback(() =>
-        zoomToCoordinates(latitude, longitude),
-        [latitude, longitude, zoomToCoordinates])
-
-    const subtitle = visible ? (itemType === ItemTypes.TEST_POINT ? TestPointTypeLabels[testPointType] : ItemTypeLabels[itemType]) : 'Loading'
-    //console.log(itemType === ItemTypes.TEST_POINT)
+const MarkerInfo = ({ zoomToCoordinates, navigateToView, navigateToMapLayerPointView, shareActiveLocation }) => {
+    const { visible,
+        name,
+        subtitle,
+        location,
+        icon,
+        iconColor,
+        onPress,
+        onLongPress,
+        onShare } = useActiveMarkerInfo({ zoomToCoordinates, navigateToView, navigateToMapLayerPointView, shareActiveLocation })
     return (
         <MarkerInfoView
-            onSharePress={shareActiveLocation}
+            onSharePress={onShare}
             visible={visible}>
             <Pressable
                 android_ripple={androidRipple}
                 style={styles.pressable}
-                onPress={viewActiveMarkerData}
-                onLongPress={animateToActive}
+                onPress={onPress}
+                onLongPress={onLongPress}
                 disabled={!visible}>
                 <View style={styles.subView}>
                     <Icon
-                        name={`map-${markerType}`}
+                        name={icon}
                         pack='cp'
                         style={styles.mainIcon}
-                        fill={StatusColors[status] ?? basic} />
+                        fill={iconColor} />
                     <View style={styles.titleView}>
                         <Text
                             category='h4'
