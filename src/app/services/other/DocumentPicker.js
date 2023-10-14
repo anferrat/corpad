@@ -7,10 +7,18 @@ import { ExternalFile } from '../../entities/survey/other/ExternalFile'
 export class DocumentPicker {
     constructor() { }
 
+    _decode(uri) {
+        return Platform.select({
+            android: decodeURIComponent(uri),
+            ios: uri,
+            default: uri
+        })
+    }
+
     async execute(type) {
         try {
             const { fileCopyUri, uri, name } = await RNDocumentPicker.pickSingle({ allowMultiSelection: false, type, copyTo: 'cachesDirectory' })
-            return new ExternalFile(fileCopyUri ? fileCopyUri : uri, name)
+            return new ExternalFile(fileCopyUri ? this._decode(fileCopyUri) : this._decode(uri), name)
         }
         catch (er) {
             if (er.code !== 'DOCUMENT_PICKER_CANCELED')

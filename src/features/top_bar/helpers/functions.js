@@ -8,6 +8,7 @@ import { warningHandler } from '../../../helpers/error_handler'
 import { ItemTypes } from '../../../constants/global'
 import { CalculatorTypeTitleLabels, ItemTypeLabels, SubitemTypeLabels } from '../../../constants/labels'
 import { CalculatorTypeIconPacks, CalculatorTypeIcons } from '../../../constants/icons'
+import { deleteMapLayer } from '../handlers/deleteMapLayer'
 
 
 export const getEditTitle = (globalState, type) => {
@@ -123,6 +124,35 @@ export const getHeader = (screen, params, navigation, dispatch, openMenu) => {
                         icon: 'download-outline',
                         pack: null
                     }
+                }
+            case "ViewMapLayer":
+                return {
+                    display: true,
+                    isPrimary: true,
+                    left: 'back',
+                    title: {
+                        title: 'Map',
+                        subtitle: 'Layers',
+                        icon: 'globe-2',
+                        pack: null
+                    }
+                }
+            case "EditMapLayer":
+                return {
+                    display: true,
+                    isPrimary: true,
+                    left: 'back',
+                    title: {
+                        title: 'Map',
+                        subtitle: 'Create new layer',
+                        icon: 'globe-2',
+                        pack: null
+                    },
+                    right: [
+                        {
+                            icon: 'trash',
+                            onPress: () => deleteMapLayer(dispatch, navigation, params)
+                        }]
                 }
             case 'Onboarding':
                 return {

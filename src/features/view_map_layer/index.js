@@ -6,6 +6,7 @@ import { Text } from '@ui-kitten/components'
 import AddLayerButton from './components/AddLayerButton'
 import BottomButton from '../../components/BottomButton'
 import useMapLayers from './hooks/useMapLayers'
+import EmptyMapLayerListComponent from './components/EmptyMapLayerListComponent'
 
 
 export const ViewMapLayer = ({ navigateToEditMapLayer, goBack }) => {
@@ -24,20 +25,22 @@ export const ViewMapLayer = ({ navigateToEditMapLayer, goBack }) => {
                             appearance='hint'
                             category='label'>Displayed map layers</Text>
                     </View>
-                    {layers.map(({ id, name, comment, color, width, visible, featureCount }, index) => <MapLayerListItem
-                        key={id}
-                        layerId={id}
-                        width={width}
-                        name={name}
-                        index={index}
-                        selected={visible}
-                        color={color}
-                        comment={comment}
-                        featureCount={featureCount}
-                        onEdit={onEdit}
-                        onDelete={onDelete}
-                        onSelect={onToggle}
-                    />)}
+                    {layers.length === 0 ?
+                        <EmptyMapLayerListComponent /> :
+                        layers.map(({ id, name, comment, color, width, visible, featureCount }, index) => <MapLayerListItem
+                            key={id}
+                            layerId={id}
+                            width={width}
+                            name={name}
+                            index={index}
+                            selected={visible}
+                            color={color}
+                            comment={comment}
+                            featureCount={featureCount}
+                            onEdit={onEdit}
+                            onDelete={onDelete}
+                            onSelect={onToggle}
+                        />)}
 
                     <AddLayerButton
                         onPress={onAddLayer}
