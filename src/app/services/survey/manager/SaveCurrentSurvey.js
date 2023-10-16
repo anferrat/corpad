@@ -1,4 +1,4 @@
-import { errors } from "../../../utils/Error"
+import { errors, Error } from "../../../utils/Error"
 import { guid } from "../../../utils/guid"
 
 export class SaveCurrentSurvey {

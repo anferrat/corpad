@@ -1,37 +1,24 @@
-import React, { useState, useRef, useEffect } from 'react'
-import { View, StyleSheet, ScrollView } from 'react-native'
-import { Text, Modal, Button } from '@ui-kitten/components'
-import Input from '../../../../components/Input'
-import IconButton from '../../../../components/IconButton'
-import { saveIcon } from '../../../../components/Icons'
+import React, { useRef, useEffect, useCallback, useState } from 'react'
+import { View, StyleSheet } from 'react-native'
+import { Text, } from '@ui-kitten/components'
+import SurveyNameModal from './SurveyNameModal'
 
 
 const SurveyNameView = ({ name, inputText, updateSurveyName, resetNameInput, onChangeNameInput }) => {
-    const [visible, setVisible] = useState(false)
     const inputRef = useRef()
+    const [visible, setVisible] = useState(false)
 
-    useEffect(() => {
-        const watch = setTimeout(() => {
-            if (visible)
-                inputRef.current?.focus()
-        }, 120)
-        return () => {
-            clearTimeout(watch)
-        }
-    }, [visible])
-
-    const showModal = React.useCallback(() => setVisible(true), [])
+    const showModal = useCallback(() => setVisible(true), [])
 
     const updateHandler = () => {
         updateSurveyName()
         setVisible(false)
     }
 
-    const hideModal = React.useCallback(() => {
+    const hideModal = useCallback(() => {
         setVisible(false)
         resetNameInput()
     }, [])
-
     return (
         <View style={styles.surveyTitle}>
             <View style={styles.titleView}>
@@ -44,41 +31,19 @@ const SurveyNameView = ({ name, inputText, updateSurveyName, resetNameInput, onC
                     numberOfLines={1}
                     style={styles.title}>{name}</Text>
             </View>
-            <IconButton
-                iconName='edit'
-                onPress={showModal} />
-            <Modal
-                style={styles.modal}
-                onBackdropPress={hideModal}
-                backdropStyle={styles.backDrop}
-                visible={visible}>
-                <ScrollView
-                bounces={false}
-                    keyboardShouldPersistTaps='handled'
-                    style={styles.inputView}>
-                    <Input
-                        ref={inputRef}
-                        label='Survey name'
-                        maxLength={25}
-                        property={'surveyName'}
-                        placeholder='My survey'
-                        style={styles.input}
-                        value={inputText}
-                        valid={true}
-                        onChangeText={onChangeNameInput} />
-                    <Button
-                        accessoryLeft={saveIcon}
-                        style={styles.button}
-                        onPress={updateHandler}>
-                        Save
-                    </Button>
-                </ScrollView>
-            </Modal>
+            <SurveyNameModal
+                showModal={showModal}
+                updateHandler={updateHandler}
+                hideModal={hideModal}
+                visible={visible}
+                inputRef={inputRef}
+                inputText={inputText}
+                onChangeNameInput={onChangeNameInput} />
         </View>
     )
 }
 
-export default SurveyNameView
+export default React.memo(SurveyNameView)
 
 const styles = StyleSheet.create({
     surveyTitle: {

@@ -1,4 +1,4 @@
-import { ItemTypes, SubitemTypes, PipeDiameters, WireColors, TestPointTypes, PermanentPotentialTypes, SortingOptions, ItemStatuses, PipeSchedules, WireGauges, CurrentUnits, AreaUnits, CurrentDensityUnits, FactorUnits, PotentialUnits, AnodeMaterials, ReferenceCellTypes, IsolationTypes, CouponTypes, PipelineMaterials, PipelineProducts, PowerSources, TapOptions, CoarseFineOptions, ExportItemProperties, ExportSubitemProperties, CalculatorTypes, PipelineCoating, IsolationShorted, MultimeterTypes, TimeUnits, MultimeterMeasurementTypes, MultimeterCycles, MultimeterSyncModes, ImageSources, MapLayerFeatures, StrokeColors, StrokeWidths } from "./global"
+import { ItemTypes, SubitemTypes, PipeDiameters, WireColors, TestPointTypes, PermanentPotentialTypes, SortingOptions, ItemStatuses, PipeSchedules, WireGauges, CurrentUnits, AreaUnits, CurrentDensityUnits, FactorUnits, PotentialUnits, AnodeMaterials, ReferenceCellTypes, IsolationTypes, CouponTypes, PipelineMaterials, PipelineProducts, PowerSources, TapOptions, CoarseFineOptions, ExportItemProperties, ExportSubitemProperties, CalculatorTypes, PipelineCoating, IsolationShorted, MultimeterTypes, TimeUnits, MultimeterMeasurementTypes, MultimeterCycles, MultimeterSyncModes, ImageSources, MapLayerFeatures, StrokeColors, StrokeWidths, ExportFormatTypes } from "./global"
 
 export const DefaultNames = Object.freeze({
     [ItemTypes.TEST_POINT]: 'TP',
@@ -94,7 +94,8 @@ export const TestPointTypeLabels = Object.freeze({
     [TestPointTypes.FIELD_NOTE]: 'Field note',
     [TestPointTypes.HEADER]: 'Piping',
     [TestPointTypes.JUNCTION_BOX]: 'Junction box',
-    [TestPointTypes.TEST_STATION]: 'Test station'
+    [TestPointTypes.TEST_STATION]: 'Test station',
+    [TestPointTypes.MEASURMENT]: 'Measurement'
 })
 
 export const SubitemTypeLabels = Object.freeze({
@@ -425,7 +426,6 @@ export const MapLayerFeatureLabels = Object.freeze({
 })
 
 export const StrokeColorLabels = Object.freeze({
-    [StrokeColors.BLACK]: 'Black',
     [StrokeColors.BLUE]: 'Blue',
     [StrokeColors.GREEN]: 'Green',
     [StrokeColors.ORANGE]: 'Orange',
@@ -440,4 +440,9 @@ export const StrokeWidthLabels = Object.freeze({
     [StrokeWidths._1_5PT]: '3 px',
     [StrokeWidths._2PT]: '4 px',
     [StrokeWidths._3PT]: '6 px'
+})
+
+export const ExportFormatTypeLabeles = Object.freeze({
+    [ExportFormatTypes.CSV]: 'Comma Separated File (.csv)',
+    [ExportFormatTypes.KML]: 'Keyhole Markup Language File (.kml)'
 })

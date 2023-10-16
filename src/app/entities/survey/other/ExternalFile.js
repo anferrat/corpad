@@ -19,6 +19,11 @@ export class ExternalFile {
             return ExternalFileTypes.COMMA_SEPARATED_TEXT
         else if (this.uri.endsWith('.jpg') || this.uri.endsWith('.png') || this.uri.endsWith('.webp') || this.uri.endsWith('.jpeg') || this.uri.endsWith('.avif'))
             return ExternalFileTypes.IMAGE
+        else if (this.uri.endsWith('.kml'))
+            return ExternalFileTypes.KEYHOLE_MARKUP_LANGUAGE
+        else if (this.uri.endsWith('.gpx'))
+            return ExternalFileTypes.GPS_EXCHANGE_FORMAT
+        else return ExternalFileTypes.UNKNOWN_FILE
     }
 
     getName() {

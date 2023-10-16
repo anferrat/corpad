@@ -48,11 +48,19 @@ export const StatusStatuses = Object.freeze({
 })
 
 export const MapLayerStrokeColors = Object.freeze({
-    [StrokeColors.BLACK]: '#1c1d20',
     [StrokeColors.BLUE]: '#3390e3',
     [StrokeColors.GREEN]: '#0a7340',
     [StrokeColors.ORANGE]: '#FCAA71',
     [StrokeColors.PURPLE]: '#cc8899',
     [StrokeColors.RED]: '#bd4131',
     [StrokeColors.YELLOW]: '#c2b942'
+})
+
+export const MapLayerFillColors = Object.freeze({
+    [StrokeColors.BLUE]: 'rgba(51,144,227,0.5)',
+    [StrokeColors.GREEN]: 'rgba(10,115,64, 0.5)',
+    [StrokeColors.ORANGE]: 'rgba(252,170,113, 0.5)',
+    [StrokeColors.PURPLE]: 'rgba(204,136,153,0.5)',
+    [StrokeColors.RED]: 'rgba(189,65,49,0.5)',
+    [StrokeColors.YELLOW]: 'rgba(194,185,66,0.5)'
 })

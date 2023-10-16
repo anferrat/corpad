@@ -3,18 +3,14 @@ import { StyleSheet, Animated, ActivityIndicator } from 'react-native'
 import { Icon, Text } from '@ui-kitten/components'
 import { basic, basic300, primary } from '../../../styles/colors'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
+import { useSelector } from 'react-redux'
 
-const LoadingView = ({ loading }) => {
-    const [displayed, setDisplayed] = useState(loading)
+const LoadingView = () => {
+    const loading = useSelector(state => state.map.loading)
+    const [visible, setVisible] = useState(loading)
     const opacity = useRef(new Animated.Value(loading ? 1 : 0))
-    const componentMounted = useRef(true)
     const insets = useSafeAreaInsets()
-    useEffect(() => {
-        componentMounted.current = true
-        return () => {
-            componentMounted.current = false
-        }
-    }, [])
+
 
     useEffect(() => {
         if (!loading) {
@@ -25,31 +21,31 @@ const LoadingView = ({ loading }) => {
                     duration: 400,
                     useNativeDriver: true
                 }
-            ).start(() => componentMounted.current ? setDisplayed(false) : null), 600)
+            ).start(() => setVisible(false)), 600)
         }
-        else {
-            setDisplayed(true)
-            opacity.current.setValue(1)
-        }
-    })
-
-    return (
-        <Animated.View
-            style={{ ...styles.mainView, opacity: opacity.current, display: displayed ? 'flex' : 'none', top: insets.top + 65 }}>
-            {loading ? <>
-                <ActivityIndicator color={primary} />
-                <Text
-                    category='p2'
-                    appearance='hint'
-                    style={styles.text}>Loading...</Text>
-            </> :
-                <>
-                    <Icon name='checkmark-circle-outline'
-                        fill={basic} style={styles.icon} />
-                    <Text category='p2' appearance='hint'>Loaded</Text>
-                </>}
-        </Animated.View>
-    )
+    }, [loading])
+    if (visible)
+        return (
+            <Animated.View
+                pointerEvents='none'
+                style={{ ...styles.mainView, opacity: opacity.current, top: insets.top + 70 }}>
+                {loading ?
+                    <>
+                        <ActivityIndicator
+                            color={primary} />
+                        <Text
+                            category='p2'
+                            appearance='hint'
+                            style={styles.text}>Loading...</Text>
+                    </> :
+                    <>
+                        <Icon name='checkmark-circle-outline'
+                            fill={basic} style={styles.icon} />
+                        <Text category='p2' appearance='hint'>Loaded</Text>
+                    </>}
+            </Animated.View>
+        )
+    else return null
 
 }
 

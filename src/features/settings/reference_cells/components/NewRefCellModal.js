@@ -32,6 +32,7 @@ const NewRefCellModal = ({ onChangeName, onChangeType, rcType, name, visible, di
             backdropStyle={styles.backDrop}
             visible={visible}>
             <ScrollView
+                bounces={false}
                 keyboardShouldPersistTaps='handled'
                 style={styles.mainView}>
                 <Input

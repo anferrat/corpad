@@ -1,4 +1,4 @@
-import { FileMimeTypes } from "../../../constants/global"
+import { ExternalFileTypes, FileMimeTypes } from "../../../constants/global"
 import { DOMParser } from "@xmldom/xmldom"
 import { Error, errors } from "../../utils/Error"
 
@@ -6,6 +6,7 @@ import { Error, errors } from "../../utils/Error"
 export class GeoParser {
     constructor() {
         this.tj = require('@tmcw/togeojson')
+        this.toKmlConverter = require('tokml')
     }
 
     _formatCheck(data) {
@@ -17,13 +18,30 @@ export class GeoParser {
         }
     }
 
-    toGeoJson(content, mimeType) {
-        switch (mimeType) {
-            case FileMimeTypes.KML:
+    toGeoJson(content, fileType) {
+        switch (fileType) {
+            case ExternalFileTypes.KEYHOLE_MARKUP_LANGUAGE:
                 const kml = new DOMParser().parseFromString(content, FileMimeTypes.KML)
                 return this._formatCheck(this.tj.kml(kml))
+            case ExternalFileTypes.GPS_EXCHANGE_FORMAT:
+                const gpx = new DOMParser().parseFromString(content, FileMimeTypes.GPX)
+                return this._formatCheck(this.tj.gpx(gpx))
             default:
-                throw new Error(errors.GENERAL, 'Unable to parse file content', 'mimeType is not supported')
+                throw new Error(errors.GENERAL, 'Unable to parse file content', 'FileType is not supported')
         }
     }
+
+    toKml(geoJson, nameProperty) {
+        try {
+            return this.toKmlConverter(geoJson, {
+                name: nameProperty,
+                simplestyle: true
+            })
+        }
+        catch (er) {
+            throw new Error(errors.GENERAL, 'Unable to convert file to KML', er)
+        }
+    }
+
+
 }

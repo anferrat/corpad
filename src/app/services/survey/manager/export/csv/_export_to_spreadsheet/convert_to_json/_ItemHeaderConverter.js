@@ -9,6 +9,7 @@ export class _ItemHeaderConverter {
     execute(exportedValues) {
         return {
             list: this._convertItemPropertyValues(exportedValues),
+            markers: this._convertMarkers(exportedValues),
             headers: this._getItemPropertyHeaders(exportedValues),
         }
     }
@@ -36,6 +37,13 @@ export class _ItemHeaderConverter {
                 itemValues[this._generateHeaderLabel(property)] = value
             })
             return itemValues
+        })
+    }
+
+    _convertMarkers(exportedValues) {
+        //generates list of markers for geoExport
+        return exportedValues.map(({ marker }) => {
+            return marker.getFeature()
         })
     }
 }

@@ -91,16 +91,20 @@ export const Unit = (props) => {
 const InputField = React.forwardRef((props, ref) => {
 
     const renderCaption = React.useCallback(() => {
-        if (!props.valid)
-            return (
-                <View>
-                    <Text
-                        category='label'
-                        status='danger'>
-                        {getPropertyCaption(props.property)}
-                    </Text>
-                </View>
-            )
+        if (!props.valid) {
+            const caption = getPropertyCaption(props.property)
+            if (caption)
+                return (
+                    <View>
+                        <Text
+                            category='label'
+                            status='danger'>
+                            {caption}
+                        </Text>
+                    </View>
+                )
+            else return null
+        }
         else return null
     }, [props.valid, props.property])
 

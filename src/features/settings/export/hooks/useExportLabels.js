@@ -4,7 +4,7 @@ import { exportSurveyToSpreadsheet, getExportPotentialPropertiesData } from "../
 import { errorHandler } from "../../../../helpers/error_handler"
 import { ItemTypeIconsFilled } from "../../../../constants/icons"
 import { ItemTypeLabelsPlural, SortingOptionLabels } from "../../../../constants/labels"
-import { FileMimeTypes, ItemTypes } from "../../../../constants/global"
+import { ExportFormatTypes, FileMimeTypes, ItemTypes } from "../../../../constants/global"
 import { hideLoader, setExportModal, updateLoader } from "../../../../store/actions/settings"
 import { resetExport } from "../../../../store/actions/export"
 
@@ -34,6 +34,8 @@ const useExportLabels = (navigateToExportItem) => {
         groupPotentialsByPipeline,
         subitemProperties,
         includeAssets,
+        includeMapLayers,
+        exportType
     } = useSelector(state => state.export)
 
     const showPotentials = exportPotentials && itemType === ItemTypes.TEST_POINT
@@ -42,7 +44,9 @@ const useExportLabels = (navigateToExportItem) => {
     const sortingLabel = SortingOptionLabels[sorting]
     const potentialsGroupingLabel = groupPotentialsByPipeline ? 'Pipeline' : 'Reading type'
     const showOther = subitemProperties.length > 0
-    const assetOptionAvailable = itemType === ItemTypes.TEST_POINT || itemType === ItemTypes.RECTIFIER
+    const assetOptionAvailable = (itemType === ItemTypes.TEST_POINT || itemType === ItemTypes.RECTIFIER) && exportType !== ExportFormatTypes.KML
+    const sortingOptionAvailable = exportType !== ExportFormatTypes.KML
+    const mapLayerOptionAvailable = exportType === ExportFormatTypes.KML
 
     useEffect(() => {
         componentMounted.current = true
@@ -74,8 +78,8 @@ const useExportLabels = (navigateToExportItem) => {
     }, [])
 
     const exportToSpreadsheet = useCallback(async () => {
-        dispatch(updateLoader('Exporting', 'Creating new .csv file'))
-        const { response, status, errorMessage } = await exportSurveyToSpreadsheet({ itemType, sorting, itemProperties, exportPotentials, referenceCellId, potentialTypeIdList, selectedSubitemTypes, pipelineIdList, groupPotentialsByPipeline, subitemProperties, includeAssets: includeAssets && assetOptionAvailable })
+        dispatch(updateLoader('Exporting', `Creating new .${exportType} file`))
+        const { response, status, errorMessage } = await exportSurveyToSpreadsheet({ itemType, sorting, itemProperties, exportPotentials, referenceCellId, potentialTypeIdList, selectedSubitemTypes, pipelineIdList, groupPotentialsByPipeline, subitemProperties, includeAssets: includeAssets && assetOptionAvailable, includeMapLayers: mapLayerOptionAvailable && includeMapLayers, exportType })
         if (status === 200) {
             navigateToExportItem()
             dispatch(resetExport())
@@ -86,7 +90,7 @@ const useExportLabels = (navigateToExportItem) => {
             errorHandler(status)
             dispatch(hideLoader())
         }
-    }, [dispatch, navigateToExportItem, itemType, sorting, itemProperties, exportPotentials, referenceCellId, potentialTypeIdList, selectedSubitemTypes, pipelineIdList, groupPotentialsByPipeline, subitemProperties])
+    }, [dispatch, navigateToExportItem, itemType, sorting, itemProperties, exportPotentials, referenceCellId, potentialTypeIdList, selectedSubitemTypes, pipelineIdList, groupPotentialsByPipeline, subitemProperties, mapLayerOptionAvailable, includeMapLayers, includeAssets, assetOptionAvailable, exportType])
 
     return {
         exportToSpreadsheet,
@@ -105,7 +109,11 @@ const useExportLabels = (navigateToExportItem) => {
         selectedSubitemTypes,
         showOther,
         assetOptionAvailable,
-        includeAssets
+        includeAssets,
+        exportType,
+        sortingOptionAvailable,
+        includeMapLayers,
+        mapLayerOptionAvailable,
     }
 
 }

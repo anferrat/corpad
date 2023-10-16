@@ -37,7 +37,8 @@ export class _ConvertToJson {
         }))
         return {
             data,
-            headers
+            headers,
+            features: items.markers
         }
     }
 }

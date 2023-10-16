@@ -1,9 +1,9 @@
 import { useDispatch, useSelector } from "react-redux"
 import { useCallback, useState, useEffect, useRef } from 'react'
-import { resetExport, setExportItemType, setExportSorting, toggleExportItemProperty, toggleIncludeAssets } from "../../../../store/actions/export"
+import { resetExport, setExportFormat, setExportItemType, setExportSorting, toggleExportItemProperty, toggleIncludeAssets, setIncludeMapLayers } from "../../../../store/actions/export"
 import { getExportItemProperties } from "../../../../app/controllers/survey/ExportController"
 import { errorHandler } from "../../../../helpers/error_handler"
-import { ItemTypes } from "../../../../constants/global"
+import { ExportFormatTypes, ItemTypes } from "../../../../constants/global"
 
 const useExportItemProperties = ({ navigateToExportOverview, navigateToExportPotentials, navigateToExportSubitems }) => {
     const [properties, setProperties] = useState([])
@@ -11,10 +11,16 @@ const useExportItemProperties = ({ navigateToExportOverview, navigateToExportPot
     const itemType = useSelector(state => state.export.itemType)
     const sorting = useSelector(state => state.export.sorting)
     const includeAssets = useSelector(state => state.export.includeAssets)
+    const exportType = useSelector(state => state.export.exportType)
+    const includeMapLayers = useSelector(state => state.export.includeMapLayers)
     const itemProperties = useSelector(state => state.export.itemProperties)
     const dispatch = useDispatch()
     const componentMounted = useRef(true)
-    const assetOptionAvailable = itemType === ItemTypes.TEST_POINT || itemType === ItemTypes.RECTIFIER
+    const formatOptionAvailable = itemType === ItemTypes.TEST_POINT || itemType === ItemTypes.RECTIFIER
+    const assetOptionAvailable = (itemType === ItemTypes.TEST_POINT || itemType === ItemTypes.RECTIFIER) && exportType === ExportFormatTypes.CSV
+    const sortingOptionAvailable = exportType !== ExportFormatTypes.KML
+    const mapLayerOptionAvailable = exportType === ExportFormatTypes.KML
+
 
     useEffect(() => {
         componentMounted.current = true
@@ -53,6 +59,12 @@ const useExportItemProperties = ({ navigateToExportOverview, navigateToExportPot
         dispatch(toggleIncludeAssets(isChecked))
     }, [])
 
+    const onSelectExportFormat = useCallback((format) =>
+        dispatch(setExportFormat(format)), [])
+
+    const onCheckIncludeMapLayers = useCallback((isChecked) =>
+        dispatch(setIncludeMapLayers(isChecked)), [])
+
     const onNextPress = useCallback(() => {
         if (itemType === 'TEST_POINT')
             navigateToExportPotentials()
@@ -70,11 +82,18 @@ const useExportItemProperties = ({ navigateToExportOverview, navigateToExportPot
         loading,
         assetOptionAvailable,
         includeAssets,
+        includeMapLayers,
+        exportType,
+        formatOptionAvailable,
+        sortingOptionAvailable,
+        mapLayerOptionAvailable,
         setIncludeAssets,
         onSelectItemType,
         onSelectSorting,
         toggleItemProperty,
-        onNextPress
+        onNextPress,
+        onSelectExportFormat,
+        onCheckIncludeMapLayers
     }
 }
 

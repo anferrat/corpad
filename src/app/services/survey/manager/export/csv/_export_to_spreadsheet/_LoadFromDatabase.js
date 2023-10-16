@@ -79,8 +79,8 @@ export class _LoadFromDatabase {
 
     async execute({ itemType, sorting, itemProperties, exportPotentials, referenceCellId, potentialTypeIdList, selectedSubitemTypes, pipelineIdList, groupPotentialsByPipeline, subitemProperties }) {
         const items = await this._getItems(itemType, sorting)
-        if(items.length === 0)
-        throw new Error(errors.GENERAL, 'No items to export', 'No export items', 111)
+        if (items.length === 0)
+            throw new Error(errors.GENERAL, 'No items to export', 'No export items', 111)
         return await Promise.all(items.map(async item => {
             const itemValues = this.itemExportConverter.execute(item, itemProperties)
             const subitems = await this._getSubitems(itemType, item.id)
@@ -91,6 +91,7 @@ export class _LoadFromDatabase {
                 item: itemValues,
                 subitem: subitemValues,
                 potential: potentialValues,
+                marker: item.getMarker()
             }
         }))
     }

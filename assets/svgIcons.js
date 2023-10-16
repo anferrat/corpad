@@ -116,6 +116,84 @@ const FC = (props) => (
   </Svg>
 )
 
+const MN = (props) => (
+  <Svg
+    xmlns="http://www.w3.org/2000/svg"
+    xmlSpace="preserve"
+    style={{
+      enableBackground: "new 0 0 24 24",
+    }}
+    viewBox="0 0 24 24"
+    {...props}
+  >
+    <Path d="m22.1 8.3-6.4-6.4c-.4-.4-.9-.6-1.4-.6-.5 0-1 .2-1.4.6l-11 11c-.8.8-.8 2 0 2.8l6.4 6.4c.4.4.9.6 1.4.6.5 0 1-.2 1.4-.6l11-11c.7-.8.7-2 0-2.8zM9.7 20.7l-6.4-6.4 1.1-1.1 3.5 3.5c.2.2.5.3.7.3s.5-.1.7-.3c.4-.4.4-1 0-1.4l-3.5-3.5 1-1.1L9 12.9c.2.2.5.3.7.3.3 0 .5-.1.7-.3.4-.4.4-1 0-1.4L8.3 9.3l1.1-1.1 3.5 3.5c.2.2.5.3.7.3.3 0 .5-.1.7-.3.4-.4.4-1 0-1.4l-3.5-3.5 1-1.1 2.1 2.1c.2.2.5.3.7.3.3 0 .5-.1.7-.3.4-.4.4-1 0-1.4l-2.1-2.1 1.1-1.1 6.4 6.4-11 11.1z" />
+  </Svg>
+)
+
+const MNFilled = (props) => (
+  <Svg
+    xmlns="http://www.w3.org/2000/svg"
+    xmlSpace="preserve"
+    style={{
+      enableBackground: "new 0 0 24 24",
+    }}
+    viewBox="0 0 24 24"
+    {...props}>
+    <Path d="m22.1 8.3-6.4-6.4c-.4-.4-.9-.6-1.4-.6-.5 0-1 .2-1.4.6l-11 11c-.8.8-.8 2 0 2.8l6.4 6.4c.4.4.9.6 1.4.6.5 0 1-.2 1.4-.6l11-11c.7-.8.7-2 0-2.8zM9.3 16.8c-.2.2-.4.3-.7.3s-.5-.1-.7-.3l-3.5-3.5 1.4-1.4 3.5 3.5c.4.4.4 1 0 1.4zm1.1-3.9c-.2.2-.4.3-.7.3-.3 0-.5-.1-.7-.3l-2.1-2.1 1.4-1.4 2.1 2.1c.4.4.4 1 0 1.4zm3.9-1.1c-.2.2-.5.3-.7.3-.3 0-.5-.1-.7-.3L9.3 8.3l1.4-1.4 3.5 3.5c.5.4.5 1 .1 1.4zm1.1-3.9c-.2.2-.5.3-.7.3-.3 0-.5-.1-.7-.3l-2.1-2.1 1.4-1.4 2.1 2.1c.4.4.4 1 0 1.4z" />
+  </Svg>
+)
+
+const MapMN = (props) => (
+  <Svg
+    xmlns="http://www.w3.org/2000/svg"
+    xmlSpace="preserve"
+    style={{
+      enableBackground: "new 0 0 24 24",
+    }}
+    viewBox="0 0 24 24"
+    {...props}>
+    <Circle
+      cx={12}
+      cy={12}
+      r={12} />
+    <Circle
+      cx={12}
+      cy={12}
+      r={11.5}
+      style={{
+        stroke: "#000",
+        strokeWidth: 0.5,
+        strokeOpacity: 0.31,
+      }} />
+    <Path
+      d="m19.6 9.2-4.8-4.8c-.3-.2-.7-.4-1.1-.4-.4 0-.8.2-1.1.4l-8.2 8.2c-.6.6-.6 1.5 0 2.1l4.8 4.8c.3.3.7.4 1.1.4.4 0 .8-.2 1.1-.4l8.2-8.2c.5-.6.5-1.5 0-2.1zM10 15.6c-.2.2-.3.2-.5.2s-.4-.1-.5-.2L6.4 13l1.1-1.1 2.6 2.6c.2.3.2.8-.1 1.1zm.8-2.9c-.2.1-.3.2-.5.2s-.4-.1-.5-.2l-1.6-1.6 1-1.1 1.6 1.6c.3.3.3.8 0 1.1zm2.9-.8c-.2.2-.3.2-.5.2s-.4-.1-.5-.2L10 9.2l1.1-1.1 2.6 2.6c.3.4.3.9 0 1.2zm.8-2.9c-.2.1-.3.2-.5.2s-.4-.1-.5-.2l-1.6-1.6L13 6.3l1.6 1.6c.2.3.2.8-.1 1.1z"
+      style={{
+        fill: "#fff",
+      }}
+    />
+  </Svg>
+)
+
+const MapMNActive = (props) => (
+  <Svg
+    xmlns="http://www.w3.org/2000/svg"
+    xmlSpace="preserve"
+    style={{
+      enableBackground: "new 0 0 38.4 48",
+    }}
+    viewBox="0 0 38.4 48"
+    {...props}
+  >
+    <Path d="M38.4 19c0 13.1-16.8 27.7-17.6 28.4-.9.8-2.2.8-3.1 0C17 46.8 0 32.1 0 19 .1 8.5 8.6 0 19.2 0s19.1 8.5 19.2 19z" />
+    <Path
+      d="m30.5 15-7.2-7.2c-.4-.4-1-.7-1.6-.7-.6 0-1.2.2-1.6.7L7.9 20.2c-.9.9-.9 2.3 0 3.2l7.2 7.2c.4.4 1 .7 1.6.7.6 0 1.2-.2 1.6-.7l12.3-12.3c.8-1 .8-2.4-.1-3.3zm-14.3 9.6c-.2.2-.5.3-.8.3s-.6-.1-.8-.3l-4-4 1.6-1.6 4 4c.5.4.5 1.1 0 1.6zm1.2-4.4c-.2.2-.5.3-.8.3-.3 0-.6-.1-.8-.3l-2.4-2.4 1.6-1.6 2.4 2.4c.5.4.5 1.2 0 1.6zm4.4-1.2c-.2.2-.5.3-.8.3-.3 0-.6-.1-.8-.3l-4-4 1.6-1.6 4 4c.4.4.4 1.2 0 1.6zm1.2-4.4c-.2.2-.5.3-.8.3-.3 0-.6-.1-.8-.3L19 12.2l1.6-1.6L23 13c.4.5.4 1.2 0 1.6z"
+      style={{
+        fill: "#fff",
+      }}
+    />
+  </Svg>
+)
+
 const Location = (props) => (
   <Svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" {...props}>
     <Path d="M21.6 11h-1.7c-.5-3.6-3.3-6.5-6.9-6.9V2.5c0-.5-.5-1-1-1s-1 .5-1 1v1.6c-3.6.4-6.5 3.3-6.9 6.9H2.5c-.5 0-1 .5-1 1s.5 1 1 1h1.6c.5 3.6 3.3 6.5 6.9 6.9v1.5c0 .5.5 1 1 1s1-.5 1-1v-1.5c3.6-.5 6.5-3.3 6.9-6.9h1.7c.5 0 1-.5 1-1s-.5-1-1-1zm-5 2h1.3c-.4 2.5-2.4 4.5-4.9 4.9v-1.4c0-.6-.5-1-1-1s-1 .4-1 1v1.4c-2.5-.4-4.5-2.4-4.9-4.9h1.4c.5 0 1-.5 1-1s-.5-1-1-1H6.1c.4-2.5 2.4-4.5 4.9-4.9v1.4c0 .5.5 1 1 1s1-.5 1-1V6.1c2.5.4 4.5 2.4 4.9 4.9h-1.3c-.6 0-1 .5-1 1s.4 1 1 1z" />
@@ -154,15 +232,15 @@ const ColorCircleDouble = (props) => (
 
 const FN = (props) => (
   <Svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" {...props}>
-  <G data-name="Layer 2">
-    <G data-name="message-square">
-      <Circle cx={12} cy={11} r={1} />
-      <Circle cx={16} cy={11} r={1} />
-      <Circle cx={8} cy={11} r={1} />
-      <Path d="M19 3H5a3 3 0 0 0-3 3v15a1 1 0 0 0 .51.87A1 1 0 0 0 3 22a1 1 0 0 0 .51-.14L8 19.14a1 1 0 0 1 .55-.14H19a3 3 0 0 0 3-3V6a3 3 0 0 0-3-3zm1 13a1 1 0 0 1-1 1H8.55a3 3 0 0 0-1.55.43l-3 1.8V6a1 1 0 0 1 1-1h14a1 1 0 0 1 1 1z" />
+    <G data-name="Layer 2">
+      <G data-name="message-square">
+        <Circle cx={12} cy={11} r={1} />
+        <Circle cx={16} cy={11} r={1} />
+        <Circle cx={8} cy={11} r={1} />
+        <Path d="M19 3H5a3 3 0 0 0-3 3v15a1 1 0 0 0 .51.87A1 1 0 0 0 3 22a1 1 0 0 0 .51-.14L8 19.14a1 1 0 0 1 .55-.14H19a3 3 0 0 0 3-3V6a3 3 0 0 0-3-3zm1 13a1 1 0 0 1-1 1H8.55a3 3 0 0 0-1.55.43l-3 1.8V6a1 1 0 0 1 1-1h14a1 1 0 0 1 1 1z" />
+      </G>
     </G>
-  </G>
-</Svg>
+  </Svg>
 )
 
 const OT = (props) => (
@@ -1256,6 +1334,10 @@ export const Icon = (props) => {
     case 'CT':
     case 'CT-filled':
       return <CT {...props} />
+    case 'MN':
+      return <MN {...props} />
+    case 'MN-filled':
+      return <MNFilled {...props} />
     case 'color-circle':
       return <ColorCircle {...props} />
     case 'color-circle-double':
@@ -1280,12 +1362,16 @@ export const Icon = (props) => {
       return <MapHDActive {...props} />
     case 'map-FN':
       return <MapFN {...props} />
+    case 'map-MN':
+      return <MapMN {...props} />
     case 'map-FN-active':
       return <MapFNActive {...props} />
     case 'map-RT':
       return <MapRT {...props} />
     case 'map-RT-active':
       return <MapRTActive {...props} />
+    case 'map-MN-active':
+      return <MapMNActive {...props} />
     case 'map-pointer':
       return <MapPointer {...props} />
     case 'map-pointer-active':

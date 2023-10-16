@@ -7,11 +7,14 @@ import AddLayerButton from './components/AddLayerButton'
 import BottomButton from '../../components/BottomButton'
 import useMapLayers from './hooks/useMapLayers'
 import EmptyMapLayerListComponent from './components/EmptyMapLayerListComponent'
+import LoadingView from '../../components/LoadingView'
+import ExportHint from './components/ExportHint'
 
 
 export const ViewMapLayer = ({ navigateToEditMapLayer, goBack }) => {
     const {
         layers,
+        visible,
         onEdit,
         onDelete,
         onToggle,
@@ -20,33 +23,36 @@ export const ViewMapLayer = ({ navigateToEditMapLayer, goBack }) => {
         <>
             <ScrollView>
                 <View style={styles.card}>
-                    <View style={styles.headerRow}>
-                        <Text
-                            appearance='hint'
-                            category='label'>Displayed map layers</Text>
-                    </View>
-                    {layers.length === 0 ?
-                        <EmptyMapLayerListComponent /> :
-                        layers.map(({ id, name, comment, color, width, visible, featureCount }, index) => <MapLayerListItem
-                            key={id}
-                            layerId={id}
-                            width={width}
-                            name={name}
-                            index={index}
-                            selected={visible}
-                            color={color}
-                            comment={comment}
-                            featureCount={featureCount}
-                            onEdit={onEdit}
-                            onDelete={onDelete}
-                            onSelect={onToggle}
-                        />)}
+                    <LoadingView loading={!visible}>
+                        <View style={styles.headerRow}>
+                            <Text
+                                appearance='hint'
+                                category='label'>Displayed map layers</Text>
+                        </View>
+                        {layers.length === 0 ?
+                            <EmptyMapLayerListComponent /> :
+                            layers.map(({ id, name, comment, color, width, visible, featureCount }, index) => <MapLayerListItem
+                                key={id}
+                                layerId={id}
+                                width={width}
+                                name={name}
+                                index={index}
+                                selected={visible}
+                                color={color}
+                                comment={comment}
+                                featureCount={featureCount}
+                                onEdit={onEdit}
+                                onDelete={onDelete}
+                                onSelect={onToggle}
+                            />)}
 
-                    <AddLayerButton
-                        onPress={onAddLayer}
-                    />
+                        <AddLayerButton
+                            onPress={onAddLayer}
+                        />
+
+                    </LoadingView>
                 </View>
-
+                <ExportHint />
             </ScrollView>
             <BottomButton
                 onPress={goBack}
@@ -64,6 +70,7 @@ const styles = StyleSheet.create({
     card: {
         ...globalStyle.card,
         padding: 0,
+        minHeight: 100
     },
     headerRow: {
         paddingTop: 12,

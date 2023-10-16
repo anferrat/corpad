@@ -31,6 +31,7 @@ import CycleSettings from '../screens/settings/CycleSettings'
 import { MultimeterModal } from '../features/overlays/multimeter'
 import EditMapLayer from '../screens/map_layer/Edit'
 import ViewMapLayer from '../screens/map_layer/View'
+import ViewMarkerInfo from '../screens/map_layer/ViewMarkerInfo'
 
 
 const Stack = createNativeStackNavigator()
@@ -48,7 +49,7 @@ export const AppNavigator = () => {
             headerShown: true,
             animation: 'fade',
             //insets has to be passed to header from the top, to avoid glitching when swicthing between screens
-            header: ({ route, navigation }) => <TopBar screen={route.name} params={route.params} navigation={navigation} topInset={21.7777} />,
+            header: ({ route, navigation, options }) => <TopBar screen={route.name} params={route.params} navigation={navigation} topInset={options.headerStatusBarHeight} />,
           }}>
           {isOnboardingVisible ? <Stack.Screen name='Onboarding' component={OnboardingScreen} /> : null}
           {
@@ -58,6 +59,7 @@ export const AppNavigator = () => {
                 <Stack.Screen name='ViewItem' component={ViewItem} />
                 <Stack.Screen name='EditMapLayer' component={EditMapLayer} />
                 <Stack.Screen name='ViewMapLayer' component={ViewMapLayer} />
+                <Stack.Screen name='ViewMarkerInfo' component={ViewMarkerInfo} />
                 <Stack.Screen name='EditItem' component={EditItem} />
                 <Stack.Screen name='EditSubitem' component={EditSubitem} />
                 <Stack.Group screenOptions={{

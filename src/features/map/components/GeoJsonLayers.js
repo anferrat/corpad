@@ -2,7 +2,7 @@ import React from 'react'
 import { StyleSheet } from 'react-native'
 import useMapLayerData from '../hooks/useMapLayerData'
 import { Geojson } from 'react-native-maps'
-import { MapLayerStrokeColors } from '../../../styles/colors'
+import { MapLayerStrokeColors, MapLayerFillColors } from '../../../styles/colors'
 import { StrokeWidthValues } from '../../../styles/styles'
 import { getPointIcon } from './native_icons/mapIcons'
 import MapLayerPointMarker from './markers/MapLayerPointMarker'
@@ -47,7 +47,7 @@ const GeoJsonLayers = () => {
                         image={getPointIcon(false, color)}
                         strokeColor={MapLayerStrokeColors[color]}
                         geojson={data}
-                        fillColor={MapLayerStrokeColors[color]}
+                        fillColor={MapLayerFillColors[color]}
                         strokeWidth={StrokeWidthValues[width]} />
                 </React.Fragment>
             }

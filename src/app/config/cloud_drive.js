@@ -8,4 +8,9 @@ export const config = {
 
 export const gdrive = new GDrive()
 
+export const folderIds = {
+    appFolder: undefined,
+    assetFolder: undefined
+}
+
 gdrive.fetchTimeout = 15000

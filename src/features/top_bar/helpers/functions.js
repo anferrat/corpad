@@ -83,7 +83,7 @@ export const getHeader = (screen, params, navigation, dispatch, openMenu) => {
                     isPrimary: true,
                     left: 'back',
                     title: {
-                        title: 'Export to spreadsheet',
+                        title: 'Export survey',
                         subtitle: 'Item properties',
                         icon: 'download-outline',
                         pack: null
@@ -95,7 +95,7 @@ export const getHeader = (screen, params, navigation, dispatch, openMenu) => {
                     isPrimary: true,
                     left: 'back',
                     title: {
-                        title: 'Export to spreadsheet',
+                        title: 'Export survey',
                         subtitle: 'Potentials',
                         icon: 'download-outline',
                         pack: null
@@ -107,7 +107,7 @@ export const getHeader = (screen, params, navigation, dispatch, openMenu) => {
                     isPrimary: true,
                     left: 'back',
                     title: {
-                        title: 'Export to spreadsheet',
+                        title: 'Export survey',
                         subtitle: 'More properties',
                         icon: 'download-outline',
                         pack: null
@@ -119,7 +119,7 @@ export const getHeader = (screen, params, navigation, dispatch, openMenu) => {
                     isPrimary: true,
                     left: 'back',
                     title: {
-                        title: 'Export to spreadsheet',
+                        title: 'Export survey',
                         subtitle: 'Overview',
                         icon: 'download-outline',
                         pack: null
@@ -136,6 +136,13 @@ export const getHeader = (screen, params, navigation, dispatch, openMenu) => {
                         icon: 'globe-2',
                         pack: null
                     }
+                }
+            case "ViewMarkerInfo":
+                return {
+                    display: true,
+                    isPrimary: true,
+                    left: 'back',
+                    title: 'Marker properties'
                 }
             case "EditMapLayer":
                 return {

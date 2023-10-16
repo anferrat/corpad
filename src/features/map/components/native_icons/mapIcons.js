@@ -36,6 +36,12 @@ const mapIcons = {
         'rt_basic',
         'active_rt'
     ],
+    MN: ['mn_success',
+        'mn_warning',
+        'mn_danger',
+        'mn_basic',
+        'active_mn'
+    ],
     default: ['default_success',
         'default_warning',
         'default_danger',
@@ -43,6 +49,10 @@ const mapIcons = {
         'active_default'
     ],
 }
+
+export const addMarker = { uri: 'add_marker' }
+
+export const activePointIcon = { uri: mapIcons.default[4] }
 
 const pointIcons = {
     false: {
@@ -73,10 +83,6 @@ const pointIcons = {
 
 export const getPointIcon = (isSelectable = false, color = StrokeColors.BLUE) => {
     return pointIcons[isSelectable][color] ?? pointIcons[false][StrokeColors.BLUE]
-}
-
-export const getActivePointIcon = (color) => {
-    return { uri: mapIcons.default[4] }
 }
 
 export const getMapIcon = (icon, status) => {

@@ -1,7 +1,7 @@
 import React from 'react'
 import { StyleSheet } from 'react-native'
 import { Marker } from 'react-native-maps'
-import { getActivePointIcon } from '../native_icons/mapIcons'
+import { activePointIcon } from '../native_icons/mapIcons'
 
 const offset = {
     x: 0,
@@ -15,7 +15,7 @@ const ActiveMapLayerPointMarker = ({ layerId, color, latitude, longitude }) => {
         return (
             <Marker
                 isPreselected={true}
-                image={getActivePointIcon(color)}
+                image={activePointIcon}
                 key={'ActivePointMarker'}
                 identifier={'ActivePointMarker'}
                 tracksViewChanges={false}
