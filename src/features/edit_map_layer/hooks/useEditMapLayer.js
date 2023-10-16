@@ -10,10 +10,18 @@ import { useDispatch } from "react-redux"
 import { addMapLayer, updateMapLayer } from "../../../store/actions/mapLayers"
 import { resetActiveMapLayerMarker } from "../../../store/actions/map"
 import { hapticMedium } from "../../../native_libs/haptics"
+import { MapLayerStrokeColors } from "../../../styles/colors"
+import { hideLoader, updateLoader } from "../../../store/actions/settings"
 
 const colorList = Object.values(StrokeColors).map((color, index) => ({ index, item: StrokeColorLabels[color], value: color }))
 
 const widthList = Object.values(StrokeWidths).map((width, index) => ({ index, item: StrokeWidthLabels[width], value: width }))
+
+const colorAccessories = colorList.map(({ value }) => ({
+    icon: 'color-circle',
+    pack: 'cp',
+    fill: MapLayerStrokeColors[value]
+}))
 
 const useEditMapLayer = ({ isNew, layerId }) => {
     const navigation = useNavigation()
@@ -84,18 +92,20 @@ const useEditMapLayer = ({ isNew, layerId }) => {
         const isValid = valid.name && valid.comment
         if (isValid) {
             const { name, defaultName, comment, colorIndex, widthIndex, visible } = data
+            dispatch(updateLoader('Saving'))
             if (isNew) {
                 hapticMedium()
-                if (geoFile.filename)
+                if (geoFile.filename) {
                     await createMapLayer({ name, defaultName, comment, width: widthList[widthIndex].value, color: colorList[colorIndex].value, data: geoFile.data },
                         er => errorHandler(er),
                         (response) => {
                             dispatch(addMapLayer(response.id, response.name, response.comment, response.strokeColor, response.strokeWidth, response.data, response.featureCount, response.points))
                             navigation.goBack()
                         })
+                }
                 else errorHandler(513)
             }
-            else
+            else {
                 await updateMapLayerRequest({ id: layerId, name, defaultName, width: widthList[widthIndex].value, color: colorList[colorIndex].value, comment, visible },
                     er => errorHandler(er),
                     (response) => {
@@ -103,8 +113,10 @@ const useEditMapLayer = ({ isNew, layerId }) => {
                         dispatch(resetActiveMapLayerMarker(layerId))
                         navigation.goBack()
                     })
+            }
         }
         else errorHandler(505)
+        dispatch(hideLoader())
     }
 
     const onSelectFile = useCallback(async () => {
@@ -144,6 +156,7 @@ const useEditMapLayer = ({ isNew, layerId }) => {
         loading,
         colorList,
         widthList,
+        colorAccessories,
         onChangeName,
         onChangeComment,
         onEndEditingName,

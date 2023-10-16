@@ -1,4 +1,4 @@
-import { useCallback } from "react"
+import { useCallback, useState, useEffect } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import { deleteMapLayer, toggleMapLayer } from "../../../store/actions/mapLayers"
 import { deleteMapLayer as deleteMapLayerRequest, updateMapLayer } from "../../../app/controllers/survey/other/MapLayerController"
@@ -8,6 +8,11 @@ import { resetActiveMapLayerMarker } from "../../../store/actions/map"
 
 const useMapLayers = ({ navigateToEditMapLayer }) => {
     const layers = useSelector(state => state.mapLayers.layers)
+    const [visible, setVisible] = useState(false)
+
+    useEffect(() => {
+        setTimeout(() => setVisible(true), 100)
+    }, [])
 
     const dispatch = useDispatch()
 
@@ -17,10 +22,8 @@ const useMapLayers = ({ navigateToEditMapLayer }) => {
         const confirm = await warningHandler(61, 'Delete', 'Cancel')
         if (confirm) {
             const { status } = await deleteMapLayerRequest({ id: layerId }, er => errorHandler(er))
-            if (status === 200) {
+            if (status === 200)
                 dispatch(deleteMapLayer(index))
-                EventRegister.emit('map_layer_changed_visibility', { isVisible: false, layerId })
-            }
         }
     }, [])
 
@@ -40,6 +43,7 @@ const useMapLayers = ({ navigateToEditMapLayer }) => {
     }, [])
 
     return {
+        visible,
         layers,
         onEdit,
         onDelete,

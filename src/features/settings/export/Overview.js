@@ -8,7 +8,7 @@ import PropertyElement from './components/overview/PropertyElement'
 import ViewContainer from './components/ViewContainer'
 import LoadingView from '../../../components/LoadingView'
 import BottomButton from '../../../components/BottomButton'
-import { ExportItemPropertyLabels, ExportSubitemPropertyLabels, SubitemTypeLabels } from '../../../constants/labels'
+import { ExportFormatTypeLabeles, ExportItemPropertyLabels, ExportSubitemPropertyLabels, SubitemTypeLabels } from '../../../constants/labels'
 import { SubitemTypeIconsFilled } from '../../../constants/icons'
 
 
@@ -30,7 +30,11 @@ const Overview = ({ navigateToExportItem }) => {
         selectedSubitemTypes,
         showOther,
         includeAssets,
-        assetOptionAvailable
+        assetOptionAvailable,
+        exportType,
+        sortingOptionAvailable,
+        includeMapLayers,
+        mapLayerOptionAvailable
     } = useExportLabels(navigateToExportItem)
     return (
         <>
@@ -50,6 +54,13 @@ const Overview = ({ navigateToExportItem }) => {
                             {itemTypeLabel}
                         </PropertyElement>
                     </Display>
+                    <Display
+                        property={'Format:'}>
+                        <PropertyElement>
+                            {ExportFormatTypeLabeles[exportType]}
+                        </PropertyElement>
+                    </Display>
+
                     {assetOptionAvailable ?
                         <Display
                             property={'Include images:'}>
@@ -58,12 +69,21 @@ const Overview = ({ navigateToExportItem }) => {
                                 {includeAssets ? 'Yes' : 'No'}
                             </PropertyElement>
                         </Display> : null}
-                    <Display
-                        property={'Sorting:'}>
-                        <PropertyElement>
-                            {sortingLabel}
-                        </PropertyElement>
-                    </Display>
+                    {mapLayerOptionAvailable ?
+                        <Display
+                            property={'Include map layers:'}>
+                            <PropertyElement
+                                icon={includeMapLayers ? 'checkmark' : 'close'}>
+                                {includeMapLayers ? 'Yes' : 'No'}
+                            </PropertyElement>
+                        </Display> : null}
+                    {sortingOptionAvailable ?
+                        <Display
+                            property={'Sorting:'}>
+                            <PropertyElement>
+                                {sortingLabel}
+                            </PropertyElement>
+                        </Display> : null}
                     <Display
                         property={'Properties:'}>
                         {itemProperties.map(property => (

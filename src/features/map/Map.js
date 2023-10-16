@@ -13,7 +13,7 @@ import useMarkers from './hooks/useMarkers'
 import ControlBar from './ControlBar'
 import GeoJsonLayers from './components/GeoJsonLayers'
 
-const Map = ({ navigateToView, navigateToEdit, navigateToViewMapLayer }) => {
+const Map = ({ navigateToView, navigateToEdit, navigateToViewMapLayer, navigateToViewMapLayerMarker }) => {
     const ref = useRef()
     const {
         markers,
@@ -98,15 +98,14 @@ const Map = ({ navigateToView, navigateToEdit, navigateToViewMapLayer }) => {
             </MapView >
             <MarkerInfo
                 navigateToView={navigateToView}
-                navigateToMapLayerPointView={() => { }}
+                navigateToMapLayerPointView={navigateToViewMapLayerMarker}
                 shareActiveLocation={shareActiveLocation}
                 zoomToCoordinates={zoomToCoordinates} />
             <NewItemView
                 shareNewItemLocation={shareNewItemLocation}
                 active={newItemMarker.active}
                 createItemHandler={createItemHandler} />
-            <LoadingView
-                loading={loading} />
+            <LoadingView />
             <ControlBar
                 loading={loading}
                 satelliteMode={satelliteMode}

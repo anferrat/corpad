@@ -23,6 +23,8 @@ const NewPotentialModal = ({ visible, addPotential, dismissModal, onChangeName, 
             backdropStyle={styles.backDrop}
             visible={visible}>
             <ScrollView
+                bounces={false}
+                keyboardShouldPersistTaps='handled'
                 style={styles.inputView}>
                 <Input
                     ref={inputRef}

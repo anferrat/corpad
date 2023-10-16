@@ -1,6 +1,6 @@
 import { Error, errors } from "../../utils/Error"
 import { GoogleDriveAuthorizationRepository } from "./GoogleDriveAuthorizationRepository"
-import { gdrive } from "../../config/cloud_drive"
+import { gdrive, folderIds } from "../../config/cloud_drive"
 import { ListQueryBuilder, MimeTypes } from "@robinbobin/react-native-google-drive-api-wrapper"
 import { GoogleDriveFileTransferManager } from "./GoogleDriveFileTransferManager"
 import { CloudFile } from "../../entities/survey/other/CloudFile"
@@ -53,8 +53,8 @@ export class GoogleDriveFileSystemRepository {
 
     async getAppFolderId() {
         //returns id of Corpad folder on users cloud, if it doesnt exist, creates one and returns id
-        if (this.appFolderId)
-            return this.appFolderId
+        if (folderIds.appFolder)
+            return folderIds.appFolder
         else
             try {
                 const list = await this.authHandler(async () => await gdrive.files.list({
@@ -63,7 +63,7 @@ export class GoogleDriveFileSystemRepository {
                 }))
                 if (list?.files.length === 0) {
                     const createFolderId = await this.createFolder(this.APPLICATION_FOLDER_NAME, ['root'])
-                    this.appFolderId = createFolderId
+                    folderIds.appFolder = createFolderId
                     return createFolderId
                 }
                 else {
@@ -77,8 +77,8 @@ export class GoogleDriveFileSystemRepository {
     }
 
     async getAssetFolderId() {
-        if (this.assetFolderId)
-            return this.assetFolderId
+        if (folderIds.assetFolder)
+            return folderIds.assetFolder
         else try {
             const appFolderId = await this.getAppFolderId()
             const list = await this.authHandler(async () => await gdrive.files.list({
@@ -97,7 +97,7 @@ export class GoogleDriveFileSystemRepository {
             }
             else {
                 const assetFolderId = await this.createFolder(this.ASSET_FOLDER_NAME, [appFolderId])
-                this.assetFolderId = assetFolderId
+                folderIds.assetFolder = assetFolderId
                 return assetFolderId
             }
         }

@@ -8,11 +8,12 @@ import Title from './components/Title'
 import useExportItemProperties from './hooks/useExportItemProperties'
 import ItemPropertySelector from './components/item/ItemPropertySelector'
 import BottomButton from '../../../components/BottomButton'
-import { ItemTypes, SortingOptions } from '../../../constants/global'
+import { ItemTypes, SortingOptions, ExportFormatTypes } from '../../../constants/global'
 import { SortingOptionLabels } from '../../../constants/labels'
 import CheckBoxText from './components/item/CheckBoxText'
+import FormatRadio from './components/item/FormatRadio'
 
-//filter sorting by location. N/A for here
+//filter out sorting by location. N/A for here
 const sortingValues = Object.values(SortingOptions).filter(sorting => sorting !== SortingOptions.NEAREST)
 
 const ItemProperties = ({ navigateToExportOverview, navigateToExportPotentials, navigateToExportSubitems }) => {
@@ -21,12 +22,19 @@ const ItemProperties = ({ navigateToExportOverview, navigateToExportPotentials, 
         itemProperties,
         properties,
         loading,
+        exportType,
         onSelectItemType,
         onSelectSorting,
         toggleItemProperty,
         onNextPress,
+        onSelectExportFormat,
+        onCheckIncludeMapLayers,
         assetOptionAvailable,
+        sortingOptionAvailable,
         includeAssets,
+        formatOptionAvailable,
+        includeMapLayers,
+        mapLayerOptionAvailable,
         setIncludeAssets
     } = useExportItemProperties({ navigateToExportPotentials, navigateToExportSubitems, navigateToExportOverview })
 
@@ -47,6 +55,33 @@ const ItemProperties = ({ navigateToExportOverview, navigateToExportPotentials, 
                                 onPress={onSelectItemType}
                             />)}
                     </View>
+                    {formatOptionAvailable ? <>
+                        <Title
+                            name={'FORMAT'} />
+                        <View
+                            style={styles.radioGroup}>
+                            {Object.values(ExportFormatTypes).map((format) =>
+                                <FormatRadio
+                                    format={format}
+                                    onChange={onSelectExportFormat}
+                                    checked={format === exportType}
+                                    key={format} />
+                            )}
+                        </View>
+                    </> : null}
+                    {mapLayerOptionAvailable ? <>
+                        <Title
+                            name={'MAP LAYERS'} />
+                        <View style={styles.checkbox}>
+                            <CheckBox
+                                checked={includeMapLayers}
+                                onChange={onCheckIncludeMapLayers}>
+                            </CheckBox>
+                            <CheckBoxText>
+                                Include visible map layers
+                            </CheckBoxText>
+                        </View>
+                    </> : null}
                     {assetOptionAvailable ? <>
                         <Title
                             name={'IMAGES'} />
@@ -56,24 +91,27 @@ const ItemProperties = ({ navigateToExportOverview, navigateToExportPotentials, 
                                 onChange={setIncludeAssets}>
                             </CheckBox>
                             <CheckBoxText>
-                               Export images
+                                Export images
                             </CheckBoxText>
                         </View>
                     </> : null}
-                    <Title
-                        name={'SORTING'} />
-                    <RadioGroup
-                        onChange={onSelectSorting}
-                        selectedIndex={sorting}
-                        style={styles.radioGroup}>
-                        {sortingValues.map((sorting) => (
-                            <Radio
-                                key={sorting}>
-                                {SortingOptionLabels[sorting]}
-                            </Radio>
-                        ))}
-                    </RadioGroup>
-
+                    {sortingOptionAvailable ?
+                        <>
+                            <Title
+                                name={'SORTING'} />
+                            <RadioGroup
+                                onChange={onSelectSorting}
+                                selectedIndex={sorting}
+                                style={styles.radioGroup}>
+                                {sortingValues.map((sorting) => (
+                                    <Radio
+                                        key={sorting}>
+                                        {SortingOptionLabels[sorting]}
+                                    </Radio>
+                                ))}
+                            </RadioGroup>
+                        </>
+                        : null}
                     <Title
                         name={'ITEM PROPERTIES'} />
                     <ItemPropertySelector
@@ -115,6 +153,6 @@ const styles = StyleSheet.create({
     },
     checkbox: {
         flexDirection: 'row',
-        marginBottom: 12
+        marginBottom: 24
     }
 })

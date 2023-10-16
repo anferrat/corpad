@@ -3,19 +3,19 @@ import { GetExportItemProperties } from "../../services/survey/manager/export/cs
 import { GetExportPotentailPropertiesData } from "../../services/survey/manager/export/csv/GetExportPotentialPropertiesData"
 import { GetExportSubitemProperties } from "../../services/survey/manager/export/csv/GetExportSubitemProperties"
 import { Controller } from "../../utils/Controller"
-import { commaSeparatedFileParser, fileNameGenerator } from "../_instances/general_services"
+import { commaSeparatedFileParser, fileNameGenerator, geoParser } from "../_instances/general_services"
 import { listPresenter } from "../_instances/presenters"
-import { assetRepo, fileSystemRepo, pipelineRepo, potentialRepo, potentialTypeRepo, rectifierRepo, referenceCellRepo, surveyRepo, testPointRepo } from "../_instances/repositories"
+import { assetRepo, fileSystemRepo, mapLayerRepo, pipelineRepo, potentialRepo, potentialTypeRepo, rectifierRepo, referenceCellRepo, surveyRepo, testPointRepo } from "../_instances/repositories"
 
 
 class ExportController extends Controller {
-    constructor(pipelineRepo, referenceCellRepo, potentialtypeRepo, listPresenter, testPointRepo, rectifierRepo, potentialRepo, potentialTypeRepo, fileSystemRepo, surveyRepo, csvParser, fileNameGenerator, assetRepo) {
+    constructor(pipelineRepo, referenceCellRepo, potentialtypeRepo, listPresenter, testPointRepo, rectifierRepo, potentialRepo, potentialTypeRepo, fileSystemRepo, surveyRepo, csvParser, fileNameGenerator, assetRepo, mapLayerRepo, geoParser) {
         super()
         this.getExportItemPropertiesService = new GetExportItemProperties()
         this.getPotentialPropertiesDataService = new GetExportPotentailPropertiesData(pipelineRepo, referenceCellRepo, potentialtypeRepo, listPresenter)
         this.getExportSubitemPropertiesService = new GetExportSubitemProperties()
 
-        this.exportToSpreadsheetService = new ExportToSpreadsheet(surveyRepo, testPointRepo, rectifierRepo, pipelineRepo, potentialRepo, potentialTypeRepo, fileSystemRepo, csvParser, fileNameGenerator, assetRepo)
+        this.exportToSpreadsheetService = new ExportToSpreadsheet(surveyRepo, testPointRepo, rectifierRepo, pipelineRepo, potentialRepo, potentialTypeRepo, fileSystemRepo, csvParser, fileNameGenerator, assetRepo, mapLayerRepo, geoParser)
     }
 
     getItemProperties(params, onError = null, onSuccess = null) {
@@ -40,8 +40,8 @@ class ExportController extends Controller {
 
     exportToSpreadsheet(params, onError = null, onSuccess = null) {
         return super.controllerHandler(onSuccess, onError, 629, async () => {
-            const { itemType, sorting, itemProperties, exportPotentials, referenceCellId, potentialTypeIdList, selectedSubitemTypes, pipelineIdList, groupPotentialsByPipeline, subitemProperties, includeAssets } = params
-            return this.exportToSpreadsheetService.execute({ itemType, sorting, itemProperties, exportPotentials, referenceCellId, potentialTypeIdList, selectedSubitemTypes, pipelineIdList, groupPotentialsByPipeline, subitemProperties, includeAssets })
+            const { itemType, sorting, itemProperties, exportPotentials, referenceCellId, potentialTypeIdList, selectedSubitemTypes, pipelineIdList, groupPotentialsByPipeline, subitemProperties, includeAssets, exportType, includeMapLayers } = params
+            return this.exportToSpreadsheetService.execute({ itemType, sorting, itemProperties, exportPotentials, referenceCellId, potentialTypeIdList, selectedSubitemTypes, pipelineIdList, groupPotentialsByPipeline, subitemProperties, includeAssets, exportType, includeMapLayers })
         })
     }
 
@@ -60,7 +60,9 @@ const exportController = new ExportController(
     surveyRepo,
     commaSeparatedFileParser,
     fileNameGenerator,
-    assetRepo
+    assetRepo,
+    mapLayerRepo,
+    geoParser
 )
 
 
@@ -70,4 +72,4 @@ export const getExportSubitemProperties = async (params, onError, onSuccess) => 
 
 export const getExportPotentialPropertiesData = async (onError, onSuccess) => await exportController.getPotentialPropertiesData(onError, onSuccess)
 
-export const exportSurveyToSpreadsheet = ({ itemType, sorting, itemProperties, exportPotentials, referenceCellId, potentialTypeIdList, selectedSubitemTypes, pipelineIdList, groupPotentialsByPipeline, subitemProperties, includeAssets }, onError, onSuccess) => exportController.exportToSpreadsheet({ itemType, sorting, itemProperties, exportPotentials, referenceCellId, potentialTypeIdList, selectedSubitemTypes, pipelineIdList, groupPotentialsByPipeline, subitemProperties, includeAssets }, onError, onSuccess)  
+export const exportSurveyToSpreadsheet = ({ itemType, sorting, itemProperties, exportPotentials, referenceCellId, potentialTypeIdList, selectedSubitemTypes, pipelineIdList, groupPotentialsByPipeline, subitemProperties, includeAssets, includeMapLayers, exportType }, onError, onSuccess) => exportController.exportToSpreadsheet({ itemType, sorting, itemProperties, exportPotentials, referenceCellId, potentialTypeIdList, selectedSubitemTypes, pipelineIdList, groupPotentialsByPipeline, subitemProperties, includeAssets, includeMapLayers, exportType }, onError, onSuccess)  

@@ -134,8 +134,10 @@ export class TestPointRepository extends SQLiteRepository {
                 ON cards.id = sides.parentCardId
                 LEFT JOIN potentials
                 ON cards.id = potentials.cardId
+                INNER JOIN potentialTypes
+                ON potentials.type = potentialTypes.id
                 WHERE cards.testPointId = ? 
-                ORDER BY cards.id DESC`, [id])
+                ORDER BY cards.id DESC, potentials.permanentReferenceId, potentials.portableReferenceId, potentialTypes.id`, [id])
             return this.subitemProcessor.generateSubitemArrayWithSidesAndPotentials(rows.length, rows.item).map((data) => {
                 const subitem = this.subitemProcessor.getSubitemFromTableData(data)
                 const potentials = this.subitemProcessor.getPotentialsFromTableData(data)

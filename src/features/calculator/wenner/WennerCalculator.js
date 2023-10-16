@@ -1,5 +1,6 @@
 import React from 'react'
 import { Button } from '@ui-kitten/components'
+import { StyleSheet } from 'react-native'
 import WennerLayer from './WennerLayer'
 import { plus } from '../../../components/Icons'
 import fieldValidation from '../../../helpers/validation'
@@ -98,7 +99,7 @@ const WennerCalculator = (props) => {
                 valid={props.valid.layers}
                 removeLayerHandler={removeLayerHandler} />
             {!props.disabled ?
-                <Button appearance='ghost' onPress={addLayerHandler} accessoryLeft={plus} disabled={(props.data.layers.length >= MAX_NUMBER_OF_LAYERS)}>Add layer ({props.data.layers.length}/{MAX_NUMBER_OF_LAYERS})</Button>
+                <Button appearance='ghost' style={styles.button} onPress={addLayerHandler} accessoryLeft={plus} disabled={(props.data.layers.length >= MAX_NUMBER_OF_LAYERS)}>Add layer ({props.data.layers.length}/{MAX_NUMBER_OF_LAYERS})</Button>
                 : null}
         </>)
 }
@@ -106,3 +107,10 @@ const WennerCalculator = (props) => {
 export default React.memo(WennerCalculator)
 
 
+const styles = StyleSheet.create({
+    button: {
+        margin: -12,
+        height: 60,
+        marginTop: 0
+    }
+})

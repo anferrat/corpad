@@ -6,7 +6,7 @@ import { edit, trashIcon } from '../../../components/Icons'
 import { androidRipple } from '../../../styles/styles'
 import useModal from '../../../hooks/useModal'
 import IconButton from '../../../components/IconButton'
-import { MapLayerStrokeColors } from '../../../styles/colors'
+import { MapLayerStrokeColors, primary } from '../../../styles/colors'
 
 
 const MapLayerListItem = ({ layerId, name, index, selected, color, comment, featureCount, onEdit, onDelete, onSelect, width }) => {
@@ -45,26 +45,22 @@ const MapLayerListItem = ({ layerId, name, index, selected, color, comment, feat
                     <View style={styles.titleView}>
                         <Icon
                             name={'layers'}
-                            fill={MapLayerStrokeColors[color] ?? '#000000'}
+                            fill={primary}
                             style={styles.circle} />
                         <Text category='h6'>{name}</Text>
                     </View>
                     <View
                         style={styles.subtitleView}>
+                        <Icon
+                            name={'color-circle'}
+                            pack='cp'
+                            style={styles.smallIcon}
+                            fill={MapLayerStrokeColors[color] ?? '#000000'} />
                         <Text
                             category={'s2'}
                             appearance='hint'
-                            style={styles.comment}>Features: {featureCount} | Width: 2</Text>
+                            style={styles.comment}>{featureCount} feature{featureCount !== 1 ? 's' : ''}</Text>
                     </View>
-                    {comment ?
-                        <View
-                            style={styles.subtitleView}>
-                            <Text
-                                category={'s2'}
-                                appearance='hint'
-                                style={styles.comment}>{comment}</Text>
-                        </View>
-                        : null}
                 </View>
             </View>
             <View
@@ -132,5 +128,10 @@ const styles = StyleSheet.create({
     titleView: {
         flexDirection: 'row',
         alignItems: 'center'
+    },
+    smallIcon: {
+        width: 15,
+        height: 15,
+        marginRight: 4
     }
 })

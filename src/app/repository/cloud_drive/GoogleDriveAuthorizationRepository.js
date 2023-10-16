@@ -1,5 +1,5 @@
 import { Error, errors } from "../../utils/Error";
-import { gdrive, config } from "../../config/cloud_drive";
+import { gdrive, config, folderIds } from "../../config/cloud_drive";
 import { GoogleSignin, statusCodes } from '@react-native-google-signin/google-signin';
 
 export class GoogleDriveAuthorizationRepository {
@@ -68,6 +68,8 @@ export class GoogleDriveAuthorizationRepository {
         try {
             await GoogleSignin.signOut()
             gdrive.accessToken = null
+            folderIds.appFolder = undefined
+            folderIds.assetFolder = undefined
         }
         catch (er) {
             throw new Error(errors.AUTH, 'Unable to sign out', er, 304)

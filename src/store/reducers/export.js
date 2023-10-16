@@ -1,9 +1,12 @@
-import { SET_EXPORT_ITEM_PROPERTIES, SET_EXPORT_ITEM_TYPE, SET_EXPORT_SORTING, RESET_EXPORT, SET_EXPORT_REFERENCE_CELL_ID, SET_EXPORT_POTENTIAL_TYPE_ID, SET_EXPORT_POTENTIAL_DEFAULT_VALUES, SET_EXPORT_SUBITEM_TYPE, SET_EXPORT_PIPELINE, SET_EXPORT_POTENTIALS, SET_EXPORT_POTENTAILS_PIPELINE_GROUPING, SET_EXPORT_SUBITEM_PROPERTIES, SET_INCLUDE_ASSETS } from '../actions/export'
+import { ExportFormatTypes, ItemTypes } from '../../constants/global'
+import { SET_EXPORT_ITEM_PROPERTIES, SET_EXPORT_ITEM_TYPE, SET_EXPORT_SORTING, RESET_EXPORT, SET_EXPORT_REFERENCE_CELL_ID, SET_EXPORT_POTENTIAL_TYPE_ID, SET_EXPORT_POTENTIAL_DEFAULT_VALUES, SET_EXPORT_SUBITEM_TYPE, SET_EXPORT_PIPELINE, SET_EXPORT_POTENTIALS, SET_EXPORT_POTENTAILS_PIPELINE_GROUPING, SET_EXPORT_SUBITEM_PROPERTIES, SET_INCLUDE_ASSETS, SET_INCLUDE_MAP_LAYERS, SET_EXPORT_FORMAT } from '../actions/export'
 
 const initialState = {
-    itemType: 'TEST_POINT',
+    itemType: ItemTypes.TEST_POINT,
     sorting: 0,
     includeAssets: true,
+    exportType: ExportFormatTypes.CSV,
+    includeMapLayers: false,
     exportPotentials: true,
     exportSubitems: false,
     itemProperties: ['name'],
@@ -70,6 +73,16 @@ const exportSurvey = (state = initialState, action) => {
             return {
                 ...state,
                 exportPotentials: action.exportPotentials
+            }
+        case SET_EXPORT_FORMAT:
+            return {
+                ...state,
+                exportType: action.format
+            }
+        case SET_INCLUDE_MAP_LAYERS:
+            return {
+                ...state,
+                includeMapLayers: action.isChecked
             }
         case SET_EXPORT_REFERENCE_CELL_ID:
             return {

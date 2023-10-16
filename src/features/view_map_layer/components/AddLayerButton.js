@@ -11,7 +11,7 @@ const AddLayerButton = ({ onPress }) => {
             style={styles.button}
             onPress={onPress}
             appearance='ghost'>
-            Add a map layer (.kml, .json)
+            Add a map layer (.kml, .gpx)
         </Button>
     )
 }

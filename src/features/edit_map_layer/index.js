@@ -8,7 +8,6 @@ import Select from '../../components/Select'
 import LoadingView from '../../components/LoadingView'
 import GeoFileImportView from './components/GeoFileImportView'
 
-
 const EditMapLayer = ({ isNew, layerId }) => {
     const {
         data,
@@ -17,6 +16,7 @@ const EditMapLayer = ({ isNew, layerId }) => {
         loading,
         colorList,
         widthList,
+        colorAccessories,
         onChangeName,
         onChangeComment,
         onEndEditingName,
@@ -52,6 +52,7 @@ const EditMapLayer = ({ isNew, layerId }) => {
                         onChangeText={onChangeName}
                         onEndEditing={onEndEditingName} />
                     <Select
+                        accessoryList={colorAccessories}
                         style={styles.select}
                         label={'Color'}
                         itemList={colorList}

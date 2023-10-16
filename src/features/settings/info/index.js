@@ -19,7 +19,8 @@ export const SurveyOverview = () => {
 
     return (
         <LoadingView loading={loading}>
-            <ScrollView>
+            <ScrollView
+                keyboardShouldPersistTaps='handled'>
                 <View style={globalStyle.card}>
                     <SurveyNameView
                         name={name}

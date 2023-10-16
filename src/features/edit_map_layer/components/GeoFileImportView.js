@@ -33,6 +33,11 @@ const GeoFileImportView = ({ filename, size, onSelectFile }) => {
                         accessoryLeft={plusCircle}>
                         Select file
                     </Button>
+                    <Text
+                        category='label'
+                        appearance='hint'>
+                        Up to 3MB. Only .kml and .gpx files are supported.
+                    </Text>
                 </View>
             </>
         )
@@ -59,6 +64,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center'
     },
     button: {
-        width: 150
-    }
+        width: 150,
+        marginBottom: 12
+    },
 })

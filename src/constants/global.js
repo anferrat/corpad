@@ -10,7 +10,8 @@ export const TestPointTypes = Object.freeze({
     TEST_STATION: 0,
     HEADER: 1,
     JUNCTION_BOX: 2,
-    FIELD_NOTE: 3
+    FIELD_NOTE: 3,
+    MEASURMENT: 4
 })
 
 export const ItemStatuses = {
@@ -27,6 +28,7 @@ export const IconTypes = Object.freeze({
         [TestPointTypes.JUNCTION_BOX]: 'JB',
         [TestPointTypes.HEADER]: 'HD',
         [TestPointTypes.FIELD_NOTE]: 'FN',
+        [TestPointTypes.MEASURMENT]: 'MN'
     },
     [ItemTypes.RECTIFIER]: 'RT',
     [ItemTypes.PIPELINE]: 'PL'
@@ -325,12 +327,15 @@ export const FileMimeTypes = Object.freeze({
     JSON: 'application/json',
     TEXT: 'text/*',
     IMAGE: 'image/*',
-    ZIP: 'application/zip'
+    ZIP: 'application/zip',
+    GPX: 'application/gpx+xml',
+    BINARY: 'application/octet-stream'
 })
 
 export const FileTypeIdentifiers = Object.freeze({
     CSV: 'public.comma-separated-values-text',
     KML: 'public.xml',
+    GPX: 'public.xml',
     JSON: 'public.json',
     TEXT: 'public.plain-text',
     ITEM: 'public.item',
@@ -496,9 +501,8 @@ export const StrokeColors = Object.freeze({
     RED: 1,
     GREEN: 2,
     BLUE: 3,
-    BLACK: 4,
-    PURPLE: 5,
-    ORANGE: 6
+    PURPLE: 4,
+    ORANGE: 5
 })
 
 export const StrokeWidths = Object.freeze({
@@ -520,6 +524,8 @@ export const ExternalFileTypes = Object.freeze({
     SURVEY: 'survey',
     IMAGE: 'image',
     COMMA_SEPARATED_TEXT: 'comma_separated_text',
+    KEYHOLE_MARKUP_LANGUAGE: 'keyhole_markup_language',
+    GPS_EXCHANGE_FORMAT: 'gps_exchange_format',
     UNKNOWN_FILE: 'unknown_file' //when file url recieved from Android intent, it recieved as document provider content schema
 })
 
@@ -527,4 +533,9 @@ export const MapLayerFeatures = Object.freeze({
     POINT: 'Point',
     LINE: 'LineString',
     POLYGON: 'Polygon'
+})
+
+export const ExportFormatTypes = Object.freeze({
+    CSV: 'csv',
+    KML: 'kml'
 })

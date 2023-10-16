@@ -1,7 +1,7 @@
 import React from 'react'
 import { StyleSheet } from 'react-native'
 import { Marker } from 'react-native-maps'
-import { getActiveMapIcon } from '../native_icons/mapIcons'
+import { addMarker } from '../native_icons/mapIcons'
 
 const offset = {
     x: 0,
@@ -14,7 +14,7 @@ const NewItemMarker = ({ latitude, longitude }) => {
         return (
             <Marker
                 style={styles.marker}
-                image={getActiveMapIcon('default')}
+                image={addMarker}
                 tracksViewChanges={false}
                 centerOffset={offset}
                 coordinate={{

@@ -14,7 +14,7 @@ export class _ExportAssets {
         switch (itemType) {
             case ItemTypes.TEST_POINT:
                 return this.testPointRepo.getAll()
-            case ItemTypes.RECTIFER:
+            case ItemTypes.RECTIFIER:
                 return this.rectifierRepo.getAll()
             default:
                 throw new Error(errors.GENERAL, `Unable to get items`, `Item type ${itemType} is not supporting asset export`)
