@@ -332,7 +332,7 @@ export const getHeader = (screen, params, navigation, dispatch, openMenu) => {
                         },
                         {
                             icon: 'plus',
-                            onPress: () => navigation.navigate('CreateSurvey')
+                            onPress: () => navigation.navigate('CreateSurvey', { withImport: false })
                         }
                     ].concat(DEVELOPER_MODE_ON ? {
                         icon: 'eye',

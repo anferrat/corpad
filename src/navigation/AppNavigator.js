@@ -83,7 +83,7 @@ export const AppNavigator = () => {
               <>
                 <Stack.Screen name='Home' component={HomeBottomTabs} initialParams={{ homeScreenCloud: isCloud }} />
                 <Stack.Group screenOptions={{ animation: 'fade' }}>
-                  <Stack.Screen name='CreateSurvey' component={CreateSurvey} />
+                  <Stack.Screen name='CreateSurvey' component={CreateSurvey} initialParams={{ withImport: false }} />
                 </Stack.Group>
               </>
             )

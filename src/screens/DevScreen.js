@@ -15,7 +15,9 @@ import { fileSystemRepo } from '../app/controllers/_instances/repositories'
 import { FileSystemLocations } from '../constants/global'
 import { readGeoFile } from '../app/controllers/survey/other/MapLayerController'
 import { errorHandler } from '../helpers/error_handler'
+import { GeoJsonValidation } from '../app/validation/geoJson/GeoJsonValidation'
 
+const pointFeature = { type: 'Feature', properties: {}, geometry: { "geometries": [{ "coordinates": [-122.9508563135236, 49.2346442062025, 0], "type": "Point" }, { "coordinates": [-122.9508563135236, 49.2346442062025, 0], "type": "Point" }, { "coordinates": [-122.9508563135236, 49.2346442062025, 0], "type": "Point" }], "type": "GeometryCollection" } }
 
 export default DevScreen = ({ navigation, route }) => {
   const id = useSelector(state => state.settings.activeMultimeter.id)
@@ -41,6 +43,18 @@ export default DevScreen = ({ navigation, route }) => {
     })
   }
 
+  const testValidation = () => {
+    const val = new GeoJsonValidation()
+    try {
+      console.log(val.feature.validateSync(
+        pointFeature
+      ))
+    }
+    catch (er) {
+      console.log(er)
+    }
+
+  }
 
   return (
     <SafeAreaView style={{ ...globalStyle.screen, paddingTop: StatusBar.currentHeight }}>
@@ -52,6 +66,7 @@ export default DevScreen = ({ navigation, route }) => {
       <Button onPress={testCapture} appearance='ghost'>TEST potential capture</Button>
       <Button onPress={pairTestMultimeter} appearance='ghost'>Pair blank multimeter (restart required)</Button>
       <Button onPress={testKml} appearance='ghost'>Test KML parser</Button>
+      <Button onPress={testValidation} appearance='ghost'>Test Validation</Button>
     </SafeAreaView>
   )
 }

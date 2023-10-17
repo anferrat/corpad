@@ -134,7 +134,7 @@ export class TestPointRepository extends SQLiteRepository {
                 ON cards.id = sides.parentCardId
                 LEFT JOIN potentials
                 ON cards.id = potentials.cardId
-                INNER JOIN potentialTypes
+                LEFT JOIN potentialTypes
                 ON potentials.type = potentialTypes.id
                 WHERE cards.testPointId = ? 
                 ORDER BY cards.id DESC, potentials.permanentReferenceId, potentials.portableReferenceId, potentialTypes.id`, [id])

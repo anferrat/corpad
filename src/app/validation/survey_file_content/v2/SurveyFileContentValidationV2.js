@@ -15,10 +15,10 @@ export class SurveyFileContentValidationV2 extends Validation {
             [DataFields.PIPELINES]: tuple([this.id, this.uid, this.name, this.timestamp, this.timestamp, this.comment, this.nps, this.pipeMaterial, this.bool, this.smallText, this.pipelineProduct]),
             [DataFields.POTENTIALS]: tuple([this.id, this.uid, this.id, this.number, this.id, this.id, this.bool, this.number]),
             [DataFields.POTENTIAL_TYPES]: tuple([this.id, this.uid, this.permTypes, this.name, this.bool]),
-            [DataFields.RECTIFIERS]: tuple([this.id, this.uid, this.name, this.status, this.timestamp, this.timestamp, this.comment, this.location, this.latitude, this.longitude, this.smallText, this.smallText, this.powerSource, this.positiveNumber, this.positiveNumber, this.tapSetting, this.tapValue, this.coarseFineValue.nullable(), this.coarseFineValue.nullable(), this.number, this.number]),
+            [DataFields.RECTIFIERS]: tuple([this.id, this.uid, this.name, this.status, this.timestamp, this.timestamp, this.comment, this.location, this.latitude.nullable(), this.longitude.nullable(), this.smallText, this.smallText, this.powerSource, this.positiveNumber, this.positiveNumber, this.tapSetting, this.tapValue, this.coarseFineValue.nullable(), this.coarseFineValue.nullable(), this.number, this.number]),
             [DataFields.REFERENCE_CELLS]: tuple([this.id, this.uid, this.rcType, this.name, this.bool]),
             [DataFields.SURVEY]: tuple([this.uid, this.name, mixed()]),
-            [DataFields.TEST_POINTS]: tuple([this.id, this.uid, this.name, this.location, this.latitude, this.longitude, this.comment, this.status, this.testPointType, this.timestamp, this.timestamp])
+            [DataFields.TEST_POINTS]: tuple([this.id, this.uid, this.name, this.location, this.latitude.nullable(), this.longitude.nullable(), this.comment, this.status, this.testPointType, this.timestamp, this.timestamp])
         }
         this.subitemSchemas = {
             [SubitemTypes.ANODE]: tuple([this.id, this.uid, this.name, this.subitemType, this.id, this.anodeMaterial, this.wireGauge, this.wireColor]),

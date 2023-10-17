@@ -5,7 +5,7 @@ import { createSurvey, getSurveyFileList } from '../../../app/controllers/survey
 import { hideLoader, setSessionModalVisible, setSurveySettings, updateLoader } from '../../../store/actions/settings'
 import { errorHandler } from '../../../helpers/error_handler'
 
-const useCreateSurvey = () => {
+const useCreateSurvey = (withImport, navigateToImport) => {
     const [name, setName] = useState({
         name: null,
         valid: true
@@ -20,6 +20,7 @@ const useCreateSurvey = () => {
     const isSigned = useSelector(state => state.settings.session.isSigned)
     const dispatch = useDispatch()
     const componentMounted = useRef(true)
+    const optionsAvailable = !withImport
 
     useEffect(() => {
         const loadData = async () => {
@@ -67,8 +68,11 @@ const useCreateSurvey = () => {
             await createSurvey(
                 { isBlank, isCloud, path, name, includeAssets },
                 (er) => errorHandler(er),
-                ({ name, fileName, isCloud, syncTime, uid }) =>
-                    dispatch(setSurveySettings(name, fileName, syncTime, isCloud, true, uid)))
+                ({ name, fileName, isCloud, syncTime, uid }) => {
+                    dispatch(setSurveySettings(name, fileName, syncTime, isCloud, true, uid))
+                    if (withImport)
+                        navigateToImport()
+                })
             dispatch(hideLoader())
         }
         else {
@@ -91,6 +95,7 @@ const useCreateSurvey = () => {
         surveyListLoading,
         visible,
         includeAssets,
+        optionsAvailable,
         setIncludeAssets,
         onChangeName,
         onEndEditingName,

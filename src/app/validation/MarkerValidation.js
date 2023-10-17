@@ -39,8 +39,8 @@ export class MarkerValidation extends Validation {
                 comment: this.comment,
                 itemType: this.itemType,
                 location: this.smallText,
-                latitude: this.latitude,
-                longitude: this.longitude
+                latitude: this.latitude.nullable(),
+                longitude: this.longitude.nullable(),
             }))
     }
 

@@ -14,6 +14,7 @@ import { SubitemFactory } from "../../services/other/SubitemFactory";
 import { UnitConverter } from "../../services/other/UnitConverter";
 import { WarningHandler } from "../../services/other/WarningHandler";
 import { MultimeterFactory } from "../../services/survey/other/multimeter/_devices/MultimeterFactory";
+import { GeoJsonValidation } from "../../validation/geoJson/GeoJsonValidation";
 import { bluetoothRepo } from "./repositories";
 
 export const kmlParser = new KmlParser()
@@ -47,3 +48,5 @@ export const subitemFactory = new SubitemFactory()
 export const warningHandler = new WarningHandler()
 
 export const appStateListener = new AppStateListener()
+
+export const geoJsonValidation = new GeoJsonValidation()

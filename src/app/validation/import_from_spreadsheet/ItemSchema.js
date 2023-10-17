@@ -15,8 +15,8 @@ export class ItemSchema extends Validation {
                     name: this.name,
                     testPointType: mixed().nullable().oneOf(Object.values(TestPointTypes), 'testPointTypeMismatch').notOneOf([null], 'testPointTypeMismatch'),
                     location: this.location,
-                    latitude: this.latitude,
-                    longitude: this.longitude,
+                    latitude: this.latitude.nullable(),
+                    longitude: this.longitude.nullable(),
                     comment: this.comment,
                     status: mixed().nullable().oneOf([ItemStatuses.ATTENTION, ItemStatuses.BAD, ItemStatuses.GOOD, ItemStatuses.UNKNOWN], 'statusMismatch').notOneOf([null], 'statusMismatch'),
                 })
@@ -24,8 +24,8 @@ export class ItemSchema extends Validation {
                 return object({
                     name: this.name,
                     location: this.location,
-                    latitude: this.latitude,
-                    longitude: this.longitude,
+                    latitude: this.latitude.nullable(),
+                    longitude: this.longitude.nullable(),
                     comment: this.comment,
                     status: mixed().nullable().oneOf([ItemStatuses.ATTENTION, ItemStatuses.BAD, ItemStatuses.GOOD, ItemStatuses.UNKNOWN], 'statusMismatch').notOneOf([null], 'statusMismatch'),
                     model: this.smallText,

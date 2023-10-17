@@ -9,7 +9,7 @@ import { getItemIcon, getItemName } from './helpers/functions'
 import { errorHandler, warningHandler } from '../../../helpers/error_handler'
 import { diagBack } from '../../../components/Icons'
 import { deleteItem } from '../../../app/controllers/survey/items/ItemController'
-import { updateSetting } from '../../../store/actions/settings'
+import { hideLoader, updateLoader, updateSetting } from '../../../store/actions/settings'
 import { setRefresh } from '../../../store/actions/list'
 import { refreshMarkers } from '../../../store/actions/map'
 
@@ -20,7 +20,7 @@ const LastImportView = ({ navigateToList }) => {
     const onCancelImport = React.useCallback(async () => {
         const confirm = await warningHandler(60, 'Undo', 'Cancel')
         if (confirm) {
-            dispatch(updateSetting('loader', { title: `Deleting ${getItemName(itemType, idList.length)}...`, visible: true }))
+            dispatch(updateLoader(`Deleting ${getItemName(itemType, idList.length)}`))
             const result = await Promise.all(idList.map((id) => deleteItem({ itemType, id })))
             const isSuccess = result.every(({ status }) => status === 200)
             if (isSuccess) {
@@ -33,7 +33,7 @@ const LastImportView = ({ navigateToList }) => {
                 const error = result.find(({ status }) => status !== 200)
                 errorHandler(error.status)
             }
-            dispatch(updateSetting('loader'))
+            dispatch(hideLoader())
         }
     }, [dispatch, itemType, idList])
 

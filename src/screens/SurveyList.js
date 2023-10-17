@@ -6,7 +6,7 @@ import { SurveyFileList } from '../features/survey_list'
 
 export default SurveyList = ({ route, navigation }) => {
     const { isCloud } = route.params
-    const navigateToCreateSurvey = () => navigation.navigate('CreateSurvey')
+    const navigateToCreateSurvey = (withImport) => navigation.navigate('CreateSurvey', { withImport })
     const navigateToSurveyFileList = ({ isCloud }) => navigation.navigate(!isCloud ? 'DeviceSurveyList' : 'CloudSurveyList')
     return (
         <SafeAreaView style={globalStyle.screen}>
