@@ -15,6 +15,7 @@ export const ViewMapLayer = ({ navigateToEditMapLayer, goBack }) => {
     const {
         layers,
         visible,
+        maxLayerNumberLimitReached,
         onEdit,
         onDelete,
         onToggle,
@@ -49,8 +50,8 @@ export const ViewMapLayer = ({ navigateToEditMapLayer, goBack }) => {
                                 onDelete={onDelete}
                                 onSelect={onToggle}
                             />)}
-
                         <AddLayerButton
+                            inactive={maxLayerNumberLimitReached}
                             onPress={onAddLayer}
                         />
 
