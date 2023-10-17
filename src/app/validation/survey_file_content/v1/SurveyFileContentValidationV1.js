@@ -8,13 +8,13 @@ export class SurveyFileContentValidationV1 extends Validation {
         this.booleanNumber = mixed().oneOf([0, 1, null]).nullable()
         this.surveyFileSchemas = {
             [SurveyFileDataFields.TEST_POINTS]: tuple([
-                this.id, this.uid, this.name, this.location, this.latitude, this.longitude, this.comment, this.testPointType, this.status, this.timestamp, this.timestamp
+                this.id, this.uid, this.name, this.location, this.latitude.nullable(), this.longitude.nullable(), this.comment, this.testPointType, this.status, this.timestamp, this.timestamp
             ]),
             [SurveyFileDataFields.SURVEY]: tuple([
                 this.uid, this.name, mixed()
             ]),
             [SurveyFileDataFields.RECTIFIERS]: tuple([
-                this.id, this.uid, this.name, this.location, this.latitude, this.longitude, this.comment, this.status, this.timestamp, this.timestamp, this.smallText, this.smallText, this.powerSource, this.positiveNumber, this.positiveNumber, this.tapSetting, this.tapValue, this.coarseFineValue.nullable(), this.coarseFineValue.nullable(), this.number, this.number
+                this.id, this.uid, this.name, this.location, this.latitude.nullable(), this.longitude.nullable(), this.comment, this.status, this.timestamp, this.timestamp, this.smallText, this.smallText, this.powerSource, this.positiveNumber, this.positiveNumber, this.tapSetting, this.tapValue, this.coarseFineValue.nullable(), this.coarseFineValue.nullable(), this.number, this.number
             ]),
             [SurveyFileDataFields.PIPELINES]: tuple([
                 this.id, this.uid, this.name, this.nps.nullable(), this.pipeMaterial.nullable(), this.booleanNumber, this.smallText, this.timestamp, this.timestamp, this.pipelineProduct.nullable(), this.comment

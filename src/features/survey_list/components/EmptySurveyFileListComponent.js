@@ -28,8 +28,19 @@ const EmptySurveyFileListComponent = ({ isCloud, onCreate, initialLoad }) => {
                 <Button
                     appearance='ghost'
                     size='large'
-                    onPress={onCreate}>
+                    onPress={onCreate.bind(this, false)}>
                     Create new survey
+                </Button>
+                <Text
+                    category='p2'
+                    appearance={'hint'}>
+                    or
+                </Text>
+                <Button
+                    appearance='ghost'
+                    size='large'
+                    onPress={onCreate.bind(this, true)}>
+                    Import from .csv
                 </Button>
             </View>
         )
@@ -37,7 +48,7 @@ const EmptySurveyFileListComponent = ({ isCloud, onCreate, initialLoad }) => {
 
 }
 
-export default EmptySurveyFileListComponent
+export default React.memo(EmptySurveyFileListComponent)
 
 const styles = StyleSheet.create({
     mainView: {

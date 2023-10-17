@@ -75,7 +75,8 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
         backgroundColor: control,
-        height: 50
+        height: 50,
+        marginTop: 12
     },
     icon: {
         width: 25,

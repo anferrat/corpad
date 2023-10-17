@@ -58,7 +58,9 @@ const styles = StyleSheet.create({
         borderRadius: 10,
         borderWidth: 1,
         borderColor: basic400,
-        overflow: 'hidden'
+        overflow: 'hidden',
+        marginHorizontal: 6,
+        marginBottom: 6
     },
     scrollView: {
         paddingBottom: 72

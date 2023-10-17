@@ -8,7 +8,7 @@ import NameEditInput from './components/NameEditInput'
 import TemplateSelector from './components/TemplateSelector'
 import { control } from '../../styles/colors'
 
-export const CreateSurvey = () => {
+export const CreateSurvey = ({ withImport, navigateToImport }) => {
     const {
         name,
         nameValid,
@@ -20,6 +20,7 @@ export const CreateSurvey = () => {
         surveyListLoading,
         visible,
         includeAssets,
+        optionsAvailable,
         setIncludeAssets,
         onChangeName,
         onEndEditingName,
@@ -29,7 +30,7 @@ export const CreateSurvey = () => {
         setSelectedSurveyIndex,
         createSurveyHandler,
         toggleView
-    } = useCreateSurvey()
+    } = useCreateSurvey(withImport, navigateToImport)
     return (
         <View
             style={styles.container}>
@@ -58,23 +59,26 @@ export const CreateSurvey = () => {
                         subtitle='Survey is stored on your device, but also synced with your cloud storage. Requires internet and Google account.'
                         selected={isCloud} />
                 </View>
-                <CollapsibleView
-                    visible={visible}
-                    toggleView={toggleView}>
-                    <TemplateSelector
-                        surveyListLoading={surveyListLoading}
-                        surveyList={surveyList}
-                        includeAssets={includeAssets}
-                        setIncludeAssets={setIncludeAssets}
-                        toggleTemplateSetting={toggleTemplateSetting}
-                        isBlank={isBlank}
-                        selectedSurveyindex={selectedSurveyIndex}
-                        setSelectedSurveyIndex={setSelectedSurveyIndex} />
-                </CollapsibleView>
+                {optionsAvailable ?
+                    <CollapsibleView
+                        visible={visible}
+                        toggleView={toggleView}>
+                        <TemplateSelector
+                            surveyListLoading={surveyListLoading}
+                            surveyList={surveyList}
+                            includeAssets={includeAssets}
+                            setIncludeAssets={setIncludeAssets}
+                            toggleTemplateSetting={toggleTemplateSetting}
+                            isBlank={isBlank}
+                            selectedSurveyindex={selectedSurveyIndex}
+                            setSelectedSurveyIndex={setSelectedSurveyIndex} />
+                    </CollapsibleView> :
+                    null}
             </ScrollView >
             <BottomButton
-                title='Create'
-                icon='file-add-outline'
+                title={withImport ? 'Next' : 'Create'}
+                icon={withImport ? 'arrow-circle-right' : 'file-add-outline'}
+                iconPosition={withImport ? 'right' : 'left'}
                 onPress={createSurveyHandler} />
         </View>
     )

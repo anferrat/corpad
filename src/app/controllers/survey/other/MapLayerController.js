@@ -6,18 +6,19 @@ import { ReadExternalGeoFile } from "../../../services/survey/other/mapLayers/Re
 import { UpdateMapLayer } from "../../../services/survey/other/mapLayers/UpdateMapLayer"
 import { Controller } from "../../../utils/Controller"
 import { MapLayerValidation } from "../../../validation/MapLayerValidation"
-import { documentPicker, geoParser, warningHandler } from "../../_instances/general_services"
+import { geoJsonParser, geoJsonPointExtractor } from "../../_instances/converters"
+import { documentPicker, geoJsonValidation, geoParser, warningHandler } from "../../_instances/general_services"
 import { mapLayerPresenter } from "../../_instances/presenters"
 import { fileSystemRepo, mapLayerRepo } from "../../_instances/repositories"
 
 class MapLayerController extends Controller {
-    constructor(mapLayerRepo, geoParser, documentPicker, fileSystemRepo, mapLayerPresenter, warningHandler) {
+    constructor(mapLayerRepo, geoParser, documentPicker, fileSystemRepo, mapLayerPresenter, warningHandler, geoJsonValidation, geoJsonParser, geoJsonPointExtractor) {
         super()
-        this.loadNewMapLayerService = new ReadExternalGeoFile(geoParser, documentPicker, fileSystemRepo, warningHandler)
-        this.getMapLayerListService = new GetMapLayerList(mapLayerRepo, mapLayerPresenter)
-        this.createMapLayerService = new CreateMapLayer(mapLayerRepo, mapLayerPresenter)
+        this.loadNewMapLayerService = new ReadExternalGeoFile(geoParser, documentPicker, fileSystemRepo, warningHandler, geoJsonValidation, geoJsonParser, geoJsonPointExtractor)
+        this.getMapLayerListService = new GetMapLayerList(mapLayerRepo, mapLayerPresenter, geoJsonValidation, geoJsonParser, geoJsonPointExtractor)
+        this.createMapLayerService = new CreateMapLayer(mapLayerRepo, mapLayerPresenter, geoJsonValidation, geoJsonParser, geoJsonPointExtractor)
         this.updateMapLayerService = new UpdateMapLayer(mapLayerRepo)
-        this.getMapLayerDataService = new GetMapLayerData(mapLayerRepo, mapLayerPresenter)
+        this.getMapLayerDataService = new GetMapLayerData(mapLayerRepo, mapLayerPresenter, geoJsonParser, geoJsonPointExtractor)
         this.deleteMapLayerService = new DeleteMapLayer(mapLayerRepo)
 
         this.validation = new MapLayerValidation()
@@ -71,7 +72,10 @@ const mapLayerController = new MapLayerController(
     documentPicker,
     fileSystemRepo,
     mapLayerPresenter,
-    warningHandler
+    warningHandler,
+    geoJsonValidation,
+    geoJsonParser,
+    geoJsonPointExtractor
 )
 
 export const readGeoFile = (onError, onSuccess) => mapLayerController.readGeoFile(onError, onSuccess)

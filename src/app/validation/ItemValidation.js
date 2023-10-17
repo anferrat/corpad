@@ -10,8 +10,8 @@ export class ItemValidation extends Validation {
         return this.validate(obj,
             object({
                 itemType: this.itemType.required(),
-                latitude: this.latitude,
-                longitude: this.longitude,
+                latitude: this.latitude.nullable(),
+                longitude: this.longitude.nullable(),
             }))
     }
 
@@ -32,8 +32,8 @@ export class ItemValidation extends Validation {
                         id: this.id.required(),
                         name: this.name.nullable(),
                         location: this.location,
-                        latitude: this.latitude,
-                        longitude: this.longitude,
+                        latitude: this.latitude.nullable(),
+                        longitude: this.longitude.nullable(),
                         comment: this.comment,
                         testPointType: this.testPointType.required(),
                         status: this.status,
@@ -47,8 +47,8 @@ export class ItemValidation extends Validation {
                         id: this.id.required(),
                         name: this.name.nullable(),
                         location: this.location,
-                        latitude: this.latitude,
-                        longitude: this.longitude,
+                        latitude: this.latitude.nullable(),
+                        longitude: this.longitude.nullable(),
                         comment: this.comment,
                         status: this.status,
                         defaultName: this.name,
@@ -125,8 +125,8 @@ export class ItemValidation extends Validation {
                     object({
                         itemType: this.itemType,
                         sorting: this.sorting.required(),
-                        latitude: this.latitude,
-                        longitude: this.longitude,
+                        latitude: this.latitude.nullable(),
+                        longitude: this.longitude.nullable(),
                         filters: object({
                             statusFilter: this.statusFilter.required(),
                             testPointTypeFilter: this.testPointTypeFilter.required(),
@@ -140,8 +140,8 @@ export class ItemValidation extends Validation {
                     object({
                         itemType: this.itemType.required(),
                         sorting: this.sorting.required(),
-                        latitude: this.latitude,
-                        longitude: this.longitude,
+                        latitude: this.latitude.nullable(),
+                        longitude: this.longitude.nullable(),
                     })
                 )
             case ItemTypes.PIPELINE:

@@ -1,28 +1,23 @@
 export class MapLayerPresenter {
-    constructor(geoJsonPointExtractor) {
-        this.geoJsonPointExtractor = geoJsonPointExtractor
+    constructor() {
     }
 
-    _parseData(data) {
-        try {
-            return JSON.parse(data)
-        }
-        catch (er) {
-            return {
-                type: 'FeatureCollection',
-                features: []
-            }
-        }
-    }
 
-    execute(layer) {
-        const data = this._parseData(layer.data)
-        const { geoJson, points } = this.geoJsonPointExtractor.execute(data)
+    execute(id, uid, name, comment, timeCreated, timeModified, strokeColor, strokeWidth, fillColor, visible, geoJson, points) {
         return {
-            ...layer,
+            id,
+            uid,
+            name,
+            comment,
+            timeCreated,
+            timeModified,
+            strokeColor,
+            strokeWidth,
+            fillColor,
+            visible,
             data: geoJson,
             points,
-            featureCount: data["features"].length
+            featureCount: geoJson.features.length + points.length
         }
     }
 }

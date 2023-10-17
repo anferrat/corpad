@@ -3,6 +3,10 @@ import { CreateSurvey } from "../../services/survey/manager/CreateSurvey";
 import { CreateSurveyFromTemplate } from "../../services/survey/manager/CreateSurveyFromTemplate";
 import { GetCurrentSurveyStatus } from "../../services/survey/manager/GetCurrentSurveyStatus";
 import { LoadSurvey } from "../../services/survey/manager/LoadSurvey";
+import { GetDefaultPipeline } from "../../services/survey/manager/create/GetDefaultPipelines";
+import { GetDefaultPotentialTypes } from "../../services/survey/manager/create/GetDefaultPotentialTypes";
+import { GetDefaultReferenceCell } from "../../services/survey/manager/create/GetDefaultReferenceCell";
+import { GetDefaultSurvey } from "../../services/survey/manager/create/GetDefaultSurvey";
 import { AdvancedJsonImport } from "../../services/survey/manager/import/json/AdvancedJsonImport";
 import { SimpleJsonImport } from "../../services/survey/manager/import/json/SimpleJsonImport";
 import { AssetFileDownloadControl } from "../../services/survey_file/assets/AssetFileDownloadControl";
@@ -63,7 +67,15 @@ export const loadCloudSurveyFileService = new LoadSurvey(jsonImportService, adva
 
 export const loadExternalSurveyFileService = new LoadSurvey(jsonImportService, advancedJsonImportService, readExternalSurveyFileService, settingRepo, currentSurveyStatusService, warningHandler)
 
-export const createSurveyService = new CreateSurvey(surveyRepo, potentialTypeRepo, currentSurveyStatusService, pipelineRepo, referenceCellRepo, settingRepo)
+const getDefaultPipelineSerivice = new GetDefaultPipeline()
+
+const getDefaultSurveyService = new GetDefaultSurvey()
+
+const getDefaultPotentialTypesService = new GetDefaultPotentialTypes()
+
+const getDefaultReferenceCellService = new GetDefaultReferenceCell()
+
+export const createSurveyService = new CreateSurvey(surveyRepo, potentialTypeRepo, currentSurveyStatusService, pipelineRepo, referenceCellRepo, settingRepo, getDefaultPipelineSerivice, getDefaultPotentialTypesService, getDefaultSurveyService, getDefaultReferenceCellService)
 
 export const createSurveyFromTemplateService = new CreateSurveyFromTemplate(fileSystemRepo, surveyFileValidation, jsonImportService, surveyFileConverterInput, currentSurveyStatusService, settingRepo)
 
