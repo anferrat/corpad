@@ -18,7 +18,9 @@ export const ViewMapLayer = ({ navigateToEditMapLayer, goBack }) => {
         onEdit,
         onDelete,
         onToggle,
-        onAddLayer } = useMapLayers({ navigateToEditMapLayer })
+        onAddLayer,
+        onGoTo
+    } = useMapLayers({ navigateToEditMapLayer, goBack })
     return (
         <>
             <ScrollView>
@@ -31,7 +33,7 @@ export const ViewMapLayer = ({ navigateToEditMapLayer, goBack }) => {
                         </View>
                         {layers.length === 0 ?
                             <EmptyMapLayerListComponent /> :
-                            layers.map(({ id, name, comment, color, width, visible, featureCount }, index) => <MapLayerListItem
+                            layers.map(({ id, name, comment, color, width, visible, featureCount, mapRegion }, index) => <MapLayerListItem
                                 key={id}
                                 layerId={id}
                                 width={width}
@@ -41,6 +43,8 @@ export const ViewMapLayer = ({ navigateToEditMapLayer, goBack }) => {
                                 color={color}
                                 comment={comment}
                                 featureCount={featureCount}
+                                mapRegion={mapRegion}
+                                onGoTo={onGoTo}
                                 onEdit={onEdit}
                                 onDelete={onDelete}
                                 onSelect={onToggle}

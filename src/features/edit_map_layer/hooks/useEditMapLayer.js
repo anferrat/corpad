@@ -99,7 +99,7 @@ const useEditMapLayer = ({ isNew, layerId }) => {
                     await createMapLayer({ name, defaultName, comment, width: widthList[widthIndex].value, color: colorList[colorIndex].value, data: geoFile.data },
                         er => errorHandler(er),
                         (response) => {
-                            dispatch(addMapLayer(response.id, response.name, response.comment, response.strokeColor, response.strokeWidth, response.data, response.featureCount, response.points))
+                            dispatch(addMapLayer(response.id, response.name, response.comment, response.strokeColor, response.strokeWidth, response.data, response.featureCount, response.points, response.mapRegion))
                             navigation.goBack()
                         })
                 }

@@ -4,15 +4,12 @@ Extracts point features from geoJson and returns updated geoJson and array of po
 */
 
 import { MapLayerPoint } from "../../entities/survey/other/MapLayerPoint"
+import bbox from "@turf/bbox"
 
 export class GeoJsonPointExtractor {
     constructor() {
     }
-
-    _convertGeometryCollections(geoJson) {
-
-    }
-
+    
     execute(geoJson) {
         const { features } = geoJson
         const newFeatures = []
@@ -40,6 +37,7 @@ export class GeoJsonPointExtractor {
                 features: newFeatures
             },
             points,
+            bbox: bbox(geoJson)
         }
     }
 }

@@ -66,6 +66,10 @@ const useMarkers = ({ navigateToEdit, navigateToView, ref }) => {
                 dispatch(deleteMarker(itemId, itemType))
         })
 
+        const onAnimateToRegion = EventRegister.addEventListener('animateToRegion', (mapRegion) => {
+            if (ref.current.animateToRegion)
+                ref.current.animateToRegion(mapRegion, 1000)
+        })
 
         const onDisplayHandler = EventRegister.addEventListener('selectOnMap', ({ itemId, itemType }) => {
             if (!loading) {
@@ -82,6 +86,7 @@ const useMarkers = ({ navigateToEdit, navigateToView, ref }) => {
             EventRegister.removeEventListener(onUpdateHandler)
             EventRegister.removeEventListener(onDeleteHandler)
             EventRegister.removeEventListener(onDisplayHandler)
+            EventRegister.removeEventListener(onAnimateToRegion)
         }
     }, [loading, activeMarkerRef, dispatch])
 

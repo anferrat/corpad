@@ -7,18 +7,18 @@ import { UpdateMapLayer } from "../../../services/survey/other/mapLayers/UpdateM
 import { Controller } from "../../../utils/Controller"
 import { MapLayerValidation } from "../../../validation/MapLayerValidation"
 import { geoJsonParser, geoJsonPointExtractor } from "../../_instances/converters"
-import { documentPicker, geoJsonValidation, geoParser, warningHandler } from "../../_instances/general_services"
+import { documentPicker, geoJsonValidation, geoParser, getMapRegionFromBbox, warningHandler } from "../../_instances/general_services"
 import { mapLayerPresenter } from "../../_instances/presenters"
 import { fileSystemRepo, mapLayerRepo } from "../../_instances/repositories"
 
 class MapLayerController extends Controller {
-    constructor(mapLayerRepo, geoParser, documentPicker, fileSystemRepo, mapLayerPresenter, warningHandler, geoJsonValidation, geoJsonParser, geoJsonPointExtractor) {
+    constructor(mapLayerRepo, geoParser, documentPicker, fileSystemRepo, mapLayerPresenter, warningHandler, geoJsonValidation, geoJsonParser, geoJsonPointExtractor, getMapRegionFromBbox) {
         super()
         this.loadNewMapLayerService = new ReadExternalGeoFile(geoParser, documentPicker, fileSystemRepo, warningHandler, geoJsonValidation, geoJsonParser, geoJsonPointExtractor)
-        this.getMapLayerListService = new GetMapLayerList(mapLayerRepo, mapLayerPresenter, geoJsonValidation, geoJsonParser, geoJsonPointExtractor)
-        this.createMapLayerService = new CreateMapLayer(mapLayerRepo, mapLayerPresenter, geoJsonValidation, geoJsonParser, geoJsonPointExtractor)
+        this.getMapLayerListService = new GetMapLayerList(mapLayerRepo, mapLayerPresenter, geoJsonValidation, geoJsonParser, geoJsonPointExtractor, getMapRegionFromBbox)
+        this.createMapLayerService = new CreateMapLayer(mapLayerRepo, mapLayerPresenter, geoJsonValidation, geoJsonParser, geoJsonPointExtractor, getMapRegionFromBbox)
         this.updateMapLayerService = new UpdateMapLayer(mapLayerRepo)
-        this.getMapLayerDataService = new GetMapLayerData(mapLayerRepo, mapLayerPresenter, geoJsonParser, geoJsonPointExtractor)
+        this.getMapLayerDataService = new GetMapLayerData(mapLayerRepo, mapLayerPresenter, geoJsonParser, geoJsonPointExtractor, getMapRegionFromBbox)
         this.deleteMapLayerService = new DeleteMapLayer(mapLayerRepo)
 
         this.validation = new MapLayerValidation()
@@ -75,7 +75,8 @@ const mapLayerController = new MapLayerController(
     warningHandler,
     geoJsonValidation,
     geoJsonParser,
-    geoJsonPointExtractor
+    geoJsonPointExtractor,
+    getMapRegionFromBbox
 )
 
 export const readGeoFile = (onError, onSuccess) => mapLayerController.readGeoFile(onError, onSuccess)

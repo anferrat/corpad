@@ -20,7 +20,8 @@ const mapLayers = (state = initialState, action) => {
                         data: action.data,
                         points: action.points,
                         featureCount: action.featureCount,
-                        visible: true
+                        visible: true,
+                        mapRegion: action.mapRegion
                     })
                 }
             else return state
@@ -68,7 +69,7 @@ const mapLayers = (state = initialState, action) => {
             return {
                 ...state,
                 layers: action.layers.map(({
-                    id, name, comment, strokeColor, strokeWidth, visible, data, featureCount, points
+                    id, name, comment, strokeColor, strokeWidth, visible, data, featureCount, points, mapRegion
                 }) => ({
                     id,
                     name,
@@ -78,7 +79,8 @@ const mapLayers = (state = initialState, action) => {
                     visible,
                     data: data,
                     points: points,
-                    featureCount: featureCount
+                    featureCount: featureCount,
+                    mapRegion
                 })),
                 loading: false
             }

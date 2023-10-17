@@ -12,13 +12,13 @@ export class GeolocationCalculator {
         return a !== null && b !== null ? Math.min(a, b) : (a === null ? b : a)
     }
 
-    calculateRegionCorners(markers) {
-        return ({
-            minLat: markers.reduce((min, { latitude }) => this._getMin(latitude, min), markers[0]?.latitude ?? null),
-            minLon: markers.reduce((min, { longitude }) => this._getMin(longitude, min), markers[0]?.longitude ?? null),
-            maxLat: markers.reduce((max, { latitude }) => this._getMax(latitude, max), markers[0]?.latitude ?? null),
-            maxLon: markers.reduce((max, { longitude }) => this._getMax(longitude, max), markers[0]?.longitude ?? null),
-        })
+    calculateMarkersBbox(markers) {
+        return ([
+            markers.reduce((min, { longitude }) => this._getMin(longitude, min), markers[0]?.longitude ?? null), //minLon
+            markers.reduce((min, { latitude }) => this._getMin(latitude, min), markers[0]?.latitude ?? null), //minLat
+            markers.reduce((max, { longitude }) => this._getMax(longitude, max), markers[0]?.longitude ?? null), //maxLon
+            markers.reduce((max, { latitude }) => this._getMax(latitude, max), markers[0]?.latitude ?? null), //maxLat
+        ])
     }
 
     haversine(lat1, lon1, lat2, lon2) {

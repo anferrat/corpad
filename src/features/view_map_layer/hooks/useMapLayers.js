@@ -5,8 +5,9 @@ import { deleteMapLayer as deleteMapLayerRequest, updateMapLayer } from "../../.
 import { errorHandler, warningHandler } from "../../../helpers/error_handler"
 import { hideLoader, updateLoader } from "../../../store/actions/settings"
 import { resetActiveMapLayerMarker } from "../../../store/actions/map"
+import { EventRegister } from "react-native-event-listeners"
 
-const useMapLayers = ({ navigateToEditMapLayer }) => {
+const useMapLayers = ({ navigateToEditMapLayer, goBack }) => {
     const layers = useSelector(state => state.mapLayers.layers)
     const [visible, setVisible] = useState(false)
 
@@ -17,6 +18,11 @@ const useMapLayers = ({ navigateToEditMapLayer }) => {
     const dispatch = useDispatch()
 
     const onEdit = useCallback((layerId) => navigateToEditMapLayer(false, layerId), [])
+
+    const onGoTo = useCallback((mapRegion) => {
+        goBack()
+        EventRegister.emit('animateToRegion', mapRegion)
+    }, [])
 
     const onDelete = useCallback(async (index, layerId) => {
         const confirm = await warningHandler(61, 'Delete', 'Cancel')
@@ -48,7 +54,8 @@ const useMapLayers = ({ navigateToEditMapLayer }) => {
         onEdit,
         onDelete,
         onToggle,
-        onAddLayer
+        onAddLayer,
+        onGoTo
     }
 }
 
