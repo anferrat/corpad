@@ -51,7 +51,7 @@ export class MapLayerRepository extends SQLiteRepository {
 
     async getAll() {
         try {
-            const result = await this.runSingleQueryTransaction('SELECT * from mapLayers')
+            const result = await this.runSingleQueryTransaction('SELECT * from mapLayers LIMIT 6')
             return this.generateArray(result.rows.length, result.rows.item).map(({ id, uid, name, comment, timeCreated, timeModified, strokeColor, strokeWidth, fillColor, data, visible }) =>
                 new MapLayer(id, uid, name, comment, timeCreated, timeModified, strokeColor, strokeWidth, fillColor, data, Boolean(visible)))
         }

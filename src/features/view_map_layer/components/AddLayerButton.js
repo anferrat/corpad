@@ -4,14 +4,15 @@ import { StyleSheet } from 'react-native'
 import { plus } from '../../../components/Icons'
 
 
-const AddLayerButton = ({ onPress }) => {
+const AddLayerButton = ({ onPress, inactive }) => {
     return (
         <Button
-            accessoryLeft={plus}
+            disabled={inactive}
+            accessoryLeft={inactive ? null : plus}
             style={styles.button}
             onPress={onPress}
             appearance='ghost'>
-            Add a map layer (.kml, .gpx)
+            {!inactive ? 'Add a map layer (.kml, .gpx)' : 'Max. limit reached'}
         </Button>
     )
 }

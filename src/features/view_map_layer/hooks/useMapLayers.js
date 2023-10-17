@@ -10,6 +10,7 @@ import { EventRegister } from "react-native-event-listeners"
 const useMapLayers = ({ navigateToEditMapLayer, goBack }) => {
     const layers = useSelector(state => state.mapLayers.layers)
     const [visible, setVisible] = useState(false)
+    const maxLayerNumberLimitReached = layers.length >= 6
 
     useEffect(() => {
         setTimeout(() => setVisible(true), 100)
@@ -51,6 +52,7 @@ const useMapLayers = ({ navigateToEditMapLayer, goBack }) => {
     return {
         visible,
         layers,
+        maxLayerNumberLimitReached,
         onEdit,
         onDelete,
         onToggle,
