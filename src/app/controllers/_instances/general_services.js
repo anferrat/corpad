@@ -1,3 +1,4 @@
+import { GetMapRegionFromBbox } from "../../services/location/GetMapRegionFromBbox";
 import { AppStateListener } from "../../services/other/AppStateListenerService";
 import { CommaSeparatedFileParser } from "../../services/other/CommaSeparatedFileParser";
 import { DocumentPicker } from "../../services/other/DocumentPicker";
@@ -50,3 +51,5 @@ export const warningHandler = new WarningHandler()
 export const appStateListener = new AppStateListener()
 
 export const geoJsonValidation = new GeoJsonValidation()
+
+export const getMapRegionFromBbox = new GetMapRegionFromBbox()

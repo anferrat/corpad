@@ -23,6 +23,7 @@
     "@robinbobin/react-native-google-drive-api-wrapper": "^1.2.3",
     "@shopify/flash-list": "^1.4.3",
     "@tmcw/togeojson": "^5.8.1",
+    "@turf/bbox": "^6.5.0",
     "@ui-kitten/components": "^5.3.0",
     "@ui-kitten/eva-icons": "^5.3.1",
     "@xmldom/xmldom": "^0.8.10",

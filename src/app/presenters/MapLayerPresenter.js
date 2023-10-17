@@ -3,7 +3,7 @@ export class MapLayerPresenter {
     }
 
 
-    execute(id, uid, name, comment, timeCreated, timeModified, strokeColor, strokeWidth, fillColor, visible, geoJson, points) {
+    execute(id, uid, name, comment, timeCreated, timeModified, strokeColor, strokeWidth, fillColor, visible, geoJson, points, mapRegion) {
         return {
             id,
             uid,
@@ -17,7 +17,8 @@ export class MapLayerPresenter {
             visible,
             data: geoJson,
             points,
-            featureCount: geoJson.features.length + points.length
+            featureCount: geoJson.features.length + points.length,
+            mapRegion
         }
     }
 }

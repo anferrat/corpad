@@ -41,7 +41,7 @@ export class GetSurveyInfo {
         if (mixed <= 1)
             return null
         else {
-            const { maxLat, maxLon, minLat, minLon } = this.geolocationCalculator.calculateRegionCorners(mixed)
+            const [minLon, minLat, maxLon, maxLat] = this.geolocationCalculator.calculateMarkersBbox(mixed)
             return Math.floor(this.geolocationCalculator.haversine(maxLat, maxLon, minLat, minLon).distance / 2)
         }
     }

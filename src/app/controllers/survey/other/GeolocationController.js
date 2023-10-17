@@ -2,24 +2,24 @@
 import { Controller } from "../../../utils/Controller"
 import { GetCurrentPosition } from "../../../services/location/GetCurrentPosition"
 import { WatchPosition } from "../../../services/location/WatchPosition"
-import { GetMapRegion } from "../../../services/location/GetMapRegion"
+import { GetInitialMapRegion } from "../../../services/location/GetInitialMapRegion"
 import { WatchDistanseAndBearing } from "../../../services/location/WatchDistanseAndBearing"
 import { GetDeclination } from "../../../services/location/GetDeclination"
 import { TimeAdjustmentListener } from "../../../services/location/TimeAdjustmentListener"
 import { ShareLocationWithExternalApp } from "../../../services/location/ShareLocationWithExternalApp"
 import { GeolocationValidation } from "../../../validation/GeolocationValidation"
 import { geolocationRepo } from "../../_instances/repositories"
-import { geolocationCalculator, linkingService, permissions } from "../../_instances/general_services"
+import { geolocationCalculator, getMapRegionFromBbox, linkingService, permissions } from "../../_instances/general_services"
 
 class GeolocationController extends Controller {
-    constructor(geolocationRepo, geolocationCalculator, permissions, linkingService) {
+    constructor(geolocationRepo, geolocationCalculator, permissions, linkingService, getMapRegionFromBbox) {
         super()
         this.geolocationRepo = geolocationRepo
         this.permissions = permissions
         this.linkingService = linkingService
         this.getCurrentPositionService = new GetCurrentPosition(geolocationRepo, permissions)
         this.watchPositionService = new WatchPosition(geolocationRepo)
-        this.getMapRegionService = new GetMapRegion(geolocationRepo, geolocationCalculator, permissions)
+        this.getMapRegionService = new GetInitialMapRegion(geolocationRepo, geolocationCalculator, permissions, getMapRegionFromBbox)
         this.watchDistanceAndBearingService = new WatchDistanseAndBearing(geolocationRepo, geolocationCalculator)
         this.getDeclinationService = new GetDeclination(geolocationRepo)
         this.timeAdjustmentListenerService = new TimeAdjustmentListener(geolocationRepo, permissions)
@@ -84,7 +84,8 @@ const geolocationController = new GeolocationController(
     geolocationRepo,
     geolocationCalculator,
     permissions,
-    linkingService)
+    linkingService,
+    getMapRegionFromBbox)
 
 export const getLocationPermission = (onError, onSuccess) => geolocationController.getPermission(onError, onSuccess)
 

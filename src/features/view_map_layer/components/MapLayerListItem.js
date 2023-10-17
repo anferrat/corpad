@@ -2,20 +2,25 @@ import React from 'react'
 import { View, StyleSheet } from 'react-native'
 import Pressable from '../../../components/Pressable'
 import { CheckBox, Icon, MenuItem, OverflowMenu, Text } from '@ui-kitten/components'
-import { edit, trashIcon } from '../../../components/Icons'
+import { diagBack, edit, trashIcon } from '../../../components/Icons'
 import { androidRipple } from '../../../styles/styles'
 import useModal from '../../../hooks/useModal'
 import IconButton from '../../../components/IconButton'
 import { MapLayerStrokeColors, primary } from '../../../styles/colors'
 
 
-const MapLayerListItem = ({ layerId, name, index, selected, color, comment, featureCount, onEdit, onDelete, onSelect, width }) => {
+const MapLayerListItem = ({ layerId, name, index, selected, color, comment, featureCount, onEdit, onDelete, onSelect, width, onGoTo, mapRegion }) => {
     const { visible, hideModal, showModal } = useModal(false)
 
     const onEditHandler = React.useCallback(() => {
         onEdit(layerId)
         hideModal()
     }, [layerId, onEdit, hideModal])
+
+    const onGoToHandler = React.useCallback(() => {
+        onGoTo(mapRegion)
+        hideModal()
+    }, [mapRegion, onGoTo, hideModal])
 
     const onDeleteHandler = React.useCallback(() => {
         onDelete(index, layerId)
@@ -69,6 +74,10 @@ const MapLayerListItem = ({ layerId, name, index, selected, color, comment, feat
                     anchor={renderAnchor}
                     visible={visible}
                     onBackdropPress={hideModal}>
+                    <MenuItem
+                        onPress={onGoToHandler}
+                        accessoryLeft={diagBack}
+                        title='Go to' />
                     <MenuItem
                         onPress={onEditHandler}
                         accessoryLeft={edit}
