@@ -30,7 +30,7 @@ export class ExportCloudSurveyFile {
         const internetOn = await this.networkRepo.checkConnection()
         if (internetOn) {
             const { file, fileName } = await this.cloudFileSystemRepo.readFile(cloudId)
-            const { surveyFile } = this.convertFileToSurveyService.execute(file)
+            const { surveyFile } = await this.convertFileToSurveyService.execute(file)
             const surveyFileContent = JSON.stringify(this.surveyFileConverterOutput.execute(surveyFile))
             if (surveyFile.assets.length === 0)
                 return {

@@ -20,7 +20,7 @@ export class ReadExternalSurveyFile {
     async _readExternalFile(pathToSurveyFile) {
         const file = await this.fileSystemRepo.readFile(pathToSurveyFile)
         const content = this._getContent(file)
-        const { surveyFile, isRecovered } = this.convertFileToSurveyService.execute(content)
+        const { surveyFile, isRecovered } = await this.convertFileToSurveyService.execute(content)
         const surveyUid = guid()
         surveyFile.survey.reset(surveyUid)
         return {
@@ -63,19 +63,11 @@ export class ReadExternalSurveyFile {
 
     async execute(externalFile) {
         const path = externalFile.getPath()
-        const type = externalFile.getFileType()
+        const type = externalFile.fileType
         if (type === ExternalFileTypes.SURVEY)
             return await this._readExternalFile(path)
         else if (type === ExternalFileTypes.SURVEY_WITH_ASSETS)
             return await this._readExternalFileWithAssets(path)
-        else if (type === ExternalFileTypes.UNKNOWN_FILE) {
-            try {
-                return await this._readExternalFile(path)
-            }
-            catch (er) {
-                return await this._readExternalFileWithAssets(path)
-            }
-        }
-        else throw new Error(errors.FILESYSTEM, 'Unable to read external file', 'File is not supported', 411)
+        else throw new Error(errors.FILESYSTEM, 'Unable to read external file', 'File is not supported', 437)
     }
 }

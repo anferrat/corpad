@@ -19,6 +19,7 @@ import { ReadCloudSurveyFile } from "../../services/survey_file/cloud/ReadCloudS
 import { UploadAssets } from "../../services/survey_file/cloud/UploadAssets";
 import { CompressTempSurvey } from "../../services/survey_file/local/CompressTempSurvey";
 import { ExportSurveyFile } from "../../services/survey_file/local/ExportSurveyFile";
+import { ExtrenalFileContentResolver } from "../../services/survey_file/local/ExternalFileContentResolver";
 import { ReadExternalSurveyFile } from "../../services/survey_file/local/ReadExternalSurveyFile";
 import { ReadSurveyFile } from "../../services/survey_file/local/ReadSurveyFile";
 import { SurveyFileContentValidation } from "../../validation/survey_file_content/SurveyFileContentValidation";
@@ -78,4 +79,6 @@ const getDefaultReferenceCellService = new GetDefaultReferenceCell()
 export const createSurveyService = new CreateSurvey(surveyRepo, potentialTypeRepo, currentSurveyStatusService, pipelineRepo, referenceCellRepo, settingRepo, getDefaultPipelineSerivice, getDefaultPotentialTypesService, getDefaultSurveyService, getDefaultReferenceCellService)
 
 export const createSurveyFromTemplateService = new CreateSurveyFromTemplate(fileSystemRepo, surveyFileValidation, jsonImportService, surveyFileConverterInput, currentSurveyStatusService, settingRepo)
+
+export const externalFileContentResolver = new ExtrenalFileContentResolver(fileSystemRepo)
 

@@ -26,7 +26,7 @@ export class OpenExternalSurvey {
                     return await this.loadExternalSurveyService.execute(file)
                 }
                 catch (er) {
-                    this.warningHandler.executeWarning('Unable to load external survey file')
+                    callback(SurveyLoadingStatuses.ERROR, er.code ?? 437)
                     return {
                         isLoaded: false,
                         syncTime: null,

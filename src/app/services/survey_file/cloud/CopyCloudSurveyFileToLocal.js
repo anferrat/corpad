@@ -29,7 +29,7 @@ export class CopyCloudSurveyFileToLocal {
         const internetOn = await this.networkRepo.checkConnection()
         if (internetOn) {
             const { fileName, file } = await this.cloudFileSystemRepo.readFile(cloudId)
-            const { surveyFile } = this.convertFileToSurveyService.execute(file)
+            const { surveyFile } = await this.convertFileToSurveyService.execute(file)
             const oldUid = surveyFile.survey.uid
             const newUid = guid()
             surveyFile.survey.reset(newUid)

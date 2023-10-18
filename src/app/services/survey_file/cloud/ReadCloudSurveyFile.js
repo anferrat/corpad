@@ -16,7 +16,7 @@ export class ReadCloudSurveyFile {
         const internetOn = await this.networkRepo.checkConnection()
         if (internetOn) {
             const { file, fileName } = await this.cloudFileSystemRepo.readFile(cloudId)
-            const { surveyFile, isRecovered } = this.convertFileToSurveyService.execute(file)
+            const { surveyFile, isRecovered } = await this.convertFileToSurveyService.execute(file)
             const currentAssetFolderPath = await this.fileSystemRepo.getLocation(FileSystemLocations.CURRENT_ASSETS)
             const localAssetFiles = await this.fileSystemRepo.readDir(FileSystemLocations.ASSETS, surveyFile.survey.uid)
             const cloudAssetFiles = await this.cloudFileSystemRepo.readSurveyAssetFolder(surveyFile.survey.uid)

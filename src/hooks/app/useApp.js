@@ -34,13 +34,15 @@ const useApp = () => {
 
     //fileUrlListener - listens for opened survey files from outside the app and loads them into database
     const urlListener = addFileUrlListener(
-      (status) => {
+      (status, errorCode) => {
         if (status === SurveyLoadingStatuses.SAVING)
           dispatch(updateLoader('Saving survey', null))
         else if (status === SurveyLoadingStatuses.LOADING) {
           dispatch(resetCurrentSurveySettings())
           dispatch(updateLoader('Loading file', null))
         }
+        else if (status === SurveyLoadingStatuses.ERROR)
+          errorHandler(errorCode)
       },
       (er) => {
         er !== 101 ? errorHandler(er) : null
