@@ -1,6 +1,7 @@
 package com.corpad;
 import android.os.Bundle;
 import org.devio.rn.splashscreen.SplashScreen;
+import android.content.Intent;
 import com.facebook.react.ReactActivity;
 import com.facebook.react.ReactActivityDelegate;
 import com.facebook.react.defaults.DefaultNewArchitectureEntryPoint;
@@ -21,8 +22,14 @@ public class MainActivity extends ReactActivity {
 
   @Override
     protected void onCreate(Bundle savedInstanceState) {
-        SplashScreen.show(this, R.style.SplashTheme, true);
-        super.onCreate(null);
+      super.onCreate(null);
+        if (!isTaskRoot()) { // Google Files bypassing singleTask for some reason. Restarting activity in New task if it's the case
+        Intent newIntent = new Intent(getIntent());
+        newIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(newIntent);
+        finish();
+    }
+     SplashScreen.show(this, R.style.SplashTheme, true);
     }
 
   /**

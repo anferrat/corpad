@@ -2,7 +2,7 @@ import { ExternalFileTypes } from "../../../constants/global"
 import { ExternalFile } from "../../entities/survey/other/ExternalFile"
 
 export class AppInitialization {
-    constructor(currentSurveyStatusService, authorizationService, surveyRepo, multimeterInitializationService, defaultNamesInitializationService, settingRepo, openExternalSurveyService, settingInitializationService, databaseInitializationService, fileSystemInitializationService, linkingService) {
+    constructor(currentSurveyStatusService, authorizationService, surveyRepo, multimeterInitializationService, defaultNamesInitializationService, settingRepo, openExternalSurveyService, settingInitializationService, databaseInitializationService, fileSystemInitializationService, linkingService, externalFileContentResolver) {
         this.currentSurveyStatusService = currentSurveyStatusService
         this.authorizationService = authorizationService
         this.surveyRepo = surveyRepo
@@ -14,6 +14,7 @@ export class AppInitialization {
         this.databaseInitializationService = databaseInitializationService
         this.fileSystemInitializationService = fileSystemInitializationService
         this.linkingService = linkingService
+        this.externalFileContentResolver = externalFileContentResolver
     }
 
     async execute() {
@@ -39,9 +40,8 @@ export class AppInitialization {
             await this.surveyRepo.clearEmptyValues()
         if (initialUrl !== null)
             try {
-                const file = new ExternalFile(initialUrl)
-                const fileType = file.getFileType()
-                if (fileType === ExternalFileTypes.SURVEY_WITH_ASSETS || ExternalFileTypes.SURVEY) {
+                const file = await this.externalFileContentResolver.execute(initialUrl)
+                if (file.fileType === ExternalFileTypes.SURVEY_WITH_ASSETS || file.fileType === ExternalFileTypes.SURVEY) {
                     const loaded = await this.openExternalSurveyService.execute(file, isLoaded)
                     syncTime = loaded.syncTime ?? syncTime
                     name = loaded.name ?? name

@@ -1,13 +1,14 @@
 import React from "react"
-import { StyleSheet, View, ActivityIndicator } from "react-native"
+import { StyleSheet, View } from "react-native"
 import { primary } from "../../../styles/colors"
 import FocusAwareStatusBar from "../../../components/FocusAwareStatusBar"
+import WaveActivityIndicator from "../../../components/WaveActivityIndicator"
 
 const SplashScreen = () => {
     return (
         <View style={styles.splash}>
-            <FocusAwareStatusBar translucent={true} barStyle='light-content' backgroundColor={'transparent'}/>
-            <ActivityIndicator size='large' color='#fff' />
+            <FocusAwareStatusBar translucent={true} barStyle='light-content' backgroundColor={'transparent'} />
+            <WaveActivityIndicator size='large' color='#fff' />
         </View>
     )
 }

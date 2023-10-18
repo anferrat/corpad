@@ -28,8 +28,4 @@ export class WarningHandler {
             )
         })
     }
-
-    executeWarning(message) {
-        Alert.alert(message)
-    }
 }

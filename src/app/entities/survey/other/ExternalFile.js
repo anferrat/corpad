@@ -1,16 +1,15 @@
 import { ExternalFileTypes } from "../../../../constants/global"
 
 export class ExternalFile {
-    constructor(uri, name) {
+    constructor(uri, name, fileType) {
         this.uri = uri
         this.name = name
+        this.fileType = fileType
     }
 
     getFileType() {
         if (!this.uri)
             return undefined
-        else if (this.uri.startsWith('content://com.android'))
-            return ExternalFileTypes.UNKNOWN_FILE
         else if (this.uri.endsWith('.json'))
             return ExternalFileTypes.SURVEY
         else if (this.uri.endsWith('.corpad'))
@@ -24,6 +23,10 @@ export class ExternalFile {
         else if (this.uri.endsWith('.gpx'))
             return ExternalFileTypes.GPS_EXCHANGE_FORMAT
         else return ExternalFileTypes.UNKNOWN_FILE
+    }
+
+    setFileType(fileType) {
+        this.fileType = fileType
     }
 
     getName() {

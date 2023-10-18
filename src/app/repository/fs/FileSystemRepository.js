@@ -1,9 +1,11 @@
 import RNFS from 'react-native-fs'
 import { zip, unzip } from 'react-native-zip-archive'
 import { Error, errors } from '../../utils/Error'
-import { FileSystemLocations } from '../../../constants/global'
+import { ExternalFileTypes, FileSystemLocations } from '../../../constants/global'
 import { Platform } from 'react-native'
 import { File } from '../../entities/survey/other/File'
+import fileType from 'react-native-file-type'
+
 
 export class FileSystemRepository {
     constructor() {
@@ -31,9 +33,6 @@ export class FileSystemRepository {
                     throw new Error(errors.FILESYSTEM, `File ${name} already exists in this directory.`, 'File already exist', 403)
 
             //check if there is enough free space - content size + 10MB extra
-            const freeSpace = (await RNFS.getFSInfo()).freeSpace
-            if (!isNaN(freeSpace) && freeSpace !== null && freeSpace < ((encodeURI(content).split(/%..|./).length - 1) + 10485760))
-                throw new Error(errors.FILESYSTEM, `Not enough space on disk.`, 'Not enough space', 402)
 
             //write file
             await RNFS.writeFile(filePath, content)
@@ -46,12 +45,6 @@ export class FileSystemRepository {
 
     async copyFile(filePath, destinationPath) {
         try {
-            //check if there is enough free space
-            if (!filePath.startsWith(`content://com.android`)) {
-                const freeSpace = (await RNFS.getFSInfo()).freeSpace
-                if (!isNaN(freeSpace) && freeSpace !== null && freeSpace < ((await RNFS.stat(filePath)).size + 10485760)) //content size + 10MB
-                    throw new Error(errors.FILESYSTEM, `Not enough space on disk.`, 'Not enough space', 402)
-            }
             //write file
             await RNFS.copyFile(filePath, destinationPath)
         }
@@ -128,6 +121,7 @@ export class FileSystemRepository {
             return await RNFS.readFile(path)
         }
         catch (er) {
+            console.log(er)
             throw new Error(errors.FILESYSTEM, `Unable to read at ${path}`, er, 408)
         }
     }
@@ -259,6 +253,24 @@ export class FileSystemRepository {
         }
         catch (er) {
             throw new Error(errors.FILESYSTEM, 'Uable to unzip file', er)
+        }
+    }
+
+    async getFileType(path) {
+        try {
+            return await fileType(path)
+        }
+        catch {
+            throw new Error(errors.FILESYSTEM, 'Unable to get file type', er)
+        }
+    }
+
+    async read(path, length, position, encoding) {
+        try {
+            return await RNFS.read(path, length, position, encoding)
+        }
+        catch (er) {
+            throw new Error(errors.FILESYSTEM, 'Unable to read file', er, 408)
         }
     }
 }

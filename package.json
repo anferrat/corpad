@@ -38,6 +38,7 @@
     "react-native-blob-courier": "^4.0.0",
     "react-native-document-picker": "^9.0.1",
     "react-native-event-listeners": "^1.0.7",
+    "react-native-file-type": "^1.0.0",
     "react-native-fs": "^2.20.0",
     "react-native-geolocation-service": "^5.3.1",
     "react-native-gesture-handler": "^2.12.0",

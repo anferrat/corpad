@@ -48,7 +48,7 @@ export class CopySurveyFileToCloud {
             //4. Parse to JSON object
             const surveyObject = this._getContent(file)
             //5. Generate SurveyFile instance from JSON
-            const { surveyFile } = this.convertFileToSurveyService.execute(surveyObject)
+            const { surveyFile } = await this.convertFileToSurveyService.execute(surveyObject)
             const oldUid = surveyFile.survey.uid
             const newUid = guid()
             //6. Assign new uid for survey

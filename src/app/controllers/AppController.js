@@ -7,13 +7,13 @@ import { MultimeterInitialization } from "../services/survey/other/multimeter/Mu
 import { Controller } from "../utils/Controller"
 import { FileSystemInitialization } from "../services/survey_file/local/FileSystemInitialization"
 import { SurveyFileListener } from "../services/app/SurveyFileListener"
-import { currentSurveyStatusService, loadExternalSurveyFileService } from "./_instances/survey_file"
+import { currentSurveyStatusService, externalFileContentResolver, loadExternalSurveyFileService } from "./_instances/survey_file"
 import { appRepo, bluetoothRepo, defaultNameRepo, fileSystemRepo, googleDriveAuthorizationRepo, networkRepo, settingRepo, surveyRepo } from "./_instances/repositories"
 import { appStateListener, linkingService, multimeterFactory, warningHandler } from "./_instances/general_services"
 import { resetCurrentSurveyService, saveCurrentSurveyService } from "./_instances/survey_manager"
 
 class AppController extends Controller {
-    constructor(currentSurveyStatusService, googleDriveAuthorizationRepo, surveyRepo, bluetoothRepo, settingRepo, multimeterFactory, defaultNameRepo, loadExternalSurveyFileService, saveCurrentSurveyService, warningHandler, resetCurrentSurveyService, fileSystemRepo, appRepo, linkingService, appStateListener, networkRepo) {
+    constructor(currentSurveyStatusService, googleDriveAuthorizationRepo, surveyRepo, bluetoothRepo, settingRepo, multimeterFactory, defaultNameRepo, loadExternalSurveyFileService, saveCurrentSurveyService, warningHandler, resetCurrentSurveyService, fileSystemRepo, appRepo, linkingService, appStateListener, networkRepo, externalFileContentResolver) {
         super()
 
         this.networkRepo = networkRepo
@@ -32,9 +32,9 @@ class AppController extends Controller {
 
         this.fileSystemInitializationService = new FileSystemInitialization(fileSystemRepo)
 
-        this.appInitializationService = new AppInitialization(currentSurveyStatusService, googleDriveAuthorizationRepo, surveyRepo, this.multimeterInitializationService, this.defaultNameInitializationService, settingRepo, this.openExternalSurveyService, this.appSettingInitializationService, this.databaseInitializationService, this.fileSystemInitializationService, linkingService)
+        this.appInitializationService = new AppInitialization(currentSurveyStatusService, googleDriveAuthorizationRepo, surveyRepo, this.multimeterInitializationService, this.defaultNameInitializationService, settingRepo, this.openExternalSurveyService, this.appSettingInitializationService, this.databaseInitializationService, this.fileSystemInitializationService, linkingService, externalFileContentResolver)
 
-        this.surveyFileListenerService = new SurveyFileListener(linkingService, this.openExternalSurveyService, appStateListener)
+        this.surveyFileListenerService = new SurveyFileListener(linkingService, this.openExternalSurveyService, appStateListener, externalFileContentResolver)
     }
 
 
@@ -80,7 +80,8 @@ const appController = new AppController(
     appRepo,
     linkingService,
     appStateListener,
-    networkRepo
+    networkRepo,
+    externalFileContentResolver
 )
 
 export const initializeApp = (onError, onSuccess) => appController.init(onError, onSuccess)

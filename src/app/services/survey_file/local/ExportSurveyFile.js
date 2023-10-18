@@ -36,7 +36,7 @@ export class ExportSurveyFile {
         const file = await this.fileSystemRepo.readFile(path)
         const filename = path.substring(path.lastIndexOf('/') + 1, path.length)
         const surveyObject = this._convertFileToObject(file)
-        const { surveyFile } = this.convertFileToSurveyService.execute(surveyObject)
+        const { surveyFile } = await this.convertFileToSurveyService.execute(surveyObject)
         const surveyFileContent = JSON.stringify(this.surveyFileConverterOutput.execute(surveyFile))
         if (surveyFile.assets.length === 0)
             return {

@@ -18,7 +18,11 @@ export class DocumentPicker {
     async execute(type) {
         try {
             const { fileCopyUri, uri, name } = await RNDocumentPicker.pickSingle({ allowMultiSelection: false, type, copyTo: 'cachesDirectory' })
-            return new ExternalFile(fileCopyUri ? this._decode(fileCopyUri) : this._decode(uri), name)
+            const path = fileCopyUri ? this._decode(fileCopyUri) : this._decode(uri)
+            const file = new ExternalFile(path, name)
+            const fileType = file.getFileType()
+            file.setFileType(fileType)
+            return file
         }
         catch (er) {
             if (er.code !== 'DOCUMENT_PICKER_CANCELED')
@@ -29,7 +33,7 @@ export class DocumentPicker {
 
     async pickSurveyFile() {
         return await this.execute(Platform.select({
-            android: `*/*`,
+            android: [FileMimeTypes.JSON, FileMimeTypes.ZIP, FileMimeTypes.BINARY],
             ios: FileTypeIdentifiers.ITEM,
             default: `*/*`
         }))

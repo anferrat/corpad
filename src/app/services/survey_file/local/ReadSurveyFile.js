@@ -23,7 +23,7 @@ export class ReadSurveyFile {
         ])
         const fileName = path.substring(path.lastIndexOf('/') + 1, path.length)
         const content = this._getContent(file)
-        const { surveyFile, isRecovered } = this.convertFileToSurveyService.execute(content)
+        const { surveyFile, isRecovered } = await this.convertFileToSurveyService.execute(content)
         const currentAssetsFolderPath = await this.fileSystemRepo.getLocation(FileSystemLocations.CURRENT_ASSETS)
         const localAssetFiles = await this.fileSystemRepo.readDir(FileSystemLocations.ASSETS, surveyFile.survey.uid)
         await this.fileSystemRepo.copyFiles(currentAssetsFolderPath, localAssetFiles)
