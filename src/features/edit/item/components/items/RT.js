@@ -48,32 +48,15 @@ const RT = ({ data, createSubitem, itemType, update, validate, updateLatAndLon, 
                         value={location}
                         property='location'
                         placeholder='Location description' />
-                    <View style={styles.row}>
-                        <View style={styles.leftItem}>
-                            <Input
-                                update={update}
-                                validate={validate}
-                                property='maxCurrent'
-                                maxLength={20}
-                                label='DC Amps'
-                                keyboardType='numeric'
-                                value={maxCurrent}
-                                valid={valid.maxCurrent}
-                                unit='A' />
-                        </View>
-                        <View style={styles.rightItem}>
-                            <Input
-                                update={update}
-                                validate={validate}
-                                property='maxVoltage'
-                                maxLength={20}
-                                label='DC Volts'
-                                keyboardType='numeric'
-                                value={maxVoltage}
-                                valid={valid.maxVoltage}
-                                unit='V' />
-                        </View>
-                    </View>
+                    <RectifierTapSetting
+                        update={update}
+                        validate={validate}
+                        updateTap={updateTap}
+                        tapSetting={tapSetting}
+                        tapValue={tapValue}
+                        tapCoarse={tapCoarse}
+                        tapFine={tapFine}
+                        tapValueValid={valid.tapValue} />
                     <Input
                         update={update}
                         validate={validate}
@@ -100,15 +83,34 @@ const RT = ({ data, createSubitem, itemType, update, validate, updateLatAndLon, 
                         selectedIndex={powerSource}
                         itemList={powerSourceList}
                         placeholder='Select Source' />
-                    <RectifierTapSetting
-                        update={update}
-                        validate={validate}
-                        updateTap={updateTap}
-                        tapSetting={tapSetting}
-                        tapValue={tapValue}
-                        tapCoarse={tapCoarse}
-                        tapFine={tapFine}
-                        tapValueValid={valid.tapValue} />
+                    <View style={styles.row}>
+                        <View style={styles.leftItem}>
+                            <Input
+                                update={update}
+                                validate={validate}
+                                property='maxCurrent'
+                                maxLength={20}
+                                label='DC Amps'
+                                keyboardType='numeric'
+                                value={maxCurrent}
+                                valid={valid.maxCurrent}
+                                unit='A' />
+                        </View>
+                        <View style={styles.rightItem}>
+                            <Input
+                                update={update}
+                                validate={validate}
+                                property='maxVoltage'
+                                maxLength={20}
+                                label='DC Volts'
+                                keyboardType='numeric'
+                                value={maxVoltage}
+                                valid={valid.maxVoltage}
+                                unit='V' />
+                        </View>
+                    </View>
+
+
                     <Input
                         update={update}
                         validate={validate}
@@ -127,7 +129,7 @@ const RT = ({ data, createSubitem, itemType, update, validate, updateLatAndLon, 
                     imageUris={imageUris} />
                 <View style={styles.button}>
                     <CreateSubitemButton
-                        title={'Add circuit'}
+                        title={'Add reading'}
                         onSelect={createSubitem}
                         itemType={itemType} />
                 </View>
@@ -145,7 +147,8 @@ const styles = StyleSheet.create({
         marginBottom: -12
     },
     row: {
-        flexDirection: 'row'
+        flexDirection: 'row',
+        paddingTop: 12
     },
     leftItem: {
         flex: 1,

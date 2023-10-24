@@ -1,4 +1,4 @@
-import { object } from "yup"
+import { object, array } from "yup"
 import { SubitemTypes } from "../../constants/global"
 import { Validation } from "../utils/Validation"
 
@@ -131,6 +131,27 @@ export class SubitemValidation extends Validation {
                     return object({
                         wireColor: this.wireColor,
                         wireGauge: this.wireGauge
+                    })
+                case SubitemTypes.ANODE_BED:
+                    return object({
+                        enclousureType: this.anodeBedEnclosure,
+                        bedType: this.bedType,
+                        materialType: this.anodeBedMaterial,
+                        anodes: array().of(object({
+                            current: this.number,
+                            wireColor: this.wireColor,
+                            wireGauge: this.wireGauge
+                        }))
+                    })
+                case SubitemTypes.SOIL_RESISTIVITY:
+                    return object({
+                        spacingUnit: this.lengthUnit,
+                        resistivityUnit: this.resistivityUnit,
+                        comment: this.comment,
+                        layers: array().of(object({
+                            spacing: this.positiveNumber,
+                            resistanceToZero: this.positiveNumber
+                        }))
                     })
             }
 

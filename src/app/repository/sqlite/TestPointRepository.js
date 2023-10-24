@@ -118,8 +118,15 @@ export class TestPointRepository extends SQLiteRepository {
 
     async getSubitemsById(id) {
         try {
-            const result = await super.runSingleQueryTransaction(`SELECT cards.*, sides.sideAId, sides.sideBId FROM cards LEFT JOIN sides ON cards.id = sides.parentCardId WHERE cards.testPointId = ? ORDER BY cards.id DESC`, [id])
-            return this.subitemProcessor.generateArrayWithSides(result.rows.length, result.rows.item).map(this.subitemProcessor.getSubitemFromTableData)
+            const result = await super.runSingleQueryTransaction(`
+            SELECT cards.*, sides.sideAId, sides.sideBId, soilResistivityLayers.id AS layerId, soilResistivityLayers.uid as layerUid, soilResistivityLayers.spacing, soilResistivityLayers.resistanceToZero, soilResistivityLayers.resistanceToNext, soilResistivityLayers.resistivityToZero, soilResistivityLayers.resistivityToNext FROM cards 
+            LEFT JOIN sides ON 
+            cards.id = sides.parentCardId 
+            LEFT JOIN soilResistivityLayers ON 
+            cards.id = soilResistivityLayers.parentId
+            WHERE cards.testPointId = ? 
+            ORDER BY cards.id DESC`, [id])
+            return this.subitemProcessor.generateSubitemDataArray(result.rows.length, result.rows.item).map(this.subitemProcessor.getSubitemFromTableData)
         }
         catch (err) {
             throw new Error(errors.DATABASE, `Unable to get list of subitems`, err)
@@ -129,19 +136,20 @@ export class TestPointRepository extends SQLiteRepository {
     async getSubitemsWithPotentialsById(id) {
         try {
             const { rows } = await super.runSingleQueryTransaction(
-                `SELECT cards.*, potentials.id AS potentialId, potentials.uid AS potentialUid, potentials.value AS potentialValue, potentials.oldValue AS potentialOldValue, potentials.type AS potentialTypeId, potentials.permanentReferenceId, potentials.portableReferenceId, sides.sideAId, sides.sideBId FROM cards 
+                `SELECT cards.*, potentials.id AS potentialId, potentials.uid AS potentialUid, potentials.value AS potentialValue, potentials.oldValue AS potentialOldValue, potentials.type AS potentialTypeId, potentials.permanentReferenceId, potentials.portableReferenceId, sides.sideAId, sides.sideBId, soilResistivityLayers.id AS layerId, soilResistivityLayers.uid as layerUid, soilResistivityLayers.spacing, soilResistivityLayers.resistanceToZero, soilResistivityLayers.resistanceToNext, soilResistivityLayers.resistivityToZero, soilResistivityLayers.resistivityToNext FROM cards 
                 LEFT JOIN sides 
                 ON cards.id = sides.parentCardId
+                LEFT JOIN soilResistivityLayers 
+                ON cards.id = soilResistivityLayers.parentId
                 LEFT JOIN potentials
                 ON cards.id = potentials.cardId
                 LEFT JOIN potentialTypes
                 ON potentials.type = potentialTypes.id
                 WHERE cards.testPointId = ? 
                 ORDER BY cards.id DESC, potentials.permanentReferenceId, potentials.portableReferenceId, potentialTypes.id`, [id])
-            return this.subitemProcessor.generateSubitemArrayWithSidesAndPotentials(rows.length, rows.item).map((data) => {
+            return this.subitemProcessor.generateSubitemDataArray(rows.length, rows.item).map((data) => {
                 const subitem = this.subitemProcessor.getSubitemFromTableData(data)
-                const potentials = this.subitemProcessor.getPotentialsFromTableData(data)
-                subitem.setPotentials(potentials)
+                subitem.setPotentials(data.potentials)
                 return subitem
             })
         }

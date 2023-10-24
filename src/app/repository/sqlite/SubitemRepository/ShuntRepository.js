@@ -14,7 +14,7 @@ export class ShuntRepository extends SQLiteRepository {
     async getAll() {
         try {
             const result = await this.runSingleQueryTransaction(`SELECT cards.id, cards.testPointId, cards.uid, cards.name, cards.fromAtoB, cards.current, cards.ratioCurrent, cards.ratioVoltage, cards.factorSelected, cards.factor, cards.voltageDrop, cards.oldVoltageDrop, sides.sideAId, sides.sideBId FROM cards LEFT JOIN sides ON cards.id = sides.parentCardId WHERE cards.type = ? ORDER BY cards.id`, [SubitemTypes.SHUNT])
-            return this.responseProcessor.generateArrayWithSides(result.rows.length, result.rows.item)
+            return this.responseProcessor.generateSubitemDataArray(result.rows.length, result.rows.item)
                 .map(({ id, testPointId, uid, name, fromAtoB, current, ratioCurrent, ratioVoltage, factorSelected, factor, voltageDrop, sideA, sideB, oldVoltageDrop }) =>
                     new Shunt(id, testPointId, uid, name, factor, ratioVoltage, ratioCurrent, Boolean(factorSelected), current, voltageDrop, fromAtoB, sideA, sideB, oldVoltageDrop))
         }

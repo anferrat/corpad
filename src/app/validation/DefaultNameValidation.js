@@ -25,6 +25,8 @@ export class DefaultNameValidation extends Validation {
                     [SubitemTypes.SHUNT]: this.name.required().nullable(),
                     [SubitemTypes.STRUCTURE]: this.name.required().nullable(),
                     [SubitemTypes.TEST_LEAD]: this.name.required().nullable(),
+                    [SubitemTypes.ANODE_BED]: this.name.required().nullable(),
+                    [SubitemTypes.SOIL_RESISTIVITY]: this.name.required().nullable(),
                 }),
                 pipelineNameAsDefault: this.bool
             }))

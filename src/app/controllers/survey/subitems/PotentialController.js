@@ -6,18 +6,18 @@ import { UpdatePotential } from "../../../services/survey/subitems/potentials/Up
 import { UpdatePotentialList } from "../../../services/survey/subitems/potentials/UpdatePotentialList"
 import { Controller } from "../../../utils/Controller"
 import { PotentialValidation } from "../../../validation/PotentialValidation"
-import { unitConverter } from "../../_instances/general_services"
+import { convertPotentialUnits } from "../../_instances/converters"
 import { potentialPresenter } from "../../_instances/presenters"
 import { potentialRepo, potentialTypeRepo, referenceCellRepo, settingRepo } from "../../_instances/repositories"
 
 class PotentialController extends Controller {
-    constructor(potentialRepo, settingRepo, potentialPresenter, unitConverter, potentialTypeRepo, referenceCellRepo) {
+    constructor(potentialRepo, settingRepo, potentialPresenter, potentialTypeRepo, referenceCellRepo, convertPotentialUnits) {
         super()
         this.createPotentialService = new CreatePotential(potentialRepo, potentialPresenter)
         this.deletePotentialService = new DeletePotential(potentialRepo)
-        this.getPotentialListService = new GetPotentialList(potentialRepo, potentialTypeRepo, referenceCellRepo, settingRepo, unitConverter, potentialPresenter)
-        this.updatePotentialService = new UpdatePotential(potentialRepo, unitConverter, potentialPresenter)
-        this.updatePotentialListService = new UpdatePotentialList(potentialRepo, unitConverter, potentialPresenter)
+        this.getPotentialListService = new GetPotentialList(potentialRepo, potentialTypeRepo, referenceCellRepo, settingRepo, potentialPresenter, convertPotentialUnits)
+        this.updatePotentialService = new UpdatePotential(potentialRepo, potentialPresenter, convertPotentialUnits)
+        this.updatePotentialListService = new UpdatePotentialList(potentialRepo, potentialPresenter, convertPotentialUnits)
         this.getOnOffPotentialPairService = new GetOnOffPotentialPair(potentialRepo, potentialTypeRepo)
         this.validation = new PotentialValidation()
     }
@@ -69,9 +69,9 @@ const potentialController = new PotentialController(
     potentialRepo,
     settingRepo,
     potentialPresenter,
-    unitConverter,
     potentialTypeRepo,
-    referenceCellRepo
+    referenceCellRepo,
+    convertPotentialUnits
 )
 
 export const createPotential = (params, onError, onSuccess) => potentialController.create(params, onError, onSuccess)

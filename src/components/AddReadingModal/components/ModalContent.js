@@ -17,9 +17,12 @@ const SubitemTypeOptions = [
     SubitemTypes.BOND,
     SubitemTypes.SHUNT,
     SubitemTypes.ISOLATION,
+    SubitemTypes.ANODE_BED,
+    SubitemTypes.CIRCUIT,
+    SubitemTypes.SOIL_RESISTIVITY,
 ]
 
-const ModalContent = ({ onSelect, hideModal }) => {
+const ModalContent = ({ onSelect, hideModal, subitemTypes }) => {
 
     const onSelectHandler = (cardType) => {
         onSelect(cardType)
@@ -41,7 +44,7 @@ const ModalContent = ({ onSelect, hideModal }) => {
                 title='Select reading'
                 onBackPress={hideModal} />
             <ScrollView>
-                {renderItem(SubitemTypeOptions)}
+                {renderItem(subitemTypes)}
             </ScrollView>
         </>
     )

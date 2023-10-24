@@ -16,5 +16,7 @@ export const defaultNames = Object.freeze({
     [SubitemTypes.ISOLATION]: 'Isolation',
     [SubitemTypes.TEST_LEAD]: 'Test lead',
     [SubitemTypes.BOND]: 'Bond',
-    [SubitemTypes.CIRCUIT]: 'Circuit'
+    [SubitemTypes.CIRCUIT]: 'Circuit',
+    [SubitemTypes.ANODE_BED]: 'Anode bed',
+    [SubitemTypes.SOIL_RESISTIVITY]: 'Soil resistivity',
 })

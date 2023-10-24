@@ -29,7 +29,6 @@ export class _GetFileContent {
 
     async _exportGeoJson(data, features, includeMapLayers) {
         const mapLayerFeatures = includeMapLayers ? await this._getMapLayerFeatures() : []
-        console.log(mapLayerFeatures)
         const surveyMarkerFeatures = features
             .map((feature, index) => ({
                 ...feature,
@@ -47,7 +46,6 @@ export class _GetFileContent {
 
 
     async execute(data, headers, features, includeMapLayers, exportType) {
-        console.log(includeMapLayers)
         switch (exportType) {
             case ExportFormatTypes.CSV:
                 return this.csvParser.unparse(data, headers)

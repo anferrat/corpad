@@ -24,7 +24,7 @@ export class ExportToSpreadsheet {
     }
 
     async execute({ itemType, sorting, itemProperties, exportPotentials, referenceCellId, potentialTypeIdList, selectedSubitemTypes, pipelineIdList, groupPotentialsByPipeline, subitemProperties, includeAssets, exportType, includeMapLayers }) {
-        
+
         const exportedValues = await this._loadFromDatabaseService.execute({ itemType, sorting, itemProperties, exportPotentials, referenceCellId, potentialTypeIdList, selectedSubitemTypes, pipelineIdList, groupPotentialsByPipeline, subitemProperties })
         
         const { headers, data, features } = await this._convertToJson.execute(exportedValues, itemType, exportPotentials, groupPotentialsByPipeline)

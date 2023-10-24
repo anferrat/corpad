@@ -1,18 +1,17 @@
-import { PotentialUnits } from "../../../../../constants/global"
 import { Potential } from "../../../../entities/survey/subitems/Potential"
 
 export class UpdatePotential {
-    constructor (potentialRepo, unitConverter, potentialPresenter) {
+    constructor(potentialRepo, potentialPresenter, convertPotentialUnits) {
         this.potentialRepo = potentialRepo
-        this.unitConverter = unitConverter
         this.potentialPresenter = potentialPresenter
+        this.convertPotentialUnits = convertPotentialUnits
     }
 
     async execute(id, value, unit) {
         const currentTime = Date.now()
-        const convertedValue = this.unitConverter.convertVolts(value, unit, PotentialUnits.VOLTS)
         //Please note that potentialRepo.update can only update potential value, other properties are fixed set
-        const potential = new Potential(id, null, null, convertedValue, null, null, false, null)
-        return this.potentialPresenter.executeWithUpdate(await this.potentialRepo.update(potential, currentTime), currentTime)
+        const potential = new Potential(id, null, null, value, null, null, false, null)
+        const convertedPotential = this.convertPotentialUnits.executeSingle(potential, unit, true)
+        return this.potentialPresenter.executeWithUpdate(await this.potentialRepo.update(convertedPotential, currentTime), currentTime)
     }
 }

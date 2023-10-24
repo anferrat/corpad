@@ -14,7 +14,7 @@ export class BondRepository extends SQLiteRepository {
     async getAll() {
         try {
             const result = await this.runSingleQueryTransaction(`SELECT cards.id, cards.testPointId, cards.uid, cards.name, cards.fromAtoB, sides.sideAId, sides.sideBId, cards.current, cards.oldCurrent FROM cards LEFT JOIN sides ON cards.id = sides.parentCardId WHERE cards.type = ? ORDER BY cards.id`, [SubitemTypes.BOND])
-            return this.responseProcessor.generateArrayWithSides(result.rows.length, result.rows.item).map(
+            return this.responseProcessor.generateSubitemDataArray(result.rows.length, result.rows.item).map(
                 ({ id, testPointId, uid, name, fromAtoB, current, sideA, sideB, oldCurrent }) =>
                     new Bond(id, testPointId, uid, name, fromAtoB, current, sideA, sideB, oldCurrent))
         }

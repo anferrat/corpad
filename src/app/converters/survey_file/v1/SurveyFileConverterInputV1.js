@@ -44,11 +44,11 @@ export class SurveyFileConverterInputV1 {
 
     _createSurvey(dataRow) {
         const [uid, name, technician] = dataRow
-    /*
-        Due to design error, survey uids were not unique in the past in cases when user creates new survey from template, copies surveys between cloud and local storage, or loads survey from external storage.
-        With introduction v2 format, uid must be unique in order for assets to work correctly, therefore, every v1 file onLoad, will be assigned new uid, that will presist in v2 version and will be unique for all cases including listed above.
-        Since uid is not used for anything in survey file v1, it is an acceptable easy fix. 
-    */
+        /*
+            Due to design error, survey uids were not unique in the past in cases when user creates new survey from template, copies surveys between cloud and local storage, or loads survey from external storage.
+            With introduction v2 format, uid must be unique in order for assets to work correctly, therefore, every v1 file onLoad, will be assigned new uid, that will presist in v2 version and will be unique for all cases including listed above.
+            Since uid is not used for anything in survey file v1, it is an acceptable easy fix. 
+        */
         return new Survey(guid(), name, technician)
     }
 
@@ -78,7 +78,7 @@ export class SurveyFileConverterInputV1 {
         const [id, testPointId, uid, type, name, anodeMaterial, wireColor, wireGauge, fromAtoB, current, currentUnit, pipelineId, pipelineCardId, couponType, density, area, description, isolationType, shorted, rcType, nps, ratioCurrent, ratioVoltage, factorSelected, factor, voltageDrop] = dataRow
         const subitemSides = sides[id] ?? {}
         const { sideA, sideB } = subitemSides
-        return this.subitemFactory.execute(id, uid, name, type, testPointId, anodeMaterial, wireGauge, wireColor, convertBool(fromAtoB), current, sideA, sideB, ratioCurrent, ratioVoltage, null, null, null, voltageDrop, pipelineCardId, couponType, density, area, isolationType, convertBool(shorted), pipelineId, rcType, nps, factor, convertBool(factorSelected), description, null, null)
+        return this.subitemFactory.execute(id, uid, name, type, testPointId, anodeMaterial, wireGauge, wireColor, convertBool(fromAtoB), current, sideA, sideB, ratioCurrent, ratioVoltage, null, null, null, voltageDrop, pipelineCardId, couponType, density, area, isolationType, convertBool(shorted), pipelineId, rcType, nps, factor, convertBool(factorSelected), description, null, null, undefined, undefined, null, null, null, null, [], [])
     }
 
     _createCircuit(dataRow) {

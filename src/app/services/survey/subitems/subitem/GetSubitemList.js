@@ -1,9 +1,8 @@
-import { ItemTypes } from "../../../../../constants/global"
-import { Potential } from "../../../../entities/survey/subitems/Potential"
+import { ItemTypes} from "../../../../../constants/global"
 import { Error, errors } from "../../../../utils/Error"
 
 export class GetSubitemList {
-    constructor(testPointRepo, rectifierRepo, referenceCellRepo, potentialTypeRepo, pipelineRepo, settingRepo, multimeterFactory, listPresenter, subitemPresenter, potentialPresenter, unitConverter) {
+    constructor(testPointRepo, rectifierRepo, referenceCellRepo, potentialTypeRepo, pipelineRepo, settingRepo, multimeterFactory, listPresenter, subitemPresenter, potentialPresenter, convertSubitemUnits, convertPotentialUnits) {
         this.testPointRepo = testPointRepo
         this.rectifierRepo = rectifierRepo
         this.listPresenter = listPresenter
@@ -14,7 +13,8 @@ export class GetSubitemList {
         this.multimeterFactory = multimeterFactory
         this.subitemPresenter = subitemPresenter
         this.potentialPresenter = potentialPresenter
-        this.unitConverter = unitConverter
+        this.convertSubitemUnits = convertSubitemUnits
+        this.convertPotentialUnits = convertPotentialUnits
     }
 
     _getBasicList(id, itemType) {
@@ -53,21 +53,25 @@ export class GetSubitemList {
         const potentialUnit = settings.defaultPotentialUnit ?? null
         const { multimeter } = settings
         const availableMeasurementTypes = multimeter && multimeter.type ? this.multimeterFactory.execute(multimeter.type).getSupportedMeasurementTypes() : []
-        subitems.forEach(subitem => {
+
+        const convertertedSubitems = subitems.map(subitem => {
+            //Calculate data if needed for subitems
+            subitem.calculate()
+
             //Convert units to display potentials
-            subitem.potentials.forEach(({ value }, index) => {
+            const convertedPotentials = this.convertPotentialUnits.execute(subitem.potentials, potentialUnit, false)
 
-                subitem.potentials[index].value = this.unitConverter.convertVolts(value, Potential.unit, potentialUnit)
+            const convertedSubitem = this.convertSubitemUnits.execute(subitem, false)
 
-            })
             // using potential presenter get object for potential list
-            const { potentials } = this.potentialPresenter.executeWithList(subitem.potentials, potentialTypes, referenceCells, potentialUnit)
-            // assign presenter object to potentials
+            const { potentials } = this.potentialPresenter.executeWithList(convertedPotentials, potentialTypes, referenceCells, potentialUnit)
 
-            subitem.setPotentials(potentials)
+            // assign presenter object to potentials
+            convertedSubitem.setPotentials(potentials)
+            return convertedSubitem
 
         })
 
-        return this.subitemPresenter.executeWithList(subitems, pipelineList, referenceCells, potentialUnit, availableMeasurementTypes)
+        return this.subitemPresenter.executeWithList(convertertedSubitems, pipelineList, referenceCells, potentialUnit, availableMeasurementTypes)
     }
 }

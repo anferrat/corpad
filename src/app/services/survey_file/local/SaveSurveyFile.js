@@ -58,10 +58,10 @@ export class SaveSurveyFile {
         const surveyFileContent = JSON.stringify(this.surveyFileConverterOutput.execute(surveyFile))
         const path = `${(await this.fileSystemRepo.getLocation(FileSystemLocations.SURVEYS))}/${fileId}`
         const isNew = isSurveyNew || !((await this.fileSystemRepo.getHash(path)) === hash)
-        const file = await this._saveSurveyFile(isNew, fileId, surveyFileContent)
-        const newHash = await this.fileSystemRepo.getHash(file.path)
         await this._copyNewAssetFiles(surveyFile.survey.uid, localFilesToCopy)
         await this._deleteOldAssetFiles(localFilesToDelete)
+        const file = await this._saveSurveyFile(isNew, fileId, surveyFileContent)
+        const newHash = await this.fileSystemRepo.getHash(file.path)
         return {
             fileName: file.name,
             cloudId: null,

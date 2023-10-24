@@ -6,18 +6,18 @@ import { SharePhoto } from "../../../services/survey/other/photos/SharePhoto"
 import { UpdateItemPhotos } from "../../../services/survey/other/photos/UpdateItemPhotos"
 import { Controller } from "../../../utils/Controller"
 import { createAssetFileService, deleteAssetFileService } from "../../_instances/assets"
-import { documentPicker, imagePicker, permissions, shareService } from "../../_instances/general_services"
+import { documentPicker, fileNameGenerator, imagePicker, permissions, shareService } from "../../_instances/general_services"
 import { assetRepo, fileSystemRepo } from "../../_instances/repositories"
 
 class MediaController extends Controller {
-    constructor(fileSystemRepo, assetRepo, imagePicker, documentPicker, shareService, createAssetFileService, deleteAssetFileService, permissions) {
+    constructor(fileSystemRepo, assetRepo, imagePicker, documentPicker, shareService, createAssetFileService, deleteAssetFileService, permissions, fileNameGenerator) {
         super()
         this.addPhotoToAssetsService = new AddPhotoToAssets(assetRepo, fileSystemRepo, createAssetFileService)
         this.deletePhotoFromAssetsService = new DeletePhotoFromAssets(deleteAssetFileService, assetRepo)
         this.getNewPhotoService = new GetNewPhoto(imagePicker, documentPicker)
         this.updateItemPhotosService = new UpdateItemPhotos(assetRepo, fileSystemRepo, createAssetFileService, deleteAssetFileService)
         this.sharePhotoService = new SharePhoto(shareService)
-        this.savePhotoToDownloadsService = new SavePhotoToDownloads(fileSystemRepo, permissions)
+        this.savePhotoToDownloadsService = new SavePhotoToDownloads(fileSystemRepo, permissions, fileNameGenerator)
     }
 
     addPhotoToAssets(params, onError = null, onSuccess = null) {
@@ -73,7 +73,8 @@ const mediaController = new MediaController(
     shareService,
     createAssetFileService,
     deleteAssetFileService,
-    permissions
+    permissions,
+    fileNameGenerator
 )
 
 export const addPhotoToAssets = ({ uri, name, itemId, itemType }, onError, onSuccess) => mediaController.addPhotoToAssets({ uri, name, itemId, itemType }, onError, onSuccess)

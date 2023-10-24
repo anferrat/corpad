@@ -18,7 +18,7 @@ const getOptionByFilter = (filter) => {
         case 'testPointTypeFilter':
             return Object.values(TestPointTypes).map(type => ({ value: type, title: TestPointTypeLabels[type], icon: TestPointTypeIcons[type] }))
         case 'readingTypeFilter':
-            return Object.values(SubitemTypes).filter(type => type !== SubitemTypes.CIRCUIT).map(type => ({ value: type, icon: SubitemTypeIcons[type], title: SubitemTypeLabels[type] }))
+            return Object.values(SubitemTypes).filter(type => type !== SubitemTypes.CIRCUIT && type !== SubitemTypes.ANODE_BED).map(type => ({ value: type, icon: SubitemTypeIcons[type], title: SubitemTypeLabels[type] }))
     }
 }
 const initFilter = []

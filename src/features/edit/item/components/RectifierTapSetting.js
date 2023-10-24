@@ -67,7 +67,7 @@ export default React.memo(RectifierTapSetting)
 
 const styles = StyleSheet.create({
     select: {
-        paddingVertical: 12,
+        paddingBottom: 12,
     },
     row: {
         flexDirection: 'row',

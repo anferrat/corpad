@@ -70,15 +70,38 @@ export class SurveyfileConverterOutputV2 {
                     const { wireGauge, wireColor } = subitem
                     return [id, uid, name, type, parentId, wireGauge, wireColor]
                 }
+                case SubitemTypes.ANODE_BED: {
+                    const { enclosureType, bedType, materialType, anodes } = subitem
+                    return [id, uid, name, type, parentId, enclosureType, bedType, materialType, this._generateAnodeBedAnodes(anodes)]
+                }
+                case SubitemTypes.SOIL_RESISTIVITY: {
+                    const { spacingUnit, resistivityUnit, comment, layers } = subitem
+                    return [id, uid, name, type, parentId, spacingUnit, resistivityUnit, comment, this._generateSoilResistivityLayers(layers)]
+                }
                 default:
                     return []
             }
         })
     }
 
-    _generatePotentials(potentials) {//add timeModifed + add it to Potential entity
+    _generateAnodeBedAnodes(anodes) {
+        return anodes.map(anode => {
+            //old current to be implemented
+            const { id, uid, parentId, current, wireColor, wireGauge } = anode
+            return [id, uid, parentId, current, wireColor, wireGauge, null]
+        })
+    }
+
+    _generateSoilResistivityLayers(layers) {
+        return layers.map(layer => {
+            const { id, uid, parentId, spacing, resistanceToZero, resistanceToNext, resistivityToZero, resistivityToNext } = layer
+            return [id, uid, parentId, spacing, resistanceToZero, resistanceToNext, resistivityToZero, resistivityToNext]
+        })
+    }
+
+    _generatePotentials(potentials) {
         return potentials.map(({ id, uid, subitemId, value, referenceCellId, potentialType, isPortableReference, prevValue }) =>
-            [id, uid, subitemId, value, referenceCellId, potentialType, isPortableReference, prevValue])
+            [id, uid, subitemId, value, referenceCellId, potentialType, isPortableReference, prevValue, null])
     }
 
     _generatePotentialTypes(potentialTypes) {
@@ -102,8 +125,9 @@ export class SurveyfileConverterOutputV2 {
     }
 
     _generateSurvey(survey) {
+        //array here for potentialType settings (autocreate). To be implemented in future
         const { uid, name, technician } = survey
-        return [uid, name, technician]
+        return [uid, name, technician, []]
     }
 
     execute(surveyFile) {

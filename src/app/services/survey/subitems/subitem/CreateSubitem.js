@@ -11,6 +11,7 @@ export class CreateSubitem {
         this.referenceCellRepo = referenceCellRepo
         this.potentialTypeRepo = potentialTypeRepo
         this.potentialRepo = potentialRepo
+        this.SUBITEMS_WITH_POTENTIALS = [SubitemTypes.ANODE, SubitemTypes.COUPON, SubitemTypes.PIPELINE, SubitemTypes.REFERENCE_CELL, SubitemTypes.RISER, SubitemTypes.STRUCTURE, SubitemTypes.TEST_LEAD]
     }
 
     _getPotentialIdByType(potentialTypes, permType) {
@@ -36,12 +37,11 @@ export class CreateSubitem {
 
 
     async execute(subitemType, parentId) {
-        const SUBITEMS_WITH_POTENTIALS = [SubitemTypes.ANODE, SubitemTypes.COUPON, SubitemTypes.PIPELINE, SubitemTypes.REFERENCE_CELL, SubitemTypes.RISER, SubitemTypes.STRUCTURE, SubitemTypes.TEST_LEAD]
         const uid = guid()
         const subitem = this.subitemFactory.execute(null, uid, null, subitemType, parentId)
         const { autoCreatePotentials } = await this.settingRepo.get()
         const created = await this.subitemRepo.create(subitem)
-        if (autoCreatePotentials && ~SUBITEMS_WITH_POTENTIALS.indexOf(subitemType))
+        if (autoCreatePotentials && ~this.SUBITEMS_WITH_POTENTIALS.indexOf(subitemType))
             await this._autoCreatePotentials(created.id)
         return this.basicPresenter.execute(created)
     }

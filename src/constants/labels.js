@@ -1,4 +1,4 @@
-import { ItemTypes, SubitemTypes, PipeDiameters, WireColors, TestPointTypes, PermanentPotentialTypes, SortingOptions, ItemStatuses, PipeSchedules, WireGauges, CurrentUnits, AreaUnits, CurrentDensityUnits, FactorUnits, PotentialUnits, AnodeMaterials, ReferenceCellTypes, IsolationTypes, CouponTypes, PipelineMaterials, PipelineProducts, PowerSources, TapOptions, CoarseFineOptions, ExportItemProperties, ExportSubitemProperties, CalculatorTypes, PipelineCoating, IsolationShorted, MultimeterTypes, TimeUnits, MultimeterMeasurementTypes, MultimeterCycles, MultimeterSyncModes, ImageSources, MapLayerFeatures, StrokeColors, StrokeWidths, ExportFormatTypes } from "./global"
+import { ItemTypes, SubitemTypes, PipeDiameters, WireColors, TestPointTypes, PermanentPotentialTypes, SortingOptions, ItemStatuses, PipeSchedules, WireGauges, CurrentUnits, AreaUnits, CurrentDensityUnits, FactorUnits, PotentialUnits, AnodeMaterials, ReferenceCellTypes, IsolationTypes, CouponTypes, PipelineMaterials, PipelineProducts, PowerSources, TapOptions, CoarseFineOptions, ExportItemProperties, ExportSubitemProperties, CalculatorTypes, PipelineCoating, IsolationShorted, MultimeterTypes, TimeUnits, MultimeterMeasurementTypes, MultimeterCycles, MultimeterSyncModes, ImageSources, MapLayerFeatures, StrokeColors, StrokeWidths, ExportFormatTypes, LengthUnits, ResistivityUnits, AnodeBedEnclosureTypes, AnodeBedMaterialTypes, AnodeBedTypes } from "./global"
 
 export const DefaultNames = Object.freeze({
     [ItemTypes.TEST_POINT]: 'TP',
@@ -14,7 +14,9 @@ export const DefaultNames = Object.freeze({
     [SubitemTypes.ISOLATION]: 'Isolation',
     [SubitemTypes.TEST_LEAD]: 'Test lead',
     [SubitemTypes.BOND]: 'Bond',
-    [SubitemTypes.CIRCUIT]: 'Circuit'
+    [SubitemTypes.CIRCUIT]: 'Circuit',
+    [SubitemTypes.ANODE_BED]: 'Anode bed',
+    [SubitemTypes.SOIL_RESISTIVITY]: 'Soil resistivity'
 })
 
 export const PipeDiameterLabels = Object.freeze({
@@ -109,7 +111,9 @@ export const SubitemTypeLabels = Object.freeze({
     [SubitemTypes.RISER]: 'Pipeline riser',
     [SubitemTypes.SHUNT]: 'Shunt',
     [SubitemTypes.STRUCTURE]: 'Foreign structure',
-    [SubitemTypes.TEST_LEAD]: 'Test lead'
+    [SubitemTypes.TEST_LEAD]: 'Test lead',
+    [SubitemTypes.ANODE_BED]: 'Anode bed',
+    [SubitemTypes.SOIL_RESISTIVITY]: 'Soil resistivity test'
 })
 
 export const PermanentPotentialTypeLabels = Object.freeze({
@@ -205,6 +209,31 @@ export const PotentialUnitLabels = Object.freeze({
     [PotentialUnits.NEGATIVE_VOLTS]: '-V',
     [PotentialUnits.VOLTS]: 'V'
 })
+
+export const LengthUnitLabels = Object.freeze({
+    [LengthUnits.CENTIMETERS]: 'cm',
+    [LengthUnits.METERS]: 'm',
+    [LengthUnits.FEET]: 'ft'
+})
+
+export const LengthUnitDescriptionLabels = Object.freeze({
+    [LengthUnits.CENTIMETERS]: 'Centimeter',
+    [LengthUnits.METERS]: 'Meter',
+    [LengthUnits.FEET]: 'Foot'
+})
+
+export const ResistivityUnitLabels = Object.freeze({
+    [ResistivityUnits.OHM_CENTIMITTERS]: '\u03A9-cm',
+    [ResistivityUnits.OHM_FEET]: '\u03A9-ft',
+    [ResistivityUnits.OHM_METERS]: '\u03A9-m'
+})
+
+export const ResistivityUnitDescriptionLabels = Object.freeze({
+    [ResistivityUnits.OHM_CENTIMITTERS]: 'Ohm-centimeter',
+    [ResistivityUnits.OHM_FEET]: 'Ohm-foot',
+    [ResistivityUnits.OHM_METERS]: 'Ohm-meter'
+})
+
 
 export const PotentialUnitDescriptionLabels = Object.freeze({
     [PotentialUnits.MILIVOLTS]: 'Milivolts',
@@ -445,4 +474,26 @@ export const StrokeWidthLabels = Object.freeze({
 export const ExportFormatTypeLabeles = Object.freeze({
     [ExportFormatTypes.CSV]: 'Comma Separated File (.csv)',
     [ExportFormatTypes.KML]: 'Keyhole Markup Language File (.kml)'
+})
+
+export const AnodeBedEnclosureTypeLabels = Object.freeze({
+    [AnodeBedEnclosureTypes.BURIED]: 'Buired',
+    [AnodeBedEnclosureTypes.JUNCTION_BOX]: 'Junction box',
+    [AnodeBedEnclosureTypes.UNDEGROUND_BOX]: 'Undeground box'
+})
+
+export const AnodeBedMateriaTypelLabels = Object.freeze({
+   [AnodeBedMaterialTypes.ALUMINUM]: 'Aluminum',
+   [AnodeBedMaterialTypes.CONDUCTIVE_POLYMER]: 'Conductive polymer',
+   [AnodeBedMaterialTypes.GRAPHITE]: 'Graphite',
+   [AnodeBedMaterialTypes.MAGNETITE]: 'Magnetite',
+   [AnodeBedMaterialTypes.MIXED_METAL_OXIDE]: 'Mixed metal oxide',
+   [AnodeBedMaterialTypes.PLATINUM]: 'Platinum',
+   [AnodeBedMaterialTypes.SCRAP_METAL]: 'Scrap metal'
+})
+
+export const AnodeBedTypeLabesl = Object.freeze({
+    [AnodeBedTypes.DEEP_VERTICAL]: 'Deep vertical',
+    [AnodeBedTypes.SHALLOW_HORIZONTAL]: 'Shallow horizontal',
+    [AnodeBedTypes.SHALLOW_VERTICAL]: 'Shallow vertical'
 })

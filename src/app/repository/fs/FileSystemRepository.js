@@ -45,11 +45,10 @@ export class FileSystemRepository {
 
     async copyFile(filePath, destinationPath) {
         try {
-            //write file
             await RNFS.copyFile(filePath, destinationPath)
         }
         catch (er) {
-            throw new Error(errors.FILESYSTEM, 'Error while copying file', er, 404)
+                throw new Error(errors.FILESYSTEM, 'Error while copying file', er, 404)
         }
     }
 

@@ -1,13 +1,11 @@
-import { Potential } from "../../../../entities/survey/subitems/Potential"
-
 export class GetPotentialList {
-    constructor (potentialRepo, potentialTypeRepo, referenceCellRepo, settingRepo, unitConverter, potentialPresenter) {
+    constructor(potentialRepo, potentialTypeRepo, referenceCellRepo, settingRepo, potentialPresenter, convertPotentialUnits) {
         this.potentialRepo = potentialRepo
         this.potentialTypeRepo = potentialTypeRepo
         this.referenceCellRepo = referenceCellRepo
         this.settingRepo = settingRepo
         this.potentialPresenter = potentialPresenter
-        this.unitConverter = unitConverter
+        this.convertPotentialUnits = convertPotentialUnits
     }
 
     async execute(subitemId, itemId) {
@@ -17,11 +15,8 @@ export class GetPotentialList {
             this.potentialRepo.getBySubitemId(subitemId),
             this.settingRepo.get()
         ])
+        const convertedPotentials = this.convertPotentialUnits.execute(potentials, settings.defaultPotentialUnit, false)
 
-        potentials.forEach(({ value }, index) => {
-            potentials[index].value = this.unitConverter.convertVolts(value, Potential.unit, settings.defaultPotentialUnit)
-        })
-
-        return this.potentialPresenter.executeWithList(potentials, potentialTypes, referenceCells, settings.defaultPotentialUnit)
+        return this.potentialPresenter.executeWithList(convertedPotentials, potentialTypes, referenceCells, settings.defaultPotentialUnit)
     }
 }

@@ -15,6 +15,7 @@ const MarkerInfo = ({ zoomToCoordinates, navigateToView, navigateToMapLayerPoint
         location,
         icon,
         iconColor,
+        subtitleIcon,
         onPress,
         onLongPress,
         onShare } = useActiveMarkerInfo({ zoomToCoordinates, navigateToView, navigateToMapLayerPointView, shareActiveLocation })
@@ -42,6 +43,11 @@ const MarkerInfo = ({ zoomToCoordinates, navigateToView, navigateToMapLayerPoint
                             {name}
                         </Text>
                         <View style={styles.statusView}>
+                            {subtitleIcon !== null ?
+                                <Icon
+                                    name={subtitleIcon}
+                                    style={styles.subtitleIcon}
+                                    fill={basic} /> : null}
                             <Text
                                 category='s1'
                                 appearance='hint'>

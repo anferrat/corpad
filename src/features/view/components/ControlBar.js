@@ -1,9 +1,8 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import ExpandedBar from './ExpandedBar'
 import ControlButton from './ControlButton'
 import { AddReadingModal } from '../../../components/AddReadingModal'
-import { ItemTypes } from '../../../constants/global'
-import { StatusBar } from 'react-native'
+import { ItemTypes, SubitemTypes } from '../../../constants/global'
 import { ScrollView } from 'react-native-gesture-handler'
 import { StyleSheet } from 'react-native'
 
@@ -12,12 +11,20 @@ const ControlBar = ({ createSubitem, deleteItem, itemType, displayOnMap, display
 
     const hideModal = React.useCallback(() => setVisible(false), [])
 
+    const subitemTypes = React.useMemo(() => {
+        switch (itemType) {
+            case ItemTypes.TEST_POINT:
+                return [SubitemTypes.PIPELINE, SubitemTypes.RISER, SubitemTypes.STRUCTURE, SubitemTypes.TEST_LEAD, SubitemTypes.ANODE, SubitemTypes.COUPON, SubitemTypes.REFERENCE_CELL, SubitemTypes.BOND, SubitemTypes.SHUNT, SubitemTypes.ISOLATION, SubitemTypes.SOIL_RESISTIVITY]
+            case ItemTypes.RECTIFIER:
+                return [SubitemTypes.ANODE_BED, SubitemTypes.CIRCUIT]
+            default:
+                return []
+        }
+    }, [itemType])
+
     const createSubitemHandler = React.useCallback(() => {
-        if (itemType === ItemTypes.TEST_POINT)
-            setVisible(true)
-        else if (itemType === ItemTypes.RECTIFIER)
-            createSubitem('CT')
-    }, [setVisible, itemType])
+        setVisible(true)
+    }, [])
 
     return (
         <>
@@ -54,6 +61,7 @@ const ControlBar = ({ createSubitem, deleteItem, itemType, displayOnMap, display
                 </ScrollView>
             </ExpandedBar>
             <AddReadingModal
+                subitemTypes={subitemTypes}
                 visible={visible}
                 hideModal={hideModal}
                 onSelect={createSubitem}

@@ -10,24 +10,31 @@ const NamePreview = ({ name, type, pipelineNameAsDefault, pipelineNameSettingAct
     const displayName = pipelineNameAsDefault && pipelineNameSettingActive ? '<PipelineName>' : (name === null ? `${index}` : `${name} ${index}`)
 
     return (
-        <View
-            style={styles.mainView}>
+        <>
+            <Text
+                category='label'
+                appearance='hint'
+                style={styles.text}
+            >Example</Text>
             <View
-                style={styles.title}>
-                <Text category='h6'>{displayName}</Text>
+                style={styles.mainView}>
                 <View
-                    style={styles.subtitle}>
-                    <Text category='s2' appearance='hint'>
-                        {ItemTypeLabels[type] ?? SubitemTypeLabels[type] ?? 'Error'}
-                    </Text>
-                    <Icon
-                        fill={basic}
-                        pack='cp'
-                        name={type}
-                        style={styles.icon} />
+                    style={styles.title}>
+                    <Text category='h6'>{displayName}</Text>
+                    <View
+                        style={styles.subtitle}>
+                        <Text category='s2' appearance='hint'>
+                            {ItemTypeLabels[type] ?? SubitemTypeLabels[type] ?? 'Error'}
+                        </Text>
+                        <Icon
+                            fill={basic}
+                            pack='cp'
+                            name={type}
+                            style={styles.icon} />
+                    </View>
                 </View>
             </View>
-        </View>
+        </>
     )
 }
 
@@ -35,7 +42,6 @@ export default React.memo(NamePreview)
 
 const styles = StyleSheet.create({
     mainView: {
-        marginTop: 32,
         padding: 12,
         borderWidth: 1,
         borderRadius: 6,
@@ -51,6 +57,10 @@ const styles = StyleSheet.create({
     },
     title: {
         flex: -1,
+    },
+    text: {
+        marginTop: 32,
+        marginBottom: 6
     },
     subtitle: {
         flexDirection: 'row',

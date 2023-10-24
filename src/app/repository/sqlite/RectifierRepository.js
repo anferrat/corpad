@@ -4,12 +4,13 @@ import { Marker } from "../../entities/survey/items/Marker"
 import { Error, errors } from "../../utils/Error"
 import { ItemResponseProcessor } from "./utils/ItemResponseProcessor"
 import { ItemTypes, SubitemTypes } from "../../../constants/global"
-import { Circuit } from "../../entities/survey/subitems/Circuit"
+import { SubitemResponseProcessor } from "./utils/SubitemResponseProcessor"
 
 export class RectifierRepository extends SQLiteRepository {
     constructor() {
         super()
         this.responseProcessor = new ItemResponseProcessor()
+        this.subitemProcessor = new SubitemResponseProcessor()
         this.tableName = 'rectifiers'
         this.subitemTable = 'circuits'
     }
@@ -93,10 +94,13 @@ export class RectifierRepository extends SQLiteRepository {
 
     async getSubitemsById(id) {
         try {
-
-            const result = await super.runSingleQueryTransaction(`SELECT * FROM circuits WHERE rectifierId = ? ORDER BY id DESC`, [id])
-            return this.generateArray(result.rows.length, result.rows.item).map(({ id, rectifierId, uid, name, ratiCurrent, ratioVoltage, targetMin, targetMax, current, voltage, voltageDrop }) =>
-                new Circuit(id, rectifierId, uid, name, ratiCurrent, ratioVoltage, targetMin, targetMax, current, voltage, voltageDrop))
+            const result = await super.runSingleQueryTransaction(`
+            SELECT circuits.*, anodeBedAnodes.id AS anodeId, anodeBedAnodes.uid as anodeUid, anodeBedAnodes.current as anodeCurrent, anodeBedAnodes.wireGauge AS anodeWireGauge, anodeBedAnodes.wireColor AS anodeWireColor FROM circuits
+            LEFT JOIN anodeBedAnodes ON
+            circuits.id = anodeBedAnodes.parentId 
+            WHERE rectifierId = ? 
+            ORDER BY id DESC`, [id])
+            return this.subitemProcessor.generateSubitemDataArray(result.rows.length, result.rows.item).map(this.subitemProcessor.getSubitemFromTableData)
         }
         catch (err) {
             throw new Error(errors.DATABASE, `Unable to get list of subitems`, err)
@@ -137,7 +141,7 @@ export class RectifierRepository extends SQLiteRepository {
                     SELECT COUNT(*) 
                     FROM assets 
                     WHERE assets.rectifierId = rectifiers.id
-                ) AS assetCount, circuits.id, circuits.uid, circuits.name, '${SubitemTypes.CIRCUIT}' AS type, circuits.current AS v1, circuits.voltage AS v2 
+                ) AS assetCount, circuits.id, circuits.uid, circuits.name, type, circuits.current AS v1, circuits.voltage AS v2 
                 FROM rectifiers
                 LEFT JOIN circuits ON
                 rectifiers.id = circuits.rectifierId
@@ -158,7 +162,7 @@ export class RectifierRepository extends SQLiteRepository {
                     FROM assets 
                     WHERE assets.rectifierId = rectifiers.id
                 ) AS assetCount, 
-                circuits.id, circuits.uid, circuits.name, '${SubitemTypes.CIRCUIT}' AS type, targetMin AS v2, targetMax AS v1 
+                circuits.id, circuits.uid, circuits.name, type, targetMin AS v2, targetMax AS v1 
                 FROM rectifiers
                 LEFT JOIN circuits ON
                 rectifiers.id = circuits.rectifierId

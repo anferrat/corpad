@@ -2,18 +2,18 @@ import React from 'react'
 import { StyleSheet } from 'react-native'
 import { Button } from '@ui-kitten/components'
 import { addIcon } from '../../../../components/Icons'
-import { getButtonTitle } from '../helpers/functions'
+import { ItemTypes } from '../../../../constants/global'
 
-const AddButton = ({ showModal, itemType, onSelect }) => {
-    if (itemType === 'TEST_POINT' || itemType === 'RECTIFIER')
+const AddButton = ({ showModal, itemType }) => {
+    if (itemType === ItemTypes.TEST_POINT || itemType === ItemTypes.RECTIFIER)
         return (
             <Button
-                onPress={itemType === 'TEST_POINT' ? showModal : onSelect.bind(this, 'CT')}
+                onPress={showModal}
                 appearance='ghost'
                 style={styles.button}
                 size='medium'
                 accessoryLeft={addIcon}>
-                {getButtonTitle(itemType)}
+                Add reading
             </Button>
         )
     else return null
