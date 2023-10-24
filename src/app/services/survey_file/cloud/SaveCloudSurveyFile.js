@@ -71,11 +71,11 @@ export class SaveCloudSurveyFile {
                 localFilesToDelete
             } = await this._assetControl(surveyFile.survey.uid, surveyFile.assets)
             this._deleteMissingAssets(surveyFile, missingAssets, removeMissingAssets)
-            const { fileId } = await this._saveSurveyFile(surveyFile, fileName, isSurveyNew, cloudId)
             await Promise.all([
                 this._uploadAssetFiles(localFilesToUpload, surveyFile.survey.uid, onUpload),
                 this._deleteAssetFiles(cloudFilesToDelete, localFilesToDelete),
                 this._copyAssetFiles(surveyFile.survey.uid, localFilesToCopy)])
+            const { fileId } = await this._saveSurveyFile(surveyFile, fileName, isSurveyNew, cloudId)
             return {
                 fileName: fileName,
                 cloudId: fileId,

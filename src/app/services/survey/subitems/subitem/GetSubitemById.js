@@ -2,7 +2,7 @@ import { SubitemTypes } from "../../../../../constants/global"
 import { Error, errors } from "../../../../utils/Error"
 
 export class GetSubitemById {
-    constructor(subitemRepo, defaultNameRepo, testPointRepo, rectifierRepo, pipelineRepo, settingRepo, subitemPresenter) {
+    constructor(subitemRepo, defaultNameRepo, testPointRepo, rectifierRepo, pipelineRepo, settingRepo, subitemPresenter, convertSubitemUnits) {
         this.subitemRepo = subitemRepo
         this.subitemPresenter = subitemPresenter
         this.defaultNameRepo = defaultNameRepo
@@ -10,6 +10,7 @@ export class GetSubitemById {
         this.rectifierRepo = rectifierRepo
         this.settingRepo = settingRepo
         this.pipelineRepo = pipelineRepo
+        this.convertSubitemUnits = convertSubitemUnits
     }
 
     async _getPipelineNameAsDefaultSetting(subitemType) {
@@ -19,7 +20,7 @@ export class GetSubitemById {
     }
 
     _getSubitemList(subitemType, itemId) {
-        if (subitemType === SubitemTypes.CIRCUIT)
+        if (subitemType === SubitemTypes.CIRCUIT || subitemType===SubitemTypes.ANODE_BED)
             return this.rectifierRepo.getSubitemsById(itemId)
         else if (~Object.values(SubitemTypes).indexOf(subitemType))
             return this.testPointRepo.getSubitemsById(itemId)
@@ -53,7 +54,8 @@ export class GetSubitemById {
         if (subitem.parentId !== itemId) {
             throw new Error(errors.GENERAL, `Subitem with id ${subitemId} doesn't belong to item with id ${itemId}`)
         }
+        const convertedSubitem = this.convertSubitemUnits.execute(subitem, false)
         const defaultName = this._getDefaultName(defaultNameBase, this._getDefaultNameIndex(subitemList, subitemType))
-        return this.subitemPresenter.execute(subitem, pipelineNameAsDefualt, subitemList, pipelineList, defaultName)
+        return this.subitemPresenter.execute(convertedSubitem, pipelineNameAsDefualt, subitemList, pipelineList, defaultName)
     }
 }

@@ -43,7 +43,7 @@ export class _ItemHeaderConverter {
     _convertMarkers(exportedValues) {
         //generates list of markers for geoExport
         return exportedValues.map(({ marker }) => {
-            return marker.getFeature()
+            return marker ? marker.getFeature() : null
         })
     }
 }

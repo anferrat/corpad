@@ -1,4 +1,4 @@
-import { SubitemTypes } from "../../../constants/global"
+import { LengthUnits, ResistivityUnits, SubitemTypes } from "../../../constants/global"
 import { Error, errors } from "../../utils/Error"
 import { Anode } from "../../entities/survey/subitems/Anode"
 import { Bond } from "../../entities/survey/subitems/Bond"
@@ -11,11 +11,13 @@ import { Riser } from "../../entities/survey/subitems/Riser"
 import { Shunt } from "../../entities/survey/subitems/Shunt"
 import { Structure } from "../../entities/survey/subitems/Structure"
 import { TestLead } from "../../entities/survey/subitems/TestLead"
+import { AnodeBed } from "../../entities/survey/subitems/AnodeBed"
+import { SoilResistivity } from "../../entities/survey/subitems/SoilResistivity"
 
 export class SubitemFactory {
     constructor() { }
 
-    execute(id, uid, name, type, parentId, anodeMaterial = null, wireGauge = null, wireColor = null, fromAtoB = true, current = null, sideA = [], sideB = [], ratioCurrent = null, ratioVoltage = null, targetMin = null, targetMax = null, voltage = null, voltageDrop = null, pipelineCardId = null, couponType = null, density = null, area = null, isolationType = null, shorted = false, pipelineId = null, rcType = null, nps = null, factor = null, factorSelected = false, description = null, prevCurrent = null, prevVoltageDrop = null) {
+    execute(id, uid, name, type, parentId, anodeMaterial = null, wireGauge = null, wireColor = null, fromAtoB = true, current = null, sideA = [], sideB = [], ratioCurrent = null, ratioVoltage = null, targetMin = null, targetMax = null, voltage = null, voltageDrop = null, pipelineCardId = null, couponType = null, density = null, area = null, isolationType = null, shorted = false, pipelineId = null, rcType = null, nps = null, factor = null, factorSelected = false, description = null, prevCurrent = null, prevVoltageDrop = null, spacingUnit = LengthUnits.METERS, resistivityUnit = ResistivityUnits.OHM_METERS, comment = null, enclosureType = null, bedType = null, materialType = null, anodes = [], layers = []) {
         switch (type) {
             case SubitemTypes.ANODE:
                 return new Anode(id, parentId, uid, name, anodeMaterial, wireGauge, wireColor)
@@ -39,6 +41,10 @@ export class SubitemFactory {
                 return new Structure(id, parentId, uid, name, description)
             case SubitemTypes.TEST_LEAD:
                 return new TestLead(id, parentId, uid, name, wireGauge, wireColor)
+            case SubitemTypes.ANODE_BED:
+                return new AnodeBed(id, parentId, uid, name, enclosureType, bedType, materialType, anodes)
+            case SubitemTypes.SOIL_RESISTIVITY:
+                return new SoilResistivity(id, parentId, uid, name, spacingUnit, resistivityUnit, comment, layers)
             default: throw new Error(errors.GENERAL, `Unable to update subitem with type ${type}`)
         }
     }

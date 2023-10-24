@@ -8,8 +8,13 @@ import { Riser } from "../../../entities/survey/subitems/Riser"
 import { Structure } from "../../../entities/survey/subitems/Structure"
 import { Shunt } from "../../../entities/survey/subitems/Shunt"
 import { TestLead } from "../../../entities/survey/subitems/TestLead"
-import { SubitemTypes } from "../../../entities/survey/subitems/Subitem"
+import { SubitemTypes } from "../../../../constants/global"
 import { Potential } from "../../../entities/survey/subitems/Potential"
+import { AnodeBedAnode } from "../../../entities/survey/subitems/AnodeBedAnode"
+import { SoilResistivityLayer } from "../../../entities/survey/subitems/SoilResistivityLayer"
+import { Circuit } from "../../../entities/survey/subitems/Circuit"
+import { AnodeBed } from "../../../entities/survey/subitems/AnodeBed"
+import { SoilResistivity } from "../../../entities/survey/subitems/SoilResistivity"
 
 
 //DO NOT CHANGE these class methods by itself. they are tightly coupled with queries in subitemRepo. 
@@ -17,7 +22,15 @@ import { Potential } from "../../../entities/survey/subitems/Potential"
 export class SubitemResponseProcessor {
     constructor() { }
 
-    generateArrayWithSides(length, item) {
+    generateSubitemDataArray(length, item) {
+        /*
+Takes output from database response and folds some data into arrays and returs array of subitems where one of the property is an array.
+Array properties: 
+potentials [] - potentials for most of subitems (PL, AN, RS etc.)
+sideA [], sideB [] - side arrays, contain list of ids of subitem (SH, BD, IK)
+anodes [] - AnodeBedAnodes array with list of anodes for AB
+layers [] = SoilResistivityLayers array for SR subitem
+        */
         let result = []
         let savedValue
         for (i = 0; i < length; i++) {
@@ -25,48 +38,23 @@ export class SubitemResponseProcessor {
             if (value?.id !== savedValue?.id) {
                 if (savedValue)
                     result.push(savedValue)
-                savedValue = { ...value, sideA: [], sideB: [] }
+                savedValue = { ...value, sideA: [], sideB: [], potentials: [], anodes: [], layers: [] }
             }
-            if (value.sideAId !== null)
+            if (value.sideAId && value.sideAId !== null)
                 savedValue.sideA.push(value.sideAId)
             else
-                if (value.sideBId !== null)
+                if (value.sideBId && value.sideBId !== null)
                     savedValue.sideB.push(value.sideBId)
-            if (i === length - 1) {
-                result.push(savedValue)
-            }
-        }
-        return result
-    }
-
-    generateSubitemArrayWithSidesAndPotentials(length, item) {
-        let result = []
-        let savedValue
-        for (i = 0; i < length; i++) {
-            let value = item(i)
-            if (value?.id !== savedValue?.id) {
-                if (savedValue)
-                    result.push(savedValue)
-                savedValue = { ...value, sideA: [], sideB: [], potentials: [] }
-            }
-            if (value.sideAId !== null)
-                savedValue.sideA.push(value.sideAId)
-            else
-                if (value.sideBId !== null)
-                    savedValue.sideB.push(value.sideBId)
-                else if (value.potentialId !== null) {
+                else if (value.potentialId && value.potentialId !== null) {
                     const { potentialId, potentialTypeId, potentialValue, potentialOldValue, permanentReferenceId, portableReferenceId, potentialUid, id } = value
                     const isPortable = permanentReferenceId === null
-                    savedValue.potentials.push({
-                        id: potentialId,
-                        cardId: id,
-                        uid: potentialUid,
-                        type: potentialTypeId,
-                        value: potentialValue,
-                        referenceCellId: isPortable ? portableReferenceId : permanentReferenceId,
-                        isPortable: isPortable,
-                        prevValue: potentialOldValue,
-                    })
+                    savedValue.potentials.push(new Potential(potentialId, potentialUid, value.id, potentialValue, potentialTypeId, isPortable ? portableReferenceId : permanentReferenceId, isPortable, potentialOldValue))
+                }
+                else if (value.anodeId && value.anodeId !== null) {
+                    savedValue.anodes.push(new AnodeBedAnode(value.anodeId, value.anodeUid, value.id, value.anodeCurrent, value.anodeWireColor, value.anodeWireGauge))
+                }
+                else if (value.layerId && value.layerId !== null) {
+                    savedValue.layers.push(new SoilResistivityLayer(value.layerId, value.layerUid, value.id, value.spacing, value.resistanceToZero, value.resistanceToNext, value.resistivityToZero, value.resistivityToNext))
                 }
             if (i === length - 1) {
                 result.push(savedValue)
@@ -75,13 +63,11 @@ export class SubitemResponseProcessor {
         return result
     }
 
-    getPotentialsFromTableData(data) {
-        return data.potentials.map(({ id, uid, type, value, referenceCellId, isPortable, cardId, prevValue }) =>
-            new Potential(id, uid, cardId, value, type, referenceCellId, isPortable, prevValue))
-    }
-
 
     getSubitemFromTableData(data) {
+        /*
+Takes data form either directly database response or from generateSubitemDataArray and returs subitem based on data recieved. data.type - must always be SubitemType
+        */
         switch (data.type) {
             case SubitemTypes.ANODE:
                 {
@@ -133,7 +119,21 @@ export class SubitemResponseProcessor {
                     const { id, testPointId, uid, name, wireGauge, wireColor } = data
                     return new TestLead(id, testPointId, uid, name, wireGauge, wireColor)
                 }
-            //Circuits are processed directly in rectifier
+            case SubitemTypes.CIRCUIT:
+                {
+                    const { id, rectifierId, uid, name, ratioCurrent, ratioVoltage, targetMin, targetMax, current, voltage, voltageDrop } = data
+                    return new Circuit(id, rectifierId, uid, name, ratioCurrent, ratioVoltage, targetMin, targetMax, current, voltage, voltageDrop)
+                }
+            case SubitemTypes.ANODE_BED:
+                {
+                    const { id, rectifierId, uid, name, bedType, enclosureType, materialType, anodes } = data
+                    return new AnodeBed(id, rectifierId, uid, name, enclosureType, bedType, materialType, anodes)
+                }
+            case SubitemTypes.SOIL_RESISTIVITY:
+                {
+                    const { id, testPointId, uid, name, spacingUnit, resistivityUnit, description, layers } = data
+                    return new SoilResistivity(id, testPointId, uid, name, spacingUnit, resistivityUnit, description, layers)
+                }
             default: return null
         }
     }

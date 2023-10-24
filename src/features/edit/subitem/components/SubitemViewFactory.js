@@ -10,31 +10,38 @@ import IK from './subitems/IK'
 import FC from './subitems/FC'
 import OT from './subitems/OT'
 import CT from './subitems/CT'
+import { SubitemTypes } from '../../../../constants/global'
+import SR from './subitems/SR'
+import AB from './subitems/AB'
 
 const SubitemViewFactory = (props) => {
     switch (props.type) {
-        case 'PL':
+        case SubitemTypes.PIPELINE:
             return <PL  {...props} />
-        case 'AN':
+        case SubitemTypes.ANODE:
             return <AN {...props} />
-        case 'RE':
+        case SubitemTypes.REFERENCE_CELL:
             return <RE {...props} />
-        case 'CN':
+        case SubitemTypes.COUPON:
             return <CN {...props} />
-        case 'SH':
+        case SubitemTypes.SHUNT:
             return <SH {...props} />
-        case 'BD':
+        case SubitemTypes.BOND:
             return <BD {...props} />
-        case 'RS':
+        case SubitemTypes.RISER:
             return <RS {...props} />
-        case 'IK':
+        case SubitemTypes.ISOLATION:
             return <IK {...props} />
-        case 'FC':
+        case SubitemTypes.STRUCTURE:
             return <FC {...props} />
-        case 'OT':
+        case SubitemTypes.TEST_LEAD:
             return <OT {...props} />
-        case 'CT':
+        case SubitemTypes.CIRCUIT:
             return <CT {...props} />
+        case SubitemTypes.SOIL_RESISTIVITY:
+            return <SR {...props} />
+        case SubitemTypes.ANODE_BED:
+            return <AB {...props} />
         default:
             return null
     }

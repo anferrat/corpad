@@ -9,6 +9,8 @@ import { PotentialType } from "../../../entities/survey/other/PotentialType";
 import { ReferenceCell } from "../../../entities/survey/other/ReferenceCell";
 import { Survey } from "../../../entities/survey/other/Survey";
 import { Anode } from "../../../entities/survey/subitems/Anode";
+import { AnodeBed } from "../../../entities/survey/subitems/AnodeBed";
+import { AnodeBedAnode } from "../../../entities/survey/subitems/AnodeBedAnode";
 import { Bond } from "../../../entities/survey/subitems/Bond";
 import { Circuit } from "../../../entities/survey/subitems/Circuit";
 import { Coupon } from "../../../entities/survey/subitems/Coupon";
@@ -17,6 +19,8 @@ import { PipelineLead } from "../../../entities/survey/subitems/PipelineLead";
 import { Potential } from "../../../entities/survey/subitems/Potential";
 import { Riser } from "../../../entities/survey/subitems/Riser";
 import { Shunt } from "../../../entities/survey/subitems/Shunt";
+import { SoilResistivity } from "../../../entities/survey/subitems/SoilResistivity";
+import { SoilResistivityLayer } from "../../../entities/survey/subitems/SoilResistivityLayer";
 import { StatReferenceCell } from "../../../entities/survey/subitems/StatReferenceCell";
 import { Structure } from "../../../entities/survey/subitems/Structure";
 import { TestLead } from "../../../entities/survey/subitems/TestLead";
@@ -52,7 +56,7 @@ export class SurveyFileConverterInputV2 {
     }
 
     _convertPotentials(potentials) {
-        return potentials.map(([id, uid, subitemId, value, referenceCellId, potentialType, isPortableReference, prevValue]) =>
+        return potentials.map(([id, uid, subitemId, value, referenceCellId, potentialType, isPortableReference, prevValue, timeModified]) =>
             new Potential(id, uid, subitemId, value, potentialType, referenceCellId, isPortableReference, prevValue))
     }
 
@@ -67,8 +71,23 @@ export class SurveyFileConverterInputV2 {
     }
 
     _convertSurvey(survey) {
-        const [uid, name, technician] = survey
+        const [uid, name, technician, autoPotentialList] = survey
         return new Survey(uid, name, technician)
+    }
+
+    _convertSoilResistivityLayers(layers) {
+        return layers.map(layer => {
+            const [id, uid, parentId, spacing, resistanceToZero, resistanceToNext, resistivityToZero, resistivityToNext] = layer
+            return new SoilResistivityLayer(id, uid, parentId, spacing, resistanceToZero, resistanceToNext, resistivityToZero, resistivityToNext)
+        })
+    }
+
+    _convertAnodeBedAnodes(anodes) {
+        return anodes.map(anode => {
+            //old current to be implemented
+            const [id, uid, parentId, current, wireColor, wireGauge, oldCurrent] = anode
+            return new AnodeBedAnode(id, uid, parentId, current, wireColor, wireGauge)
+        })
     }
 
     _convertSubitems(subitems) {
@@ -118,6 +137,15 @@ export class SurveyFileConverterInputV2 {
                     const [id, uid, name, type, parentId, wireGauge, wireColor] = subitem
                     return new TestLead(id, parentId, uid, name, wireGauge, wireColor)
                 }
+                case SubitemTypes.SOIL_RESISTIVITY: {
+                    const [id, uid, name, type, parentId, spacingUnit, resistivityUnit, comment, layers] = subitem
+                    return new SoilResistivity(id, parentId, uid, name, spacingUnit, resistivityUnit, comment, this._convertSoilResistivityLayers(layers))
+                }
+                case SubitemTypes.ANODE_BED: {
+                    const [id, uid, name, type, parentId, enclosureType, bedType, materialType, anodes] = subitem
+                    return new AnodeBed(id, parentId, uid, name, enclosureType, bedType, materialType, this._convertAnodeBedAnodes(anodes))
+                }
+
                 default:
                     return undefined
             }

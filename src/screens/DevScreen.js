@@ -16,6 +16,8 @@ import { FileSystemLocations } from '../constants/global'
 import { readGeoFile } from '../app/controllers/survey/other/MapLayerController'
 import { errorHandler } from '../helpers/error_handler'
 import { GeoJsonValidation } from '../app/validation/geoJson/GeoJsonValidation'
+import { SoilResistivity } from '../app/entities/survey/subitems/SoilResistivity'
+import { SoilResistivityLayer } from '../app/entities/survey/subitems/SoilResistivityLayer'
 
 const pointFeature = { type: 'Feature', properties: {}, geometry: { "geometries": [{ "coordinates": [-122.9508563135236, 49.2346442062025, 0], "type": "Point" }, { "coordinates": [-122.9508563135236, 49.2346442062025, 0], "type": "Point" }, { "coordinates": [-122.9508563135236, 49.2346442062025, 0], "type": "Point" }], "type": "GeometryCollection" } }
 
@@ -24,6 +26,8 @@ export default DevScreen = ({ navigation, route }) => {
   const pairTestMultimeter = () => {
     pairMultimeter({ id: 'kkk', multimeterType: 'POKIT', name: 'PokitPro' })
   }
+
+
 
   const testCapture = () => {
     EventRegister.emit('MULTIMETER_START_CAPTURE', { itemId: 1, subitemId: 1, potentialId: 1, measurementType: 'POTENTIALS' })
@@ -46,9 +50,9 @@ export default DevScreen = ({ navigation, route }) => {
   const testValidation = () => {
     const val = new GeoJsonValidation()
     try {
-      console.log(val.feature.validateSync(
-        pointFeature
-      ))
+      const test = new SoilResistivity(1, 2, 'sds', 'ds', 1, 1, 'ds', [new SoilResistivityLayer(1, 'sds', 2, 3, 12), new SoilResistivityLayer(1, 'sds', 2, 6, 25)])
+      test.calculate()
+      console.log(test.layers)
     }
     catch (er) {
       console.log(er)

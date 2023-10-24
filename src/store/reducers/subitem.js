@@ -1,6 +1,7 @@
 import { calculateCouponDensity, currentCalculation, factorCalculation } from "../../helpers/functions"
 import fieldValidation from '../../helpers/validation'
-import { UPDATE_SUBITEM_PROPERTY, LOAD_SUBITEM_STATE, SAVE_SUBITEM_STATE, RESET_SUBITEM_STATE, UPDATE_SUBITEM_SHORTED, UPDATE_SUBITEM_RATIO, UPDATE_SUBITEM_FACTOR, UPDATE_SUBITEM_VOLTAGE_DROP, VALIDATE_SUBITEM_PROPERTY, UPDATE_SUBITEM_COUPON_PROPERTY } from "../actions/subitem"
+import { convertLength } from "../../app/controllers/survey/other/ConverterController"
+import { UPDATE_SUBITEM_PROPERTY, LOAD_SUBITEM_STATE, SAVE_SUBITEM_STATE, RESET_SUBITEM_STATE, UPDATE_SUBITEM_SHORTED, UPDATE_SUBITEM_RATIO, UPDATE_SUBITEM_FACTOR, UPDATE_SUBITEM_VOLTAGE_DROP, VALIDATE_SUBITEM_PROPERTY, UPDATE_SUBITEM_COUPON_PROPERTY, ADD_SUBITEM_SOIL_RESISTIVITY_LAYER, DELETE_SUBITEM_SOIL_RESISTIVITY_LAYER, UPDATE_SUBITEM_SPACING_UNIT, ADD_SUBITEM_ANODE_BED_ANODE, DELETE_SUBITEM_ANODE_BED_ANODE, UPDATE_SUBITEM_SUB_PROPERTY, VALIDATE_SUBITEM_SUB_PROPERTY, SET_SUBITEM_ANODE_WIRE_PROPERTIES } from "../actions/subitem"
 
 const initialState = {
     name: null,
@@ -70,7 +71,6 @@ const subitem = (state = initialState, action) => {
                 }
             else return state
         case UPDATE_SUBITEM_RATIO: {
-
             if (action.property === 'ratioVoltage' || action.property === 'ratioCurrent') {
                 if (action.value === undefined) {
                     const validate = fieldValidation(state[action.property], action.property)
@@ -128,6 +128,104 @@ const subitem = (state = initialState, action) => {
                     current: currentCalculation(updated.voltageDrop, updated.factor)
                 }
             else return updated
+
+        case ADD_SUBITEM_SOIL_RESISTIVITY_LAYER:
+            return {
+                ...state,
+                layers: state.layers.concat({
+                    resistanceToZero: null,
+                    spacing: null
+                }),
+                valid: {
+                    ...state.valid,
+                    layers: state.valid.layers.concat({
+                        spacing: true,
+                        resistanceToZero: true
+                    })
+                }
+            }
+        case DELETE_SUBITEM_SOIL_RESISTIVITY_LAYER:
+            return {
+                ...state,
+                layers: state.layers.filter((_, index) => index !== action.index),
+                valid: {
+                    ...state.valid,
+                    layers: state.valid.layers.filter((_, index) => index !== action.index)
+                }
+            }
+        case UPDATE_SUBITEM_SUB_PROPERTY:
+            return {
+                ...state,
+                [action.parentProperty]: Object.assign([], state[action.parentProperty], {
+                    [action.index]: {
+                        ...state[action.parentProperty][action.index],
+                        [action.property]: action.value
+                    }
+                })
+            }
+        case VALIDATE_SUBITEM_SUB_PROPERTY: {
+            const { valid, value } = fieldValidation(state[action.parentProperty][action.index][action.property], action.property)
+            console.log(valid)
+            return {
+                ...state,
+                valid: {
+                    ...state.valid,
+                    [action.parentProperty]: Object.assign([], state.valid[action.parentProperty], {
+                        [action.index]: {
+                            ...state.valid[action.parentProperty][action.index],
+                            [action.property]: valid
+                        }
+                    })
+                },
+                [action.parentProperty]: Object.assign([], state[action.parentProperty], {
+                    [action.index]: {
+                        ...state[action.parentProperty][action.index],
+                        [action.property]: value
+                    }
+                })
+            }
+        }
+        case UPDATE_SUBITEM_SPACING_UNIT: {
+            return {
+                ...state,
+                spacingUnit: action.unit,
+                layers: state.layers.map((layer, index) => {
+                    return ({
+                        ...layer,
+                        spacing: state.valid.layers[index].spacing ? Math.round(convertLength({ value: Number(layer.spacing), inputUnit: state.spacingUnit, outputUnit: action.unit }).response * 1000) / 1000 : layer.spacing
+                    })
+                })
+            }
+        }
+        case ADD_SUBITEM_ANODE_BED_ANODE:
+            return {
+                ...state,
+                anodes: state.anodes.concat({
+                    current: null,
+                    wireColor: state.anodes.length === 0 ? null : state.anodes[state.anodes.length - 1].wireColor,
+                    wireGauge: state.anodes.length === 0 ? null : state.anodes[state.anodes.length - 1].wireGauge
+                }),
+                valid: {
+                    ...state.valid,
+                    anodes: state.valid.anodes.concat({
+                        current: true,
+                    })
+                }
+            }
+        case DELETE_SUBITEM_ANODE_BED_ANODE:
+            return {
+                ...state,
+                anodes: state.anodes.filter((_, index) => index !== action.index),
+                valid: {
+                    ...state.valid,
+                    anodes: state.valid.anodes.filter((_, index) => index !== action.index)
+                }
+            }
+        case SET_SUBITEM_ANODE_WIRE_PROPERTIES:
+            return {
+                ...state,
+                anodes: state.anodes.map((anode) => ({ ...anode, wireColor: action.wireColor, wireGauge: action.wireGauge })),
+            }
         case LOAD_SUBITEM_STATE:
             return {
                 ...action.cardObject,

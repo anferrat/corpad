@@ -72,7 +72,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
         borderRadius: 6,
-        height: 100,
+        height: 112,
         overflow: 'hidden',
     }, Platform.select({
         android: {
@@ -86,6 +86,6 @@ const styles = StyleSheet.create({
     buttonView: {
         position: 'absolute',
         right: '5%',
-        bottom: 140,
+        bottom: 152,
     }
 })

@@ -6,7 +6,7 @@ const LegendItem = (props) => {
     return (
         <View style={styles.mainView}>
             <Icon name={props.icon} fill={props.color} style={styles.icon} />
-            <Text style={styles.text} category='s1'>
+            <Text style={styles.text} category='s1' numberOfLines={1} ellipsizeMode={'middle'}>
                 {props.text}
             </Text>
         </View>
@@ -27,6 +27,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
     },
     text: {
+        flex: 1,
         marginLeft: 12
     },
     icon: {

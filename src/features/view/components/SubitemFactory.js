@@ -10,6 +10,9 @@ import PL from './subitems/PL'
 import RE from './subitems/RE'
 import RS from './subitems/RS'
 import SH from './subitems/SH'
+import { SubitemTypes } from '../../../constants/global'
+import SR from './subitems/SR'
+import AB from './subitems/AB'
 
 const SubitemViewFactory = ({
   subitem,
@@ -40,7 +43,7 @@ const SubitemViewFactory = ({
   }, [subitem.id, subitem.type, onMultimeterPress])
 
   switch (subitem.type) {
-    case 'PL':
+    case SubitemTypes.PIPELINE:
       return (
         <PL
           data={subitem}
@@ -55,7 +58,7 @@ const SubitemViewFactory = ({
           onMultimeterPress={onMultimeterPressHandler}
         />
       )
-    case 'AN':
+    case SubitemTypes.ANODE:
       return (
         <AN
           data={subitem}
@@ -69,7 +72,7 @@ const SubitemViewFactory = ({
           onMultimeterPress={onMultimeterPressHandler}
         />
       )
-    case 'RE':
+    case SubitemTypes.REFERENCE_CELL:
       return (
         <RE
           data={subitem}
@@ -83,7 +86,7 @@ const SubitemViewFactory = ({
           onMultimeterPress={onMultimeterPressHandler}
         />
       )
-    case 'CN':
+    case SubitemTypes.COUPON:
       return (
         <CN
           data={subitem}
@@ -100,7 +103,7 @@ const SubitemViewFactory = ({
           onMultimeterPress={onMultimeterPressHandler}
         />
       )
-    case 'SH':
+    case SubitemTypes.SHUNT:
       return (
         <SH
           data={subitem}
@@ -114,7 +117,7 @@ const SubitemViewFactory = ({
           onMultimeterPress={onMultimeterPressHandler}
         />
       )
-    case 'BD':
+    case SubitemTypes.BOND:
       return (
         <BD
           data={subitem}
@@ -127,7 +130,7 @@ const SubitemViewFactory = ({
           onMultimeterPress={onMultimeterPressHandler}
         />
       )
-    case 'RS':
+    case SubitemTypes.RISER:
       return (
         <RS
           data={subitem}
@@ -141,7 +144,7 @@ const SubitemViewFactory = ({
           validatePotential={validatePotential}
           onMultimeterPress={onMultimeterPressHandler} />
       )
-    case 'IK':
+    case SubitemTypes.ISOLATION:
       return (
         <IK
           data={subitem}
@@ -155,7 +158,7 @@ const SubitemViewFactory = ({
           onMultimeterPress={onMultimeterPressHandler}
         />
       )
-    case 'FC':
+    case SubitemTypes.STRUCTURE:
       return (
         <FC
           data={subitem}
@@ -169,7 +172,7 @@ const SubitemViewFactory = ({
           onMultimeterPress={onMultimeterPressHandler}
         />
       )
-    case 'OT':
+    case SubitemTypes.TEST_LEAD:
       return (
         <OT
           data={subitem}
@@ -183,7 +186,7 @@ const SubitemViewFactory = ({
           onMultimeterPress={onMultimeterPressHandler}
         />
       )
-    case 'CT':
+    case SubitemTypes.CIRCUIT:
       return (
         <CT
           data={subitem}
@@ -196,6 +199,16 @@ const SubitemViewFactory = ({
           onMultimeterPress={onMultimeterPressHandler}
         />
       )
+    case SubitemTypes.SOIL_RESISTIVITY:
+      return <SR
+        data={subitem}
+        onEdit={onEdit}
+        subitemIndex={subitemIndex} />
+    case SubitemTypes.ANODE_BED:
+      return <AB
+        data={subitem}
+        onEdit={onEdit}
+        subitemIndex={subitemIndex} />
     default:
       return null;
   }

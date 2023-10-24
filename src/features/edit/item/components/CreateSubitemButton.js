@@ -3,6 +3,7 @@ import { StyleSheet } from 'react-native'
 import { AddReadingModal } from "../../../../components/AddReadingModal"
 import { Button } from '@ui-kitten/components'
 import { addIcon } from '../../../../components/Icons'
+import { SubitemTypes, ItemTypes } from '../../../../constants/global'
 
 
 const CreateSubitemButton = ({ itemType, onSelect, title }) => {
@@ -10,15 +11,17 @@ const CreateSubitemButton = ({ itemType, onSelect, title }) => {
     const showModal = React.useCallback(() => setVisible(true), [])
     const hideModal = React.useCallback(() => setVisible(false), [])
 
-    const onPress = React.useCallback(() => {
+    const subitemTypes = React.useMemo(() => {
         switch (itemType) {
-            case 'TEST_POINT':
-                return showModal()
-            case 'RECTIFIER':
-                return onSelect('CT')
-            default: return () => { }
+            case ItemTypes.TEST_POINT:
+                return [SubitemTypes.PIPELINE, SubitemTypes.RISER, SubitemTypes.STRUCTURE, SubitemTypes.TEST_LEAD, SubitemTypes.ANODE, SubitemTypes.COUPON, SubitemTypes.REFERENCE_CELL, SubitemTypes.BOND, SubitemTypes.SHUNT, SubitemTypes.ISOLATION, SubitemTypes.SOIL_RESISTIVITY]
+            case ItemTypes.RECTIFIER:
+                return [SubitemTypes.ANODE_BED, SubitemTypes.CIRCUIT]
+            default:
+                return []
         }
-    }, [onSelect, showModal, itemType])
+    }, [itemType])
+
 
     return (
         <>
@@ -27,10 +30,11 @@ const CreateSubitemButton = ({ itemType, onSelect, title }) => {
                 style={styles.button}
                 size='medium'
                 accessoryLeft={addIcon}
-                onPress={onPress}>
+                onPress={showModal}>
                 {title}
             </Button>
             <AddReadingModal
+                subitemTypes={subitemTypes}
                 visible={visible}
                 hideModal={hideModal}
                 onSelect={onSelect}

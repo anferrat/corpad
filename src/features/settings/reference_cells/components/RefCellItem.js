@@ -30,9 +30,10 @@ const RefCellItem = ({ selected, updateMain, name, rcType, deleteReference, id }
                     pack='cp'
                     fill={primary}
                     style={styles.icon} />
-                <View>
+                <View style={styles.values}>
                     <Text
-                        category='p1'>
+                        category='p1'
+                        numberOfLines={1}>
                         {name}
                     </Text>
                     <Text
@@ -97,5 +98,8 @@ const styles = StyleSheet.create({
         width: 20,
         height: 20,
         marginHorizontal: 8
+    },
+    values: {
+        flex: 1
     }
 })

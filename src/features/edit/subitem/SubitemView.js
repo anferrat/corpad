@@ -8,7 +8,23 @@ import useSubitemActions from './hooks/useSubitemActions'
 
 const SubitemView = ({ itemId, subitemId, subitemType, isNew }) => {
     const subitemData = useSubitemData({ itemId, subitemId, subitemType, isNew })
-    const { update, validate, updateShortedHandler, updateRatioHandler, validateRatioHandler, updateFactorHandler, validateFactorHandler, validateVoltageDropHandler, validateCouponHandler } = useSubitemActions()
+    const { update,
+        validate,
+        updateShortedHandler,
+        updateRatioHandler,
+        validateRatioHandler,
+        updateFactorHandler,
+        validateFactorHandler,
+        validateVoltageDropHandler,
+        validateCouponHandler,
+        addSoilResistivityLayerHandler,
+        deleteSoilResistivityLayerHandler,
+        updateSubProperty,
+        validateSubProperty,
+        updateSpacingUnit,
+        addAnodeBedAnodeHandler,
+        deleteAnodeBedAnodeHandler,
+        updateAnodeWireProperties } = useSubitemActions()
     const { loading, pipelineList, subitemList } = subitemData
     return (
         <LoadingView loading={loading} style={styles.loading}>
@@ -22,6 +38,15 @@ const SubitemView = ({ itemId, subitemId, subitemType, isNew }) => {
                 validateVoltageDropHandler={validateVoltageDropHandler}
                 validateCouponHandler={validateCouponHandler}
                 updateRatioHandler={updateRatioHandler}
+                addSoilResistivityLayerHandler={addSoilResistivityLayerHandler}
+                deleteSoilResistivityLayerHandler={deleteSoilResistivityLayerHandler}
+                updateSubProperty={updateSubProperty}
+                validateSubProperty={validateSubProperty}
+                updateSpacingUnit={updateSpacingUnit}
+                addAnodeBedAnodeHandler={addAnodeBedAnodeHandler}
+                deleteAnodeBedAnodeHandler={deleteAnodeBedAnodeHandler}
+                updateAnodeWireProperties={updateAnodeWireProperties}
+                addSubi
                 itemId={itemId}
                 subitemId={subitemId}
                 type={subitemType}

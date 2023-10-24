@@ -15,7 +15,9 @@ const SaveButton = () => {
     const valid = useSelector(state => {
         if (state.subitem.valid)
             return (Object.values(state.subitem.valid).every(v => v)) &&
-                (state.potentials.potentials.every(({ valid }) => valid))
+                (state.potentials.potentials.every(({ valid }) => valid)) &&
+                (!state.subitem.valid.layers || state.subitem.valid.layers.every(l => Object.values(l).every(v => v))) &&
+                (!state.subitem.valid.anodes || state.subitem.valid.anodes.every(a => Object.values(a).every(v => v)))
         else return false
     })
 

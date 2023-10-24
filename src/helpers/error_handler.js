@@ -69,7 +69,7 @@ const errorCodes = {
     410: 'Unable to get file stats',
     411: 'Unable to read directory',
     415: 'Unable to create new survey.',
-    416: 'Unable to copy survey file to Downloads directory.',
+    416: 'Unable to copy survey file. Check if file with same name already exists in Downloads directory.',
     417: 'Unable to copy survey file to the cloud storage.',
     418: 'Unable to copy survey file to the device.',
     419: 'Unable to obtain survey file link.',

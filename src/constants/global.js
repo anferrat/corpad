@@ -45,7 +45,9 @@ export const SubitemTypes = Object.freeze({
     RISER: 'RS',
     ISOLATION: 'IK',
     STRUCTURE: 'FC',
-    CIRCUIT: 'CT'
+    CIRCUIT: 'CT',
+    ANODE_BED: 'AB',
+    SOIL_RESISTIVITY: 'SR',
 })
 
 export const PipelineProducts = Object.freeze({
@@ -226,6 +228,18 @@ export const CurrentUnits = Object.freeze({
     MICRO_AMPS: 0,
     MILI_AMPS: 1,
     AMPS: 2
+})
+
+export const LengthUnits = Object.freeze({
+    METERS: 0,
+    CENTIMETERS: 1,
+    FEET: 2
+})
+
+export const ResistivityUnits = Object.freeze({
+    OHM_METERS: 0,
+    OHM_CENTIMITTERS: 1,
+    OHM_FEET: 2
 })
 
 export const FactorUnits = Object.freeze({
@@ -538,4 +552,27 @@ export const MapLayerFeatures = Object.freeze({
 export const ExportFormatTypes = Object.freeze({
     CSV: 'csv',
     KML: 'kml'
+})
+
+export const AnodeBedEnclosureTypes = Object.freeze({
+    JUNCTION_BOX: 0,
+    UNDEGROUND_BOX: 1,
+    BURIED: 2
+
+})
+
+export const AnodeBedTypes = Object.freeze({
+    SHALLOW_VERTICAL: 0,
+    SHALLOW_HORIZONTAL: 1,
+    DEEP_VERTICAL: 2
+})
+
+export const AnodeBedMaterialTypes = Object.freeze({
+    GRAPHITE: 0,
+    MIXED_METAL_OXIDE: 1,
+    PLATINUM: 2,
+    CONDUCTIVE_POLYMER: 3,
+    SCRAP_METAL: 4,
+    MAGNETITE: 5,
+    ALUMINUM: 6
 })

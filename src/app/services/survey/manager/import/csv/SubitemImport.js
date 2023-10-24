@@ -43,7 +43,7 @@ export class SubitemImport {
                 //generate subitem from converted data
                 const uid = guid()
                 const { name, type, anodeMaterial, wireGauge, wireColor, fromAtoB, current, sideA, sideB, ratioCurrent, ratioVoltage, targetMin, targetMax, voltage, voltageDrop, pipelineCardId, couponType, density, area, isolationType, shorted, pipelineId, rcType, nps, factor, factorSelected, description } = { ...subitemData, ...convertedUnits, ...convertedKeys }
-                const subitem = this.subitemFactory.execute(null, uid, name, type, itemId, anodeMaterial, wireGauge, wireColor, fromAtoB, current, sideA, sideB, ratioCurrent, ratioVoltage, targetMin, targetMax, voltage, voltageDrop, pipelineCardId, couponType, density, area, isolationType, shorted, pipelineId, rcType, nps, factor, factorSelected, description, null, null)
+                const subitem = this.subitemFactory.execute(null, uid, name, type, itemId, anodeMaterial, wireGauge, wireColor, fromAtoB, current, sideA, sideB, ratioCurrent, ratioVoltage, targetMin, targetMax, voltage, voltageDrop, pipelineCardId, couponType, density, area, isolationType, shorted, pipelineId, rcType, nps, factor, factorSelected, description, null, null, undefined, undefined, null, null, null, null, [], [])
                 subitem.calculate()
 
                 //generate potentails from data and pass down to potentias import

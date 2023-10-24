@@ -41,6 +41,9 @@ const validate = (v, type) => {
             return isNull(v) || String(v).length <= 80
         case 'tapValue':
             return (!isNaN(v) && v >= 0 && v <= 100) || isNull(v)
+        case 'spacing':
+        case 'resistanceToZero':
+            return !isNaN(v) && v !== null && v !== 0
         case 'current':
         case 'voltage':
         case 'ratioVoltage':

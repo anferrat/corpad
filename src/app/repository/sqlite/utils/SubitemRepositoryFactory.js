@@ -11,6 +11,8 @@ import { CircuitRepository } from "../SubitemRepository/CircuitRepository"
 import { Error, errors } from "../../../utils/Error"
 import { SubitemTypes } from "../../../../constants/global"
 import { TestLeadRepository } from "../SubitemRepository/TestLeadRepository"
+import { AnodeBedRepository } from "../SubitemRepository/AnodeBedRepository"
+import { SoilResistivityRepository } from "../SubitemRepository/SoilResistivityRepository"
 
 export class SubitemRepositoryFactory {
     constructor() {
@@ -25,6 +27,8 @@ export class SubitemRepositoryFactory {
         this.structureRepo = new StructureRepository()
         this.circuitRepo = new CircuitRepository()
         this.testLeadRepo = new TestLeadRepository()
+        this.anodeBedRepo = new AnodeBedRepository()
+        this.soilResistivityRepo = new SoilResistivityRepository()
     }
 
     execute(type) {
@@ -51,6 +55,10 @@ export class SubitemRepositoryFactory {
                 return this.circuitRepo
             case SubitemTypes.TEST_LEAD:
                 return this.testLeadRepo
+            case SubitemTypes.ANODE_BED:
+                return this.anodeBedRepo
+            case SubitemTypes.SOIL_RESISTIVITY:
+                return this.soilResistivityRepo
             default:
                 throw new Error(errors.DATABASE, `Unknown subitem type ${type}. Cannot proceed with database operation.`)
         }

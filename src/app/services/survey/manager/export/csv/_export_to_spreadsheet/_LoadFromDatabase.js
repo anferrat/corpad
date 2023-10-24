@@ -91,7 +91,7 @@ export class _LoadFromDatabase {
                 item: itemValues,
                 subitem: subitemValues,
                 potential: potentialValues,
-                marker: item.getMarker()
+                marker: itemType === ItemTypes.TEST_POINT || itemType === ItemTypes.RECTIFIER ? item.getMarker() : null
             }
         }))
     }

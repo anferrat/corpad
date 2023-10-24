@@ -1,7 +1,11 @@
-import { AreaUnits, CurrentUnits, FactorUnits, PotentialUnits } from "../../../constants/global"
+import { AreaUnits, CurrentUnits, FactorUnits, LengthUnits, PotentialUnits, ResistivityUnits } from "../../../constants/global"
 
 export class UnitConverter {
     constructor() {
+    }
+
+    _parseLengthBase(number) {
+        return parseFloat(number.toFixed(2))
     }
 
     convertVolts(value, inputUnit, outputUnit) {
@@ -108,5 +112,51 @@ export class UnitConverter {
         }
         return result
 
+    }
+
+    convertLength(value, inputUnit, outputUnit) {
+        if (inputUnit === outputUnit || value === null)
+            return value
+        let result = value
+        switch (inputUnit) {
+            case LengthUnits.CENTIMETERS:
+                result /= 100
+                break
+            case LengthUnits.FEET:
+                result *= 0.3048
+                break
+        }
+        switch (outputUnit) {
+            case LengthUnits.CENTIMETERS:
+                result *= 100
+                break
+            case LengthUnits.FEET:
+                result /= 0.3048
+                break
+        }
+        return result
+    }
+
+    convertResistivity(value, inputUnit, outputUnit) {
+        if (inputUnit === outputUnit || value === null)
+            return value
+        let result = value
+        switch (inputUnit) {
+            case ResistivityUnits.OHM_CENTIMITTERS:
+                result /= 100
+                break
+            case ResistivityUnits.OHM_FEET:
+                result /= 3.28084
+                break
+        }
+        switch (outputUnit) {
+            case ResistivityUnits.OHM_CENTIMITTERS:
+                result *= 100
+                break
+            case ResistivityUnits.OHM_FEET:
+                result *= 3.28084
+                break
+        }
+        return result
     }
 }

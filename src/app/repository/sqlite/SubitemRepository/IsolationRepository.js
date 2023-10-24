@@ -14,7 +14,7 @@ export class IsolationRepository extends SQLiteRepository {
     async getAll() {
         try {
             const result = await this.runSingleQueryTransaction(`SELECT cards.id, cards.testPointId, cards.uid, cards.name, cards.fromAtoB, cards.shorted, cards.isolationType, sides.sideAId, sides.sideBId, cards.current FROM cards LEFT JOIN sides ON cards.id = sides.parentCardId WHERE cards.type = ? ORDER BY cards.id`, [SubitemTypes.ISOLATION])
-            return this.responseProcessor.generateArrayWithSides(result.rows.length, result.rows.item)
+            return this.responseProcessor.generateSubitemDataArray(result.rows.length, result.rows.item)
                 .map(({ id, uid, testPointId, name, fromAtoB, current, isolationType, shorted, sideA, sideB }) =>
                     new Isolation(id, testPointId, uid, name, fromAtoB, isolationType, Boolean(shorted), current, sideA, sideB))
         }

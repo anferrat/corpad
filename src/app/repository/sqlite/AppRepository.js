@@ -1,6 +1,7 @@
 import { SQLiteRepository } from "../../utils/SQLite"
 import { Error, errors } from "../../utils/Error"
 import { schemaVersion } from "../../config/database"
+import { SubitemTypes } from "../../../constants/global"
 
 export class AppRepository extends SQLiteRepository {
     constructor() {
@@ -24,14 +25,16 @@ export class AppRepository extends SQLiteRepository {
             ])
 
             await super.runMultiQueryTransaction(tx => [
-                super.runQuery(tx, `CREATE TABLE IF NOT EXISTS circuits (id INTEGER PRIMARY KEY NOT NULL, uid Text, name TEXT, rectifierId INTEGER, ratioCurrent REAL, ratioVoltage REAL, voltageDrop REAL, current REAL, voltage REAL, targetMin REAL, targetMax REAL, FOREIGN KEY(rectifierId) REFERENCES rectifiers(id) ON DELETE CASCADE)`, []),
-                super.runQuery(tx, `CREATE TABLE IF NOT EXISTS cards (id INTEGER PRIMARY KEY NOT NULL, testPointId INTEGER NOT NULL, uid TEXT, type TEXT, name TEXT, anodeMaterial INTEGER, wireColor INTEGER, wireGauge INTEGER, fromAtoB BOOLEAN, current REAL, currentUnit TEXT, pipelineId INT, pipelineCardId INT, couponType INTEGER, density REAL, area REAL, description TEXT, isolationType INTEGER, shorted BOOLEAN, rcType INTEGER, nps INTEGER, ratioCurrent REAL, ratioVoltage REAL, factorSelected BOOLEAN, factor REAL, voltageDrop REAL, oldCurrent REAL, oldVoltageDrop REAL, FOREIGN KEY(testPointId) REFERENCES testPoints(id) ON DELETE CASCADE, FOREIGN KEY(pipelineId) REFERENCES pipelines(id) ON DELETE SET NULL, FOREIGN KEY(pipelineCardId) REFERENCES cards(id) ON DELETE SET NULL)`, []),
+                super.runQuery(tx, `CREATE TABLE IF NOT EXISTS circuits (id INTEGER PRIMARY KEY NOT NULL, uid Text, name TEXT, type TEXT, rectifierId INTEGER, ratioCurrent REAL, ratioVoltage REAL, voltageDrop REAL, current REAL, voltage REAL, targetMin REAL, targetMax REAL, enclosureType INT, materialType INT, bedType INT, FOREIGN KEY(rectifierId) REFERENCES rectifiers(id) ON DELETE CASCADE)`, []),
+                super.runQuery(tx, `CREATE TABLE IF NOT EXISTS cards (id INTEGER PRIMARY KEY NOT NULL, testPointId INTEGER NOT NULL, uid TEXT, type TEXT, name TEXT, anodeMaterial INTEGER, wireColor INTEGER, wireGauge INTEGER, fromAtoB BOOLEAN, current REAL, currentUnit TEXT, pipelineId INT, pipelineCardId INT, couponType INTEGER, density REAL, area REAL, description TEXT, isolationType INTEGER, shorted BOOLEAN, rcType INTEGER, nps INTEGER, ratioCurrent REAL, ratioVoltage REAL, factorSelected BOOLEAN, factor REAL, voltageDrop REAL, oldCurrent REAL, oldVoltageDrop REAL, spacingUnit INT, resistivityUnit INT, FOREIGN KEY(testPointId) REFERENCES testPoints(id) ON DELETE CASCADE, FOREIGN KEY(pipelineId) REFERENCES pipelines(id) ON DELETE SET NULL, FOREIGN KEY(pipelineCardId) REFERENCES cards(id) ON DELETE SET NULL)`, []),
                 super.runQuery(tx, 'CREATE TABLE IF NOT EXISTS assets (id INTEGER PRIMARY KEY NOT NULL, uid TEXT NOT NULL, timeCreated INTEGER, timeModified INTEGER, comment TEXT, fileName TEXT, mediaType INTEGER, testPointId INTEGER, rectifierId INTEGER, loaded BOOLEAN, FOREIGN KEY(rectifierId) REFERENCES rectifiers(id) ON DELETE CASCADE, FOREIGN KEY(testPointId) REFERENCES testPoints(id) ON DELETE CASCADE )', []),
             ])
 
             await super.runMultiQueryTransaction(tx => [
                 super.runQuery(tx, `CREATE TABLE IF NOT EXISTS sides (id INTEGER PRIMARY KEY NOT NULL, sideAId INT, sideBId INT, parentCardId INT, FOREIGN KEY(parentCardId) REFERENCES cards(id) ON DELETE CASCADE, FOREIGN KEY(sideAId) REFERENCES cards(id) ON DELETE CASCADE, FOREIGN KEY(sideBId) REFERENCES cards(id) ON DELETE CASCADE)`, []),
                 super.runQuery(tx, `CREATE TABLE IF NOT EXISTS potentials (id INTEGER PRIMARY KEY NOT NULL, cardId INTEGER NOT NULL, uid TEXT, value REAL, type INTEGER NOT NULL, oldValue REAL, timeModified INTEGER, unit TEXT, portableReferenceId INTEGER, permanentReferenceId INTEGER, FOREIGN KEY(portableReferenceId) REFERENCES referenceCells(id) ON DELETE CASCADE, FOREIGN KEY(type) REFERENCES potentialTypes(id) ON DELETE CASCADE, FOREIGN KEY(cardId) REFERENCES cards(id) ON DELETE CASCADE, FOREIGN KEY(permanentReferenceId) REFERENCES cards(id) ON DELETE CASCADE)`, []),
+                super.runQuery(tx, `CREATE TABLE IF NOT EXISTS soilResistivityLayers (id INTEGER PRIMARY KEY NOT NULL, uid TEXT, spacing REAL, resistanceToZero REAL, resistanceToNext REAL, resistivityToZero REAL, resistivityToNext REAL, parentId INT, FOREIGN KEY(parentId) REFERENCES cards(id) ON DELETE CASCADE)`, []),
+                super.runQuery(tx, `CREATE TABLE IF NOT EXISTS anodeBedAnodes (id INTEGER PRIMARY KEY NOT NULL, uid TEXT, current REAL, wireColor INT, wireGauge INT, parentId INT, FOREIGN KEY(parentId) REFERENCES circuits(id) ON DELETE CASCADE)`, []),
             ])
 
             await this.runMultiQueryTransaction(tx => [
@@ -97,12 +100,24 @@ export class AppRepository extends SQLiteRepository {
                             //to v2
                             this.runQuery(tx, 'ALTER TABLE potentials ADD timeModified INTEGER'),
                             this.runQuery(tx, 'ALTER TABLE potentialTypes ADD isAc BOOLEAN DEFAULT 0'),
+                            this.runQuery(tx, 'ALTER TABLE circuits ADD enclosureType INTEGER'),
+                            this.runQuery(tx, 'ALTER TABLE circuits ADD bedType INTEGER'),
+                            this.runQuery(tx, 'ALTER TABLE circuits ADD materialType INTEGER'),
+                            this.runQuery(tx, `ALTER TABLE circuits ADD type TEXT DEFAULT ${SubitemTypes.CIRCUIT}`),
+                            this.runQuery(tx, 'ALTER TABLE cards ADD spacingUnit INTEGER'),
+                            this.runQuery(tx, 'ALTER TABLE cards ADD resistivityUnit INTEGER'),
                         ])
                     case 1:
                         return await this.runMultiQueryTransaction(tx => [
                             //to v2
                             this.runQuery(tx, 'ALTER TABLE potentials ADD timeModified INTEGER'),
                             this.runQuery(tx, 'ALTER TABLE potentialTypes ADD isAc BOOLEAN DEFAULT 0'),
+                            this.runQuery(tx, 'ALTER TABLE circuits ADD enclosureType INTEGER'),
+                            this.runQuery(tx, 'ALTER TABLE circuits ADD bedType INTEGER'),
+                            this.runQuery(tx, 'ALTER TABLE circuits ADD materialType INTEGER'),
+                            this.runQuery(tx, 'ALTER TABLE cards ADD spacingUnit INTEGER'),
+                            this.runQuery(tx, 'ALTER TABLE cards ADD resistivityUnit INTEGER'),
+                            this.runQuery(tx, `ALTER TABLE circuits ADD type TEXT DEFAULT ${SubitemTypes.CIRCUIT}`),
                         ])
                 }
 

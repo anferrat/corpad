@@ -20,7 +20,7 @@ const ImageControlButton = ({ icon, title, pack, onPress }) => {
                     style={styles.icon}
                     pack={pack} />
                 <Text
-                category="s2"
+                    category="s2"
                     status='control'>
                     {title}
                 </Text>
@@ -34,7 +34,9 @@ export default ImageControlButton
 const styles = StyleSheet.create({
     wrapper: {
         borderRadius: 40,
-        overflow: 'hidden'
+        width: 80,
+        overflow: 'hidden',
+        backgroundColor: 'rgba(0,0,0,0.5)'
     },
     container: {
         alignItems: 'center',

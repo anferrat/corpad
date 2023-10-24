@@ -3,7 +3,7 @@ import { StyleSheet, Modal } from 'react-native'
 import ModalContent from './ModalContent'
 import { control } from '../../../styles/colors'
 
-const AddReadingModal = ({ hideModal, visible, onSelect }) => {
+const AddReadingModal = ({ hideModal, visible, onSelect, subitemTypes }) => {
     return (
         <>
             <Modal
@@ -13,6 +13,7 @@ const AddReadingModal = ({ hideModal, visible, onSelect }) => {
                 onRequestClose={hideModal}
                 visible={visible}>
                 <ModalContent
+                    subitemTypes={subitemTypes}
                     onSelect={onSelect}
                     hideModal={hideModal} />
             </Modal>

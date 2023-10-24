@@ -1,4 +1,4 @@
-import { SubitemTypes } from "../../../../../../constants/global"
+import { ItemTypes, SubitemTypes } from "../../../../../../constants/global"
 
 export class SimpleJsonImport {
     constructor(surveyRepo) {
@@ -9,11 +9,11 @@ export class SimpleJsonImport {
 
         const { testPoints, pipelines, rectifiers, subitems, potentials, potentialTypes, survey, referenceCells, assets, mapLayers } = surveyFile
 
-        //Getting circuits from subitems (stored inside separate table)
-        const circuits = subitems.filter(({ type }) => type === SubitemTypes.CIRCUIT)
+        //Getting (rectifier subitems)
+        const circuits = subitems.filter(({ parentType }) => parentType === ItemTypes.RECTIFIER)
 
         //Getting cards (testPoint subitems) from subitems
-        const cards = subitems.filter(({ type }) => type !== SubitemTypes.CIRCUIT)
+        const cards = subitems.filter(({ parentType }) => parentType === ItemTypes.TEST_POINT)
 
         //Coupon subitem must be inserted first, because it references PIPELINE/RISER subitem, therefore sorting COUPON to be firts
         cards.sort((a, b) => a.type === SubitemTypes.COUPON && b.type !== SubitemTypes.COUPON ? -1 : (a.type !== SubitemTypes.COUPON && b.type === SubitemTypes.COUPON ? 1 : 0))
@@ -26,11 +26,20 @@ export class SimpleJsonImport {
                 ...sideB.map(sideBId => ({ sideAId: null, sideBId: sideBId, parentId: id }))
             ]).flat()
 
+        //Getting anodBed anodes from anode bed subitems
+        const anodeBedAnodes = circuits
+            .filter(({ anodes }) => Boolean(anodes) && anodes.length > 0)
+            .map(({ anodes }) => anodes).flat()
+
+        const soilResistivityLayers = sides
+            .filter(({ layers }) => Boolean(layers) && layers.length > 0)
+            .map(({ layers }) => layers).flat()
+
         //ensure there is a main reference Cell
         const mainReferenceExist = referenceCells.some(({ isMainReference }) => isMainReference)
         if (!mainReferenceExist && referenceCells[0])
             referenceCells[0].makeMainReference()
-        await this.surveyRepo.import({ testPoints, rectifiers, pipelines, cards, circuits, potentialTypes, survey, referenceCells, potentials, sides, assets, mapLayers })
+        await this.surveyRepo.import({ testPoints, rectifiers, pipelines, cards, circuits, potentialTypes, survey, referenceCells, potentials, sides, assets, mapLayers, anodeBedAnodes, soilResistivityLayers })
     }
 
 }

@@ -42,7 +42,9 @@ export const SubitemTypeIcons = Object.freeze({
     [SubitemTypes.RISER]: 'RS',
     [SubitemTypes.SHUNT]: 'SH',
     [SubitemTypes.STRUCTURE]: 'FC',
-    [SubitemTypes.TEST_LEAD]: 'OT'
+    [SubitemTypes.TEST_LEAD]: 'OT',
+    [SubitemTypes.ANODE_BED]: 'AB',
+    [SubitemTypes.SOIL_RESISTIVITY]: 'SR'
 })
 
 export const SubitemTypeIconsFilled = Object.freeze({
@@ -56,7 +58,9 @@ export const SubitemTypeIconsFilled = Object.freeze({
     [SubitemTypes.RISER]: 'RS-filled',
     [SubitemTypes.SHUNT]: 'SH-filled',
     [SubitemTypes.STRUCTURE]: 'FC-filled',
-    [SubitemTypes.TEST_LEAD]: 'OT-filled'
+    [SubitemTypes.TEST_LEAD]: 'OT-filled',
+    [SubitemTypes.ANODE_BED]: 'AB-filled',
+    [SubitemTypes.SOIL_RESISTIVITY]: 'SR-filled'
 })
 
 export const CalculatorTypeIcons = Object.freeze({

@@ -1,5 +1,5 @@
 import { object, string, number, boolean, array, mixed } from 'yup'
-import { SubitemTypes, PipelineMaterials, PipelineProducts, CoarseFineOptions, PowerSources, TapOptions, ItemStatuses, ItemTypes, TestPointTypes, AnodeMaterials, CalculatorTypes, CouponTypes, DisplayedReadingOptions, IsolationTypes, ItemPropertyUpdateTypes, PermanentPotentialTypes, PipeDiameters, PotentialUnits, ReferenceCellTypes, SortingOptions, SubitemPropertyUpdateTypes, WireColors, WireGauges, MultimeterTypes, MultimeterSyncModes, MultimeterCycles, MultimeterMeasurementTypes, StrokeColors, StrokeWidths, MediaTypes, MapLayerFeatures } from '../../constants/global'
+import { SubitemTypes, PipelineMaterials, PipelineProducts, CoarseFineOptions, PowerSources, TapOptions, ItemStatuses, ItemTypes, TestPointTypes, AnodeMaterials, CalculatorTypes, CouponTypes, DisplayedReadingOptions, IsolationTypes, ItemPropertyUpdateTypes, PermanentPotentialTypes, PipeDiameters, PotentialUnits, ReferenceCellTypes, SortingOptions, SubitemPropertyUpdateTypes, WireColors, WireGauges, MultimeterTypes, MultimeterSyncModes, MultimeterCycles, MultimeterMeasurementTypes, StrokeColors, StrokeWidths, MediaTypes, MapLayerFeatures, AnodeBedEnclosureTypes, AnodeBedMaterialTypes, AnodeBedTypes, LengthUnits, ResistivityUnits } from '../../constants/global'
 import { Error, errors } from "./Error"
 
 export class Validation {
@@ -56,6 +56,11 @@ export class Validation {
     strokeWidth = mixed().oneOf(Object.values(StrokeWidths))
     mediaType = mixed().oneOf(Object.values(MediaTypes))
     mapLayerFeatures = array().of(mixed().oneOf(Object.values(MapLayerFeatures)))
+    anodeBedEnclosure = mixed().oneOf([null, ...Object.values(AnodeBedEnclosureTypes)]).nullable()
+    anodeBedMaterial = mixed().oneOf([null, ...Object.values(AnodeBedMaterialTypes)]).nullable()
+    bedType = mixed().oneOf([null, ...Object.values(AnodeBedTypes)]).nullable()
+    lengthUnit = mixed().oneOf(Object.values(LengthUnits))
+    resistivityUnit = mixed().oneOf(Object.values(ResistivityUnits))
     validate(value, schema) {
         try {
             return schema.validateSync(value)

@@ -27,8 +27,9 @@ export class SubitemRepository extends SQLiteRepository {
 
     async delete(itemId, subitemId, subitemType, currentTime) {
         try {
-            const subitemTable = subitemType === SubitemTypes.CIRCUIT ? 'circuits' : 'cards'
-            const itemTable = subitemType === SubitemTypes.CIRCUIT ? 'rectifiers' : 'testPoints'
+            const isRectifierItemType = subitemType === SubitemTypes.CIRCUIT || subitemType === SubitemTypes.ANODE_BED
+            const subitemTable = isRectifierItemType ? 'circuits' : 'cards'
+            const itemTable = isRectifierItemType ? 'rectifiers' : 'testPoints'
             const result = await super.runMultiQueryTransaction(tx => [
                 this.runQuery(tx, `DELETE FROM ${subitemTable} WHERE id=?`, [subitemId]),
                 this.runQuery(tx, `UPDATE ${itemTable} SET timeModified = ? WHERE id = ?`, [currentTime, itemId]),

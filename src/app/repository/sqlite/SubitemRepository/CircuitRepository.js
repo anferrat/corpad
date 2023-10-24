@@ -1,16 +1,17 @@
 import { SQLiteRepository } from "../../../utils/SQLite"
 import { Circuit } from "../../../entities/survey/subitems/Circuit"
 import { Error, errors } from "../../../utils/Error"
+import { SubitemTypes } from "../../../../constants/global"
 
 
 export class CircuitRepository extends SQLiteRepository {
-    constructor () {
+    constructor() {
         super()
     }
 
     async getAll() {
         try {
-            const result = await this.runSingleQueryTransaction('SELECT id, rectifierId, uid, name, ratioCurrent, ratioVoltage, current, voltage, targetMin, targetMax, voltageDrop FROM circuits')
+            const result = await this.runSingleQueryTransaction('SELECT id, rectifierId, uid, name, ratioCurrent, ratioVoltage, current, voltage, targetMin, targetMax, voltageDrop FROM circuits WHERE type=?', [SubitemTypes.CIRCUIT])
             return super.generateArray(result.rows.length, result.rows.item)
                 .map(({ id, rectifierId, uid, name, ratioCurrent, ratioVoltage, current, voltage, targetMin, targetMax, voltageDrop }) =>
                     new Circuit(id, rectifierId, uid, name, ratioCurrent, ratioVoltage, targetMin, targetMax, current, voltage, voltageDrop))
@@ -22,9 +23,9 @@ export class CircuitRepository extends SQLiteRepository {
 
     async create(circuit) {
         try {
-            const { id, uid, parentId, name, ratioCurrent, ratioVoltage, current, voltage, targetMin, targetMax, voltageDrop } = circuit
-            const result = await this.runSingleQueryTransaction('INSERT INTO circuits (id, uid, rectifierId, name, ratioCurrent, ratioVoltage, current, voltage, targetMin, targetMax, voltageDrop) VALUES (?,?,?,?,?,?,?,?,?,?,?)',
-                [id, uid, parentId, name, ratioCurrent, ratioVoltage, current, voltage, targetMin, targetMax, voltageDrop])
+            const { id, uid, type, parentId, name, ratioCurrent, ratioVoltage, current, voltage, targetMin, targetMax, voltageDrop } = circuit
+            const result = await this.runSingleQueryTransaction('INSERT INTO circuits (id, uid, type, rectifierId, name, ratioCurrent, ratioVoltage, current, voltage, targetMin, targetMax, voltageDrop) VALUES (?,?,?,?,?,?,?,?,?,?,?,?)',
+                [id, uid, type, parentId, name, ratioCurrent, ratioVoltage, current, voltage, targetMin, targetMax, voltageDrop])
             return new Circuit(result.insertId, parentId, uid, name, ratioCurrent, ratioVoltage, targetMin, targetMax, current, voltage, voltageDrop)
         }
         catch (err) {
@@ -34,7 +35,7 @@ export class CircuitRepository extends SQLiteRepository {
 
     async getById(id) {
         try {
-            const result = await this.runSingleQueryTransaction('SELECT rectifierId, uid, name, ratioCurrent, ratioVoltage, current, voltage, targetMin, targetMax, voltageDrop FROM circuits WHERE id=?', [id])
+            const result = await this.runSingleQueryTransaction('SELECT rectifierId, uid, name, ratioCurrent, ratioVoltage, current, voltage, targetMin, targetMax, voltageDrop FROM circuits WHERE id=? AND type=?', [id, SubitemTypes.CIRCUIT])
             const { rectifierId, uid, name, ratioCurrent, ratioVoltage, current, voltage, targetMin, targetMax, voltageDrop } = result.rows.item(0)
             return new Circuit(id, rectifierId, uid, name, ratioCurrent, ratioVoltage, targetMin, targetMax, current, voltage, voltageDrop)
         }

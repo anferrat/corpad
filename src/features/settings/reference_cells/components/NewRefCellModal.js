@@ -36,6 +36,7 @@ const NewRefCellModal = ({ onChangeName, onChangeType, rcType, name, visible, di
                 keyboardShouldPersistTaps='handled'
                 style={styles.mainView}>
                 <Input
+                    maxLength={40}
                     ref={inputRef}
                     label='Name'
                     valid={nameValid}

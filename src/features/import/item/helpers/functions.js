@@ -134,16 +134,6 @@ export const getPreviewList = (data, fields, fieldIndex, fieldIndexList, importT
 
 export const showItemValue = (item) => (item === undefined || item === '' || item === null) ? '<Empty>' : item.trim()
 
-export const getButtonTitle = (itemType) => {
-    switch (itemType) {
-        case 'TEST_POINT':
-            return 'Add reading'
-        case 'RECTIFIER':
-            return 'Add circuit'
-        default:
-            return 'Add'
-    }
-}
 
 export const getItemName = (itemType, count = null) => {
     const text = count === 1 ? ItemTypeLabels[itemType] : ItemTypeLabelsPlural[itemType]
