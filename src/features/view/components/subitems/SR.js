@@ -24,11 +24,11 @@ const SR = ({ data, onEdit }) => {
                 labels={tabs}
                 selectedTabIndex={displayedTab}
                 onPress={setDisplayedTab} />
-            <View
-                style={styles.layers}>
-                {layers.length === 0 ?
-                    null :
-                    layers.map(({ spacing, resistanceToZero, resistivityToZero }, index) => {
+            {layers.length === 0 ?
+                null :
+                <View
+                    style={styles.layers}>
+                    {layers.map(({ spacing, resistanceToZero, resistivityToZero }, index) => {
                         return displayedTab === 0 ?
                             <ResistivityLayerView
                                 key={'' + index + displayedTab}
@@ -46,8 +46,8 @@ const SR = ({ data, onEdit }) => {
                                 resistance={index === 0 ? resistanceToZero : layers[index - 1].resistanceToNext}
                                 resistivity={index === 0 ? resistivityToZero : layers[index - 1].resistivityToNext}
                                 resistivityUnit={resistivityUnit} />
-                    })}
-            </View>
+                    })}</View>}
+
             <TextLine title='Comment' value={comment} />
         </>
     )

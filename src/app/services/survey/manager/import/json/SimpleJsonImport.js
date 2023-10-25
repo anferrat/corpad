@@ -31,9 +31,11 @@ export class SimpleJsonImport {
             .filter(({ anodes }) => Boolean(anodes) && anodes.length > 0)
             .map(({ anodes }) => anodes).flat()
 
-        const soilResistivityLayers = sides
+            //Getting Soil resistivity layers from soil resistivity subitems
+        const soilResistivityLayers = cards
             .filter(({ layers }) => Boolean(layers) && layers.length > 0)
             .map(({ layers }) => layers).flat()
+
 
         //ensure there is a main reference Cell
         const mainReferenceExist = referenceCells.some(({ isMainReference }) => isMainReference)

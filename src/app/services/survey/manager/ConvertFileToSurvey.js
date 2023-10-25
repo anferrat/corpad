@@ -35,7 +35,10 @@ export class ConvertFileToSurvey {
                 }
             }
             catch (er) {
-                throw new Error(errors.GENERAL, 'Unable to convert file to survey', 'File format is not valid.', 437)
+                if (er?.code === 101)
+                    throw new Error(errors.GENERAL, 'Recovering survey cancelled', 'User cancelled operation', 101)
+                else
+                    throw new Error(errors.GENERAL, 'Unable to convert file to survey', 'File format is not valid.', 437)
             }
         }
     }

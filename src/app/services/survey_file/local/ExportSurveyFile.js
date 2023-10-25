@@ -25,6 +25,7 @@ export class ExportSurveyFile {
         const { missingAssets } = await this.assetFileUploadControl.execute(assets, [], localAssetFiles)
         const confirm = missingAssets.length === 0 || await this.warningHandler.execute(`There are missing ${missingAssets.length} assets (e.g. photos) for this survey. They will be removed from exported survey. Do you wish to continue?`, 'Continue', 'Cancel')
         if (confirm) {
+            await this.fileSystemRepo.removeDir(FileSystemLocations.TEMP_ASSETS)
             const tempAssetsFolderPath = await this.fileSystemRepo.getLocation(FileSystemLocations.TEMP_ASSETS)
             await this.fileSystemRepo.copyFiles(tempAssetsFolderPath, localAssetFiles)
         }
@@ -44,6 +45,7 @@ export class ExportSurveyFile {
                 mimeType: FileMimeTypes.JSON,
             }
         else {
+           
             await this._copyAssets(surveyFile.assets, surveyFile.survey.uid)
             await this.fileSystemRepo.writeFile(surveyFileContent, 'survey.json', FileSystemLocations.TEMP_SURVEY, true)
             const zipPath = await this.compressTempSurveyService.execute(filename)

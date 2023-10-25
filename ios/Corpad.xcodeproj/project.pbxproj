@@ -512,7 +512,7 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = org.reactjs.native.example.Corpad;
+				PRODUCT_BUNDLE_IDENTIFIER = com.corpad;
 				PRODUCT_NAME = Corpad;
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "Corpad-Bridging-Header.h";
@@ -545,7 +545,7 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = org.reactjs.native.example.Corpad;
+				PRODUCT_BUNDLE_IDENTIFIER = com.corpad;
 				PRODUCT_NAME = Corpad;
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "Corpad-Bridging-Header.h";

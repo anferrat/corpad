@@ -1,8 +1,7 @@
 import React from 'react'
-import { StyleSheet, Image, View } from 'react-native'
+import { StyleSheet, Image, View, Pressable } from 'react-native'
 import { basic1000, basic300, basic400, basic700, control, danger, primary } from '../../../../../styles/colors'
 import { Icon } from '@ui-kitten/components'
-import Pressable from '../../../../../components/Pressable'
 import { androidRipple } from '../../../../../styles/styles'
 import { dimensions } from './size'
 
@@ -20,8 +19,7 @@ const PhotoListItem = ({ uri, index, onPress, onDelete }) => {
     return (
         <Pressable
             style={styles.container}
-            onPress={onPressHandler}
-            android_ripple={androidRipple}>
+            onPress={onPressHandler}>
             <Image
                 style={styles.image}
                 width={dimensions.length}

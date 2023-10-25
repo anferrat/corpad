@@ -10,7 +10,7 @@ export class DocumentPicker {
     _decode(uri) {
         return Platform.select({
             android: decodeURIComponent(uri),
-            ios: uri,
+            ios: decodeURIComponent(uri),
             default: uri
         })
     }
@@ -34,7 +34,7 @@ export class DocumentPicker {
     async pickSurveyFile() {
         return await this.execute(Platform.select({
             android: [FileMimeTypes.JSON, FileMimeTypes.ZIP, FileMimeTypes.BINARY],
-            ios: FileTypeIdentifiers.ITEM,
+            ios: [FileTypeIdentifiers.SURVEY_FILE_WITH_ASSETS, FileTypeIdentifiers.JSON],
             default: `*/*`
         }))
     }
