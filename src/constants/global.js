@@ -347,12 +347,15 @@ export const FileMimeTypes = Object.freeze({
 })
 
 export const FileTypeIdentifiers = Object.freeze({
+    SURVEY_FILE: 'com.corpad.survey-file',
+    SURVEY_FILE_WITH_ASSETS:'com.corpad.survey-file-with-assets',
     CSV: 'public.comma-separated-values-text',
-    KML: 'public.xml',
-    GPX: 'public.xml',
+    KML: 'com.google.earth.kml',
+    GPX: 'com.topografix.gpx',
     JSON: 'public.json',
     TEXT: 'public.plain-text',
     ITEM: 'public.item',
+    CONTENT: 'public.content'
 })
 
 export const FileExtensions = Object.freeze({

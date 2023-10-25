@@ -20,15 +20,15 @@ export class Marker extends SurveyItem {
         return {
             "type": "Feature",
             "properties": {
-                "name": this.name,
+                "name": this.name ?? 'Point',
                 "marker-size": "large",
-                "marker-color": StatusColors[this.status],
-                "marker-symbol": this.itemType === ItemTypes.TEST_POINT ? ExportMarkerSymbols[this.itemType][this.testPointType] : ExportMarkerSymbols[this.itemType]
+                "marker-color": StatusColors[this.status] ?? '#7186C7',
+                "marker-symbol": (this.itemType === ItemTypes.TEST_POINT ? ExportMarkerSymbols[this.itemType][this.testPointType] : ExportMarkerSymbols[this.itemType]) ?? 't'
             },
             "geometry": {
                 "coordinates": [
-                    this.longitude,
-                    this.latitude
+                    this.longitude ?? 0,
+                    this.latitude ?? 0
                 ],
                 "type": "Point",
             }

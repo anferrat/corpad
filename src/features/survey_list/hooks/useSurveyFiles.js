@@ -4,7 +4,7 @@ import { errorHandler, warningHandler } from '../../../helpers/error_handler'
 import { useDispatch, useSelector } from 'react-redux'
 import { hideLoader, setSurveySettings, updateLoader, updateLoaderProgress, updateSession } from '../../../store/actions/settings'
 import { EventRegister } from 'react-native-event-listeners'
-import { ToastAndroid } from 'react-native'
+import { Platform, ToastAndroid } from 'react-native'
 
 const useSurveyFiles = ({ isCloud, navigateToSurveyFileList }) => {
     const isSignedIn = useSelector(state => state.settings.session.isSigned)
@@ -36,7 +36,7 @@ const useSurveyFiles = ({ isCloud, navigateToSurveyFileList }) => {
         }
     }, [])
 
-    const fileListErrorHandler = useCallback((errorStatus, er) => {
+    const fileListErrorHandler = useCallback((errorStatus) => {
         //Handle remote requests. 302 status - user is not signed. 
         if (errorStatus === 302)
             dispatch(updateSession(false, false, null))
@@ -118,9 +118,11 @@ const useSurveyFiles = ({ isCloud, navigateToSurveyFileList }) => {
 
     const shareSurveyFile = useCallback(async ({ path, cloudId, name }) => {
         dispatch(updateLoader('Exporting survey', name))
-        await shareFile({ path, cloudId, isCloud, onDownload })
+        const { status } = await shareFile({ path, cloudId, isCloud, onDownload })
+        if (status !== 200)
+            fileListErrorHandler(status)
         dispatch(hideLoader())
-    }, [isCloud])
+    }, [isCloud, fileListErrorHandler])
 
 
     const copyToAlternateFolder = useCallback(async ({ path, cloudId, name }) => {
@@ -139,8 +141,10 @@ const useSurveyFiles = ({ isCloud, navigateToSurveyFileList }) => {
     const copyToDownloads = useCallback(async ({ path, cloudId, name }) => {
         dispatch(updateLoader('Saving survey to downloads', name))
         const { status } = await copySurveyFileToDownloads({ isCloud, cloudId, path, onDownload })
-        if (status === 200)
-            ToastAndroid.show('Saved', ToastAndroid.SHORT)
+        if (status === 200) {
+            if (Platform.OS === "android")
+                ToastAndroid.show('Saved', ToastAndroid.SHORT)
+        }
         else fileListErrorHandler(status)
         dispatch(hideLoader())
     }, [fileListErrorHandler, onDownload])

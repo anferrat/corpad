@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
-import { ToastAndroid } from 'react-native'
+import { Platform, ToastAndroid } from 'react-native'
 import { errorHandler, warningHandler } from '../../../../helpers/error_handler'
 import { deleteAllExportedFiles, deleteExportedFile, getExportedFileList, openFileIn, saveExportedFileToDownloads, shareFile } from '../../../../app/controllers/survey/other/ExportedFileController'
 
@@ -31,14 +31,18 @@ const useExportedFiles = () => {
     }, [])
 
     const saveToDownloads = useCallback((path) => {
-        saveExportedFileToDownloads({ path }, er => errorHandler(er), () => ToastAndroid.show('Saved', ToastAndroid.SHORT))
+        saveExportedFileToDownloads({ path }, er => errorHandler(er), () => {
+            if (Platform.OS === 'android')
+                ToastAndroid.show('Saved', ToastAndroid.SHORT)
+        })
     }, [])
 
     const deleteFile = useCallback(async (fileName, path) => {
         const confirm = await warningHandler(44, 'Delete', 'Cancel')
         if (confirm) {
             const { status } = await deleteExportedFile({ path }, er => errorHandler(er), () => {
-                ToastAndroid.show(`${fileName} was deleted`, ToastAndroid.SHORT)
+                if (Platform.OS === 'android')
+                    ToastAndroid.show(`${fileName} was deleted`, ToastAndroid.SHORT)
             })
 
             return status === 200
@@ -57,7 +61,8 @@ const useExportedFiles = () => {
                 deleteAllExportedFiles(
                     (er) => errorHandler(er),
                     () => {
-                        ToastAndroid.show('All files were deleted', ToastAndroid.SHORT)
+                        if (Platform.OS === 'android')
+                            ToastAndroid.show('All files were deleted', ToastAndroid.SHORT)
                         setFiles(initFiles)
                     })
             }

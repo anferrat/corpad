@@ -20,7 +20,7 @@ export class SurveyFileContentValidationV2 extends Validation {
         }
 
         this.anodeBedAnodeSchema = tuple([this.id.nullable(), this.uid.nullable(), this.id, this.number, this.wireColor, this.wireGauge, this.number])
-        this.soilResistivityLayerSchema = tuple([this.id, this.uid, this.id, this.number, this.number, this.number, this.number, this.number])
+        this.soilResistivityLayerSchema = tuple([this.id.nullable(), this.uid.nullable(), this.id, this.number, this.number, this.number, this.number, this.number])
 
         this.subitemSchemas = {
             [SubitemTypes.ANODE]: tuple([this.id, this.uid, this.name, this.subitemType, this.id, this.anodeMaterial, this.wireGauge, this.wireColor]),

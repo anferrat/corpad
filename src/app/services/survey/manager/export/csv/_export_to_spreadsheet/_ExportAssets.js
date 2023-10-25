@@ -31,6 +31,7 @@ export class _ExportAssets {
         const items = await this._getItems(itemType)
         if (items.length > 0) {
             const assetFolder = await this.fileSystemRepo.getLocation(FileSystemLocations.CURRENT_ASSETS)
+            await this.fileSystemRepo.removeDir(FileSystemLocations.TEMP_ASSETS)
             const tempAssetFolder = await this.fileSystemRepo.getLocation(FileSystemLocations.TEMP_ASSETS)
             const exportedFilesFolder = await this.fileSystemRepo.getLocation(FileSystemLocations.EXPORTS)
             const assets = (await this.assetRepo.getAll()).filter(({ parentType }) => parentType === itemType)

@@ -50,9 +50,9 @@ const ExportedFileListItem = ({ deleteFile, removeFileFromList, saveToDownloads,
         hideModal()
     }, [path])
 
-    const handleShareFile = React.useCallback(() => {
+    const handleShareFile = React.useCallback(async () => {
+        await shareFileHandler(path, type)
         hideModal()
-        shareFileHandler(path, type)
     }, [path, type, hideModal, shareFileHandler])
 
     const handleOpenIn = React.useCallback(async () => {
