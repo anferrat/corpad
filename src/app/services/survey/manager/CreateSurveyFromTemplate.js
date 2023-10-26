@@ -1,13 +1,14 @@
 import { Error, errors } from "../../../utils/Error"
 
 export class CreateSurveyFromTemplate {
-    constructor(fileSystemRepo, validation, jsonImportService, surveyFileConverter, surveyLoadStatusService, settingRepo) {
+    constructor(fileSystemRepo, validation, jsonImportService, surveyFileConverter, surveyLoadStatusService, settingRepo, surveyRepo) {
         this.fileSystemRepo = fileSystemRepo
         this.validation = validation
         this.jsonImportService = jsonImportService
         this.surveyFileConverter = surveyFileConverter
         this.surveyLoadStatusService = surveyLoadStatusService
         this.settingRepo = settingRepo
+        this.surveyRepo = surveyRepo
     }
 
     async execute(name, isCloud, path) {
@@ -29,6 +30,7 @@ export class CreateSurveyFromTemplate {
                 //6. Import to database with fast method.
                 await this.jsonImportService.execute(surveyFile)
                 await this.settingRepo.updateSurveySettings({ isSurveyNew: 1, isCloud, originalHash: null, fileName: null, cloudId: null, lastSync: null })
+                await this.surveyRepo.updateName(name)
                 return {
                     name,
                     fileName: null,
