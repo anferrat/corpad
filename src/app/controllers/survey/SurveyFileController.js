@@ -73,7 +73,7 @@ class SurveyFileController extends Controller {
         this.copySurveyFileToDownloadsService = new CopySurveyFileToDownloads(fileSystemRepo, permissions)
 
         this.createSurveyService = new CreateSurvey(surveyRepo, potentialTypeRepo, this.surveyLoadStatusService, pipelineRepo, referenceCellRepo, settingRepo)
-        this.createSurveyFromTemplateService = new CreateSurveyFromTemplate(fileSystemRepo, surveyFileContentValidation, this.jsonImportService, this.surveyFileConverterInputService, this.surveyLoadStatusService, settingRepo)
+        this.createSurveyFromTemplateService = new CreateSurveyFromTemplate(fileSystemRepo, surveyFileContentValidation, this.jsonImportService, this.surveyFileConverterInputService, this.surveyLoadStatusService, settingRepo, surveyRepo)
 
         this.shareService = shareService
 
