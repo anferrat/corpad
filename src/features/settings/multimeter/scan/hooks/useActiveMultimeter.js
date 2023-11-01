@@ -2,16 +2,19 @@ import { useCallback, useState, useEffect, useRef } from 'react'
 import { useDispatch, useSelector } from "react-redux"
 import { startMultimeterScan, stopMultimeterScan, multimeterScanListener, multimeterStopScanListener, pairMultimeter, unpairMultimeter, connectMultimeter, disconnectMultimeter, addMultimeterStatusListener, checkBleState } from '../../../../../app/controllers/MultimeterController'
 import { addBluetoothStatusListener } from '../../../../../app/controllers/AppController'
-import { setActiveMultimeter, setActiveMultimeterStatus } from '../../../../../store/actions/settings'
+import { setActiveMultimeter, setActiveMultimeterStatus, showPaywall } from '../../../../../store/actions/settings'
 import { errorHandler } from '../../../../../helpers/error_handler'
 import useModal from '../../../../../hooks/useModal'
 import { hapticMedium } from '../../../../../native_libs/haptics'
+import { isProStatus } from '../../../../../helpers/functions'
 
 const initialState = []
 
 const useActiveMultimeter = () => {
     const dispatch = useDispatch()
     const activeMultimeter = useSelector(state => state.settings.activeMultimeter)
+    const subscriptionStatus = useSelector(state => state.settings.subscription.status)
+    const isPro = isProStatus(subscriptionStatus)
     const [isBluetoothOn, setIsBluetoothOn] = useState(false)
     const [scannedDevices, setScannedDevices] = useState(initialState)
     const [pairingId, setPairingId] = useState(null)
@@ -21,6 +24,10 @@ const useActiveMultimeter = () => {
     const connectingFlag = useRef(false)
     const scanningRef = useRef(false)
     const componentMounted = useRef(true)
+
+    const onPaywallShow = useCallback(() => {
+        dispatch(showPaywall())
+    }, [])
 
 
 
@@ -153,6 +160,13 @@ const useActiveMultimeter = () => {
         }
     }, [scanning, isBluetoothOn])
 
+    const onShowModal = useCallback(() => {
+        if (isPro)
+            showModal()
+        else
+            onPaywallShow()
+    }, [isPro])
+
     return {
         scanDevices,
         connectToActiveMultimeter,
@@ -165,9 +179,11 @@ const useActiveMultimeter = () => {
         pairingId,
         connecting,
         pairing: pairingId !== null && !activeMultimeter.paired,
-        showModal,
+        showModal: onShowModal,
         hideModal,
-        visible
+        onPaywallShow,
+        visible,
+        isPro,
     }
 
 }

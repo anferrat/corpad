@@ -12,7 +12,6 @@ export class _GetFileContent {
             return JSON.parse(data)
         }
         catch (er) {
-            console.log(er)
             return {
                 type: 'FeatureCollection',
                 features: []

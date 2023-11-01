@@ -10,27 +10,28 @@ import { useBottomSheetNavigation } from '../../../../hooks/bottom_sheet/useBott
 const ListHeader = (props) => {
     const { openRectifierReadingMenu, openTestPointFilterMenu, openTestPointReadingMenu, openTestPointSortingMenu } = useBottomSheetNavigation()
     const { translateY, opacity } = props
-
-    return (
-        <Animated.View
-            style={{ ...styles.mainView, opacity: opacity, transform: [{ translateY: translateY }] }}>
-            <View style={styles.sorting}>
-                <SortingHeaderButton
-                    dataType={props.dataType}
-                    openSheet={openTestPointSortingMenu} />
-            </View>
-            <View style={styles.filter}>
-                <FilterHeaderButton
-                    dataType={props.dataType}
-                    openSheet={openTestPointFilterMenu} />
-            </View>
-            <View style={styles.reading}>
-                <ReadingsHeaderButton
-                    dataType={props.dataType}
-                    openSheet={props.dataType === 'RECTIFIER' ? openRectifierReadingMenu : openTestPointReadingMenu} />
-            </View>
-        </Animated.View>
-    )
+    if (props.dataType !== 'PIPELINE')
+        return (
+            <Animated.View
+                style={{ ...styles.mainView, opacity: opacity, transform: [{ translateY: translateY }] }}>
+                <View style={styles.sorting}>
+                    <SortingHeaderButton
+                        dataType={props.dataType}
+                        openSheet={openTestPointSortingMenu} />
+                </View>
+                <View style={styles.filter}>
+                    <FilterHeaderButton
+                        dataType={props.dataType}
+                        openSheet={openTestPointFilterMenu} />
+                </View>
+                <View style={styles.reading}>
+                    <ReadingsHeaderButton
+                        dataType={props.dataType}
+                        openSheet={props.dataType === 'RECTIFIER' ? openRectifierReadingMenu : openTestPointReadingMenu} />
+                </View>
+            </Animated.View>
+        )
+    else return <View style={styles.mainView}></View>
 }
 
 export default ListHeader

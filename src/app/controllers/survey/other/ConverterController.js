@@ -20,7 +20,6 @@ class ConverterController extends Controller {
     }
 
     convertLength({ value, inputUnit, outputUnit }, onError = null, onSuccess = null) {
-        console.log(value, inputUnit, outputUnit)
         return super.callbackHandler(onSuccess, onError, 622, () => {
             return this.converterService.convertLength(value, inputUnit, outputUnit)
         })

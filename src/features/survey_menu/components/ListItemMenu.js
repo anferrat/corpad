@@ -1,13 +1,13 @@
 import React from 'react'
 import { Text, Icon } from '@ui-kitten/components'
 import { StyleSheet, View, ActivityIndicator } from 'react-native'
-import { basic, primary, StatusColors } from '../../../styles/colors'
+import { basic, primary } from '../../../styles/colors'
 import { androidRipple } from '../../../styles/styles'
 import Pressable from '../../../components/Pressable'
 
 
-const ListItem = ({ status, icon, pack, title, subtitle, onPress, disabled, subtitleIcon, subtitleIconPack, subtitleIconColor }) => {
-    const color = StatusColors[status] ?? primary
+const ListItem = ({ iconColor, icon, pack, title, subtitle, onPress, disabled, subtitleIcon, subtitleIconPack, subtitleIconColor, textStatus }) => {
+    const color = iconColor ?? primary
     return (
         <Pressable
             disabled={disabled}
@@ -18,7 +18,7 @@ const ListItem = ({ status, icon, pack, title, subtitle, onPress, disabled, subt
                 <Icon name={icon} pack={pack} style={styles.icon} fill={color} />
             }
             <View>
-                <Text category='s1'>{title}</Text>
+                <Text category='s1' status={textStatus ?? 'default'} >{title}</Text>
                 {subtitle ?
                     <View style={styles.subtitleView}>
                         {subtitleIcon ? <Icon name={subtitleIcon} fill={subtitleIconColor ?? basic} style={styles.subtitleIcon} pack={subtitleIconPack ?? 'cp'} /> : null}

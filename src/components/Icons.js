@@ -49,3 +49,4 @@ export const checkedBox = (props) => <Icon name='checkmark-square-2-outline' {..
 export const scanIcon = (props) => <Icon name='bluetooth' {...props} />
 export const connectIcon = (props) => <Icon name='link-2' {...props} />
 export const optionIcon = (props) => <Icon name='options' {...props} />
+export const pricetags = (props) => <Icon name='pricetags' {...props} />

@@ -1,64 +1,30 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import { globalStyle } from '../styles/styles'
 import { SafeAreaView, StatusBar } from 'react-native'
 import { Button, Text } from '@ui-kitten/components'
 import { TestRepository } from '../app/repository/sqlite/TestRepo'
 import FocusAwareStatusBar from '../components/FocusAwareStatusBar'
 import { generateTestPoints, resetDatabase } from '../app/controllers/DevController'
-import { pairMultimeter } from '../app/controllers/MultimeterController'
-import { EventRegister } from 'react-native-event-listeners'
-import { _PokitMultimeterService } from '../app/services/survey/other/multimeter/_devices/pokitPro/_PokitMultimeterService'
-import { useSelector } from 'react-redux'
-import { GoogleDriveFileTransferManager } from '../app/repository/cloud_drive/GoogleDriveFileTransferManager'
-import RNFS from 'react-native-fs'
-import { fileSystemRepo } from '../app/controllers/_instances/repositories'
-import { FileSystemLocations } from '../constants/global'
-import { readGeoFile } from '../app/controllers/survey/other/MapLayerController'
-import { errorHandler } from '../helpers/error_handler'
-import { GeoJsonValidation } from '../app/validation/geoJson/GeoJsonValidation'
-import { SoilResistivity } from '../app/entities/survey/subitems/SoilResistivity'
-import { SoilResistivityLayer } from '../app/entities/survey/subitems/SoilResistivityLayer'
+import { InitializePurchases } from '../app/services/purchases/InitializePurchases'
+import { geolocationRepo, networkRepo, purchaseRepo, settingRepo } from '../app/controllers/_instances/repositories'
+import { permissions } from '../app/controllers/_instances/general_services'
+import { useDispatch } from 'react-redux'
+import { showPaywall } from '../store/actions/settings'
+import { SettingRepository } from '../app/repository/sqlite/SettingRepository'
 
-const pointFeature = { type: 'Feature', properties: {}, geometry: { "geometries": [{ "coordinates": [-122.9508563135236, 49.2346442062025, 0], "type": "Point" }, { "coordinates": [-122.9508563135236, 49.2346442062025, 0], "type": "Point" }, { "coordinates": [-122.9508563135236, 49.2346442062025, 0], "type": "Point" }], "type": "GeometryCollection" } }
+const settings = new SettingRepository()
+
+const initPurchases = new InitializePurchases(purchaseRepo, networkRepo, geolocationRepo, settingRepo, permissions)
 
 export default DevScreen = ({ navigation, route }) => {
-  const id = useSelector(state => state.settings.activeMultimeter.id)
-  const pairTestMultimeter = () => {
-    pairMultimeter({ id: 'kkk', multimeterType: 'POKIT', name: 'PokitPro' })
+  const dispatch = useDispatch()
+
+  const show = () => dispatch(showPaywall())
+
+  const test = () => {
+    settingRepo.updateOfflineCount(2)
   }
 
-
-
-  const testCapture = () => {
-    EventRegister.emit('MULTIMETER_START_CAPTURE', { itemId: 1, subitemId: 1, potentialId: 1, measurementType: 'POTENTIALS' })
-  }
-
-  const testDownload = async () => {
-    const manager = new GoogleDriveFileTransferManager()
-    const { jobId, promise } = manager.upload(`${RNFS.DocumentDirectoryPath}/surveys/kuku3.json`, 'kuku3.json', ['1N2ek1TMnwn6R2t-CSqV5cNvrLlgwMY5V'], 'application/json')
-    //'1H0L-GYu4zULBis9zeKbs46EA2gljUf8s', `${RNFS.DocumentDirectoryPath}/surveys/kuku3.json`)
-    //console.log(await promise)
-  }
-
-  const testKml = () => {
-    readGeoFile((er, errorMessage) => {
-      errorHandler(er)
-      console.log(errorMessage)
-    })
-  }
-
-  const testValidation = () => {
-    const val = new GeoJsonValidation()
-    try {
-      const test = new SoilResistivity(1, 2, 'sds', 'ds', 1, 1, 'ds', [new SoilResistivityLayer(1, 'sds', 2, 3, 12), new SoilResistivityLayer(1, 'sds', 2, 6, 25)])
-      test.calculate()
-      console.log(test.layers)
-    }
-    catch (er) {
-      console.log(er)
-    }
-
-  }
 
   return (
     <SafeAreaView style={{ ...globalStyle.screen, paddingTop: StatusBar.currentHeight }}>
@@ -67,10 +33,9 @@ export default DevScreen = ({ navigation, route }) => {
       <Button onPress={() => navigation.goBack()} appearance='ghost'>Back to App</Button>
       <Button onPress={() => generateTestPoints({ count: 10 })} appearance='ghost'>Generate 10 test points</Button>
       <Button onPress={resetDatabase} appearance='ghost'>Reset DB</Button>
-      <Button onPress={testCapture} appearance='ghost'>TEST potential capture</Button>
-      <Button onPress={pairTestMultimeter} appearance='ghost'>Pair blank multimeter (restart required)</Button>
-      <Button onPress={testKml} appearance='ghost'>Test KML parser</Button>
-      <Button onPress={testValidation} appearance='ghost'>Test Validation</Button>
+      <Button onPress={show} appearance='ghost'>Show paywall</Button>
+      <Button onPress={test} appearance='ghost'>Test count update</Button>
+
     </SafeAreaView>
   )
 }

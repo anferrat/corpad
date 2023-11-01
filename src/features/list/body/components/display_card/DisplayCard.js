@@ -36,11 +36,12 @@ const DisplayCard = ({ id, dataList, subtitle, timeModified, status, onPress, na
                     readingIndex={readingIndex}
                     onPress={toggleReading} />
             </View>
-            <View style={readingList.length ? displayCard.readingBar : displayCard.hidden}>
-                <ReadingBar
-                    readingIndex={readingIndex}
-                    readingList={readingList} />
-            </View>
+            {readingList.length ?
+                <View style={displayCard.readingBar}>
+                    <ReadingBar
+                        readingIndex={readingIndex}
+                        readingList={readingList} />
+                </View> : null}
         </Pressable>
     )
 }

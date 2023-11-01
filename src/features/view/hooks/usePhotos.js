@@ -6,16 +6,19 @@ import { EventRegister } from "react-native-event-listeners"
 import { addPhotoToAssets, deletePhotoFromAssets, savePhotoToDownloads, sharePhoto } from "../../../app/controllers/survey/other/MediaController"
 import { ItemTypes } from "../../../constants/global"
 import { useDispatch } from "react-redux"
-import { updateLoader, hideLoader } from "../../../store/actions/settings"
+import { updateLoader, hideLoader, showPaywall } from "../../../store/actions/settings"
 import { ImageSourceLabels } from "../../../constants/labels"
 import { useIsFocused } from "@react-navigation/native"
 import { PHOTO_LIMIT } from "../../../constants/global"
 import { Platform, ToastAndroid } from "react-native"
 import { useSelector } from "react-redux"
+import { isProStatus } from "../../../helpers/functions"
 
 const usePhotos = ({ itemId, itemType }) => {
     const listRef = useRef()
     const name = useSelector(state => state.item.view.name ?? 'Error')
+    const subscriptionStatus = useSelector(state => state.settings.subscription.status)
+    const isPro = isProStatus(subscriptionStatus)
     const componentMounted = useRef(true)
     const isFocused = useIsFocused()
     const dispatch = useDispatch()
@@ -24,6 +27,10 @@ const usePhotos = ({ itemId, itemType }) => {
         index: 0,
         visible: false
     })
+
+    const onShowPaywall = useCallback(() => {
+        dispatch(showPaywall())
+    }, [])
 
     const scrollToStart = useCallback(() => {
         if (listRef.current.scrollToIndex)
@@ -90,7 +97,7 @@ const usePhotos = ({ itemId, itemType }) => {
 
 
 
-    const onAddPhoto = () => !limitReached ? openImagePicker({ itemType, itemId }) : null
+    const onAddPhoto = () => isPro ? (!limitReached ? openImagePicker({ itemType, itemId }) : null) : onShowPaywall()
 
     const onSharePhoto = async () => {
         if (imageView.visible)
@@ -120,11 +127,13 @@ const usePhotos = ({ itemId, itemType }) => {
     }
 
     const onPhotoPress = useCallback((index) => {
-        setImageView({
-            visible: true,
-            index: index
-        })
-    }, [])
+        isPro ?
+            setImageView({
+                visible: true,
+                index: index
+            }) :
+            onShowPaywall()
+    }, [isPro, onShowPaywall])
 
     const onImageViewClose = useCallback(() => setImageView({
         visible: false,
@@ -137,6 +146,7 @@ const usePhotos = ({ itemId, itemType }) => {
         limitReached,
         listRef,
         isVisible,
+        isPhotoCaptureDisabled: !isPro,
         onAddPhoto,
         onDeletePhoto,
         onImageViewClose,

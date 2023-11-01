@@ -455,7 +455,7 @@ export const getResult = (data, calculatorType, isMetric) => {
                         ['Test point 1 - Start', data.start.current.on, data.start.current.off, data.start.potential.on, data.start.potential.off, data.start.resistivity],
                         ['Test point 2 - End', data.end.current.on, data.end.current.off, data.end.potential.on, data.end.potential.off, data.end.resistivity],
                         [''],
-                        [`Pipe segment length ${unit}`, 'Pipe diameter' `Pipe OD ${unit}`, 'Voltage difference(avg.) mV', 'Current picked up by pipeline A', 'Pipe-to-earth resistance ohm', 'Overall conductance S', `Specific resistance ohm-${unit}2`, `Specific conductance ohm/${unit}2`, 'Average soil resistivity ohm-cm', `Normilized conductance ohm-${unit}2`, 'Coating quality'],
+                        [`Pipe segment length ${unit}`, 'Pipe diameter', `Pipe OD ${unit}`, 'Voltage difference(avg.) mV', 'Current picked up by pipeline A', 'Pipe-to-earth resistance ohm', 'Overall conductance S', `Specific resistance ohm-${unit}2`, `Specific conductance ohm/${unit}2`, 'Average soil resistivity ohm-cm', `Normilized conductance ohm-${unit}2`, 'Coating quality'],
                         [data.spacing, npsValue, od, deltaE, deltaI, resistance, conductance, specificResistance, specificConductance, averageResistivity, normilizedConductance, quality]
                     ],
                     label: `${npsValue}, ${data.spacing} ${unit}`

@@ -348,7 +348,7 @@ export const FileMimeTypes = Object.freeze({
 
 export const FileTypeIdentifiers = Object.freeze({
     SURVEY_FILE: 'com.corpad.survey-file',
-    SURVEY_FILE_WITH_ASSETS:'com.corpad.survey-file-with-assets',
+    SURVEY_FILE_WITH_ASSETS: 'com.corpad.survey-file-with-assets',
     CSV: 'public.comma-separated-values-text',
     KML: 'com.google.earth.kml',
     GPX: 'com.topografix.gpx',
@@ -578,4 +578,12 @@ export const AnodeBedMaterialTypes = Object.freeze({
     SCRAP_METAL: 4,
     MAGNETITE: 5,
     ALUMINUM: 6
+})
+
+export const SubscriptionStatuses = Object.freeze({
+    NOT_GRANTED: 0,
+    GRANTED: 1,
+    UNKNOWN_GRANTED: 2,
+    UNKNOWN_NOT_GRANTED: 3,
+    PENDING: 4,
 })

@@ -18,20 +18,18 @@ const ItemList = ({ itemType, navigateToView }) => {
     const dispatch = useDispatch()
     const t = useSelector(state => getListStateByType(itemType, state))
     const headerRef = useRef(new Animated.Value(0))
-    const minScroll = 0;
+    const minScroll = 1
 
     const clampedScrollY = headerRef.current.interpolate({
-        inputRange: [minScroll, minScroll + 1],
+        inputRange: [-minScroll, minScroll],
         outputRange: [0, 1],
         extrapolateLeft: 'clamp',
     })
 
-    const minusScrollY = Animated.multiply(clampedScrollY, -1);
-
     const translateY = Animated.diffClamp(
-        minusScrollY,
-        -HEADER_HEIGHT + 1,
-        0,
+        Animated.multiply(clampedScrollY, -1),
+        -HEADER_HEIGHT,
+        -1,
     )
 
     const opacity = translateY.interpolate({
@@ -141,7 +139,7 @@ const ItemList = ({ itemType, navigateToView }) => {
             visible={!t.settings.refreshing} />, [t.settings.refreshing, t.settings.filterCounter])
 
     //When elements are updated from outside we only recieve an id, so we create a blocking view with loading indicator while data is fetched from db to update that element.
-    const UpdatingView = React.memo(({ updating }) => <View style={updating ? styles.backdrop : styles.hidden}><ActivityIndicator color={primary} size='large' /></View>)
+    const UpdatingView = React.memo(({ updating }) => updating ? <View style={styles.backdrop}><ActivityIndicator color={primary} size='large' /></View> : null)
 
     //Keep timeModified as part of the key. When card is updated, it will reset internal card state
     const keyExtractor = React.useCallback((item) => itemType + item.uid + item.timeModified, [itemType])
@@ -155,7 +153,7 @@ const ItemList = ({ itemType, navigateToView }) => {
         <>
             <Header />
             <FlatList
-                contentContainerStyle={styles.container}
+                contentContainerStyle={itemType === 'PIPELINE' ? styles.containerPipeline : styles.container}
                 keyExtractor={keyExtractor}
                 ListEmptyComponent={renderEmptyListComponent}
                 data={t.itemList}
@@ -163,15 +161,16 @@ const ItemList = ({ itemType, navigateToView }) => {
                     progressViewOffset={40}
                     onRefresh={refreshHandler}
                     refreshing={t.settings.refreshing}
-                    colors={[primary]}
-                />}
+                    colors={[primary]} />}
                 onEndReachedThreshold={6}
                 onEndReached={offsetHandler}
                 renderItem={renderItem}
                 ListFooterComponent={renderFooter}
                 onScroll={Animated.event(
                     [{ nativeEvent: { contentOffset: { y: headerRef.current } } }],
-                    { useNativeDriver: true }
+                    {
+                        useNativeDriver: true,
+                    }
                 )}
             />
             <UpdatingView updating={t.settings.updating} />
@@ -190,12 +189,13 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
     },
-    hidden: {
-        display: 'none'
-    },
     container: {
         flexGrow: 1,
         paddingBottom: 52,
         marginTop: 40
+    },
+    containerPipeline: {
+        flexGrow: 1,
+        paddingBottom: 52,
     }
 })

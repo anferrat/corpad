@@ -13,31 +13,31 @@ export const mainPages = [
         backgroundColor: basic300,
         image: <Icon name='corpad-logo' fill={primary} pack='cp' style={styles.icon} />,
         title: 'Welcome to Corpad',
-        subtitle: 'Application for corrosion professionals that allows you to create and manage pipeline surveys with your mobile device'
+        subtitle: 'Streamline your cathodic protection data capture with ease using our offline-capable mobile app'
     },
     {
         backgroundColor: basic300,
         image: <Icon name='onboarding-create' pack='cp' fill={primary} style={styles.icon} />,
-        title: 'Create',
-        subtitle: 'Create new surveys "on the go" or import your data from spreadsheets'
+        title: 'Data capture',
+        subtitle: ' Take photos, assign GPS coordinates, and plot data on the map with our user-friendly interface'
     },
     {
         backgroundColor: basic300,
-        image: <Icon name='onboarding-navigate' pack='cp' fill={primary} style={styles.icon} />,
-        title: 'Navigate',
-        subtitle: `Display test points on the map and import its location to other apps for navigation`
+        image: <Icon name='onboarding-calculator' pack='cp' fill={primary} style={styles.icon} />,
+        title: 'Corrosion calculator',
+        subtitle: `Quickly calculate cathodic protection values on the go for accurate data analysis`
     },
     {
         backgroundColor: basic300,
-        image: <Icon name='onboarding-calculator' fill={primary} pack='cp' style={styles.icon} />,
-        title: 'Calculate',
-        subtitle: 'Calculate resistivity, current and other properties with your phone. Save results or/and export them to spreadsheets.'
+        image: <Icon name='onboarding-multimeter' fill={primary} pack='cp' style={styles.icon} />,
+        title: 'Connect multimeter',
+        subtitle: 'Seamlessly connect a Bluetooth multimeter to capture real-time data in the field'
     },
     {
         backgroundColor: basic300,
         image: <Icon name='onboarding-export' pack='cp' fill={primary} style={styles.icon} />,
-        title: 'Export',
-        subtitle: 'Export your data to spreadsheets or store them as JSON files on your device and cloud storage'
+        title: 'Efficient data dandling',
+        subtitle: 'Easily import and export data with CSV and KML files and back up surveys to the cloud'
     }
 ]
 
@@ -46,26 +46,26 @@ export const lastVersionPages = [
     {
         backgroundColor: basic300,
         image: <Icon name='corpad-logo' fill={primary} pack='cp' style={styles.icon} />,
-        title: 'Updated to version 1.3',
-        subtitle: 'Take a look at the fantastic features that are included in this update.'
+        title: 'Updated to version 1.4',
+        subtitle: "We've enhanced your cathodic protection data capture experience. Explore our latest features and unlock premium capabilities with a subscription."
     },
     {
         backgroundColor: basic300,
-        image: <Icon name='radio' fill={primary} style={styles.icon} />,
-        title: 'Digital multimeter',
-        subtitle: 'Bluetooth multimeter support added. Multimeter can be used to capture potentials directly from the app. Find more at corpad.ca/multimeters'
+        image: <Icon name='file-text' fill={primary} style={styles.icon} />,
+        title: 'Capture more data',
+        subtitle: 'Now you can capture images, import features from .kml and .gpx files, collect anode bed redings for rectifiers and soil resistivity readings for test points. Your survey capabilities just got even more powerful.'
     },
     {
         backgroundColor: basic300,
-        image: <Icon name='options-2' fill={primary} style={styles.icon} />,
-        title: 'Export .csv and map search re-worked',
-        subtitle: 'Updated interface makes app faster and easier to use in field.'
+        image: <Icon name='pricetags' fill={primary} style={styles.icon} />,
+        title: 'Unlock premium features',
+        subtitle: 'Upgrade to our subscription plan to access advanced features and make the most out of your data capture experience. Enjoy exclusive benefits and enhanced functionality.'
     },
     {
         backgroundColor: basic300,
         image: <Icon name='smiling-face' fill={primary} style={styles.icon} />,
-        title: 'Lots of small things',
-        subtitle: 'Check https://www.corpad.ca/updates for more info. If you encounter a bug, having issues or have great ideas on how to improve this app, please let me know at andrei@corpad.ca.'
+        title: "Don't miss out",
+        subtitle: "We're committed to delivering ongoing improvements and updates. Stay tuned for future enhancements and new features that will further streamline your fieldwork."
     },
 ]
 

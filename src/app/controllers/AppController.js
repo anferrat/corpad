@@ -8,17 +8,20 @@ import { Controller } from "../utils/Controller"
 import { FileSystemInitialization } from "../services/survey_file/local/FileSystemInitialization"
 import { SurveyFileListener } from "../services/app/SurveyFileListener"
 import { currentSurveyStatusService, externalFileContentResolver, loadExternalSurveyFileService } from "./_instances/survey_file"
-import { appRepo, bluetoothRepo, defaultNameRepo, fileSystemRepo, googleDriveAuthorizationRepo, networkRepo, settingRepo, surveyRepo } from "./_instances/repositories"
-import { appStateListener, linkingService, multimeterFactory, warningHandler } from "./_instances/general_services"
+import { appRepo, bluetoothRepo, defaultNameRepo, fileSystemRepo, geolocationRepo, googleDriveAuthorizationRepo, networkRepo, purchaseRepo, settingRepo, surveyRepo } from "./_instances/repositories"
+import { appStateListener, linkingService, multimeterFactory, permissions, warningHandler } from "./_instances/general_services"
 import { resetCurrentSurveyService, saveCurrentSurveyService } from "./_instances/survey_manager"
+import { InitializePurchases } from "../services/purchases/InitializePurchases"
 
 class AppController extends Controller {
-    constructor(currentSurveyStatusService, googleDriveAuthorizationRepo, surveyRepo, bluetoothRepo, settingRepo, multimeterFactory, defaultNameRepo, loadExternalSurveyFileService, saveCurrentSurveyService, warningHandler, resetCurrentSurveyService, fileSystemRepo, appRepo, linkingService, appStateListener, networkRepo, externalFileContentResolver) {
+    constructor(currentSurveyStatusService, googleDriveAuthorizationRepo, surveyRepo, bluetoothRepo, settingRepo, multimeterFactory, defaultNameRepo, loadExternalSurveyFileService, saveCurrentSurveyService, warningHandler, resetCurrentSurveyService, fileSystemRepo, appRepo, linkingService, appStateListener, networkRepo, externalFileContentResolver, purchaseRepo, geolocationRepo, permissions) {
         super()
 
         this.networkRepo = networkRepo
 
         this.bluetoothRepo = bluetoothRepo
+
+        this.purchaseInitializationService = new InitializePurchases(purchaseRepo, networkRepo, geolocationRepo, settingRepo, permissions)
 
         this.openExternalSurveyService = new OpenExternalSurvey(loadExternalSurveyFileService, saveCurrentSurveyService, warningHandler, currentSurveyStatusService, resetCurrentSurveyService, fileSystemRepo)
 
@@ -32,9 +35,12 @@ class AppController extends Controller {
 
         this.fileSystemInitializationService = new FileSystemInitialization(fileSystemRepo)
 
-        this.appInitializationService = new AppInitialization(currentSurveyStatusService, googleDriveAuthorizationRepo, surveyRepo, this.multimeterInitializationService, this.defaultNameInitializationService, settingRepo, this.openExternalSurveyService, this.appSettingInitializationService, this.databaseInitializationService, this.fileSystemInitializationService, linkingService, externalFileContentResolver)
+        this.appInitializationService = new AppInitialization(currentSurveyStatusService, googleDriveAuthorizationRepo, surveyRepo, this.multimeterInitializationService, this.defaultNameInitializationService, settingRepo, this.openExternalSurveyService, this.appSettingInitializationService, this.databaseInitializationService, this.fileSystemInitializationService, linkingService, externalFileContentResolver, this.purchaseInitializationService)
 
         this.surveyFileListenerService = new SurveyFileListener(linkingService, this.openExternalSurveyService, appStateListener, externalFileContentResolver)
+
+
+
     }
 
 
@@ -81,7 +87,10 @@ const appController = new AppController(
     linkingService,
     appStateListener,
     networkRepo,
-    externalFileContentResolver
+    externalFileContentResolver,
+    purchaseRepo,
+    geolocationRepo,
+    permissions
 )
 
 export const initializeApp = (onError, onSuccess) => appController.init(onError, onSuccess)

@@ -10,8 +10,6 @@ export class Linking {
 
     addUrlListener(callback) {
         return LinkingDefault.addEventListener('url', (data) => {
-            console.log('JJJSJJSJSJ')
-            console.log(data)
             callback(data.url)
         })
     }

@@ -120,7 +120,6 @@ export class FileSystemRepository {
             return await RNFS.readFile(path)
         }
         catch (er) {
-            console.log(er)
             throw new Error(errors.FILESYSTEM, `Unable to read at ${path}`, er, 408)
         }
     }

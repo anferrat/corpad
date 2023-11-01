@@ -3,7 +3,7 @@ import MapButton from './MapButton'
 
 const MapSettingButton = ({ navigateToViewMapLayer }) => {
     return <MapButton
-        icon={'menu'}
+        icon={'layers'}
         onPress={navigateToViewMapLayer} />
 }
 

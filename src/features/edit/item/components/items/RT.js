@@ -13,7 +13,7 @@ import PhotoView from '../photos/PhotoView'
 
 const powerSourceList = Object.values(PowerSources).map(source => ({ item: PowerSourceLabels[source], index: source }))
 
-const RT = ({ data, createSubitem, itemType, update, validate, updateLatAndLon, updateTap }) => {
+const RT = ({ data, createSubitem, itemType, update, validate, updateLatAndLon, updateTap, isPro }) => {
     const { id, name, status, defaultName, valid, latitude, longitude, location, maxCurrent, maxVoltage, model, serialNumber, powerSource, comment, tapSetting, tapValue, tapCoarse, tapFine, imageUris } = data
     return (
         <>
@@ -123,10 +123,11 @@ const RT = ({ data, createSubitem, itemType, update, validate, updateLatAndLon, 
                         property='comment'
                         value={comment} />
                 </View>
-                <PhotoView
-                    itemId={id}
-                    itemType={itemType}
-                    imageUris={imageUris} />
+                {isPro ?
+                    <PhotoView
+                        itemId={id}
+                        itemType={itemType}
+                        imageUris={imageUris} /> : null}
                 <View style={styles.button}>
                     <CreateSubitemButton
                         title={'Add reading'}

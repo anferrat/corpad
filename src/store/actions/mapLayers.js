@@ -23,8 +23,8 @@ export const deleteMapLayerById = (layerId) => ({
     type: DELETE_MAP_LAYER_BY_ID, layerId
 })
 
-export const loadMapLayers = (layers) => ({
-    type: LOAD_MAP_LAYERS, layers
+export const loadMapLayers = (layers, hidden) => ({
+    type: LOAD_MAP_LAYERS, layers, hidden
 })
 
 export const updateMapLayer = (layerId, name, comment, color, width) => ({

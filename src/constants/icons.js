@@ -1,4 +1,4 @@
-import { ItemTypes, ItemStatuses, SubitemTypes, CalculatorTypes, TestPointTypes } from './global'
+import { ItemTypes, ItemStatuses, SubitemTypes, CalculatorTypes, TestPointTypes, SubscriptionStatuses } from './global'
 
 //List of icons that are tightly coupled with constants
 export const ItemTypeSingleIcons = Object.freeze({
@@ -100,4 +100,12 @@ export const ExportMarkerSymbols = Object.freeze({
     },
     [ItemTypes.RECTIFIER]: 'r'
 
+})
+
+export const SubscriptionStatusIcons = Object.freeze({
+    [SubscriptionStatuses.GRANTED]: 'checkmark-circle-2',
+    [SubscriptionStatuses.NOT_GRANTED]: 'close-circle',
+    [SubscriptionStatuses.UNKNOWN_GRANTED]: 'checkmark-circle-2',
+    [SubscriptionStatuses.UNKNOWN_NOT_GRANTED]: 'alert-triangle',
+    [SubscriptionStatuses.PENDING]: 'question-mark-circle'
 })

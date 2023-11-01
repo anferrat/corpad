@@ -32,7 +32,6 @@ export class GeoParser {
     }
 
     toKml(geoJson, nameProperty) {
-        console.log(geoJson.features)
         try {
             return this.toKmlConverter(geoJson, {
                 name: nameProperty,

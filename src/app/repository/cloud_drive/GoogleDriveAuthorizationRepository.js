@@ -26,21 +26,31 @@ export class GoogleDriveAuthorizationRepository {
     }
 
     async signInSilently() {
-        try {
-            const userInfo = await GoogleSignin.signInSilently()
-            const token = (await GoogleSignin.getTokens()).accessToken
-            gdrive.accessToken = token
-            return {
-                isSigned: true,
-                userName: userInfo.user.name
+        return new Promise(async (resolve) => {
+            try {
+                const timer = setTimeout(() => {
+                    resolve({
+                        isSigned: false,
+                        userName: null
+                    })
+                }, 2000)
+                const userInfo = await GoogleSignin.signInSilently()
+                const token = (await GoogleSignin.getTokens()).accessToken
+                clearTimeout(timer)
+                gdrive.accessToken = token
+                resolve({
+                    isSigned: true,
+                    userName: userInfo.user.name
+                })
             }
-        }
-        catch (er) {
-            return {
-                isSigned: false,
-                userName: null
+            catch (er) {
+                resolve({
+                    isSigned: false,
+                    userName: null
+                })
             }
-        }
+        })
+
     }
 
     async checkSignInStatus() {

@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { createSurvey, getSurveyFileList } from '../../../app/controllers/survey/SurveyFileController'
 import { hideLoader, setSessionModalVisible, setSurveySettings, updateLoader } from '../../../store/actions/settings'
 import { errorHandler } from '../../../helpers/error_handler'
+import { isProStatus } from '../../../helpers/functions'
 
 const useCreateSurvey = (withImport, navigateToImport) => {
     const [name, setName] = useState({
@@ -18,9 +19,12 @@ const useCreateSurvey = (withImport, navigateToImport) => {
     const [surveyListLoading, setSurveyListLoading] = useState(true)
     const [visible, setVisible] = useState(false)
     const isSigned = useSelector(state => state.settings.session.isSigned)
+    const subscriptionStatus = useSelector(state => state.settings.subscription.status)
+    const isPro = isProStatus(subscriptionStatus)
     const dispatch = useDispatch()
     const componentMounted = useRef(true)
     const optionsAvailable = !withImport
+    const assetOptionAvailable = isPro
 
     useEffect(() => {
         const loadData = async () => {
@@ -66,7 +70,7 @@ const useCreateSurvey = (withImport, navigateToImport) => {
             dispatch(updateLoader('Creating survey', `Name: ${name}`))
             const path = surveyList[selectedSurveyIndex] ? surveyList[selectedSurveyIndex].path : null
             await createSurvey(
-                { isBlank, isCloud, path, name, includeAssets },
+                { isBlank, isCloud, path, name, includeAssets: includeAssets && isPro },
                 (er) => errorHandler(er),
                 ({ name, fileName, isCloud, syncTime, uid }) => {
                     dispatch(setSurveySettings(name, fileName, syncTime, isCloud, true, uid))
@@ -82,7 +86,7 @@ const useCreateSurvey = (withImport, navigateToImport) => {
                 valid: valid
             })
         }
-    }, [name.name, isBlank, isCloud, surveyList, selectedSurveyIndex, includeAssets])
+    }, [name.name, isBlank, isCloud, surveyList, selectedSurveyIndex, includeAssets, isPro])
 
     return {
         name: name.name,
@@ -94,8 +98,9 @@ const useCreateSurvey = (withImport, navigateToImport) => {
         isSigned,
         surveyListLoading,
         visible,
-        includeAssets,
+        includeAssets: includeAssets && isPro,
         optionsAvailable,
+        assetOptionAvailable,
         setIncludeAssets,
         onChangeName,
         onEndEditingName,

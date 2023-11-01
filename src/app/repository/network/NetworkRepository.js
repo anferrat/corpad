@@ -16,4 +16,10 @@ export class NetworkRepository {
     addNetworkListener(callback) {
         return NetInfo.addEventListener(({ isInternetReachable }) => callback(isInternetReachable))
     }
+
+    async isInternetOnCheck() {
+        const isInternetOn = await this.checkConnection()
+        if (!isInternetOn)
+            throw new Error(errors.NETWORK, 'Unable to check purchase status', 'No internet connection', 102)
+    }
 }

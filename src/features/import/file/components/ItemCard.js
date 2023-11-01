@@ -11,10 +11,12 @@ const ItemCard = ({ onPress, selected, icon, pack, title }) => {
             android_ripple={androidRipple}
             style={selected ? pressableStyleSelected : pressableStyle}
             onPress={onPress}>
-            <Icon
-                name={'checkmark-circle-2'}
-                style={selected ? styles.checkIcon : styles.hidden}
-                fill={success} />
+            {selected ?
+                <Icon
+                    name={'checkmark-circle-2'}
+                    style={styles.checkIcon}
+                    fill={success} />
+                : null}
             <View
                 style={styles.innerPressable}>
                 <View style={selected ? styles.iconLayoutSelected : styles.iconLayout}>
@@ -94,9 +96,6 @@ const styles = StyleSheet.create({
         alignSelf: 'flex-end',
         right: -6,
         top: -6
-    },
-    hidden: {
-        display: 'none'
     }
 })
 

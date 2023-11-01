@@ -51,8 +51,5 @@ const styles = StyleSheet.create({
     input: {
         flex: 1,
         paddingLeft: 6
-    },
-    hidden: {
-        display: 'none'
     }
 })

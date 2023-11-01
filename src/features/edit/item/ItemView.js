@@ -6,11 +6,12 @@ import useItemData from './hooks/useItemData'
 import { globalStyle } from '../../../styles/styles'
 
 const ItemView = ({ itemId, itemType, isNew, navigateToView, navigateToSubitem }) => {
-    const { item, loading, update, validate, createSubitem, updateLatAndLon, updateTap } = useItemData({ itemId, itemType, isNew, navigateToView, navigateToSubitem })
+    const { item, loading, isPro, update, validate, createSubitem, updateLatAndLon, updateTap } = useItemData({ itemId, itemType, isNew, navigateToView, navigateToSubitem })
     return (
         <View style={loading ? styles.card : {}} >
             <LoadingView loading={loading}>
                 <ItemFactory
+                    isPro={isPro}
                     updateTap={updateTap}
                     updateLatAndLon={updateLatAndLon}
                     update={update}

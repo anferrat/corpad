@@ -189,12 +189,6 @@ const InputFieldParamaters = ({ value, property, subitemIndex, potentialIndex, g
 export default React.memo(InputFieldParamaters, () => true)
 
 const styles = StyleSheet.create({
-    hidden: {
-        display: 'none'
-    },
-    visible: {
-        display: 'flex'
-    },
     field: {
         paddingBottom: 12,
         flex: 1

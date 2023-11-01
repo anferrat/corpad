@@ -13,6 +13,7 @@ export class AppRepository extends SQLiteRepository {
             await super.runMultiQueryTransaction(tx => [
                 super.runQuery(tx, `CREATE TABLE IF NOT EXISTS survey (id INTEGER PRIMARY KEY NOT NULL, uid TEXT, name TEXT, technician TEXT)`, []),
                 super.runQuery(tx, `CREATE TABLE IF NOT EXISTS calculators (id INTEGER PRIMARY KEY NOT NULL, timeCreated INTEGER, calculatorType TEXT, data TEXT, name TEXT, latitude REAL, longitude REAL)`, []),
+                super.runQuery(tx, `CREATE TABLE IF NOT EXISTS config (id TEXT PRIMARY KEY NOT NULL, value TEXT )`, []),
                 super.runQuery(tx, `CREATE TABLE IF NOT EXISTS settings (id INTEGER PRIMARY KEY NOT NULL, pipelineNameAsDefault BOOLEAN, defaultPotentialUnit INTEGER, autoCreatePotentials BOOLEAN, isSurveyNew BOOLEAN, isCloud BOOLEAN, originalHash TEXT, fileName TEXT, cloudId TEXT, lastSync INTEGER, onboarding TEXT, multimeter TEXT)`, []),
                 super.runQuery(tx, 'CREATE TABLE IF NOT EXISTS schemaVersion (version INTEGER)', []),
                 super.runQuery(tx, `CREATE TABLE IF NOT EXISTS defaultNames (id INTEGER PRIMARY KEY NOT NULL, type TEXT, name TEXT)`, []),
@@ -146,6 +147,9 @@ export class AppRepository extends SQLiteRepository {
                 super.runQuery(tx, 'DROP TABLE IF EXISTS settings', []),
                 super.runQuery(tx, 'DROP TABLE IF EXISTS mapLayers', []),
                 super.runQuery(tx, 'DROP TABLE IF EXISTS defaultNames', []),
+                super.runQuery(tx, 'DROP TABLE IF EXISTS config', []),
+                super.runQuery(tx, 'DROP TABLE IF EXISTS soilResistivityLayers', []),
+                super.runQuery(tx, 'DROP TABLE IF EXISTS anodeBedAnodes', []),
             ])
         }
         catch (er) {

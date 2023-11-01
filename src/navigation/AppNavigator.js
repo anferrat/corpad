@@ -32,6 +32,7 @@ import { MultimeterModal } from '../features/overlays/multimeter'
 import EditMapLayer from '../screens/map_layer/Edit'
 import ViewMapLayer from '../screens/map_layer/View'
 import ViewMarkerInfo from '../screens/map_layer/ViewMarkerInfo'
+import Paywall from '../features/overlays/paywall'
 
 
 const Stack = createNativeStackNavigator()
@@ -44,6 +45,7 @@ export const AppNavigator = () => {
     return (
       <>
         <MultimeterModal />
+        <Paywall />
         <Stack.Navigator
           screenOptions={{
             headerShown: true,

@@ -156,12 +156,6 @@ const styles = StyleSheet.create({
     },
     mainView: {
         paddingBottom: 72
-    },
-    hidden: {
-        display: 'none'
-    },
-    visible: {
-        display: 'flex'
     }
 })
 

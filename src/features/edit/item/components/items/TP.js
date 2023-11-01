@@ -15,7 +15,7 @@ const testPointTypes = Object.values(TestPointTypes).map(type => ({ item: TestPo
 const testPointAccessoryList = testPointTypes.map(({ index }) => ({ icon: TestPointTypeIcons[index], pack: 'cp' }))
 
 
-const TestPointView = ({ data, createSubitem, itemType, update, validate, updateLatAndLon }) => {
+const TestPointView = ({ data, createSubitem, itemType, update, validate, updateLatAndLon, isPro }) => {
     const { id, name, status, testPointType, latitude, longitude, location, comment, defaultName, valid, imageUris } = data
     return (
         <>
@@ -70,10 +70,12 @@ const TestPointView = ({ data, createSubitem, itemType, update, validate, update
                     value={comment}
                     property='comment'
                     placeholder='Type your comments here' />
-                <PhotoView
-                    itemId={id}
-                    itemType={itemType}
-                    imageUris={imageUris} />
+                {isPro ?
+                    <PhotoView
+                        itemId={id}
+                        itemType={itemType}
+                        imageUris={imageUris} />
+                    : null}
                 <View style={styles.button}>
                     <CreateSubitemButton
                         title={'Add reading'}

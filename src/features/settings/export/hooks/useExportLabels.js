@@ -7,6 +7,7 @@ import { ItemTypeLabelsPlural, SortingOptionLabels } from "../../../../constants
 import { ExportFormatTypes, FileMimeTypes, ItemTypes } from "../../../../constants/global"
 import { hideLoader, setExportModal, updateLoader } from "../../../../store/actions/settings"
 import { resetExport } from "../../../../store/actions/export"
+import { isProStatus } from "../../../../helpers/functions"
 
 const useExportLabels = (navigateToExportItem) => {
     const [potentialData, setPotentialData] = useState({
@@ -37,6 +38,8 @@ const useExportLabels = (navigateToExportItem) => {
         includeMapLayers,
         exportType
     } = useSelector(state => state.export)
+    const subscriptionStatus = useSelector(state => state.settings.subscription.status)
+    const isPro = isProStatus(subscriptionStatus)
 
     const showPotentials = exportPotentials && itemType === ItemTypes.TEST_POINT
     const itemTypeLabel = ItemTypeLabelsPlural[itemType]
@@ -44,9 +47,9 @@ const useExportLabels = (navigateToExportItem) => {
     const sortingLabel = SortingOptionLabels[sorting]
     const potentialsGroupingLabel = groupPotentialsByPipeline ? 'Pipeline' : 'Reading type'
     const showOther = subitemProperties.length > 0
-    const assetOptionAvailable = (itemType === ItemTypes.TEST_POINT || itemType === ItemTypes.RECTIFIER) && exportType !== ExportFormatTypes.KML
+    const assetOptionAvailable = (itemType === ItemTypes.TEST_POINT || itemType === ItemTypes.RECTIFIER) && exportType !== ExportFormatTypes.KML && isPro
     const sortingOptionAvailable = exportType !== ExportFormatTypes.KML
-    const mapLayerOptionAvailable = exportType === ExportFormatTypes.KML
+    const mapLayerOptionAvailable = exportType === ExportFormatTypes.KML && isPro
 
     useEffect(() => {
         componentMounted.current = true

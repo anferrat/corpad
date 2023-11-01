@@ -165,7 +165,6 @@ const subitem = (state = initialState, action) => {
             }
         case VALIDATE_SUBITEM_SUB_PROPERTY: {
             const { valid, value } = fieldValidation(state[action.parentProperty][action.index][action.property], action.property)
-            console.log(valid)
             return {
                 ...state,
                 valid: {

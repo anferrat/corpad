@@ -76,7 +76,7 @@ const mapLayers = (state = initialState, action) => {
                     comment,
                     color: strokeColor,
                     width: strokeWidth,
-                    visible,
+                    visible: action.hidden ? false : visible,
                     data: data,
                     points: points,
                     featureCount: featureCount,

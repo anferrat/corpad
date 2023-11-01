@@ -14,7 +14,7 @@ const statusColors = {
     warning: warning
 }
 
-const ControlButton = ({ onPress, status, icon, label, hidden }) => {
+const ControlButton = ({ onPress, status, icon, label, hidden, disabled }) => {
     if (!hidden)
         return (
             <PressableDefault
@@ -27,12 +27,13 @@ const ControlButton = ({ onPress, status, icon, label, hidden }) => {
                             android_ripple={ripple}
                             onPress={onPress}>
                             <Icon
-                                fill={statusColors[status] ?? primary}
+                                fill={disabled ? basic : (statusColors[status] ?? primary)}
                                 style={styles.icon}
                                 name={icon} />
                         </Pressable>
                     </View>
                     <Text
+                        appearance={disabled ? 'hint' : 'default'}
                         category='label'
                         style={styles.label}>
                         {label}

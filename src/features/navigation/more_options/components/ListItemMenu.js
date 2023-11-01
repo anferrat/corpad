@@ -6,21 +6,32 @@ import { androidRipple } from '../../../../styles/styles'
 import Pressable from '../../../../components/Pressable'
 
 
-const ListItem = (props) => {
-    const color = React.useMemo(() => props.status === 'danger' ? danger : (props.status === 'basic' ? basic : (props.status === 'success' ? success : primary)), [props.status])
+const ListItem = ({ disabled, status, icon, pack, title, subtitle, iconColor, onPress }) => {
+    const color = iconColor ?? primary
     return (
         <Pressable
-            disabled={props.disabled}
+            disabled={disabled}
             android_ripple={androidRipple}
             style={styles.pressable}
-            onPress={props.onPress}>
-            {props.icon === 'activityIndicator' ? <ActivityIndicator style={styles.icon} size='small' color={color} /> :
-                <Icon name={props.icon} pack={props.pack} style={styles.icon} fill={color} />
-            }
+            onPress={onPress}>
+            <Icon
+                name={icon}
+                pack={pack}
+                style={styles.icon}
+                fill={color} />
             <View>
-                <Text category='s1' style={{ fontWeight: props.selected ? 'bold' : 'normal' }}>{props.title}</Text>
-                {props.subtitle ?
-                    <Text category='s2' appearance='hint'>{props.subtitle}</Text> : null}
+                <Text
+                    status={status ?? 'default'}
+                    category='s1'>
+                    {title}
+                </Text>
+                {subtitle ?
+                    <Text
+                        category='s2'
+                        appearance='hint'>
+                        {subtitle}
+                    </Text>
+                    : null}
             </View>
         </Pressable>
     )

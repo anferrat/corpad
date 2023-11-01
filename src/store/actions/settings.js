@@ -22,6 +22,9 @@ export const SET_TIME_ADJUSTMENT = 'SET_ACTIVE_MULTIMETER_TIME_ADJUSTMENT'
 export const SET_ACTIVE_MULTIMETER_SETTINGS = 'SET_ACTIVE_MULTIMETER_SETTINGS'
 export const UPDATE_LOADER_PROGRESS = 'UPDATE_LOADER_PROGRESS'
 export const HIDE_LOADER = 'HIDE_LOADER'
+export const UPDATE_SUBSCRIPTION_STATUS = 'UPDATE_SUBSCRIPTION_STATUS'
+export const SHOW_PAYWALL = 'SHOW_PAYWALL'
+export const HIDE_PAYWALL = 'HIDE_PAYWALL'
 
 export const updateSetting = (setting, value) => {
     return { type: UPDATE_SETTING, setting: setting, value: value }
@@ -87,8 +90,8 @@ export const setSessionModalVisible = (visible) => {
     return { type: SET_SESSION_MODAL_VISIBLE, visible }
 }
 
-export const setSettingsOnAppLoad = (isLoaded, syncTime, name, uid, fileName, isCloud, isSigned, userName, onboarding, multimeter) => {
-    return { type: SET_SETTINGS_ON_APP_LOAD, isLoaded, syncTime, name, uid, fileName, isCloud, isSigned, userName, onboarding, multimeter }
+export const setSettingsOnAppLoad = (isLoaded, syncTime, name, uid, fileName, isCloud, isSigned, userName, onboarding, multimeter, subscriptionStatus, subscriptionExpirationTime) => {
+    return { type: SET_SETTINGS_ON_APP_LOAD, isLoaded, syncTime, name, uid, fileName, isCloud, isSigned, userName, onboarding, multimeter, subscriptionStatus, subscriptionExpirationTime }
 }
 
 export const updateBottomSheetContent = (itemType, content, params) => ({
@@ -113,5 +116,17 @@ export const setGpsTimeAdjustment = (timeFix) => ({
 
 export const setMultimeterSettings = (syncMode, onTime, offTime, delay, firstCycle) => ({
     type: SET_ACTIVE_MULTIMETER_SETTINGS, syncMode, onTime, offTime, delay, firstCycle
+})
+
+export const updateSubscriptionStatus = (status, expirationTime = 0) => ({
+    type: UPDATE_SUBSCRIPTION_STATUS, status, expirationTime
+})
+
+export const showPaywall = () => ({
+    type: SHOW_PAYWALL
+})
+
+export const hidePaywall = () => ({
+    type: HIDE_PAYWALL
 })
 

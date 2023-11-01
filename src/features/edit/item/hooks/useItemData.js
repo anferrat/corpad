@@ -7,11 +7,14 @@ import { deleteItem, getItemById, updateItem } from "../../../../app/controllers
 import { EventRegister } from "react-native-event-listeners"
 import { createSubitem as createSubitemRequest } from "../../../../app/controllers/survey/subitems/SubitemController"
 import { updateItemPhotos } from "../../../../app/controllers/survey/other/MediaController"
+import { isProStatus } from "../../../../helpers/functions"
 
 const useItemData = ({ itemId, itemType, isNew, navigateToView, navigateToSubitem }) => {
 
     const item = useSelector(state => state.item.edit)
     const loading = useSelector(state => state.item.edit.loading)
+    const subscriptionStatus = useSelector(state => state.settings.subscription.status)
+    const isPro = isProStatus(subscriptionStatus)
     const navigation = useNavigation()
     const dispatch = useDispatch()
     const deleteOnExit = useRef(isNew)
@@ -84,7 +87,7 @@ const useItemData = ({ itemId, itemType, isNew, navigateToView, navigateToSubite
 
     const updateTap = useCallback((value) => { dispatch(updateTapSetting(value)) }, [dispatch])
 
-    return { item, loading, update, validate, createSubitem, updateLatAndLon, updateTap }
+    return { item, loading, isPro, update, validate, createSubitem, updateLatAndLon, updateTap }
 }
 
 export default useItemData

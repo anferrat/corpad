@@ -16,6 +16,7 @@ export const ViewMapLayer = ({ navigateToEditMapLayer, goBack }) => {
         layers,
         visible,
         maxLayerNumberLimitReached,
+        isPro,
         onEdit,
         onDelete,
         onToggle,
@@ -35,6 +36,7 @@ export const ViewMapLayer = ({ navigateToEditMapLayer, goBack }) => {
                         {layers.length === 0 ?
                             <EmptyMapLayerListComponent /> :
                             layers.map(({ id, name, comment, color, width, visible, featureCount, mapRegion }, index) => <MapLayerListItem
+                                disabled={!isPro}
                                 key={id}
                                 layerId={id}
                                 width={width}
@@ -51,6 +53,7 @@ export const ViewMapLayer = ({ navigateToEditMapLayer, goBack }) => {
                                 onSelect={onToggle}
                             />)}
                         <AddLayerButton
+                            isPro={isPro}
                             inactive={maxLayerNumberLimitReached}
                             onPress={onAddLayer}
                         />

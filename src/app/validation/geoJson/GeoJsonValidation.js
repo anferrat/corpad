@@ -107,7 +107,6 @@ export class GeoJsonValidation extends Validation {
             return this.featureCollection.cast(data)
         }
         catch (er) {
-            console.log(er)
             return {
                 type: 'FeatureCollection',
                 features: []

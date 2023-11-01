@@ -1,11 +1,17 @@
 
-import { UPDATE_SETTING, LOAD_SETTINGS, SET_SURVEY_SAVING_STATUS, UPDATE_SURVEY_NAME, RESET_CURRENT_SURVEY_SETTINGS, LOAD_SESSION_STATE, UPDATE_ONBOARDING, SET_EXPORT_MODAL, UPDATE_LOADER, UPDATE_SESSION, UPDATE_NETWORK_STATUS, SET_SESSION_MODAL_VISIBLE, UPDATE_CURRENT_SURVEY_SETTINGS, SET_SETTINGS_ON_APP_LOAD, SET_SURVEY_SETTINGS, UPDATE_BOTTOM_SHEET_CONTENT, SET_BLUETOOTH_SCANNING, SET_ACTIVE_MULTIMETER, SET_ACTIVE_MULTIMETER_STATUS, SET_TIME_ADJUSTMENT, SET_ACTIVE_MULTIMETER_SETTINGS, UPDATE_LOADER_PROGRESS, HIDE_LOADER } from "../actions/settings"
+import { SubscriptionStatuses } from "../../constants/global"
+import { UPDATE_SETTING, LOAD_SETTINGS, SET_SURVEY_SAVING_STATUS, UPDATE_SURVEY_NAME, RESET_CURRENT_SURVEY_SETTINGS, LOAD_SESSION_STATE, UPDATE_ONBOARDING, SET_EXPORT_MODAL, UPDATE_LOADER, UPDATE_SESSION, UPDATE_NETWORK_STATUS, SET_SESSION_MODAL_VISIBLE, UPDATE_CURRENT_SURVEY_SETTINGS, SET_SETTINGS_ON_APP_LOAD, SET_SURVEY_SETTINGS, UPDATE_BOTTOM_SHEET_CONTENT, SET_BLUETOOTH_SCANNING, SET_ACTIVE_MULTIMETER, SET_ACTIVE_MULTIMETER_STATUS, SET_TIME_ADJUSTMENT, SET_ACTIVE_MULTIMETER_SETTINGS, UPDATE_LOADER_PROGRESS, HIDE_LOADER, UPDATE_SUBSCRIPTION_STATUS, SHOW_PAYWALL, HIDE_PAYWALL } from "../actions/settings"
 
 const initialState = {
     bottomSheetContent: {  //BottomSheet component
         itemType: 'TEST_POINT',
         content: 'sorting',
         params: {},
+    },
+    subscription: {
+        status: SubscriptionStatuses.PENDING,
+        paywallVisible: false,
+        expirationTime: 0
     },
     lastImport: {
         itemType: null,
@@ -132,6 +138,11 @@ const settings = (state = initialState, action) => {
             const multimeterPaired = action.multimeter.peripheralId !== null
             return {
                 ...state,
+                subscription: {
+                    ...state.subscription,
+                    status: action.subscriptionStatus,
+                    expirationTime: action.subscriptionExpirationTime
+                },
                 currentSurvey: {
                     ...state.currentSurvey,
                     name: action.name,
@@ -321,6 +332,31 @@ const settings = (state = initialState, action) => {
                 ...state,
                 timeAdjustment: {
                     timeFix: action.timeFix
+                }
+            }
+        case UPDATE_SUBSCRIPTION_STATUS:
+            return {
+                ...state,
+                subscription: {
+                    ...state.subscription,
+                    status: action.status,
+                    expirationTime: action.expirationTime
+                }
+            }
+        case SHOW_PAYWALL:
+            return {
+                ...state,
+                subscription: {
+                    ...state.subscription,
+                    paywallVisible: true
+                }
+            }
+        case HIDE_PAYWALL:
+            return {
+                ...state,
+                subscription: {
+                    ...state.subscription,
+                    paywallVisible: false
                 }
             }
         default:

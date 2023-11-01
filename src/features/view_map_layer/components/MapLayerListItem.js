@@ -6,10 +6,11 @@ import { diagBack, edit, trashIcon } from '../../../components/Icons'
 import { androidRipple } from '../../../styles/styles'
 import useModal from '../../../hooks/useModal'
 import IconButton from '../../../components/IconButton'
-import { MapLayerStrokeColors, primary } from '../../../styles/colors'
+import { MapLayerStrokeColors, basic, danger, primary } from '../../../styles/colors'
 
+const deleteButton = (props) => <Icon {...props} name='trash' fill={danger} />
 
-const MapLayerListItem = ({ layerId, name, index, selected, color, comment, featureCount, onEdit, onDelete, onSelect, width, onGoTo, mapRegion }) => {
+const MapLayerListItem = ({ layerId, name, index, selected, color, comment, featureCount, onEdit, onDelete, onSelect, width, onGoTo, mapRegion, disabled }) => {
     const { visible, hideModal, showModal } = useModal(false)
 
     const onEditHandler = React.useCallback(() => {
@@ -32,17 +33,21 @@ const MapLayerListItem = ({ layerId, name, index, selected, color, comment, feat
     const renderAnchor = React.useCallback(() =>
         <View>
             <IconButton
+                color={disabled ? basic : primary}
+                disabled={disabled}
                 iconName={'more-vertical-outline'}
                 onPress={showModal}
             />
-        </View>, [])
+        </View>, [disabled])
     return (
         <Pressable
+            disabled={disabled}
             android_ripple={androidRipple}
             onPress={onSelectHandler}
             style={styles.container}>
             <View style={styles.leftSide}>
                 <CheckBox
+                    disabled={disabled}
                     style={styles.checkBox}
                     onChange={onSelectHandler}
                     checked={selected} />
@@ -50,9 +55,13 @@ const MapLayerListItem = ({ layerId, name, index, selected, color, comment, feat
                     <View style={styles.titleView}>
                         <Icon
                             name={'layers'}
-                            fill={primary}
+                            fill={disabled ? basic : primary}
                             style={styles.circle} />
-                        <Text category='h6'>{name}</Text>
+                        <Text
+                            appearance={disabled ? 'hint' : 'default'}
+                            category='h6'>
+                            {name}
+                        </Text>
                     </View>
                     <View
                         style={styles.subtitleView}>
@@ -84,7 +93,7 @@ const MapLayerListItem = ({ layerId, name, index, selected, color, comment, feat
                         title='Edit' />
                     <MenuItem
                         onPress={onDeleteHandler}
-                        accessoryLeft={trashIcon}
+                        accessoryLeft={deleteButton}
                         title='Delete' />
                 </OverflowMenu>
             </View>

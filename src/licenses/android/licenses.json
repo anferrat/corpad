@@ -237,6 +237,13 @@
         "licenseUrl": "https://github.com/jfilter/react-native-onboarding-swiper/raw/master/LICENSE",
         "parents": "corpad"
     },
+    "react-native-purchases": {
+        "licenses": "MIT",
+        "copyright": "Copyright (c) 2018 RevenueCat, Inc.",
+        "repository": "https://github.com/RevenueCat/react-native-purchases",
+        "licenseUrl": "https://github.com/RevenueCat/react-native-purchases/blob/main/LICENSE",
+        "parents": "corpad"
+    },
     "react-native-reanimated": {
         "licenses": "MIT",
         "copyright": "Copyright (c) 2016 Software Mansion <swmansion.com>",
