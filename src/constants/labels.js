@@ -1,4 +1,4 @@
-import { ItemTypes, SubitemTypes, PipeDiameters, WireColors, TestPointTypes, PermanentPotentialTypes, SortingOptions, ItemStatuses, PipeSchedules, WireGauges, CurrentUnits, AreaUnits, CurrentDensityUnits, FactorUnits, PotentialUnits, AnodeMaterials, ReferenceCellTypes, IsolationTypes, CouponTypes, PipelineMaterials, PipelineProducts, PowerSources, TapOptions, CoarseFineOptions, ExportItemProperties, ExportSubitemProperties, CalculatorTypes, PipelineCoating, IsolationShorted, MultimeterTypes, TimeUnits, MultimeterMeasurementTypes, MultimeterCycles, MultimeterSyncModes, ImageSources, MapLayerFeatures, StrokeColors, StrokeWidths, ExportFormatTypes, LengthUnits, ResistivityUnits, AnodeBedEnclosureTypes, AnodeBedMaterialTypes, AnodeBedTypes } from "./global"
+import { ItemTypes, SubitemTypes, PipeDiameters, WireColors, TestPointTypes, PermanentPotentialTypes, SortingOptions, ItemStatuses, PipeSchedules, WireGauges, CurrentUnits, AreaUnits, CurrentDensityUnits, FactorUnits, PotentialUnits, AnodeMaterials, ReferenceCellTypes, IsolationTypes, CouponTypes, PipelineMaterials, PipelineProducts, PowerSources, TapOptions, CoarseFineOptions, ExportItemProperties, ExportSubitemProperties, CalculatorTypes, PipelineCoating, IsolationShorted, MultimeterTypes, TimeUnits, MultimeterMeasurementTypes, MultimeterCycles, MultimeterSyncModes, ImageSources, MapLayerFeatures, StrokeColors, StrokeWidths, ExportFormatTypes, LengthUnits, ResistivityUnits, AnodeBedEnclosureTypes, AnodeBedMaterialTypes, AnodeBedTypes, SubscriptionStatuses } from "./global"
 
 export const DefaultNames = Object.freeze({
     [ItemTypes.TEST_POINT]: 'TP',
@@ -483,17 +483,25 @@ export const AnodeBedEnclosureTypeLabels = Object.freeze({
 })
 
 export const AnodeBedMateriaTypelLabels = Object.freeze({
-   [AnodeBedMaterialTypes.ALUMINUM]: 'Aluminum',
-   [AnodeBedMaterialTypes.CONDUCTIVE_POLYMER]: 'Conductive polymer',
-   [AnodeBedMaterialTypes.GRAPHITE]: 'Graphite',
-   [AnodeBedMaterialTypes.MAGNETITE]: 'Magnetite',
-   [AnodeBedMaterialTypes.MIXED_METAL_OXIDE]: 'Mixed metal oxide',
-   [AnodeBedMaterialTypes.PLATINUM]: 'Platinum',
-   [AnodeBedMaterialTypes.SCRAP_METAL]: 'Scrap metal'
+    [AnodeBedMaterialTypes.ALUMINUM]: 'Aluminum',
+    [AnodeBedMaterialTypes.CONDUCTIVE_POLYMER]: 'Conductive polymer',
+    [AnodeBedMaterialTypes.GRAPHITE]: 'Graphite',
+    [AnodeBedMaterialTypes.MAGNETITE]: 'Magnetite',
+    [AnodeBedMaterialTypes.MIXED_METAL_OXIDE]: 'Mixed metal oxide',
+    [AnodeBedMaterialTypes.PLATINUM]: 'Platinum',
+    [AnodeBedMaterialTypes.SCRAP_METAL]: 'Scrap metal'
 })
 
 export const AnodeBedTypeLabesl = Object.freeze({
     [AnodeBedTypes.DEEP_VERTICAL]: 'Deep vertical',
     [AnodeBedTypes.SHALLOW_HORIZONTAL]: 'Shallow horizontal',
     [AnodeBedTypes.SHALLOW_VERTICAL]: 'Shallow vertical'
+})
+
+export const SubscriptionStatusLabels = Object.freeze({
+    [SubscriptionStatuses.GRANTED]: 'Active',
+    [SubscriptionStatuses.NOT_GRANTED]: 'Not active',
+    [SubscriptionStatuses.UNKNOWN_GRANTED]: 'Active',
+    [SubscriptionStatuses.UNKNOWN_NOT_GRANTED]: 'Needs attention',
+    [SubscriptionStatuses.PENDING]: 'Pending'
 })

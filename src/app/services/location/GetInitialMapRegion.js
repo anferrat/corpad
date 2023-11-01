@@ -33,7 +33,6 @@ export class GetInitialMapRegion {
             }
         }
         catch (er) {
-            console.log(er)
             return this.DEFAULT_REGION
         }
     }

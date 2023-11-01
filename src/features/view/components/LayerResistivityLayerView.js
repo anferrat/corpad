@@ -16,7 +16,8 @@ const ResistivityLayerView = ({ startSpacing, endSpacing, spacingUnit, resistanc
         <View style={styles.mainView}>
             <View style={styles.titleView}>
                 <Icon
-                    name={'layers'}
+                    name={'SR-layer'}
+                    pack='cp'
                     style={styles.icon}
                     fill={basic} />
                 <Text

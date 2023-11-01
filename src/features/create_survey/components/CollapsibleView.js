@@ -18,9 +18,10 @@ const CollapsibleView = ({ children, visible, toggleView }) => {
                     {!visible ? 'More' : 'Less'} options ...
                 </Text>
             </Pressable>
-            <View style={visible ? styles.options : styles.hidden}>
-                {children}
-            </View>
+            {visible ?
+                <View>
+                    {children}
+                </View> : null}
         </>
     )
 }
@@ -39,11 +40,5 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         paddingVertical: 6,
         marginVertical: 12,
-    },
-    options: {
-
-    },
-    hidden: {
-        display: 'none'
     }
 })

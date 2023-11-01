@@ -3,12 +3,15 @@ import { useDispatch, useSelector } from "react-redux"
 import { deleteMapLayer, toggleMapLayer } from "../../../store/actions/mapLayers"
 import { deleteMapLayer as deleteMapLayerRequest, updateMapLayer } from "../../../app/controllers/survey/other/MapLayerController"
 import { errorHandler, warningHandler } from "../../../helpers/error_handler"
-import { hideLoader, updateLoader } from "../../../store/actions/settings"
+import { hideLoader, showPaywall, updateLoader } from "../../../store/actions/settings"
 import { resetActiveMapLayerMarker } from "../../../store/actions/map"
 import { EventRegister } from "react-native-event-listeners"
+import { isProStatus } from "../../../helpers/functions"
 
 const useMapLayers = ({ navigateToEditMapLayer, goBack }) => {
     const layers = useSelector(state => state.mapLayers.layers)
+    const subscriptionStatus = useSelector(state => state.settings.subscription.status)
+    const isPro = isProStatus(subscriptionStatus)
     const [visible, setVisible] = useState(false)
     const maxLayerNumberLimitReached = layers.length >= 6
 
@@ -46,13 +49,17 @@ const useMapLayers = ({ navigateToEditMapLayer, goBack }) => {
     }, [])
 
     const onAddLayer = useCallback(() => {
-        navigateToEditMapLayer(true)
-    }, [])
+        isPro ?
+            navigateToEditMapLayer(true)
+            :
+            dispatch(showPaywall())
+    }, [isPro])
 
     return {
         visible,
         layers,
         maxLayerNumberLimitReached,
+        isPro,
         onEdit,
         onDelete,
         onToggle,

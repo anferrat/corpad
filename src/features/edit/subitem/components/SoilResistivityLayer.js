@@ -27,7 +27,8 @@ const SoilResistivityLayer = ({ valid, spacing, resistance, deleteSoilResistivit
                 style={styles.title}>
                 <View style={styles.titleText}>
                     <Icon
-                        name='layers'
+                        name='SR-layer'
+                        pack='cp'
                         style={styles.icon}
                         fill={basic} />
                     <Text

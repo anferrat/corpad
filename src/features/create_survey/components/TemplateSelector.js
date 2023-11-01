@@ -9,7 +9,7 @@ const accessory = {
     icon: 'file-outline'
 }
 
-const TemplateSelector = ({ surveyList, toggleTemplateSetting, isBlank, selectedSurveyindex, setSelectedSurveyIndex, surveyListLoading, includeAssets, setIncludeAssets }) => {
+const TemplateSelector = ({ surveyList, toggleTemplateSetting, isBlank, selectedSurveyindex, setSelectedSurveyIndex, surveyListLoading, includeAssets, setIncludeAssets, assetOptionAvailable }) => {
     const placeholder = surveyList.length > 0 ? 'Select survey' : 'No local surveys found'
     return (
         <>
@@ -58,6 +58,7 @@ const TemplateSelector = ({ surveyList, toggleTemplateSetting, isBlank, selected
                             itemList={surveyList} />
                     }
                     <CheckBox
+                        disabled={!assetOptionAvailable}
                         checked={includeAssets}
                         onChange={setIncludeAssets}
                         style={styles.checkbox}>

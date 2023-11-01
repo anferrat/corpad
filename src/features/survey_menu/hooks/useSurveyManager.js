@@ -2,14 +2,17 @@ import { useCallback } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import { saveAndResetSurvey, saveSurvey } from "../../../app/controllers/survey/SurveyController"
 import { errorHandler } from "../../../helpers/error_handler"
-import { hideLoader, resetCurrentSurveySettings, setSurveySaving, updateCurrentSurveySettings, updateLoader, updateLoaderProgress, updateSession } from "../../../store/actions/settings"
+import { hideLoader, resetCurrentSurveySettings, setSurveySaving, showPaywall, updateCurrentSurveySettings, updateLoader, updateLoaderProgress, updateSession } from "../../../store/actions/settings"
 import { hapticMedium } from "../../../native_libs/haptics"
-import { getFormattedDate } from "../../../helpers/functions"
+import { getFormattedDate, isProStatus, isVerifyStatus } from "../../../helpers/functions"
 import { MultimeterTypeLabels } from "../../../constants/labels"
 
 const useSurveyManager = ({ hideSheet }) => {
     const { fileName, savingInProgress, lastSyncTime } = useSelector(state => state.settings.currentSurvey)
     const { connected, paired, multimeterType } = useSelector(state => state.settings.activeMultimeter)
+    const subscriptionStatus = useSelector(state => state.settings.subscription.status)
+    const isPro = isProStatus(subscriptionStatus)
+    const isVerify = isVerifyStatus(subscriptionStatus)
     const dispatch = useDispatch()
 
     const syncTimeLabel = (lastSyncTime === null ? 'Never saved' : `Last synced: ${getFormattedDate(lastSyncTime)}`)
@@ -17,6 +20,11 @@ const useSurveyManager = ({ hideSheet }) => {
     const multimeterLablel = paired ? (`${connected ? 'Connected' : 'Disconnected'} | ${MultimeterTypeLabels[multimeterType]}`) : null
 
     const onUpload = useCallback((total, count) => dispatch(updateLoaderProgress(true, 'Uploading assets', total, count)))
+
+    const onPaywallShow = useCallback(() => {
+        dispatch(showPaywall())
+        hideSheet()
+    }, [hideSheet])
 
     const surveyManagerErrorHandler = useCallback((error, message) => {
         if (error === 302)
@@ -28,7 +36,7 @@ const useSurveyManager = ({ hideSheet }) => {
     const saveSurveyHandler = useCallback(async () => {
         if (!savingInProgress) {
             dispatch(setSurveySaving(true))
-            const { response, status } = await saveSurvey({ }, surveyManagerErrorHandler)
+            const { response, status } = await saveSurvey({}, surveyManagerErrorHandler)
             if (status === 200) {
                 const { fileName, syncTime } = response
                 dispatch(updateCurrentSurveySettings(syncTime, fileName))
@@ -53,11 +61,14 @@ const useSurveyManager = ({ hideSheet }) => {
     return {
         saveSurveyHandler,
         saveAndResetSurveyHandler,
+        onPaywallShow,
         savingInProgress,
         syncTimeLabel,
         multimeterLablel,
         connected,
-        paired
+        paired,
+        isPro,
+        isVerify
     }
 }
 

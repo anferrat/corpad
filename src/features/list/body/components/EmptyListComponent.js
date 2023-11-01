@@ -4,14 +4,16 @@ import { Icon, Text } from '@ui-kitten/components'
 import { basic } from '../../../../styles/colors'
 
 const EmptyListComponent = (props) => {
-    return (
-        <View
-            style={props.visible ? styles.main : styles.hidden}>
-            <Icon style={styles.icon} name='list-outline' fill={basic} />
-            <Text category='h3' appearance='hint' style={styles.mainText}>No Items</Text>
-            {props.filtered ? <FilteredItemsHint /> : <EmptyListHint />}
-        </View>
-    )
+    if (props.visible)
+        return (
+            <View
+                style={styles.main}>
+                <Icon style={styles.icon} name='list-outline' fill={basic} />
+                <Text category='h3' appearance='hint' style={styles.mainText}>No Items</Text>
+                {props.filtered ? <FilteredItemsHint /> : <EmptyListHint />}
+            </View>
+        )
+    else return null
 }
 
 const FilteredItemsHint = () => {
@@ -38,9 +40,6 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         height: '80%',
         padding: 12
-    },
-    hidden: {
-        display: 'none',
     },
     icon: {
         width: 60,

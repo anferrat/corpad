@@ -17,7 +17,7 @@ const EmptySurveyFileListComponent = ({ isCloud, onCreate, initialLoad }) => {
                     category='h5'
                     appearance={'hint'}
                     style={styles.title}>
-                    No survey files available
+                    No survey files
                 </Text>
                 <Text
                     category='p2'

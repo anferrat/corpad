@@ -6,7 +6,7 @@ import { ItemTypes, SubitemTypes } from '../../../constants/global'
 import { ScrollView } from 'react-native-gesture-handler'
 import { StyleSheet } from 'react-native'
 
-const ControlBar = ({ createSubitem, deleteItem, itemType, displayOnMap, displayOnMapVisible, navigateToEdit, onAddPhoto, addPhotoAvailable }) => {
+const ControlBar = ({ createSubitem, deleteItem, itemType, displayOnMap, displayOnMapVisible, navigateToEdit, onAddPhoto, addPhotoAvailable, isPhotoCaptureDisabled }) => {
     const [visible, setVisible] = useState(false)
 
     const hideModal = React.useCallback(() => setVisible(false), [])
@@ -41,6 +41,7 @@ const ControlBar = ({ createSubitem, deleteItem, itemType, displayOnMap, display
                             onPress={displayOnMap} /> : null}
                     {addPhotoAvailable ? <ControlButton
                         label='Add a photo'
+                        disabled={isPhotoCaptureDisabled}
                         icon='camera'
                         onPress={onAddPhoto} /> : null}
                     {itemType !== 'PIPELINE' ?

@@ -1,3 +1,4 @@
+import { SubscriptionStatuses } from '../constants/global'
 import fieldValidation from './validation'
 
 export const calculateCouponDensity = (current, area) => {
@@ -69,7 +70,7 @@ export const getFormattedDate = (timestamp) => { //formats date. date stored acr
     else return 'Time error'
 }
 
-export const getFullDate = (timestamp) => { 
+export const getFullDate = (timestamp) => {
     const t = new Date(timestamp)
     if (timestamp && !isNaN(timestamp) && timestamp > 0 && t) {
         return t.getFullYear() + '/'
@@ -107,3 +108,6 @@ export const getFileSize = (bytes) => {
         unit: 'B'
     }
 }
+
+export const isProStatus = status => status === SubscriptionStatuses.GRANTED || status === SubscriptionStatuses.UNKNOWN_GRANTED
+export const isVerifyStatus = status => status === SubscriptionStatuses.UNKNOWN_NOT_GRANTED

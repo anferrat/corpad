@@ -2,28 +2,31 @@ import React from 'react'
 import TP from './items/TP'
 import RT from './items/RT'
 import PL from './items/PL'
+import { ItemTypes } from '../../../../constants/global'
 
-const ItemFactory = ({ item, itemType, update, validate, createSubitem, updateLatAndLon, updateTap }) => {
+const ItemFactory = ({ item, itemType, update, validate, createSubitem, updateLatAndLon, updateTap, isPro }) => {
 
     switch (itemType) {
-        case 'TEST_POINT':
+        case ItemTypes.TEST_POINT:
             return <TP
                 data={item}
+                isPro={isPro}
                 updateLatAndLon={updateLatAndLon}
                 itemType={itemType}
                 update={update}
                 validate={validate}
                 createSubitem={createSubitem} />
-        case 'RECTIFIER':
+        case ItemTypes.RECTIFIER:
             return <RT
                 updateTap={updateTap}
+                isPro={isPro}
                 updateLatAndLon={updateLatAndLon}
                 itemType={itemType}
                 data={item}
                 update={update}
                 validate={validate}
                 createSubitem={createSubitem} />
-        case 'PIPELINE':
+        case ItemTypes.PIPELINE:
             return <PL
                 data={item}
                 update={update}

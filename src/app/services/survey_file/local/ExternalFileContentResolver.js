@@ -33,7 +33,6 @@ export class ExtrenalFileContentResolver {
             return file
         }
         catch (er) {
-            console.log(er)
             return file
         }
     }

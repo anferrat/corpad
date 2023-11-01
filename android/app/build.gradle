@@ -98,7 +98,7 @@ android {
         applicationId "com.corpad"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 22
+        versionCode 26
         versionName "1.4"
     }
 
@@ -157,6 +157,9 @@ android {
 }
 
 dependencies {
+     def billingVersion = "6.0.0"
+
+    implementation "com.android.billingclient:billing:$billingVersion"
   // The version of react-native is set by the React Native Gradle Plugin
     implementation("com.facebook.react:react-android")
     implementation("androidx.swiperefreshlayout:swiperefreshlayout:1.0.0")

@@ -6,21 +6,23 @@ export class MultimeterInitialization {
         this.CONNECTION_DELAY = 3000
     }
 
-    async execute() {
+    async execute(autoConnect = true) {
         try {
             await this.bluetoothRepo.init()
-            const { multimeter } = await this.settingRepo.get()
-            const { peripheralId, type } = multimeter
-            if (peripheralId !== null && peripheralId) {
-                await this.bluetoothRepo.checkState()
-                const multimeterSrvice = this.multimeterFactory.execute(type)
-                setTimeout(async () => {
-                    try {
-                        await multimeterSrvice.startMultimeter(peripheralId)
-                    }
-                    catch { }
-                }, this.CONNECTION_DELAY)
+            if (autoConnect) {
+                const { multimeter } = await this.settingRepo.get()
+                const { peripheralId, type } = multimeter
+                if (peripheralId !== null && peripheralId) {
+                    await this.bluetoothRepo.checkState()
+                    const multimeterSrvice = this.multimeterFactory.execute(type)
+                    setTimeout(async () => {
+                        try {
+                            await multimeterSrvice.startMultimeter(peripheralId)
+                        }
+                        catch { }
+                    }, this.CONNECTION_DELAY)
 
+                }
             }
         }
         catch (er) {

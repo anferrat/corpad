@@ -29,6 +29,31 @@ export class SettingRepository extends SQLiteRepository {
         }
     }
 
+    async updateOfflineCount(count) {
+        try {
+            await this.runSingleQueryTransaction('SELECT id, value FROM config WHERE id="offlineCount"')
+            super.runMultiQueryTransaction(tx => [
+                super.runQuery(tx, 'DELETE FROM config WHERE id="offlineCount"'),
+                super.runQuery(tx, 'INSERT INTO config (id, value) VALUES ("offlineCount", ?)', [count])
+            ])
+        }
+        catch (er) {
+            throw new Error(errors.DATABASE, 'Unable to update offline count', er)
+        }
+    }
+
+    async getOfflineCount() {
+        try {
+            const result = await this.runSingleQueryTransaction('SELECT id, value FROM config WHERE id="offlineCount"')
+            if (result.rows.length === 0)
+                return 0
+            else return Number(result.rows.item(0).value)
+        }
+        catch (er) {
+            throw new Error(errors.DATABASE, 'Unable to get offline count', er)
+        }
+    }
+
     async updateSurveySettings(settings) {
         const { isSurveyNew, isCloud, originalHash, fileName, cloudId, lastSync } = settings
         try {

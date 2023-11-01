@@ -12,7 +12,7 @@ export class MarkOnboardingVisited {
         onboarding.main = false
         await Promise.all([
             this.settingRepo.updateOnboarding(onboarding),
-            this.multimeterInitializationService.execute()
+            this.multimeterInitializationService.execute(false)
         ])
         return ONBOARDING_VERSION
     }

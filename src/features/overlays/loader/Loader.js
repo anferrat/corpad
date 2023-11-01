@@ -70,8 +70,5 @@ const styles = StyleSheet.create({
     text: {
         paddingBottom: 12,
         textAlign: 'center'
-    },
-    hidden: {
-        display: 'none'
     }
 })

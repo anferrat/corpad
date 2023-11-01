@@ -4,10 +4,13 @@ import { resetExport, setExportFormat, setExportItemType, setExportSorting, togg
 import { getExportItemProperties } from "../../../../app/controllers/survey/ExportController"
 import { errorHandler } from "../../../../helpers/error_handler"
 import { ExportFormatTypes, ItemTypes } from "../../../../constants/global"
+import { isProStatus } from "../../../../helpers/functions"
 
 const useExportItemProperties = ({ navigateToExportOverview, navigateToExportPotentials, navigateToExportSubitems }) => {
     const [properties, setProperties] = useState([])
     const [loading, setLoading] = useState(true)
+    const subscriptionStatus = useSelector(state => state.settings.subscription.status)
+    const isPro = isProStatus(subscriptionStatus)
     const itemType = useSelector(state => state.export.itemType)
     const sorting = useSelector(state => state.export.sorting)
     const includeAssets = useSelector(state => state.export.includeAssets)
@@ -17,9 +20,9 @@ const useExportItemProperties = ({ navigateToExportOverview, navigateToExportPot
     const dispatch = useDispatch()
     const componentMounted = useRef(true)
     const formatOptionAvailable = itemType === ItemTypes.TEST_POINT || itemType === ItemTypes.RECTIFIER
-    const assetOptionAvailable = (itemType === ItemTypes.TEST_POINT || itemType === ItemTypes.RECTIFIER) && exportType === ExportFormatTypes.CSV
+    const assetOptionAvailable = (itemType === ItemTypes.TEST_POINT || itemType === ItemTypes.RECTIFIER) && exportType === ExportFormatTypes.CSV && isPro
     const sortingOptionAvailable = exportType !== ExportFormatTypes.KML
-    const mapLayerOptionAvailable = exportType === ExportFormatTypes.KML
+    const mapLayerOptionAvailable = exportType === ExportFormatTypes.KML && isPro
 
 
     useEffect(() => {

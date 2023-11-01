@@ -63,15 +63,16 @@ const CT = ({ data, update, validate }) => {
                 style={styles.button}>
                 Current calculation
             </Button>
-            <View style={{ ...styles.shuntView, display: expanded ? 'flex' : 'none' }}>
-                <CircuitShuntView
-                    update={update}
-                    validateShuntProperty={validateShuntProperty}
-                    ratioVoltage={ratioVoltage}
-                    ratioCurrent={ratioCurrent}
-                    voltageDrop={voltageDrop}
-                    valid={validShuntObject} />
-            </View>
+            {expanded ?
+                <View style={styles.shuntView}>
+                    <CircuitShuntView
+                        update={update}
+                        validateShuntProperty={validateShuntProperty}
+                        ratioVoltage={ratioVoltage}
+                        ratioCurrent={ratioCurrent}
+                        voltageDrop={voltageDrop}
+                        valid={validShuntObject} />
+                </View> : null}
         </>
     )
 }

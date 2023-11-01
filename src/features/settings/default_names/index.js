@@ -68,9 +68,6 @@ const styles = StyleSheet.create({
     checkBox: {
         paddingVertical: 12,
     },
-    checkBoxHidden: {
-        display: 'none'
-    },
     input: {
         paddingTop: 12
     },

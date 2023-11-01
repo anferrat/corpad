@@ -1,4 +1,4 @@
-import { ItemStatuses, StrokeColors, WireColors } from "../constants/global"
+import { ItemStatuses, StrokeColors, SubscriptionStatuses, WireColors } from "../constants/global"
 
 export const primary = "#7186C7"
 export const success = "#43C150"
@@ -14,6 +14,7 @@ export const basic700 = '#888892'
 export const primary100 = '#E6EDFC'
 export const primary200 = '#CEDCF9'
 export const primary400 = '#95A8DD'
+export const primary700 = '#38498F'
 export const success100 = "#E3FBDB"
 export const control = '#fff'
 
@@ -63,4 +64,12 @@ export const MapLayerFillColors = Object.freeze({
     [StrokeColors.PURPLE]: 'rgba(204,136,153,0.5)',
     [StrokeColors.RED]: 'rgba(189,65,49,0.5)',
     [StrokeColors.YELLOW]: 'rgba(194,185,66,0.5)'
+})
+
+export const SubscriptionStatusColors = Object.freeze({
+    [SubscriptionStatuses.GRANTED]: success,
+    [SubscriptionStatuses.NOT_GRANTED]: danger,
+    [SubscriptionStatuses.UNKNOWN_GRANTED]: success,
+    [SubscriptionStatuses.UNKNOWN_NOT_GRANTED]: warning,
+    [SubscriptionStatuses.PENDING]: basic
 })

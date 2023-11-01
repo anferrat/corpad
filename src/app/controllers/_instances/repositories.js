@@ -3,6 +3,7 @@ import { GoogleDriveAuthorizationRepository } from "../../repository/cloud_drive
 import { GoogleDriveFileSystemRepository } from "../../repository/cloud_drive/GoogleDriveFileSystemRepository";
 import { FileSystemRepository } from "../../repository/fs/FileSystemRepository";
 import { GeolocationRepository } from "../../repository/geolocation/GeolocationRepository";
+import { PurchaseRepository } from "../../repository/inAppPurchases/PurchaseRepository";
 import { NetworkRepository } from "../../repository/network/NetworkRepository";
 import { AppRepository } from "../../repository/sqlite/AppRepository";
 import { AssetRepository } from "../../repository/sqlite/AssetRepository";
@@ -54,3 +55,6 @@ export const googleDriveAuthorizationRepo = new GoogleDriveAuthorizationReposito
 
 //Bluetooth
 export const bluetoothRepo = new BluetoothRepository()
+
+//Purchases
+export const purchaseRepo = new PurchaseRepository()

@@ -6,7 +6,7 @@ import PairedView from './components/PairedView'
 
 
 const Multimeter = ({ navigateToMultimeterCycleSettings }) => {
-    const { scanning, scanDevices, activeMultimeter, scannedDevices, isBluetoothOn, pairDevice, unpairDevice, connecting, pairingId, connectToActiveMultimeter, pairing, hideModal, showModal, visible } = useActiveMultimeter()
+    const { scanning, scanDevices, activeMultimeter, scannedDevices, isBluetoothOn, pairDevice, unpairDevice, connecting, pairingId, connectToActiveMultimeter, pairing, hideModal, showModal, visible, isPro } = useActiveMultimeter()
     const { multimeterType, paired, connected, name } = activeMultimeter
     return (
         <ScrollView>
@@ -21,6 +21,7 @@ const Multimeter = ({ navigateToMultimeterCycleSettings }) => {
                     unpair={unpairDevice}
                 /> :
                 <UnpairedView
+                    isPro={isPro}
                     hideModal={hideModal}
                     showModal={showModal}
                     visible={visible}

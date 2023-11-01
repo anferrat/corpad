@@ -1,8 +1,8 @@
-import { ExternalFileTypes } from "../../../constants/global"
+import { ExternalFileTypes, SubscriptionStatuses } from "../../../constants/global"
 import { ExternalFile } from "../../entities/survey/other/ExternalFile"
 
 export class AppInitialization {
-    constructor(currentSurveyStatusService, authorizationService, surveyRepo, multimeterInitializationService, defaultNamesInitializationService, settingRepo, openExternalSurveyService, settingInitializationService, databaseInitializationService, fileSystemInitializationService, linkingService, externalFileContentResolver) {
+    constructor(currentSurveyStatusService, authorizationService, surveyRepo, multimeterInitializationService, defaultNamesInitializationService, settingRepo, openExternalSurveyService, settingInitializationService, databaseInitializationService, fileSystemInitializationService, linkingService, externalFileContentResolver, purchaseInitializationService) {
         this.currentSurveyStatusService = currentSurveyStatusService
         this.authorizationService = authorizationService
         this.surveyRepo = surveyRepo
@@ -15,6 +15,7 @@ export class AppInitialization {
         this.fileSystemInitializationService = fileSystemInitializationService
         this.linkingService = linkingService
         this.externalFileContentResolver = externalFileContentResolver
+        this.purchaseInitializationService = purchaseInitializationService
     }
 
     async execute() {
@@ -25,17 +26,23 @@ export class AppInitialization {
         const settings = await this.settingInitializationService.execute()
 
         //Initialize bluetooth module, only if onboarding is not displayed, otherwise initialize it after onboarding update. (No notification should be displayed during onboarding)
-        if (!settings.onboarding.main)
-            await this.multimeterInitializationService.execute()
 
-        let [{ isLoaded, syncTime, name, fileName, isCloud, uid }, { isSigned, userName }, initialUrl] = await Promise.all([
+        let [{ isLoaded, syncTime, name, fileName, isCloud, uid }, { isSigned, userName }, initialUrl, { status, expirationTime }] = await Promise.all([
             this.currentSurveyStatusService.execute(),
             this.authorizationService.checkSignInStatus(),
             this.linkingService.getInitialUrl(),
+            this.purchaseInitializationService.execute(),
             this.defaultNamesInitializationService.execute(),
             this.fileSystemInitializationService.execute(),
-
         ])
+
+
+        if (!settings.onboarding.main) {
+            const autoConnect = status === SubscriptionStatuses.GRANTED || status === SubscriptionStatuses.UNKNOWN_GRANTED
+            await this.multimeterInitializationService.execute(autoConnect)
+        }
+
+
         if (isLoaded)
             await this.surveyRepo.clearEmptyValues()
         if (initialUrl !== null)
@@ -72,6 +79,8 @@ export class AppInitialization {
             userName,
             onboarding: settings.onboarding,
             multimeter: settings.multimeter,
+            subscriptionStatus: status,
+            subscriptionExpirationTime: expirationTime
         }
     }
 }

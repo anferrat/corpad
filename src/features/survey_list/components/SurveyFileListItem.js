@@ -36,7 +36,7 @@ const SurveyFileListItem = ({ name, uid, fileName, timeModified, tpCount, rectif
 
     }, [path, cloudId, fileName])
 
-    const handleShareSurveyFile = useCallback(() => {
+    const handleShareSurveyFile = useCallback(async () => {
         hideMenu()
         shareSurveyFile({ path, cloudId, name })
     }, [path, cloudId, name])

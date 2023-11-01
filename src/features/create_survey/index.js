@@ -21,6 +21,7 @@ export const CreateSurvey = ({ withImport, navigateToImport }) => {
         visible,
         includeAssets,
         optionsAvailable,
+        assetOptionAvailable,
         setIncludeAssets,
         onChangeName,
         onEndEditingName,
@@ -67,6 +68,7 @@ export const CreateSurvey = ({ withImport, navigateToImport }) => {
                             surveyListLoading={surveyListLoading}
                             surveyList={surveyList}
                             includeAssets={includeAssets}
+                            assetOptionAvailable={assetOptionAvailable}
                             setIncludeAssets={setIncludeAssets}
                             toggleTemplateSetting={toggleTemplateSetting}
                             isBlank={isBlank}
