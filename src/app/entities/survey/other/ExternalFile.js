@@ -1,3 +1,4 @@
+import { Platform } from "react-native"
 import { ExternalFileTypes } from "../../../../constants/global"
 
 export class ExternalFile {
@@ -43,6 +44,10 @@ export class ExternalFile {
     }
 
     getPath() {
-        return decodeURI(this.uri)
+        return Platform.select({
+            android: this.uri,
+            ios: decodeURI(this.uri),
+            default: decodeURI(this.uri)
+        })
     }
 }

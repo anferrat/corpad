@@ -14,7 +14,7 @@ const UnpairedView = ({ scanning, scanDevices, scannedDevices, isBluetoothOn, pa
             <View style={styles.container}>
                 <MultimeterPlaceholder />
                 <Button
-                    status={isPro ? 'primary' : 'basic'}
+                    appearance={isPro ? 'filled' : 'ghost'}
                     disabled={pairing || scanning || !isBluetoothOn}
                     style={styles.scanButton}
                     accessoryLeft={!isPro ? pricetags : (isBluetoothOn ? (scanning || pairingId !== null ? activity : scanIcon) : null)}

@@ -1,6 +1,6 @@
 import React from 'react'
 import { StyleSheet, Image, View, Pressable } from 'react-native'
-import { basic1000, basic300, basic400, basic700, control, danger, primary } from '../../../../../styles/colors'
+import { basic1000, basic300, basic400, basic700, control, danger, primary, primary400 } from '../../../../../styles/colors'
 import { Icon } from '@ui-kitten/components'
 import { androidRipple } from '../../../../../styles/styles'
 import { dimensions } from './size'
@@ -48,8 +48,8 @@ const styles = StyleSheet.create({
     },
     image: {
         borderRadius: 15,
-        borderWidth: 1,
-        borderColor: basic400,
+        borderWidth: 2,
+        borderColor: primary400,
         marginRight: dimensions.separator
     },
     remove: {

@@ -29,6 +29,7 @@ const styles = StyleSheet.create({
         height: 20
     },
     text: {
+        padding: 12,
         textAlign: 'center',
         textAlignVertical: 'center'
     }
