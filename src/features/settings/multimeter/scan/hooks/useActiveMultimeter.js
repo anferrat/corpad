@@ -120,30 +120,35 @@ const useActiveMultimeter = () => {
     }, [])
 
     const connectToActiveMultimeter = useCallback(async () => {
-        if (!activeMultimeter.connected) {
-            setConnecting(true)
-            connectingFlag.current = true
-            const { response, status } = await connectMultimeter()
-            if (status === 200 && response.isConnected) {
-                if (componentMounted.current)
-                    setConnecting(false)
-                dispatch(setActiveMultimeterStatus(true))
-            }
-            else if (status === 903)
-                errorHandler(903)
-            else {
-                setTimeout(() => {
-                    if (connectingFlag.current) {
-                        disconnectMultimeter()
-                        if (componentMounted.current) {
-                            setConnecting(false)
-                            errorHandler(822)
+        if (isPro) {
+            if (!activeMultimeter.connected) {
+                setConnecting(true)
+                connectingFlag.current = true
+                const { response, status } = await connectMultimeter()
+                if (status === 200 && response.isConnected) {
+                    if (componentMounted.current)
+                        setConnecting(false)
+                    dispatch(setActiveMultimeterStatus(true))
+                }
+                else if (status === 903)
+                    errorHandler(903)
+                else {
+                    setTimeout(() => {
+                        if (connectingFlag.current) {
+                            disconnectMultimeter()
+                            if (componentMounted.current) {
+                                setConnecting(false)
+                                errorHandler(822)
+                            }
                         }
-                    }
-                }, 5000)
+                    }, 5000)
+                }
             }
         }
-    }, [activeMultimeter.connected])
+        else {
+            onPaywallShow()
+        }
+    }, [activeMultimeter.connected, isPro, onPaywallShow])
 
     const scanDevices = useCallback(async () => {
         hideModal()

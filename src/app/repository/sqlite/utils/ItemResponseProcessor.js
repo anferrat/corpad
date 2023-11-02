@@ -28,7 +28,8 @@ export class ItemResponseProcessor {
           ELSE CAST(substr(name, -6) AS INTEGER)
         END,
         name`
-        this.natSortDESC = ` ORDER BY
+        
+        this.natSortDESC = ` ORDER BY name DESC,
         CASE
           WHEN (CAST(name AS INTEGER) = 0 AND substr(name, 1) <> '0') THEN ''
           ELSE CAST(name AS INTEGER)
@@ -50,9 +51,7 @@ export class ItemResponseProcessor {
           WHEN ((CAST(substr(name, -5) AS INTEGER) = 0) AND (substr(name, -5) <> '00')) THEN CAST(substr(name, -4) AS INTEGER)
           WHEN ((CAST(substr(name, -6) AS INTEGER) = 0) AND (substr(name, -6) <> '00')) THEN CAST(substr(name, -5) AS INTEGER)
           ELSE CAST(substr(name, -6) AS INTEGER)
-        END,
-        name DESC
-        `
+        END`
     }
 
 

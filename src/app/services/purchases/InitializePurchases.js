@@ -48,36 +48,35 @@ export class InitializePurchases {
                     status: SubscriptionStatuses.NOT_GRANTED,
                     expirationTime: status.expirationTime
                 }
-            else
-                if (isInternetOn && status.isActive) {
-                    await this.settingRepo.updateOfflineCount(0)
+            else if (isInternetOn) {
+                await this.settingRepo.updateOfflineCount(0)
+                return {
+                    status: SubscriptionStatuses.GRANTED,
+                    expirationTime: status.expirationTime
+                }
+            }
+            else {
+                //Here the status we recieve is from the cache, so we need to verify if cashed value satisfies checks
+                const [offlineCount] = await Promise.all([this.settingRepo.getOfflineCount()])
+                if (offlineCount >= this.OFFLINE_COUNT_LIMIT)
                     return {
-                        status: SubscriptionStatuses.GRANTED,
+                        status: SubscriptionStatuses.UNKNOWN_NOT_GRANTED,
                         expirationTime: status.expirationTime
                     }
-                }
-                else {
-                    //Here the status is from the cache, so we need to verify if cashed value satisfies checks
-                    const [offlineCount] = await Promise.all([this.settingRepo.getOfflineCount()])
-                    if (offlineCount >= this.OFFLINE_COUNT_LIMIT)
-                        return {
-                            status: SubscriptionStatuses.UNKNOWN_NOT_GRANTED,
-                            expirationTime: status.expirationTime
-                        }
-                    else
-                        /*
-                    /* LOCATION BASED TIME VERIFICATION - POSSIBLY MOVE IT TO A SEPARATE SERVICE
-                            {
-                            const isLocation = await this._isLocationAvailable()
-                            if (isLocation) {
-                                const { gnss } = await this.geolocationRepo.getGpsTimeAdjustment(5000)
-                                console.log(gnss)
-                                if (gnss)
-                                    return await this._getStatus(gnss, status, offlineCount)
-                            }}
-                            */
-                        return await this._getStatus(Date.now(), status, offlineCount)
-                }
+                else
+                    /*
+                /* LOCATION BASED TIME VERIFICATION - POSSIBLY MOVE IT TO A SEPARATE SERVICE
+                        {
+                        const isLocation = await this._isLocationAvailable()
+                        if (isLocation) {
+                            const { gnss } = await this.geolocationRepo.getGpsTimeAdjustment(5000)
+                            console.log(gnss)
+                            if (gnss)
+                                return await this._getStatus(gnss, status, offlineCount)
+                        }}
+                        */
+                    return await this._getStatus(Date.now(), status, offlineCount)
+            }
         }
         catch (er) {
             return {

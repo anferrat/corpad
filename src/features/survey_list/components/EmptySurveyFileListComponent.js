@@ -17,7 +17,7 @@ const EmptySurveyFileListComponent = ({ isCloud, onCreate, initialLoad }) => {
                     category='h5'
                     appearance={'hint'}
                     style={styles.title}>
-                    No survey files
+                    No survey files found
                 </Text>
                 <Text
                     category='p2'
@@ -29,7 +29,7 @@ const EmptySurveyFileListComponent = ({ isCloud, onCreate, initialLoad }) => {
                     appearance='ghost'
                     size='large'
                     onPress={onCreate.bind(this, false)}>
-                    Create new survey
+                    Create survey
                 </Button>
                 <Text
                     category='p2'
@@ -40,7 +40,7 @@ const EmptySurveyFileListComponent = ({ isCloud, onCreate, initialLoad }) => {
                     appearance='ghost'
                     size='large'
                     onPress={onCreate.bind(this, true)}>
-                    Import from .csv
+                    Import survey from .csv
                 </Button>
             </View>
         )

@@ -1,6 +1,6 @@
 import React from 'react'
 import { StyleSheet, Image } from 'react-native'
-import { basic400 } from '../../../../styles/colors'
+import { primary400 } from '../../../../styles/colors'
 import Pressable from '../../../../components/Pressable'
 import { androidRipple } from '../../../../styles/styles'
 import { imageLength, separatorWidth } from './constants/dimensions'
@@ -35,8 +35,8 @@ const styles = StyleSheet.create({
     },
     image: {
         borderRadius: 15,
-        borderWidth: 1,
-        borderColor: basic400,
+        borderWidth: 2,
+        borderColor: primary400,
         marginRight: separatorWidth
     }
 })

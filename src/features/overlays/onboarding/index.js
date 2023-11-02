@@ -36,8 +36,7 @@ export const OnboardingOverlayEditMap = ({ visible }) => {
     if (visible && isFocused)
         return <OnboardingOverlay
             onboarding='map'
-            icon='onboarding-navigate'
-            pack='cp' />
+            icon='globe' />
     else return null
 }
 

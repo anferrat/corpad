@@ -1,12 +1,13 @@
 import React from "react"
 import { View, StyleSheet } from "react-native"
 import { Divider, Icon, ListItem, Text } from "@ui-kitten/components"
-import { primary } from '../../../../../styles/colors'
+import { danger, primary } from '../../../../../styles/colors'
 import { globalStyle } from "../../../../../styles/styles"
 import { MultimeterTypeLabels } from "../../../../../constants/labels"
 import StatusView from "./StatusView"
-import { connectIcon, optionIcon, trashIcon, activity } from "../../../../../components/Icons"
+import { connectIcon, optionIcon, activity } from "../../../../../components/Icons"
 
+const trashIcon = (props) => <Icon {...props} name='trash' fill={danger} />
 
 const PairedView = ({ name, type, connected, connecting, connect, unpair, navigateToCycleSettings }) => {
     return (

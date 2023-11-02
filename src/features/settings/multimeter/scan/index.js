@@ -18,8 +18,7 @@ const Multimeter = ({ navigateToMultimeterCycleSettings }) => {
                     connected={connected}
                     connecting={connecting}
                     connect={connectToActiveMultimeter}
-                    unpair={unpairDevice}
-                /> :
+                    unpair={unpairDevice} /> :
                 <UnpairedView
                     isPro={isPro}
                     hideModal={hideModal}
