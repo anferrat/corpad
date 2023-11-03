@@ -69,6 +69,7 @@ const useApp = () => {
       }
     }
     onAppLoad()
+
     return () => {
       componentMounted.current = false
       if (urlListener.response)

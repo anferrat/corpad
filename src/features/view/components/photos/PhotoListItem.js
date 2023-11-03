@@ -14,8 +14,7 @@ const PhotoListItem = ({ source, index, onPress }) => {
 
     return (
         <Pressable
-            onPress={onPressHandler}
-            android_ripple={androidRipple}>
+            onPress={onPressHandler}>
             <Image
                 style={styles.image}
                 width={imageLength}

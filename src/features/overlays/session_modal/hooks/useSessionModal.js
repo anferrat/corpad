@@ -18,7 +18,7 @@ const useSessionModal = () => {
         dispatch(updateSession(isSigned, true, userName))
         await signInToGoogleDrive(
             er => {
-                er?.code !== 101 ? errorHandler(er) : null
+                er !== 101 ? errorHandler(er) : null
                 dispatch(updateSession(false, false))
             },
             (response) => {

@@ -39,8 +39,8 @@ export class InitializePurchases {
     }
 
     async execute() {
-        this.purchaseRepo.init()
         try {
+            this.purchaseRepo.init()
             const isInternetOn = await this.networkRepo.checkConnection()
             const status = await this.purchaseRepo.getStatus()
             if (!status.isActive)

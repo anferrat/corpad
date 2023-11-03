@@ -1,4 +1,5 @@
 import { ExternalFileTypes, SubscriptionStatuses } from "../../../constants/global"
+import { fileListener } from "../../config/fileListener"
 import { ExternalFile } from "../../entities/survey/other/ExternalFile"
 
 export class AppInitialization {
@@ -45,7 +46,9 @@ export class AppInitialization {
 
         if (isLoaded)
             await this.surveyRepo.clearEmptyValues()
-        if (initialUrl !== null)
+
+        if (initialUrl !== null) {
+            fileListener.inProgress = true
             try {
                 const file = await this.externalFileContentResolver.execute(initialUrl)
                 if (file.fileType === ExternalFileTypes.SURVEY_WITH_ASSETS || file.fileType === ExternalFileTypes.SURVEY) {
@@ -60,7 +63,8 @@ export class AppInitialization {
             }
             catch (er) {
             }
-
+            fileListener.inProgress = false
+        }
 
         if (!isSigned) {
             const session = await this.authorizationService.signInSilently()

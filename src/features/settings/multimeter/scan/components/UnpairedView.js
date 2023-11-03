@@ -17,9 +17,9 @@ const UnpairedView = ({ scanning, scanDevices, scannedDevices, isBluetoothOn, pa
                     appearance={isPro ? 'filled' : 'ghost'}
                     disabled={pairing || scanning || !isBluetoothOn}
                     style={styles.scanButton}
-                    accessoryLeft={!isPro ? pricetags : (isBluetoothOn ? (scanning || pairingId !== null ? activity : scanIcon) : null)}
+                    accessoryLeft={(isBluetoothOn ? (!isPro ? pricetags : (scanning || pairingId !== null ? activity : scanIcon)) : null)}
                     onPress={showModal}>
-                    {isPro ? (isBluetoothOn ? (pairingId !== null ? 'Pairing' : (scanning ? 'Searching for multimeters' : 'Search for multimeters')) : 'Bluetooth is off') : 'Upgrade to premium'}</Button>
+                    {isBluetoothOn ? (!isPro ? 'Upgrade to premium' : (pairingId !== null ? 'Pairing' : (scanning ? 'Searching for multimeters' : 'Search for multimeters'))) : 'Bluetooth is off'}</Button>
                 {scannedDevices.length !== 0 ?
                     <View
                         style={styles.devices}>

@@ -24,7 +24,7 @@ export class _ExportAssets {
     _getAssetFileName(count, itemName, assetFileName) {
         const name = this.fileNameGenerator.sanitizeFileName(itemName)
         const ext = this.fileNameGenerator.getExtension(assetFileName)
-        return `${name}_image${count ? `-${count}` : ""}.${ext}`
+        return `${name}_image${count ? `-${count + 1}` : ""}.${ext}`
     }
 
     async execute(itemType, exportFileName) {
@@ -36,17 +36,19 @@ export class _ExportAssets {
             const exportedFilesFolder = await this.fileSystemRepo.getLocation(FileSystemLocations.EXPORTS)
             const assets = (await this.assetRepo.getAll()).filter(({ parentType }) => parentType === itemType)
             const itemNames = new Map(items.map(({ id, name }) => [id, name]))
-            const itemAssetCount = new Map(assets.map(({ id }) => [id, 0]))
-            await Promise.all(assets.map(async ({ parentId, fileName }) => {
+            const itemAssetCount = new Map(items.map(({ id }) => [id, 0]))
+            const assetNames = assets.map(({ parentId, fileName }) => {
                 const itemName = itemNames.get(parentId)
                 const count = itemAssetCount.get(parentId)
-                const assetName = this._getAssetFileName(count, itemName, fileName)
-                await this.fileSystemRepo.copyFile(`${assetFolder}/${fileName}`, `${tempAssetFolder}/${assetName}`)
                 itemAssetCount.set(parentId, count + 1)
+                return this._getAssetFileName(count, itemName, fileName)
+            })
+            await Promise.all(assets.map(async ({ parentId, fileName }, index) => {
+                await this.fileSystemRepo.copyFile(`${assetFolder}/${fileName}`, `${tempAssetFolder}/${assetNames[index]}`)
             }))
             const archiveName = `${exportFileName}_images.zip`
             await this.fileSystemRepo.zip(tempAssetFolder, `${exportedFilesFolder}/${archiveName}`)
-            await this.fileSystemRepo.unlink(tempAssetFolder)
+            await this.fileSystemRepo.removeDir(FileSystemLocations.TEMP_ASSETS)
         }
     }
 }

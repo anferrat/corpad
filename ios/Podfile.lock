@@ -89,6 +89,8 @@ PODS:
   - hermes-engine/Pre-built (0.72.1)
   - libevent (2.1.12)
   - OpenSSL-Universal (1.1.1100)
+  - PurchasesHybridCommon (7.1.0):
+    - RevenueCat (= 4.28.0)
   - RCT-Folly (2021.07.22.00):
     - boost
     - DoubleConversion
@@ -522,6 +524,7 @@ PODS:
     - React-jsi (= 0.72.1)
     - React-logger (= 0.72.1)
     - React-perflogger (= 0.72.1)
+  - RevenueCat (4.28.0)
   - RNCClipboard (1.11.2):
     - React-Core
   - RNFlashList (1.4.3):
@@ -532,6 +535,9 @@ PODS:
     - React-Core
   - RNGoogleSignin (10.0.1):
     - GoogleSignIn (~> 7.0)
+    - React-Core
+  - RNPurchases (7.1.0):
+    - PurchasesHybridCommon (= 7.1.0)
     - React-Core
   - RNReactNativeHapticFeedback (2.0.3):
     - React-Core
@@ -569,7 +575,7 @@ PODS:
     - React-RCTImage
   - RNSensors (7.3.6):
     - React-Core
-  - RNShare (9.2.1):
+  - RNShare (9.4.1):
     - React-Core
   - RNSVG (9.13.6):
     - React
@@ -664,6 +670,7 @@ DEPENDENCIES:
   - RNFS (from `../node_modules/react-native-fs`)
   - RNGestureHandler (from `../node_modules/react-native-gesture-handler`)
   - "RNGoogleSignin (from `../node_modules/@react-native-google-signin/google-signin`)"
+  - RNPurchases (from `../node_modules/react-native-purchases`)
   - RNReactNativeHapticFeedback (from `../node_modules/react-native-haptic-feedback`)
   - RNReanimated (from `../node_modules/react-native-reanimated`)
   - RNScreens (from `../node_modules/react-native-screens`)
@@ -691,6 +698,8 @@ SPEC REPOS:
     - GTMSessionFetcher
     - libevent
     - OpenSSL-Universal
+    - PurchasesHybridCommon
+    - RevenueCat
     - SocketRocket
     - SSZipArchive
     - YogaKit
@@ -803,6 +812,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-gesture-handler"
   RNGoogleSignin:
     :path: "../node_modules/@react-native-google-signin/google-signin"
+  RNPurchases:
+    :path: "../node_modules/react-native-purchases"
   RNReactNativeHapticFeedback:
     :path: "../node_modules/react-native-haptic-feedback"
   RNReanimated:
@@ -843,6 +854,7 @@ SPEC CHECKSUMS:
   hermes-engine: 9df83855a0fd15ef8eb61694652bae636b0c466e
   libevent: 4049cae6c81cdb3654a443be001fb9bdceff7913
   OpenSSL-Universal: ebc357f1e6bc71fa463ccb2fe676756aff50e88c
+  PurchasesHybridCommon: 67d4953cf72b5c493426521fbe6481a3f80902e4
   RCT-Folly: 0080d0a6ebf2577475bda044aa59e2ca1f909cda
   RCTRequired: c52ee8fb2b35c1b54031dd8e92d88ad4dba8f2ce
   RCTTypeSafety: 75fa444becadf0ebfa0a456b8c64560c7c89c7df
@@ -885,16 +897,18 @@ SPEC CHECKSUMS:
   React-runtimescheduler: 67707a955b9ecc628cc38bdc721fbc498910f0fd
   React-utils: 0a70ea97d4e2749f336b450c082905be1d389435
   ReactCommon: e593d19c9e271a6da4d0bd7f13b28cfeae5d164b
+  RevenueCat: 211ea3859e2ed3008152ea666054d1843355ce2f
   RNCClipboard: 3f0451a8100393908bea5c5c5b16f96d45f30bfc
   RNFlashList: ade81b4e928ebd585dd492014d40fb8d0e848aab
   RNFS: 4ac0f0ea233904cb798630b3c077808c06931688
   RNGestureHandler: dec4645026e7401a0899f2846d864403478ff6a5
   RNGoogleSignin: ccaa4a81582cf713eea562c5dd9dc1961a715fd0
+  RNPurchases: 7e33f9d5e4ff554a49c3e8090a6767288b75ebef
   RNReactNativeHapticFeedback: afa5bf2794aecbb2dba2525329253da0d66656df
   RNReanimated: 9f7068e43b9358a46a688d94a5a3adb258139457
   RNScreens: 50ffe2fa2342eabb2d0afbe19f7c1af286bc7fb3
   RNSensors: 117ba71c7eeeea0407ea0c0bb79e3495d602049b
-  RNShare: e969d57543095d4018e256d0dab844574627b50a
+  RNShare: 32e97adc8d8c97d4a26bcdd3c45516882184f8b6
   RNSVG: 8ba35cbeb385a52fd960fd28db9d7d18b4c2974f
   RNZipArchive: 68a0c6db4b1c103f846f1559622050df254a3ade
   SocketRocket: f32cd54efbe0f095c4d7594881e52619cfe80b17
