@@ -87,9 +87,13 @@
 	<key>NSBluetoothAlwaysUsageDescription</key>
 	<string>You need to enable bluetooth for this app, in order to use multimeter peripherals.</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>You need to grant location permissions to use device GPS</string>
+	<string>You need to grant location permissions to use map and capture GPS coordinates.</string>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen.storyboard</string>
+	<key>NSCameraUsageDescription</key>
+	<string>You need to enable camera for capturing photos.</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>You need to grant permission to access library in order to use images.</string>
 	<key>UIRequiredDeviceCapabilities</key>
 	<array>
 		<string>armv7</string>

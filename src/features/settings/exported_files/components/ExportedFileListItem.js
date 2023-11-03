@@ -10,6 +10,7 @@ import { getFileSize } from "../helpers/functions"
 import FileListItemMenuItem from "./FileListItemMenuItem"
 import Pressable from "../../../../components/Pressable"
 import { FileMimeTypes } from "../../../../constants/global"
+import { FileMimeTypeLabels } from "../../../../constants/labels"
 
 const fileIcons = {
     [FileMimeTypes.CSV]: {
@@ -93,9 +94,10 @@ const ExportedFileListItem = ({ deleteFile, removeFileFromList, saveToDownloads,
                             ellipsizeMode={'middle'}>
                             {name}</Text>
                         <Text
+                            numberOfLines={1}
                             category="c1"
                             appearance="hint">
-                            {value} {unit}, {getFormattedDate(timeModified)}</Text>
+                            {FileMimeTypeLabels[type]} file, {value} {unit}, {getFormattedDate(timeModified)}</Text>
                     </View>
                     <FileListItemMenu
                         showMenu={showModal}

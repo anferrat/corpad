@@ -48,6 +48,7 @@ export class FileSystemRepository {
             await RNFS.copyFile(filePath, destinationPath)
         }
         catch (er) {
+            console.log(er)
                 throw new Error(errors.FILESYSTEM, 'Error while copying file', er, 404)
         }
     }
@@ -205,6 +206,7 @@ export class FileSystemRepository {
             else return true
         }
         catch (er) {
+            console.log(er)
             throw new Error(errors.FILESYSTEM, `Unable to delete file/directory at ${path}`, er, 407)
         }
     }

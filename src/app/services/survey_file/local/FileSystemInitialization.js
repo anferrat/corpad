@@ -1,3 +1,4 @@
+import { Platform } from "react-native"
 import { FileSystemLocations } from "../../../../constants/global"
 
 export class FileSystemInitialization {
@@ -6,8 +7,14 @@ export class FileSystemInitialization {
     }
 
     async execute() {
-        await this.fileSystemRepo.removeDir(FileSystemLocations.TEMP)
-        await this.fileSystemRepo.removeDir(FileSystemLocations.TEMP_DOWNLOADS)
-        await this.fileSystemRepo.removeDir(FileSystemLocations.CACHE)
+        try {
+            await this.fileSystemRepo.removeDir(FileSystemLocations.TEMP)
+            await this.fileSystemRepo.removeDir(FileSystemLocations.TEMP_DOWNLOADS)
+            if (Platform.OS !== 'ios')
+                await this.fileSystemRepo.removeDir(FileSystemLocations.CACHE)
+        }
+        catch (er) {
+            //No Errors thrown at initialization (when possible)
+        }
     }
 }
