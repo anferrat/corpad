@@ -26,6 +26,7 @@ export class GenerateItem {
         this.NUMBER_OF_FIRST_ORDER_SUBITEMS = 5
         this.NUMBER_OF_SECOND_ORDER_SUBITEMS = 2
         this.SUBITEM_TYPES_WITH_POTENTIALS = [SubitemTypes.PIPELINE, SubitemTypes.ANODE, SubitemTypes.RISER, SubitemTypes.STRUCTURE]
+        this.statuses = [ItemStatuses.ATTENTION, ItemStatuses.BAD, ItemStatuses.GOOD, ItemStatuses.UNKNOWN]
     }
 
     genRandomIndex(array) {
@@ -53,7 +54,7 @@ export class GenerateItem {
     }
 
     async generateTestPoint(index) {
-        const testPoint = new TestPoint(null, guid(), `TP${index + 1}`, this.getRandomItem(ItemStatuses), Date.now(), Date.now(), this.getRandomItem(this.comments), this.getRandomItem(this.locations), this.getRandomCoord(49, 50), this.getRandomCoord(-123, -122), this.getRandomItem(TestPointTypes))
+        const testPoint = new TestPoint(null, guid(), `TP${index + 1}`, this.getRandomItem(this.statuses), Date.now(), Date.now(), this.getRandomItem(this.comments), this.getRandomItem(this.locations), this.getRandomCoord(49, 50), this.getRandomCoord(-123, -122), this.getRandomItem(TestPointTypes))
         return await this.testPointRepo.create(testPoint)
     }
 
@@ -164,6 +165,7 @@ export class GenerateItem {
         for (let i = 0; i < count; i++) {
             const testPoint = await this.generateTestPoint(i)
             await this.generateSubitems(testPoint.id, pipelines, potentialTypes, referenceCells)
+            console.log('Generated item ', i)
         }
     }
 

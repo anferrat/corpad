@@ -7,8 +7,8 @@ export class ShareSurveyFile {
         this.shareService = shareService
     }
 
-    async execute(fileId) {
-        const { path, mimeType } = await this.exportSurveyFileService.execute(fileId)
+    async execute(fileId, onDownload) {
+        const { path, mimeType } = await this.exportSurveyFileService.execute(fileId, onDownload)
         await this.shareService.shareFile(path, mimeType)
         await this.fileSystemRepo.removeDir(FileSystemLocations.TEMP)
     }

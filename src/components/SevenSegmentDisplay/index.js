@@ -18,8 +18,8 @@ const convertValue = (value) => {
 
 }
 
-const width = Math.floor(Dimensions.get('window').width / 14)
-const height = Math.floor(Dimensions.get('window').width / 28)
+const width = Math.floor(Dimensions.get('window').width / 15)+1
+const height = Math.floor(Dimensions.get('window').width / 30)+1
 
 const SevenSegmentView = ({ value = 0, onColor, size, overRange }) => {
     const converted = convertValue(value)
