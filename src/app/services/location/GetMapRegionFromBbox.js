@@ -9,9 +9,13 @@ export class GetMapRegionFromBbox {
         this.PADDING = 1.1
     }
 
+    _check(val) {
+        return (val || val === 0) && val !== Infinity && val !== -Infinity
+    }
+
     execute(bbox) {
         const [minLon, minLat, maxLon, maxLat] = bbox
-        if (maxLat || maxLat === 0 && minLat || minLat === 0 && maxLon || maxLon === 0 && minLon || minLon === 0) {
+        if (this._check(maxLat) && this._check(minLat) && this._check(maxLon) && this._check(minLon)) {
             const midLat = (minLat + maxLat) / 2
             const midLon = (minLon + maxLon) / 2
             const deltaLat = maxLat - minLat
