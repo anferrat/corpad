@@ -10,7 +10,7 @@
 	<array>
 		<dict>
 			<key>CFBundleTypeName</key>
-			<string>SurveyFile</string>
+			<string>Corpad survey</string>
 			<key>LSHandlerRank</key>
 			<string>Owner</string>
 			<key>LSItemContentTypes</key>
@@ -20,21 +20,13 @@
 		</dict>
 		<dict>
 			<key>CFBundleTypeName</key>
-			<string>SurveyFileWithAssets</string>
+			<string>Corpad survey with assets</string>
 			<key>LSHandlerRank</key>
 			<string>Owner</string>
 			<key>LSItemContentTypes</key>
 			<array>
 				<string>com.corpad.survey-file-with-assets</string>
 			</array>
-		</dict>
-		<dict>
-			<key>CFBundleTypeName</key>
-			<string></string>
-			<key>LSHandlerRank</key>
-			<string>None</string>
-			<key>LSItemContentTypes</key>
-			<array/>
 		</dict>
 	</array>
 	<key>CFBundleExecutable</key>
@@ -81,19 +73,25 @@
 			<dict>
 				<key>NSExceptionAllowsInsecureHTTPLoads</key>
 				<true/>
+				<key>NSIncludesSubdomains</key>
+				<true/>
 			</dict>
 		</dict>
 	</dict>
 	<key>NSBluetoothAlwaysUsageDescription</key>
 	<string>You need to enable bluetooth for this app, in order to use multimeter peripherals.</string>
-	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>You need to grant location permissions to use map and capture GPS coordinates.</string>
-	<key>UILaunchStoryboardName</key>
-	<string>LaunchScreen.storyboard</string>
+	<key>NSBluetoothPeripheralUsageDescription</key>
+	<string>You need to enable bluetooth for this app, in order to use multimeter peripherals.</string>
 	<key>NSCameraUsageDescription</key>
 	<string>You need to enable camera for capturing photos.</string>
+	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+	<string>You need to grant location permissions to use map and capture GPS coordinates.</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>You need to grant location permissions to use map and capture GPS coordinates.</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>You need to grant permission to access library in order to use images.</string>
+	<key>UILaunchStoryboardName</key>
+	<string>LaunchScreen.storyboard</string>
 	<key>UIRequiredDeviceCapabilities</key>
 	<array>
 		<string>armv7</string>
@@ -112,6 +110,8 @@
 		<string>UIInterfaceOrientationLandscapeRight</string>
 		<string>UIInterfaceOrientationPortrait</string>
 	</array>
+	<key>UISupportsDocumentBrowser</key>
+	<true/>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
 	<key>UTExportedTypeDeclarations</key>
@@ -122,7 +122,7 @@
 				<string>public.data</string>
 			</array>
 			<key>UTTypeDescription</key>
-			<string>Corpad Survey File With Assets</string>
+			<string>Corpad survey with assets</string>
 			<key>UTTypeIconFiles</key>
 			<array/>
 			<key>UTTypeIdentifier</key>
@@ -143,7 +143,7 @@
 				<string>public.json</string>
 			</array>
 			<key>UTTypeDescription</key>
-			<string>Corpad Survey File</string>
+			<string>Corpad survey</string>
 			<key>UTTypeIconFiles</key>
 			<array/>
 			<key>UTTypeIdentifier</key>
