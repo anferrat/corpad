@@ -1,7 +1,7 @@
 import RNFS from 'react-native-fs'
 import { zip, unzip } from 'react-native-zip-archive'
 import { Error, errors } from '../../utils/Error'
-import { ExternalFileTypes, FileSystemLocations } from '../../../constants/global'
+import { FileSystemLocations } from '../../../constants/global'
 import { Platform } from 'react-native'
 import { File } from '../../entities/survey/other/File'
 import fileType from 'react-native-file-type'
@@ -9,16 +9,20 @@ import fileType from 'react-native-file-type'
 
 export class FileSystemRepository {
     constructor() {
-        this.appFolder = RNFS.DocumentDirectoryPath
-        this.downloadsFolder = RNFS.DownloadDirectoryPath
-        this.surveysFolder = `${RNFS.DocumentDirectoryPath}/surveys`
+        this.appFolder = Platform.select({
+            android: RNFS.DocumentDirectoryPath,
+            ios: RNFS.LibraryDirectoryPath,
+            default: RNFS.DocumentDirectoryPath
+        })
         this.exportsFolder = `${RNFS.DocumentDirectoryPath}/exports`
-        this.tempFolder = `${RNFS.DocumentDirectoryPath}/temp`
-        this.assetsFolder = `${RNFS.DocumentDirectoryPath}/assets`
-        this.currentAssetsFolder = `${RNFS.DocumentDirectoryPath}/assets/current`
-        this.tempSurveyFolder = `${RNFS.DocumentDirectoryPath}/temp/survey`
-        this.tempSurveyAssetsFolder = `${RNFS.DocumentDirectoryPath}/temp/survey/assets`
-        this.tempDownloadsFolder = `${RNFS.DocumentDirectoryPath}/downloads`
+        this.downloadsFolder = RNFS.DownloadDirectoryPath
+        this.surveysFolder = `${this.appFolder}/surveys`
+        this.tempFolder = `${this.appFolder}/temp`
+        this.assetsFolder = `${this.appFolder}/assets`
+        this.currentAssetsFolder = `${this.appFolder}/assets/current`
+        this.tempSurveyFolder = `${this.appFolder}/temp/survey`
+        this.tempSurveyAssetsFolder = `${this.appFolder}/temp/survey/assets`
+        this.tempDownloadsFolder = `${this.appFolder}/downloads`
         this.cacheFolder = RNFS.CachesDirectoryPath
     }
 
@@ -48,8 +52,7 @@ export class FileSystemRepository {
             await RNFS.copyFile(filePath, destinationPath)
         }
         catch (er) {
-            console.log(er)
-                throw new Error(errors.FILESYSTEM, 'Error while copying file', er, 404)
+            throw new Error(errors.FILESYSTEM, 'Error while copying file', er, 404)
         }
     }
 
@@ -206,7 +209,6 @@ export class FileSystemRepository {
             else return true
         }
         catch (er) {
-            console.log(er)
             throw new Error(errors.FILESYSTEM, `Unable to delete file/directory at ${path}`, er, 407)
         }
     }

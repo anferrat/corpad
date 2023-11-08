@@ -33,7 +33,10 @@ export default DevScreen = ({ navigation, route }) => {
       <FocusAwareStatusBar barStyle={'dark-content'} backgroundColor='transparent' translucent={true} />
       <Text category='h4' style={{ alignSelf: 'center', paddingBottom: 24 }}>Dev. options</Text>
       <Button onPress={() => navigation.goBack()} appearance='ghost'>Back to App</Button>
-      <Button onPress={async () => { await generateTestPoints({ count }); console.log('Test points generated') }} appearance='ghost'>Generate {count} test points</Button>
+      <Button onPress={async () => {
+        await generateTestPoints({ count });
+        //console.log('Test points generated')
+      }} appearance='ghost'>Generate {count} test points</Button>
       <Button onPress={resetDatabase} appearance='ghost'>Reset DB</Button>
       <Button onPress={show} appearance='ghost'>Show paywall</Button>
       <Button onPress={test} appearance='ghost'>Test count update</Button>
