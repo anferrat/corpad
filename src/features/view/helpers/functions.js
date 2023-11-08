@@ -25,19 +25,19 @@ const fixRealValue = (a) => {
     else {
         const abs = Math.abs(a)
         if (abs >= 1000)
-            return Math.floor(a)
+            return Math.floor(a).toFixed(0)
         else if (abs < 1000 && abs >= 100)
-            return a.toFixed(1)
+            return Number(a).toFixed(1)
         else if (abs < 100 && abs > 1) {
-            return a.toFixed(2).replace(/\.?0*$/, '')
+            return Number(a).toFixed(2).replace(/\.?0*$/, '')
         }
         else if (abs <= 1 && abs >= 0.01) {
-            return a.toFixed(3).replace(/\.?0*$/, '')
+            return Number(a).toFixed(3).replace(/\.?0*$/, '')
         }
         else if (abs < 0.01 && abs > 0.0001) {
-            return a.toFixed(5).replace(/\.?0*$/, '')
+            return Number(a).toFixed(5).replace(/\.?0*$/, '')
         }
-        else return 0
+        else return "0"
     }
 }
 
