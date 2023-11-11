@@ -501,6 +501,8 @@
 				DEVELOPMENT_TEAM = UXC83W5XQ8;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = Corpad/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "Corpad Cathodic Protection";
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.productivity";
 				IPHONEOS_DEPLOYMENT_TARGET = 12.4;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -534,6 +536,8 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = UXC83W5XQ8;
 				INFOPLIST_FILE = Corpad/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "Corpad Cathodic Protection";
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.productivity";
 				IPHONEOS_DEPLOYMENT_TARGET = 12.4;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
