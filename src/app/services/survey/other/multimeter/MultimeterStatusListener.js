@@ -7,19 +7,24 @@ export class MultimeterStatusListener {
 
     execute(callback) {
         const onEvent = async (id, status) => {
-            const { multimeter } = await this.settingRepo.get()
-            if (multimeter.peripheralId === id && id !== null) {
-                callback({ isConnected: status })
+            try {
+                const { multimeter } = await this.settingRepo.get()
+                if (multimeter.peripheralId === id && id !== null) {
+                    callback({ isConnected: status })
+                }
             }
+            catch { }
         }
 
         const onAppStateChange = async (callback) => {
-            const { multimeter } = await this.settingRepo.get()
-            if (multimeter.peripheralId !== null && multimeter.peripheralId !== null) {
-                const status = await this.bluetoothRepo.isDeviceConnected(multimeter.peripheralId)
-                callback({ isConnected: status })
-
+            try {
+                const { multimeter } = await this.settingRepo.get()
+                if (multimeter.peripheralId !== null && multimeter.peripheralId !== null) {
+                    const status = await this.bluetoothRepo.isDeviceConnected(multimeter.peripheralId)
+                    callback({ isConnected: status })
+                }
             }
+            catch { }
         }
 
         const connect = this.bluetoothRepo.connectedDevicesListener((id) => onEvent(id, true))
