@@ -3,7 +3,7 @@ import { fileListener } from "../../config/fileListener"
 import { ExternalFile } from "../../entities/survey/other/ExternalFile"
 
 export class AppInitialization {
-    constructor(currentSurveyStatusService, authorizationService, surveyRepo, multimeterInitializationService, defaultNamesInitializationService, settingRepo, openExternalSurveyService, settingInitializationService, databaseInitializationService, fileSystemInitializationService, linkingService, externalFileContentResolver, purchaseInitializationService) {
+    constructor(currentSurveyStatusService, authorizationService, surveyRepo, multimeterInitializationService, defaultNamesInitializationService, settingRepo, openExternalSurveyService, settingInitializationService, databaseInitializationService, fileSystemInitializationService, linkingService, externalFileContentResolver, purchaseInitializationService, urlFileAccess) {
         this.currentSurveyStatusService = currentSurveyStatusService
         this.authorizationService = authorizationService
         this.surveyRepo = surveyRepo
@@ -17,6 +17,7 @@ export class AppInitialization {
         this.linkingService = linkingService
         this.externalFileContentResolver = externalFileContentResolver
         this.purchaseInitializationService = purchaseInitializationService
+        this.urlFileAccess = urlFileAccess
     }
 
     async execute() {
@@ -50,6 +51,7 @@ export class AppInitialization {
         if (initialUrl !== null) {
             fileListener.inProgress = true
             try {
+                await this.urlFileAccess.requestAccess(initialUrl)
                 const file = await this.externalFileContentResolver.execute(initialUrl)
                 if (file.fileType === ExternalFileTypes.SURVEY_WITH_ASSETS || file.fileType === ExternalFileTypes.SURVEY) {
                     const loaded = await this.openExternalSurveyService.execute(file, isLoaded)
@@ -60,8 +62,13 @@ export class AppInitialization {
                     isLoaded = loaded.isLoaded ?? isLoaded
                     uid = loaded.uid ?? uid
                 }
+                await this.urlFileAccess.revokeAccess(initialUrl)
             }
             catch (er) {
+                try {
+                    await this.urlFileAccess.revokeAccess()
+                }
+                catch { }
             }
             fileListener.inProgress = false
         }
