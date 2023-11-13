@@ -17,6 +17,7 @@ import { WarningHandler } from "../../services/other/WarningHandler";
 import { MultimeterFactory } from "../../services/survey/other/multimeter/_devices/MultimeterFactory";
 import { GeoJsonValidation } from "../../validation/geoJson/GeoJsonValidation";
 import { bluetoothRepo } from "./repositories";
+import { UrlFileAccess } from "../../services/other/UrlFileAccess";
 
 export const kmlParser = new KmlParser()
 
@@ -53,3 +54,5 @@ export const appStateListener = new AppStateListener()
 export const geoJsonValidation = new GeoJsonValidation()
 
 export const getMapRegionFromBbox = new GetMapRegionFromBbox()
+
+export const urlFileAccessService = new UrlFileAccess()
