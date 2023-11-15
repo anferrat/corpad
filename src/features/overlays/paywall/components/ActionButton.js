@@ -30,7 +30,7 @@ const ActionButton = ({ status, onPurchase, onRestore, onClose, onVerify, isUnav
           disabled={isUnavailable || processing}
           style={styles.button}
           onPress={onPurchase}>
-          {isUnavailable ? 'Unavailable' : `7-day free, ${price}/month`}
+          {isUnavailable ? 'Unavailable' : `7 days free, ${price}/month`}
         </Button>
         <RestoreView
           disabled={processing}

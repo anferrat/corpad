@@ -65,8 +65,6 @@
 	</array>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
-	<key>LSSupportsOpeningDocumentsInPlace</key>
-	<true/>
 	<key>NSAppTransportSecurity</key>
 	<dict>
 		<key>NSAllowsArbitraryLoads</key>
@@ -88,8 +86,6 @@
 	<string>You need to enable bluetooth for this app, in order to use multimeter peripherals.</string>
 	<key>NSCameraUsageDescription</key>
 	<string>You need to enable camera for capturing photos.</string>
-	<key>NSDocumentsFolderUsageDescription</key>
-	<string>You need to grant permission to access douments, in order to open survey files stored in other apps' folders.</string>
 	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
 	<string>You need to grant location permissions to use map and capture GPS coordinates.</string>
 	<key>NSLocationWhenInUseUsageDescription</key>

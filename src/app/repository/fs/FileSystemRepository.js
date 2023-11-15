@@ -52,7 +52,6 @@ export class FileSystemRepository {
             await RNFS.copyFile(filePath, destinationPath)
         }
         catch (er) {
-            console.log(er)
             throw new Error(errors.FILESYSTEM, 'Error while copying file', er, 404)
         }
     }
