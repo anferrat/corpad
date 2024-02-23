@@ -45,7 +45,7 @@ export class SubitemFactory {
                 return new AnodeBed(id, parentId, uid, name, enclosureType, bedType, materialType, anodes)
             case SubitemTypes.SOIL_RESISTIVITY:
                 return new SoilResistivity(id, parentId, uid, name, spacingUnit, resistivityUnit, comment, layers)
-            default: throw new Error(errors.GENERAL, `Unable to update subitem with type ${type}`)
+            default: throw new Error(errors.GENERAL, `Unable to create subitem with type ${type}`)
         }
     }
 }

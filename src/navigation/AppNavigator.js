@@ -7,7 +7,7 @@ import SettingDetails from '../screens/settings/Details'
 import ViewItem from '../screens/View'
 import EditItem from '../screens/edit/Item'
 import EditSubitem from '../screens/edit/Subitem'
-//import DevScreen from '../screens/DevScreen'
+import DevScreen from '../screens/DevScreen'
 import SearchBar from '../screens/Search'
 import OnboardingScreen from '../screens/Onboarding'
 import CalculatorList from '../screens/calculator/List'
@@ -33,6 +33,7 @@ import EditMapLayer from '../screens/map_layer/Edit'
 import ViewMapLayer from '../screens/map_layer/View'
 import ViewMarkerInfo from '../screens/map_layer/ViewMarkerInfo'
 import Paywall from '../features/overlays/paywall'
+import ExternalLink from '../screens/ExternalLink'
 
 
 const Stack = createNativeStackNavigator()
@@ -92,11 +93,12 @@ export const AppNavigator = () => {
           }
           <Stack.Group screenOptions={{ animation: 'fade' }}>
             <Stack.Screen name='Spreadsheet' component={Spreadsheet} initialParams={{ uri: null, title: null }} />
+            <Stack.Screen name='ExternalLink' component={ExternalLink} initialParams={{ link: null }} />
           </Stack.Group>
           <Stack.Group screenOptions={{ animation: 'fade_from_bottom' }}>
             <Stack.Screen name='CalculatorList' component={CalculatorList} />
             <Stack.Screen name='Calculator' component={Calculator} />
-            {/*<Stack.Screen name='DevScreen' component={DevScreen} />*/}
+            <Stack.Screen name='DevScreen' component={DevScreen} />
             <Stack.Screen name='CalculatorDescription' component={CalculatorDescription} />
             <Stack.Screen name='SettingDetails' component={SettingDetails} />
             <Stack.Screen name='Licenses' component={Licenses} />

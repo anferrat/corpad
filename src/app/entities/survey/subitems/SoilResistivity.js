@@ -1,6 +1,6 @@
-import { ItemTypes, LengthUnits, ResistivityUnits, SubitemTypes } from "../../../../constants/global";
-import { SoilResistivityLayer } from "./SoilResistivityLayer";
-import { Subitem } from "./Subitem";
+import { ItemTypes, LengthUnits, ResistivityUnits, SubitemTypes } from "../../../../constants/global"
+import { SoilResistivityLayer } from "./SoilResistivityLayer"
+import { Subitem } from "./Subitem"
 
 export class SoilResistivity extends Subitem {
     constructor(id, parentId, uid, name, spacingUnit, resistivityUnit, comment, layers) {
@@ -32,7 +32,11 @@ export class SoilResistivity extends Subitem {
         const result = []
         for (i = 0; i < this.layers.length; i++) {
             const { spacing, resistanceToZero, id, uid, parentId } = this.layers[i]
-            if (!spacing || !resistanceToZero || i + 1 === this.layers.length || spacing === this.layers[i + 1].spacing || !this.layers[i + 1].resistanceToZero)
+            if (!spacing ||
+                !resistanceToZero ||
+                i + 1 === this.layers.length ||
+                spacing === this.layers[i + 1].spacing ||
+                !this.layers[i + 1].resistanceToZero)
                 if (i + 1 === this.layers.length) {
                     const resistivityToZero = this._calculateResistivity(resistanceToZero, spacing)
                     result.push(new SoilResistivityLayer(id, uid, parentId, spacing, resistanceToZero, null, resistivityToZero, null))

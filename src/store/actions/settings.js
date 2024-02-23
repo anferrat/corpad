@@ -129,4 +129,3 @@ export const showPaywall = () => ({
 export const hidePaywall = () => ({
     type: HIDE_PAYWALL
 })
-

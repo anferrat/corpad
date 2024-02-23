@@ -2,7 +2,7 @@ import React from 'react'
 import { View, StyleSheet } from 'react-native'
 import { Text, Icon } from '@ui-kitten/components'
 import SingleIconButton from '../../../components/IconButton'
-import WireParams from './WireParams.js'
+import WireParams from '../../../components/WireParams'
 import { basic } from '../../../styles/colors'
 
 const Header = ({ icon, title, wireColor, wireGauge, onEdit }) => {
