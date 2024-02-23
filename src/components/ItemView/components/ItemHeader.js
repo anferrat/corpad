@@ -1,0 +1,51 @@
+import React from 'react'
+import { Text, Icon } from '@ui-kitten/components'
+import { StyleSheet, View } from 'react-native'
+import { basic } from '../../../styles/colors'
+import { ItemTypeIcons, TestPointTypeIcons } from '../../../constants/icons'
+import { ItemTypeLabels, TestPointTypeLabels } from '../../../constants/labels'
+
+const ItemTitleView = ({ name, itemType, testPointType }) => {
+    const icon = testPointType !== undefined ? TestPointTypeIcons[testPointType] : ItemTypeIcons[itemType]
+    const subtitle = testPointType !== undefined ? TestPointTypeLabels[testPointType] : ItemTypeLabels[itemType]
+    return (
+        <View
+            style={styles.mainView}>
+            <Text
+                category='h4'
+                numberOfLines={1}
+                ellipsizeMode='tail'>{name}</Text>
+            <View
+                style={styles.subtitleView}>
+                <Icon
+                    fill={basic}
+                    style={styles.icon}
+                    pack={'cp'}
+                    name={`${icon}-filled`} />
+                <Text
+                    category='p1'
+                    appearance='hint'>
+                    {subtitle}</Text>
+
+            </View>
+        </View>
+    )
+}
+
+export default React.memo(ItemTitleView)
+
+const styles = StyleSheet.create({
+    mainView: {
+        marginBottom: 12,
+    },
+    subtitleView: {
+        paddingTop: 4,
+        flexDirection: 'row',
+        alignItems: 'center',
+    },
+    icon: {
+        height: 18,
+        width: 18,
+        marginRight: 4
+    }
+})
