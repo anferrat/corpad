@@ -38,6 +38,22 @@ export class RectifierRepository extends SQLiteRepository {
         }
     }
 
+    async getByUid(uid) {
+        try {
+            const result = await super.runSingleQueryTransaction(`SELECT * from ${this.tableName} WHERE uid=?`, [uid])
+            const rectifier = result.rows.item(0)
+            if (rectifier) {
+                const { id, uid, name, status, timeCreated, timeModified, comment, location, latitude, longitude, model, serialNumber, powerSource, acVoltage, acCurrent, tapSetting, tapValue, tapCoarse, tapFine, maxVoltage, maxCurrent } = rectifier
+                return new Rectifier(id, uid, name, status, timeCreated, timeModified, comment, location, latitude, longitude, model, serialNumber, powerSource, acVoltage, acCurrent, tapSetting, tapValue, tapCoarse, tapFine, maxVoltage, maxCurrent)
+            }
+            else
+                throw 'Rectifier uid not found'
+        }
+        catch (err) {
+            throw new Error(errors.DATABASE, `Unable to get rectifer with uid ${uid}`, err)
+        }
+    }
+
     async create(rectifier) {
         try {
             const { id, uid, timeCreated, timeModified, name, status, location, latitude, longitude, comment, model, serialNumber, powerSource, acVoltage, acCurrent, tapSetting, tapValue, tapCoarse, tapFine, maxVoltage, maxCurrent } = rectifier

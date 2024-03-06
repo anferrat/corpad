@@ -13,6 +13,20 @@ export class Subitem {
         this.potentials = potentials
     }
 
+    setSides(sideA, sideB) { }
+
+    setPipelineId(pipelineId) { }
+
+    setPipelineCardId(pipelineCardId) { }
+
+    setParentId(parentId) {
+        this.parentId = parentId
+    }
+
+    setId(id) {
+        this.id = id
+    }
+
     calculate() { }
 
     reset() { }

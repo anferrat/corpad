@@ -8,4 +8,8 @@ export class PipelineLead extends Subitem {
         this.wireColor = wireColor
         this.pipelineId = pipelineId
     }
+
+    setPipelineId(pipelineId) {
+        this.pipelineId = pipelineId
+    }
 }

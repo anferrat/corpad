@@ -134,16 +134,16 @@ export class SubitemEncoder extends Encoder {
 
     encode(subitems, pipelines, referenceCells, potentialTypes) {
         const sortedSubitems = this._sortSubitems(subitems)
-        const convertedPipelines = this._convertPipelines(pipelines, subitems)
+        const convertedPipelines = this._convertPipelines(pipelines, sortedSubitems)
         const convertedPotentialTypes = this._convertPotentialTypes(potentialTypes)
-        const convertedReferenceCells = this._convertReferenceCells(referenceCells, subitems)
+        const convertedReferenceCells = this._convertReferenceCells(referenceCells, sortedSubitems)
         return this._concat([
             this._encodeSubitemLength(sortedSubitems.length),
             sortedSubitems.length === 0 ?
                 this._getEmptyBuffer() :
                 this._concat([
                     this._encodePipelines(convertedPipelines),
-                    this._encodeSubitems(subitems, convertedPipelines, convertedReferenceCells, convertedPotentialTypes)
+                    this._encodeSubitems(sortedSubitems, convertedPipelines, convertedReferenceCells, convertedPotentialTypes)
                 ])
         ])
     }

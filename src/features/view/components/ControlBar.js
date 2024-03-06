@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import ExpandedBar from './ExpandedBar'
-import ControlButton from './ControlButton'
+import ControlButton from '../../../components/ControlButton'
 import { AddReadingModal } from '../../../components/AddReadingModal'
 import { ItemTypes, SubitemTypes } from '../../../constants/global'
 import { ScrollView } from 'react-native-gesture-handler'

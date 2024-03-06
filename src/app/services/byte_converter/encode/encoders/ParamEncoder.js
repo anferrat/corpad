@@ -1,3 +1,4 @@
+import { ExternalLinkTypes } from "../../../../../constants/global"
 import { Encoder } from "./Encoder"
 
 export class ParamEncoder extends Encoder {
@@ -18,6 +19,8 @@ export class ParamEncoder extends Encoder {
     encode() {
         return this._concat([
             this._getUniqueIdentifier(),
+            this._encodeUint8(ExternalLinkTypes.NFC),
+            this._encodeUInt32(0), //spare bytes
             this._getTimestamp()
         ])
     }

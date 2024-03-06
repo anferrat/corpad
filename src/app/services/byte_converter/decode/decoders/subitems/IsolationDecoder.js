@@ -34,7 +34,7 @@ export class IsolationDecoder extends Decoder {
             sideA: sideA.value,
             sideB: sideB.value,
             isolationType: this.codes.isolationTypes[isolationType.value] ?? null,
-            shorted: Boolean(shorted),
+            shorted: Boolean(shorted.value),
             ...shortingCurrent.value
         }, shortingCurrent.offset)
     }

@@ -28,6 +28,39 @@ export const globalStyle = StyleSheet.create({
         backgroundColor: basic200,
         overflow: 'hidden',
     },
+    card_noPadding: Platform.select({
+        ios: {
+            shadowOffset: { width: 0, height: 1 },
+            shadowOpacity: 0.8,
+            shadowRadius: 2,
+            borderWidth: 1,
+            borderRadius: 6,
+            borderColor: basic300,
+            margin: 6,
+            marginTop: 12,
+            backgroundColor: '#fff',
+            overflow: 'hidden',
+            zIndex: 1
+        },
+        android: {
+            elevation: 3,
+            borderRadius: 6,
+            margin: 6,
+            marginTop: 12,
+            backgroundColor: '#fff',
+            overflow: 'hidden',
+            zIndex: 1
+        },
+        default: {
+            borderRadius: 6,
+            margin: 6,
+            marginTop: 12,
+            backgroundColor: '#fff',
+            overflow: 'hidden',
+            zIndex: 1
+        }
+    }),
+
     card: Platform.select({
         ios: {
             shadowOffset: { width: 0, height: 1 },

@@ -47,6 +47,22 @@ export class TestPointRepository extends SQLiteRepository {
         }
     }
 
+    async getByUid(uid) {
+        try {
+            const result = await super.runSingleQueryTransaction(`SELECT * from testPoints WHERE uid=?`, [uid])
+            const testPoint = result.rows.item(0)
+            if (testPoint) {
+                const { id, uid, name, status, timeCreated, timeModified, comment, location, latitude, longitude, testPointType } = testPoint
+                return new TestPoint(id, uid, name, status, timeCreated, timeModified, comment, location, latitude, longitude, testPointType)
+            }
+            else
+                throw 'No item with such uid'
+        }
+        catch (err) {
+            throw new Error(errors.DATABASE, `Unable to get test point with uid ${uid}`, err)
+        }
+    }
+
     async create(testPoint) {
         const { id, uid, name, status, latitude, longitude, timeCreated, timeModified, testPointType, comment, location } = testPoint
         if (uid && timeCreated) {

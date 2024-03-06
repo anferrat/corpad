@@ -33,7 +33,9 @@ import EditMapLayer from '../screens/map_layer/Edit'
 import ViewMapLayer from '../screens/map_layer/View'
 import ViewMarkerInfo from '../screens/map_layer/ViewMarkerInfo'
 import Paywall from '../features/overlays/paywall'
-import ExternalLink from '../screens/ExternalLink'
+import ExternalLink from '../screens/externalLink/ExternalLink'
+import FindItem from '../screens/externalLink/FindItem'
+import PipelineMatching from '../screens/externalLink/PipelineMatching'
 
 
 const Stack = createNativeStackNavigator()
@@ -94,6 +96,8 @@ export const AppNavigator = () => {
           <Stack.Group screenOptions={{ animation: 'fade' }}>
             <Stack.Screen name='Spreadsheet' component={Spreadsheet} initialParams={{ uri: null, title: null }} />
             <Stack.Screen name='ExternalLink' component={ExternalLink} initialParams={{ link: null }} />
+            <Stack.Screen name='FindItemInSurvey' component={FindItem} />
+            <Stack.Screen name='PipelineMatching' component={PipelineMatching} />
           </Stack.Group>
           <Stack.Group screenOptions={{ animation: 'fade_from_bottom' }}>
             <Stack.Screen name='CalculatorList' component={CalculatorList} />

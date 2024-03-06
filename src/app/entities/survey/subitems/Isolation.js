@@ -25,5 +25,10 @@ export class Isolation extends Subitem {
         this.current = null
         this.shorted = false
     }
+
+    setSides(sideA, sideB) {
+        this.sideA = sideA
+        this.sideB = sideB
+    }
 }
 

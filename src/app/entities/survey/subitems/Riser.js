@@ -7,4 +7,8 @@ export class Riser extends Subitem {
         this.pipelineId = pipelineId
         this.nps = nps
     }
+
+    setPipelineId(pipelineId) {
+        this.pipelineId = pipelineId
+    }
 }

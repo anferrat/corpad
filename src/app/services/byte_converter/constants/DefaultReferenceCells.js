@@ -10,6 +10,7 @@ export class DefaultReferenceCells {
             new ReferenceCell(4, 'default-uid-CL', ReferenceCellTypes.SILVER_CHLORIDE, 'RC4', false),
             new ReferenceCell(5, 'default-uid-ZRE', ReferenceCellTypes.ZINC, 'RC5', false)
         ]
+
         this.cellMap = new Map([
             [ReferenceCellTypes.COPPER_SULFATE, this.cells[0]],
             [ReferenceCellTypes.NORMAL_HYDROGEN, this.cells[1]],

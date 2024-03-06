@@ -6,12 +6,13 @@ import { DefaultNameInitialization } from "../services/survey/other/default_name
 import { MultimeterInitialization } from "../services/survey/other/multimeter/MultimeterInitialization"
 import { Controller } from "../utils/Controller"
 import { FileSystemInitialization } from "../services/survey_file/local/FileSystemInitialization"
-import { SurveyFileListener } from "../services/app/SurveyFileListener"
+import { UrlListener } from "../services/app/UrlListener"
 import { currentSurveyStatusService, externalFileContentResolver, loadExternalSurveyFileService } from "./_instances/survey_file"
 import { appRepo, bluetoothRepo, defaultNameRepo, fileSystemRepo, geolocationRepo, googleDriveAuthorizationRepo, networkRepo, purchaseRepo, settingRepo, surveyRepo } from "./_instances/repositories"
 import { appStateListener, linkingService, multimeterFactory, permissions, urlFileAccessService, warningHandler } from "./_instances/general_services"
 import { resetCurrentSurveyService, saveCurrentSurveyService } from "./_instances/survey_manager"
 import { InitializePurchases } from "../services/purchases/InitializePurchases"
+import { UrlResolver } from "../services/app/UrlResolver"
 
 class AppController extends Controller {
     constructor(currentSurveyStatusService, googleDriveAuthorizationRepo, surveyRepo, bluetoothRepo, settingRepo, multimeterFactory, defaultNameRepo, loadExternalSurveyFileService, saveCurrentSurveyService, warningHandler, resetCurrentSurveyService, fileSystemRepo, appRepo, linkingService, appStateListener, networkRepo, externalFileContentResolver, purchaseRepo, geolocationRepo, permissions, urlFileAccess) {
@@ -35,11 +36,11 @@ class AppController extends Controller {
 
         this.fileSystemInitializationService = new FileSystemInitialization(fileSystemRepo)
 
-        this.appInitializationService = new AppInitialization(currentSurveyStatusService, googleDriveAuthorizationRepo, surveyRepo, this.multimeterInitializationService, this.defaultNameInitializationService, settingRepo, this.openExternalSurveyService, this.appSettingInitializationService, this.databaseInitializationService, this.fileSystemInitializationService, linkingService, externalFileContentResolver, this.purchaseInitializationService, urlFileAccess)
+        this.urlResolver = new UrlResolver(urlFileAccess, externalFileContentResolver, this.openExternalSurveyService)
 
-        this.surveyFileListenerService = new SurveyFileListener(linkingService, this.openExternalSurveyService, appStateListener, externalFileContentResolver, urlFileAccess)
+        this.appInitializationService = new AppInitialization(currentSurveyStatusService, googleDriveAuthorizationRepo, surveyRepo, this.multimeterInitializationService, this.defaultNameInitializationService, settingRepo, this.appSettingInitializationService, this.databaseInitializationService, this.fileSystemInitializationService, linkingService, this.purchaseInitializationService, this.urlResolver)
 
-
+        this.urlListenerService = new UrlListener(linkingService, this.urlResolver)
 
     }
 
@@ -50,9 +51,9 @@ class AppController extends Controller {
         })
     }
 
-    addFileUrlListener(callback, onError, onSuccess) {
+    addUrlListener(callback, onError, onSuccess) {
         return super.callbackHandler(onSuccess, onError, 420, () => {
-            return this.surveyFileListenerService.addListener(callback, onError, onSuccess)
+            return this.urlListenerService.addListener(callback, onError, onSuccess)
         })
     }
 
@@ -96,7 +97,7 @@ const appController = new AppController(
 
 export const initializeApp = (onError, onSuccess) => appController.init(onError, onSuccess)
 
-export const addFileUrlListener = (callback, onError, onSuccess) => appController.addFileUrlListener(callback, onError, onSuccess)
+export const addUrlListener = (callback, onError, onSuccess) => appController.addUrlListener(callback, onError, onSuccess)
 
 export const addNetworkStatusListener = (onInternetStatusChanged, onError, onSuccess) => appController.addNetworkStatusListener(onInternetStatusChanged, onError, onSuccess)
 

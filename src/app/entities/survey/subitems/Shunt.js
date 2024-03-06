@@ -40,4 +40,9 @@ export class Shunt extends Subitem {
         this.voltageDrop = null
         this.fromAtoB = true
     }
+
+    setSides(sideA, sideB) {
+        this.sideA = sideA
+        this.sideB = sideB
+    }
 }

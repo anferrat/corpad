@@ -1,18 +1,21 @@
 import React from 'react'
-import { View, StyleSheet } from 'react-native'
+import SubitemHeader from '../components/SubitemHeader'
+import PotentialView from '../components/PotentialView'
+import TextLine from '../../TextLine'
 
 
-const FC = () => {
+const FC = ({ name, type, potentials, description, potentialUnit }) => {
     return (
-        <View style={styles.container}>
-            {/* Add your content here */}
-        </View>
+        <>
+            <SubitemHeader
+                subitemType={type}
+                name={name} />
+            <PotentialView
+                potentials={potentials}
+                potentialUnit={potentialUnit} />
+            <TextLine title='Description' value={description} />
+        </>
     )
 }
 
 export default FC
-
-const styles = StyleSheet.create({
-    container: {
-    },
-})

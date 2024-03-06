@@ -1,18 +1,21 @@
 import React from 'react'
-import { View, StyleSheet } from 'react-native'
+import SubitemHeader from '../components/SubitemHeader'
+import PotentialView from '../components/PotentialView'
 
 
-const OT = () => {
+const OT = ({ name, type, potentials, wireColor, wireGauge, potentialUnit }) => {
     return (
-        <View style={styles.container}>
-            {/* Add your content here */}
-        </View>
+        <>
+            <SubitemHeader
+                name={name}
+                subitemType={type}
+                wireColor={wireColor}
+                wireGauge={wireGauge} />
+            <PotentialView
+                potentials={potentials}
+                potentialUnit={potentialUnit} />
+        </>
     )
 }
 
 export default OT
-
-const styles = StyleSheet.create({
-    container: {
-    },
-})

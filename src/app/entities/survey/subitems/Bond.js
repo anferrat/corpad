@@ -24,4 +24,9 @@ export class Bond extends Subitem {
         this.current = null
         this.fromAtoB = true
     }
+
+    setSides(sideA, sideB) {
+        this.sideA = sideA
+        this.sideB = sideB
+    }
 }

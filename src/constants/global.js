@@ -587,3 +587,14 @@ export const SubscriptionStatuses = Object.freeze({
     UNKNOWN_NOT_GRANTED: 3,
     PENDING: 4,
 })
+
+export const ExternalLinkTypes = Object.freeze({
+    NFC: 0,
+    QR_CODE: 1
+})
+
+export const UrlTypes = Object.freeze({
+    FILE: 'file',
+    DATA_LINK: 'DATA_LINK'
+})
+

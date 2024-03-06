@@ -1,23 +1,20 @@
-import { ExternalFileTypes, SubscriptionStatuses } from "../../../constants/global"
-import { fileListener } from "../../config/fileListener"
-import { ExternalFile } from "../../entities/survey/other/ExternalFile"
+import { SubscriptionStatuses } from "../../../constants/global"
+
 
 export class AppInitialization {
-    constructor(currentSurveyStatusService, authorizationService, surveyRepo, multimeterInitializationService, defaultNamesInitializationService, settingRepo, openExternalSurveyService, settingInitializationService, databaseInitializationService, fileSystemInitializationService, linkingService, externalFileContentResolver, purchaseInitializationService, urlFileAccess) {
+    constructor(currentSurveyStatusService, authorizationService, surveyRepo, multimeterInitializationService, defaultNamesInitializationService, settingRepo, settingInitializationService, databaseInitializationService, fileSystemInitializationService, linkingService, purchaseInitializationService, urlResolver) {
         this.currentSurveyStatusService = currentSurveyStatusService
         this.authorizationService = authorizationService
         this.surveyRepo = surveyRepo
         this.multimeterInitializationService = multimeterInitializationService
         this.defaultNamesInitializationService = defaultNamesInitializationService
         this.settingRepo = settingRepo
-        this.openExternalSurveyService = openExternalSurveyService
         this.settingInitializationService = settingInitializationService
         this.databaseInitializationService = databaseInitializationService
         this.fileSystemInitializationService = fileSystemInitializationService
         this.linkingService = linkingService
-        this.externalFileContentResolver = externalFileContentResolver
         this.purchaseInitializationService = purchaseInitializationService
-        this.urlFileAccess = urlFileAccess
+        this.urlResolver = urlResolver
     }
 
     async execute() {
@@ -48,29 +45,20 @@ export class AppInitialization {
         if (isLoaded)
             await this.surveyRepo.clearEmptyValues()
 
+        let urlType
+        let link
         if (initialUrl !== null) {
-            fileListener.inProgress = true
-            try {
-                await this.urlFileAccess.requestAccess(initialUrl)
-                const file = await this.externalFileContentResolver.execute(initialUrl)
-                if (file.fileType === ExternalFileTypes.SURVEY_WITH_ASSETS || file.fileType === ExternalFileTypes.SURVEY) {
-                    const loaded = await this.openExternalSurveyService.execute(file, isLoaded)
-                    syncTime = loaded.syncTime ?? syncTime
-                    name = loaded.name ?? name
-                    fileName = loaded.fileName ?? fileName
-                    isCloud = loaded.isCloud ?? isCloud
-                    isLoaded = loaded.isLoaded ?? isLoaded
-                    uid = loaded.uid ?? uid
-                }
-                await this.urlFileAccess.revokeAccess(initialUrl)
-            }
-            catch (er) {
-                try {
-                    await this.urlFileAccess.revokeAccess()
-                }
-                catch { }
-            }
-            fileListener.inProgress = false
+            await this.urlResolver.execute(initialUrl, () => { }, () => { }, (loaded) => {
+                console.log(loaded)
+                syncTime = loaded.syncTime ?? syncTime
+                name = loaded.name ?? name
+                fileName = loaded.fileName ?? fileName
+                isCloud = loaded.isCloud ?? isCloud
+                isLoaded = loaded.isLoaded ?? isLoaded
+                uid = loaded.uid ?? uid
+                urlType = loaded.urlType
+                link = loaded.link
+            })
         }
 
         if (!isSigned) {
@@ -81,6 +69,8 @@ export class AppInitialization {
 
         return {
             isLoaded,
+            urlType,
+            link,
             syncTime: syncTime ?? null,
             name: name ?? null,
             uid: uid,

@@ -30,7 +30,6 @@ export class SurveyRepository extends SQLiteRepository {
         }
     }
 
-
     async reset() {
         try {
             await super.runMultiQueryTransaction(tx => [

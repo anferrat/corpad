@@ -89,6 +89,14 @@ export const TestPointTypeIcons = Object.freeze({
     [TestPointTypes.MEASURMENT]: 'MN'
 })
 
+export const TestPointTypeIconsFilled = Object.freeze({
+    [TestPointTypes.TEST_STATION]: 'TS-filled',
+    [TestPointTypes.JUNCTION_BOX]: 'JB-filled',
+    [TestPointTypes.HEADER]: 'HD-filled',
+    [TestPointTypes.FIELD_NOTE]: 'FN-filled',
+    [TestPointTypes.MEASURMENT]: 'MN-filled'
+})
+
 export const ExportMarkerSymbols = Object.freeze({
     [ItemTypes.TEST_POINT]:
     {
