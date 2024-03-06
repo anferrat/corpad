@@ -1,4 +1,4 @@
-import { ItemStatuses, ItemTypes } from "../../../constants/global";
+import { ItemStatuses, ItemTypes, SubitemTypes } from "../../../constants/global";
 import { Pipeline } from "../../entities/survey/items/Pipeline";
 import { Rectifier } from "../../entities/survey/items/Rectifier";
 import { TestPoint } from "../../entities/survey/items/TestPoint";
@@ -43,8 +43,10 @@ export class GenerateCompositeItem {
             return anodes
                 .map(({ wireColor, wireGauge, current }) =>
                     new AnodeBedAnode(null, guid(), subitemId, current, wireColor, wireGauge))
-        else return anodes
+        else
+            return anodes
     }
+
     _generateSoilResistivityLayers(layers, subitemId) {
         if (layers)
             return layers
@@ -55,15 +57,17 @@ export class GenerateCompositeItem {
 
     _generatePotentials(potentials, subitemId) {
         if (potentials)
-            return potentials.map(({ isPortableReference, referenceCellId, rcType, permanentPotentialType, value }) =>
-                new Potential(
+            return potentials.map(({ isPortableReference, referenceCellId, rcType, permanentPotentialType, value }) => {
+                return new Potential(
                     null,
                     guid(),
                     subitemId,
                     value,
-                    this.defaultPotentialTypes.typeMap.get(permanentPotentialType),
-                    isPortableReference ? this.defaultReferenceCells.cellMap.get(rcType) : referenceCellId,
-                    isPortableReference))
+                    this.defaultPotentialTypes.typeMap.get(permanentPotentialType).id,
+                    isPortableReference ? this.defaultReferenceCells.cellMap.get(rcType).id : referenceCellId,
+                    isPortableReference,
+                    null)
+            })
         else
             return potentials
     }
@@ -78,7 +82,10 @@ export class GenerateCompositeItem {
         else {
             const defaultName = await this.defaultNameRepo.getByType(subitemType)
             const index = this._getDefaultNameIndex(subitems, subitemType, subitemId)
-            return `${defaultName} ${index}`
+            if (index === 1)
+                return defaultName
+            else
+                return `${defaultName} ${index}`
         }
     }
 
@@ -103,6 +110,25 @@ export class GenerateCompositeItem {
         return pipelines.map((name, index) => new Pipeline(index, guid(), name, timestamp, timestamp, null, null, null, true, null, null, 0))
     }
 
+    _getReferenceCellList(defaultCells, subitems) {
+        const stationaryReferenceCells = subitems.filter(({ type }) => type === SubitemTypes.REFERENCE_CELL)
+        const usedRcTypes = []
+        const deafultReferenceCellMapById = new Map(defaultCells.map(({ id, rcType }) => [id, rcType]))
+        subitems.forEach(subitem => {
+            if (subitem.potentials) {
+                subitem.potentials.forEach(potential => {
+                    if (potential.isPortableReference) {
+                        const rcType = deafultReferenceCellMapById.get(potential.referenceCellId)
+                        if (!~usedRcTypes.indexOf(rcType))
+                            usedRcTypes.push(rcType)
+                    }
+                })
+            }
+        })
+        const portableReferenceCells = defaultCells.filter(({ rcType }) => ~usedRcTypes.indexOf(rcType))
+        return portableReferenceCells.concat(stationaryReferenceCells)
+    }
+
 
     async execute(decodedData) {
         const item = this._generateItem(decodedData)
@@ -113,7 +139,7 @@ export class GenerateCompositeItem {
         return {
             item,
             pipelines: generatedPipelines,
-            referenceCells: this.defaultReferenceCells.cells,
+            referenceCells: this._getReferenceCellList(this.defaultReferenceCells.cells, generatedSubitems),
             potentialTypes: this.defaultPotentialTypes.types
         }
     }

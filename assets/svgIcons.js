@@ -1472,6 +1472,43 @@ const ProLabel = (props) => (
   </Svg>
 )
 
+const NFC = (props) => (
+  <Svg
+    xmlns="http://www.w3.org/2000/svg"
+    xmlSpace="preserve"
+    style={{
+      enableBackground: "new 0 0 24 24",
+    }}
+    viewBox="0 0 24 24"
+    {...props}
+  >
+    <Path
+      fill="none"
+      d="M0 0h24v24H0z"
+      style={{
+        fillOpacity: 0,
+      }}
+    />
+    <Circle cx={12} cy={15.6} r={1} />
+    <Path d="M12 11.1c-1.3 0-2.5.5-3.5 1.4-.4.4-.4 1 0 1.4.4.4 1 .4 1.4 0 1.2-1.1 3-1.1 4.2 0 .4.4 1 .4 1.4 0 .4-.4.4-1 0-1.4-1-.9-2.2-1.4-3.5-1.4z" />
+    <Path d="M12 22C6.5 22 2 17.5 2 12S6.5 2 12 2s10 4.5 10 10-4.5 10-10 10zm0-18c-4.4 0-8 3.6-8 8s3.6 8 8 8 8-3.6 8-8-3.6-8-8-8z" />
+    <Path d="M11.9 7.4c-2.4 0-4.8 1-6.5 2.8-.4.4-.4 1 0 1.4.4.4 1 .4 1.4 0 2.7-2.8 7.1-2.9 9.9-.2l.2.2c.2.2.4.3.7.3.6 0 1-.5 1-1 0-.3-.1-.5-.3-.7-1.6-1.8-4-2.8-6.4-2.8z" />
+  </Svg>
+)
+
+const NFCFilled = (props) => (
+  <Svg
+    xmlns="http://www.w3.org/2000/svg"
+    xmlSpace="preserve"
+    style={{
+      enableBackground: "new 0 0 24 24",
+    }}
+    viewBox="0 0 24 24"
+    {...props}
+  >
+    <Path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10 10-4.5 10-10S17.5 2 12 2zm0 14.6c-.6 0-1-.4-1-1s.4-1 1-1 1 .4 1 1-.4 1-1 1zm3.5-2.7c-.4.4-1 .4-1.4 0-1.2-1.1-3-1.1-4.2 0-.4.4-1 .4-1.4 0s-.4-1 0-1.4c.9-.9 2.2-1.4 3.5-1.4s2.5.5 3.5 1.4c.4.3.4 1 0 1.4zm2.2-2.1c-.3 0-.5-.1-.7-.3l-.2-.2c-2.8-2.6-7.2-2.6-9.9.2-.4.4-1 .4-1.4 0s-.4-1 0-1.4c1.7-1.8 4-2.7 6.5-2.8 2.5 0 4.8 1 6.5 2.8.2.2.3.4.3.7-.1.6-.6 1-1.1 1z" />
+  </Svg>
+)
 
 export const Icon = (props) => {
   switch (props.name) {
@@ -1653,6 +1690,10 @@ export const Icon = (props) => {
       return <ExportIcon {...props} />
     case 'share-ios':
       return <ShareIos {...props} />
+    case 'nfc':
+      return <NFC {...props} />
+    case 'nfc-filled':
+      return <NFCFilled {...props} />
     default:
       return <Pin {...props} />
   }

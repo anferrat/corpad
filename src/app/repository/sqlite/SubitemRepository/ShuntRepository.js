@@ -30,7 +30,7 @@ export class ShuntRepository extends SQLiteRepository {
             const result = await super.runSingleQueryTransaction(`INSERT INTO cards (id, uid, testPointId, type, name, fromAtoB, current, ratioCurrent, ratioVoltage, factorSelected, factor, voltageDrop, oldVoltageDrop) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)`,
                 [id, uid, parentId, type, name, fromAtoB, current, ratioCurrent, ratioVoltage, factorSelected, factor, voltageDrop, prevVoltageDrop])
             if (sides.length > 0)
-                this.runSingleQueryTransaction(`INSERT INTO sides (sideAId, sideBId, parentCardId) VALUES ${sides.map(side => `(${side.sideA}, ${side.sideB}, ${id})`).join()}`)
+                this.runSingleQueryTransaction(`INSERT INTO sides (sideAId, sideBId, parentCardId) VALUES ${sides.map(side => `(${side.sideA}, ${side.sideB}, ${result.insertId})`).join()}`)
             return new Shunt(result.insertId, parentId, uid, name, factor, ratioVoltage, ratioCurrent, factorSelected, current, voltageDrop, fromAtoB, sideA, sideB, prevVoltageDrop)
         }
         catch (err) {

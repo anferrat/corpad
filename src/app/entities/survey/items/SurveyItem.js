@@ -11,6 +11,7 @@ export class SurveyItem {
         this.timeModified = timeModified
         this.comment = comment
         this.markerType = itemType === ItemTypes.TEST_POINT ? IconTypes[itemType][testPointType] : IconTypes[itemType]
+        this.testPointType = testPointType
         this.subitems = []
     }
 
@@ -19,6 +20,14 @@ export class SurveyItem {
 
     setSubitems(subitems) {
         this.subitems = subitems
+    }
+
+    setUid(uid) {
+        this.uid = uid
+    }
+
+    setId(id) {
+        this.id = id
     }
 }
 

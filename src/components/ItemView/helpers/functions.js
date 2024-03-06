@@ -69,3 +69,23 @@ export const getTapValue = (tapSetting, tapValue, tapCoarse, tapFine) => {
         return { value: `F${CoarseFineOptionLabels[tapFine]}`, unit: null }
     else return { value: `C${CoarseFineOptionLabels[tapCoarse]}`, unit: null }
 }
+
+export const displayShuntRatio = (ratioCurrent, ratioVoltage) => {
+    if (ratioCurrent && ratioVoltage)
+        return + ratioVoltage + ' mV - ' + ratioCurrent + ' A'
+    else return null
+}
+
+export const displayCurrentTarget = (min, max) => {
+    if (min === null && max === null) {
+        return null
+    }
+    else
+        if (min === null) {
+            return 'Max. ' + max
+        }
+        else if (max === null) {
+            return 'Min. ' + min
+        }
+        else return min + ' - ' + max
+}

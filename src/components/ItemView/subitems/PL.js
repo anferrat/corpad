@@ -1,18 +1,24 @@
 import React from 'react'
-import { View, StyleSheet } from 'react-native'
+import SubitemHeader from '../components/SubitemHeader'
+import PotentialView from '../components/PotentialView'
+import TextLine from '../../TextLine'
 
 
-const PL = () => {
+const PL = ({ name, type, potentials, wireColor, wireGauge, pipelineId, pipelines, potentialUnit }) => {
+    const pipelineIndex = pipelines.findIndex(({ id }) => id === pipelineId)
     return (
-        <View style={styles.container}>
-            {/* Add your content here */}
-        </View>
+        <>
+            <SubitemHeader
+                subitemType={type}
+                name={name}
+                wireColor={wireColor}
+                wireGauge={wireGauge} />
+            <PotentialView
+                potentials={potentials}
+                potentialUnit={potentialUnit} />
+            <TextLine title='Pipeline' value={~pipelineIndex ? pipelines[pipelineIndex].name : null} icon='PL' pack='cp' />
+        </>
     )
 }
 
 export default PL
-
-const styles = StyleSheet.create({
-    container: {
-    },
-})

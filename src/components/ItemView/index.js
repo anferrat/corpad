@@ -4,18 +4,27 @@ import ItemFactory from './components/ItemFactory'
 import SubitemFactory from './components/SubitemFactory'
 
 
-export const ItemView = ({ item, pipelines, referenceCells, potentialTypes }) => {
+export const ItemView = ({ item, pipelines, referenceCells, potentialTypes, potentialUnit }) => {
+    const subitemIdMap = new Map(item.subitems.map(subitem => ([subitem.id, subitem])))
     return (
         <View style={styles.container}>
-            <ItemFactory
-                {...item} />
+            <View style={styles.itemView}>
+                <ItemFactory
+                    {...item} />
+            </View>
             {item.subitems.map((subitem) =>
-                <SubitemFactory {...subitem}
+                <View
                     key={subitem.id}
-                    pipelines={pipelines}
-                    potentialTypes={potentialTypes}
-                    referenceCells={referenceCells}
-                />)}
+                    style={styles.subitemView}>
+                    <SubitemFactory {...subitem}
+                        subitemIdMap={subitemIdMap}
+                        potentialUnit={potentialUnit}
+                        pipelines={pipelines}
+                        potentialTypes={potentialTypes}
+                        referenceCells={referenceCells}
+                    />
+                </View>)}
+
         </View>
     )
 }
@@ -24,4 +33,10 @@ const styles = StyleSheet.create({
     container: {
 
     },
+    subitemView: {
+        marginBottom: 12
+    },
+    itemView: {
+        padding: 12
+    }
 })

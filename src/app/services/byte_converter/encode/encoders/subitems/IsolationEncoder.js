@@ -8,8 +8,9 @@ export class IsolationEncoder extends Encoder {
     }
 
     _encodeShortingCurrent(shorted, current, fromAtoB) {
+        const multiplier = fromAtoB ? 1 : -1
         return shorted ?
-            this._encodeInt32(current === null ? null : Math.round(Number(fromAtoB) * current * 1000)) :
+            this._encodeInt32(current === null ? null : Math.round(multiplier * current * 1000)) :
             this._getEmptyBuffer()
     }
 

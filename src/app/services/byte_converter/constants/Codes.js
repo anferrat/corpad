@@ -66,7 +66,7 @@ export class Codes {
         this.referenceCellTypes = Object.freeze({
             [ReferenceCellTypes.COPPER_SULFATE]: 1,
             [ReferenceCellTypes.NORMAL_HYDROGEN]: 5,
-            [ReferenceCellTypes.SATURATED_CALOMEL]: 2,
+            [ReferenceCellTypes.SATURATED_CALOMEL]: 4,
             [ReferenceCellTypes.SILVER_CHLORIDE]: 3,
             [ReferenceCellTypes.ZINC]: 2
         })

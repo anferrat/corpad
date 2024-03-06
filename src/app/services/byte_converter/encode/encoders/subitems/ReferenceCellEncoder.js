@@ -9,7 +9,7 @@ export class ReferenceCellEncoder extends Encoder {
     }
 
     encode(subitem, referenceCells, potentialTypes) {
-        const { rcType, wireColor, wireGauge } = subitem
+        const { rcType, wireColor, wireGauge, potentials } = subitem
         return this._concat([
             this._encodeUint8(this.codes.referenceCellTypes[rcType]),
             this.wireParamEncoder.encode(wireColor, wireGauge),

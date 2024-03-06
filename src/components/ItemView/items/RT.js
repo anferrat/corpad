@@ -12,7 +12,7 @@ import { getTapValue } from '../helpers/functions'
 const RT = ({ name, itemType, coord, date, location, comment, maxVoltage, maxCurrent, model, serialNumber, powerSource, tapValue, tapSetting, tapFine, tapCoarse }) => {
     const { unit, value } = getTapValue(tapSetting, tapValue, tapCoarse, tapFine)
     return (
-        <View style={styles.container}>
+        <>
             <View style={styles.header}>
                 <ItemHeader
                     name={name}
@@ -29,7 +29,7 @@ const RT = ({ name, itemType, coord, date, location, comment, maxVoltage, maxCur
             <TextLine title='Serial number' value={serialNumber} />
             <TextLine title='Power source' value={PowerSourceLabels[powerSource] ?? null} />
             <TextLine title={tapSetting === TapOptions.AUTO ? 'Current control' : TapOptionLabels[tapSetting]} value={value} unit={unit} />
-        </View>
+        </>
     )
 }
 
@@ -39,9 +39,6 @@ const styles = StyleSheet.create({
 
     divider: {
         marginVertical: 4
-    },
-    container: {
-        marginBottom: 12
     },
     header: {
         paddingHorizontal: 8

@@ -424,6 +424,30 @@ export const getHeader = (screen, params, navigation, dispatch, openMenu) => {
                 return {
                     display: false,
                 }
+            case "ExternalLink":
+                return {
+                    display: true,
+                    isPrimary: true,
+                    title: '',
+                    left: 'back',
+                    right: null
+                }
+            case "FindItemInSurvey":
+                return {
+                    display: true,
+                    isPrimary: true,
+                    title: 'Find in the survey',
+                    left: 'back',
+                    right: null
+                }
+            case "PipelineMatching":
+                return {
+                    display: true,
+                    isPrimary: true,
+                    title: 'Match pipelines',
+                    left: 'back',
+                    right: null
+                }
             default:
                 return {
                     display: true,

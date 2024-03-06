@@ -28,5 +28,9 @@ export class Coupon extends Subitem {
         this.current = null
         this.density = null
     }
+
+    setPipelineCardId(pipelineCardId) {
+        this.pipelineCardId = pipelineCardId
+    }
 }
 

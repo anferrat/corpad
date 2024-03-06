@@ -1,13 +1,14 @@
 //Used at the app root (navigation container)
-import { useState, useRef, useEffect } from "react"
+import { useState, useRef, useEffect, useCallback } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import useOnboardingScreen from "./useOnboardingScreen"
-import { addFileUrlListener, addNetworkStatusListener, initializeApp } from "../../app/controllers/AppController"
+import { addUrlListener, addNetworkStatusListener, initializeApp } from "../../app/controllers/AppController"
 import { resetCurrentSurveySettings, setActiveMultimeterStatus, setSettingsOnAppLoad, setSurveySettings, updateLoader, updateNetworkStatus, hideLoader } from "../../store/actions/settings"
 import { errorHandler } from "../../helpers/error_handler"
-import { SurveyLoadingStatuses } from "../../constants/global"
+import { SurveyLoadingStatuses, UrlTypes } from "../../constants/global"
 import { addMultimeterStatusListener } from "../../app/controllers/MultimeterController"
 import useTimeAdjustment from "./useTimeAdjustment"
+import { useNavigation } from '@react-navigation/native'
 
 const useApp = () => {
 
@@ -23,17 +24,33 @@ const useApp = () => {
   useTimeAdjustment()
 
   const [loading, setLoading] = useState(true)
+  const [initialUrlLink, setInitialUrlLink] = useState({
+    urlType: null,
+    link: null
+  })
 
   const componentMounted = useRef(true)
 
   const dispatch = useDispatch()
+
+  const navigation = useNavigation()
+
+  const handleExternalDataLink = useCallback((link, urlType) => {
+    if (urlType === UrlTypes.DATA_LINK && link)
+      navigation.navigate('ExternalLink', { link })
+  }, [navigation])
+
+  useEffect(() => {
+    if (initialUrlLink.urlType && initialUrlLink.link)
+      handleExternalDataLink(initialUrlLink.link, initialUrlLink.urlType)
+  }, [initialUrlLink])
 
   useEffect(() => {
 
     const networkStatus = addNetworkStatusListener(isInternetOn => dispatch(updateNetworkStatus(isInternetOn)))
 
     //fileUrlListener - listens for opened survey files from outside the app and loads them into database
-    const urlListener = addFileUrlListener(
+    const urlListener = addUrlListener(
       (status, errorCode) => {
         if (status === SurveyLoadingStatuses.SAVING)
           dispatch(updateLoader('Saving survey', null))
@@ -48,9 +65,13 @@ const useApp = () => {
         er !== 101 ? errorHandler(er) : null
         dispatch(hideLoader())
       },
-      ({ name, fileName, syncTime, isCloud, isLoaded, uid }) => {
-        dispatch(setSurveySettings(name, fileName, syncTime, isCloud, isLoaded, uid))
-        dispatch(hideLoader())
+      ({ name, fileName, syncTime, isCloud, isLoaded, uid, urlType, link }) => {
+        if (urlType === UrlTypes.FILE) {
+          dispatch(setSurveySettings(name, fileName, syncTime, isCloud, isLoaded, uid))
+          dispatch(hideLoader())
+        }
+        else
+          handleExternalDataLink(link, urlType)
       }
     )
 
@@ -62,10 +83,15 @@ const useApp = () => {
       componentMounted.current = true
       const { status, response } = await initializeApp()
       if (status === 200) {
-        const { isLoaded, syncTime, name, uid, fileName, isCloud, isSigned, userName, onboarding, multimeter, subscriptionStatus, subscriptionExpirationTime } = response
+        const { isLoaded, syncTime, name, uid, fileName, isCloud, isSigned, userName, onboarding, multimeter, subscriptionStatus, subscriptionExpirationTime, urlType, link } = response
         dispatch(setSettingsOnAppLoad(isLoaded, syncTime, name, uid, fileName, isCloud, isSigned, userName, onboarding, multimeter, subscriptionStatus, subscriptionExpirationTime))
-        if (componentMounted.current)
+        if (componentMounted.current) {
           setLoading(false)
+          setTimeout(() => setInitialUrlLink({
+            urlType,
+            link
+          }), 500)
+        }
       }
     }
     onAppLoad()

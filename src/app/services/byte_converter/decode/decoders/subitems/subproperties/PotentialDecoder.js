@@ -13,7 +13,7 @@ export class PotentialDecoder extends Decoder {
         const permanentPotentialType = this._decodeUint8(buf, referenceCellId.offset)
         const value = this._decodeInt32(buf, permanentPotentialType.offset)
         return new DecoderResult({
-            isPortableReference: isPortable.value,
+            isPortableReference: Boolean(isPortable.value),
             referenceCellId: isPortable.value ? null : referenceCellId.value,
             rcType: isPortable ? this.codes.referenceCellTypes[referenceCellId.value] ?? null : null,
             permanentPotentialType: this.codes.potentialTypes[permanentPotentialType.value] ?? null,

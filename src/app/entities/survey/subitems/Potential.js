@@ -17,4 +17,16 @@ export class Potential {
         this.prevValue = this.value
         this.value = null
     }
+
+    setSubitemId(subitemId) {
+        this.subitemId = subitemId
+    }
+
+    setReferenceCellId(referenceCellId) {
+        this.referenceCellId = referenceCellId
+    }
+
+    setPotentialTypeId(potentialTypeId) {
+        this.potentialType = potentialTypeId
+    }
 }

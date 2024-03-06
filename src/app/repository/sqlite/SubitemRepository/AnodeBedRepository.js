@@ -59,8 +59,8 @@ export class AnodeBedRepository extends SQLiteRepository {
             if (anodes.length > 0)
                 await super.runSingleQueryTransaction(`
                     INSERT INTO anodeBedAnodes (parentId, current, wireColor, wireGauge) VALUES
-                    ${anodes.map(() => '(?,?,?,?)')} `,
-                    anodes.map(anode => [null, null, result.insertId, anode.current, anode.wireColor, anode.wireGauge]))
+                    ${anodes.map(() => '(?,?,?,?)').join(', ')} `,
+                    anodes.map(anode => [result.insertId, anode.current, anode.wireColor, anode.wireGauge]).flat())
             return new AnodeBed(result.insertId, parentId, uid, name, enclosureType, bedType, materialType, anodes)
         }
         catch (err) {
