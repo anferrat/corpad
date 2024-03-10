@@ -13,6 +13,8 @@ import { appStateListener, linkingService, multimeterFactory, permissions, urlFi
 import { resetCurrentSurveyService, saveCurrentSurveyService } from "./_instances/survey_manager"
 import { InitializePurchases } from "../services/purchases/InitializePurchases"
 import { UrlResolver } from "../services/app/UrlResolver"
+import { BlockUrlListener } from "../services/app/BlockUrlListener"
+import { UnblockUrlListener } from "../services/app/UnblockUrlListener"
 
 class AppController extends Controller {
     constructor(currentSurveyStatusService, googleDriveAuthorizationRepo, surveyRepo, bluetoothRepo, settingRepo, multimeterFactory, defaultNameRepo, loadExternalSurveyFileService, saveCurrentSurveyService, warningHandler, resetCurrentSurveyService, fileSystemRepo, appRepo, linkingService, appStateListener, networkRepo, externalFileContentResolver, purchaseRepo, geolocationRepo, permissions, urlFileAccess) {
@@ -42,6 +44,10 @@ class AppController extends Controller {
 
         this.urlListenerService = new UrlListener(linkingService, this.urlResolver)
 
+        this.blockUrlListenerService = new BlockUrlListener()
+
+        this.unblockUrlListenerService = new UnblockUrlListener()
+
     }
 
 
@@ -68,6 +74,14 @@ class AppController extends Controller {
         return super.callbackHandler(onSuccess, onError, 110, () => {
             return this.bluetoothRepo.bluetoothStatusListener(callback)
         })
+    }
+
+    blockUrlListener() {
+        this.blockUrlListenerService.execute()
+    }
+
+    unblockUrlListener() {
+        this.unblockUrlListenerService.execute()
     }
 }
 
@@ -102,3 +116,7 @@ export const addUrlListener = (callback, onError, onSuccess) => appController.ad
 export const addNetworkStatusListener = (onInternetStatusChanged, onError, onSuccess) => appController.addNetworkStatusListener(onInternetStatusChanged, onError, onSuccess)
 
 export const addBluetoothStatusListener = (callback, onError, onSuccess) => appController.addBluetoothStatusListener(callback, onError, onSuccess)
+
+export const blockUrlResolver = () => appController.blockUrlListener()
+
+export const unblockUrlResolver = () => appController.unblockUrlListener()

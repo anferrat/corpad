@@ -19,5 +19,6 @@ export const errors = Object.freeze({
     VALIDATION: 'ValidationError',
     BLUETOOTH: 'BluetoothError',
     CAMERA: 'CameraError',
-    PURCHASE: 'PurchaseError'
+    PURCHASE: 'PurchaseError',
+    NFC: 'NfcError'
 })

@@ -35,9 +35,7 @@ export class ItemEncoder extends Encoder {
     }
 
     _encodeComment(comment) {
-        //Automatically trimming comment down to 200 symbols length, need to re-implement at Encoder to trim extra long string
-        const trimmedComment = comment.length > 200 ? comment.substring(0, 200) : comment
-        return this._encodeString(trimmedComment)
+        return this._encodeString(comment)
     }
 
     encode(item) {

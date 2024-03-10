@@ -6,6 +6,8 @@ import { EventRegister } from "react-native-event-listeners"
 
 export const useExternalLink = ({ link, navigateToFindItem, navigateToPipelineMatching, goBack, navigateToItem, navigateToSurvey }) => {
     const [data, setData] = useState({
+        id: null,
+        technician: null,
         item: null,
         pipelines: [],
         potentialUnit: PotentialUnits.VOLTS,
@@ -24,6 +26,8 @@ export const useExternalLink = ({ link, navigateToFindItem, navigateToPipelineMa
                 if (componentMounted.current) {
                     if (status === 200)
                         setData({
+                            tagId: response.tagId,
+                            technician: response.technician,
                             item: response.item,
                             pipelines: response.pipelines,
                             potentialUnit: response.potentialUnit,
@@ -64,9 +68,7 @@ export const useExternalLink = ({ link, navigateToFindItem, navigateToPipelineMa
                     else
                         navigateToPipelineMatching()
                 }
-                else if (status === 101)
-                    navigateToSurvey()
-                else
+                else if (status !== 101)
                     errorHandler(829)
                 setIsCreating(false)
             }

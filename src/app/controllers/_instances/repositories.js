@@ -5,6 +5,7 @@ import { FileSystemRepository } from "../../repository/fs/FileSystemRepository";
 import { GeolocationRepository } from "../../repository/geolocation/GeolocationRepository";
 import { PurchaseRepository } from "../../repository/inAppPurchases/PurchaseRepository";
 import { NetworkRepository } from "../../repository/network/NetworkRepository";
+import { NdefRepository } from "../../repository/nfc/ndefRepository";
 import { AppRepository } from "../../repository/sqlite/AppRepository";
 import { AssetRepository } from "../../repository/sqlite/AssetRepository";
 import { CalculatorRepository } from "../../repository/sqlite/CalculatorRepository";
@@ -58,3 +59,6 @@ export const bluetoothRepo = new BluetoothRepository()
 
 //Purchases
 export const purchaseRepo = new PurchaseRepository()
+
+//NFC
+export const ndefRepo = new NdefRepository()

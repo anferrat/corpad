@@ -6,7 +6,7 @@ import { ItemTypes, SubitemTypes } from '../../../constants/global'
 import { ScrollView } from 'react-native-gesture-handler'
 import { StyleSheet } from 'react-native'
 
-const ControlBar = ({ createSubitem, deleteItem, itemType, displayOnMap, displayOnMapVisible, navigateToEdit, onAddPhoto, addPhotoAvailable, isPhotoCaptureDisabled }) => {
+const ControlBar = ({ createSubitem, deleteItem, itemType, displayOnMap, displayOnMapVisible, navigateToEdit, onAddPhoto, addPhotoAvailable, isPro, writeToTag, writeToTagDisabled, onShowPaywall }) => {
     const [visible, setVisible] = useState(false)
 
     const hideModal = React.useCallback(() => setVisible(false), [])
@@ -41,7 +41,7 @@ const ControlBar = ({ createSubitem, deleteItem, itemType, displayOnMap, display
                             onPress={displayOnMap} /> : null}
                     {addPhotoAvailable ? <ControlButton
                         label='Add a photo'
-                        disabled={isPhotoCaptureDisabled}
+                        inactive={!isPro}
                         icon='camera'
                         onPress={onAddPhoto} /> : null}
                     {itemType !== 'PIPELINE' ?
@@ -54,11 +54,17 @@ const ControlBar = ({ createSubitem, deleteItem, itemType, displayOnMap, display
                         icon='edit'
                         onPress={navigateToEdit} />
                     <ControlButton
+                        disabled={writeToTagDisabled}
+                        inactive={!isPro}
+                        label='Write to tag'
+                        icon='nfc-filled'
+                        pack='cp'
+                        onPress={isPro ? writeToTag : onShowPaywall} />
+                    <ControlButton
                         label='Delete'
                         icon='trash'
                         status='danger'
                         onPress={deleteItem} />
-
                 </ScrollView>
             </ExpandedBar>
             <AddReadingModal

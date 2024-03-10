@@ -7,13 +7,25 @@ import ControlBar from './components/ControlBar'
 import useItemData from './hooks/useItemData'
 import PhotoListView from './components/photos/PhotoListView'
 import usePhotos from './hooks/usePhotos'
+import useNfcWriter from './hooks/useNfcWriter'
+import NfcModal from './components/nfc/NfcModal'
 
 
 const ItemView = ({ itemId, itemType, navigateToMap, navigateToEditSubitem, navigateToEdit }) => {
     const { item, loading, displayOnMapVisible, submit, update, createSubitem, deleteItem, displayOnMap } = useItemData({ itemId, itemType, navigateToMap, navigateToEditSubitem })
-    const { onAddPhoto, onPhotoPress, onImageViewClose, onDeletePhoto, onSharePhoto, onSavePhoto, photos, imageView, limitReached, listRef, isVisible, isPhotoCaptureDisabled } = usePhotos({ itemId, itemType })
+    const { onAddPhoto, onPhotoPress, onImageViewClose, onDeletePhoto, onSharePhoto, onSavePhoto, photos, imageView, limitReached, listRef, isVisible, isPro } = usePhotos({ itemId, itemType })
+    const {
+        visible,
+        nfcLoading,
+        size,
+        status,
+        writeToTagDisabled,
+        writeToTag,
+        retry,
+        reset,
+        onShowPaywall
+    } = useNfcWriter({ itemId, itemType })
     const updateStatus = (value) => submit(value, 'status')
-
     return (
         <View style={globalStyle.card}>
             <LoadingView loading={loading} style={styles.loading}>
@@ -37,8 +49,11 @@ const ItemView = ({ itemId, itemType, navigateToMap, navigateToEditSubitem, navi
                     isVisible={isVisible} />
                 <View style={styles.bar}>
                     <ControlBar
+                        onShowPaywall={onShowPaywall}
                         itemType={itemType}
-                        isPhotoCaptureDisabled={isPhotoCaptureDisabled}
+                        writeToTag={writeToTag}
+                        writeToTagDisabled={writeToTagDisabled}
+                        isPro={isPro}
                         displayOnMapVisible={displayOnMapVisible}
                         createSubitem={createSubitem}
                         deleteItem={deleteItem}
@@ -48,6 +63,13 @@ const ItemView = ({ itemId, itemType, navigateToMap, navigateToEditSubitem, navi
                         addPhotoAvailable={!limitReached && isVisible} />
                 </View>
             </LoadingView>
+            <NfcModal
+                retry={retry}
+                visible={visible}
+                loading={nfcLoading}
+                size={size}
+                status={status}
+                reset={reset} />
         </View>
     )
 }

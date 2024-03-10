@@ -10,7 +10,7 @@ export class ConvertLinkToItem {
 
     async execute(link) {
         const data = this.linkDecoder.decode(link)
-        const { linkType } = data
+        const { linkType, technician, id } = data
         const [{ item, pipelines, potentialTypes, referenceCells }, { isLoaded }] = await Promise.all([
             this.generateCompositeItem.execute(data),
             this.getCurrentSurveyStatusService.execute()])
@@ -24,6 +24,8 @@ export class ConvertLinkToItem {
 
         item.setSubitems(convertedSubitems)
         return {
+            tagId: id,
+            technician,
             item,
             pipelines,
             potentialUnit: PotentialUnits.VOLTS,

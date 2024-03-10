@@ -14,26 +14,30 @@ const statusColors = {
     warning: warning
 }
 
-const ControlButton = ({ onPress, status, icon, label, hidden, disabled }) => {
+const ControlButton = ({ onPress, status, icon, label, hidden, disabled, pack, inactive }) => {
     if (!hidden)
         return (
             <PressableDefault
-                onPress={onPress} style={styles.pressable}>
+                disabled={disabled}
+                onPress={onPress}
+                style={styles.pressable}>
                 <View style={styles.topView}>
                     <View
                         style={styles.elevatedView}>
                         <Pressable
+                            disabled={disabled}
                             style={styles.innerView}
                             android_ripple={ripple}
                             onPress={onPress}>
                             <Icon
-                                fill={disabled ? basic : (statusColors[status] ?? primary)}
+                                pack={pack}
+                                fill={disabled || inactive ? basic : (statusColors[status] ?? primary)}
                                 style={styles.icon}
                                 name={icon} />
                         </Pressable>
                     </View>
                     <Text
-                        appearance={disabled ? 'hint' : 'default'}
+                        appearance={disabled || inactive ? 'hint' : 'default'}
                         category='label'
                         style={styles.label}>
                         {label}

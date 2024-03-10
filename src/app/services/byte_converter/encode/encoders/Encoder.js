@@ -22,9 +22,14 @@ export class Encoder {
     }
 
     _encodeString(string) {
+        if (!string)
+            return this._encodeUint8(0)
         const value = Buffer.from(string)
-        if (value.length > 255)
-            throw new Error(errors.GENERAL, 'Unable to encode string', 'String length larger than 255 bytes')
+        if (value.length > 255) {
+            //FF represents null value
+            const trimmed = Buffer.from(value, 0, 254)
+            return Buffer.concat([254, trimmed])
+        }
         const length = this._encodeUint8(value.length)
         return Buffer.concat([length, value])
     }
@@ -55,6 +60,13 @@ export class Encoder {
         const buffer = Buffer.allocUnsafe(4)
         buffer.writeUint32LE(verifiedValue)
         return buffer
+    }
+
+    _writeBufSize(buffer) {
+        const length = buffer.length
+        if (length > this.UINT16MAX)
+            throw new Error(errors.GENERAL, 'Unable to create buffer', "Buffer limit is reached")
+        buffer.writeUint16LE(length)
     }
 
     _getEmptyBuffer() {

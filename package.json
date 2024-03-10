@@ -47,6 +47,7 @@
     "react-native-indicators": "^0.17.0",
     "react-native-keyboard-aware-scroll-view": "^0.9.5",
     "react-native-maps": "^1.7.1",
+    "react-native-nfc-manager": "^3.14.13",
     "react-native-onboarding-swiper": "^1.2.0",
     "react-native-purchases": "^7.1.0",
     "react-native-reanimated": "^3.3.0",

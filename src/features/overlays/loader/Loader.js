@@ -1,19 +1,19 @@
 import React from 'react'
-import { StyleSheet, ActivityIndicator, View } from 'react-native'
+import { StyleSheet, View } from 'react-native'
 import { Text } from '@ui-kitten/components'
-import { useSelector } from 'react-redux'
 import { primary } from '../../../styles/colors'
 import LoaderProgressBar from './LoaderProgressBar'
 import WaveActivityIndicator from '../../../components/WaveActivityIndicator'
+import useLoader from './hooks/useLoader'
 
 const Loader = () => {
-    const text = useSelector(state => state.settings.loader.text)
-    const loaderVisible = useSelector(state => state.settings.loader.visible)
-    const loaderTitle = useSelector(state => state.settings.loader.title)
-    const progress = useSelector(state => state.settings.loader.progress)
-    const { visible, title, count, total } = progress
-    const isProgressVisible = visible && total && count <= total
-    const displayedText = isProgressVisible ? `${title} (${count}/${total})` : text
+    const { displayedText,
+        loaderTitle,
+        loaderVisible,
+        isProgressVisible,
+        total,
+        count } = useLoader()
+
     if (loaderVisible)
         return (
             <View
