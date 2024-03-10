@@ -21,7 +21,7 @@ const SH = ({ name, type, factorSelected, ratioCurrent, ratioVoltage, factor, vo
                 sideB={sideB}
                 fromAtoB={fromAtoB}
                 value={value} />
-            <TextLine title={factorSelected ? 'Factor' : 'Shunt ratio'} value={factorSelected ? factor : shuntRatio} unit={factorSelected ? FactorUnitLabels[FactorUnits.AMPS_OVER_VOLTS] : null} />
+            <TextLine title={factorSelected ? 'Factor' : 'Shunt ratio'} value={factorSelected ? factor : shuntRatio} unit={factorSelected ? FactorUnitLabels[FactorUnits.AMPS_OVER_MILIVOLTS] : null} />
             <TextLine title={'Volatge drop'} value={voltageDrop} unit={PotentialUnitLabels[PotentialUnits.MILIVOLTS]} />
         </>
     )

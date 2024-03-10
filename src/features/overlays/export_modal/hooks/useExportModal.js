@@ -1,13 +1,23 @@
-import { useCallback, useState } from "react"
+import { useCallback, useEffect, useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import { setExportModal } from "../../../../store/actions/settings"
 import { openFileIn, shareFile } from "../../../../app/controllers/survey/other/ExportedFileController"
+import { blockUrlResolver, unblockUrlResolver } from "../../../../app/controllers/AppController"
 
 const useExportModal = ({ navigationRef }) => {
     const { visible, fileUrl, mimeType } = useSelector(state => state.settings.exportModal)
     const [loading, setLoading] = useState(false)
     const fileName = fileUrl ? fileUrl.substring(fileUrl.lastIndexOf('/') + 1, fileUrl.length) : ''
     const dispatch = useDispatch()
+
+    useEffect(() => {
+        if (visible)
+            blockUrlResolver()
+        return () => {
+            if (visible)
+                unblockUrlResolver()
+        }
+    }, [visible])
 
     const hideModal = useCallback(() => {
         dispatch(setExportModal(false, null, null))

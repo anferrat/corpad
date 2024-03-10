@@ -1,8 +1,8 @@
 import React from 'react'
 import { View, StyleSheet } from 'react-native'
 import { activity, plusCircle, search } from '../../../../../components/Icons'
-import { Button, Text } from '@ui-kitten/components'
-
+import { Button, Icon, ListItem, Text } from '@ui-kitten/components'
+import { primary } from '../../../../../styles/colors'
 
 const ControlButtons = ({ loading, goToFindInSurvey, isSurveyLoaded, addToSurvey, isCreating }) => {
     if (!isSurveyLoaded && !loading)
@@ -12,7 +12,7 @@ const ControlButtons = ({ loading, goToFindInSurvey, isSurveyLoaded, addToSurvey
                     style={styles.hint}
                     category='s2'
                     appearance='hint'>
-                    To save the data from this link, please open an existing survey or create a new one.
+                    To save the data from this label, please open an existing survey or create a new one.
                 </Text>
             </View>
         )
@@ -21,21 +21,21 @@ const ControlButtons = ({ loading, goToFindInSurvey, isSurveyLoaded, addToSurvey
             return (
                 <View
                     style={styles.buttonView}>
-                    <Button
+                    <ListItem
+                        style={styles.listItem}
                         onPress={addToSurvey}
+                        title='Add to the survey'
+                        description='Create new survey item with data from the label.'
                         disabled={loading || isCreating}
-                        style={styles.button}
-                        accessoryLeft={isCreating ? activity : plusCircle}>
-                        Add to the survey
-                    </Button>
-                    <Button
+                        accessoryLeft={isCreating ? activity : (props) => <Icon {...props} fill={primary} name='plus-circle' />} />
+                    <ListItem
+                        title='Find in the survey'
+                        description='Find item in the survey that matches data from the label.'
+                        accessoryLeft={(props) => <Icon {...props} fill={primary} name='search' />}
                         disabled={loading || isCreating}
                         onPress={goToFindInSurvey}
-                        style={styles.button}
-                        appearance='outline'
-                        accessoryLeft={search}>
-                        Find in the survey
-                    </Button>
+                    />
+
                 </View>
             )
         else
@@ -48,17 +48,15 @@ const styles = StyleSheet.create({
     buttonView: {
         width: '100%',
         minHeight: 50,
-        justifyContent: 'space-evenly',
         alignItems: 'center',
-        flexWrap: 'wrap',
-        marginTop: 12
+        justifyContent: 'space-around',
+        marginTop: 0
     },
-    button: {
-        paddingHorizontal: 6,
-        marginBottom: 12,
-        width: '100%'
+    listItem: {
+        minHeight: 70
     },
     hint: {
-        textAlign: 'center'
+        textAlign: 'center',
+        margin: 12
     }
 })

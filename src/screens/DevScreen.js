@@ -91,7 +91,7 @@ export default DevScreen = ({ navigation, route }) => {
 
     const testPoint =
       new TestPoint(3, '0bfd7953-e4ff-c758-1729-d91c0c40fcc9', 'MyTP1', 0, Date.now(), Date.now(), 'Nothing to say here', 'In your ass', 51.111936, -114.175154, 1)
-    testPoint.setSubitems([
+    const subitems = [
       new Anode(1, 3, '787hdhujk-2ud-4hy-kski', 'my Anode', 2, 1, 0),
       pipelineLead,
       new Bond(3, 3, 'dsdsdsdsdsdsd', 'Bond 1', true, 1.3, [1], [2], null),
@@ -107,7 +107,8 @@ export default DevScreen = ({ navigation, route }) => {
         new SoilResistivityLayer(3, 'asasa', 10, 1, 9, null, null, null)
       ]),
       new StatReferenceCell(11, 3, 'sdsdsdsdsds', 'RefCell', 0, 3, 4)
-    ])
+    ]
+    testPoint.setSubitems([])
     const rectifier = new Rectifier(1, '787hdhujk-2ud-4hy-kski', 'hooks', 0, Date.now(), Date.now(), 'Very cool rectifier', 'Cant believe it', 51.111936, -114.175154, 'My basic', 'non34urbusiness', 0, null, null, 2, 43, 2, 4, null, 34)
     rectifier.setSubitems([
       new Circuit(1, 1, 'dasas', 'JKdjdj', null, null, 1, 2, 1.5, 2, null),

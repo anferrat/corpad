@@ -21,6 +21,12 @@ const Features = () => {
                 icon='bluetooth'
                 color='#FFAF95'
                 description='Connect BLE (Bleutooth Low Energy) multimeter to capture voltage and current.' />
+            <FeatureListItem
+                title='NFC tags'
+                icon='nfc'
+                pack='cp'
+                color='#9AE2FE'
+                description='Write full site data to NFC labels with your phone.' />
         </View>
     )
 }

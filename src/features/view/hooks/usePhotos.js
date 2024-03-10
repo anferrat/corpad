@@ -146,7 +146,7 @@ const usePhotos = ({ itemId, itemType }) => {
         limitReached,
         listRef,
         isVisible,
-        isPhotoCaptureDisabled: !isPro,
+        isPro,
         onAddPhoto,
         onDeletePhoto,
         onImageViewClose,

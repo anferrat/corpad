@@ -85,9 +85,9 @@ export class SubitemEncoder extends Encoder {
             case SubitemTypes.SOIL_RESISTIVITY:
                 return this.soilResistivityEncoder.encode(subitem)
             case SubitemTypes.STRUCTURE:
-                return this.structureEncoder.encode(subitem)
+                return this.structureEncoder.encode(subitem, referenceCells, potentialTypes)
             case SubitemTypes.TEST_LEAD:
-                return this.testLeadEncoder.encode(subitem)
+                return this.testLeadEncoder.encode(subitem, referenceCells, potentialTypes)
             default:
                 return this._getEmptyBuffer()
         }
@@ -128,11 +128,12 @@ export class SubitemEncoder extends Encoder {
     _convertReferenceCells(referenceCells, subitems) {
         return new Map([
             [1, new Map(referenceCells.map(rc => [rc.id, rc.rcType]))],
-            [0, new Map(subitems.map((subitem, index) => [subitem.id, index]))]])
+            [0, new Map(subitems.map((subitem, index) => [subitem.id, index]))]]) //must be full subitems map here, in order to find out the index of the ref cell
     }
 
 
     encode(subitems, pipelines, referenceCells, potentialTypes) {
+
         const sortedSubitems = this._sortSubitems(subitems)
         const convertedPipelines = this._convertPipelines(pipelines, sortedSubitems)
         const convertedPotentialTypes = this._convertPotentialTypes(potentialTypes)

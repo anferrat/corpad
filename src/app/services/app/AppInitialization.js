@@ -49,7 +49,6 @@ export class AppInitialization {
         let link
         if (initialUrl !== null) {
             await this.urlResolver.execute(initialUrl, () => { }, () => { }, (loaded) => {
-                console.log(loaded)
                 syncTime = loaded.syncTime ?? syncTime
                 name = loaded.name ?? name
                 fileName = loaded.fileName ?? fileName

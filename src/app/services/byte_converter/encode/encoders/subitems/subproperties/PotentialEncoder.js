@@ -20,9 +20,12 @@ export class PotentialEncoder extends Encoder {
     }
 
     encode(potentials, referenceCells, potentialTypes) {
-        const encodedPotentials = potentials.filter(({ potentialType, isPortableReference, referenceCellId }) => referenceCells
-            .get(Number(isPortableReference))
-            .get(referenceCellId) && potentialTypes.get(potentialType))
+        console.log(potentials, referenceCells, potentialTypes)
+        const encodedPotentials = potentials.filter(({ potentialType, isPortableReference, referenceCellId }) => {
+            return referenceCells
+                .get(Number(isPortableReference))
+                .get(referenceCellId) !== undefined && potentialTypes.get(potentialType) !== undefined
+        })
         const numberOfPotentials = encodedPotentials.length
         return this._concat([
             this._encodeUint8(numberOfPotentials),

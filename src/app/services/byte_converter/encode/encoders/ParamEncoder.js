@@ -16,10 +16,12 @@ export class ParamEncoder extends Encoder {
         return this._encodeUInt32(timestamp)
     }
 
-    encode() {
+    encode(technician) {
         return this._concat([
+            this._encodeUint16(0), //bytes for buffer size. Filled at the end.
             this._getUniqueIdentifier(),
             this._encodeUint8(ExternalLinkTypes.NFC),
+            this._encodeString(technician),
             this._encodeUInt32(0), //spare bytes
             this._getTimestamp()
         ])

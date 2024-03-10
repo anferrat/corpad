@@ -23,6 +23,7 @@ import { SoilResistivityEncoder } from "./encoders/subitems/SoilResistivityEncod
 import { SoilResistivityLayerEncoder } from "./encoders/subitems/subproperties/SoilResistivityLayerEncoder"
 import { StructureEncoder } from "./encoders/subitems/StructureEncoder"
 import { TestLeadEncoder } from "./encoders/subitems/TestLeadEncoder"
+import { Error, errors } from "../../../utils/Error"
 
 export class LinkEncoder extends Encoder {
     //Encodes item into a byte array returns as base64 string
@@ -59,13 +60,21 @@ export class LinkEncoder extends Encoder {
         )
     }
 
-    encode(item, pipelines = [], referenceCells = [], potentialTypes = []) {
+    _verifyLink(link) {
+        if (link.length > 2048)
+            throw new Error(errors.GENERAL, 'Unable to create link', 'Link length limit is reached', 834)
+    }
+
+    encode(item, pipelines = [], referenceCells = [], potentialTypes = [], technician = "") {
         const buffer = this._concat([
-            this.paramEncoder.encode(),
+            this.paramEncoder.encode(technician),
             this.itemEncoder.encode(item),
             this.subitemEncoder.encode(item.subitems, pipelines, referenceCells, potentialTypes)])
+        this._writeBufSize(buffer)
         const message = buffer.toString('base64')
-        return 'com.corpad://l/' + encodeURIComponent(message)
+        const link = 'com.corpad://l/' + encodeURIComponent(message)
+        this._verifyLink(link)
+        return link
     }
 
 }

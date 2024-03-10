@@ -428,8 +428,13 @@ export const getHeader = (screen, params, navigation, dispatch, openMenu) => {
                 return {
                     display: true,
                     isPrimary: true,
-                    title: '',
-                    left: 'back',
+                    title: {
+                        title: 'Label discovered',
+                        subtitle: 'NFC label',
+                        icon: 'nfc-filled',
+                        pack: 'cp',
+                    },
+                    left: null,
                     right: null
                 }
             case "FindItemInSurvey":
