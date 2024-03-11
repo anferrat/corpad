@@ -53,13 +53,14 @@ const ControlBar = ({ createSubitem, deleteItem, itemType, displayOnMap, display
                         label='Edit'
                         icon='edit'
                         onPress={navigateToEdit} />
-                    <ControlButton
-                        disabled={writeToTagDisabled}
-                        inactive={!isPro}
-                        label='Write to tag'
-                        icon='nfc-filled'
-                        pack='cp'
-                        onPress={isPro ? writeToTag : onShowPaywall} />
+                    {itemType !== 'PIPELINE' ?
+                        <ControlButton
+                            disabled={writeToTagDisabled}
+                            inactive={!isPro}
+                            label='Write to tag'
+                            icon='nfc-filled'
+                            pack='cp'
+                            onPress={isPro ? writeToTag : onShowPaywall} /> : null}
                     <ControlButton
                         label='Delete'
                         icon='trash'

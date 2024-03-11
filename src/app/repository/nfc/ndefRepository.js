@@ -1,3 +1,4 @@
+import { Platform } from 'react-native'
 import NfcManager, { NfcTech, Ndef } from 'react-native-nfc-manager'
 import { Error, errors } from '../../utils/Error'
 
@@ -5,8 +6,23 @@ export class NdefRepository {
     constructor() {
     }
 
-    async start() {
-        await NfcManager.requestTechnology(NfcTech.Ndef)
+    async addBackgroundTagListenerIOS() {
+        const record = await NfcManager.getBackgroundNdef()
+        console.log(record)
+    }
+
+    async start(message) {
+        try {
+            await NfcManager.requestTechnology(NfcTech.Ndef, Platform.select({
+                ios: {
+                    alertMessage: message,
+                },
+                android: {}
+            }))
+        }
+        catch (er) {
+            throw new Error(errors.NFC, 'Unable to request technology', er)
+        }
     }
 
     async getDeviceStatus() {

@@ -4,8 +4,10 @@ import { addNfcWritingListener, removeNfcWritingListener } from "../../../app/co
 import { NFC_STATUS_CODES } from "../helpers/constants"
 import { NdefWritingStatuses } from "../../../constants/global"
 import { useDispatch } from 'react-redux'
-import { blockUrlResolver, unblockUrlResolver } from "../../../app/controllers/AppController"
+import { blockUrlResolver, openLink, unblockUrlResolver } from "../../../app/controllers/AppController"
 import { showPaywall } from "../../../store/actions/settings"
+import { Platform } from "react-native"
+import { errorHandler } from "../../../helpers/error_handler"
 
 const useNfcWriter = ({ itemId, itemType }) => {
     const dispatch = useDispatch()
@@ -18,6 +20,11 @@ const useNfcWriter = ({ itemId, itemType }) => {
 
     const onShowPaywall = useCallback(() => {
         dispatch(showPaywall())
+    }, [])
+
+    const handleTagErrorLink = useCallback(() => {
+        openLink({ url: 'https://docs.corpad.ca/tag-errors' },
+            er => errorHandler(er))
     }, [])
 
     useEffect(() => {
@@ -34,29 +41,35 @@ const useNfcWriter = ({ itemId, itemType }) => {
     }, [visible])
 
     const writeToTag = useCallback(async () => {
-        showModal()
-        setLoading(true)
+        if (Platform.OS === 'android') {
+            showModal()
+            setLoading(true)
+        }
         await addNfcWritingListener({ itemId, itemType },
             (status) => {
                 if (componentMounted.current) {
+                    if (Platform.OS === 'ios')
+                        showModal()
                     setStatus(status)
                     setLoading(false)
                 }
             },
             (writeStatus, payload) => {
                 if (componentMounted.current) {
-                    switch (writeStatus) {
-                        case NdefWritingStatuses.LINK_CREATED:
-                            setSize(payload.size)
-                            setLoading(false)
-                            return
-                        case NdefWritingStatuses.NDEF_TECHNOLOGY_REQUESTED:
-                            setLoading(true)
-                            return
-                        case NdefWritingStatuses.WRITE_COMPLETED: {
-                            setLoading(false)
-                            setStatus(NFC_STATUS_CODES.SUCCESS)
-                            return
+                    if (Platform.OS === 'android') {
+                        switch (writeStatus) {
+                            case NdefWritingStatuses.LINK_CREATED:
+                                setSize(payload.size)
+                                setLoading(false)
+                                return
+                            case NdefWritingStatuses.NDEF_TECHNOLOGY_REQUESTED:
+                                setLoading(true)
+                                return
+                            case NdefWritingStatuses.WRITE_COMPLETED: {
+                                setLoading(false)
+                                setStatus(NFC_STATUS_CODES.SUCCESS)
+                                return
+                            }
                         }
                     }
                 }
@@ -87,7 +100,8 @@ const useNfcWriter = ({ itemId, itemType }) => {
         writeToTag,
         retry,
         reset,
-        onShowPaywall
+        onShowPaywall,
+        handleTagErrorLink
     }
 }
 

@@ -1,25 +1,25 @@
 export const onboardingPoints = {
     editTestPoint: [
-        'Each test point can have multiple test items (e.g., test leads, coupons etc.)',
-        'Depending on type of test point you can add different items',
-        'Keep it simple or create complex test point structures'
+        'Each test point can have multiple readings (e.g., test leads, coupons etc.).',
+        "Each reading has it's own properties including potentials, current, wire color etc.",
+        'Keep your test point structures simple or create more complex ones as needed.'
     ],
     map: [
-        'Long press to create new test points',
-        'Drag and drop to update coordinates'
+        "Create new test points or rectifiers by long-pressing.",
+        "Update coordinates easily with drag-and-drop.",
+        "Search for items on the map by their names."
     ],
     editBond: [
-        'Some items may use another items within one test point as side property',
-        'For example shunt reading may have pipeline test lead as side A and anode test lead as side B',
-        'Add more readings to the test point to be able to select side properties'
+        'Some readings may have other readings within one test point as side A or side B property.',
+        'Add more readings to the test point, come back and select them as side property if needed.'
     ],
     editReferenceCell: [
-        'Stationary reference cell can be used when creating new potential readings within same test point',
-        'Deleting stationary reference cell will delete potentials that use it',
+        'Stationary reference cell can be used when creating new potentials inside one test point.',
+        'Deleting the stationary reference cell will remove any associated potentials.',
     ],
     potentialTypes: [
-        'Choose potential unit for when recording data',
-        'There are five standard potential types that can be used to create potential readings',
-        'It is possible to create custom potential types and use them within the survey',
+        "Select the potential unit for recording data.",
+        "Five standard potential types are available for creating potential readings.",
+        "Custom potential types can be created and utilized within the survey.",
     ]
 }

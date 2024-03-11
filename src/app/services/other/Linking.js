@@ -1,4 +1,5 @@
 import { Linking as LinkingDefault } from "react-native"
+import { Error, errors } from "../../utils/Error"
 
 export class Linking {
     constructor() {
@@ -24,6 +25,16 @@ export class Linking {
         }
         catch {
             return false
+        }
+    }
+
+    async openLink(url) {
+        try {
+            if (await LinkingDefault.canOpenURL(url))
+                return this.openUrl(url)
+        }
+        catch (er) {
+            throw new Error(errors.GENERAL, 'Unable to open url', er, 119)
         }
     }
 }

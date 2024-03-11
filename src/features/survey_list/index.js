@@ -6,7 +6,7 @@ import SurveyFileListItem from './components/SurveyFileListItem'
 import SurveyFileListHeader from './components/SurveyFileListHeader'
 
 export const SurveyFileList = ({ navigateToCreateSurvey, isCloud, navigateToSurveyFileList }) => {
-    const { fileList, loading, initialLoad, isSignedIn, refreshHandler, loadSurvey, deleteSurvey, removeSurveyFromList, shareSurveyFile, copyToAlternateFolder, copyToDownloads } = useSurveyFiles({ isCloud, navigateToSurveyFileList })
+    const { fileList, loading, initialLoad, isSignedIn, refreshHandler, loadSurvey, deleteSurvey, removeSurveyFromList, shareSurveyFile, copyToAlternateFolder, copyToDownloads, docLinkHandler } = useSurveyFiles({ isCloud, navigateToSurveyFileList })
 
     const isEmpty = [...fileList[0].data, ...fileList[1].data].length === 0
 
@@ -39,6 +39,7 @@ export const SurveyFileList = ({ navigateToCreateSurvey, isCloud, navigateToSurv
 
     const EmtyComponent = React.useMemo(() =>
         <EmptySurveyFileListComponent
+            onPressLink={docLinkHandler}
             initialLoad={initialLoad}
             onCreate={navigateToCreateSurvey}
             isCloud={isCloud} />,

@@ -25,6 +25,7 @@ export const DefaultNames = () => {
                         onSelect={onChangeType}
                         selectedIndex={selectedIndex} />
                     <Input
+                        maxLength={30}
                         style={styles.input}
                         value={value}
                         valid={valid}

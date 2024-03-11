@@ -23,6 +23,7 @@ export class AppRepository extends SQLiteRepository {
                 super.runQuery(tx, `CREATE TABLE IF NOT EXISTS referenceCells (id INTEGER PRIMARY KEY NOT NULL, uid TEXT, rcType INTEGER, name TEXT, mainReference BOOLEAN)`, []),
                 super.runQuery(tx, 'CREATE TABLE IF NOT EXISTS potentialTypes (id INTEGER PRIMARY KEY NOT NULL, uid TEXT NOT NULL, name TEXT NOT NULL, custom BOOLEAN, permType TEXT, isAc BOOLEAN)', []),
                 super.runQuery(tx, `CREATE TABLE IF NOT EXISTS mapLayers (id INTEGER PRIMARY KEY NOT NULL, uid TEXT NOT NULL, name TEXT, timeCreated INTEGER, timeModified INTEGER, comment TEXT, strokeColor INTEGER, strokeWidth INTEGER, fillColor INTEGER, visible BOOLEAN DEFAULT 1, data TEXT)`, []),
+                super.runQuery(tx, 'CREATE TABLE IF NOT EXISTS surveyFiles (id INTEGER PRIMARY KEY NOT NULL, uid TEXT, name TEXT, fileName TEXT, cloudId TEXT, path TEXT, hash TEXT, isCloud BOOLEAN, timeModified INTEGER, assetCount INTEGER, tpCount INTEGER, rtCount INTEGER, plCount INTEGER, passedCount INTEGER)')
             ])
 
             await super.runMultiQueryTransaction(tx => [

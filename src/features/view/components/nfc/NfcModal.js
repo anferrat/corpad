@@ -9,7 +9,7 @@ import { basic700, control, primary } from '../../../../styles/colors'
 import ModalButton from './ModalButton'
 
 
-const NfcModal = ({ visible, status, loading, size, reset, retry }) => {
+const NfcModal = ({ visible, status, loading, size, reset, retry, handleTagErrorLink }) => {
     return (
         <Modal
             visible={visible}
@@ -27,6 +27,7 @@ const NfcModal = ({ visible, status, loading, size, reset, retry }) => {
                     <ModalIcon
                         status={status} />
                     <ModalLabel
+                        handleTagErrorLink={handleTagErrorLink}
                         status={status} />
                 </> :
                     <View

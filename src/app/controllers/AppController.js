@@ -17,12 +17,14 @@ import { BlockUrlListener } from "../services/app/BlockUrlListener"
 import { UnblockUrlListener } from "../services/app/UnblockUrlListener"
 
 class AppController extends Controller {
-    constructor(currentSurveyStatusService, googleDriveAuthorizationRepo, surveyRepo, bluetoothRepo, settingRepo, multimeterFactory, defaultNameRepo, loadExternalSurveyFileService, saveCurrentSurveyService, warningHandler, resetCurrentSurveyService, fileSystemRepo, appRepo, linkingService, appStateListener, networkRepo, externalFileContentResolver, purchaseRepo, geolocationRepo, permissions, urlFileAccess) {
+    constructor(currentSurveyStatusService, googleDriveAuthorizationRepo, surveyRepo, bluetoothRepo, settingRepo, multimeterFactory, defaultNameRepo, loadExternalSurveyFileService, saveCurrentSurveyService, warningHandler, resetCurrentSurveyService, fileSystemRepo, appRepo, linkingService, networkRepo, externalFileContentResolver, purchaseRepo, geolocationRepo, permissions, urlFileAccess) {
         super()
 
         this.networkRepo = networkRepo
 
         this.bluetoothRepo = bluetoothRepo
+
+        this.linkingService = linkingService
 
         this.purchaseInitializationService = new InitializePurchases(purchaseRepo, networkRepo, geolocationRepo, settingRepo, permissions)
 
@@ -83,6 +85,12 @@ class AppController extends Controller {
     unblockUrlListener() {
         this.unblockUrlListenerService.execute()
     }
+
+    openLink({ url }, onError, onSuccess) {
+        return super.controllerHandler(onSuccess, onError, 119, () => {
+            return this.linkingService.openLink(url)
+        })
+    }
 }
 
 const appController = new AppController(
@@ -100,7 +108,6 @@ const appController = new AppController(
     fileSystemRepo,
     appRepo,
     linkingService,
-    appStateListener,
     networkRepo,
     externalFileContentResolver,
     purchaseRepo,
@@ -120,3 +127,5 @@ export const addBluetoothStatusListener = (callback, onError, onSuccess) => appC
 export const blockUrlResolver = () => appController.blockUrlListener()
 
 export const unblockUrlResolver = () => appController.unblockUrlListener()
+
+export const openLink = ({ url }, onError, onSuccess) => appController.openLink({ url }, onError, onSuccess)

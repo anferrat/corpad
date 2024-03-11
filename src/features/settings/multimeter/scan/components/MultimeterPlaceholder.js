@@ -1,13 +1,18 @@
 import { Icon, Text } from '@ui-kitten/components'
 import React from 'react'
-import { View, StyleSheet, Linking } from 'react-native'
+import { View, StyleSheet } from 'react-native'
 import { primary } from '../../../../../styles/colors'
 import Pressable from '../../../../../components/Pressable'
 import { androidRipple } from '../../../../../styles/styles'
+import { openLink } from '../../../../../app/controllers/AppController'
+import { errorHandler } from '../../../../../helpers/error_handler'
 
 
 const MultimeterPlaceholder = () => {
-    const openLink = () => Linking.openURL('https://www.corpad.ca/multimeters')
+    const handleLink = () => {
+        openLink({ url: 'https://www.corpad.ca/multimeters' },
+            er => errorHandler(er))
+    }
     return (
         <View style={styles.container}>
             <Icon style={styles.icon}
@@ -31,7 +36,7 @@ const MultimeterPlaceholder = () => {
                 </Text>
                 <Pressable
                     androidRipple={androidRipple}
-                    onPress={openLink}>
+                    onPress={handleLink}>
                     <Text
                         appearance='hint'
                         status='primary'

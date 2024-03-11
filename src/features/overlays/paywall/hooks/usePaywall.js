@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux"
 import { getOfferings, purchaseSubscription, restorePurchases, updateSubscriptionStatus as verifySubscription } from "../../../../app/controllers/survey/other/PurchaseController"
 import { hidePaywall, updateSubscriptionStatus } from "../../../../store/actions/settings"
 import { errorHandler } from "../../../../helpers/error_handler"
-import { Linking } from "react-native"
+import { openLink } from "../../../../app/controllers/AppController"
 
 const usePaywall = () => {
     const status = useSelector(state => state.settings.subscription.status)
@@ -67,10 +67,9 @@ const usePaywall = () => {
         setProcessing(false)
     }, [])
 
-    const viewTermsAndConditions = useCallback(async () => {
-        if (await Linking.canOpenURL('https://www.corpad.ca/legal/terms-and-conditions'))
-            Linking.openURL('https://www.corpad.ca/legal/terms-and-conditions')
-        else errorHandler(100)
+    const viewTermsAndConditions = useCallback(() => {
+        openLink({ url: 'https://www.corpad.ca/legal/terms-and-conditions' },
+            er => errorHandler(er))
     }, [])
 
     return {

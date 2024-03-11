@@ -1,8 +1,7 @@
 import React from 'react'
-import { View, StyleSheet, Linking } from 'react-native'
+import { View, StyleSheet } from 'react-native'
 import { Text } from '@ui-kitten/components'
 import { NFC_LABELS, NFC_STATUS_CODES } from '../../helpers/constants'
-import { errorHandler } from '../../../../helpers/error_handler'
 import Pressable from '../../../../components/Pressable'
 
 
@@ -29,16 +28,10 @@ const getLabel = (status) => {
     }
 }
 
-const LinkComponent = () => {
-    const linkHandler = async () => {
-        const link = 'https://docs.corpad.ca/tag-errors'
-        if (await Linking.canOpenURL(link))
-            Linking.openURL(link)
-        else
-            errorHandler(100)
-    }
+const LinkComponent = ({ handleLink }) => {
     return (
-        <Pressable onPress={linkHandler}>
+        <Pressable
+            onPress={handleLink}>
             <Text
                 appearance='hint'>
                 https://docs.corpad.ca/tag-errors
@@ -46,7 +39,7 @@ const LinkComponent = () => {
         </Pressable>)
 }
 
-const ModalLabel = ({ status }) => {
+const ModalLabel = ({ status, handleTagErrorLink }) => {
     const label = getLabel(status)
     return (
         <View
@@ -56,7 +49,7 @@ const ModalLabel = ({ status }) => {
                 appearance='hint'>
                 {label}
             </Text>
-            {status === NFC_STATUS_CODES.NOT_FORMATTED || status === NFC_STATUS_CODES.NOT_ENOUGH_SPACE ? <LinkComponent /> : null}
+            {status === NFC_STATUS_CODES.NOT_FORMATTED || status === NFC_STATUS_CODES.NOT_ENOUGH_SPACE ? <LinkComponent handleLink={handleTagErrorLink} /> : null}
         </View>
     )
 }

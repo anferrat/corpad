@@ -1,5 +1,5 @@
 import React from 'react'
-import { View } from 'react-native'
+import { SafeAreaView } from 'react-native'
 import { globalStyle } from '../../styles/styles'
 import PipelineMatching from '../../features/overlays/external_link/add'
 
@@ -16,12 +16,13 @@ export default PipelineMatchingScreen = ({ route, navigation }) => {
     const navigateToSurvey = () => navigation.navigate('PipelineSurvey')
 
     return (
-        <View style={globalStyle.screen}>
+        <SafeAreaView
+            style={globalStyle.screen}>
             <PipelineMatching
                 goBack={goBack}
                 navigateToItem={navigateToItem}
                 navigateToSurvey={navigateToSurvey}
                 link={link} />
-        </View>
+        </SafeAreaView>
     )
 }

@@ -7,15 +7,16 @@ import { globalStyle } from '../../../styles/styles'
 import { ScrollView } from 'react-native-gesture-handler'
 import { errorHandler } from '../../../helpers/error_handler'
 import SubscriptionView from './components/SubscriptionView'
+import { openLink } from '../../../app/controllers/AppController'
 
 const About = (props) => {
     const linkedin = (props) => <Icon {...props} name='linkedin' />
     const twitter = (props) => <Icon {...props} name='twitter' />
     const email = (props) => <Icon {...props} name='email' />
     const linkHandler = async (link) => {
-        if (await Linking.canOpenURL(link))
-            Linking.openURL(link)
-        else errorHandler(100)
+        openLink({ url: link },
+            er =>
+                errorHandler(er))
     }
     return (
         <ScrollView >
