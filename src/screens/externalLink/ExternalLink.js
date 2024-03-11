@@ -1,5 +1,5 @@
 import React from 'react'
-import { View } from 'react-native'
+import { View, SafeAreaView } from 'react-native'
 import { globalStyle } from '../../styles/styles'
 import { ExternalLinkView } from '../../features/overlays/external_link/view'
 
@@ -20,7 +20,7 @@ export default ExternalLinkScreen = ({ route, navigation }) => {
     const goBack = () => navigation.goBack()
 
     return (
-        <View style={globalStyle.screen}>
+        <SafeAreaView style={globalStyle.screen}>
             <ExternalLinkView
                 navigateToFindItem={navigateToFindItem}
                 navigateToItem={navigateToItem}
@@ -28,6 +28,6 @@ export default ExternalLinkScreen = ({ route, navigation }) => {
                 navigateToSurvey={navigateToSurvey}
                 goBack={goBack}
                 link={link} />
-        </View>
+        </SafeAreaView>
     )
 }

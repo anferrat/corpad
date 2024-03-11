@@ -57,6 +57,7 @@ const errorCodes = {
     116: 'Please connect to the internet to verify subscription status.',
     117: 'Unable to verify subscription status. Please try again later.',
     118: 'No purchases were restored.',
+    119: 'Unable to open URL',
     301: 'Unable to update network status.',
     302: 'Unable to complete operation. Need to sign in.',
     303: 'Unable to sign in with Google Account',

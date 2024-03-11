@@ -23,7 +23,8 @@ const ItemView = ({ itemId, itemType, navigateToMap, navigateToEditSubitem, navi
         writeToTag,
         retry,
         reset,
-        onShowPaywall
+        onShowPaywall,
+        handleTagErrorLink
     } = useNfcWriter({ itemId, itemType })
     const updateStatus = (value) => submit(value, 'status')
     return (
@@ -69,7 +70,8 @@ const ItemView = ({ itemId, itemType, navigateToMap, navigateToEditSubitem, navi
                 loading={nfcLoading}
                 size={size}
                 status={status}
-                reset={reset} />
+                reset={reset}
+                handleTagErrorLink={handleTagErrorLink} />
         </View>
     )
 }

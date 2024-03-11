@@ -14,7 +14,7 @@ export class DeleteSurveyFile {
                 this.deleteAssetsService.execute(uid, false)
             ])
         else {
-            throw new Error(errors.GENERAL, `Hash of deleting file doesn't match one from meta data`)
+            throw new Error(errors.GENERAL, 'Unable to delete file', `Hash of deleting file doesn't match one from meta data`)
         }
     }
 }

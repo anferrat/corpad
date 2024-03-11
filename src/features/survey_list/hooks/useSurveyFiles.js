@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { hideLoader, setSurveySettings, updateLoader, updateLoaderProgress, updateSession } from '../../../store/actions/settings'
 import { EventRegister } from 'react-native-event-listeners'
 import { Platform, ToastAndroid } from 'react-native'
+import { openLink } from '../../../app/controllers/AppController'
 
 const useSurveyFiles = ({ isCloud, navigateToSurveyFileList }) => {
     const isSignedIn = useSelector(state => state.settings.session.isSigned)
@@ -150,6 +151,11 @@ const useSurveyFiles = ({ isCloud, navigateToSurveyFileList }) => {
         dispatch(hideLoader())
     }, [fileListErrorHandler, onDownload])
 
+    const docLinkHandler = useCallback(() => {
+        openLink({ url: 'https://docs.corpad.ca' },
+            er => errorHandler(er))
+    }, [])
+
 
     return {
         fileList,
@@ -163,6 +169,7 @@ const useSurveyFiles = ({ isCloud, navigateToSurveyFileList }) => {
         shareSurveyFile,
         copyToAlternateFolder,
         copyToDownloads,
+        docLinkHandler
     }
 }
 

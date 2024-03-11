@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { globalStyle } from '../styles/styles'
 import { SafeAreaView, StatusBar } from 'react-native'
 import { Button, Text } from '@ui-kitten/components'
@@ -12,8 +12,6 @@ import { useDispatch } from 'react-redux'
 import { setActiveMultimeter, showPaywall, updateSubscriptionStatus } from '../store/actions/settings'
 import { SettingRepository } from '../app/repository/sqlite/SettingRepository'
 import { LinkEncoder } from '../app/services/byte_converter/encode/LinkEncoder'
-import { TestPointRepository } from '../app/repository/sqlite/TestPointRepository'
-import { RectifierRepository } from '../app/repository/sqlite/RectifierRepository'
 import { TestPoint } from '../app/entities/survey/items/TestPoint'
 import { Rectifier } from '../app/entities/survey/items/Rectifier'
 import { Anode } from '../app/entities/survey/subitems/Anode'
@@ -43,6 +41,7 @@ import { DefaultPotentialTypes } from '../app/services/byte_converter/constants/
 import { DefaultReferenceCells } from '../app/services/byte_converter/constants/DefaultReferenceCells'
 import { SubitemFactory } from '../app/services/other/SubitemFactory'
 import { StatReferenceCell } from '../app/entities/survey/subitems/StatReferenceCell'
+
 
 const settings = new SettingRepository()
 const count = 150

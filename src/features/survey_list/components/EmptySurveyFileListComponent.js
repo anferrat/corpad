@@ -2,12 +2,12 @@ import React from 'react'
 import { Text, Icon, Button } from '@ui-kitten/components'
 import { StyleSheet, View } from 'react-native'
 import { basic, basic200 } from '../../../styles/colors'
+import Pressable from '../../../components/Pressable'
 
-const EmptySurveyFileListComponent = ({ isCloud, onCreate, initialLoad }) => {
+const EmptySurveyFileListComponent = ({ isCloud, onCreate, initialLoad, onPressLink }) => {
     if (initialLoad)
         return (
             <View style={styles.mainView}>
-
                 <Icon
                     style={styles.icon}
                     fill={basic}
@@ -20,16 +20,29 @@ const EmptySurveyFileListComponent = ({ isCloud, onCreate, initialLoad }) => {
                     No survey files found
                 </Text>
                 <Text
-                    category='p2'
+                    category='p1'
                     appearance={'hint'}
                     style={styles.title}>
-                    You don't have any survey files at the moment. You can either create a new survey or open an existing survey file by selecting <Icon name='folder' style={styles.folderIcon} fill={basic} /> and choosing a file from your device or cloud storage.
+                    Create or open a survey file by tapping <Icon name='folder' style={styles.folderIcon} fill={basic} /> and selecting from your device or cloud storage.
                 </Text>
+                <View
+                    style={styles.linkView}>
+                    <Text
+                        appearance='hint'>
+                        New to Corpad? Check our documentation at </Text>
+                    <Pressable
+                        onPress={onPressLink}>
+                        <Text
+                            status='primary'>
+                            docs.corpad.ca
+                        </Text>
+                    </Pressable>
+                </View>
                 <Button
                     appearance='ghost'
                     size='large'
                     onPress={onCreate.bind(this, false)}>
-                    Create survey
+                    Create new survey
                 </Button>
                 <Text
                     category='p2'
@@ -42,6 +55,7 @@ const EmptySurveyFileListComponent = ({ isCloud, onCreate, initialLoad }) => {
                     onPress={onCreate.bind(this, true)}>
                     Import survey from .csv
                 </Button>
+                
             </View>
         )
     else return null
@@ -74,5 +88,11 @@ const styles = StyleSheet.create({
         height: 18,
         marginHorizontal: 3,
         marginBottom: -4,
+    },
+    linkView: {
+        flexDirection: 'row',
+        flexWrap: 'wrap',
+        justifyContent: 'center',
+        marginBottom: 24
     }
 })

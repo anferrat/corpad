@@ -28,6 +28,8 @@ const validate = (v, type) => {
             return !isNaN(v)
         case 'name':
             return isNull(v) || reg('^[-a-zA-Z0-9_.\s() ]*$').test(v) && String(v).length <= 40
+        case 'defaultName':
+            return isNull(v) || reg('^[-a-zA-Z0-9_.\s() ]*$').test(v) && String(v).length <= 30
         case 'name_not_empty':
         case 'surveyName':
             return !isNull(v) && reg('^[-a-zA-Z0-9_.\s() ]*$').test(v) && String(v).length <= 40

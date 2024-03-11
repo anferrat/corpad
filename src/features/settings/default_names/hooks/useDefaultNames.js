@@ -49,7 +49,7 @@ const useDefaultNames = () => {
     const onChangeText = useCallback((text) => setName(state => ({ ...state, value: text })), [])
 
     const onEndEditing = useCallback(() => {
-        const validation = fieldValidation(value, 'name')
+        const validation = fieldValidation(value, 'defaultName')
         if (validation.valid)
             setDefaultNames(state => ({
                 ...state,

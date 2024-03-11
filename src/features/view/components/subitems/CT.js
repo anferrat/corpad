@@ -36,7 +36,7 @@ const CT = ({ data, validateVoltage, validateCurrent, updatePropertyValue, onEdi
 
     const onChangeCurrent = React.useCallback((value) => updatePropertyValue(value, subitemIndex, 'current'), [subitemIndex, updatePropertyValue])
 
-    const onEndEditingCurrent = React.useCallback(() => validateCurrent(subitemIndex, data), [subitemIndex, current, validateCurrent])
+    const onEndEditingCurrent = React.useCallback(() => validateCurrent(subitemIndex, { ...data, voltageDrop: null }), [subitemIndex, current, validateCurrent]) //reset voltageDrop, otherwise it'll block current updates
 
     const onChangeVoltage = React.useCallback((value) => updatePropertyValue(value, subitemIndex, 'voltage'), [subitemIndex, updatePropertyValue])
 

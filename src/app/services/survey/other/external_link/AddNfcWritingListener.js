@@ -17,7 +17,8 @@ export class AddNfcWritingListener {
             if (!isSupported)
                 onError(841)
             if (isEnabled && isSupported) {
-                await this.ndefRepo.start()
+                const alertMessageIOS = `Approach an NFC label. \n Writing ${size} bytes.`
+                await this.ndefRepo.start(alertMessageIOS)
                 onSuccess(NdefWritingStatuses.NDEF_TECHNOLOGY_REQUESTED)
                 const { status, capacity } = await this.ndefRepo.getTagStatus()
                 onSuccess(NdefWritingStatuses.TAG_STATUS_RECEIVED, { status, capacity })
@@ -36,7 +37,7 @@ export class AddNfcWritingListener {
             }
         }
         catch (er) {
-            console.log(er)
+            console.log(JSON.stringify(er))
             onError(839)
             this.ndefRepo.stop()
         }
