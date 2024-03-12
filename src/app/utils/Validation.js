@@ -1,5 +1,5 @@
 import { object, string, number, boolean, array, mixed } from 'yup'
-import { SubitemTypes, PipelineMaterials, PipelineProducts, CoarseFineOptions, PowerSources, TapOptions, ItemStatuses, ItemTypes, TestPointTypes, AnodeMaterials, CalculatorTypes, CouponTypes, DisplayedReadingOptions, IsolationTypes, ItemPropertyUpdateTypes, PermanentPotentialTypes, PipeDiameters, PotentialUnits, ReferenceCellTypes, SortingOptions, SubitemPropertyUpdateTypes, WireColors, WireGauges, MultimeterTypes, MultimeterSyncModes, MultimeterCycles, MultimeterMeasurementTypes, StrokeColors, StrokeWidths, MediaTypes, MapLayerFeatures, AnodeBedEnclosureTypes, AnodeBedMaterialTypes, AnodeBedTypes, LengthUnits, ResistivityUnits } from '../../constants/global'
+import { SubitemTypes, PipelineMaterials, PipelineProducts, CoarseFineOptions, PowerSources, TapOptions, ItemStatuses, ItemTypes, TestPointTypes, AnodeMaterials, CalculatorTypes, CouponTypes, DisplayedReadingOptions, IsolationTypes, ItemPropertyUpdateTypes, PermanentPotentialTypes, PipeDiameters, PotentialUnits, ReferenceCellTypes, SortingOptions, SubitemPropertyUpdateTypes, WireColors, WireGauges, MultimeterTypes, MultimeterSyncModes, MultimeterCycles, MultimeterMeasurementTypes, StrokeColors, StrokeWidths, MediaTypes, MapLayerFeatures, AnodeBedEnclosureTypes, AnodeBedMaterialTypes, AnodeBedTypes, LengthUnits, ResistivityUnits, ExternalLinkTypes } from '../../constants/global'
 import { Error, errors } from "./Error"
 
 export class Validation {
@@ -61,6 +61,7 @@ export class Validation {
     bedType = mixed().oneOf([null, ...Object.values(AnodeBedTypes)]).nullable()
     lengthUnit = mixed().oneOf(Object.values(LengthUnits))
     resistivityUnit = mixed().oneOf(Object.values(ResistivityUnits))
+    externalLinkType = mixed().oneOf(Object.values(ExternalLinkTypes))
     validate(value, schema) {
         try {
             return schema.validateSync(value)

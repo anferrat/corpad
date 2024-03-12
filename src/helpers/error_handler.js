@@ -34,7 +34,8 @@ const warningCodes = {
     57: 'Are you sure you want to delete this circuit?',
     59: 'Are you sure you want to delete this import setting?',
     60: 'Previously imported items will be deleted, this action cannot be reverted. Would you like to undo last import?',
-    61: 'Are you sure you want to delete this layer?'
+    61: 'Are you sure you want to delete this layer?',
+    62: 'Are you sure you want to delete all scanned label records?',
 }
 
 const errorCodes = {
@@ -157,6 +158,9 @@ const errorCodes = {
     658: 'Unable to update map layer.',
     659: 'Unable to obtain map layer list.',
     660: 'Unable to delete map layer.',
+    661: 'Unable to log external link record',
+    662: 'Unable to get external links',
+    663: 'Unable to delete external links',
     661: 'Unable to read map layer data.',
     700: 'Unable to complete Google Drive operation.',
     701: 'Unable to read/create cloud app directory.',

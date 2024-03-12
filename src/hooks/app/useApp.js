@@ -37,7 +37,7 @@ const useApp = () => {
 
   const handleExternalDataLink = useCallback((link, urlType) => {
     if (urlType === UrlTypes.DATA_LINK && link)
-      navigation.navigate('ExternalLink', { link })
+      navigation.navigate('ExternalLink', { link, shouldLog: true })
   }, [navigation])
 
   useEffect(() => {

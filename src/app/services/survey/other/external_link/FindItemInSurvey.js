@@ -18,12 +18,12 @@ export class FindItemInSurvey {
         else throw new Error(errors.GENERAL, 'Unable to get items from survey', 'Item type is not supported')
     }
 
-    _searchByName(name, searchedItems, uidMatch) {
+    _searchByName(name, searchedItems) {
         return [...searchedItems].sort((a, b) => {
             const aMatch = a.name === name
             const bMatch = b.name === name
             return aMatch && !bMatch ? -1 : (!aMatch && bMatch ? 1 : a.name.localeCompare(b.name))
-        })
+        }).filter((_, i) => i <= 10)
     }
 
     _searchByUid(uid, items) {
@@ -55,7 +55,7 @@ export class FindItemInSurvey {
         const [items, searchedItems] = await Promise.all([this._getItems(itemType), this.surveyRepo.searchItem(name)])
         //using survey repo here to offload search from JS thread to sqlite
         const uidMatch = this._searchByUid(uid, items)
-        const nameMatches = this._searchByName(name, searchedItems, uidMatch)
+        const nameMatches = this._searchByName(name, searchedItems)
         return {
             nameMatches,
             uidMatch

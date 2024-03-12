@@ -8,22 +8,22 @@ import SurveyFileListHeader from './components/SurveyFileListHeader'
 export const SurveyFileList = ({ navigateToCreateSurvey, isCloud, navigateToSurveyFileList }) => {
     const { fileList, loading, initialLoad, isSignedIn, refreshHandler, loadSurvey, deleteSurvey, removeSurveyFromList, shareSurveyFile, copyToAlternateFolder, copyToDownloads, docLinkHandler } = useSurveyFiles({ isCloud, navigateToSurveyFileList })
 
-    const isEmpty = [...fileList[0].data, ...fileList[1].data].length === 0
+    const isEmpty = (fileList[0].data.length + fileList[1].data.length) === 0
 
     const renderItem = React.useCallback(({ item }) => {
-        const { name, filePath, fileName, cloudId, tpCount, rectifierCount, pipelineCount, good, timeModified, uid, hash } = item
+        const { name, path, filename, cloudId, tpCount, rtCount, plCount, successRate, timeModified, uid, hash } = item
         return <SurveyFileListItem
             name={name}
             uid={uid}
             hash={hash}
-            fileName={fileName}
-            path={filePath}
+            fileName={filename}
+            path={path}
             cloudId={cloudId}
             isCloud={isCloud}
             tpCount={tpCount}
-            rectifierCount={rectifierCount}
-            pipelineCount={pipelineCount}
-            passedItems={(tpCount + rectifierCount) === 0 ? 0 : good / (tpCount + rectifierCount)}
+            rectifierCount={rtCount}
+            pipelineCount={plCount}
+            passedItems={successRate}
             timeModified={timeModified}
             isSignedIn={isSignedIn}
             loadSurvey={loadSurvey}
@@ -35,7 +35,7 @@ export const SurveyFileList = ({ navigateToCreateSurvey, isCloud, navigateToSurv
         />
     }, [isSignedIn])
 
-    const keyExtractor = React.useCallback(item => isCloud ? item.cloudId : item.filePath, [isCloud])
+    const keyExtractor = React.useCallback(item => isCloud ? item.cloudId : item.path, [isCloud])
 
     const EmtyComponent = React.useMemo(() =>
         <EmptySurveyFileListComponent

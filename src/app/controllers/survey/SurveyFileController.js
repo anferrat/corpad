@@ -7,7 +7,7 @@ import { GetSurveyFileList } from "../../services/survey_file/local/GetSurveyFil
 import { Controller } from "../../utils/Controller"
 import { SurveyFileValidation } from "../../validation/SurveyFileValidation"
 import { PickExternalSurveyFile } from "../../services/survey_file/local/PickExternalSurveyFile"
-import { fileSystemRepo, googleDriveFileSystemRepo, networkRepo } from "../_instances/repositories"
+import { fileSystemRepo, googleDriveFileSystemRepo, networkRepo, surveyFileRepo } from "../_instances/repositories"
 import { assetFileDownloadControl, convertFileToSurveyService, createSurveyFromTemplateService, createSurveyService, deleteAssetsService, downloadFiles, exportCloudSurveyFile, exportSurveyFile, loadCloudSurveyFileService, loadExternalSurveyFileService, loadLocalSurveyFileService, uploadAssets } from "../_instances/survey_file"
 import { surveyFileListPresenter } from "../_instances/presenters"
 import { documentPicker, permissions, shareService } from "../_instances/general_services"
@@ -15,14 +15,15 @@ import { surveyFileConverterOutput } from "../_instances/converters"
 import { ShareSurveyFile } from "../../services/survey_file/local/ShareSurveyFile"
 import { SaveSurveyFileToDownloads } from "../../services/survey_file/local/SaveSurveyFileToDownloads"
 import { CopyCloudSurveyFileToLocal } from "../../services/survey_file/cloud/CopyCloudSurveyFileToLocal"
+import { GetSurveyFileMetadata } from "../../converters/survey_file/GetSurveyFileMetadata"
 
 
 class SurveyFileController extends Controller {
-    constructor(fileSystemRepo, cloudFileSystemRepo, networkRepo, loadLocalSurveyFileService, loadCloudSurveyFileService, loadExternalServiceFileService, createSurveyService, createSurveyFromTemplateService, surveyFileListPresenter, shareService, permissions, documentPicker, convertFileToSurveyService, surveyFileConverterOutput, uploadAssets, downloadFiles, exportSurveyFile, exportCloudSurveyFile, deleteAssetsService, assetFileDownloadControl) {
+    constructor(fileSystemRepo, cloudFileSystemRepo, networkRepo, loadLocalSurveyFileService, loadCloudSurveyFileService, loadExternalServiceFileService, createSurveyService, createSurveyFromTemplateService, surveyFileListPresenter, shareService, permissions, documentPicker, convertFileToSurveyService, surveyFileConverterOutput, uploadAssets, downloadFiles, exportSurveyFile, exportCloudSurveyFile, deleteAssetsService, assetFileDownloadControl, getSurveyFileMetaDataService, surveyFileRepo) {
         super()
 
-        this.getLocalSurveyFileListService = new GetSurveyFileList(fileSystemRepo, surveyFileListPresenter)
-        this.getCloudSurveyFileListService = new GetCloudSurveyFileList(cloudFileSystemRepo, surveyFileListPresenter, networkRepo)
+        this.getLocalSurveyFileListService = new GetSurveyFileList(fileSystemRepo, surveyFileListPresenter, getSurveyFileMetaDataService, surveyFileRepo)
+        this.getCloudSurveyFileListService = new GetCloudSurveyFileList(cloudFileSystemRepo, surveyFileListPresenter, networkRepo, getSurveyFileMetaDataService, surveyFileRepo)
         this.deleteCloudSurveyFileService = new DeleteCloudSurveyFile(cloudFileSystemRepo, networkRepo, deleteAssetsService)
         this.deleteSurveyFileService = new DeleteSurveyFile(fileSystemRepo, deleteAssetsService)
 
@@ -160,7 +161,9 @@ const surveyFileController = new SurveyFileController(
     exportSurveyFile,
     exportCloudSurveyFile,
     deleteAssetsService,
-    assetFileDownloadControl
+    assetFileDownloadControl,
+    new GetSurveyFileMetadata(),
+    surveyFileRepo
 )
 
 export const getSurveyFileList = ({ isCloud }, onError, onSuccess) => surveyFileController.getList({ isCloud }, onError, onSuccess)

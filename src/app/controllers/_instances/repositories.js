@@ -10,6 +10,7 @@ import { AppRepository } from "../../repository/sqlite/AppRepository";
 import { AssetRepository } from "../../repository/sqlite/AssetRepository";
 import { CalculatorRepository } from "../../repository/sqlite/CalculatorRepository";
 import { DefaultNameRepository } from "../../repository/sqlite/DefaultNameRepository";
+import { ExternalLinkRepo } from "../../repository/sqlite/ExternalLinkRepo";
 import { MapLayerRepository } from "../../repository/sqlite/MapLayerRepository";
 import { PipelineRepository } from "../../repository/sqlite/PipelineRepository";
 import { PotentialRepository } from "../../repository/sqlite/PotentialRepository";
@@ -18,6 +19,7 @@ import { RectifierRepository } from "../../repository/sqlite/RectifierRepository
 import { ReferenceCellRepository } from "../../repository/sqlite/ReferenceCellRepository";
 import { SettingRepository } from "../../repository/sqlite/SettingRepository";
 import { SubitemRepository } from "../../repository/sqlite/SubitemRepository";
+import { SurveyFileRepo } from "../../repository/sqlite/SurveyFileRepo";
 import { SurveyRepository } from "../../repository/sqlite/SurveyRepository";
 import { TestPointRepository } from "../../repository/sqlite/TestPointRepository";
 import { TestRepository } from "../../repository/sqlite/TestRepo";
@@ -38,6 +40,8 @@ export const subitemRepo = new SubitemRepository()
 export const surveyRepo = new SurveyRepository()
 export const testPointRepo = new TestPointRepository()
 export const testRepo = new TestRepository()
+export const surveyFileRepo = new SurveyFileRepo()
+export const externalLinkRepo = new ExternalLinkRepo()
 
 //NETWORK
 export const networkRepo = new NetworkRepository()
@@ -62,3 +66,5 @@ export const purchaseRepo = new PurchaseRepository()
 
 //NFC
 export const ndefRepo = new NdefRepository()
+
+

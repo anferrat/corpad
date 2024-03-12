@@ -4,11 +4,11 @@ import { ScrollView } from 'react-native-gesture-handler'
 import { Text } from '@ui-kitten/components'
 import ListItem from './components/ListItem'
 import useSettings from './hooks/useSettings'
+import { Platform } from 'react-native'
 
 export const SettingsList = () => {
     const {
         onExit,
-        exitEnabled,
         navigateToExport,
         navigateToAbout,
         navigateToPotentials,
@@ -18,6 +18,7 @@ export const SettingsList = () => {
         navigateToReferenceCells,
         navigateToMultimeter,
         navigateToCalculator,
+        navigateToExternalLinks
     } = useSettings()
     return (
         <ScrollView
@@ -64,6 +65,15 @@ export const SettingsList = () => {
                 title={'Digital multimeter'}
                 subtitle={'Control bluetooth multimeter settings'}
                 onPress={navigateToMultimeter} />
+            <ListItem
+                icon={'nfc'}
+                pack='cp'
+                title={'NFC labels'}
+                subtitle={Platform.select({
+                    android: 'View recently scanned labels',
+                    ios: 'Launch NFC scanning and view recently scanned labels'
+                })}
+                onPress={navigateToExternalLinks} />
             <ListItem
                 icon={'calculator'}
                 pack='cp'

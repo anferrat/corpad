@@ -1,7 +1,6 @@
 import { useCallback } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import { showPaywall } from "../../../../store/actions/settings"
-import { SubscriptionStatuses } from "../../../../constants/global"
 import { isProStatus, isVerifyStatus } from "../../../../helpers/functions"
 
 const useMoreOptions = (closeSheet) => {
