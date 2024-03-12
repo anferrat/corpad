@@ -20,7 +20,6 @@ export class PotentialEncoder extends Encoder {
     }
 
     encode(potentials, referenceCells, potentialTypes) {
-        console.log(potentials, referenceCells, potentialTypes)
         const encodedPotentials = potentials.filter(({ potentialType, isPortableReference, referenceCellId }) => {
             return referenceCells
                 .get(Number(isPortableReference))

@@ -73,6 +73,11 @@ const useBottomSheetContent = () => {
         closeSheet()
     }, [navigation, closeSheet])
 
+    const navigateToExternalLinkSettings = useCallback(() => {
+        navigation.navigate('SettingDetails', { setting: 'externalLinks' })
+        closeSheet()
+    }, [navigation, closeSheet])
+
     return {
         params,
         selectedRoute,
@@ -83,6 +88,7 @@ const useBottomSheetContent = () => {
         navigateToExportedFiles,
         navigateToCalculatorList,
         navigateToMultimeter,
+        navigateToExternalLinkSettings,
         closeSheet
     }
 }

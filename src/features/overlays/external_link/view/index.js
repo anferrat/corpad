@@ -9,8 +9,8 @@ import LoadingView from '../../../../components/LoadingView'
 import ControlButtons from './components/ControlButtons'
 import Header from './components/Header'
 
-export const ExternalLinkView = ({ link, navigateToFindItem, navigateToPipelineMatching, goBack, navigateToItem, navigateToSurvey }) => {
-    const { tagId, technician, item, pipelines, potentialUnit, linkType, isSurveyLoaded, loading, isCreating, goToFindInSurvey, addToSurvey } = useExternalLink({ link, navigateToFindItem, navigateToPipelineMatching, goBack, navigateToItem, navigateToSurvey })
+export const ExternalLinkView = ({ link, shouldLog, navigateToFindItem, navigateToPipelineMatching, goBack, navigateToItem, navigateToSurvey }) => {
+    const { tagId, technician, item, pipelines, potentialUnit, linkType, isSurveyLoaded, loading, isCreating, goToFindInSurvey, addToSurvey } = useExternalLink({ link, shouldLog, navigateToFindItem, navigateToPipelineMatching, goBack, navigateToItem, navigateToSurvey })
 
     return (
         <>
@@ -71,7 +71,7 @@ const styles = StyleSheet.create({
 
     itemView: {
         ...globalStyle.card_noPadding,
-        minHeight: 200
+        minHeight: 100
     },
     label: {
         paddingHorizontal: 12,

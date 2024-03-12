@@ -46,6 +46,8 @@ const useSettings = () => {
 
     const navigateToReferenceCells = () => navigateToDetails('refCells')
 
+    const navigateToExternalLinks = () => navigateToDetails('externalLinks')
+
     return {
         onExit,
         navigateToDetails,
@@ -57,7 +59,8 @@ const useSettings = () => {
         navigateToInfo,
         navigateToReferenceCells,
         navigateToMultimeter,
-        navigateToCalculator
+        navigateToCalculator,
+        navigateToExternalLinks
     }
 }
 

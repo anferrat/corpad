@@ -37,7 +37,6 @@ export class AddNfcWritingListener {
             }
         }
         catch (er) {
-            console.log(JSON.stringify(er))
             onError(839)
             this.ndefRepo.stop()
         }

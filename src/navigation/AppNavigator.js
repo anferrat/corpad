@@ -94,7 +94,7 @@ export const AppNavigator = () => {
             }
             <Stack.Group screenOptions={{ animation: 'fade' }}>
               <Stack.Screen name='Spreadsheet' component={Spreadsheet} initialParams={{ uri: null, title: null }} />
-              <Stack.Screen name='ExternalLink' component={ExternalLink} initialParams={{ link: null }} />
+              <Stack.Screen name='ExternalLink' component={ExternalLink} initialParams={{ link: null, shouldLog: false }} />
               <Stack.Screen name='FindItemInSurvey' component={FindItem} />
               <Stack.Screen name='PipelineMatching' component={PipelineMatching} />
             </Stack.Group>

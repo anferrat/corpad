@@ -8,7 +8,6 @@ export class NdefRepository {
 
     async addBackgroundTagListenerIOS() {
         const record = await NfcManager.getBackgroundNdef()
-        console.log(record)
     }
 
     async start(message) {

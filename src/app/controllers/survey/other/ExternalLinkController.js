@@ -14,11 +14,15 @@ import { GetPipelineMatchingList } from "../../../services/survey/other/external
 import { Controller } from "../../../utils/Controller"
 import { geolocationCalculator, subitemFactory, warningHandler } from "../../_instances/general_services"
 import { listPresenter, potentialPresenter } from "../../_instances/presenters"
-import { defaultNameRepo, ndefRepo, pipelineRepo, potentialRepo, potentialTypeRepo, rectifierRepo, referenceCellRepo, settingRepo, subitemRepo, surveyRepo, testPointRepo } from "../../_instances/repositories"
+import { defaultNameRepo, externalLinkRepo, ndefRepo, pipelineRepo, potentialRepo, potentialTypeRepo, rectifierRepo, referenceCellRepo, settingRepo, subitemRepo, surveyRepo, testPointRepo } from "../../_instances/repositories"
 import { AddNfcWritingListener } from "../../../services/survey/other/external_link/AddNfcWritingListener"
+import { ExternalLinkValidation } from "../../../validation/ExternalLinkValidation"
+import { LogExternalLinkRecord } from "../../../services/survey/other/external_link/LogExternalLinkRecord"
+import { GetExternalLinkRecords } from "../../../services/survey/other/external_link/GetExternalLinkRecords"
+import { DeleteAllExternalLinkRecords } from "../../../services/survey/other/external_link/DeleteAllExternalLinkRecords"
 
 class ExternalLinkController extends Controller {
-    constructor(defaultNameRepo, subitemFactory, linkDecoder, potentialPresenter, testPointRepo, rectifierRepo, geolocationCalculator, surveyRepo, settingRepo, subitemRepo, potentialRepo, potentialTypeRepo, referenceCellRepo, pipelineRepo, warningHandler, listPresenter, linkEncoder, ndefRepo) {
+    constructor(defaultNameRepo, subitemFactory, linkDecoder, potentialPresenter, testPointRepo, rectifierRepo, geolocationCalculator, surveyRepo, settingRepo, subitemRepo, potentialRepo, potentialTypeRepo, referenceCellRepo, pipelineRepo, warningHandler, listPresenter, linkEncoder, ndefRepo, externalLinkRepo) {
         super()
         this.generateCompositeItem = new GenerateCompositeItem(defaultNameRepo, subitemFactory)
         this.createPipelineMapService = new CreatePipelineMap()
@@ -32,6 +36,11 @@ class ExternalLinkController extends Controller {
         this.convertItemToLinkService = new ConvertItemToLink(testPointRepo, rectifierRepo, pipelineRepo, potentialTypeRepo, referenceCellRepo, linkEncoder, ndefRepo)
         this.removeNfcWritingListenerService = new RemoveNfcWritingListener(ndefRepo)
         this.addNfcWritingListenerService = new AddNfcWritingListener(ndefRepo, this.convertItemToLinkService)
+        this.logExternalLinkService = new LogExternalLinkRecord(externalLinkRepo)
+        this.getExternalLinkRecordsService = new GetExternalLinkRecords(externalLinkRepo)
+        this.deleteAllExternalLinkRecordsService = new DeleteAllExternalLinkRecords(externalLinkRepo)
+
+        this.validation = new ExternalLinkValidation()
     }
 
 
@@ -76,6 +85,25 @@ class ExternalLinkController extends Controller {
             return this.addNfcWritingListenerService.addListener(onError, onSuccess, itemId, itemType)
         })
     }
+
+    logExternalLink(data, onError = null, onSuccess = null) {
+        return super.controllerHandler(onSuccess, onError, 661, () => {
+            const { tagId, name, linkType, technician, itemType, location, link } = this.validation.logExternalLink(data)
+            return this.logExternalLinkService.execute({ tagId, name, linkType, technician, itemType, location, link })
+        })
+    }
+
+    getExternalLinkRecords(onError = null, onSuccess = null) {
+        return super.controllerHandler(onSuccess, onError, 662, () => {
+            return this.getExternalLinkRecordsService.execute()
+        })
+    }
+
+    deleteAllExternalLinkRecords(onError = null, onSuccess = null) {
+        return super.controllerHandler(onSuccess, onError, 663, () => {
+            return this.deleteAllExternalLinkRecordsService.execute()
+        })
+    }
 }
 
 const externalLinkController = new ExternalLinkController(
@@ -96,7 +124,8 @@ const externalLinkController = new ExternalLinkController(
     warningHandler,
     listPresenter,
     new LinkEncoder(),
-    ndefRepo
+    ndefRepo,
+    externalLinkRepo
 )
 
 export const decodeLink = ({ link }, onError, onSuccess) => externalLinkController.decodeLink({ link }, onError, onSuccess)
@@ -112,3 +141,9 @@ export const getPipelineMatchingList = ({ link }, onError, onSuccess) => externa
 export const removeNfcWritingListener = (onError, onSuccess) => externalLinkController.removeListener(onError, onSuccess)
 
 export const addNfcWritingListener = ({ itemId, itemType }, onError, onSuccess) => externalLinkController.addListener({ itemId, itemType }, onError, onSuccess)
+
+export const logExternalLink = ({ tagId, name, linkType, technician, itemType, location, link }, onError, onSuccess) => externalLinkController.logExternalLink({ tagId, name, linkType, technician, itemType, location, link }, onError, onSuccess)
+
+export const getExternalLinkRecords = (onError, onSuccess) => externalLinkController.getExternalLinkRecords(onError, onSuccess)
+
+export const deleteAllExternalLinkRecords = (onError, onSuccess) => externalLinkController.deleteAllExternalLinkRecords(onError, onSuccess)

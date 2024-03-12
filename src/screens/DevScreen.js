@@ -123,7 +123,7 @@ export default DevScreen = ({ navigation, route }) => {
       const link = encoder.encode(testPoint, pipelines, referenceCells, potentialTypes)
       console.log('ENCODED LINK')
       console.log(link)
-      navigation.navigate('ExternalLink', { link })
+      navigation.navigate('ExternalLink', { link, shouldLog: false })
       /*
       const data = decoder.decode(link)
       console.log('DECODED DATA')

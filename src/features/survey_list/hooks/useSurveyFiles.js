@@ -1,5 +1,5 @@
 import { useCallback, useState, useRef, useEffect } from 'react'
-import { copyCloudSurveyFileToDevice, copySurveyFileToCloud, copySurveyFileToDownloads, deleteSurveyFile, getCloudSurveyFileLink, getSurveyFileList, loadSurveyFile, shareFile } from '../../../app/controllers/survey/SurveyFileController'
+import { copyCloudSurveyFileToDevice, copySurveyFileToCloud, copySurveyFileToDownloads, deleteSurveyFile, getSurveyFileList, loadSurveyFile, shareFile } from '../../../app/controllers/survey/SurveyFileController'
 import { errorHandler, warningHandler } from '../../../helpers/error_handler'
 import { useDispatch, useSelector } from 'react-redux'
 import { hideLoader, setSurveySettings, updateLoader, updateLoaderProgress, updateSession } from '../../../store/actions/settings'
@@ -107,11 +107,11 @@ const useSurveyFiles = ({ isCloud, navigateToSurveyFileList }) => {
             setFileList(state => Object.assign([], state, {
                 [0]: {
                     ...state[0],
-                    data: state[0].data.filter(survey => ((survey.filePath !== path) && !isCloud) || ((survey.cloudId !== cloudId) && isCloud)),
+                    data: state[0].data.filter(survey => ((survey.path !== path) && !isCloud) || ((survey.cloudId !== cloudId) && isCloud)),
                 },
                 [1]: {
                     ...state[1],
-                    data: state[1].data.filter(survey => ((survey.filePath !== path) && !isCloud) || ((survey.cloudId !== cloudId) && isCloud))
+                    data: state[1].data.filter(survey => ((survey.path !== path) && !isCloud) || ((survey.cloudId !== cloudId) && isCloud))
                 }
             }))
         }

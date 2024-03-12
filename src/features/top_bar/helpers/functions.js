@@ -38,6 +38,8 @@ const getTitleBySettingType = (setting) => {
             return 'Licenses'
         case 'multimeter':
             return 'Multimeter'
+        case 'externalLinks':
+            return 'NFC labels'
         default:
             return 'Settings'
     }

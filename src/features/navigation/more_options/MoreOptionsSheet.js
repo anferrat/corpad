@@ -1,25 +1,17 @@
 import React from 'react'
 import { View, StyleSheet } from 'react-native'
 import ListItem from './components/ListItemMenu'
-import useMoreOptions from './hooks/useMoreOptions'
-import { success } from '../../../styles/colors'
 
 const MoreOptionsSheet = (props) => {
-    const { isPro, isVerify, onPaywallShow } = useMoreOptions(props.closeSheet)
+    console.log(props)
     return (
         <View
             style={styles.mainView}>
-            {isPro || isVerify ?
-                <ListItem
-                    title='Multimeter'
-                    icon='radio'
-                    onPress={props.navigateToMultimeter} /> :
-                <ListItem
-                    title='Upgrade to premium'
-                    icon='pricetags'
-                    status='primary'
-                    iconColor={success}
-                    onPress={onPaywallShow} />}
+            <ListItem
+                title='NFC labels'
+                icon='nfc'
+                pack='cp'
+                onPress={props.navigateToExternalLinkSettings} />
             <ListItem
                 title='Corrosion calculator'
                 icon='calculator'

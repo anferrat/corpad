@@ -6,8 +6,10 @@ export class GetSurveyFileMetadata {
     }
 
     _getGoodItemCount(testPoints, rectifiers, testPointTstatusIndex, rectifierStatusIndex) {
-        return testPoints.filter(tp => (tp[testPointTstatusIndex] ?? -1) === ItemStatuses.GOOD).length +
+        const total = testPoints.length + rectifiers.length
+        const passed = testPoints.filter(tp => (tp[testPointTstatusIndex] ?? -1) === ItemStatuses.GOOD).length +
             rectifiers.filter(rt => (rt[rectifierStatusIndex] ?? -1) === ItemStatuses.GOOD).length
+        return total === 0 ? 0 : passed / total
     }
 
     execute(surveyObject) {
@@ -18,9 +20,9 @@ export class GetSurveyFileMetadata {
                     return {
                         name: data.survey[0][1],
                         tpCount: data.testPoints.length,
-                        rectifierCount: data.rectifiers.length,
-                        pipelineCount: data.pipelines.length,
-                        good: this._getGoodItemCount(data.testPoints, data.rectifiers, 8, 7),
+                        rtCount: data.rectifiers.length,
+                        plCount: data.pipelines.length,
+                        successRate: this._getGoodItemCount(data.testPoints, data.rectifiers, 8, 7),
                         uid: data.survey[0][0],
                         assetCount: 0
                     }
@@ -28,9 +30,9 @@ export class GetSurveyFileMetadata {
                     return {
                         name: data.survey[1],
                         tpCount: data.testPoints.length,
-                        rectifierCount: data.rectifiers.length,
-                        pipelineCount: data.pipelines.length,
-                        good: this._getGoodItemCount(data.testPoints, data.rectifiers, 7, 3),
+                        rtCount: data.rectifiers.length,
+                        plCount: data.pipelines.length,
+                        successRate: this._getGoodItemCount(data.testPoints, data.rectifiers, 7, 3),
                         uid: data.survey[0],
                         assetCount: data.assets.length
                     }

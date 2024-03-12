@@ -1,10 +1,10 @@
 import { useEffect, useRef, useState } from 'react'
-import { addLinkDataToSurvey, decodeLink } from '../../../../../app/controllers/survey/other/ExternalLinkController'
+import { addLinkDataToSurvey, decodeLink, logExternalLink } from '../../../../../app/controllers/survey/other/ExternalLinkController'
 import { ExternalLinkTypes, PotentialUnits } from '../../../../../constants/global'
 import { errorHandler } from '../../../../../helpers/error_handler'
 import { EventRegister } from "react-native-event-listeners"
 
-export const useExternalLink = ({ link, navigateToFindItem, navigateToPipelineMatching, goBack, navigateToItem, navigateToSurvey }) => {
+export const useExternalLink = ({ link, shouldLog, navigateToFindItem, navigateToPipelineMatching, goBack, navigateToItem, navigateToSurvey }) => {
     const [data, setData] = useState({
         id: null,
         technician: null,
@@ -24,7 +24,19 @@ export const useExternalLink = ({ link, navigateToFindItem, navigateToPipelineMa
             if (link) {
                 const { response, status } = await decodeLink({ link })
                 if (componentMounted.current) {
-                    if (status === 200)
+                    if (status === 200) {
+                        if (shouldLog) {
+                            //on fail do nothing
+                            await logExternalLink({
+                                tagId: response.tagId,
+                                name: response.item.name,
+                                linkType: response.linkType,
+                                technician: response.technician,
+                                itemType: response.item.itemType,
+                                location: response.item.location,
+                                link: link
+                            }, null, () => EventRegister.emit('NEW_EXTERNAL_LINK_LOGGED'))
+                        }
                         setData({
                             tagId: response.tagId,
                             technician: response.technician,
@@ -35,6 +47,7 @@ export const useExternalLink = ({ link, navigateToFindItem, navigateToPipelineMa
                             isSurveyLoaded: response.isSurveyLoaded,
                             loading: false,
                         })
+                    }
                     else
                         errorHandler(status, goBack)
                 }
