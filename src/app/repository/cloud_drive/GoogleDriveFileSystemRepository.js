@@ -18,7 +18,7 @@ export class GoogleDriveFileSystemRepository {
 
     async authHandler(request) {
         /*
-            Auth handler is for Unauthorized 401 error. It updates the gDrive tocken and attepmts to execute request second time before rejecting.
+            Auth handler is for Unauthorized 401 error. It updates the gDrive token and attepmts to execute request second time before rejecting.
         */
         try {
             return await request()
