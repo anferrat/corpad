@@ -32,7 +32,7 @@ const useCreateSurvey = (withImport, navigateToImport) => {
             if (status === 200)
                 if (componentMounted.current) {
                     const { earlier, today } = response
-                    setSurveyList([...earlier.map(({ name, filePath }) => ({ item: name, path: filePath })), ...today.map(({ name, filePath }) => ({ item: name, path: filePath }))])
+                    setSurveyList([...earlier.map(({ name, path }) => ({ item: name, path })), ...today.map(({ name, path }) => ({ item: name, path }))])
                     setSurveyListLoading(false)
                 }
         }

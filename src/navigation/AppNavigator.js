@@ -101,7 +101,8 @@ export const AppNavigator = () => {
             <Stack.Group screenOptions={{ animation: 'fade_from_bottom' }}>
               <Stack.Screen name='CalculatorList' component={CalculatorList} />
               <Stack.Screen name='Calculator' component={Calculator} />
-              <Stack.Screen name='DevScreen' component={DevScreen} />
+              {//<Stack.Screen name='DevScreen' component={DevScreen} />
+              }
               <Stack.Screen name='CalculatorDescription' component={CalculatorDescription} />
               <Stack.Screen name='SettingDetails' component={SettingDetails} />
               <Stack.Screen name='Licenses' component={Licenses} />
