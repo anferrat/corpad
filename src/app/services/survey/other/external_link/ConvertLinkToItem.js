@@ -29,7 +29,7 @@ export class ConvertLinkToItem {
             item,
             pipelines,
             potentialUnit: PotentialUnits.VOLTS,
-            linkType: linkType,
+            linkType,
             isSurveyLoaded: isLoaded
         }
     }

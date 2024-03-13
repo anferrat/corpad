@@ -30,12 +30,11 @@ export class LinkDecoder {
     constructor() {
         this.codes = new Codes()
         this.codes.reverseCodes()
-
         this.wireParamDecoder = new WireParamDecoder(this.codes)
         this.potentialDecoder = new PotentialDecoder(this.codes)
         this.sideDecoder = new SideDecoder()
 
-        this.paramDecoder = new ParamDecoder()
+        this.paramDecoder = new ParamDecoder(this.codes)
         this.itemDecoder = new ItemDecoder(
             new TestPointDecoder(this.codes),
             new RectifierDecoder(this.codes),

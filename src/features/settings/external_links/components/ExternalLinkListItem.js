@@ -5,7 +5,6 @@ import { basic, basic300, primary } from '../../../../styles/colors'
 import { androidRipple } from "../../../../styles/styles"
 import Pressable from "../../../../components/Pressable"
 import { getFullDate } from "../../../../helpers/functions"
-import { ItemTypeLabels } from "../../../../constants/labels"
 import { ExternalLinkTypeIcons } from "../../../../constants/icons"
 
 const ExternalLinkListItem = ({ name, timeRecorded, itemType, linkType, onPress, link }) => {

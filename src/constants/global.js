@@ -589,8 +589,8 @@ export const SubscriptionStatuses = Object.freeze({
 })
 
 export const ExternalLinkTypes = Object.freeze({
-    NFC: 0,
-    QR_CODE: 1
+    NFC: 'NFC',
+    QR_CODE: 'QR_CODE'
 })
 
 export const UrlTypes = Object.freeze({

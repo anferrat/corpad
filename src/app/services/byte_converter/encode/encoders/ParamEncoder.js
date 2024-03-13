@@ -2,8 +2,9 @@ import { ExternalLinkTypes } from "../../../../../constants/global"
 import { Encoder } from "./Encoder"
 
 export class ParamEncoder extends Encoder {
-    constructor() {
+    constructor(codes) {
         super()
+        this.codes = codes
     }
 
     _getUniqueIdentifier() {
@@ -20,7 +21,7 @@ export class ParamEncoder extends Encoder {
         return this._concat([
             this._encodeUint16(0), //bytes for buffer size. Filled at the end.
             this._getUniqueIdentifier(),
-            this._encodeUint8(ExternalLinkTypes.NFC),
+            this._encodeUint8(this.codes.linkTypes[ExternalLinkTypes.NFC]),
             this._encodeString(technician),
             this._encodeUInt32(0), //spare bytes
             this._getTimestamp()

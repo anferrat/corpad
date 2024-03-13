@@ -44,7 +44,7 @@ export default SettingDetails = ({ navigation, route }) => {
     const navigateToLicenses = () => navigation.navigate('Licenses')
     const navigateToMultimeterCycleSettings = () => navigation.navigate('CycleSettings')
     const navigateToSpreadsheet = (uri, title) => navigation.navigate('Spreadsheet', { title: title, uri: uri })
-    const navigateToExternalLink = (link) => navigation.navigate('ExternalLink', { link, shouldLog: false })
+    const navigateToExternalLink = (link, shouldLog) => navigation.navigate('ExternalLink', { link, shouldLog })
     return (
         <SafeAreaView style={globalStyle.screen}>
             <OnboardingOverlayPotentialtypes
