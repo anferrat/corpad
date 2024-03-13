@@ -1,11 +1,11 @@
-import { ExternalLinkTypes } from "../../../../../constants/global";
 import { Error, errors } from "../../../../utils/Error";
 import { Decoder } from "./Decoder";
 import { DecoderResult } from "./DecoderResult";
 
 export class ParamDecoder extends Decoder {
-    constructor() {
+    constructor(codes) {
         super()
+        this.codes = codes
     }
 
     _verifySize(buf, recordedSize) {
@@ -38,7 +38,7 @@ export class ParamDecoder extends Decoder {
         const timestamp = this._decodeTimestamp(buf, spare.offset)
         return new DecoderResult({
             id: id.value,
-            linkType: ExternalLinkTypes[linkType.value] ?? ExternalLinkTypes.NFC,
+            linkType: this.codes.linkTypes[linkType.value],
             timestamp: timestamp.value,
             technician: technician.value
         }, timestamp.offset)

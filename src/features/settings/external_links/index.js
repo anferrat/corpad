@@ -10,7 +10,16 @@ import BottomButton from '../../../components/BottomButton'
 
 
 const ExternalLinkSettings = ({ navigateToExternalLink }) => {
-    const { records, loading, canScanLabel, onViewLink, onDeleteAll } = useExternalLinkSettings({ navigateToExternalLink })
+    const {
+        records,
+        loading,
+        canScanLabel,
+        scanDisabled,
+        onViewLink,
+        onDeleteAll,
+        onReadTagIos
+    } =
+        useExternalLinkSettings({ navigateToExternalLink })
     return (
         <>
             <ScrollView
@@ -20,9 +29,14 @@ const ExternalLinkSettings = ({ navigateToExternalLink }) => {
                     <LoadingView
                         loading={loading} >
                         {canScanLabel ?
-                            <Button>
-                                Scan NFC label
-                            </Button> : null}
+                            <Button
+                                disabled={scanDisabled}
+                                appearance='outline'
+                                onPress={onReadTagIos}
+                                style={styles.button}>
+                                Read NFC label
+                            </Button>
+                            : null}
                         <View
                             style={styles.list}>
                             <Text
@@ -49,9 +63,9 @@ const ExternalLinkSettings = ({ navigateToExternalLink }) => {
             </ScrollView>
             <BottomButton
                 onPress={onDeleteAll}
-                title='Clear all'
+                title='Delete all'
                 icon='trash'
-                disabled={loading || records.length === 0}
+                disabled={loading || (records.length === 0)}
             />
         </>
     )
@@ -74,5 +88,11 @@ const styles = StyleSheet.create({
     },
     listTitle: {
         marginBottom: 6
+    },
+    button: {
+        marginBottom: 24,
+        marginTop: 12,
+        flex: 1,
+        width: '100%'
     }
 })

@@ -3,7 +3,6 @@ import { View, StyleSheet } from 'react-native'
 import ListItem from './components/ListItemMenu'
 
 const MoreOptionsSheet = (props) => {
-    console.log(props)
     return (
         <View
             style={styles.mainView}>

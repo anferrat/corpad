@@ -20,6 +20,7 @@ import { ExternalLinkValidation } from "../../../validation/ExternalLinkValidati
 import { LogExternalLinkRecord } from "../../../services/survey/other/external_link/LogExternalLinkRecord"
 import { GetExternalLinkRecords } from "../../../services/survey/other/external_link/GetExternalLinkRecords"
 import { DeleteAllExternalLinkRecords } from "../../../services/survey/other/external_link/DeleteAllExternalLinkRecords"
+import { ReadNfcTagIos } from "../../../services/survey/other/external_link/ReadNfcTagIos"
 
 class ExternalLinkController extends Controller {
     constructor(defaultNameRepo, subitemFactory, linkDecoder, potentialPresenter, testPointRepo, rectifierRepo, geolocationCalculator, surveyRepo, settingRepo, subitemRepo, potentialRepo, potentialTypeRepo, referenceCellRepo, pipelineRepo, warningHandler, listPresenter, linkEncoder, ndefRepo, externalLinkRepo) {
@@ -39,6 +40,7 @@ class ExternalLinkController extends Controller {
         this.logExternalLinkService = new LogExternalLinkRecord(externalLinkRepo)
         this.getExternalLinkRecordsService = new GetExternalLinkRecords(externalLinkRepo)
         this.deleteAllExternalLinkRecordsService = new DeleteAllExternalLinkRecords(externalLinkRepo)
+        this.readNfcTagIosService = new ReadNfcTagIos(ndefRepo)
 
         this.validation = new ExternalLinkValidation()
     }
@@ -104,6 +106,12 @@ class ExternalLinkController extends Controller {
             return this.deleteAllExternalLinkRecordsService.execute()
         })
     }
+
+    readNfcTagIos(onError = null, onSuccess = null) {
+        return super.controllerHandler(onSuccess, onError, 842, () => {
+            return this.readNfcTagIosService.execute()
+        })
+    }
 }
 
 const externalLinkController = new ExternalLinkController(
@@ -147,3 +155,5 @@ export const logExternalLink = ({ tagId, name, linkType, technician, itemType, l
 export const getExternalLinkRecords = (onError, onSuccess) => externalLinkController.getExternalLinkRecords(onError, onSuccess)
 
 export const deleteAllExternalLinkRecords = (onError, onSuccess) => externalLinkController.deleteAllExternalLinkRecords(onError, onSuccess)
+
+export const readNfcTagIos = (onError, onSuccess) => externalLinkController.readNfcTagIos(onError, onSuccess)

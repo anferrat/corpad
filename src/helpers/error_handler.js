@@ -213,6 +213,8 @@ const errorCodes = {
     839: 'Unable to cancel writing to NDEF tag.',
     840: 'NFC module is turned off.',
     841: 'NFC is not supported for this device.',
+    842: 'Unable to read from NFC tag',
+    843: 'Tag contains invalid data.',
     900: 'Unable to obtain permission to proceed with operation.',
     901: 'Need permission to write to Downloads folder.',
     902: 'Location permission was not granted.',

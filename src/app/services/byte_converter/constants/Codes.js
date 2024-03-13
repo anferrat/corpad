@@ -1,7 +1,12 @@
-import { TestPointTypes, CoarseFineOptions, PowerSources, TapOptions, SubitemTypes, ReferenceCellTypes, PermanentPotentialTypes, AnodeMaterials, WireColors, WireGauges, PipeDiameters, CouponTypes, IsolationTypes, AnodeBedEnclosureTypes, AnodeBedTypes, AnodeBedMaterialTypes, ItemTypes } from "../../../../constants/global"
+import { TestPointTypes, CoarseFineOptions, PowerSources, TapOptions, SubitemTypes, ReferenceCellTypes, PermanentPotentialTypes, AnodeMaterials, WireColors, WireGauges, PipeDiameters, CouponTypes, IsolationTypes, AnodeBedEnclosureTypes, AnodeBedTypes, AnodeBedMaterialTypes, ItemTypes, ExternalLinkTypes } from "../../../../constants/global"
 
 export class Codes {
     constructor() {
+        this.linkTypes = Object.freeze({
+            [ExternalLinkTypes.NFC]: 1,
+            [ExternalLinkTypes.QR_CODE]: 2
+        })
+
         this.itemTypes = Object.freeze({
             [ItemTypes.TEST_POINT]: 1,
             [ItemTypes.RECTIFIER]: 2
@@ -225,6 +230,7 @@ export class Codes {
         this.enclosureTypes = this.reverse(this.enclosureTypes)
         this.anodeBedTypes = this.reverse(this.anodeBedTypes)
         this.anodeBedMaterialTypes = this.reverse(this.anodeBedMaterialTypes)
+        this.linkTypes = this.reverse(this.linkTypes)
     }
 
 }

@@ -1,5 +1,5 @@
-import { useState, useEffect, useRef } from "react"
-import { deleteAllExternalLinkRecords, getExternalLinkRecords } from "../../../../app/controllers/survey/other/ExternalLinkController"
+import { useState, useEffect, useRef, useCallback } from "react"
+import { deleteAllExternalLinkRecords, getExternalLinkRecords, readNfcTagIos } from "../../../../app/controllers/survey/other/ExternalLinkController"
 import { errorHandler, warningHandler } from "../../../../helpers/error_handler"
 import { Platform } from "react-native"
 import { EventRegister } from 'react-native-event-listeners'
@@ -7,6 +7,7 @@ import { EventRegister } from 'react-native-event-listeners'
 const useExternalLinkSettings = ({ navigateToExternalLink }) => {
     const [records, setRecords] = useState([])
     const [loading, setLoading] = useState(true)
+    const [scanDisabled, setScanDisabled] = useState(false)
     const componentMounted = useRef(true)
     const canScanLabel = Platform.OS === 'ios'
 
@@ -14,7 +15,7 @@ const useExternalLinkSettings = ({ navigateToExternalLink }) => {
         componentMounted.current = true
 
         const onLoad = async () => {
-            const { response, status, errorMessage } = await getExternalLinkRecords(er =>
+            await getExternalLinkRecords(er =>
                 errorHandler(er),
                 (response) => {
                     if (componentMounted.current) {
@@ -23,9 +24,8 @@ const useExternalLinkSettings = ({ navigateToExternalLink }) => {
                     }
                 }
             )
-            console.log(errorMessage)
         }
-        const onNewLog = EventRegister.addEventListener('NEW_EXTERNAL_LINK_LOGGED', () => onLoad())
+        const onNewLog = EventRegister.addEventListener('NEW_EXTERNAL_LINK_LOGGED', onLoad)
         onLoad()
         return () => {
             componentMounted.current = false
@@ -33,7 +33,7 @@ const useExternalLinkSettings = ({ navigateToExternalLink }) => {
         }
     }, [])
 
-    const onViewLink = (link) => navigateToExternalLink(link)
+    const onViewLink = (link) => navigateToExternalLink(link, false)
 
     const onDeleteAll = async () => {
         if (!loading) {
@@ -46,12 +46,23 @@ const useExternalLinkSettings = ({ navigateToExternalLink }) => {
         }
     }
 
+    const onReadTagIos = useCallback(async () => {
+        setScanDisabled(true)
+        await readNfcTagIos(
+            er => er === 843 ? errorHandler(er) : null,
+            (link) => navigateToExternalLink(link, true))
+        if (componentMounted.current)
+            setScanDisabled(false)
+    }, [])
+
     return {
         records,
         loading,
         canScanLabel,
+        scanDisabled,
         onViewLink,
-        onDeleteAll
+        onDeleteAll,
+        onReadTagIos,
     }
 }
 

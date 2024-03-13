@@ -34,7 +34,7 @@ export class LinkEncoder extends Encoder {
         this.wireParamEncoder = new WireParamEncoder(this.codes)
         this.sideEncoder = new SideEncoder()
 
-        this.paramEncoder = new ParamEncoder()
+        this.paramEncoder = new ParamEncoder(this.codes)
 
         this.itemEncoder = new ItemEncoder(
             new TestPointEncoder(this.codes),

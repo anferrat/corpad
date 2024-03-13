@@ -6,10 +6,6 @@ export class NdefRepository {
     constructor() {
     }
 
-    async addBackgroundTagListenerIOS() {
-        const record = await NfcManager.getBackgroundNdef()
-    }
-
     async start(message) {
         try {
             await NfcManager.requestTechnology(NfcTech.Ndef, Platform.select({
@@ -64,6 +60,26 @@ export class NdefRepository {
         }
     }
 
+    async readTag() {
+        try {
+            const message = await NfcManager.getTag()
+            if (Platform.OS === 'ios')
+                await NfcManager.setAlertMessageIOS('Success')
+            return message
+        }
+        catch (er) {
+            throw new Error(errors.NFC, 'Unable to read tag', er)
+        }
+    }
+
+    decodeUri(message) {
+        const isFormatted = Ndef.isType(message.ndefMessage[0], Ndef.TNF_WELL_KNOWN, Ndef.RTD_URI)
+        if (isFormatted)
+            return Ndef.uri.decodePayload(message.ndefMessage[0].payload)
+        else
+            throw new Error(errors.NFC, 'Unable to decode URI from tag data', 'Tag data is of invalid type', 843)
+    }
+
     async writeUriToTag(uri) {
 
         try {
@@ -73,6 +89,8 @@ export class NdefRepository {
             if (!bytes)
                 throw 'No data to write. Chech encoding.'
             await NfcManager.ndefHandler.writeNdefMessage(bytes)
+            if (Platform.OS === 'ios')
+                await NfcManager.setAlertMessageIOS('Success')
         }
         catch (er) {
             throw new Error(errors.NFC, 'Unable to write NDEF message to the tag', er)

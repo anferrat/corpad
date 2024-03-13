@@ -121,8 +121,6 @@ export default DevScreen = ({ navigation, route }) => {
     const genItem = new GenerateCompositeItem(new DefaultNameRepository(), new DefaultPotentialTypes(), new DefaultReferenceCells(), new SubitemFactory())
     try {
       const link = encoder.encode(testPoint, pipelines, referenceCells, potentialTypes)
-      console.log('ENCODED LINK')
-      console.log(link)
       navigation.navigate('ExternalLink', { link, shouldLog: false })
       /*
       const data = decoder.decode(link)
