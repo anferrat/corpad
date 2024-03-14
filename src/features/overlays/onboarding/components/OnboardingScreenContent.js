@@ -46,20 +46,14 @@ export const lastVersionPages = [
     {
         backgroundColor: basic300,
         image: <Icon name='corpad-logo' fill={primary} pack='cp' style={styles.icon} />,
-        title: 'Updated to version 1.4',
-        subtitle: "We've enhanced your cathodic protection data capture experience. Explore our latest features and unlock premium capabilities with a subscription."
+        title: 'Updated to version 1.5',
+        subtitle: "We've enhanced your cathodic protection data capture experience."
     },
     {
         backgroundColor: basic300,
-        image: <Icon name='file-text' fill={primary} style={styles.icon} />,
-        title: 'Capture more data',
-        subtitle: 'Now you can capture images, import features from .kml and .gpx files, collect anode bed redings for rectifiers and soil resistivity readings for test points. Your survey capabilities just got even more powerful.'
-    },
-    {
-        backgroundColor: basic300,
-        image: <Icon name='pricetags' fill={primary} style={styles.icon} />,
-        title: 'Unlock premium features',
-        subtitle: 'Upgrade to our subscription plan to access advanced features and make the most out of your data capture experience. Enjoy exclusive benefits and enhanced functionality.'
+        image: <Icon name='nfc' fill={primary} pack='cp' style={styles.icon} />,
+        title: 'NFC labels',
+        subtitle: 'Now you can write and read test point and rectifier data to/from NFC tags with your phone. Learn more at docs.corpad.ca/nfc.'
     },
     {
         backgroundColor: basic300,
