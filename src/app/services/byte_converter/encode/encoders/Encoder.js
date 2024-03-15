@@ -25,10 +25,10 @@ export class Encoder {
         if (!string)
             return this._encodeUint8(0)
         const value = Buffer.from(string)
-        if (value.length > 255) {
+        if (value.length > 254) {
             //FF represents null value
             const trimmed = Buffer.from(value, 0, 254)
-            return Buffer.concat([254, trimmed])
+            return Buffer.concat([this._encodeUint8(254), trimmed])
         }
         const length = this._encodeUint8(value.length)
         return Buffer.concat([length, value])
