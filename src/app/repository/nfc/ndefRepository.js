@@ -100,4 +100,9 @@ export class NdefRepository {
     async stop() {
         await NfcManager.cancelTechnologyRequest()
     }
+
+    async invalidateSessionIOS(errorMessage) {
+        if (Platform.OS === 'ios')
+            await NfcManager.invalidateSessionWithErrorIOS(errorMessage)
+    }
 }

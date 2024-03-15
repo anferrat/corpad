@@ -41,39 +41,37 @@ const useNfcWriter = ({ itemId, itemType }) => {
     }, [visible])
 
     const writeToTag = useCallback(async () => {
-        if (Platform.OS === 'android') {
-            showModal()
-            setLoading(true)
-        }
+        showModal()
+        if (Platform.OS === 'ios')
+            setWriteDisabled(true)
+        setLoading(true)
         await addNfcWritingListener({ itemId, itemType },
             (status) => {
                 if (componentMounted.current) {
-                    if (Platform.OS === 'ios')
-                        showModal()
                     setStatus(status)
                     setLoading(false)
                 }
             },
             (writeStatus, payload) => {
                 if (componentMounted.current) {
-                    if (Platform.OS === 'android') {
-                        switch (writeStatus) {
-                            case NdefWritingStatuses.LINK_CREATED:
-                                setSize(payload.size)
-                                setLoading(false)
-                                return
-                            case NdefWritingStatuses.NDEF_TECHNOLOGY_REQUESTED:
-                                setLoading(true)
-                                return
-                            case NdefWritingStatuses.WRITE_COMPLETED: {
-                                setLoading(false)
-                                setStatus(NFC_STATUS_CODES.SUCCESS)
-                                return
-                            }
+                    switch (writeStatus) {
+                        case NdefWritingStatuses.LINK_CREATED:
+                            setSize(payload.size)
+                            setLoading(false)
+                            return
+                        case NdefWritingStatuses.NDEF_TECHNOLOGY_REQUESTED:
+                            setLoading(true)
+                            return
+                        case NdefWritingStatuses.WRITE_COMPLETED: {
+                            setLoading(false)
+                            setStatus(NFC_STATUS_CODES.SUCCESS)
+                            return
                         }
                     }
                 }
             })
+        if (Platform.OS === 'ios')
+            await reset()
     }, [])
 
     const reset = useCallback(async () => {
@@ -92,7 +90,7 @@ const useNfcWriter = ({ itemId, itemType }) => {
     }, [])
 
     return {
-        visible,
+        visible: visible && Platform.OS === 'android',
         nfcLoading: loading,
         size,
         status,
