@@ -86,6 +86,9 @@ const useNfcWriter = ({ itemId, itemType }) => {
 
     const retry = useCallback(async () => {
         setStatus(null)
+        setSize(0)
+        setLoading(true)
+        await removeNfcWritingListener()
         await writeToTag()
     }, [])
 
