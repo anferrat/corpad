@@ -18,7 +18,8 @@ export const SettingsList = () => {
         navigateToReferenceCells,
         navigateToMultimeter,
         navigateToCalculator,
-        navigateToExternalLinks
+        navigateToExternalLinks,
+        navigateToImages
     } = useSettings()
     return (
         <ScrollView
@@ -45,6 +46,11 @@ export const SettingsList = () => {
                 title={'Potentials'}
                 subtitle={'Control default units for potential readings, add and remove potential reading types'}
                 onPress={navigateToPotentials} />
+            <ListItem
+                icon={'image'}
+                title={'Images'}
+                subtitle={'View images in this survey'}
+                onPress={navigateToImages} />
             <ListItem
                 icon={'download'}
                 title={'Export survey'}

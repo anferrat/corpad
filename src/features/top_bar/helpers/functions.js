@@ -40,6 +40,8 @@ const getTitleBySettingType = (setting) => {
             return 'Multimeter'
         case 'externalLinks':
             return 'NFC labels'
+        case 'photos':
+            return 'Survey images'
         default:
             return 'Settings'
     }

@@ -4,6 +4,7 @@ import { GetNewPhoto } from "../../../services/survey/other/photos/GetNewPhoto"
 import { SavePhotoToDownloads } from "../../../services/survey/other/photos/SavePhotoToDownloads"
 import { SharePhoto } from "../../../services/survey/other/photos/SharePhoto"
 import { UpdateItemPhotos } from "../../../services/survey/other/photos/UpdateItemPhotos"
+import { GetAllAssets } from "../../../services/survey_file/assets/GetAllAssets"
 import { Controller } from "../../../utils/Controller"
 import { createAssetFileService, deleteAssetFileService } from "../../_instances/assets"
 import { documentPicker, fileNameGenerator, imagePicker, permissions, shareService } from "../../_instances/general_services"
@@ -18,6 +19,7 @@ class MediaController extends Controller {
         this.updateItemPhotosService = new UpdateItemPhotos(assetRepo, fileSystemRepo, createAssetFileService, deleteAssetFileService)
         this.sharePhotoService = new SharePhoto(shareService)
         this.savePhotoToDownloadsService = new SavePhotoToDownloads(fileSystemRepo, permissions, fileNameGenerator)
+        this.getAllAssetsService = new GetAllAssets(assetRepo, fileSystemRepo)
     }
 
     addPhotoToAssets(params, onError = null, onSuccess = null) {
@@ -62,6 +64,12 @@ class MediaController extends Controller {
         })
     }
 
+    getAll(onError = null, onSuccess = null) {
+        return super.controllerHandler(onSuccess, onError, 438, async () => {
+            return this.getAllAssetsService.execute()
+        })
+    }
+
 
 }
 
@@ -88,3 +96,5 @@ export const savePhotoToDownloads = ({ path, name }, onError, onSuccess) => medi
 export const getNewPhoto = ({ imageSource }, onError, onSuccess) => mediaController.getNewPhoto({ imageSource }, onError, onSuccess)
 
 export const updateItemPhotos = ({ imageUris, itemId, itemType }, onError, onSuccess) => mediaController.updateItemPhotos({ imageUris, itemId, itemType }, onError, onSuccess)
+
+export const getSurveyAssetList = (onError, onSuccess) => mediaController.getAll(onError, onSuccess)

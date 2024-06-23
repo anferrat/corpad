@@ -11,6 +11,7 @@ import { OnboardingOverlayPotentialtypes } from '../../features/overlays/onboard
 import Multimeter from '../../features/settings/multimeter/scan'
 import MultimeterSettings from '../../features/settings/multimeter/cycle_settings'
 import ExternalLinkSettings from '../../features/settings/external_links'
+import ImageList from '../../features/settings/images'
 
 const Setting = (props) => {
     switch (props.setting) {
@@ -32,6 +33,8 @@ const Setting = (props) => {
             return <MultimeterSettings {...props} />
         case 'externalLinks':
             return <ExternalLinkSettings {...props} />
+        case 'photos':
+            return <ImageList {...props} />
         default:
             return null
     }
@@ -45,6 +48,7 @@ export default SettingDetails = ({ navigation, route }) => {
     const navigateToMultimeterCycleSettings = () => navigation.navigate('CycleSettings')
     const navigateToSpreadsheet = (uri, title) => navigation.navigate('Spreadsheet', { title: title, uri: uri })
     const navigateToExternalLink = (link, shouldLog) => navigation.navigate('ExternalLink', { link, shouldLog })
+    const navigateToItem = (itemId, itemType) => navigation.navigate('ViewItem', { itemId, itemType })
     return (
         <SafeAreaView style={globalStyle.screen}>
             <OnboardingOverlayPotentialtypes
@@ -55,6 +59,7 @@ export default SettingDetails = ({ navigation, route }) => {
                 navigateToLicenses={navigateToLicenses}
                 navigateToExternalLink={navigateToExternalLink}
                 goBack={goBack}
+                navigateToItem={navigateToItem}
                 setting={setting} />
         </SafeAreaView>
     )

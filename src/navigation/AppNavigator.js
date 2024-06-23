@@ -36,6 +36,7 @@ import Paywall from '../features/overlays/paywall'
 import ExternalLink from '../screens/externalLink/ExternalLink'
 import FindItem from '../screens/externalLink/FindItem'
 import PipelineMatching from '../screens/externalLink/PipelineMatching'
+import { DEVELOPER_MODE_ON } from '../../App'
 
 
 const Stack = createNativeStackNavigator()
@@ -101,7 +102,7 @@ export const AppNavigator = () => {
             <Stack.Group screenOptions={{ animation: 'fade_from_bottom' }}>
               <Stack.Screen name='CalculatorList' component={CalculatorList} />
               <Stack.Screen name='Calculator' component={Calculator} />
-              {//<Stack.Screen name='DevScreen' component={DevScreen} />
+              {DEVELOPER_MODE_ON ? <Stack.Screen name='DevScreen' component={DevScreen} /> : null
               }
               <Stack.Screen name='CalculatorDescription' component={CalculatorDescription} />
               <Stack.Screen name='SettingDetails' component={SettingDetails} />

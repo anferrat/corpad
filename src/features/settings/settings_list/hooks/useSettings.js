@@ -48,6 +48,8 @@ const useSettings = () => {
 
     const navigateToExternalLinks = () => navigateToDetails('externalLinks')
 
+    const navigateToImages = () => navigateToDetails('photos')
+
     return {
         onExit,
         navigateToDetails,
@@ -60,7 +62,8 @@ const useSettings = () => {
         navigateToReferenceCells,
         navigateToMultimeter,
         navigateToCalculator,
-        navigateToExternalLinks
+        navigateToExternalLinks,
+        navigateToImages
     }
 }
 

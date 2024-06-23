@@ -98,6 +98,7 @@ const errorCodes = {
     435: 'Unable to open GIS file.',
     436: 'File format is not supported. Supported formats are .kml and .gpx',
     437: 'File has usupported format and cannot be loaded.',
+    438: 'Unable to load list of media files',
     503: 'Multimeter data is invalid for this field. If this issue presist, please contact support.',
     505: 'Some of the data is invalid. Please check entered values and try again.',
     506: 'Name must only contain following characters: A-z, 0-9, -._() and be at least 2 characters long',
