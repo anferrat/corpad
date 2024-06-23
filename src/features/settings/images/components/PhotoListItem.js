@@ -2,7 +2,7 @@ import React from 'react'
 import { StyleSheet, Image } from 'react-native'
 import Pressable from '../../../../components/Pressable'
 import { androidRipple } from '../../../../styles/styles'
-import { imageLength } from '../constants/dimensions'
+import { imageLength, separatorWidth } from '../constants/dimensions'
 
 
 const PhotoListItem = ({ source, index, onPress }) => {
@@ -32,6 +32,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
     },
     image: {
-        marginRight: 6
+        marginRight: separatorWidth,
+        marginBottom: separatorWidth
     }
 })
