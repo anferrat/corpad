@@ -1,9 +1,9 @@
 import React from 'react'
 import { View, StyleSheet } from 'react-native'
-import Pressable from '../../../../../components/Pressable'
+import Pressable from './Pressable'
 import { Text, Icon } from '@ui-kitten/components'
-import { control } from '../../../../../styles/colors'
-import { androidRipple } from '../../../../../styles/styles'
+import { control } from '../styles/colors'
+import { androidRipple } from '../styles/styles'
 
 
 const ImageControlButton = ({ icon, title, pack, onPress }) => {
@@ -20,7 +20,7 @@ const ImageControlButton = ({ icon, title, pack, onPress }) => {
                     style={styles.icon}
                     pack={pack} />
                 <Text
-                category="s2"
+                    category="s2"
                     status='control'>
                     {title}
                 </Text>

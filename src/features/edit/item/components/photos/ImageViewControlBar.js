@@ -1,7 +1,7 @@
 import React from 'react'
 import { View, StyleSheet } from 'react-native'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
-import ImageControlButton from './ImageControlButton'
+import ImageControlButton from '../../../../../components/ImageControlButton'
 
 
 const ImageViewControlBar = ({ onDeletePhoto }) => {
