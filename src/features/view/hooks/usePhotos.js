@@ -127,13 +127,11 @@ const usePhotos = ({ itemId, itemType }) => {
     }
 
     const onPhotoPress = useCallback((index) => {
-        isPro ?
-            setImageView({
-                visible: true,
-                index: index
-            }) :
-            onShowPaywall()
-    }, [isPro, onShowPaywall])
+        setImageView({
+            visible: true,
+            index: index
+        })
+    }, [onShowPaywall])
 
     const onImageViewClose = useCallback(() => setImageView({
         visible: false,

@@ -2,7 +2,7 @@ import React from 'react'
 import { StyleSheet, FlatList, View } from 'react-native'
 import PhotoListItem from './PhotoListItem'
 import ImageView from './ImageView'
-import { imageLength, separatorWidth } from '../constants/dimensions'
+import { imageLength, separatorWidth, numberOfColumns } from '../constants/dimensions'
 import useImageList from '../hooks/useImageList'
 import { globalStyle } from '../../../../styles/styles'
 
@@ -13,6 +13,7 @@ const getItemLayout = (data, index) => {
         index
     }
 }
+
 
 const keyExtractor = (item) => item.fileName
 
@@ -45,7 +46,7 @@ const PhotoListView = ({ goBack, navigateToItem }) => {
         <View
             style={styles.mainView}>
             <FlatList
-                numColumns={3}
+                numColumns={numberOfColumns}
                 keyExtractor={keyExtractor}
                 getItemLayout={getItemLayout}
                 style={styles.flatList}
