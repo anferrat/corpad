@@ -23,7 +23,7 @@ const ExternalLinkSettings = ({ navigateToExternalLink }) => {
     return (
         <>
             <ScrollView
-                style={styles.scrollview}>
+                contentContainerStyle={styles.scrollview}>
                 <View
                     style={styles.container}>
                     <LoadingView
@@ -80,6 +80,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
     },
     scrollview: {
+
         paddingBottom: 72,
     },
     list: {
