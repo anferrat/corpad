@@ -1,10 +1,10 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import { StyleSheet, FlatList, View } from 'react-native'
 import PhotoListItem from './PhotoListItem'
 import ImageView from './ImageView'
 import { imageLength, separatorWidth, numberOfColumns } from '../constants/dimensions'
-import useImageList from '../hooks/useImageList'
 import { globalStyle } from '../../../../styles/styles'
+import { ImageListContext } from '../contexts/ImageListContext'
 
 const getItemLayout = (data, index) => {
     return {
@@ -17,30 +17,14 @@ const getItemLayout = (data, index) => {
 
 const keyExtractor = (item) => item.fileName
 
-const PhotoListView = ({ goBack, navigateToItem }) => {
-
-    const {
-        media,
-        uriList,
-        selectedIndex,
-        itemName,
-        itemType,
-        isViewVisible,
-        goToItem,
-        onPhotoPress,
-        onImageViewClose,
-        onShare,
-        onSave,
-        onImageIndexChange
-    } = useImageList({ goBack, navigateToItem })
-
+const PhotoListView = () => {
+    const media = useContext(ImageListContext)
     const renderItem = React.useCallback(({ item, index }) => {
         const { source } = item
         return <PhotoListItem
             index={index}
-            onPress={onPhotoPress}
             source={source} />
-    }, [onPhotoPress])
+    }, [])
 
     return (
         <View
@@ -54,18 +38,7 @@ const PhotoListView = ({ goBack, navigateToItem }) => {
                 data={media}
                 contentContainerStyle={styles.container}
                 showsHorizontalScrollIndicator={false} />
-            <ImageView
-                uriList={uriList}
-                isVisible={isViewVisible}
-                goToItem={goToItem}
-                itemName={itemName}
-                itemType={itemType}
-                selectedIndex={selectedIndex}
-                onImageIndexChange={onImageIndexChange}
-                onClose={onImageViewClose}
-                onShare={onShare}
-                onSave={onSave}
-            />
+            <ImageView />
         </View>
     )
 }

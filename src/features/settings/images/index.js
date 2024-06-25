@@ -1,22 +1,18 @@
 import React from 'react'
-import { View, StyleSheet } from 'react-native'
+import { StyleSheet } from 'react-native'
 import PhotoListView from './components/PhotoListView'
+import ImageViewProvider from './providers/ImageViewProvider'
 
 
 const ImageList = ({ goBack, navigateToItem }) => {
     return (
-        <PhotoListView
+        <ImageViewProvider
             goBack={goBack}
-            navigateToItem={navigateToItem}
-        />
+            navigateToItem={navigateToItem}>
+            <PhotoListView />
+        </ImageViewProvider>
     )
 }
 
 
 export default ImageList
-
-const styles = StyleSheet.create({
-    container: {
-
-    },
-})
