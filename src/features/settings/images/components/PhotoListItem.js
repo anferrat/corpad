@@ -1,11 +1,13 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import { StyleSheet, Image } from 'react-native'
 import Pressable from '../../../../components/Pressable'
 import { androidRipple } from '../../../../styles/styles'
 import { imageLength, separatorWidth } from '../constants/dimensions'
+import { PhotoItemContext } from '../contexts/PhotoItemContext'
 
 
-const PhotoListItem = ({ source, index, onPress }) => {
+const PhotoListItem = ({ source, index, }) => {
+    const onPress = useContext(PhotoItemContext)
     const onPressHandler = React.useCallback(() => {
         onPress(index)
     }, [onPress, index])
@@ -15,7 +17,7 @@ const PhotoListItem = ({ source, index, onPress }) => {
             android_ripple={androidRipple}
             onPress={onPressHandler}>
             <Image
-            style={styles.image}
+                style={styles.image}
                 width={imageLength}
                 height={imageLength}
                 source={source} />

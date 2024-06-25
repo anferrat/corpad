@@ -3,36 +3,48 @@ import { getSurveyAssetList, savePhotoToDownloads, sharePhoto } from "../../../.
 import { errorHandler } from "../../../../helpers/error_handler"
 import { getItemById } from "../../../../app/controllers/survey/items/ItemController"
 import { Platform, ToastAndroid } from "react-native"
+import { useIsFocused } from "@react-navigation/native"
 
 const defaultItem = {
     id: null,
     name: null,
-    type: null
+    type: null,
+    timeCreated: null
 }
 
 const useImageList = ({ goBack, navigateToItem }) => {
+    const [isLoading, setIsLoading] = useState(true)
     const [media, setMedia] = useState([])
     const [uriList, setUriList] = useState([])
     const [selectedIndex, setSelectedIndex] = useState(null)
     const [isViewVisible, setIsViewVisible] = useState(false)
     const [item, setItem] = useState(defaultItem)
+    const isFocused = useIsFocused()
     const componentMounted = useRef(true)
 
     useEffect(() => {
-        componentMounted.current = true
+        setIsLoading(true)
         const loadImages = async () => {
-            getSurveyAssetList(
-                er => errorHandler(er, go),
+            await getSurveyAssetList(
+                er => errorHandler(er, goBack),
                 ({ uriList, assets }) => {
                     if (componentMounted.current) {
                         setUriList(uriList)
                         setMedia(assets)
+                        setIsLoading(false)
                     }
                 }
             )
         }
-        loadImages()
+        if (isFocused)
+            loadImages()
 
+        return () => {
+        }
+    }, [isFocused])
+
+    useEffect(() => {
+        componentMounted.current = true
         return () => {
             componentMounted.current = false
         }
@@ -42,24 +54,6 @@ const useImageList = ({ goBack, navigateToItem }) => {
         setSelectedIndex(index)
         setIsViewVisible(true)
     }, [])
-
-    useEffect(() => {
-        const updateItem = () => {
-            setItem(defaultItem)
-            const selectedItem = media[selectedIndex]
-            if (selectedItem) {
-                const { parentId, parentType } = selectedItem
-                getItemById({ id: parentId, itemType: parentType },
-                    er => setItem(defaultItem),
-                    ({ name }) => setItem({
-                        id: parentId,
-                        name,
-                        type: parentType
-                    })
-                )
-            }
-        }
-    }, [selectedIndex])
 
     const goToItem = useCallback(() => {
         if (item.id && item.type) {
@@ -78,13 +72,14 @@ const useImageList = ({ goBack, navigateToItem }) => {
             setItem(defaultItem)
             const selectedItem = media[index]
             if (selectedItem) {
-                const { parentId, parentType } = selectedItem
+                const { parentId, parentType, timeCreated } = selectedItem
                 getItemById({ id: parentId, itemType: parentType },
-                    er => setItem(defaultItem),
+                    () => setItem(defaultItem),
                     ({ name }) => setItem({
                         id: parentId,
                         name,
-                        type: parentType
+                        type: parentType,
+                        timeCreated
                     })
                 )
             }
@@ -113,12 +108,14 @@ const useImageList = ({ goBack, navigateToItem }) => {
     }, [selectedIndex, media, isViewVisible])
 
     return {
+        isLoading,
         media,
         uriList,
         selectedIndex,
         isViewVisible,
         itemName: item.name,
         itemType: item.type,
+        timeCreated: item.timeCreated,
         goToItem,
         onPhotoPress,
         onImageViewClose,

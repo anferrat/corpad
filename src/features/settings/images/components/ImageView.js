@@ -1,10 +1,24 @@
-import React from 'react'
-import { StyleSheet, StatusBar } from 'react-native'
+import React, { useContext } from 'react'
+import { StatusBar } from 'react-native'
 import ImageViewDefault from 'react-native-image-viewing'
 import ImageViewControlBar from './ImageViewControlBar'
+import { ImageViewContext } from '../contexts/ImageViewContext'
 
 
-const ImageView = ({ uriList, selectedIndex, onClose, onShare, onSave, goToItem, isVisible, itemType, itemName, onImageIndexChange }) => {
+const ImageView = () => {
+    const {
+        uriList,
+        selectedIndex,
+        onImageViewClose,
+        onShare,
+        onSave,
+        goToItem,
+        isViewVisible,
+        itemType,
+        itemName,
+        timeCreated,
+        onImageIndexChange
+    } = useContext(ImageViewContext)
 
     const footer = React.memo(() => <ImageViewControlBar
         onShare={onShare}
@@ -12,10 +26,11 @@ const ImageView = ({ uriList, selectedIndex, onClose, onShare, onSave, goToItem,
         goToItem={goToItem}
         itemType={itemType}
         itemName={itemName}
+        timeCreated={timeCreated}
     />)
     return (
         <>
-            {isVisible ?
+            {isViewVisible ?
                 <StatusBar
                     backgroundColor='#000'
                     barStyle={'light-content'}
@@ -26,8 +41,8 @@ const ImageView = ({ uriList, selectedIndex, onClose, onShare, onSave, goToItem,
                 presentationStyle='fullScreen'
                 images={uriList}
                 imageIndex={selectedIndex}
-                visible={isVisible}
-                onRequestClose={onClose} />
+                visible={isViewVisible}
+                onRequestClose={onImageViewClose} />
         </>
     )
 }
