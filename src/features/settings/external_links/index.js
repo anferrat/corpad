@@ -27,6 +27,7 @@ const ExternalLinkSettings = ({ navigateToExternalLink }) => {
                 <View
                     style={styles.container}>
                     <LoadingView
+                        style={styles.loading}
                         loading={loading} >
                         {canScanLabel ?
                             <Button
@@ -80,7 +81,6 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
     },
     scrollview: {
-
         paddingBottom: 72,
     },
     list: {
@@ -95,5 +95,8 @@ const styles = StyleSheet.create({
         marginTop: 12,
         flex: 1,
         width: '100%'
+    },
+    loading: {
+        height: 272
     }
 })

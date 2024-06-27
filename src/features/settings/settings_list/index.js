@@ -49,7 +49,7 @@ export const SettingsList = () => {
             <ListItem
                 icon={'image'}
                 title={'Images'}
-                subtitle={'View images in this survey'}
+                subtitle={'View all the images assigned to test points and rectifiers in this survey'}
                 onPress={navigateToImages} />
             <ListItem
                 icon={'download'}

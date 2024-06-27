@@ -4,6 +4,7 @@ import { errorHandler } from "../../../../helpers/error_handler"
 import { getItemById } from "../../../../app/controllers/survey/items/ItemController"
 import { Platform, ToastAndroid } from "react-native"
 import { useIsFocused } from "@react-navigation/native"
+import { useSelector } from "react-redux"
 
 const defaultItem = {
     id: null,
@@ -13,8 +14,10 @@ const defaultItem = {
 }
 
 const useImageList = ({ goBack, navigateToItem }) => {
+    const surveyName = useSelector(state => state.settings.currentSurvey.name)
     const [isLoading, setIsLoading] = useState(true)
     const [media, setMedia] = useState([])
+    const [totalSize, setTotalSize] = useState(null)
     const [uriList, setUriList] = useState([])
     const [selectedIndex, setSelectedIndex] = useState(null)
     const [isViewVisible, setIsViewVisible] = useState(false)
@@ -27,10 +30,11 @@ const useImageList = ({ goBack, navigateToItem }) => {
         const loadImages = async () => {
             await getSurveyAssetList(
                 er => errorHandler(er, goBack),
-                ({ uriList, assets }) => {
+                ({ uriList, assets, size }) => {
                     if (componentMounted.current) {
                         setUriList(uriList)
                         setMedia(assets)
+                        setTotalSize(size)
                         setIsLoading(false)
                     }
                 }
@@ -116,6 +120,9 @@ const useImageList = ({ goBack, navigateToItem }) => {
         itemName: item.name,
         itemType: item.type,
         timeCreated: item.timeCreated,
+        totalSize,
+        numberOfImages: media.length,
+        surveyName,
         goToItem,
         onPhotoPress,
         onImageViewClose,

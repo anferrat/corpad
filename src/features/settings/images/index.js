@@ -4,7 +4,7 @@ import PhotoListView from './components/PhotoListView'
 import ImageViewProvider from './providers/ImageViewProvider'
 
 
-const ImageList = ({ goBack, navigateToItem }) => {
+const ImageList = ({ goBack, navigateToItem, }) => {
     return (
         <ImageViewProvider
             goBack={goBack}

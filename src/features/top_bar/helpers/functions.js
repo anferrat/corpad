@@ -41,7 +41,7 @@ const getTitleBySettingType = (setting) => {
         case 'externalLinks':
             return 'NFC labels'
         case 'photos':
-            return 'Survey images'
+            return 'Images'
         default:
             return 'Settings'
     }

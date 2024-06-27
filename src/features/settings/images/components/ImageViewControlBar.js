@@ -6,7 +6,7 @@ import GoToButton from './GoToButton'
 import { ItemTypeIconsFilled } from '../../../../constants/icons'
 
 
-const ImageViewControlBar = ({ onShare, onSave, itemType, goToItem, itemName }) => {
+const ImageViewControlBar = ({ onShare, onSave, itemType, goToItem, itemName, timeCreated }) => {
     const insets = useSafeAreaInsets()
     const isAndroid = Platform.OS === "android"
 
@@ -14,6 +14,7 @@ const ImageViewControlBar = ({ onShare, onSave, itemType, goToItem, itemName }) 
     return (
         <View style={{ ...styles.container, bottom: insets.bottom }}>
             <GoToButton
+                timeCreated={timeCreated}
                 name={itemName}
                 onPress={goToItem}
                 icon={icon}
@@ -28,6 +29,10 @@ const ImageViewControlBar = ({ onShare, onSave, itemType, goToItem, itemName }) 
                     icon={'download'}
                     onPress={onSave}
                     title={'Save'} /> : null}
+                <ImageControlButton
+                    icon={'diagonal-arrow-right-up'}
+                    onPress={goToItem}
+                    title={'Go to'} />
             </View>
         </View>
     )
