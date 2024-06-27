@@ -9,7 +9,7 @@ const EmptyListComponent = () => {
             style={styles.container}>
             <Text
                 appearance='hint'>
-                No labels found.
+                No images found.
             </Text>
         </View>
     )
@@ -25,6 +25,5 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
         marginVertical: 24,
-        height: 200
     },
 })

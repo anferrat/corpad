@@ -8,7 +8,7 @@ import { Dimensions } from "react-native"
 
 */
 
-const p = 12 //padding of parent component
+const p = 0 //padding of parent component
 const w = Dimensions.get('window').width - p
 const y = 6
 const x = 120 //set what you want - approx size of the image

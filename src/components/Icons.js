@@ -50,3 +50,4 @@ export const scanIcon = (props) => <Icon name='bluetooth' {...props} />
 export const connectIcon = (props) => <Icon name='link-2' {...props} />
 export const optionIcon = (props) => <Icon name='options' {...props} />
 export const pricetags = (props) => <Icon name='pricetags' {...props} />
+export const hardDrive = (props) => <Icon name='hard-drive' {...props} />

@@ -14,9 +14,13 @@ export class GetAllAssets {
             asset.getSource(location)
             return asset.source
         })
+
+        const files = await this.fileSystemRepo.readDir(FileSystemLocations.CURRENT_ASSETS)
+        const size = files.reduce((total, next) => total + next.size, 0)
         return {
             uriList,
             assets,
+            size
         }
     }
 }
