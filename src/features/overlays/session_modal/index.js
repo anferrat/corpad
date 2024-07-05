@@ -1,11 +1,12 @@
 import React from 'react'
 import { StyleSheet, View } from 'react-native'
 import { Modal } from '@ui-kitten/components'
-import { basic200 } from '../../../styles/colors'
+import { basic200, control } from '../../../styles/colors'
 import useSessionModal from './hooks/useSessionModal'
 import NoInternetView from './components/NoInternetView'
 import SignedView from './components/SignedView'
 import NotSignedView from './components/NotSignedView'
+import { getModalTop } from '../../../styles/dimensions'
 
 export const SessionModal = () => {
     const { isInternetOn, userName, isSigned, isVisible, signing, onSignIn, onSignOut, hideModal } = useSessionModal()
@@ -40,12 +41,16 @@ const styles = StyleSheet.create({
         alignItems: 'center'
     },
     modal: {
-        width: '70%',
+        width: '80%',
         minWidth: 290,
+        height: 230,
+        position: 'absolute',
+        top: getModalTop(230),
     },
     mainView: {
-        backgroundColor: '#fff',
-        borderRadius: 6,
+        flex: 1,
+        backgroundColor: control,
+        borderRadius: 15,
         alignItems: 'center',
         borderWidth: 1,
         borderColor: basic200,

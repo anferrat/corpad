@@ -44,8 +44,8 @@ export default NotSignedView
 
 const styles = StyleSheet.create({
     icon: {
-        width: 100,
-        height: 100,
+        width: 80,
+        height: 80,
         marginTop: 12
     },
     text: {

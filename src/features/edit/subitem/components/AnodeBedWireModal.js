@@ -3,6 +3,7 @@ import React, { useState } from 'react'
 import { View, StyleSheet } from 'react-native'
 import WireView from './WireView'
 import { control } from '../../../../styles/colors'
+import { getModalTop } from '../../../../styles/dimensions'
 
 
 const AnodeBedWireModal = ({ visible, hideModal, update, wireColor, wireGauge, index, updateAnodeWireProperties }) => {
@@ -35,7 +36,8 @@ const AnodeBedWireModal = ({ visible, hideModal, update, wireColor, wireGauge, i
                 <Text
                     style={styles.text}
                     category={'h6'}>
-                    Anode #{index + 1}</Text>
+                    Anode #{index + 1}
+                </Text>
                 <WireView
                     update={updatePoperty}
                     wireColor={color}
@@ -43,6 +45,7 @@ const AnodeBedWireModal = ({ visible, hideModal, update, wireColor, wireGauge, i
                 <View
                     style={styles.checkbox}>
                     <CheckBox
+                        style={styles.check}
                         checked={applyToAll}
                         onChange={setApplyToAll}>
                         Apply to all
@@ -65,19 +68,22 @@ export default AnodeBedWireModal
 
 const styles = StyleSheet.create({
     container: {
-        alignItems: 'center',
-        justifyContent: 'center',
+        alignItems: 'flex-start',
+        justifyContent: 'flex-start',
         maxWidth: 500,
-        width: '90%',
         backgroundColor: control,
         borderRadius: 15,
-        padding: 12,
+        padding: 24,
+        flex: 1,
     },
     buttons: {
         flexDirection: 'row',
     },
     modal: {
-        width: '100%',
+        height: 260,
+        position: 'absolute',
+        top: getModalTop(260),
+        width: '90%',
         justifyContent: 'center',
         alignItems: 'center',
 
@@ -89,15 +95,15 @@ const styles = StyleSheet.create({
         flex: 1,
     },
     text: {
-        width: '100%',
+        flex: 1,
         marginBottom: 12,
-        textAlign: 'left',
     },
     checkbox: {
-        width: '100%',
+        flexDirection: 'row',
         marginVertical: 12,
         marginBottom: 24,
-        justifyContent: 'flex-start',
-        textAlign: 'left',
+    },
+    check: {
+        flex: 1
     }
 })

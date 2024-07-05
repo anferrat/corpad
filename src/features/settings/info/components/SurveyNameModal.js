@@ -5,6 +5,7 @@ import Input from '../../../../components/Input'
 import { Button, Modal } from '@ui-kitten/components'
 import IconButton from '../../../../components/IconButton'
 import { saveIcon } from '../../../../components/Icons'
+import { getModalTop } from '../../../../styles/dimensions'
 
 
 const SurveyNameModal = ({ inputText, onChangeNameInput, inputRef, showModal, updateHandler, hideModal, visible }) => {
@@ -58,7 +59,10 @@ export default SurveyNameModal
 
 const styles = StyleSheet.create({
     modal: {
-        width: '90%'
+        width: '90%',
+        height: 146,
+        position: 'absolute',
+        top: getModalTop(346)
     },
     backDrop: {
         backgroundColor: 'rgba(0,0,0,0.5)'
@@ -66,7 +70,7 @@ const styles = StyleSheet.create({
     inputView: {
         padding: 12,
         backgroundColor: '#fff',
-        borderRadius: 6,
+        borderRadius: 15,
         flex: 1,
     },
     input: {

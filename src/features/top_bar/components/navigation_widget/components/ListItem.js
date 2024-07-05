@@ -10,7 +10,7 @@ const ListItem = ({ title, value }) => {
             <Text
                 style={styles.title}
                 appearance='hint'
-                category='label'>
+                category='s2'>
                 {title}
             </Text>
             <Text
@@ -31,7 +31,6 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         flexDirection: 'row',
         justifyContent: 'center',
-        paddingBottom: 8
     },
     title: {
         textTransform: 'uppercase',
