@@ -29,6 +29,7 @@ const ControlButtons = ({ loading, goToFindInSurvey, isSurveyLoaded, addToSurvey
                         disabled={loading || isCreating}
                         accessoryLeft={isCreating ? activity : (props) => <Icon {...props} fill={primary} name='plus-circle' />} />
                     <ListItem
+                        style={styles.listItem}
                         title='Find in the survey'
                         description='Find item in the survey that matches data from the label.'
                         accessoryLeft={(props) => <Icon {...props} fill={primary} name='search' />}

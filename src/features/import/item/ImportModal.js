@@ -8,6 +8,7 @@ import ImportModalContent from './components/ImportModalContent'
 import { importData } from '../../../app/controllers/survey/ImportController'
 import { setRefresh } from '../../../store/actions/list'
 import { refreshMarkers } from '../../../store/actions/map'
+import { getModalTop } from '../../../styles/dimensions'
 
 const ImportModal = ({ visible, hideModal }) => {
     const { itemType, data, fields, defaultNames, item, subitems, extraData, fileName } = useSelector(state => state.importData)
@@ -59,10 +60,11 @@ const styles = StyleSheet.create({
     modal: {
         borderRadius: 10,
         padding: 12,
-        flex: 1,
         height: 190,
         justifyContent: 'flex-start',
         width: '80 %',
+        position: 'absolute',
+        top: getModalTop(190),
         backgroundColor: control
     },
     backdrop: {

@@ -1,9 +1,10 @@
 import React, { useRef, useEffect } from "react"
-import { StyleSheet, ScrollView } from "react-native"
+import { StyleSheet, ScrollView, Keyboard } from "react-native"
 import { Modal, Button } from "@ui-kitten/components"
 import { control } from "../../../../styles/colors"
 import Input from "../../../../components/Input"
 import { plusCircle } from "../../../../components/Icons"
+import { getModalTop } from "../../../../styles/dimensions"
 
 const NewPotentialModal = ({ visible, addPotential, dismissModal, onChangeName, nameValid, name }) => {
     const inputRef = useRef()
@@ -69,7 +70,8 @@ const styles = StyleSheet.create({
     modal: {
         position: 'absolute',
         width: '90%',
-        top: '35%'
+        height: 146,
+        top: getModalTop(346)
     },
     backDrop: {
         backgroundColor: 'rgba(0,0,0,0.5)'

@@ -6,6 +6,7 @@ import Input from "../../../../components/Input"
 import { plusCircle } from "../../../../components/Icons"
 import { ReferenceCellTypes } from "../../../../constants/global"
 import { ReferenceCellTypeLabels } from "../../../../constants/labels"
+import { getModalTop } from "../../../../styles/dimensions"
 
 const accessory = {
     icon: 'RE',
@@ -70,7 +71,8 @@ const styles = StyleSheet.create({
     modal: {
         position: 'absolute',
         width: '90%',
-        top: '25%',
+        height: 224,
+        top: getModalTop(434)
     },
     backDrop: {
         backgroundColor: 'rgba(0,0,0,0.5)'

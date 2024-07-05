@@ -8,6 +8,7 @@ import ListItem from './components/ListItem'
 import { getDistance } from './helpers/functions'
 import LoadingView from '../../../../components/LoadingView'
 import DirectionLabel from './components/DirectionLabel'
+import { getModalTop } from '../../../../styles/dimensions'
 
 
 const NavigationWidget = () => {
@@ -35,10 +36,21 @@ const NavigationWidget = () => {
                     visible={visible}
                     onBackdropPress={hideModal}
                     backdropStyle={styles.backdrop}>
-                    <View style={styles.container}>
-                        <View style={styles.titleContainer}>
-                            <Icon name={'compass'} style={styles.compassIcon} fill={primary} />
-                            <Text category={'h6'} style={styles.title} numberOfLines={1} ellipsizeMode={'tail'}>Direction to: {name}</Text>
+                    <View
+                        style={styles.container}>
+                        <View
+                            style={styles.titleContainer}>
+                            <Icon
+                                name={'compass'}
+                                style={styles.compassIcon}
+                                fill={primary} />
+                            <Text
+                                category={'h6'}
+                                style={styles.title}
+                                numberOfLines={1}
+                                ellipsizeMode={'tail'}>
+                                Direction to: {name}
+                            </Text>
                         </View>
                         <LoadingView loading={loading}>
                             <Animated.View
@@ -56,11 +68,14 @@ const NavigationWidget = () => {
                                     fill={primary}
                                     style={styles.icon} />
                             </Animated.View>
-
                             <View style={styles.values}>
                                 <DirectionLabel value={`${direction} (${Math.round(bearing)}\u00b0)`} />
-                                <ListItem title={'Distance: '} value={getDistance(distance)} />
-                                <ListItem title={'Accuracy: '} value={getDistance(accuracy)} />
+                                <ListItem
+                                    title={'Distance: '}
+                                    value={getDistance(distance)} />
+                                <ListItem
+                                    title={'Accuracy: '}
+                                    value={getDistance(accuracy)} />
                             </View>
                         </LoadingView>
                         <Button
@@ -69,7 +84,6 @@ const NavigationWidget = () => {
                             appearance='ghost'>
                             Close
                         </Button>
-
                     </View>
                 </Modal>
             </>
@@ -85,9 +99,6 @@ const styles = StyleSheet.create({
     backdrop: {
         backgroundColor: 'rgba(0,0,0,0.5)'
     },
-    direction: {
-        marginRight: 12
-    },
     arrow: {
         marginTop: 12,
         alignSelf: 'center',
@@ -95,18 +106,8 @@ const styles = StyleSheet.create({
         alignItems: 'center'
     },
     icon: {
-        width: 60,
-        height: 60,
-    },
-    main: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        marginHorizontal: 12,
-        padding: 6,
-        borderRadius: 10,
-    },
-    activity: {
-        marginRight: 22
+        width: 80,
+        height: 80,
     },
     compassIcon: {
         width: 25,
@@ -114,14 +115,17 @@ const styles = StyleSheet.create({
         marginRight: 12
     },
     modal: {
-        width: '90%',
-        alignSelf: 'center'
+        width: '80%',
+        position: 'absolute',
+        top: getModalTop(300),
+        height: 300,
     },
     container: {
         backgroundColor: control,
-        height: 280,
-        borderRadius: 10,
-        paddingTop: 12,
+        flex: 1,
+        borderRadius: 15,
+        padding: 24,
+        paddingBottom: 0,
         justifyContent: 'center',
         borderWidth: 1,
         borderColor: basic300
@@ -130,18 +134,16 @@ const styles = StyleSheet.create({
     titleContainer: {
         width: '100%',
         flexDirection: 'row',
-        paddingHorizontal: 12,
-        paddingVertical: 6
     },
     title: {
         flex: 1,
     },
     values: {
         flex: 1,
-        paddingHorizontal: 12,
-
+        marginBottom: 12
     },
     closeButton: {
-        height: 60
+        height: 60,
+        marginHorizontal: -24
     }
 })

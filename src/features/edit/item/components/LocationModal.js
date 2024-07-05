@@ -4,6 +4,7 @@ import { Modal, Button, Text, Icon } from '@ui-kitten/components'
 import { useLocation } from '../hooks/useLocation'
 import { basic400, control, primary } from '../../../../styles/colors'
 import LoadingView from '../../../../components/LoadingView'
+import { getModalTop } from '../../../../styles/dimensions'
 
 const LocationModal = ({ visible, hideModal, updateLatAndLon }) => {
     return (
@@ -67,12 +68,14 @@ const LocationModalContent = ({ hideModal, updateLatAndLon }) => {
 const styles = StyleSheet.create({
     modal: {
         backgroundColor: control,
-        height: 200,
+        height: 220,
         width: '90%',
         borderRadius: 10,
-        padding: 12,
+        padding: 18,
         borderColor: basic400,
-        borderWidth: 1
+        borderWidth: 1,
+        position: 'absolute',
+        top: getModalTop(220)
     },
     titleRow: {
         flexDirection: 'row'
@@ -95,8 +98,8 @@ const styles = StyleSheet.create({
         textTransform: 'lowercase',
         fontWeight: 'bold',
         textAlign: 'center',
-      flexBasis: 22
-       
+        flexBasis: 22
+
     },
     values: {
         alignItems: 'center',

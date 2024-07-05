@@ -2,6 +2,7 @@ import React from 'react'
 import { View, StyleSheet } from 'react-native'
 import { Modal, Text, Button, Icon } from '@ui-kitten/components'
 import { primary, control } from '../../../../../styles/colors'
+import { getModalTop } from '../../../../../styles/dimensions'
 
 const accessory = (props) => <Icon {...props} name='arrow-circle-right' />
 
@@ -41,9 +42,12 @@ const styles = StyleSheet.create({
     modal: {
         width: '80%',
         backgroundColor: control,
-        padding: 12,
+        padding: 24,
         borderRadius: 10,
-        justifyContent: 'center'
+        justifyContent: 'center',
+        height: 220,
+        position: 'absolute',
+        top: getModalTop(220)
     },
     hint: {
         paddingBottom: 24,
