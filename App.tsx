@@ -30,7 +30,6 @@ import FullScreenLoader from './src/features/overlays/loader/Loader';
 import {ExportModal} from './src/features/overlays/export_modal/';
 import {SessionModal} from './src/features/overlays/session_modal/';
 import {Animated} from 'react-native';
-import {enableLatestRenderer} from 'react-native-maps';
 import mapLayers from './src/store/reducers/mapLayers';
 
 const rootReducer = combineReducers({
@@ -47,7 +46,7 @@ const rootReducer = combineReducers({
   mapLayers: mapLayers,
 });
 
-enableLatestRenderer();
+
 const store = createStore(rootReducer);
 export const BS = createContext<MutableRefObject<any> | null>(null);
 export const ScrollRef = createContext<MutableRefObject<any> | null>(null);
@@ -57,7 +56,7 @@ ModalService.setShouldUseTopInsets = true;
 export const version = '1.5.1';
 export const DEVELOPER_MODE_ON = false;
 
-function App(): JSX.Element {
+function App(): React.JSX.Element {
   /*
 bottom sheet ref - used to access bottomsheet via imperative methods, passed as ref to BottomSheet component
 navigation ref - used to acces navigation methods outside Screens (e.g. global modals, bottom sheet) 

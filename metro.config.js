@@ -1,17 +1,11 @@
-const { getDefaultConfig, mergeConfig } = require('@react-native/metro-config');
-const MetroConfig = require('@ui-kitten/metro-config');
+const {getDefaultConfig, mergeConfig} = require('@react-native/metro-config');
+
 /**
- * Metro configuration for React Native
- * https://facebook.github.io/metro/docs/configuration
+ * Metro configuration
+ * https://reactnative.dev/docs/metro
  *
  * @type {import('metro-config').MetroConfig}
  */
 const config = {};
 
-const evaConfig = {
-  evaPackage: '@eva-design/eva',
-  customMappingPath: './src/styles/mapping.json',
-};
-
-module.exports = mergeConfig(getDefaultConfig(__dirname), config, MetroConfig.create(evaConfig));
-
+module.exports = mergeConfig(getDefaultConfig(__dirname), config);

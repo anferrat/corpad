@@ -14,6 +14,7 @@ export class Share {
             })
         }
         catch (er) {
+            console.log(er)
         }
     }
 

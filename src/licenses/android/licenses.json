@@ -174,13 +174,6 @@
     "licenseUrl": "https://github.com/itinance/react-native-fs/raw/master/LICENSE",
     "parents": "corpad"
   },
-  "react-native-geolocation-service": {
-    "licenses": "MIT",
-    "copyright": "Copyright (c) 2018 Iftekhar Rifat",
-    "repository": "https://github.com/Agontuk/react-native-geolocation-service",
-    "licenseUrl": "https://github.com/Agontuk/react-native-geolocation-service/raw/master/LICENSE",
-    "parents": "corpad"
-  },
   "react-native-gesture-handler": {
     "licenses": "MIT",
     "copyright": "Copyright (c) 2016 Software Mansion <swmansion.com>",
