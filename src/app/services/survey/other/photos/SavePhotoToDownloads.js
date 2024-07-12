@@ -1,4 +1,5 @@
 import { FileSystemLocations } from "../../../../../constants/global"
+import { Error, errors } from "../../../../utils/Error"
 
 export class SavePhotoToDownloads {
     constructor(fileSystemRepo, permissions, fileNameGenerator) {
@@ -12,6 +13,12 @@ export class SavePhotoToDownloads {
         const ext = path.substring(path.lastIndexOf('.') + 1, path.length)
         const destinationPath = await this.fileSystemRepo.getLocation(FileSystemLocations.DOWNLOADS)
         const fileName = this.fileNameGenerator.execute(`image-${name}`, ext)
-        await this.fileSystemRepo.copyFile(path, `${destinationPath}/${fileName}`)
+        try {
+            await this.fileSystemRepo.copyFile(path, `${destinationPath}/${fileName}`)
+        }
+        catch (er) {
+            throw new Error(errors.FILESYSTEM, 'Unable to save to Downloads', er, 416)
+        }
+        await this.fileSystemRepo.scanFile(`${destinationPath}/${fileName}`)
     }
 }

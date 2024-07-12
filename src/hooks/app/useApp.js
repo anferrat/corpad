@@ -52,8 +52,10 @@ const useApp = () => {
     //fileUrlListener - listens for opened survey files from outside the app and loads them into database
     const urlListener = addUrlListener(
       (status, errorCode) => {
-        if (status === SurveyLoadingStatuses.SAVING)
+        if (status === SurveyLoadingStatuses.SAVING) {
+          navigation.navigate('PipelineSurvey')
           dispatch(updateLoader('Saving survey', null))
+        }
         else if (status === SurveyLoadingStatuses.LOADING) {
           dispatch(resetCurrentSurveySettings())
           dispatch(updateLoader('Loading file', null))
