@@ -1,16 +1,17 @@
-import Geolocation from 'react-native-geolocation-service';
-//rn comunity is used for GNSS time capturing only (using Android API), geolocation-service is used for coordinated (using fused API)
-import GeolocationTime from '@react-native-community/geolocation'
+import Geolocation from '@react-native-community/geolocation'
 import geomagnetism from 'geomagnetism'
 import { Error, errors } from '../../utils/Error'
 import { timeFix } from '../../config/geolocation';
 
 export class GeolocationRepository {
-    constructor() { }
+    constructor() { 
+        //Geolocation.setRNConfiguration({ skipPermissionRequests: false, locationProvider: 'android' })
+    }
 
     async getCurrent() {
         try {
             return new Promise((resolve, reject) => {
+                Geolocation.setRNConfiguration({ skipPermissionRequests: false, locationProvider: 'auto' })
                 Geolocation.getCurrentPosition(({ coords: { latitude, longitude, accuracy } }) => resolve({ latitude, longitude, accuracy }),
                     er => reject(er),
                     {
@@ -30,6 +31,7 @@ export class GeolocationRepository {
     }
 
     watch(callback) {
+        Geolocation.setRNConfiguration({ skipPermissionRequests: false, locationProvider: 'auto' })
         const watchId = Geolocation.watchPosition(({ coords: { latitude, longitude, accuracy } }) => {
             callback({ latitude, longitude, accuracy })
         },
@@ -48,8 +50,10 @@ export class GeolocationRepository {
     }
 
     getGpsTimeAdjustment(timeout = 10000) {
+        //getiing timestamp from GPS
+        Geolocation.setRNConfiguration({ skipPermissionRequests: false, locationProvider: 'android' })
         return new Promise((resolve) => {
-            GeolocationTime.getCurrentPosition(({ timestamp }) => {
+            Geolocation.getCurrentPosition(({ timestamp }) => {
                 resolve({
                     device: Date.now(),
                     gnss: timestamp
@@ -59,11 +63,12 @@ export class GeolocationRepository {
     }
 
     watchTimeAdjustment(callback) {
-        const watchId = GeolocationTime.watchPosition(
+        Geolocation.setRNConfiguration({ skipPermissionRequests: false, locationProvider: 'android' })
+        const watchId = Geolocation.watchPosition(
             ({ timestamp }) => callback({ gnss: timestamp, device: Date.now() }),
             (er) => { throw new Error(errors.LOCATION, 'Unable to get time adjustment', er, 800) },
             { interval: 100, timeout: 10000, enableHighAccuracy: true, maximumAge: 0 })
-        return () => GeolocationTime.clearWatch(watchId)
+        return () => Geolocation.clearWatch(watchId)
     }
 
     recordTimeFix(gnss, device) {

@@ -1,7 +1,7 @@
 import React from 'react'
 import { View, StyleSheet, Dimensions } from 'react-native'
-import SevenSegmentDisplay from 'rn-seven-segment-display'
-import { basic, basic1000, basic1100, basic200, basic300, basic400, control, primary } from '../../styles/colors'
+import SevenSegmentDisplay from './base'
+import { basic1000, control } from '../../styles/colors'
 import Point from './components/Point'
 import Minus from './components/Minus'
 
@@ -18,8 +18,8 @@ const convertValue = (value) => {
 
 }
 
-const width = Math.floor(Dimensions.get('window').width / 15)+1
-const height = Math.floor(Dimensions.get('window').width / 30)+1
+const width = Math.floor(Dimensions.get('window').width / 15)
+const height = Math.floor(Dimensions.get('window').width / 30)
 
 const SevenSegmentView = ({ value = 0, onColor, size, overRange }) => {
     const converted = convertValue(value)
