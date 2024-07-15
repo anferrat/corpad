@@ -70,7 +70,6 @@ export class InitializePurchases {
                         const isLocation = await this._isLocationAvailable()
                         if (isLocation) {
                             const { gnss } = await this.geolocationRepo.getGpsTimeAdjustment(5000)
-                            console.log(gnss)
                             if (gnss)
                                 return await this._getStatus(gnss, status, offlineCount)
                         }}
