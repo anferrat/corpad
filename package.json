@@ -6,6 +6,7 @@
     "android": "npx react-native run-android",
     "build": "npx react-native run-android --variant=release",
     "bundle-android": "npx react-native build-android --mode=release",
+    "bootstrap": "node_modules/@ui-kitten/metro-config/bin/ui-kitten bootstrap @eva-design/eva ./src/styles/mapping.json",
     "ios": "react-native run-ios",
     "start": "react-native start",
     "test": "jest",
