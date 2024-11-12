@@ -6,7 +6,7 @@ import { FileNameGenerator } from "../../services/other/FileNameGenerator";
 import { GeoParser } from "../../services/other/GeoParser";
 import { GeolocationCalculator } from "../../services/other/GeolocationCalculator";
 import { ImagePicker } from "../../services/other/ImagePicker";
-import { KmlParser } from "../../services/other/KmlParser";
+
 import { Linking } from "../../services/other/Linking";
 import { OpenInExternalApp } from "../../services/other/OpenInExternalApp";
 import { Permissions } from "../../services/other/Permissions";
@@ -18,8 +18,6 @@ import { MultimeterFactory } from "../../services/survey/other/multimeter/_devic
 import { GeoJsonValidation } from "../../validation/geoJson/GeoJsonValidation";
 import { bluetoothRepo } from "./repositories";
 import { UrlFileAccess } from "../../services/other/UrlFileAccess";
-
-export const kmlParser = new KmlParser()
 
 export const fileNameGenerator = new FileNameGenerator()
 
