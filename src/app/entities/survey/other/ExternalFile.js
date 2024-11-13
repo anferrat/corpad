@@ -21,6 +21,8 @@ export class ExternalFile {
             return ExternalFileTypes.IMAGE
         else if (this.uri.endsWith('.kml'))
             return ExternalFileTypes.KEYHOLE_MARKUP_LANGUAGE
+        else if (this.uri.endsWith('.kmz'))
+            return ExternalFileTypes.KEYHOLE_MARKUP_ZIPPED
         else if (this.uri.endsWith('.gpx'))
             return ExternalFileTypes.GPS_EXCHANGE_FORMAT
         else return ExternalFileTypes.UNKNOWN_FILE

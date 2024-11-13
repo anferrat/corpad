@@ -2,19 +2,23 @@ import { CreateMapLayer } from "../../../services/survey/other/mapLayers/CreateM
 import { DeleteMapLayer } from "../../../services/survey/other/mapLayers/DeleteMapLayer"
 import { GetMapLayerData } from "../../../services/survey/other/mapLayers/GetMapLayerData"
 import { GetMapLayerList } from "../../../services/survey/other/mapLayers/GetMapLayerList"
+import { ParseKmzToKml } from "../../../services/survey/other/mapLayers/ParseKmzToKml"
+import { ParseToGeoJson } from "../../../services/survey/other/mapLayers/ParseToGeoJson"
 import { ReadExternalGeoFile } from "../../../services/survey/other/mapLayers/ReadExternalGeoFile"
 import { UpdateMapLayer } from "../../../services/survey/other/mapLayers/UpdateMapLayer"
 import { Controller } from "../../../utils/Controller"
 import { MapLayerValidation } from "../../../validation/MapLayerValidation"
 import { geoJsonParser, geoJsonPointExtractor } from "../../_instances/converters"
-import { documentPicker, geoJsonValidation, geoParser, getMapRegionFromBbox, warningHandler } from "../../_instances/general_services"
+import { documentPicker, geoJsonValidation, getMapRegionFromBbox, warningHandler } from "../../_instances/general_services"
 import { mapLayerPresenter } from "../../_instances/presenters"
 import { fileSystemRepo, mapLayerRepo } from "../../_instances/repositories"
 
 class MapLayerController extends Controller {
-    constructor(mapLayerRepo, geoParser, documentPicker, fileSystemRepo, mapLayerPresenter, warningHandler, geoJsonValidation, geoJsonParser, geoJsonPointExtractor, getMapRegionFromBbox) {
+    constructor(mapLayerRepo, documentPicker, fileSystemRepo, mapLayerPresenter, warningHandler, geoJsonValidation, geoJsonParser, geoJsonPointExtractor, getMapRegionFromBbox) {
         super()
-        this.loadNewMapLayerService = new ReadExternalGeoFile(geoParser, documentPicker, fileSystemRepo, warningHandler, geoJsonValidation, geoJsonParser, geoJsonPointExtractor)
+        this.parseKmztoKmlService = new ParseKmzToKml(fileSystemRepo)
+        this.parseToGeoJson = new ParseToGeoJson()
+        this.loadNewMapLayerService = new ReadExternalGeoFile(this.parseToGeoJson, documentPicker, fileSystemRepo, warningHandler, geoJsonValidation, this.parseKmztoKmlService)
         this.getMapLayerListService = new GetMapLayerList(mapLayerRepo, mapLayerPresenter, geoJsonValidation, geoJsonParser, geoJsonPointExtractor, getMapRegionFromBbox)
         this.createMapLayerService = new CreateMapLayer(mapLayerRepo, mapLayerPresenter, geoJsonValidation, geoJsonParser, geoJsonPointExtractor, getMapRegionFromBbox)
         this.updateMapLayerService = new UpdateMapLayer(mapLayerRepo)
@@ -68,7 +72,6 @@ class MapLayerController extends Controller {
 
 const mapLayerController = new MapLayerController(
     mapLayerRepo,
-    geoParser,
     documentPicker,
     fileSystemRepo,
     mapLayerPresenter,

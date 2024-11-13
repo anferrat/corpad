@@ -3,7 +3,7 @@ import { AppStateListener } from "../../services/other/AppStateListenerService";
 import { CommaSeparatedFileParser } from "../../services/other/CommaSeparatedFileParser";
 import { DocumentPicker } from "../../services/other/DocumentPicker";
 import { FileNameGenerator } from "../../services/other/FileNameGenerator";
-import { GeoParser } from "../../services/other/GeoParser";
+import { GeoParser } from "../../services/other/geoParser/GeoParser";
 import { GeolocationCalculator } from "../../services/other/GeolocationCalculator";
 import { ImagePicker } from "../../services/other/ImagePicker";
 

@@ -6,4 +6,8 @@ export class File {
         this.size = size
         this.isFile = isFile
     }
+
+    getExtension() {
+        return this.filename.split('.').pop()
+    }
 }
