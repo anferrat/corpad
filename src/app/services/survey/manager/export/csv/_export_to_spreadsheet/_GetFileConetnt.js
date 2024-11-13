@@ -1,10 +1,10 @@
 import { ExportFormatTypes } from "../../../../../../../constants/global";
 
 export class _GetFileContent {
-    constructor(mapLayerRepo, csvParser, geoParser) {
+    constructor(mapLayerRepo, csvParser, parseToKml) {
         this.mapLayerRepo = mapLayerRepo
         this.csvParser = csvParser
-        this.geoParser = geoParser
+        this.parseToKml = parseToKml
     }
 
     _convertData(data) {
@@ -50,7 +50,7 @@ export class _GetFileContent {
                 return this.csvParser.unparse(data, headers)
             case ExportFormatTypes.KML:
                 const geoJson = await this._exportGeoJson(data, features, includeMapLayers)
-                return this.geoParser.toKml(geoJson, 'name')
+                return this.parseToKml.execute(geoJson, 'name')
         }
     }
 }

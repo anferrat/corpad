@@ -9,13 +9,13 @@ import { assetRepo, fileSystemRepo, mapLayerRepo, pipelineRepo, potentialRepo, p
 
 
 class ExportController extends Controller {
-    constructor(pipelineRepo, referenceCellRepo, potentialtypeRepo, listPresenter, testPointRepo, rectifierRepo, potentialRepo, potentialTypeRepo, fileSystemRepo, surveyRepo, csvParser, fileNameGenerator, assetRepo, mapLayerRepo, geoParser) {
+    constructor(pipelineRepo, referenceCellRepo, potentialtypeRepo, listPresenter, testPointRepo, rectifierRepo, potentialRepo, potentialTypeRepo, fileSystemRepo, surveyRepo, csvParser, fileNameGenerator, assetRepo, mapLayerRepo) {
         super()
         this.getExportItemPropertiesService = new GetExportItemProperties()
         this.getPotentialPropertiesDataService = new GetExportPotentailPropertiesData(pipelineRepo, referenceCellRepo, potentialtypeRepo, listPresenter)
         this.getExportSubitemPropertiesService = new GetExportSubitemProperties()
 
-        this.exportToSpreadsheetService = new ExportToSpreadsheet(surveyRepo, testPointRepo, rectifierRepo, pipelineRepo, potentialRepo, potentialTypeRepo, fileSystemRepo, csvParser, fileNameGenerator, assetRepo, mapLayerRepo, geoParser)
+        this.exportToSpreadsheetService = new ExportToSpreadsheet(surveyRepo, testPointRepo, rectifierRepo, pipelineRepo, potentialRepo, potentialTypeRepo, fileSystemRepo, csvParser, fileNameGenerator, assetRepo, mapLayerRepo)
     }
 
     getItemProperties(params, onError = null, onSuccess = null) {
@@ -61,8 +61,7 @@ const exportController = new ExportController(
     commaSeparatedFileParser,
     fileNameGenerator,
     assetRepo,
-    mapLayerRepo,
-    geoParser
+    mapLayerRepo
 )
 
 
