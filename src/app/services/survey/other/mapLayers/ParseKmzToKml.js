@@ -23,8 +23,11 @@ export class ParseKmzToKml {
             else
                 return false
         })
-        if (files.length > 0)
-            return await this.fileSystemRepo.readFile(files[0].path)
+        if (files.length > 0) {
+            const content = await this.fileSystemRepo.readFile(files[0].path)
+            await this.fileSystemRepo.removeDir(FileSystemLocations.TEMP)
+            return content
+        }
         else
             throw new Error(errors.FILESYSTEM, 'Unable to read KMZ file', 'No KML file was found inside ZIP archive')
     }

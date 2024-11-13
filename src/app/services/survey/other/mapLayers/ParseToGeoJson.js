@@ -26,6 +26,8 @@ export class ParseToGeoJson {
             case ExternalFileTypes.GPS_EXCHANGE_FORMAT:
                 const gpx = new DOMParser().parseFromString(content, FileMimeTypes.GPX)
                 return this._formatCheck(this.tj.gpx(gpx))
+            case ExternalFileTypes.GEOJSON:
+                return JSON.parse(content)
             default:
                 throw new Error(errors.GENERAL, 'Unable to parse file content', 'FileType is not supported')
         }

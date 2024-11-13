@@ -3,7 +3,6 @@ import { AppStateListener } from "../../services/other/AppStateListenerService";
 import { CommaSeparatedFileParser } from "../../services/other/CommaSeparatedFileParser";
 import { DocumentPicker } from "../../services/other/DocumentPicker";
 import { FileNameGenerator } from "../../services/other/FileNameGenerator";
-import { GeoParser } from "../../services/other/geoParser/GeoParser";
 import { GeolocationCalculator } from "../../services/other/GeolocationCalculator";
 import { ImagePicker } from "../../services/other/ImagePicker";
 
@@ -30,8 +29,6 @@ export const shareService = new Share()
 export const openInExternalAppService = new OpenInExternalApp()
 
 export const geolocationCalculator = new GeolocationCalculator()
-
-export const geoParser = new GeoParser()
 
 export const linkingService = new Linking()
 

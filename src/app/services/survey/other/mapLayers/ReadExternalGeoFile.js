@@ -13,8 +13,7 @@ export class ReadExternalGeoFile {
         this.MAX_FEATURE_NUMBER = 500
     }
 
-    async _conditionCheck(file) {
-        const { size } = await this.fileSystemRepo.getStat(file.uri)
+    async _conditionCheck(size) {
         if (size > this.MAXIMUM_FILE_SIZE)
             throw new Error(errors.GENERAL, 'Unable to read geo file', 'File is larger than 5MB', 434)
     }
@@ -26,6 +25,7 @@ export class ReadExternalGeoFile {
                 return this.parseKmzToKmlService.execute(file)
             case ExternalFileTypes.KEYHOLE_MARKUP_LANGUAGE:
             case ExternalFileTypes.GPS_EXCHANGE_FORMAT:
+            case ExternalFileTypes.GEOJSON:
                 return this.fileSystemRepo.readFile(file.uri)
             default:
                 throw new Error(errors.GENERAL, 'Unable to continue with selected file type', 'Unsupported file type', 436)
@@ -37,11 +37,13 @@ export class ReadExternalGeoFile {
     async execute() {
         const file = await this.documentPicker.pickGeoFile()
 
-        await this._conditionCheck(file)
+        const { size } = await this.fileSystemRepo.getStat(file.uri)
+
+        await this._conditionCheck(size)
 
         const content = await this._readContent(file)
 
-        let data = this.parseToGeoJson.execute(content, fileType)
+        let data = this.parseToGeoJson.execute(content, file.getFileType())
 
         data = this.geoJsonValidation.execute(data)
 
