@@ -1,6 +1,6 @@
-import { Button } from '@ui-kitten/components'
+import { Button, Text } from '@ui-kitten/components'
 import React from 'react'
-import { StyleSheet } from 'react-native'
+import { StyleSheet, View } from 'react-native'
 import { plus, pricetags } from '../../../components/Icons'
 
 
@@ -12,7 +12,19 @@ const AddLayerButton = ({ onPress, inactive, isPro }) => {
             style={styles.button}
             onPress={onPress}
             appearance='ghost'>
-            {isPro ? (!inactive ? 'Add a map layer (.kml, .gpx)' : 'Max. limit reached') : 'Upgrade to premium'}
+            {isPro ? (!inactive ?
+                <View>
+                    <Text
+                        style={styles.mainText}
+                        category='p1'
+                        status='primary'>
+                        Add a map layer
+                    </Text>
+                    <Text appearance='hint' category='s2'>
+                        Supported formats: .kml, .kmz, .gpx, .geojson
+                    </Text>
+                </View>
+                : 'Max. limit reached') : 'Upgrade to premium'}
         </Button>
     )
 }
@@ -23,6 +35,9 @@ const styles = StyleSheet.create({
     button: {
         height: 60,
         alignItems: 'center',
-        justifyContent: 'center',
+        justifyContent: 'flex-start',
     },
+    mainText: {
+        fontWeight: 'bold',
+    }
 })

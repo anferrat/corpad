@@ -340,6 +340,7 @@ export const FileMimeTypes = Object.freeze({
     KML: 'application/vnd.google-earth.kml+xml',
     KMZ: 'application/vnd.google-earth.kmz',
     JSON: 'application/json',
+    GEOJSON: 'application/geo+json',
     TEXT: 'text/*',
     IMAGE: 'image/*',
     ZIP: 'application/zip',
@@ -355,6 +356,7 @@ export const FileTypeIdentifiers = Object.freeze({
     KMZ: 'com.google.earth.kmz',
     GPX: 'com.topografix.gpx',
     JSON: 'public.json',
+    GEOJSON: 'public.geojson',
     TEXT: 'public.plain-text',
     ITEM: 'public.item',
     CONTENT: 'public.content'
@@ -546,6 +548,7 @@ export const ExternalFileTypes = Object.freeze({
     KEYHOLE_MARKUP_LANGUAGE: 'keyhole_markup_language',
     KEYHOLE_MARKUP_ZIPPED: 'keyhole_markup_zipped',
     GPS_EXCHANGE_FORMAT: 'gps_exchange_format',
+    GEOJSON: 'geoJSON',
     UNKNOWN_FILE: 'unknown_file' //when file url recieved from Android intent, it recieved as document provider content schema
 })
 

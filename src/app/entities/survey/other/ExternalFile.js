@@ -25,6 +25,8 @@ export class ExternalFile {
             return ExternalFileTypes.KEYHOLE_MARKUP_ZIPPED
         else if (this.uri.endsWith('.gpx'))
             return ExternalFileTypes.GPS_EXCHANGE_FORMAT
+        else if (this.uri.endsWith('.geojson'))
+            return ExternalFileTypes.GEOJSON
         else return ExternalFileTypes.UNKNOWN_FILE
     }
 
