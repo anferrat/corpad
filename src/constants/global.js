@@ -338,6 +338,7 @@ export const FileSystemLocations = Object.freeze({
 export const FileMimeTypes = Object.freeze({
     CSV: 'text/csv',
     KML: 'application/vnd.google-earth.kml+xml',
+    KMZ: 'application/vnd.google-earth.kmz',
     JSON: 'application/json',
     TEXT: 'text/*',
     IMAGE: 'image/*',
@@ -351,6 +352,7 @@ export const FileTypeIdentifiers = Object.freeze({
     SURVEY_FILE_WITH_ASSETS: 'com.corpad.survey-file-with-assets',
     CSV: 'public.comma-separated-values-text',
     KML: 'com.google.earth.kml',
+    KMZ: 'com.google.earth.kmz',
     GPX: 'com.topografix.gpx',
     JSON: 'public.json',
     TEXT: 'public.plain-text',
@@ -542,6 +544,7 @@ export const ExternalFileTypes = Object.freeze({
     IMAGE: 'image',
     COMMA_SEPARATED_TEXT: 'comma_separated_text',
     KEYHOLE_MARKUP_LANGUAGE: 'keyhole_markup_language',
+    KEYHOLE_MARKUP_ZIPPED: 'keyhole_markup_zipped',
     GPS_EXCHANGE_FORMAT: 'gps_exchange_format',
     UNKNOWN_FILE: 'unknown_file' //when file url recieved from Android intent, it recieved as document provider content schema
 })

@@ -53,9 +53,9 @@ export class DocumentPicker {
 
     pickGeoFile() {
         return this.execute(Platform.select({
-            android: [FileMimeTypes.KML, FileMimeTypes.BINARY],
-            ios: [FileTypeIdentifiers.KML, FileTypeIdentifiers.GPX],
-            default: FileMimeTypes.KML
+            android: [FileMimeTypes.KML, FileMimeTypes.BINARY, FileMimeTypes.KMZ],
+            ios: [FileTypeIdentifiers.KML, FileTypeIdentifiers.GPX, FileTypeIdentifiers.KMZ],
+            default: [FileMimeTypes.KML, FileTypeIdentifiers.KMZ]
         }))
     }
 }

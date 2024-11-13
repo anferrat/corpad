@@ -2,28 +2,46 @@ import { ExternalFileTypes } from "../../../../../constants/global"
 import { Error, errors } from "../../../../utils/Error"
 
 export class ReadExternalGeoFile {
-    constructor(geoParser, documentPicker, fileSystemRepo, warningHandler, geoJsonValidation, geoJsonParser) {
-        this.geoParser = geoParser
+    constructor(parseToGeoJson, documentPicker, fileSystemRepo, warningHandler, geoJsonValidation, parseKmzToKmlService) {
         this.documentPicker = documentPicker
         this.fileSystemRepo = fileSystemRepo
         this.warningHandler = warningHandler
         this.geoJsonValidation = geoJsonValidation
-        this.geoJsonParser = geoJsonParser
+        this.parseToGeoJson = parseToGeoJson
+        this.parseKmzToKmlService = parseKmzToKmlService
         this.MAXIMUM_FILE_SIZE = 3145728
         this.MAX_FEATURE_NUMBER = 500
     }
 
-    async execute() {
-        const file = await this.documentPicker.pickGeoFile()
-        const fileType = file.getFileType()
-        if (fileType !== ExternalFileTypes.KEYHOLE_MARKUP_LANGUAGE && fileType !== ExternalFileTypes.GPS_EXCHANGE_FORMAT)
-            throw new Error(errors.GENERAL, 'Unable to continue with selected file type', 'Unsupported file type', 436)
+    async _conditionCheck(file) {
         const { size } = await this.fileSystemRepo.getStat(file.uri)
         if (size > this.MAXIMUM_FILE_SIZE)
             throw new Error(errors.GENERAL, 'Unable to read geo file', 'File is larger than 5MB', 434)
-        const content = await this.fileSystemRepo.readFile(file.uri)
+    }
 
-        let data = this.geoParser.toGeoJson(content, fileType)
+    _readContent(file) {
+        const fileType = file.getFileType()
+        switch (fileType) {
+            case ExternalFileTypes.KEYHOLE_MARKUP_ZIPPED:
+                return this.parseKmzToKmlService.execute(file)
+            case ExternalFileTypes.KEYHOLE_MARKUP_LANGUAGE:
+            case ExternalFileTypes.GPS_EXCHANGE_FORMAT:
+                return this.fileSystemRepo.readFile(file.uri)
+            default:
+                throw new Error(errors.GENERAL, 'Unable to continue with selected file type', 'Unsupported file type', 436)
+        }
+    }
+
+
+
+    async execute() {
+        const file = await this.documentPicker.pickGeoFile()
+
+        await this._conditionCheck(file)
+
+        const content = await this._readContent(file)
+
+        let data = this.parseToGeoJson.execute(content, fileType)
 
         data = this.geoJsonValidation.execute(data)
 
@@ -36,7 +54,7 @@ export class ReadExternalGeoFile {
         }
         return {
             filename: file.name,
-            data: this.geoJsonParser.unparse(data),
+            data: JSON.stringify(data),
             size: size
         }
     }
