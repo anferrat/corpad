@@ -6,9 +6,10 @@ import { CreateItemSheet } from '../features/create_item'
 import { MenuSheet } from '../features/survey_menu'
 import MoreOptionsSheet from '../features/navigation/more_options/MoreOptionsSheet'
 import useBottomSheetContent from './hooks/useBottomSheet'
-import Router from './components/Router'
-import Route from './components/Route'
+import Router from '../components/Router/Router'
+import Route from '../components/Router/Route'
 import ImagePickerView from '../features/image_picker'
+import { TestPointFilter } from '../features/bottom_sheet_content/filters'
 
 //implemented as single screen, possible to have embeded navigator inside
 
@@ -35,8 +36,7 @@ const BottomSheetContent = () => {
             </Route>
             <Route
                 routeKey='TEST_POINT_FILTER'>
-                <Filter
-                    dataType={'TEST_POINT'}
+                <TestPointFilter
                     closeSheet={closeSheet} />
             </Route>
             <Route

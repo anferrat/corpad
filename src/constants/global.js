@@ -50,6 +50,12 @@ export const SubitemTypes = Object.freeze({
     SOIL_RESISTIVITY: 'SR',
 })
 
+export const SubitemTypeAllocation = Object.freeze({
+    [ItemTypes.TEST_POINT]: [SubitemTypes.PIPELINE, SubitemTypes.RISER, SubitemTypes.STRUCTURE, SubitemTypes.TEST_LEAD, SubitemTypes.ANODE, SubitemTypes.COUPON, SubitemTypes.REFERENCE_CELL, SubitemTypes.BOND, SubitemTypes.SHUNT, SubitemTypes.ISOLATION, SubitemTypes.SOIL_RESISTIVITY],
+    [ItemTypes.RECTIFIER]: [SubitemTypes.ANODE_BED, SubitemTypes.CIRCUIT],
+    [ItemTypes.PIPELINE]: []
+})
+
 export const PipelineProducts = Object.freeze({
     GAS: 0,
     OIL: 1,
