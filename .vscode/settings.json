@@ -3,7 +3,7 @@
     "editor.autoClosingBrackets": "always",
     "javascript.format.enable": true,
     "javascript.preferences.jsxAttributeCompletionStyle": "none",
-    "typescript.format.enable": false,
+    "typescript.format.enable": true,
     "typescript.preferences.jsxAttributeCompletionStyle": "none",
     "java.configuration.updateBuildConfiguration": "interactive",
     "search.exclude": {

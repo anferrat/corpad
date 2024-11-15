@@ -1,0 +1,6 @@
+export const TestPointFilterScreens = Object.freeze({
+    LIST: "LIST",
+    STATUS_FILTER: "STATUS",
+    TEST_POINT_TYPE_FILTER: 'TEST_POINT_TYPE_FILTER',
+    READING_FILTER: 'READING_FILTER'
+})
