@@ -87,7 +87,7 @@ const AddMapComponent = (props) => {
                 <MultiSelect
                     valid={valid[1]}
                     disabled={fieldValuesEmpty || propertyListEmpty}
-                    label={'Values from .csv'}
+                    label={'Values from spreadsheet'}
                     placeholder={'Select values'}
                     style={styles.select}
                     itemList={fieldValuesDisplay}

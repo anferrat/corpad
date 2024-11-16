@@ -17,7 +17,7 @@ const ModalStart = ({
     return (
         <>
             <ModalTitle
-                title={'Import from .csv'}
+                title={'Import from spreadsheet'}
                 iconFill={primary}
                 icon='download-outline'
                 hideModal={hideModal} />

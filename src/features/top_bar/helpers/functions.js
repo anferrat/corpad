@@ -227,7 +227,7 @@ export const getHeader = (screen, params, navigation, dispatch, openMenu) => {
                     left: 'back',
                     title: {
                         title: ItemTypeLabels[params.itemType] ?? '',
-                        subtitle: 'Import from .csv',
+                        subtitle: 'Import from spreadsheet',
                         icon: false,
                         pack: null,
                     },
@@ -262,7 +262,7 @@ export const getHeader = (screen, params, navigation, dispatch, openMenu) => {
                     display: true,
                     isPrimary: true,
                     left: 'back',
-                    title: 'Import from .csv',
+                    title: 'Import from spreadsheet',
                     right: null,
                 }
             case 'ImportParameters':
@@ -272,7 +272,7 @@ export const getHeader = (screen, params, navigation, dispatch, openMenu) => {
                     left: 'back',
                     title: {
                         title: `Property: "${params.property === 'potential' ? 'Potentials' : fieldProperties[params.property]?.label ?? null}"`,
-                        subtitle: 'Import from .csv',
+                        subtitle: 'Import from spreadsheet',
                         icon: false,
                         pack: null,
                     },
@@ -383,7 +383,7 @@ export const getHeader = (screen, params, navigation, dispatch, openMenu) => {
                     isPrimary: true,
                     title: {
                         title: params?.title ?? 'Error',
-                        subtitle: '.csv file preview'
+                        subtitle: 'Spreadsheet file preview'
                     },
                     right: null
                 }

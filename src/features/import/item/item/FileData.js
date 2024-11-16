@@ -20,7 +20,7 @@ const FileData = ({ navigateToSpreadsheet }) => {
 
     return (
         <View style={{ ...globalStyle.card, ...styles.mainView }} >
-            <Text category='label' appearance='hint' style={styles.label}>Data file (.csv)</Text>
+            <Text category='label' appearance='hint' style={styles.label}>Data file</Text>
             <ListItem
                 disabled={true}
                 accessoryLeft={file}

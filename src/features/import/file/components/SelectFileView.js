@@ -1,9 +1,12 @@
 import React from 'react'
-import { View, StyleSheet } from 'react-native'
-import { Icon, Text } from '@ui-kitten/components'
+import { View, StyleSheet, Modal } from 'react-native'
+import { Button, Icon, Text } from '@ui-kitten/components'
 import { basic400, primary } from '../../../../styles/colors'
+import ModalContent from './ModalContent'
+import useModal from '../../../../hooks/useModal'
 
 const SelectFileView = (props) => {
+    const { showModal, hideModal, visible } = useModal(false)
     return (
         <>
             <Text style={styles.title}>SELECT FILE</Text>
@@ -16,9 +19,23 @@ const SelectFileView = (props) => {
                     appearance={'hint'}
                     style={styles.text}
                     category='s1'>
-                    Only comma-separated text files (.csv) are supported. First row should be headers. Check corpad.ca to learn how to format your files.</Text>
+                    Supported formats (.xlsx, .csv)
+                    <Button
+                        onPress={showModal}
+                        appearance='ghost'>
+                        Learn about file formatting
+                    </Button>
+                </Text>
+
                 {props.children}
             </View>
+            <Modal
+                animationType='slide'
+                onDismiss={hideModal}
+                visible={visible}>
+                <ModalContent
+                    hideModal={hideModal} />
+            </Modal>
         </>
     )
 }

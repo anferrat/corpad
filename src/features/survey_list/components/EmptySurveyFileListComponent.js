@@ -53,7 +53,7 @@ const EmptySurveyFileListComponent = ({ isCloud, onCreate, initialLoad, onPressL
                     appearance='ghost'
                     size='large'
                     onPress={onCreate.bind(this, true)}>
-                    Import survey from .csv
+                    Import survey from spreadsheet
                 </Button>
                 
             </View>

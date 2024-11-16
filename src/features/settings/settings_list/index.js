@@ -84,7 +84,7 @@ export const SettingsList = () => {
                 icon={'calculator'}
                 pack='cp'
                 title={'Corrosion calculator'}
-                subtitle={'Execute number of cathodic protection calculations and export results into .csv files'}
+                subtitle={'Execute number of cathodic protection calculations and export results as files'}
                 onPress={navigateToCalculator} />
             <ListItem
                 icon={'people-outline'}
@@ -94,7 +94,7 @@ export const SettingsList = () => {
             <ListItem
                 icon={'file-text-outline'}
                 title={'Exported files'}
-                subtitle={'View exported .csv and .kml files, delete or share them with different apps'}
+                subtitle={'View exported survey files, delete or share them with different apps'}
                 onPress={navigateToExportedFiles} />
             <Text
                 style={styles.title}

@@ -3,17 +3,18 @@ import { ImportSpreadsheetData } from "../../services/survey/manager/import/csv/
 import { SelectFileForImport } from "../../services/survey/manager/import/csv/SelectFileForImport"
 import { Controller } from "../../utils/Controller"
 import { ImportValidation } from "../../validation/import_from_spreadsheet/ImportValidation"
-import { commaSeparatedFileParser, documentPicker, subitemFactory, unitConverter } from "../_instances/general_services"
+import { documentPicker, spreadsheetDataParser, subitemFactory, unitConverter } from "../_instances/general_services"
 import { importDataPresenter } from "../_instances/presenters"
-import { defaultNameRepo, fileSystemRepo, pipelineRepo, potentialRepo, potentialTypeRepo, rectifierRepo, referenceCellRepo, settingRepo, subitemRepo, testPointRepo } from "../_instances/repositories"
+import { defaultNameRepo, pipelineRepo, potentialRepo, potentialTypeRepo, rectifierRepo, referenceCellRepo, settingRepo, subitemRepo, testPointRepo } from "../_instances/repositories"
 
 class ImportController extends Controller {
-    constructor(importDataConverter, importDataValidator, testPointRepository, rectifierRepository, pipelineRepository, potentialRepository, subitemRepository, subitemFactory, unitConverter, fileSystemRepo, defaultNameRepo, potentialTypeRepo, referenceCellRepo, settingRepo, importDataPresenter, documentPicker, csvParser) {
+    constructor(importDataConverter, importDataValidator, testPointRepository, rectifierRepository, pipelineRepository, potentialRepository, subitemRepository, subitemFactory, unitConverter, defaultNameRepo, potentialTypeRepo, referenceCellRepo, settingRepo, importDataPresenter, documentPicker, spreadsheetDataParser) {
         super()
         this.importDataConverter = importDataConverter
         this.importDataValidator = importDataValidator
+        this.spreadsheetDataParser = spreadsheetDataParser
         this.importSpreadsheetData = new ImportSpreadsheetData(testPointRepository, rectifierRepository, pipelineRepository, subitemRepository, potentialRepository, subitemFactory, unitConverter)
-        this.selectFileForImportService = new SelectFileForImport(fileSystemRepo, documentPicker, csvParser, defaultNameRepo, potentialTypeRepo, pipelineRepository, referenceCellRepo, settingRepo, importDataPresenter)
+        this.selectFileForImportService = new SelectFileForImport(documentPicker, defaultNameRepo, potentialTypeRepo, pipelineRepository, referenceCellRepo, settingRepo, spreadsheetDataParser, importDataPresenter)
     }
 
     importData(params, onError = null, onSuccess = null) {
@@ -42,14 +43,13 @@ const importController = new ImportController(
     subitemRepo,
     subitemFactory,
     unitConverter,
-    fileSystemRepo,
     defaultNameRepo,
     potentialTypeRepo,
     referenceCellRepo,
     settingRepo,
     importDataPresenter,
     documentPicker,
-    commaSeparatedFileParser
+    spreadsheetDataParser
 )
 
 

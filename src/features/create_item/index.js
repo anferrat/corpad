@@ -24,7 +24,7 @@ export const CreateItemSheet = React.memo(({ navigateToEdit, closeSheet, navigat
                         icon={ItemTypeSingleIconsFilled[itemType]} />
                 </View>)}
             <Divider />
-            <ListItem title='Import from .csv' icon='file-add' onPress={navigateToImport} />
+            <ListItem title='Import from spreadsheet' icon='file-add' onPress={navigateToImport} />
         </>
     )
 })

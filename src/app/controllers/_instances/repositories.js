@@ -6,6 +6,7 @@ import { GeolocationRepository } from "../../repository/geolocation/GeolocationR
 import { PurchaseRepository } from "../../repository/inAppPurchases/PurchaseRepository";
 import { NetworkRepository } from "../../repository/network/NetworkRepository";
 import { NdefRepository } from "../../repository/nfc/ndefRepository";
+import { XlsxRepository } from "../../repository/spreadsheet/XlsxRepository";
 import { AppRepository } from "../../repository/sqlite/AppRepository";
 import { AssetRepository } from "../../repository/sqlite/AssetRepository";
 import { CalculatorRepository } from "../../repository/sqlite/CalculatorRepository";
@@ -66,5 +67,8 @@ export const purchaseRepo = new PurchaseRepository()
 
 //NFC
 export const ndefRepo = new NdefRepository()
+
+//Spreadsheet
+export const xlsxRepo = new XlsxRepository()
 
 

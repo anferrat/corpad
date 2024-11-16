@@ -351,7 +351,8 @@ export const FileMimeTypes = Object.freeze({
     IMAGE: 'image/*',
     ZIP: 'application/zip',
     GPX: 'application/gpx+xml',
-    BINARY: 'application/octet-stream'
+    BINARY: 'application/octet-stream',
+    XLSX: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
 })
 
 export const FileTypeIdentifiers = Object.freeze({
@@ -365,7 +366,8 @@ export const FileTypeIdentifiers = Object.freeze({
     GEOJSON: 'public.geojson',
     TEXT: 'public.plain-text',
     ITEM: 'public.item',
-    CONTENT: 'public.content'
+    CONTENT: 'public.content',
+    SPREADSHEET: 'public.spreadsheet'
 })
 
 export const FileExtensions = Object.freeze({
@@ -555,6 +557,7 @@ export const ExternalFileTypes = Object.freeze({
     KEYHOLE_MARKUP_ZIPPED: 'keyhole_markup_zipped',
     GPS_EXCHANGE_FORMAT: 'gps_exchange_format',
     GEOJSON: 'geoJSON',
+    XLSX: 'xlsx_file',
     UNKNOWN_FILE: 'unknown_file' //when file url recieved from Android intent, it recieved as document provider content schema
 })
 

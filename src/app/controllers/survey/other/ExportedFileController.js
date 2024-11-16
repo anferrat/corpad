@@ -1,19 +1,19 @@
 import { CopyExportedFileToDownloads } from "../../../services/survey/other/exported_files/CopyExportedFileToDownloads"
 import { DeleteExportedFile } from "../../../services/survey/other/exported_files/DeleteExportedFile"
 import { GetExportedFileList } from "../../../services/survey/other/exported_files/GetExportedFileList"
-import { LoadCommaSeparatedFile } from "../../../services/survey/other/exported_files/LoadCommaSeparatedFile"
+import { LoadSpreadsheetFile } from "../../../services/survey/other/exported_files/LoadSpreadsheetFile"
 import { Controller } from "../../../utils/Controller"
-import { commaSeparatedFileParser, openInExternalAppService, permissions, shareService } from "../../_instances/general_services"
+import { openInExternalAppService, permissions, shareService, spreadsheetDataParser } from "../../_instances/general_services"
 import { listPresenter } from "../../_instances/presenters"
 import { fileSystemRepo } from "../../_instances/repositories"
 
 class ExportedFileController extends Controller {
-    constructor(fileSystemRepo, listPresenter, csvParser, permissions, shareService, openInExternalAppService) {
+    constructor(fileSystemRepo, listPresenter, permissions, shareService, openInExternalAppService, spreadsheetDataParser) {
         super()
         this.copyExportedFileToDownloadsService = new CopyExportedFileToDownloads(fileSystemRepo, permissions)
         this.deleteExportedFileService = new DeleteExportedFile(fileSystemRepo)
         this.getExportedFileListService = new GetExportedFileList(fileSystemRepo, listPresenter)
-        this.loadCommaSeparatedFileService = new LoadCommaSeparatedFile(fileSystemRepo, csvParser)
+        this.loadSpreadsheetFileService = new LoadSpreadsheetFile(spreadsheetDataParser)
         this.openInExternalAppService = openInExternalAppService
         this.shareService = shareService
     }
@@ -44,10 +44,10 @@ class ExportedFileController extends Controller {
         })
     }
 
-    loadCsvFile(params, onError = null, onSuccess = null) {
+    loadSpreadsheetFile(params, onError = null, onSuccess = null) {
         return super.controllerHandler(onSuccess, onError, 428, async () => {
             const { path } = params
-            return this.loadCommaSeparatedFileService.execute(path)
+            return this.loadSpreadsheetFileService.execute(path)
         })
     }
 
@@ -69,10 +69,10 @@ class ExportedFileController extends Controller {
 const exportedFileController = new ExportedFileController(
     fileSystemRepo,
     listPresenter,
-    commaSeparatedFileParser,
     permissions,
     shareService,
-    openInExternalAppService
+    openInExternalAppService,
+    spreadsheetDataParser
 )
 
 export const getExportedFileList = (onError, onSuccess) => exportedFileController.getList(onError, onSuccess)
@@ -83,7 +83,7 @@ export const deleteAllExportedFiles = (onError, onSuccess) => exportedFileContro
 
 export const saveExportedFileToDownloads = ({ path }, onError, onSuccess) => exportedFileController.copyToDownloads({ path }, onError, onSuccess)
 
-export const loadCommaSeparatedFile = ({ path }, onError, onSuccess) => exportedFileController.loadCsvFile({ path }, onError, onSuccess)
+export const loadSpreadsheetFile = ({ path }, onError, onSuccess) => exportedFileController.loadSpreadsheetFile({ path }, onError, onSuccess)
 
 export const openFileIn = ({ url, mimeType }, onError, onSuccess) => exportedFileController.openIn({ url, mimeType }, onError, onSuccess)
 

@@ -15,7 +15,7 @@ export class ReadExternalGeoFile {
 
     async _conditionCheck(size) {
         if (size > this.MAXIMUM_FILE_SIZE)
-            throw new Error(errors.GENERAL, 'Unable to read geo file', 'File is larger than 5MB', 434)
+            throw new Error(errors.GENERAL, `Unable to read geo file', 'File is larger than ${this.MAXIMUM_FILE_SIZE}`, 434)
     }
 
     _readContent(file) {
@@ -37,7 +37,7 @@ export class ReadExternalGeoFile {
     async execute() {
         const file = await this.documentPicker.pickGeoFile()
 
-        const { size } = await this.fileSystemRepo.getStat(file.uri)
+        const { size } = file
 
         await this._conditionCheck(size)
 

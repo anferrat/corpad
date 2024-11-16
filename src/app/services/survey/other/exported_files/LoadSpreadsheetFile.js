@@ -1,15 +1,16 @@
-export class LoadCommaSeparatedFile {
-    constructor(fileSystemRepo, parser) {
-        this.fileSystemRepo = fileSystemRepo
-        this.parser = parser
+import { ExternalFile } from "../../../../entities/survey/other/ExternalFile"
+
+export class LoadSpreadsheetFile {
+    constructor(spreadsheetDataParser) {
+        this.spreadsheetDataParser = spreadsheetDataParser
         this.MAX_ROWS = 100
         this.MAX_FIELDS = 50
     }
 
     async execute(path) {
-        const file = await this.fileSystemRepo.readFile(path)
-        const res = await this.parser.parse(file)
-        const { data, meta } = res
+        const file = new ExternalFile(path)
+        const content = await this.spreadsheetDataParser.parseFile(file)
+        const { data, meta } = content
         const rowLimitReached = data.length > (this.MAX_ROWS)
         const fieldsLimitReached = meta.fields.length > (this.MAX_FIELDS)
         const result = data.filter((_, i) => i <= (this.MAX_ROWS - 1))
