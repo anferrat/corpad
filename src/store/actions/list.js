@@ -2,7 +2,6 @@
 export const SET_RESFRESH = 'SET_RESFRESH'
 export const SET_DISPLAYED_READING = 'SET_DISPLAYED_READING'
 export const SET_SORTING_SETTING = 'SET_SORTING_SETTING'
-export const SET_FILTER_VIEW = 'SET_FILTER_VIEW'
 export const APPLY_FILTER = 'APPLY_FILTER'
 export const RESET_FILTERS = 'RESET_FILTERS'
 export const SET_OFFSET = 'SET_OFFSET'
@@ -10,7 +9,6 @@ export const LOAD_LIST_STATE = 'LOAD_LIST_STATE'
 export const RESET_LIST_STATE = 'RESET_LIST_STATE'
 export const UPDATE_LIST = 'UPDATE_LIST'
 export const DELETE_ITEM_FROM_LIST = 'DELETE_ITEM_FROM_LIST'
-export const ON_FILTER_BUTTON_PRESS = 'ON_FILTER_BUTTON_PRESS'
 
 export const resetListState = (listType) => {
     return { type: listType + '_' + RESET_LIST_STATE }
@@ -24,20 +22,12 @@ export const setDisplayedReading = (listType, displayedReading) => {
     return { type: listType + '_' + SET_DISPLAYED_READING, displayedReading: displayedReading }
 }
 
-export const setSortingSetting = (listType, sorting, latitude = 0, longitude = 0) => {
-    return { type: listType + '_' + SET_SORTING_SETTING, sorting: sorting, latitude: latitude, longitude: longitude }
-}
-
-export const setFilterView = (listType, filterView) => {
-    return { type: listType + '_' + SET_FILTER_VIEW, filterView: filterView }
+export const setSortingSetting = (listType, sorting) => {
+    return { type: listType + '_' + SET_SORTING_SETTING, sorting: sorting}
 }
 
 export const applyFilter = (listType, filter, filterValue) => {
     return { type: listType + '_' + APPLY_FILTER, filter: filter, filterValue: filterValue }
-}
-
-export const filterHandler = (listType) => {
-    return { type: listType + '_' + ON_FILTER_BUTTON_PRESS }
 }
 
 export const setOffset = (listType, offset) => {

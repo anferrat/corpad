@@ -1,7 +1,4 @@
 import React from 'react'
-import Sorting from '../features/list/header/sorting/Sorting'
-import Readings from '../features/list/header/readings/Readings'
-import Filter from '../features/list/header/filter/Filter'
 import { CreateItemSheet } from '../features/create_item'
 import { MenuSheet } from '../features/survey_menu'
 import MoreOptionsSheet from '../features/navigation/more_options/MoreOptionsSheet'
@@ -10,6 +7,8 @@ import Router from '../components/Router/Router'
 import Route from '../components/Router/Route'
 import ImagePickerView from '../features/image_picker'
 import { TestPointFilter } from '../features/bottom_sheet_content/filters'
+import { RectifierReadingList, TestPointReadingList } from '../features/bottom_sheet_content/readings'
+import { RectifierSorting, TestPointSorting } from '../features/bottom_sheet_content/sorting'
 
 //implemented as single screen, possible to have embeded navigator inside
 
@@ -41,20 +40,22 @@ const BottomSheetContent = () => {
             </Route>
             <Route
                 routeKey='TEST_POINT_SORTING'>
-                <Sorting
-                    dataType={'TEST_POINT'}
+                <TestPointSorting
+                    closeSheet={closeSheet} />
+            </Route>
+            <Route
+                routeKey='RECTIFIER_SORTING'>
+                <RectifierSorting
                     closeSheet={closeSheet} />
             </Route>
             <Route
                 routeKey='TEST_POINT_READINGS'>
-                <Readings
-                    dataType='TEST_POINT'
+                <TestPointReadingList
                     closeSheet={closeSheet} />
             </Route>
             <Route
                 routeKey='RECTIFIER_READINGS'>
-                <Readings
-                    dataType='RECTIFIER'
+                <RectifierReadingList
                     closeSheet={closeSheet} />
             </Route>
             <Route

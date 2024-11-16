@@ -10,12 +10,12 @@ export class GeolocationRepository {
 
     async getCurrent() {
         try {
-            return new Promise((resolve, reject) => {
+            return await new Promise((resolve, reject) => {
                 Geolocation.setRNConfiguration({ skipPermissionRequests: false, locationProvider: 'auto' })
                 Geolocation.getCurrentPosition(({ coords: { latitude, longitude, accuracy } }) => resolve({ latitude, longitude, accuracy }),
                     er => reject(er),
                     {
-                        timeout: 2000,
+                        timeout: 10000,
                         accuracy: { android: 'balanced' },
                         enableHighAccuracy: true,
                         maximumAge: 10,

@@ -10,7 +10,7 @@ import { getLocationAsync, fetchData, fetchIdList } from '../helpers/functions'
 import FlatList from './components/FlatList'
 import { primary } from '../../../styles/colors'
 import { EventRegister } from 'react-native-event-listeners'
-import ListHeader from '../header/header/ListHeader'
+import ListHeader from '../header'
 
 const HEADER_HEIGHT = 40
 
@@ -145,7 +145,7 @@ const ItemList = ({ itemType, navigateToView }) => {
     const keyExtractor = React.useCallback((item) => itemType + item.uid + item.timeModified, [itemType])
 
     const Header = React.memo(() => <ListHeader
-        dataType={itemType}
+        itemType={itemType}
         translateY={translateY}
         opacity={opacity} />)
 

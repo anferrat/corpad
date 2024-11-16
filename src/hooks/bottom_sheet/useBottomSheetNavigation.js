@@ -12,6 +12,7 @@ export const BOTTOM_SHEET_VIEWS = {
     TEST_POINT_SORTING: { itemType: 'TEST_POINT', content: 'sorting', index: 4 },
     TEST_POINT_READINGS: { itemType: 'TEST_POINT', content: 'readings', index: 4 },
     RECTIFIER_READINGS: { itemType: 'RECTIFIER', content: 'readings', index: 1 },
+    RECTIFIER_SORTING: { itemType: 'RECTIFIER', content: 'sorting', index: 4 },
     BASIC_MENU: { itemType: null, content: 'moreOptions', index: 0 },
     IMAGE_PICKER: { itemType: null, content: 'imagePicker', index: 0 }
 }
@@ -40,6 +41,8 @@ export const useBottomSheetNavigation = () => {
 
     const openRectifierReadingMenu = () => openBottomSheet(BOTTOM_SHEET_VIEWS.RECTIFIER_READINGS)
 
+    const openRectifierSortingMenu = () => openBottomSheet(BOTTOM_SHEET_VIEWS.RECTIFIER_SORTING)
+
     const openImagePicker = ({ itemType, itemId }) => openBottomSheet(BOTTOM_SHEET_VIEWS.IMAGE_PICKER, { itemType, itemId })
 
     const openMenu = () => openBottomSheet(BOTTOM_SHEET_VIEWS.MENU)
@@ -51,6 +54,7 @@ export const useBottomSheetNavigation = () => {
         openTestPointReadingMenu,
         openTestPointSortingMenu,
         openRectifierReadingMenu,
+        openRectifierSortingMenu,
         openMenu,
         openImagePicker
     }

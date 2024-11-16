@@ -107,6 +107,7 @@ export const fetchIdList = async (itemType, filters = undefined, sorting = 0, la
 }
 
 export const getLocationAsync = async () => {
+    //Don't unite into one service with fetching id list
     const { response, status } = await getCurrentPosition()
     if (status === 200) {
         const { latitude, longitude } = response
@@ -158,41 +159,4 @@ export const dataListIcons = {
         icon: 'image-outline',
         pack: null
     }
-}
-
-export const displayedReadingsValues = {
-    TEST_POINT: [
-        {
-            title: 'Potentials: ON/OFF',
-            icons: [{ icon: 'On', pack: 'cp', unit: 'V' }, { icon: 'Off', pack: 'cp', unit: 'V' }],
-            unit: 'V'
-        },
-        {
-            title: 'Potentials: OFF/Native',
-            icons: [{ icon: 'Off', pack: 'cp', unit: 'V' }, { icon: 'Depol', pack: 'cp', unit: 'V' }],
-            unit: 'V'
-        },
-        {
-            title: 'Current: Shunts and bonds',
-            icons: [{ icon: 'flash-outline', pack: null, unit: 'A' }],
-        },
-        {
-            title: 'Current density: Coupons',
-            icons: [{ icon: 'keypad-outline', pack: null, unit: 'A/m2' }],
-        },
-        {
-            title: 'Shorting current: Isolation',
-            icons: [{ icon: 'alert-triangle-outline', pack: null, unit: '' }, { icon: 'flash-outline', pack: null, unit: 'A' }],
-        }
-    ],
-    RECTIFIER: [
-        {
-            title: 'Current and voltage',
-            icons: [{ icon: 'flash-outline', pack: null, unit: 'A' }, { icon: 'voltage', pack: 'cp', unit: 'V' }]
-        },
-        {
-            title: 'Current target',
-            icons: [{ icon: 'diagonal-arrow-right-up-outline', pack: null, unit: 'A' }, { icon: 'diagonal-arrow-right-down-outline', pack: null, unit: 'A' }],
-        }
-    ]
 }

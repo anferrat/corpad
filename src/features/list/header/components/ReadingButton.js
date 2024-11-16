@@ -4,15 +4,15 @@ import { androidRipple } from '../../../../styles/colors'
 import ReadingTitle from './ReadingTitle'
 import Pressable from '../../../../components/Pressable'
 
-const ReadingButton = (props) => {
+const ReadingButton = ({ onPress, itemType, reading }) => {
     return (
         <Pressable
             style={styles.pressable}
-            onPress={props.onPress}
+            onPress={onPress}
             android_ripple={androidRipple}>
             <ReadingTitle
-                dataType={props.dataType}
-                reading={props.reading} />
+                itemType={itemType}
+                reading={reading} />
         </Pressable>
     )
 }

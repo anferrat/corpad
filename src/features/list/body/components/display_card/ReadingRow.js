@@ -1,7 +1,7 @@
 import React from 'react'
 import { basic } from '../../../../../styles/colors'
 import DataRow from './DataRow'
-import { displayedReadingsValues } from '../../../helpers/functions'
+import { ReadingParameters } from '../../../constants/constants'
 
 const ReadingRow = ({ displayedReading, value, itemType, index }) => {
     if (value === null || value === undefined)
@@ -9,9 +9,9 @@ const ReadingRow = ({ displayedReading, value, itemType, index }) => {
     else
         return <DataRow
             fill={basic}
-            pack={displayedReadingsValues[itemType][displayedReading].icons[index].pack}
-            icon={displayedReadingsValues[itemType][displayedReading].icons[index].icon}
-            value={`${value}${displayedReadingsValues[itemType][displayedReading].icons[index].unit}`}
+            pack={ReadingParameters[itemType][displayedReading][index].pack}
+            icon={ReadingParameters[itemType][displayedReading][index].icon}
+            value={`${value}${ReadingParameters[itemType][displayedReading][index].unit}`}
         />
 }
 

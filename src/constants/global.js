@@ -627,3 +627,16 @@ export const NdefWritingStatuses = Object.freeze({
     WRITE_FAILED: 'WRITE_FAILED',
     NDEF_TECHNOLOGY_CANCELLED: 'NDEF_TECHNOLOGY_CANCELLED'
 })
+
+export const TestPointReadingOptions = Object.freeze({
+    ON_OFF: 0,
+    OFF_NATIVE: 1,
+    SHUNT_CURRENT: 2,
+    CURRENT_DENSITY: 3,
+    SHORTING_CURRENT: 4
+})
+
+export const RectifierReadingOptions = Object.freeze({
+    CURRENT_VOLTAGE: 0,
+    TARGET: 1
+})

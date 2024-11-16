@@ -1,4 +1,4 @@
-import { ItemTypes, ItemStatuses, SubitemTypes, CalculatorTypes, TestPointTypes, SubscriptionStatuses, ExternalLinkTypes } from './global'
+import { ItemTypes, ItemStatuses, SubitemTypes, CalculatorTypes, TestPointTypes, SubscriptionStatuses, ExternalLinkTypes, SortingOptions } from './global'
 
 //List of icons that are tightly coupled with constants
 export const ItemTypeSingleIcons = Object.freeze({
