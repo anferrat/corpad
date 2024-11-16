@@ -6,25 +6,29 @@ import SelectFileView from './components/SelectFileView'
 import SelectItem from './SelectItem'
 import NextButton from './NextButton'
 import LastImportView from './LastImportView'
+import { globalStyle } from '../../../styles/styles'
 
 
 export const FilePickerImport = ({ navigateToSpreadsheet, navigateToImportItem, navigateToList }) => {
 
     return (
-        <View
-            style={styles.container}>
+        <>
             <ScrollView
                 contentContainerStyle={styles.scrollView}>
                 <LastImportView navigateToList={navigateToList} />
-                <SelectItem />
-                <SelectFileView>
-                    <FilePicker
-                        navigateToSpreadsheet={navigateToSpreadsheet} />
-                </SelectFileView>
+                <View
+                    style={styles.container}>
+                    <SelectItem />
+                    <SelectFileView>
+                        <FilePicker
+                            navigateToSpreadsheet={navigateToSpreadsheet} />
+                    </SelectFileView>
+
+                </View>
             </ScrollView>
             <NextButton
                 onPress={navigateToImportItem} />
-        </View>
+        </>
     )
 }
 
@@ -33,6 +37,8 @@ const styles = StyleSheet.create({
         paddingBottom: 72,
     },
     container: {
-        flex: 1
+        ...globalStyle.card_noPadding,
+        flex: 1,
+        marginTop: 6
     }
 })

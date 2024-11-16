@@ -1,12 +1,10 @@
 import React from 'react'
 import { View, StyleSheet } from 'react-native'
-import { Text } from '@ui-kitten/components'
 import ItemCard from './components/ItemCard'
 import { useDispatch, useSelector } from 'react-redux'
 import { setImportItemType } from '../../../store/actions/importData'
 import { ItemTypes } from '../../../constants/global'
-import { ItemTypeIconsFilled } from '../../../constants/icons'
-import { ItemTypeLabelsPlural } from '../../../constants/labels'
+import Title from './components/Title'
 
 const SelectItem = () => {
     const selectedType = useSelector(state => state.importData.itemType)
@@ -18,21 +16,16 @@ const SelectItem = () => {
     }
     return (
         <View style={styles.mainView}>
-            <Text
-                category='h6'
-                style={styles.title}>
-                1. Select survey item
-            </Text>
+            <Title
+                name='SELECT IMPORTING SURVEY ITEM' />
             <View
                 style={styles.itemSelection}>
                 {Object.values(ItemTypes).map((type) => (
                     <ItemCard
                         key={type}
-                        icon={ItemTypeIconsFilled[type]}
-                        pack='cp'
-                        title={ItemTypeLabelsPlural[type]}
+                        itemType={type}
                         selected={selectedType === type}
-                        onPress={selectOption.bind(this, type)}
+                        onPress={selectOption}
                     />))}
             </View>
         </View>
@@ -43,12 +36,12 @@ export default React.memo(SelectItem)
 
 const styles = StyleSheet.create({
     mainView: {
-    },
-    title: {
-        padding: 12,
+        paddingHorizontal: 12,
+        marginTop: 12,
+        marginBottom: 12
     },
     itemSelection: {
-        paddingHorizontal: 6,
+        marginHorizontal:-6,
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'space-evenly'

@@ -49,7 +49,7 @@ const LastImportView = ({ navigateToList }) => {
                 </View>
                 <View style={styles.iconRow}>
                     <Icon style={styles.icon} fill={basic} name={getItemIcon(itemType)} pack='cp' />
-                    <Text category='s2' appearance='hint'>{idList.length} {getItemName(itemType, idList.length)} were imported</Text>
+                    <Text category='s2' appearance='hint'>{idList.length} {getItemName(itemType, idList.length)} imported</Text>
 
                 </View>
                 <Button
