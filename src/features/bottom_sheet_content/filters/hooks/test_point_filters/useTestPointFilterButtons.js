@@ -8,8 +8,8 @@ export const useTestPointFilterButton = ({ closeSheet }) => {
     const resetVisible = useSelector(state => state.testPointList.settings.filterCounter !== 0)
 
     const onResetPress = useCallback(() => {
-        dispatch(resetFilters(ItemTypes.TEST_POINT))
         closeSheet()
+        dispatch(resetFilters(ItemTypes.TEST_POINT))
     }, [])
 
     return {

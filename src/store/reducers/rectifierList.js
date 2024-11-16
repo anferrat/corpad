@@ -1,4 +1,4 @@
-import { LOAD_LIST_STATE, UPDATE_LIST, DELETE_ITEM_FROM_LIST, SET_RESFRESH, SET_DISPLAYED_READING, SET_OFFSET, RESET_LIST_STATE } from '../actions/rectifierList'
+import { LOAD_LIST_STATE, UPDATE_LIST, DELETE_ITEM_FROM_LIST, SET_RESFRESH, SET_DISPLAYED_READING, SET_OFFSET, RESET_LIST_STATE, SET_SORTING_SETTING } from '../actions/rectifierList'
 
 const initialState = {
     itemList: [],
@@ -11,7 +11,7 @@ const initialState = {
         updating: false,
         endReached: false,
         displayedReading: 0,
-        sorting: 2,
+        sorting: 0,
     }
 }
 
@@ -30,26 +30,26 @@ const rectifierList = (state = initialState, action) => {
                     },
                 }
             }
-            case UPDATE_LIST: {
-                const index = state.itemList.findIndex(item => item.id === action.itemId)
-                const isNew = !(~state.idList.indexOf(action.itemId)) && !~index
-                if (isNew)
+        case UPDATE_LIST: {
+            const index = state.itemList.findIndex(item => item.id === action.itemId)
+            const isNew = !(~state.idList.indexOf(action.itemId)) && !~index
+            if (isNew)
+                return {
+                    ...state,
+                    itemList: [action.itemObject].concat(state.itemList),
+                    idList: state.idList, //do not change Id list when new item is added. It'll mess up with things 
+                }
+            else {
+                if (~index)
                     return {
                         ...state,
-                        itemList: [action.itemObject].concat(state.itemList),
-                        idList: state.idList, //do not change Id list when new item is added. It'll mess up with things 
+                        itemList: Object.assign([], state.itemList, {
+                            [index]: action.itemObject,
+                        })
                     }
-                else {
-                    if (~index)
-                        return {
-                            ...state,
-                            itemList: Object.assign([], state.itemList, {
-                                [index]: action.itemObject,
-                            })
-                        }
-                    else return state
-                }
+                else return state
             }
+        }
         case DELETE_ITEM_FROM_LIST:
             return {
                 itemList: state.itemList.filter(item => item.id !== action.itemId),
@@ -85,6 +85,19 @@ const rectifierList = (state = initialState, action) => {
                     endReached: false,
                     refreshing: true,
                     displayedReading: action.displayedReading
+                }
+            }
+        case SET_SORTING_SETTING:
+            return {
+                itemList: state.itemList,
+                idList: [],
+                settings: {
+                    ...state.settings,
+                    idListLoaded: false,
+                    refreshing: true,
+                    offset: 0,
+                    endReached: false,
+                    sorting: action.sorting,
                 }
             }
         case SET_OFFSET:

@@ -5,6 +5,7 @@ import { SubitemTypeAllocation } from "../../../../constants/global"
 import { SubitemTypeIcons } from "../../../../constants/icons"
 import { SubitemTypeLabels } from "../../../../constants/labels"
 import { FlashList } from "@shopify/flash-list"
+import { Divider } from "@ui-kitten/components"
 
 function ReadingTypeFilter({ excluded, onApply, visible, itemType }) {
     const { notSelected, onChange } = useFilter({ excluded, visible, onApply })
@@ -18,15 +19,15 @@ function ReadingTypeFilter({ excluded, onApply, visible, itemType }) {
             value={item}
             status={'primary'}
             pack={'cp'}
-            title={SubitemTypeLabels[item]}
-        />
+            title={SubitemTypeLabels[item]} />
 
     return (
         <FlashList
             data={Object.values(SubitemTypeAllocation[itemType])}
             renderItem={renderItem}
             extraData={notSelected}
-            estimatedItemSize={60} />
+            estimatedItemSize={60}
+            ItemSeparatorComponent={Divider} />
     )
 }
 

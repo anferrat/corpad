@@ -1,4 +1,4 @@
-import { LOAD_LIST_STATE, UPDATE_LIST, DELETE_ITEM_FROM_LIST, SET_RESFRESH, SET_DISPLAYED_READING, SET_SORTING_SETTING, SET_FILTER_VIEW, APPLY_FILTER, RESET_FILTERS, SET_OFFSET, ON_FILTER_BUTTON_PRESS, RESET_LIST_STATE } from '../actions/testPointList'
+import { LOAD_LIST_STATE, UPDATE_LIST, DELETE_ITEM_FROM_LIST, SET_RESFRESH, SET_DISPLAYED_READING, SET_SORTING_SETTING, APPLY_FILTER, RESET_FILTERS, SET_OFFSET, RESET_LIST_STATE } from '../actions/testPointList'
 
 const initialState = {
     itemList: [],
@@ -10,13 +10,9 @@ const initialState = {
         limit: 25,
         updating: false,
         endReached: false,
-        latitude: 0,
-        longitude: 0,
         displayedReading: 0,
         sorting: 0,
-        filterView: 0,
         filterCounter: 0,
-        applyFilters: false,
         appliedFilters: {
             searchString: '',
             hideEmptyTestPoints: false,
@@ -111,12 +107,8 @@ const testPointList = (state = initialState, action) => {
                     offset: 0,
                     endReached: false,
                     sorting: action.sorting,
-                    latitude: action.latitude,
-                    longitude: action.longitude,
                 }
             }
-        case SET_FILTER_VIEW:
-            return { ...state, settings: { ...state.settings, filterView: action.filterView } } //maybe remove later, only applied for testPoints
         case APPLY_FILTER:
             return {
                 itemList: action.filter === 'readingTypeFilter' ? [] : state.itemList,
@@ -126,19 +118,9 @@ const testPointList = (state = initialState, action) => {
                     idListLoaded: false,
                     refreshing: true,
                     offset: 0,
-                    filterView: 0,
                     endReached: false,
-                    applyFilters: false,
                     filterCounter: Array.isArray(state.settings.appliedFilters[action.filter]) ? state.settings.filterCounter - (state.settings.appliedFilters[action.filter].length) + action.filterValue.length : state.settings.filterCounter + (action.filterValue ? 1 : -1),
                     appliedFilters: { ...state.settings.appliedFilters, [action.filter]: action.filterValue }
-                }
-            }
-        case ON_FILTER_BUTTON_PRESS:
-            return {
-                ...state,
-                settings: {
-                    ...state.settings,
-                    applyFilters: true,
                 }
             }
         case SET_OFFSET:
@@ -160,9 +142,7 @@ const testPointList = (state = initialState, action) => {
                     refreshing: true,
                     offset: 0,
                     endReached: false,
-                    applyFilters: false,
                     filterCounter: 0,
-                    filterView: 0,
                     appliedFilters: {
                         hideEmptyTestPoints: false,
                         statusFilter: [],

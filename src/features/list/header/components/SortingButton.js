@@ -1,20 +1,36 @@
 import React from 'react'
-import {  StyleSheet } from 'react-native'
+import { StyleSheet } from 'react-native'
 import { Text, Icon } from '@ui-kitten/components'
 import { primary } from '../../../../styles/colors'
 import { androidRipple } from '../../../../styles/styles'
 import Pressable from '../../../../components/Pressable'
 
-const SortingButton = (props) => {
+const SortingButton = ({ isIcon, value, arrowIcon, onPress }) => {
     return (
         <Pressable
             style={styles.pressable}
-            onPress={props.onPress}
+            onPress={onPress}
             android_ripple={androidRipple}>
-            <Text style={styles.buttonText} status='primary' category='s1'>Sort:</Text>
-            {props.iconText !== null ? <Text style={styles.iconText} status='primary' category='p2'>{props.iconText}</Text> : null}
-            {props.icon !== null ? <Icon name={props.icon} fill={primary} style={styles.icon} /> : null}
-            <Icon name={'arrow-' + props.direction} pack={'cp'} fill={primary} style={styles.arrow} />
+            <Text style={styles.buttonText}
+                status='primary'
+                category='s1'>Sort:</Text>
+            {!isIcon ?
+                <Text
+                    style={styles.iconText}
+                    status='primary'
+                    category='p2'>
+                    {value}
+                </Text> :
+                <Icon
+                    name={value}
+                    fill={primary}
+                    style={styles.icon} />
+            }
+            <Icon
+                name={arrowIcon}
+                pack={'cp'}
+                fill={primary}
+                style={styles.arrow} />
         </Pressable>
     )
 }

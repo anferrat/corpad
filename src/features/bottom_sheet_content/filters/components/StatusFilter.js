@@ -6,6 +6,7 @@ import { StatusIcons } from "../../../../constants/icons"
 import { StatusStatuses } from "../../../../styles/colors"
 import { StatusLabels } from "../../../../constants/labels"
 import { FlashList } from "@shopify/flash-list"
+import { Divider } from "@ui-kitten/components"
 
 const statusItems = Object.values(ItemStatuses).filter(status => status !== ItemStatuses.NO_STATUS)
 
@@ -21,9 +22,7 @@ function StatusFilter({ excluded, onApply, visible }) {
             value={item}
             status={StatusStatuses[item]}
             pack={undefined}
-            title={StatusLabels[item]}
-        />
-
+            title={StatusLabels[item]}/>
 
     return (
         <FlashList
@@ -31,6 +30,7 @@ function StatusFilter({ excluded, onApply, visible }) {
             renderItem={renderItem}
             estimatedItemSize={60}
             extraData={notSelected}
+            ItemSeparatorComponent={Divider}
         />
     )
 }

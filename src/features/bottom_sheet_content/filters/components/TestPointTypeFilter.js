@@ -5,6 +5,7 @@ import CheckBoxListItem from "./CheckBoxListItem"
 import { TestPointTypeIcons } from "../../../../constants/icons"
 import { TestPointTypeLabels } from "../../../../constants/labels"
 import { FlashList } from "@shopify/flash-list"
+import { Divider } from "@ui-kitten/components"
 
 function TestPointTypeFilter({ excluded, onApply, visible }) {
     const { notSelected, onChange } = useFilter({ excluded, visible, onApply })
@@ -26,7 +27,9 @@ function TestPointTypeFilter({ excluded, onApply, visible }) {
             data={Object.values(TestPointTypes)}
             renderItem={renderItem}
             estimatedItemSize={60}
-            extraData={notSelected} />
+            extraData={notSelected}
+            ItemSeparatorComponent={Divider}
+        />
     )
 }
 
