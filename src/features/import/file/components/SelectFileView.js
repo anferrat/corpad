@@ -6,7 +6,7 @@ import { basic400, primary } from '../../../../styles/colors'
 const SelectFileView = (props) => {
     return (
         <>
-            <Text category='h6' style={styles.title}>2. Select file</Text>
+            <Text style={styles.title}>SELECT FILE</Text>
             <View style={styles.mainView}>
                 <Icon
                     style={styles.icon}
@@ -40,6 +40,8 @@ const styles = StyleSheet.create({
     },
     title: {
         margin: 12,
+        fontSize: 16,
+        fontWeight: 'bold',
     },
     text: {
         margin: 12,

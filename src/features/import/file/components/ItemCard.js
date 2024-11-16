@@ -1,104 +1,76 @@
-import React from 'react'
-import { Text, Icon } from '@ui-kitten/components'
-import { Platform, StyleSheet, View } from 'react-native'
-import { primary, basic, success, control, primary100, basic300 } from '../../../../styles/colors'
-import { androidRipple } from '../../../../styles/styles'
+import React, { useCallback } from 'react'
+import { StyleSheet } from 'react-native'
+import { Icon, Text } from '@ui-kitten/components'
+import { ItemTypeLabelsPlural } from '../../../../constants/labels'
+import { ItemTypeIconsFilled } from '../../../../constants/icons'
+import { control, basic, primary, basic300 } from '../../../../styles/colors'
 import Pressable from '../../../../components/Pressable'
 
-const ItemCard = ({ onPress, selected, icon, pack, title }) => {
+const ItemCard = ({ onPress, selected, itemType }) => {
+    const onPressHandler = useCallback(() => onPress(itemType), [itemType, onPress])
+    const title = ItemTypeLabelsPlural[itemType]
+    const icon = ItemTypeIconsFilled[itemType]
+
     return (
         <Pressable
-            android_ripple={androidRipple}
-            style={selected ? pressableStyleSelected : pressableStyle}
-            onPress={onPress}>
-            {selected ?
-                <Icon
-                    name={'checkmark-circle-2'}
-                    style={styles.checkIcon}
-                    fill={success} />
-                : null}
-            <View
-                style={styles.innerPressable}>
-                <View style={selected ? styles.iconLayoutSelected : styles.iconLayout}>
-                    <Icon
-                        name={icon}
-                        pack={pack}
-                        style={styles.icon}
-                        fill={control} />
-                </View>
-            </View>
+            disabled={selected}
+            onPress={onPressHandler}
+            style={selected ? styles.containerSelected : styles.container}>
+            <Icon
+                name={icon}
+                pack={'cp'}
+                style={styles.icon}
+                fill={selected ? control : basic} />
             <Text
                 style={styles.text}
-                appearance={selected ? 'default' : 'hint'}>
+                category='p1'
+                numberOfLines={1}
+                ellipsizeMode={'tail'}
+                status={selected ? 'control' : 'basic'}>
                 {title}
             </Text>
+
         </Pressable>
     )
 }
 
-export default React.memo(ItemCard)
+export default ItemCard
 
-const styles = StyleSheet.create({
-    pressable: {
-        flex: 1,
-        padding: 12,
-        marginHorizontal: 6,
-        borderRadius: 6,
-        maxWidth: '33%',
+const containerStyles = StyleSheet.create({
+    container: {
+        paddingVertical: 10,
         backgroundColor: control,
-    },
-    pressablePlatformSpecific: Platform.select({
-        android: {
-            elevation: 5
-        },
-        default: {
-            borderColor: basic300,
-            borderWidth: 1,
-        }
-    }),
-    pressableSelected: {
-        backgroundColor: primary100
-    },
-    innerPressable: {
-        alignItems: 'center',
-        justifyContent: 'center',
-
-    },
-    iconLayout: {
-        width: 40,
-        height: 40,
-        borderRadius: 25,
+        borderRadius: 20,
+        marginHorizontal: 6,
+        marginBottom: 6,
+        flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor: basic
-    },
-    iconLayoutSelected: {
-        width: 40,
-        height: 40,
-        borderRadius: 25,
-        justifyContent: 'center',
-        alignItems: 'center',
-        backgroundColor: primary
-    },
-    icon: {
-        height: 20,
-        width: 20,
-    },
-    text: {
-        alignSelf: 'center',
-        paddingTop: 8,
-        fontSize: 13
-    },
-    checkIcon: {
-        width: 20,
-        height: 20,
-        position: 'absolute',
-        alignSelf: 'flex-end',
-        right: -6,
-        top: -6
+        borderWidth: 1,
+        borderColor: basic300
     }
 })
 
-const pressableStyle = StyleSheet.compose(styles.pressable, styles.pressablePlatformSpecific)
+const styles = StyleSheet.create({
+    container: StyleSheet.compose(containerStyles.container),
+    containerSelected: StyleSheet.compose(containerStyles.container,
+        {
+            backgroundColor: primary
+        }),
+    icon: {
+        width: 24,
+        height: 24,
+    },
+    row: {
+        flex: 1,
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'center',
+        marginHorizontal: 8
+    },
+    text: {
+        marginTop: 6,
+        textAlign: 'center'
+    }
+})
 
-const pressableStyleSelected = StyleSheet.compose(pressableStyle, styles.pressableSelected)
