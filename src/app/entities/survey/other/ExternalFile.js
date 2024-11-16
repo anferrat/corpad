@@ -2,10 +2,11 @@ import { Platform } from "react-native"
 import { ExternalFileTypes } from "../../../../constants/global"
 
 export class ExternalFile {
-    constructor(uri, name, fileType) {
+    constructor(uri, name, fileType, size) {
         this.uri = uri
         this.name = name
         this.fileType = fileType
+        this.size = size
     }
 
     getFileType() {
@@ -27,6 +28,8 @@ export class ExternalFile {
             return ExternalFileTypes.GPS_EXCHANGE_FORMAT
         else if (this.uri.endsWith('.geojson'))
             return ExternalFileTypes.GEOJSON
+        else if (this.uri.endsWith('.xlsx'))
+            return ExternalFileTypes.XLSX
         else return ExternalFileTypes.UNKNOWN_FILE
     }
 

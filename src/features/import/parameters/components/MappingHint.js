@@ -18,7 +18,7 @@ const MappingHint = (props) => {
                     <View style={styles.mainView}>
                         <Text appearance='hint' category='s2' style={styles.text}>1. Select data column you wish to use for this property.</Text>
                         <Text appearance='hint' category='s2' style={styles.text}>2. Select property value.</Text>
-                        <Text appearance='hint' category='s2' style={styles.text}>3. Select one or more values from .csv file.  When importing, these values will be converted to corresponding property value.</Text>
+                        <Text appearance='hint' category='s2' style={styles.text}>3. Select one or more values from spreadsheet file. When importing, these values will be converted to corresponding property value.</Text>
                     </View> : null}
             </View>
         )

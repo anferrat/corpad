@@ -128,6 +128,15 @@ export class FileSystemRepository {
         }
     }
 
+    async readBinaryFile(path) {
+        try {
+            return await RNFS.readFile(path, 'base64')
+        }
+        catch (er) {
+            throw new Error(errors.FILESYSTEM, `Unable to read binary file at ${path}`, er, 408)
+        }
+    }
+
     async getHash(path, algorithm = 'md5') {
         try {
             return await RNFS.hash(path, algorithm)

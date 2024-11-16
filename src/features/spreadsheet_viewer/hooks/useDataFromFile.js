@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { errorHandler } from '../../../helpers/error_handler'
 import { getData } from '../helpers/function'
 import { useNavigation } from '@react-navigation/native'
-import { loadCommaSeparatedFile } from '../../../app/controllers/survey/other/ExportedFileController'
+import { loadSpreadsheetFile } from '../../../app/controllers/survey/other/ExportedFileController'
 
 export const useDataFromFile = (uri) => {
     const [values, setValues] = useState({
@@ -15,14 +15,13 @@ export const useDataFromFile = (uri) => {
         }
     })
     const navigation = useNavigation()
-    //Max values for optimization
 
 
     useEffect(() => {
         const loadData = async () => {
             if (!values.loading)
                 setValues(old => ({ ...old, loading: true }))
-            const { response, status } = await loadCommaSeparatedFile({ path: uri })
+            const { response, status } = await loadSpreadsheetFile({ path: uri })
             if (status === 200) {
                 const { rowLimitReached, fieldsLimitReached, fields, data } = response
                 setValues({

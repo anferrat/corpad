@@ -17,9 +17,9 @@ export class DocumentPicker {
 
     async execute(type) {
         try {
-            const { fileCopyUri, uri, name } = await RNDocumentPicker.pickSingle({ allowMultiSelection: false, type, copyTo: 'cachesDirectory' })
+            const { fileCopyUri, uri, name, size } = await RNDocumentPicker.pickSingle({ allowMultiSelection: false, type, copyTo: 'cachesDirectory' })
             const path = fileCopyUri ? this._decode(fileCopyUri) : this._decode(uri)
-            const file = new ExternalFile(path, name)
+            const file = new ExternalFile(path, name, null, size)
             const fileType = file.getFileType()
             file.setFileType(fileType)
             return file
@@ -39,11 +39,11 @@ export class DocumentPicker {
         }))
     }
 
-    pickCommaSeparetedFile() {
+    pickSpreadsheetFile() {
         return this.execute(Platform.select({
-            android: FileMimeTypes.TEXT,
-            ios: FileTypeIdentifiers.CSV,
-            default: FileMimeTypes.CSV
+            android: [FileMimeTypes.TEXT, FileMimeTypes.XLSX],
+            ios: [FileTypeIdentifiers.CSV, FileTypeIdentifiers.SPREADSHEET],
+            default: [FileMimeTypes.TEXT, FileMimeTypes.XLSX]
         }))
     }
 

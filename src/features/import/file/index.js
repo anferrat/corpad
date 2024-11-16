@@ -1,5 +1,5 @@
 import React from 'react'
-import { StyleSheet, View } from 'react-native'
+import { Modal, StyleSheet, View } from 'react-native'
 import { ScrollView } from 'react-native-gesture-handler'
 import FilePicker from './FilePicker'
 import SelectFileView from './components/SelectFileView'
@@ -7,7 +7,6 @@ import SelectItem from './SelectItem'
 import NextButton from './NextButton'
 import LastImportView from './LastImportView'
 import { globalStyle } from '../../../styles/styles'
-
 
 export const FilePickerImport = ({ navigateToSpreadsheet, navigateToImportItem, navigateToList }) => {
 
@@ -23,7 +22,6 @@ export const FilePickerImport = ({ navigateToSpreadsheet, navigateToImportItem, 
                         <FilePicker
                             navigateToSpreadsheet={navigateToSpreadsheet} />
                     </SelectFileView>
-
                 </View>
             </ScrollView>
             <NextButton

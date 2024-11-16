@@ -17,6 +17,7 @@ const FilePicker = ({ navigateToSpreadsheet }) => {
         return (
             <>
                 <Button
+                    appearance='outline'
                     style={styles.button}
                     onPress={selectFile}
                     accessoryLeft={loading ?
@@ -41,7 +42,7 @@ export default FilePicker
 
 const styles = StyleSheet.create({
     button: {
-        margin: 12,
+        margin: 24,
     }
 
 })

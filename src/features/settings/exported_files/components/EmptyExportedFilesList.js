@@ -22,7 +22,7 @@ const EmptyExportedFilesList = () => {
                 category='p1'
                 appearance={'hint'}
                 style={styles.title}>
-                You can manage .csv and .kml files here, after exporting data from surveys.
+                You can manage .csv, .kml and .zip files here, after exporting data from surveys.
             </Text>
         </View>
     )
