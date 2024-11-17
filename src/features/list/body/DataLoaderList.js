@@ -29,14 +29,8 @@ const ItemList = ({ itemType, navigateToView }) => {
     const translateY = Animated.diffClamp(
         Animated.multiply(clampedScrollY, -1),
         -HEADER_HEIGHT,
-        -1,
+        0,
     )
-
-    const opacity = translateY.interpolate({
-        inputRange: [-HEADER_HEIGHT, 0],
-        outputRange: [1, 1],
-        extrapolate: 'clamp',
-    })
 
     useEffect(() => {
         const onUpdateHandler = EventRegister.addEventListener('GLOBAL_ITEM_UPDATED', async (updated) => {
@@ -46,14 +40,18 @@ const ItemList = ({ itemType, navigateToView }) => {
                     [updated.itemId],
                     t.settings.appliedFilters,
                     t.settings.displayedReading)
-                if (item.id)
+                if (item.id) {
                     dispatch(updateList(itemType, updated.itemId, item))
+                    headerRef.current.setValue(0)
+                }
             }
         })
 
         const onDeleteHandler = EventRegister.addEventListener('GLOBAL_ITEM_DELETED', (deleted) => {
-            if (deleted.itemType === itemType)
+            if (deleted.itemType === itemType) {
                 dispatch(deleteItemFromList(itemType, deleted.itemId))
+                headerRef.current.setValue(0)
+            }
         })
 
         return () => {
@@ -90,6 +88,7 @@ const ItemList = ({ itemType, navigateToView }) => {
                 )
                 dispatch(loadListState(itemType, data, []))
             }
+            headerRef.current.setValue(0)
         }
 
         if (t.settings.refreshing && !t.settings.endReached) {
@@ -146,8 +145,7 @@ const ItemList = ({ itemType, navigateToView }) => {
 
     const Header = React.memo(() => <ListHeader
         itemType={itemType}
-        translateY={translateY}
-        opacity={opacity} />)
+        translateY={translateY}/>)
 
     return (
         <>

@@ -1,8 +1,7 @@
-import React, { useContext } from 'react'
+import React from 'react'
 import TopBarBase from './components/TopBarBase'
 import { useDispatch } from 'react-redux'
 import { getHeader } from './helpers/functions'
-import { BS } from '../../../App'
 import { useBottomSheetNavigation } from '../../hooks/bottom_sheet/useBottomSheetNavigation'
 import { initialWindowMetrics } from 'react-native-safe-area-context'
 
