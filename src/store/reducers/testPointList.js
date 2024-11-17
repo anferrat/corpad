@@ -19,6 +19,7 @@ const initialState = {
             statusFilter: [],
             testPointTypeFilter: [],
             readingTypeFilter: [],
+            pipelines: []
         }
     }
 }
@@ -148,6 +149,7 @@ const testPointList = (state = initialState, action) => {
                         statusFilter: [],
                         testPointTypeFilter: [],
                         readingTypeFilter: [],
+                        pipelines: []
                     }
                 }
             }

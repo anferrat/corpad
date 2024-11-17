@@ -9,6 +9,7 @@ import TestPointFilterList from './TestPointFilterList'
 import TestPointTestPointTypeFilter from './TestPointTypeFilter'
 import TestPointReadingTypeFilter from './TestPointReadingTypeFilter'
 import FilterButtons from '../FilterButtons'
+import PipelineSegmentFilter from './PipelineSegmentFilter'
 
 
 
@@ -48,6 +49,14 @@ const TestPointFilter = ({ closeSheet }) => {
                         onBackPress={goToList}
                         closeSheet={closeSheet}
                         visible={screen === TestPointFilterScreens.READING_FILTER} />
+                </Route>
+                <Route
+                    routeKey={TestPointFilterScreens.PIPELINE_FILTER}>
+                    <PipelineSegmentFilter
+                        key={screen === TestPointFilterScreens.PIPELINE_FILTER}
+                        onBackPress={goToList}
+                        closeSheet={closeSheet}
+                        visible={screen === TestPointFilterScreens.PIPELINE_FILTER} />
                 </Route>
             </Router>
             <FilterButtons

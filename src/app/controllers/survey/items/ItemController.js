@@ -12,6 +12,7 @@ import { GeolocationCalculator } from "../../../services/other/GeolocationCalcul
 import { GetItemPhotos } from "../../../services/survey/items/GetItemPhotos"
 import { assetRepo, defaultNameRepo, fileSystemRepo, geolocationRepo, pipelineRepo, rectifierRepo, surveyRepo, testPointRepo } from "../../_instances/repositories"
 import { basicPresenter, itemPresenter, listPresenter } from "../../_instances/presenters"
+import { GetPipelineList } from "../../../services/survey/items/GetPipelineList"
 
 class ItemController extends Controller {
     constructor(testPointRepo, rectifierRepo, pipelineRepo, surveyRepo, defaultNameRepo, geolocationRepo, fileSystemRepo, assetRepo, basicPresenter, itemPresenter, listPresenter) {
@@ -31,6 +32,7 @@ class ItemController extends Controller {
 
         this.geolocationCalculatorService = new GeolocationCalculator()
         this.getNearbyItemsService = new GetNearbyItems(testPointRepo, rectifierRepo, geolocationRepo, this.geolocationCalculatorService)
+        this.getPipelineListService = new GetPipelineList(pipelineRepo)
     }
 
     create(params, onError = null, onSuccess = null) {
@@ -76,6 +78,13 @@ class ItemController extends Controller {
         return super.controllerHandler(onSuccess, onError, 613, async () => {
             const { itemType, filters, sorting, latitude, longitude } = this.validation.getIdList(params)
             return this.getIdListService.execute({ itemType, filters, sorting, latitude, longitude })
+        }
+        )
+    }
+
+    getPipelineList(onError = null, onSuccess = null) {
+        return super.controllerHandler(onSuccess, onError, 613, async () => {
+            return this.getPipelineListService.execute()
         }
         )
     }
@@ -132,3 +141,5 @@ export const searchItem = ({ keyword }, onError, onSuccess) => itemController.se
 export const getNearbyItems = ({ itemType }, onError, onSuccess) => itemController.getNearbyItems({ itemType }, onError, onSuccess)
 
 export const getItemPhotos = ({ itemId, itemType }, onError, onSuccess) => itemController.getItemPhotos({ itemType, itemId }, onError, onSuccess)
+
+export const getPipelineList = (onError, onSuccess) => itemController.getPipelineList(onError, onSuccess)

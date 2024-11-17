@@ -8,7 +8,7 @@ import SheetHeader from '../../../components/SheetHeader'
 
 
 const TestPointFilterList = ({ onPressListItem, closeSheet }) => {
-    const { statusCounter, readingCounter, testPointTypeCounter } = useTestPointFilterCounter()
+    const { statusCounter, readingCounter, testPointTypeCounter, pipelineCounter } = useTestPointFilterCounter()
     const { onApply, filter } = useTestPointHideEmptyToggleFilter({ closeSheet })
     return (
         <>
@@ -32,6 +32,12 @@ const TestPointFilterList = ({ onPressListItem, closeSheet }) => {
                 onPress={onPressListItem}
                 counter={readingCounter}
                 routeKey={TestPointFilterScreens.READING_FILTER}
+                disabled={false} />
+            <FilterListItem
+                title='Pipelines'
+                onPress={onPressListItem}
+                counter={pipelineCounter}
+                routeKey={TestPointFilterScreens.PIPELINE_FILTER}
                 disabled={false} />
             <ToggleListItem
                 title='Hide test points without readings'

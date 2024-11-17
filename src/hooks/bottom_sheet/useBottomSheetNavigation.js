@@ -8,7 +8,7 @@ import { updateBottomSheetContent } from "../../store/actions/settings"
 export const BOTTOM_SHEET_VIEWS = {
     CREATE: { itemType: null, content: 'create', index: 3 },
     MENU: { itemType: null, content: 'menu', index: 2 },
-    TEST_POINT_FILTER: { itemType: 'TEST_POINT', content: 'filter', index: 4 },
+    TEST_POINT_FILTER: { itemType: 'TEST_POINT', content: 'filter', index: 5 },
     TEST_POINT_SORTING: { itemType: 'TEST_POINT', content: 'sorting', index: 4 },
     TEST_POINT_READINGS: { itemType: 'TEST_POINT', content: 'readings', index: 4 },
     RECTIFIER_READINGS: { itemType: 'RECTIFIER', content: 'readings', index: 1 },
