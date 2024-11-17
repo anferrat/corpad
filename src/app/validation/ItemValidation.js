@@ -132,6 +132,7 @@ export class ItemValidation extends Validation {
                             testPointTypeFilter: this.testPointTypeFilter.required(),
                             hideEmptyTestPoints: this.bool.required(),
                             readingTypeFilter: this.readingTypeFilter.required(),
+                            pipelines: this.pipelineSegmentFilter
                         }).required()
                     })
                 )

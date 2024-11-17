@@ -5,30 +5,23 @@ import { Error, errors } from "../../utils/Error"
 import { ItemResponseProcessor } from "./utils/ItemResponseProcessor"
 import { ItemTypes, SubitemTypes } from "../../../constants/global"
 import { SubitemResponseProcessor } from "./utils/SubitemResponseProcessor"
+import { FilterQueryGenerator } from "./utils/FilterQueryGenerator"
 
 export class TestPointRepository extends SQLiteRepository {
     constructor() {
         super()
         this.responseProcessor = new ItemResponseProcessor()
         this.subitemProcessor = new SubitemResponseProcessor()
+        this.filterQueryGenerator = new FilterQueryGenerator()
         this.tableName = 'testPoints'
         this.subitemTable = 'cards'
     }
 
     async getIdList({ filters, sorting, latitude, longitude }) {
         try {
-            const getFilterQuery = (filters) => {
-                if (filters) {
-                    const statusFilter = filters.statusFilter.length > 0 ? `(status NOT IN ${this.convertArrayToInStatement(filters.statusFilter)})` : ''
-                    const testPointTypeFilter = filters.testPointTypeFilter.length > 0 ? (statusFilter !== '' ? ' AND ' : '') + "(testPointType NOT IN ('" + filters.testPointTypeFilter.join("', '") + "'))" : ''
-                    const hideEmptyFilter = filters.hideEmptyTestPoints ? (statusFilter !== '' || testPointTypeFilter !== '' ? ' AND ' : '') + "((SELECT COUNT(cards.id) FROM cards WHERE ((cards.testPointId = testPoints.id) AND cards.type NOT IN ('" + filters.readingTypeFilter.join("', '") + "')))<>0)" : ''
-                    return filters.statusFilter.length > 0 || filters.testPointTypeFilter.length > 0 || hideEmptyFilter ? ' WHERE (' + statusFilter + testPointTypeFilter + hideEmptyFilter + ')' : ''
-                }
-                else return ''
-            }
             const sortingQuery = this.responseProcessor.sortingQuery(sorting, latitude, longitude)
-            const filterQuery = getFilterQuery(filters)
-            const result = await super.runSingleQueryTransaction(`SELECT id FROM ${this.tableName}${filterQuery}${sortingQuery}`, [])
+            const filterQuery = this.filterQueryGenerator.testPoint(filters)
+            const result = await super.runSingleQueryTransaction(`SELECT DISTINCT id FROM ${this.tableName}${filterQuery}${sortingQuery}`, [])
             return super.generateArray(result.rows.length, result.rows.item).map(row => row.id)
         }
         catch (err) {

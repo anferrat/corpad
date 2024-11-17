@@ -37,6 +37,7 @@ export class Validation {
     testPointTypeFilter = array().of(this.testPointType)
     subitemType = mixed().oneOf(Object.values(SubitemTypes))
     readingTypeFilter = array().of(this.subitemType)
+    pipelineSegmentFilter = array()
     permTypes = mixed().oneOf([...Object.values(PermanentPotentialTypes), null]).nullable()
     anodeMaterial = mixed().oneOf([...Object.values(AnodeMaterials), null], 'typeMismatch').nullable()
     wireColor = mixed().oneOf([...Object.values(WireColors), null]).nullable()

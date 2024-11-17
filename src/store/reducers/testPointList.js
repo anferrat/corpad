@@ -14,7 +14,6 @@ const initialState = {
         sorting: 0,
         filterCounter: 0,
         appliedFilters: {
-            searchString: '',
             hideEmptyTestPoints: false,
             statusFilter: [],
             testPointTypeFilter: [],

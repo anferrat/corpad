@@ -643,3 +643,7 @@ export const RectifierReadingOptions = Object.freeze({
     CURRENT_VOLTAGE: 0,
     TARGET: 1
 })
+
+export const PipelineFilterItems = Object.freeze({
+    NOT_ASSIGNED: 'NOT_ASSIGNED'
+})
