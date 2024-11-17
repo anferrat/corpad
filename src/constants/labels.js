@@ -1,4 +1,4 @@
-import { ItemTypes, SubitemTypes, PipeDiameters, WireColors, TestPointTypes, PermanentPotentialTypes, SortingOptions, ItemStatuses, PipeSchedules, WireGauges, CurrentUnits, AreaUnits, CurrentDensityUnits, FactorUnits, PotentialUnits, AnodeMaterials, ReferenceCellTypes, IsolationTypes, CouponTypes, PipelineMaterials, PipelineProducts, PowerSources, TapOptions, CoarseFineOptions, ExportItemProperties, ExportSubitemProperties, CalculatorTypes, PipelineCoating, IsolationShorted, MultimeterTypes, TimeUnits, MultimeterMeasurementTypes, MultimeterCycles, MultimeterSyncModes, ImageSources, MapLayerFeatures, StrokeColors, StrokeWidths, ExportFormatTypes, LengthUnits, ResistivityUnits, AnodeBedEnclosureTypes, AnodeBedMaterialTypes, AnodeBedTypes, SubscriptionStatuses, FileMimeTypes, ExternalLinkTypes, TestPointReadingOptions, RectifierReadingOptions } from "./global"
+import { ItemTypes, SubitemTypes, PipeDiameters, WireColors, TestPointTypes, PermanentPotentialTypes, SortingOptions, ItemStatuses, PipeSchedules, WireGauges, CurrentUnits, AreaUnits, CurrentDensityUnits, FactorUnits, PotentialUnits, AnodeMaterials, ReferenceCellTypes, IsolationTypes, CouponTypes, PipelineMaterials, PipelineProducts, PowerSources, TapOptions, CoarseFineOptions, ExportItemProperties, ExportSubitemProperties, CalculatorTypes, PipelineCoating, IsolationShorted, MultimeterTypes, TimeUnits, MultimeterMeasurementTypes, MultimeterCycles, MultimeterSyncModes, ImageSources, MapLayerFeatures, StrokeColors, StrokeWidths, ExportFormatTypes, LengthUnits, ResistivityUnits, AnodeBedEnclosureTypes, AnodeBedMaterialTypes, AnodeBedTypes, SubscriptionStatuses, FileMimeTypes, ExternalLinkTypes, TestPointReadingOptions, RectifierReadingOptions, PipelineFilterItems } from "./global"
 
 export const DefaultNames = Object.freeze({
     [ItemTypes.TEST_POINT]: 'TP',
@@ -533,4 +533,8 @@ export const TestPointReadingOptionLabels = Object.freeze({
 export const RectifierReadingOptionLabels = Object.freeze({
     [RectifierReadingOptions.CURRENT_VOLTAGE]: 'Current and voltage',
     [RectifierReadingOptions.TARGET]: 'Current target'
+})
+
+export const PipelineFilterItemLabels = Object.freeze({
+    [PipelineFilterItems.NOT_ASSIGNED]: 'Non-pipelines and unassigned'
 })

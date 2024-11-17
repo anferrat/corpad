@@ -1,0 +1,47 @@
+import { PipelineFilterItems } from "../../../../constants/global"
+
+export class FilterQueryGenerator {
+    constructor() {
+    }
+
+    _toInValues(array) {
+        return array.length === 0 ? '()' : '("' + array.join('", "') + '")'
+    }
+
+    _statusFilter(statusFilter) {
+        return `(status NOT IN ${this._toInValues(statusFilter)})`
+    }
+
+    _testPointTypeFilter(testPointTypeFilter) {
+        return `(testPointType NOT IN ${this._toInValues(testPointTypeFilter)})`
+    }
+
+    _hideEmptyFilter(readingTypeFilter) {
+        return `(EXISTS (SELECT 1 FROM cards WHERE((cards.testPointId = testPoints.id) AND cards.type NOT IN ${this._toInValues(readingTypeFilter)})))`
+    }
+
+    _pipelineFilter(pipelines) {
+        let isNullFiltered = ~pipelines.indexOf(PipelineFilterItems.NOT_ASSIGNED)
+        return `(EXISTS (SELECT 1 FROM cards WHERE cards.testPointId = testPoints.id AND (cards.pipelineId NOT IN ${this._toInValues(pipelines)}${!isNullFiltered ? 'OR cards.pipelineId IS NULL' : ''})))`
+    }
+
+
+    testPoint(filters) {
+        const whereClauses = []
+
+        const { readingTypeFilter, hideEmptyTestPoints, pipelines, statusFilter, testPointTypeFilter } = filters
+
+        if (hideEmptyTestPoints)
+            whereClauses.push(this._hideEmptyFilter(readingTypeFilter))
+        if (statusFilter.length > 0)
+            whereClauses.push(this._statusFilter(statusFilter))
+        if (testPointTypeFilter.length > 0)
+            whereClauses.push(this._testPointTypeFilter(testPointTypeFilter))
+        if (pipelines.length > 0)
+
+            whereClauses.push(this._pipelineFilter(pipelines))
+
+
+        return `${whereClauses.length > 0 ? ` WHERE ${whereClauses.join(' AND ')}` : ''}`
+    }
+}
