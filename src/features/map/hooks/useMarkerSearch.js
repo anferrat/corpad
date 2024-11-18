@@ -1,12 +1,14 @@
 import { useCallback, useState, useEffect } from 'react'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { searchMarker } from '../helpers/functions'
 import debounce from 'lodash.debounce'
 import { useBottomSheetNavigation } from '../../../hooks/bottom_sheet/useBottomSheetNavigation'
+import { activateMarker, resetActiveMarkers } from '../../../store/actions/map'
 
-const useMarkerSearch = ({ setMarkerActive, resetActiveMarker }) => {
+const useMarkerSearch = () => {
     const { openMenu } = useBottomSheetNavigation()
     const markers = useSelector(state => state.map.markers)
+    const dispatch = useDispatch()
 
     const [search, setSearch] = useState({
         keyword: null,
@@ -47,16 +49,16 @@ const useMarkerSearch = ({ setMarkerActive, resetActiveMarker }) => {
         }
     }, [modalEnabled])
 
-    const showOnMap = useCallback((itemId, itemType) => {
-        setMarkerActive(itemId, itemType)
+    const showOnMap = useCallback((marker) => {
+        dispatch(activateMarker(marker))
         hideModal()
-    }, [setMarkerActive, hideModal])
+    }, [dispatch, hideModal])
 
     const resetKeyword = useCallback(() => {
         setSearch(state => ({ ...state, keyword: null, searching: true }))
         setTimeout(() => { setSearch(state => ({ ...state, markersFound: markers, searching: false })) }, 50)
-        resetActiveMarker()
-    }, [markers, resetActiveMarker, setSearch])
+        dispatch(resetActiveMarkers())
+    }, [markers, setSearch, dispatch])
 
     return {
         search,

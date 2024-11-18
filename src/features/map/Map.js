@@ -35,13 +35,10 @@ const Map = ({ navigateToView, navigateToEdit, navigateToViewMapLayer, navigateT
         createItemHandler,
         shareActiveLocation,
         shareNewItemLocation,
-        viewActiveMarkerData,
         toggleSatelliteMode,
         zoomToCoordinates,
         onMapReady,
-        setMarkerActive,
-        resetActiveMarker
-    } = useMarkers({ navigateToEdit, navigateToView, ref })
+    } = useMarkers({ navigateToEdit, ref })
 
     return (
         <>
@@ -110,8 +107,6 @@ const Map = ({ navigateToView, navigateToEdit, navigateToViewMapLayer, navigateT
                 loading={loading}
                 satelliteMode={satelliteMode}
                 navigateToViewMapLayer={navigateToViewMapLayer}
-                setMarkerActive={setMarkerActive}
-                resetActiveMarker={resetActiveMarker}
                 toggleSatelliteMode={toggleSatelliteMode}
                 zoomToUserLocation={zoomToUserLocation}
                 animateToCoordinates={animateToCoordinates}

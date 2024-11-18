@@ -6,11 +6,11 @@ export class GetMarkerList {
         this.permissions = permissions
     }
 
-    async execute() {
+    async execute(filters) {
         try { await this.permissions.location() } catch { }
         const [testPoints, rectifiers] = await Promise.all([
-            this.testPointRepo.getAllMarkers(),
-            this.rectifierRepo.getAllMarkers()
+            this.testPointRepo.getAllMarkers(filters),
+            this.rectifierRepo.getAllMarkers(filters)
         ])
         return this.listPresenter.execute([...testPoints, ...rectifiers])
     }

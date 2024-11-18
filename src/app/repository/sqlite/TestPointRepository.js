@@ -111,11 +111,12 @@ export class TestPointRepository extends SQLiteRepository {
         }
     }
 
-    async getAllMarkers() {
+    async getAllMarkers(filters) {
         try {
             const sortingQuery = this.responseProcessor.sortingQuery(0, null, null)
+            const filterQuery = this.filterQueryGenerator.testPointMarker(filters)
             const result = await this.runSingleQueryTransaction(
-                `SELECT id,'${ItemTypes.TEST_POINT}' AS itemType, uid, status, testPointType, latitude, longitude, name, location, comment, timeCreated, timeModified FROM testPoints WHERE latitude IS NOT NULL AND longitude IS NOT NULL${sortingQuery}`, [])
+                `SELECT id,'${ItemTypes.TEST_POINT}' AS itemType, uid, status, testPointType, latitude, longitude, name, location, comment, timeCreated, timeModified FROM testPoints WHERE latitude IS NOT NULL AND longitude IS NOT NULL${filterQuery}${sortingQuery}`, [])
             return super.generateArray(result.rows.length, result.rows.item)
                 .map(({ id, uid, itemType, status, testPointType, latitude, longitude, name, location, comment, timeCreated, timeModified }) =>
                     new Marker(id, uid, name, status, timeCreated, timeModified, comment, itemType, testPointType, location, latitude, longitude))

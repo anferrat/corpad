@@ -4,18 +4,18 @@ import { useSelector, useDispatch } from 'react-redux'
 import { getMarker, getMarkerList } from '../../../app/controllers/survey/items/MarkerController'
 import { getInitialMapRegion, shareLocationWithExtarnalApp } from '../../../app/controllers/survey/other/GeolocationController'
 import { errorHandler } from '../../../helpers/error_handler'
-import { activateMarker, deleteMarker, loadMarkers, refreshMarkers, resetActiveMarkers, setActiveMarker, setMapReady, setNewItemMarker, toggleSatellite, updateMarker } from '../../../store/actions/map'
+import { activateMarker, deleteMarker, loadMarkers, refreshMarkers, resetActiveMarkers, setMapReady, setNewItemMarker, toggleSatellite, updateMarker } from '../../../store/actions/map'
 import { updateMarker as updateMarkerRequest } from '../../../app/controllers/survey/items/MarkerController'
 import { hapticMedium, hapticMap } from '../../../native_libs/haptics'
 import { useIsFocused } from '@react-navigation/native'
 import { createItem } from '../../../app/controllers/survey/items/ItemController'
 import { roundCoord } from '../helpers/functions'
 
-const useMarkers = ({ navigateToEdit, navigateToView, ref }) => {
+const useMarkers = ({ navigateToEdit, ref }) => {
     const map = useSelector(state => state.map)
     const isFocused = useIsFocused()
     const dispatch = useDispatch()
-    const { loading, activeMarker, markers, newItemMarker, satelliteMode, activeMapLayerMarker } = map
+    const { loading, activeMarker, markers, newItemMarker, satelliteMode, activeMapLayerMarker, isFirstLoad, filters } = map
     const currentRegion = useRef({
         latitudeDelta: 0.0135,
         longitudeDelta: 0.0135,
@@ -32,18 +32,26 @@ const useMarkers = ({ navigateToEdit, navigateToView, ref }) => {
     })
 
     const loadData = useCallback(async () => {
-        const { status, response } = await getMarkerList(er => errorHandler(er))
+        const { status, response } = await getMarkerList({ filters }, er => errorHandler(er))
         if (status === 200) {
             dispatch(loadMarkers(response))
-            //onLoad animate to initial region. if active marker exist on load, it will animate to active marker instead
-            if (activeMarkerRef.current.itemType === null) {
-                const regionData = await getInitialMapRegion({ markers: response })
-                ref.current.animateToRegion(regionData.response)
-            }
-            else {
-                dispatch(setActiveMarker(activeMarkerRef.current.itemId, activeMarkerRef.current.itemType))
+            if (isFirstLoad) {
+                //onLoad animate to initial region. if active marker exist on load, it will animate to active marker instead
+                if (activeMarkerRef.current.itemType === null) {
+                    const regionData = await getInitialMapRegion({ markers: response })
+                    ref.current.animateToRegion(regionData.response)
+                }
+                else
+                    activateMarkerFromSource(activeMarkerRef.current)
             }
         }
+    }, [dispatch, isFirstLoad])
+
+    const activateMarkerFromSource = useCallback(async ({ itemId, itemType }) => {
+        const { status, response } = await getMarker({ itemType, itemId })
+        if (status === 200)
+            if (response.latitide !== null && response.longitude !== null)
+                dispatch(activateMarker(response))
     }, [dispatch])
 
     useEffect(() => {
@@ -55,9 +63,8 @@ const useMarkers = ({ navigateToEdit, navigateToView, ref }) => {
         const onUpdateHandler = EventRegister.addEventListener('GLOBAL_ITEM_UPDATED', async ({ itemType, itemId }) => {
             if (!loading && (itemType === 'TEST_POINT' || itemType === 'RECTIFIER')) {
                 const { status, response } = await getMarker({ itemType, itemId })
-                if (status === 200) {
+                if (status === 200)
                     dispatch(updateMarker(response))
-                }
             }
         })
 
@@ -74,7 +81,7 @@ const useMarkers = ({ navigateToEdit, navigateToView, ref }) => {
         const onDisplayHandler = EventRegister.addEventListener('selectOnMap', ({ itemId, itemType }) => {
             if (!loading) {
                 if (activeMarkerRef.current.itemId !== itemId && activeMarkerRef.current.itemType !== itemType)
-                    dispatch(setActiveMarker(itemId, itemType))
+                    activateMarkerFromSource({ itemId, itemType })
             }
             else {
                 activeMarkerRef.current.itemId = itemId
@@ -96,7 +103,7 @@ const useMarkers = ({ navigateToEdit, navigateToView, ref }) => {
 
     useEffect(() => {
         if (!loading && isFocused && activeMarkerRef.current.itemId !== null && activeMarkerRef.current.itemType !== null) {
-            dispatch(setActiveMarker(activeMarkerRef.current.itemId, activeMarkerRef.current.itemType))
+            activateMarkerFromSource(activeMarkerRef.current)
             activeMarkerRef.current.itemType = null
             activeMarkerRef.current.itemId = null
         }
@@ -150,11 +157,10 @@ const useMarkers = ({ navigateToEdit, navigateToView, ref }) => {
     }, [activeMarker.id !== null, newItemMarker.active, dispatch, activeMapLayerMarker.layerId !== null])
 
     const updateMarkerHandler = useCallback(async (marker, lat, lon) => {
-
         const latitide = roundCoord(lat)
         const longitude = roundCoord(lon)
         dispatch(updateMarker({ ...marker, latitude: latitide, longitude: longitude })) //timeModified is not updated. Doesnt break anything, but keep in mind
-        const { errorMessage } = await updateMarkerRequest({ ...marker, latitude: latitide, longitude: longitude },
+        await updateMarkerRequest({ ...marker, latitude: latitide, longitude: longitude },
             er => {
                 dispatch(updateMarker(marker))
                 errorHandler(er)
@@ -221,17 +227,9 @@ const useMarkers = ({ navigateToEdit, navigateToView, ref }) => {
                 er => errorHandler(er))
     }, [newItemMarker.latitude, newItemMarker.longitude])
 
-    const viewActiveMarkerData = useCallback(() => {
-        navigateToView(activeMarker.id, activeMarker.itemType)
-    }, [activeMarker.id, activeMarker.itemType])
-
     const toggleSatelliteMode = useCallback(() => dispatch(toggleSatellite()), [dispatch])
 
     const onMapReady = useCallback(() => { dispatch(setMapReady()) }, [dispatch])
-
-    const setMarkerActive = useCallback((itemId, itemType) => dispatch(setActiveMarker(itemId, itemType)), [dispatch])
-
-    const resetActiveMarker = useCallback(() => dispatch(resetActiveMarkers()), [dispatch])
 
     return {
         markers,
@@ -253,12 +251,9 @@ const useMarkers = ({ navigateToEdit, navigateToView, ref }) => {
         createItemHandler,
         shareActiveLocation,
         shareNewItemLocation,
-        viewActiveMarkerData,
         toggleSatelliteMode,
         zoomToCoordinates,
         onMapReady,
-        setMarkerActive,
-        resetActiveMarker
     }
 }
 

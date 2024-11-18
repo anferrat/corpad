@@ -6,8 +6,8 @@ import IconButton from '../../../components/IconButton'
 import useMarkerSearch from '../hooks/useMarkerSearch'
 import SearchModal from './search/SearchModal'
 
-const SearchBar = ({ setMarkerActive, resetActiveMarker, satelliteMode }) => {
-    const { search, hideModal, showModal, openMenu, onChangeKeyword, showOnMap, resetKeyword } = useMarkerSearch({ setMarkerActive, resetActiveMarker })
+const SearchBar = ({ satelliteMode }) => {
+    const { search, hideModal, showModal, openMenu, onChangeKeyword, showOnMap, resetKeyword } = useMarkerSearch()
     const { keyword, modalEnabled, markersFound, searching } = search
     const isEmpty = keyword === null
 

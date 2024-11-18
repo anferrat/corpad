@@ -5,12 +5,14 @@ import { Error, errors } from "../../utils/Error"
 import { ItemResponseProcessor } from "./utils/ItemResponseProcessor"
 import { ItemTypes, SubitemTypes } from "../../../constants/global"
 import { SubitemResponseProcessor } from "./utils/SubitemResponseProcessor"
+import { FilterQueryGenerator } from "./utils/FilterQueryGenerator"
 
 export class RectifierRepository extends SQLiteRepository {
     constructor() {
         super()
         this.responseProcessor = new ItemResponseProcessor()
         this.subitemProcessor = new SubitemResponseProcessor()
+        this.filterQueryGenerator = new FilterQueryGenerator()
         this.tableName = 'rectifiers'
         this.subitemTable = 'circuits'
     }
@@ -135,11 +137,12 @@ export class RectifierRepository extends SQLiteRepository {
         }
     }
 
-    async getAllMarkers() {
+    async getAllMarkers(filters) {
         try {
             const sortingQuery = this.responseProcessor.sortingQuery(0, null, null)
+            const filterQuery = this.filterQueryGenerator.rectifierMarker(filters)
             const result = await this.runSingleQueryTransaction(
-                `SELECT id, '${ItemTypes.RECTIFIER}' AS itemType, uid, status, NULL AS testPointType, latitude, longitude, name, location, comment, timeCreated, timeModified FROM rectifiers WHERE latitude IS NOT NULL AND longitude IS NOT NULL${sortingQuery}`, [])
+                `SELECT id, '${ItemTypes.RECTIFIER}' AS itemType, uid, status, NULL AS testPointType, latitude, longitude, name, location, comment, timeCreated, timeModified FROM rectifiers WHERE latitude IS NOT NULL AND longitude IS NOT NULL${filterQuery}${sortingQuery}`, [])
             return super.generateArray(result.rows.length, result.rows.item)
                 .map(({ id, uid, itemType, status, testPointType, latitude, longitude, name, location, comment, timeCreated, timeModified }) =>
                     new Marker(id, uid, name, status, timeCreated, timeModified, comment, itemType, testPointType, location, latitude, longitude))
