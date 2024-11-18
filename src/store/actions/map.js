@@ -2,7 +2,6 @@ export const LOAD_MARKERS = 'LOAD_MARKERS'
 export const REFRESH_MARKERS = 'REFRESH_MARKERS'
 export const DELETE_MARKER = 'DELETE_MARKER'
 export const UPDATE_MARKER = 'UPDATE_MARKER'
-export const SET_ACTIVE_MARKER = 'SET_ACTIVE_MARKER'
 export const SET_MARKER_UPDATE = 'SET_MARKER_UPDATE'
 export const SET_NEW_ITEM_MARKER = 'SET_NEW_ITEM_MARKER'
 export const TOGGLE_SATELLITE_MODE = 'TOGGLE_SATELLITE_MODE'
@@ -11,6 +10,7 @@ export const RESET_ACTIVE_MARKERS = 'RESET_ACTIVE_MARKERS'
 export const SET_MAP_READY = 'SET_MAP_READY'
 export const SET_ACTIVE_MAP_LAYER_MARKER = 'SET_ACTIVE_MAP_LAYER_MARKER'
 export const RESET_ACTIVE_MAP_LAYER_MARKER = 'RESET_ACTIVE_MAP_LAYER_MARKER'
+export const APPLY_MAP_FILTER = 'APPLY_MAP_FILTER'
 
 export const loadMarkers = (list) => {
     return { type: LOAD_MARKERS, list: list }
@@ -30,10 +30,6 @@ export const updateMarker = (marker) => {
 
 export const refreshMarkers = () => {
     return { type: REFRESH_MARKERS }
-}
-
-export const setActiveMarker = (itemId, itemType) => {
-    return { type: SET_ACTIVE_MARKER, itemId, itemType }
 }
 
 export const activateMarker = (marker) => {
@@ -58,4 +54,8 @@ export const resetActiveMarkers = () => {
 
 export const setMapReady = () => {
     return { type: SET_MAP_READY }
+}
+
+export const applyFilter = (filterType, filter) => {
+    return { type: APPLY_MAP_FILTER, filterType, filter }
 }

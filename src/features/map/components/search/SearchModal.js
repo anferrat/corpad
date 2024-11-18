@@ -47,9 +47,7 @@ const SearchModal = ({ hideModal, keyword, onChangeKeyword, markersFound, showOn
 
     const renderItem = React.useCallback(({ item }) => (
         <SearchItem
-            itemType={item.itemType}
-            itemId={item.id}
-            showOnMap={showOnMap}
+            showOnMap={showOnMap.bind(this, item)}
             name={item.name}
             markerType={item.markerType}
             status={item.status}

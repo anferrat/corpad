@@ -1,4 +1,4 @@
-import { PipelineFilterItems } from "../../../../constants/global"
+import { ItemTypes, PipelineFilterItems } from "../../../../constants/global"
 
 export class FilterQueryGenerator {
     constructor() {
@@ -25,6 +25,10 @@ export class FilterQueryGenerator {
         return `(EXISTS (SELECT 1 FROM cards WHERE cards.testPointId = testPoints.id AND (cards.pipelineId NOT IN ${this._toInValues(pipelines)}${!isNullFiltered ? 'OR cards.pipelineId IS NULL' : ''})))`
     }
 
+    _rectifierMarkerFilter() {
+        return `1=0`
+    }
+
 
     testPoint(filters) {
         const whereClauses = []
@@ -41,6 +45,33 @@ export class FilterQueryGenerator {
 
             whereClauses.push(this._pipelineFilter(pipelines))
 
+
+        return `${whereClauses.length > 0 ? ` WHERE ${whereClauses.join(' AND ')}` : ''}`
+    }
+
+    testPointMarker(filters) {
+        const { statusFilter, markerTypeFilter } = filters
+        const whereClauses = []
+
+        if (statusFilter.length > 0)
+            whereClauses.push(this._statusFilter(statusFilter))
+
+        if (markerTypeFilter.length > 0)
+            whereClauses.push(this._testPointTypeFilter(testPointTypeFilter))
+
+        return `${whereClauses.length > 0 ? ` WHERE ${whereClauses.join(' AND ')}` : ''}`
+    }
+
+    rectifierMarker(filters) {
+        const { statusFilter, markerTypeFilter } = filters
+        const whereClauses = []
+
+        if (statusFilter.length > 0)
+            whereClauses.push(this._statusFilter(statusFilter))
+
+        const isRectifierFiltered = ~markerTypeFilter.indexOf(ItemTypes.RECTIFIER)
+        if (isRectifierFiltered)
+            whereClauses.push(this._rectifierMarkerFilter())
 
         return `${whereClauses.length > 0 ? ` WHERE ${whereClauses.join(' AND ')}` : ''}`
     }

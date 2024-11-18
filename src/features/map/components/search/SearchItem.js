@@ -9,10 +9,10 @@ const renderIcon = (markerType, status) => (props) => <Icon name={`map-${markerT
 
 const diagArrowIcon = (props) => <Icon name='diagonal-arrow-right-up-outline' {...props} />
 
-const SearchItem = ({ name, location, markerType, status, showOnMap, itemId, itemType }) => {
+const SearchItem = ({ name, location, markerType, status, showOnMap }) => {
     return (
         <ListItem
-            onPress={showOnMap.bind(this, itemId, itemType)}
+            onPress={showOnMap}
             accessoryLeft={renderIcon(markerType, status)}
             accessoryRight={diagArrowIcon}
             title={name}

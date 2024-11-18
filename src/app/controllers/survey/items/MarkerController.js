@@ -3,7 +3,7 @@ import { GetMarkerList } from "../../../services/survey/items/markers/GetMarkerL
 import { UpdateMarker } from "../../../services/survey/items/markers/UpdateMarker"
 import { Controller } from "../../../utils/Controller"
 import { MarkerValidation } from "../../../validation/MarkerValidation"
-import {  permissions } from "../../_instances/general_services"
+import { permissions } from "../../_instances/general_services"
 import { basicPresenter, listPresenter } from "../../_instances/presenters"
 import { rectifierRepo, testPointRepo } from "../../_instances/repositories"
 
@@ -23,9 +23,9 @@ class MarkerController extends Controller {
         })
     }
 
-    getList(onError = null, onSuccess = null) {
+    getList({ filters }, onError = null, onSuccess = null) {
         return super.controllerHandler(onSuccess, onError, 615, async () => {
-            return this.getMarkerListService.execute()
+            return this.getMarkerListService.execute(filters)
         })
     }
 
@@ -48,6 +48,6 @@ const markerController = new MarkerController(
 
 export const getMarker = ({ itemType, itemId }, onError, onSuccess) => markerController.getMarker({ itemType, itemId }, onError, onSuccess)
 
-export const getMarkerList = (onError, onSuccess) => markerController.getList(onError, onSuccess)
+export const getMarkerList = ({ filters }, onError, onSuccess) => markerController.getList({ filters }, onError, onSuccess)
 
 export const updateMarker = ({ id, uid, latitude, longitude, comment, location, status, testPointType, timeCreated, name, itemType }, onError, onSuccess) => markerController.updateMarker({ id, uid, latitude, longitude, comment, location, status, testPointType, timeCreated, name, itemType }, onError, onSuccess)
