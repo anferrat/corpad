@@ -7,7 +7,7 @@ import { ImportData } from './ImportDataProvider'
 import ImportModalContent from './components/ImportModalContent'
 import { importData } from '../../../app/controllers/survey/ImportController'
 import { setRefresh } from '../../../store/actions/list'
-import { refreshMarkers } from '../../../store/actions/map'
+import { resetMap } from '../../../store/actions/map'
 import { getModalTop } from '../../../styles/dimensions'
 
 const ImportModal = ({ visible, hideModal }) => {
@@ -18,7 +18,7 @@ const ImportModal = ({ visible, hideModal }) => {
     const navigateHandler = React.useCallback(() => {
         navigateToList(itemType)
         dispatch(setRefresh(itemType))
-        dispatch(refreshMarkers())
+        dispatch(resetMap())
     }, [])
 
     const importHandler = React.useCallback((callback) => {

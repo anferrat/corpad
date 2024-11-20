@@ -57,9 +57,9 @@ export class FilterQueryGenerator {
             whereClauses.push(this._statusFilter(statusFilter))
 
         if (markerTypeFilter.length > 0)
-            whereClauses.push(this._testPointTypeFilter(testPointTypeFilter))
+            whereClauses.push(this._testPointTypeFilter(markerTypeFilter))
 
-        return `${whereClauses.length > 0 ? ` WHERE ${whereClauses.join(' AND ')}` : ''}`
+        return `${whereClauses.length > 0 ? ` AND ${whereClauses.join(' AND ')}` : ''}`
     }
 
     rectifierMarker(filters) {
@@ -73,6 +73,6 @@ export class FilterQueryGenerator {
         if (isRectifierFiltered)
             whereClauses.push(this._rectifierMarkerFilter())
 
-        return `${whereClauses.length > 0 ? ` WHERE ${whereClauses.join(' AND ')}` : ''}`
+        return `${whereClauses.length > 0 ? ` AND ${whereClauses.join(' AND ')}` : ''}`
     }
 }

@@ -15,18 +15,18 @@ const Features = () => {
                 title='Map layers'
                 icon='globe-2'
                 color='#FFEA70'
-                description='Add geodata to your survey from .kml and .gpx files.' />
+                description='Import polylines, polygons and markers from geodata files.' />
             <FeatureListItem
                 title='Multimeter'
                 icon='bluetooth'
                 color='#FFAF95'
-                description='Connect BLE (Bleutooth Low Energy) multimeter to capture voltage and current.' />
+                description='Connect multimeter over Bleutooth to capture voltage and current.' />
             <FeatureListItem
                 title='NFC tags'
                 icon='nfc'
                 pack='cp'
                 color='#9AE2FE'
-                description='Write full site data to NFC labels with your phone.' />
+                description='Write site data to NFC labels with your phone.' />
         </View>
     )
 }

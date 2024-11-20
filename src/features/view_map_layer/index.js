@@ -8,7 +8,6 @@ import BottomButton from '../../components/BottomButton'
 import useMapLayers from './hooks/useMapLayers'
 import EmptyMapLayerListComponent from './components/EmptyMapLayerListComponent'
 import LoadingView from '../../components/LoadingView'
-import ExportHint from './components/ExportHint'
 
 
 export const ViewMapLayer = ({ navigateToEditMapLayer, goBack }) => {
@@ -60,7 +59,6 @@ export const ViewMapLayer = ({ navigateToEditMapLayer, goBack }) => {
 
                     </LoadingView>
                 </View>
-                <ExportHint />
             </ScrollView>
             <BottomButton
                 onPress={goBack}

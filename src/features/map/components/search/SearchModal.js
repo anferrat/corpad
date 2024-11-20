@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from 'react'
-import { Icon } from '@ui-kitten/components'
+import { Icon, Text } from '@ui-kitten/components'
 import { StyleSheet, ActivityIndicator } from 'react-native'
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context'
 import { FlashList } from '@shopify/flash-list'
@@ -11,7 +11,7 @@ import EmptyList from './EmptyList'
 
 
 
-const SearchModal = ({ hideModal, keyword, onChangeKeyword, markersFound, showOnMap, resetKeyword, searching }) => {
+const SearchModal = ({ hideModal, keyword, onChangeKeyword, markersFound, showOnMap, resetKeyword, searching, markerCount }) => {
     const isEmptySearch = keyword === null
 
     const inputRef = useRef()
@@ -74,6 +74,12 @@ const SearchModal = ({ hideModal, keyword, onChangeKeyword, markersFound, showOn
                     ref={inputRef}
                     style={styles.input}
                     value={keyword} />
+                {markerCount !== 0 ?
+                    <Text
+                        style={styles.hintText}
+                        appearance='hint'>
+                        Total: {markerCount}
+                    </Text> : null}
                 <FlashList
                     ListEmptyComponent={
                         <EmptyList searching={searching} />
@@ -116,5 +122,10 @@ const styles = StyleSheet.create({
     },
     activity: {
         marginHorizontal: 4
+    },
+    hintText: {
+        marginLeft: '2.5%',
+        marginRight: '2.5%',
+        textAlign: 'right'
     }
 })

@@ -36,7 +36,7 @@ const GeoFileImportView = ({ filename, size, onSelectFile }) => {
                     <Text
                         category='label'
                         appearance='hint'>
-                        Up to 3MB. Only .kml and .gpx files are supported.
+                        File size limit: 3MB
                     </Text>
                 </View>
             </>

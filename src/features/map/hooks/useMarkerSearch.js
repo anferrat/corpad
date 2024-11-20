@@ -62,6 +62,7 @@ const useMarkerSearch = () => {
 
     return {
         search,
+        markerCount: markers.length,
         showModal,
         hideModal,
         openMenu,

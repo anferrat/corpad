@@ -6,7 +6,7 @@ import useBottomSheetContent from './hooks/useBottomSheet'
 import Router from '../components/Router/Router'
 import Route from '../components/Router/Route'
 import ImagePickerView from '../features/image_picker'
-import { TestPointFilter } from '../features/bottom_sheet_content/filters'
+import { MapFilter, TestPointFilter } from '../features/bottom_sheet_content/filters'
 import { RectifierReadingList, TestPointReadingList } from '../features/bottom_sheet_content/readings'
 import { RectifierSorting, TestPointSorting } from '../features/bottom_sheet_content/sorting'
 
@@ -71,6 +71,11 @@ const BottomSheetContent = () => {
                 <ImagePickerView
                     closeSheet={closeSheet}
                     params={params} />
+            </Route>
+            <Route
+                routeKey='MAP_FILTER'>
+                <MapFilter
+                    closeSheet={closeSheet} />
             </Route>
         </Router>
     )

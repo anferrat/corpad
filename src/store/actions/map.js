@@ -11,6 +11,8 @@ export const SET_MAP_READY = 'SET_MAP_READY'
 export const SET_ACTIVE_MAP_LAYER_MARKER = 'SET_ACTIVE_MAP_LAYER_MARKER'
 export const RESET_ACTIVE_MAP_LAYER_MARKER = 'RESET_ACTIVE_MAP_LAYER_MARKER'
 export const APPLY_MAP_FILTER = 'APPLY_MAP_FILTER'
+export const RESET_MAP_FILTERS = 'RESET_MAP_FILTERS'
+export const RESET_MAP = 'RESET_MAP'
 
 export const loadMarkers = (list) => {
     return { type: LOAD_MARKERS, list: list }
@@ -28,8 +30,8 @@ export const updateMarker = (marker) => {
     return { type: UPDATE_MARKER, marker: marker }
 }
 
-export const refreshMarkers = () => {
-    return { type: REFRESH_MARKERS }
+export const resetMap = () => {
+    return { type: RESET_MAP }
 }
 
 export const activateMarker = (marker) => {
@@ -56,6 +58,14 @@ export const setMapReady = () => {
     return { type: SET_MAP_READY }
 }
 
-export const applyFilter = (filterType, filter) => {
+export const applyMapFilter = (filterType, filter) => {
     return { type: APPLY_MAP_FILTER, filterType, filter }
+}
+
+export const resetMapFilters = () => {
+    return { type: RESET_MAP_FILTERS }
+}
+
+export const refreshMarkers = () => {
+    return { type: REFRESH_MARKERS }
 }

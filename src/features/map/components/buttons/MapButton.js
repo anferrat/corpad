@@ -38,7 +38,8 @@ const styles = StyleSheet.create({
         elevation: 5,
         backgroundColor: '#fff',
         borderWidth: 1,
-        borderColor: basic300
+        borderColor: basic300,
+        marginBottom: 15
     },
     pressable: {
         flex: 1,

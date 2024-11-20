@@ -9,7 +9,7 @@ const EmptyList = ({ searching }) => {
             <View
                 style={styles.main}>
                 <Text category='p1' style={styles.mainText}>No results found on map</Text>
-                <Text category='s2' style={styles.text}>Try different search parameter. Items without coordinates will not be displayed here.</Text>
+                <Text category='s2' style={styles.text}>Try different search parameter or reset filters. Items without coordinates will not be displayed here.</Text>
             </View>
         )
     else
