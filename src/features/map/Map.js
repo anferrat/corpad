@@ -7,7 +7,6 @@ import MapView from 'react-native-maps'
 import MarkerInfo from './components/MarkerInfo'
 import NewItemMarker from './components/markers/NewItemMarker'
 import NewItemView from './components/NewItem'
-import LoadingView from './components/LoadingView'
 import FocusAwareStatusBar from '../../components/FocusAwareStatusBar'
 import useMarkers from './hooks/useMarkers'
 import ControlBar from './ControlBar'
@@ -102,7 +101,6 @@ const Map = ({ navigateToView, navigateToEdit, navigateToViewMapLayer, navigateT
                 shareNewItemLocation={shareNewItemLocation}
                 active={newItemMarker.active}
                 createItemHandler={createItemHandler} />
-            <LoadingView />
             <ControlBar
                 loading={loading}
                 satelliteMode={satelliteMode}

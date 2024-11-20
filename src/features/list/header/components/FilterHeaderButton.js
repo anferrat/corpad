@@ -7,7 +7,7 @@ const FilterHeaderButton = ({ itemType, openSheet }) => {
     const counter = useFilter({ itemType })
     if (itemType === ItemTypes.TEST_POINT)
         return <FilterButton
-            icon='funnel-outline'
+            icon={counter > 0 ? 'funnel' : 'funnel-outline'}
             onPress={openSheet}
             title={`Filter${counter ? ` (${counter})` : ''}`}
         />

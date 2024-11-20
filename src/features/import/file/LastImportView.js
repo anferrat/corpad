@@ -11,7 +11,7 @@ import { diagBack } from '../../../components/Icons'
 import { deleteItem } from '../../../app/controllers/survey/items/ItemController'
 import { hideLoader, updateLoader, updateSetting } from '../../../store/actions/settings'
 import { setRefresh } from '../../../store/actions/list'
-import { refreshMarkers } from '../../../store/actions/map'
+import { resetMap } from '../../../store/actions/map'
 
 const LastImportView = ({ navigateToList }) => {
     const { idList, importTime, itemType } = useSelector(state => state.settings.lastImport)
@@ -26,7 +26,7 @@ const LastImportView = ({ navigateToList }) => {
             if (isSuccess) {
                 dispatch(updateSetting('lastImport'))
                 dispatch(setRefresh(itemType))
-                dispatch(refreshMarkers())
+                dispatch(resetMap())
                 navigateToList(itemType)
             }
             else {

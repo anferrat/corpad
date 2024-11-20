@@ -96,7 +96,7 @@ const errorCodes = {
     433: 'Unable to delete photo',
     434: 'Unable to open GIS file. File has to be less than 3MB.',
     435: 'Unable to open GIS file.',
-    436: 'File format is not supported. Supported formats are .kml and .gpx',
+    436: 'File format is not supported. Supported formats are .kml, .kmz, .gpx and .geojson',
     437: 'File has usupported format and cannot be loaded.',
     438: 'Unable to load list of media files',
     439: 'Unable to open .xlsx file',

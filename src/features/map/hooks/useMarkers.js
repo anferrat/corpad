@@ -4,7 +4,7 @@ import { useSelector, useDispatch } from 'react-redux'
 import { getMarker, getMarkerList } from '../../../app/controllers/survey/items/MarkerController'
 import { getInitialMapRegion, shareLocationWithExtarnalApp } from '../../../app/controllers/survey/other/GeolocationController'
 import { errorHandler } from '../../../helpers/error_handler'
-import { activateMarker, deleteMarker, loadMarkers, refreshMarkers, resetActiveMarkers, setMapReady, setNewItemMarker, toggleSatellite, updateMarker } from '../../../store/actions/map'
+import { activateMarker, deleteMarker, loadMarkers, resetMap, resetActiveMarkers, setMapReady, setNewItemMarker, toggleSatellite, updateMarker } from '../../../store/actions/map'
 import { updateMarker as updateMarkerRequest } from '../../../app/controllers/survey/items/MarkerController'
 import { hapticMedium, hapticMap } from '../../../native_libs/haptics'
 import { useIsFocused } from '@react-navigation/native'
@@ -45,12 +45,13 @@ const useMarkers = ({ navigateToEdit, ref }) => {
                     activateMarkerFromSource(activeMarkerRef.current)
             }
         }
-    }, [dispatch, isFirstLoad])
+    }, [dispatch, isFirstLoad, filters])
 
     const activateMarkerFromSource = useCallback(async ({ itemId, itemType }) => {
         const { status, response } = await getMarker({ itemType, itemId })
         if (status === 200)
-            if (response.latitide !== null && response.longitude !== null)
+            if (response.latitide !== null && response.longitude !== null && response.name !== null)
+                //check null for name as well. newly created items may be
                 dispatch(activateMarker(response))
     }, [dispatch])
 
@@ -69,6 +70,10 @@ const useMarkers = ({ navigateToEdit, ref }) => {
         })
 
         const onDeleteHandler = EventRegister.addEventListener('GLOBAL_ITEM_DELETED', ({ itemId, itemType }) => {
+            if (activeMarkerRef.current.itemId === itemId && activeMarkerRef.current.itemType === itemType) {
+                activeMarkerRef.current.itemId = null
+                activeMarkerRef.current.itemType = null
+            }
             if (!loading && (itemType === 'TEST_POINT' || itemType === 'RECTIFIER'))
                 dispatch(deleteMarker(itemId, itemType))
         })
@@ -98,7 +103,7 @@ const useMarkers = ({ navigateToEdit, ref }) => {
     }, [loading, activeMarkerRef, dispatch])
 
     useEffect(() => () => {
-        dispatch(refreshMarkers())
+        dispatch(resetMap())
     }, [])
 
     useEffect(() => {
@@ -202,6 +207,7 @@ const useMarkers = ({ navigateToEdit, ref }) => {
             navigateToEdit(response.id, itemType)
             activeMarkerRef.current.itemId = response.id
             activeMarkerRef.current.itemType = itemType
+            dispatch(resetActiveMarkers())
         }
     }, [navigateToEdit, newItemMarker.latitude, newItemMarker.longitude])
 

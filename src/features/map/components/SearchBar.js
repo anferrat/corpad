@@ -7,7 +7,7 @@ import useMarkerSearch from '../hooks/useMarkerSearch'
 import SearchModal from './search/SearchModal'
 
 const SearchBar = ({ satelliteMode }) => {
-    const { search, hideModal, showModal, openMenu, onChangeKeyword, showOnMap, resetKeyword } = useMarkerSearch()
+    const { search, markerCount, hideModal, showModal, openMenu, onChangeKeyword, showOnMap, resetKeyword } = useMarkerSearch()
     const { keyword, modalEnabled, markersFound, searching } = search
     const isEmpty = keyword === null
 
@@ -33,7 +33,7 @@ const SearchBar = ({ satelliteMode }) => {
                     <Text
                         appearance={keyword ? 'default' : 'hint'}
                         style={styles.text}>
-                        {keyword ? keyword : 'Search by name'}
+                        {keyword ? keyword : `Search by name`}
                     </Text>
                 </View>
                 <View
@@ -65,6 +65,7 @@ const SearchBar = ({ satelliteMode }) => {
                     resetKeyword={resetKeyword}
                     showOnMap={showOnMap}
                     markersFound={markersFound}
+                    markerCount={markerCount}
                     keyword={keyword}
                     onChangeKeyword={onChangeKeyword}
                     hideModal={hideModal} />

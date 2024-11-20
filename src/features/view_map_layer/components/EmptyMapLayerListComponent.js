@@ -11,7 +11,7 @@ const EmptyMapLayerListComponent = () => {
             style={styles.text}
             category='s2'
             appearance='hint'>
-            Select .kml or .gpx file and import markers, polylines and polygons into the survey.
+            Import markers, polylines and polygons into the survey from geodata file.
         </Text>
     </View>
 }
