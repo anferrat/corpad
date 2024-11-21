@@ -1,14 +1,14 @@
 import React from 'react'
 import { Animated, StyleSheet, View } from 'react-native'
 import { Text, Icon, Modal, Button } from '@ui-kitten/components'
-import IconButton from '../../../../components/IconButton'
-import { basic, basic300, control, primary } from '../../../../styles/colors'
+import { basic300, control, primary } from '../../../../styles/colors'
 import useNavigationWidget from './hooks/useNavigationWidget'
 import ListItem from './components/ListItem'
 import { getDistance } from './helpers/functions'
 import LoadingView from '../../../../components/LoadingView'
 import DirectionLabel from './components/DirectionLabel'
 import { getModalTop } from '../../../../styles/dimensions'
+import { compass } from '../../../../components/Icons'
 
 
 const NavigationWidget = () => {
@@ -28,9 +28,12 @@ const NavigationWidget = () => {
     if (enabled)
         return (
             <>
-                <IconButton
-                    iconName='compass'
-                    onPress={showModal} />
+                <Button
+                    accessoryLeft={compass}
+                    onPress={showModal}
+                    appearance='ghost'>
+                    Compass
+                </Button>
                 <Modal
                     style={styles.modal}
                     visible={visible}

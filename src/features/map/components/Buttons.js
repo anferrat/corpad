@@ -37,7 +37,7 @@ export default React.memo(Buttons)
 
 const styles = StyleSheet.create({
     controlBar: {
-        top: 30,
+        top: 24,
         flexDirection: 'row',
         justifyContent: 'space-between',
         pointerEvents: 'box-none',

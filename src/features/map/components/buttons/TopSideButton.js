@@ -43,12 +43,12 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         borderColor: basic300,
         justifyContent: 'center',
-        height: 44,
-        marginRight: 12
+        marginRight: 12,
+        height: 45,
     },
     pressable: {
-        height: 50,
-        paddingHorizontal: 18,
+        height: 45,
+        paddingHorizontal: 12,
         paddingVertical: 8,
         justifyContent: 'center',
         alignItems: 'center',
@@ -57,7 +57,6 @@ const styles = StyleSheet.create({
     icon: {
         width: 22,
         height: 22,
-        marginBottom: 3
     },
     primary: {
         borderWidth: 0,
