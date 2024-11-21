@@ -5,6 +5,7 @@ import { basic400, control, primary } from '../../../styles/colors'
 import IconButton from '../../../components/IconButton'
 import useMarkerSearch from '../hooks/useMarkerSearch'
 import SearchModal from './search/SearchModal'
+import AppLogo from './search/AppLogo'
 
 const SearchBar = ({ satelliteMode }) => {
     const { search, markerCount, hideModal, showModal, openMenu, onChangeKeyword, showOnMap, resetKeyword } = useMarkerSearch()
@@ -25,11 +26,7 @@ const SearchBar = ({ satelliteMode }) => {
                 style={styles.mainView}
                 onPress={showModal}>
                 <View style={styles.side}>
-                    <Icon
-                        pack='cp'
-                        name='corpad-logo'
-                        fill={primary}
-                        style={styles.logo} />
+                    <AppLogo />
                     <Text
                         appearance={keyword ? 'default' : 'hint'}
                         style={styles.text}>
@@ -91,11 +88,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'space-between'
     },
-    logo: {
-        width: 30,
-        height: 30,
-        marginHorizontal: 12
-    },
+
     text: {
         marginLeft: 4,
         marginTop: 2

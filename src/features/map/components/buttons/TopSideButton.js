@@ -5,11 +5,12 @@ import { basic300, control, primary } from '../../../../styles/colors'
 import { androidRipple } from '../../../../styles/styles'
 import Pressable from '../../../../components/Pressable'
 
-const TopSideButton = ({ onPress, icon, pack, title }) => {
+const TopSideButton = ({ onPress, icon, pack, title, disabled }) => {
     return (
         <View
             style={styles.wrapper} >
             <Pressable
+                disabled={disabled}
                 style={styles.pressable}
                 android_ripple={androidRipple}
                 onPress={onPress}>

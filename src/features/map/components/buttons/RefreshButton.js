@@ -4,13 +4,12 @@ import { useRefreshButton } from '../../hooks/useRefreshButton'
 
 const RefreshButton = () => {
     const { isVisible, onRefreshPress } = useRefreshButton()
-    if (isVisible)
-        return <TopSideButton
-            onPress={onRefreshPress}
-            icon={'refresh'}
-        />
-    else
-        return null
+
+    return <TopSideButton
+        onPress={onRefreshPress}
+        icon={'refresh'}
+        disabled={isVisible}
+    />
 }
 
 export default RefreshButton
