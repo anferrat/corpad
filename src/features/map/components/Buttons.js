@@ -5,12 +5,10 @@ import SatelliteButton from './buttons/SatelliteButton'
 import MyLocationButton from './buttons/MyLocationButton'
 import FilterButton from './buttons/FilterButton'
 import RefreshButton from './buttons/RefreshButton'
-import MapLoading from './MapLoading'
 
 const Buttons = ({ satelliteMode, zoomToUserLocation, toggleSatelliteMode, navigateToViewMapLayer }) => {
     return (
         <View style={styles.controlBar}>
-            <MapLoading />
             <View
                 style={styles.side1}>
                 <FilterButton />
