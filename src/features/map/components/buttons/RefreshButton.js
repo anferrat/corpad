@@ -8,7 +8,7 @@ const RefreshButton = () => {
     return <TopSideButton
         onPress={onRefreshPress}
         icon={'refresh'}
-        disabled={isVisible}
+        disabled={!isVisible}
     />
 }
 
