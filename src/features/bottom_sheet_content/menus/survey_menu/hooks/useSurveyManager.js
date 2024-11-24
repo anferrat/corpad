@@ -1,11 +1,11 @@
 import { useCallback } from "react"
 import { useDispatch, useSelector } from "react-redux"
-import { saveAndResetSurvey, saveSurvey } from "../../../app/controllers/survey/SurveyController"
-import { errorHandler } from "../../../helpers/error_handler"
-import { hideLoader, resetCurrentSurveySettings, setSurveySaving, showPaywall, updateCurrentSurveySettings, updateLoader, updateLoaderProgress, updateSession } from "../../../store/actions/settings"
-import { hapticMedium } from "../../../native_libs/haptics"
-import { getFormattedDate, isProStatus, isVerifyStatus } from "../../../helpers/functions"
-import { MultimeterTypeLabels } from "../../../constants/labels"
+import { saveAndResetSurvey, saveSurvey } from "../../../../../app/controllers/survey/SurveyController"
+import { errorHandler } from "../../../../../helpers/error_handler"
+import { hideLoader, resetCurrentSurveySettings, setSurveySaving, showPaywall, updateCurrentSurveySettings, updateLoader, updateLoaderProgress, updateSession } from "../../../../../store/actions/settings"
+import { hapticMedium } from "../../../../../native_libs/haptics"
+import { getFormattedDate, isProStatus, isVerifyStatus } from "../../../../../helpers/functions"
+import { MultimeterTypeLabels } from "../../../../../constants/labels"
 
 const useSurveyManager = ({ hideSheet }) => {
     const { fileName, savingInProgress, lastSyncTime } = useSelector(state => state.settings.currentSurvey)

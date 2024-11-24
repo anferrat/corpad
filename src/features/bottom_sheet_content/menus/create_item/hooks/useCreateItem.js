@@ -1,6 +1,6 @@
 import { useCallback } from 'react'
-import { createItem } from '../../../app/controllers/survey/items/ItemController'
-import { errorHandler } from '../../../helpers/error_handler'
+import { createItem } from '../../../../../app/controllers/survey/items/ItemController'
+import { errorHandler } from '../../../../../helpers/error_handler'
 
 const useCreateItem = ({ navigateToEdit, hideSheet }) => {
 

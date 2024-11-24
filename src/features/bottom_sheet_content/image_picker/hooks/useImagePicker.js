@@ -1,7 +1,7 @@
 import { EventRegister } from "react-native-event-listeners"
-import { getNewPhoto } from "../../../app/controllers/survey/other/MediaController"
-import { errorHandler } from "../../../helpers/error_handler"
-import { ImageSources } from "../../../constants/global"
+import { getNewPhoto } from "../../../../app/controllers/survey/other/MediaController"
+import { errorHandler } from "../../../../helpers/error_handler"
+import { ImageSources } from "../../../../constants/global"
 
 const useImagePicker = ({ itemId, itemType }, closeSheet) => {
     const addPhoto = (imageSource) => {

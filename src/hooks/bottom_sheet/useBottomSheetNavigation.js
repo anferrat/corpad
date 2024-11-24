@@ -7,15 +7,16 @@ import { updateBottomSheetContent } from "../../store/actions/settings"
 
 export const BOTTOM_SHEET_VIEWS = {
     CREATE: { itemType: null, content: 'create', index: 3 },
-    MENU: { itemType: null, content: 'menu', index: 2 },
-    TEST_POINT_FILTER: { itemType: 'TEST_POINT', content: 'filter', index: 5 },
+    MENU: { itemType: null, content: 'menu', index: 5 },
+    TEST_POINT_FILTER: { itemType: 'TEST_POINT', content: 'filter', index: 6 },
     TEST_POINT_SORTING: { itemType: 'TEST_POINT', content: 'sorting', index: 4 },
     TEST_POINT_READINGS: { itemType: 'TEST_POINT', content: 'readings', index: 4 },
-    MAP_FILTER: { itemType: null, content: 'map_filter', index: 5 },
+    MAP_FILTER: { itemType: null, content: 'map_filter', index: 6 },
     RECTIFIER_READINGS: { itemType: 'RECTIFIER', content: 'readings', index: 1 },
     RECTIFIER_SORTING: { itemType: 'RECTIFIER', content: 'sorting', index: 4 },
     BASIC_MENU: { itemType: null, content: 'moreOptions', index: 0 },
-    IMAGE_PICKER: { itemType: null, content: 'imagePicker', index: 0 }
+    IMAGE_PICKER: { itemType: null, content: 'imagePicker', index: 0 },
+    EXPORT_LABEL: { itemType: null, content: 'export_label', index: 1 }
 }
 
 
@@ -48,6 +49,8 @@ export const useBottomSheetNavigation = () => {
 
     const openImagePicker = ({ itemType, itemId }) => openBottomSheet(BOTTOM_SHEET_VIEWS.IMAGE_PICKER, { itemType, itemId })
 
+    const openExportLabel = ({ itemId, itemType }) => openBottomSheet(BOTTOM_SHEET_VIEWS.EXPORT_LABEL, { itemId, itemType })
+
     const openMenu = () => openBottomSheet(BOTTOM_SHEET_VIEWS.MENU)
 
     return {
@@ -61,6 +64,7 @@ export const useBottomSheetNavigation = () => {
         openMenu,
         openImagePicker,
         openMapFilterMenu,
+        openExportLabel
     }
 }
 

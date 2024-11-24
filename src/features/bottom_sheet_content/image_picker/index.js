@@ -1,6 +1,6 @@
 import React from 'react'
 import { View, StyleSheet } from 'react-native'
-import ListItem from './components/ListItem'
+import MenuListItem from '../components/MenuListItem'
 import useImagePicker from './hooks/useImagePicker'
 
 
@@ -8,15 +8,15 @@ const ImagePickerView = ({ params, closeSheet }) => {
     const { addPhotoFromLibrary, addPhotoFromCamera, addPhotoFromStorage } = useImagePicker(params, closeSheet)
     return (
         <View style={styles.container}>
-            <ListItem
+            <MenuListItem
                 onPress={addPhotoFromCamera}
                 title='Take a photo'
                 icon='camera' />
-            <ListItem
+            <MenuListItem
                 onPress={addPhotoFromLibrary}
                 title='Select from the gallery'
                 icon='image' />
-            <ListItem
+            <MenuListItem
                 onPress={addPhotoFromStorage}
                 title='Select from storage'
                 icon='folder' />
