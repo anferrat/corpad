@@ -2,19 +2,20 @@ import React from 'react'
 import { View } from 'react-native'
 import { Divider } from '@ui-kitten/components'
 import ListItem from './components/ListItem'
-import SheetHeader from './components/SheetHeader'
 import useCreateItem from './hooks/useCreateItem'
-import { ItemTypes } from '../../constants/global'
-import { ItemTypeSingleIconsFilled } from '../../constants/icons'
-import { ItemTypeLabels } from '../../constants/labels'
+import { ItemTypes } from '../../../../constants/global'
+import { ItemTypeSingleIconsFilled } from '../../../../constants/icons'
+import { ItemTypeLabels } from '../../../../constants/labels'
+import SheetHeader from '../../components/SheetHeader'
 
-export const CreateItemSheet = React.memo(({ navigateToEdit, closeSheet, navigateToImport }) => {
+
+const CreateItemSheet = React.memo(({ navigateToEdit, closeSheet, navigateToImport }) => {
     const createItemHandler = useCreateItem({ navigateToEdit, hideSheet: closeSheet })
     return (
         <>
             <SheetHeader
-                title='Create'
-                onCloseHandler={closeSheet} />
+                onClosePress={closeSheet}
+                title='Create' />
             {Object.values(ItemTypes).map((itemType, i) =>
                 <View key={`CREATE_NEW_ITEM_${itemType}`}>
                     <ListItem
@@ -28,3 +29,5 @@ export const CreateItemSheet = React.memo(({ navigateToEdit, closeSheet, navigat
         </>
     )
 })
+
+export default CreateItemSheet

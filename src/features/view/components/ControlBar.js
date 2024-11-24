@@ -2,29 +2,23 @@ import React, { useState } from 'react'
 import ExpandedBar from './ExpandedBar'
 import ControlButton from '../../../components/ControlButton'
 import { AddReadingModal } from '../../../components/AddReadingModal'
-import { ItemTypes, SubitemTypes } from '../../../constants/global'
 import { ScrollView } from 'react-native-gesture-handler'
 import { StyleSheet } from 'react-native'
+import useControlBar from '../hooks/useControlBar'
+import { SubitemTypeAllocation } from '../../../constants/global'
 
-const ControlBar = ({ createSubitem, deleteItem, itemType, displayOnMap, displayOnMapVisible, navigateToEdit, onAddPhoto, addPhotoAvailable, isPro, writeToTag, writeToTagDisabled, onShowPaywall }) => {
-    const [visible, setVisible] = useState(false)
-
-    const hideModal = React.useCallback(() => setVisible(false), [])
-
-    const subitemTypes = React.useMemo(() => {
-        switch (itemType) {
-            case ItemTypes.TEST_POINT:
-                return [SubitemTypes.PIPELINE, SubitemTypes.RISER, SubitemTypes.STRUCTURE, SubitemTypes.TEST_LEAD, SubitemTypes.ANODE, SubitemTypes.COUPON, SubitemTypes.REFERENCE_CELL, SubitemTypes.BOND, SubitemTypes.SHUNT, SubitemTypes.ISOLATION, SubitemTypes.SOIL_RESISTIVITY]
-            case ItemTypes.RECTIFIER:
-                return [SubitemTypes.ANODE_BED, SubitemTypes.CIRCUIT]
-            default:
-                return []
-        }
-    }, [itemType])
-
-    const createSubitemHandler = React.useCallback(() => {
-        setVisible(true)
-    }, [])
+const ControlBar = ({ createSubitem, deleteItem, itemType, displayOnMap, displayOnMapVisible, navigateToEdit, onAddPhoto, isPro, exportLabelDisabled, openExportLabel }) => {
+    const { buttons, readingModalVisible, hideReadingModal } = useControlBar({
+        deleteItem,
+        itemType,
+        displayOnMap,
+        displayOnMapVisible,
+        navigateToEdit,
+        onAddPhoto,
+        isPro,
+        exportLabelDisabled,
+        openExportLabel
+    })
 
     return (
         <>
@@ -34,44 +28,22 @@ const ControlBar = ({ createSubitem, deleteItem, itemType, displayOnMap, display
                     contentContainerStyle={styles.container}
                     showsHorizontalScrollIndicator={false}
                     horizontal={true}>
-                    {displayOnMapVisible ?
+                    {buttons.map(({ key, icon, pack, label, onPress, status, inactive }) =>
                         <ControlButton
-                            icon='map'
-                            label='Show on map'
-                            onPress={displayOnMap} /> : null}
-                    {addPhotoAvailable ? <ControlButton
-                        label='Add a photo'
-                        inactive={!isPro}
-                        icon='camera'
-                        onPress={onAddPhoto} /> : null}
-                    {itemType !== 'PIPELINE' ?
-                        <ControlButton
-                            icon='plus-circle'
-                            label='Add reading'
-                            onPress={createSubitemHandler} /> : null}
-                    <ControlButton
-                        label='Edit'
-                        icon='edit'
-                        onPress={navigateToEdit} />
-                    {itemType !== 'PIPELINE' ?
-                        <ControlButton
-                            disabled={writeToTagDisabled}
-                            inactive={!isPro}
-                            label='Write to tag'
-                            icon='nfc-filled'
-                            pack='cp'
-                            onPress={isPro ? writeToTag : onShowPaywall} /> : null}
-                    <ControlButton
-                        label='Delete'
-                        icon='trash'
-                        status='danger'
-                        onPress={deleteItem} />
+                            key={key}
+                            icon={icon}
+                            label={label}
+                            onPress={onPress}
+                            inactive={inactive}
+                            pack={pack}
+                            status={status} />
+                    )}
                 </ScrollView>
             </ExpandedBar>
             <AddReadingModal
-                subitemTypes={subitemTypes}
-                visible={visible}
-                hideModal={hideModal}
+                subitemTypes={SubitemTypeAllocation[itemType]}
+                visible={readingModalVisible}
+                hideModal={hideReadingModal}
                 onSelect={createSubitem}
             />
         </>

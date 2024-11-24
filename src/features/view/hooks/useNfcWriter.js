@@ -3,24 +3,18 @@ import useModal from "../../../hooks/useModal"
 import { addNfcWritingListener, removeNfcWritingListener } from "../../../app/controllers/survey/other/ExternalLinkController"
 import { NFC_STATUS_CODES } from "../helpers/constants"
 import { NdefWritingStatuses } from "../../../constants/global"
-import { useDispatch } from 'react-redux'
 import { blockUrlResolver, openLink, unblockUrlResolver } from "../../../app/controllers/AppController"
-import { showPaywall } from "../../../store/actions/settings"
 import { Platform } from "react-native"
 import { errorHandler } from "../../../helpers/error_handler"
+import { EventRegister } from "react-native-event-listeners"
 
-const useNfcWriter = ({ itemId, itemType }) => {
-    const dispatch = useDispatch()
+const useNfcWriter = () => {
     const { visible, showModal, hideModal } = useModal(false)
     const [size, setSize] = useState(0)
     const [loading, setLoading] = useState(true)
     const [status, setStatus] = useState(null)
     const [writeDisabled, setWriteDisabled] = useState(false)
     const componentMounted = useRef(true)
-
-    const onShowPaywall = useCallback(() => {
-        dispatch(showPaywall())
-    }, [])
 
     const handleTagErrorLink = useCallback(() => {
         openLink({ url: 'https://docs.corpad.ca/tag-errors' },
@@ -40,7 +34,16 @@ const useNfcWriter = ({ itemId, itemType }) => {
         }
     }, [visible])
 
-    const writeToTag = useCallback(async () => {
+    useEffect(() => {
+        const tagListener = EventRegister.addEventListener('NFC_TAG_WRITE', ({ itemId, itemType }) => {
+            writeToTag(itemId, itemType)
+        })
+        return () => {
+            EventRegister.removeEventListener(tagListener)
+        }
+    }, [])
+
+    const writeToTag = useCallback(async (itemId, itemType) => {
         showModal()
         if (Platform.OS === 'ios')
             setWriteDisabled(true)
@@ -101,7 +104,6 @@ const useNfcWriter = ({ itemId, itemType }) => {
         writeToTag,
         retry,
         reset,
-        onShowPaywall,
         handleTagErrorLink
     }
 }

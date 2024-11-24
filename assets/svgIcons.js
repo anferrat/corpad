@@ -1510,6 +1510,22 @@ const NFCFilled = (props) => (
   </Svg>
 )
 
+const QRCode = (props) => (
+  <Svg
+    xmlns="http://www.w3.org/2000/svg"
+    xmlSpace="preserve"
+    style={{
+      enableBackground: "new 0 0 24 24",
+    }}
+    viewBox="0 0 24 24"
+    {...props}
+  >
+    <Path d="M8.5 9.5h-5c-.6 0-1-.4-1-1v-5c0-.6.4-1 1-1h5c.6 0 1 .4 1 1v5c0 .6-.4 1-1 1zm-4-2h3v-3h-3v3zM8.5 21.5h-5c-.6 0-1-.4-1-1v-5c0-.6.4-1 1-1h5c.6 0 1 .4 1 1v5c0 .6-.4 1-1 1zm-4-2h3v-3h-3v3zM20.5 21.5h-5c-.6 0-1-.4-1-1v-5c0-.6.4-1 1-1h5c.6 0 1 .4 1 1v5c0 .6-.4 1-1 1zm-4-2h3v-3h-3v3zM8.5 13h-5c-.6 0-1-.4-1-1s.4-1 1-1h5c.6 0 1 .4 1 1s-.4 1-1 1zM12 21c-.6 0-1-.4-1-1v-2c0-.6.4-1 1-1s1 .4 1 1v2c0 .6-.4 1-1 1zM15 7c0 .5-.5 1-1 1h-1v7c0 .5-.5 1-1 1s-1-.5-1-1V7c0-.5.5-1 1-1h2c.5 0 1 .5 1 1z" />
+    <Path d="M21.5 3.5v5c0 .5-.4 1-1 1-.5 0-1-.5-1-1v-4h-8c-.5 0-1-.5-1-1s.5-1 1-1h9l.4.1c.1 0 .2.1.3.2.2.2.3.4.3.7z" />
+    <Path d="M21.5 12c0 .5-.5 1-1 1h-5c-.5 0-1-.5-1-1s.5-1 1-1h.5V6.5c0-.5.5-1 1-1s1 .5 1 1V11h2.5c.5 0 1 .5 1 1z" />
+  </Svg>
+)
+
 export const Icon = (props) => {
   switch (props.name) {
     case 'AN':
@@ -1694,6 +1710,8 @@ export const Icon = (props) => {
       return <NFC {...props} />
     case 'nfc-filled':
       return <NFCFilled {...props} />
+    case 'qr-code':
+      return <QRCode {...props} />
     default:
       return <Pin {...props} />
   }

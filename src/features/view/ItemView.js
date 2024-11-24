@@ -9,6 +9,7 @@ import PhotoListView from './components/photos/PhotoListView'
 import usePhotos from './hooks/usePhotos'
 import useNfcWriter from './hooks/useNfcWriter'
 import NfcModal from './components/nfc/NfcModal'
+import useCreateLabel from './hooks/useCreateLabel'
 
 
 const ItemView = ({ itemId, itemType, navigateToMap, navigateToEditSubitem, navigateToEdit }) => {
@@ -20,12 +21,11 @@ const ItemView = ({ itemId, itemType, navigateToMap, navigateToEditSubitem, navi
         size,
         status,
         writeToTagDisabled,
-        writeToTag,
         retry,
         reset,
-        onShowPaywall,
         handleTagErrorLink
     } = useNfcWriter({ itemId, itemType })
+    const { openExportLabel } = useCreateLabel({ itemType, itemId })
     const updateStatus = (value) => submit(value, 'status')
     return (
         <View style={globalStyle.card}>
@@ -50,11 +50,10 @@ const ItemView = ({ itemId, itemType, navigateToMap, navigateToEditSubitem, navi
                     isVisible={isVisible} />
                 <View style={styles.bar}>
                     <ControlBar
-                        onShowPaywall={onShowPaywall}
-                        itemType={itemType}
-                        writeToTag={writeToTag}
-                        writeToTagDisabled={writeToTagDisabled}
                         isPro={isPro}
+                        itemType={itemType}
+                        exportLabelDisabled={writeToTagDisabled}
+                        openExportLabel={openExportLabel}
                         displayOnMapVisible={displayOnMapVisible}
                         createSubitem={createSubitem}
                         deleteItem={deleteItem}

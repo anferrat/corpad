@@ -1,14 +1,15 @@
 import React from 'react'
-import { CreateItemSheet } from '../features/create_item'
-import { MenuSheet } from '../features/survey_menu'
-import MoreOptionsSheet from '../features/navigation/more_options/MoreOptionsSheet'
 import useBottomSheetContent from './hooks/useBottomSheet'
 import Router from '../components/Router/Router'
 import Route from '../components/Router/Route'
-import ImagePickerView from '../features/image_picker'
+import CreateItemSheet from '../features/bottom_sheet_content/menus/create_item'
+import SurveyMenuSheet from '../features/bottom_sheet_content/menus/survey_menu'
+import MoreOptionsSheet from '../features/bottom_sheet_content/menus/more_options'
+import ImagePickerView from '../features/bottom_sheet_content/image_picker'
 import { MapFilter, TestPointFilter } from '../features/bottom_sheet_content/filters'
 import { RectifierReadingList, TestPointReadingList } from '../features/bottom_sheet_content/readings'
 import { RectifierSorting, TestPointSorting } from '../features/bottom_sheet_content/sorting'
+import LabelPicker from '../features/bottom_sheet_content/label_picker'
 
 //implemented as single screen, possible to have embeded navigator inside
 
@@ -26,10 +27,10 @@ const BottomSheetContent = () => {
             </Route>
             <Route
                 routeKey='MENU'>
-                <MenuSheet
+                <SurveyMenuSheet
+                    navigateToCalculatorList={navigateToCalculatorList}
                     navigateToMultimeter={navigateToMultimeter}
                     navigateToExport={navigateToExport}
-                    navigateToCalculatorList={navigateToCalculatorList}
                     navigateToSettings={navigateToSettings}
                     closeSheet={closeSheet} />
             </Route>
@@ -76,6 +77,12 @@ const BottomSheetContent = () => {
                 routeKey='MAP_FILTER'>
                 <MapFilter
                     closeSheet={closeSheet} />
+            </Route>
+            <Route
+                routeKey='EXPORT_LABEL'>
+                <LabelPicker
+                    closeSheet={closeSheet}
+                    params={params} />
             </Route>
         </Router>
     )
