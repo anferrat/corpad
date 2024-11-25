@@ -8,7 +8,7 @@ import ListItemSearch from './components/ListItemSearch'
 import { control, primary } from '../../styles/colors'
 import useSurveySearch from './hooks/useSurveySearch'
 import EmptyResult from './components/EmptyResult'
-import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context'
+import { useSafeAreaInsets } from 'react-native-safe-area-context'
 
 
 export const SearchBar = ({ navigateToView }) => {
