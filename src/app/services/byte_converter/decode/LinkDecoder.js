@@ -1,4 +1,5 @@
 import { Buffer } from "buffer";
+import base64url from "base64url";
 import { Error, errors } from "../../../utils/Error";
 import { Codes } from "../constants/Codes";
 import { ParamDecoder } from "./decoders/ParamDecoder";
@@ -58,10 +59,22 @@ export class LinkDecoder {
         )
     }
 
+    _decodeBase64(data) {
+        /* 
+        Early versions encoded Buffer into base64 string, to account for these tags, we check for it. 
+        Since 1.6 update data is base64url encoded
+        */
+        const isBase64 = ~data.indexOf('%')
+        if (isBase64)
+            return decodeURIComponent(data)
+        else
+            return base64url.toBase64(data)
+    }
+
     _extractData(link) {
         const isValid = link.startsWith('com.corpad://l/')
         if (isValid)
-            return Buffer.from(decodeURIComponent(link.substring(15)), 'base64')
+            return Buffer.from(this._decodeBase64(link.substring(15)), 'base64')
         else throw new Error(errors.GENERAL, 'Unable to extract data', 'Link is not valid')
     }
 

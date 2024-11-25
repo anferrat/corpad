@@ -1,3 +1,4 @@
+import base64url from "base64url"
 import { ParamEncoder } from "./encoders/ParamEncoder"
 import { Encoder } from "./encoders/Encoder"
 import { ItemEncoder } from "./encoders/ItemEncoder"
@@ -72,7 +73,8 @@ export class LinkEncoder extends Encoder {
             this.subitemEncoder.encode(item.subitems, pipelines, referenceCells, potentialTypes)])
         this._writeBufSize(buffer)
         const message = buffer.toString('base64')
-        const link = 'com.corpad://l/' + encodeURIComponent(message)
+        const urlMessage = base64url.fromBase64(message)
+        const link = 'com.corpad://l/' + encodeURIComponent(urlMessage)
         this._verifyLink(link)
         return link
     }
