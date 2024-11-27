@@ -1,4 +1,4 @@
-import { NdefWritingStatuses, NdefTagStatuses } from "../../../../../constants/global"
+import { NdefWritingStatuses, NdefTagStatuses, ExternalLinkTypes } from "../../../../../constants/global"
 
 export class AddNfcWritingListener {
     constructor(ndefRepo, convertItemToLinkService) {
@@ -8,7 +8,7 @@ export class AddNfcWritingListener {
 
     async addListener(onError, onSuccess, itemId, itemType) {
         try {
-            const { link, size } = await this.convertItemToLinkService.execute(itemId, itemType)
+            const { link, size } = await this.convertItemToLinkService.execute(itemId, itemType, ExternalLinkTypes.NFC)
             onSuccess(NdefWritingStatuses.LINK_CREATED, { link, size })
             const { isEnabled, isSupported } = await this.ndefRepo.getDeviceStatus()
             onSuccess(NdefWritingStatuses.NFC_MODULE_STATUS_RECEIVED, { isEnabled, isSupported })

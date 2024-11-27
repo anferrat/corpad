@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { globalStyle } from '../styles/styles'
 import { SafeAreaView, StatusBar } from 'react-native'
 import { Button, Text } from '@ui-kitten/components'
@@ -41,15 +41,21 @@ import { DefaultPotentialTypes } from '../app/services/byte_converter/constants/
 import { DefaultReferenceCells } from '../app/services/byte_converter/constants/DefaultReferenceCells'
 import { SubitemFactory } from '../app/services/other/SubitemFactory'
 import { StatReferenceCell } from '../app/entities/survey/subitems/StatReferenceCell'
+import { QRCodeRepository } from '../app/repository/qrcodes/QRCodeRepository'
+import { SvgXml } from 'react-native-svg';
 
 
 const settings = new SettingRepository()
+const qrRepo = new QRCodeRepository()
 const count = 150
 const initPurchases = new InitializePurchases(purchaseRepo, networkRepo, geolocationRepo, settingRepo, permissions)
 
 export default DevScreen = ({ navigation, route }) => {
+  let svgRef = null
+  if (svgRef)
+    svgRef.toDataURL(data => console.log(data))
   const dispatch = useDispatch()
-
+  const [svg, setSvg] = useState(null)
   const show = () => dispatch(showPaywall())
 
   const setupMultimeter = () => {
@@ -139,6 +145,16 @@ export default DevScreen = ({ navigation, route }) => {
     console.log(await testPointRepo.getAll())
   }
 
+  const testQr = async () => {
+    try {
+      const ss = await qrRepo.generatePngFile('https://docs.corpad.ca')
+      console.log(ss)
+    }
+    catch (er) {
+      console.log(er)
+    }
+  }
+
   return (
     <SafeAreaView style={{ ...globalStyle.screen, paddingTop: StatusBar.currentHeight }}>
       <FocusAwareStatusBar barStyle={'dark-content'} backgroundColor='transparent' translucent={true} />
@@ -154,6 +170,12 @@ export default DevScreen = ({ navigation, route }) => {
       <Button onPress={setupMultimeter} appearance='ghost'>Setup multimeter</Button>
       <Button onPress={getItem} appearance='ghost'>Check items</Button>
       <Button onPress={encode} appearance='ghost'>Test encoding</Button>
+      <Button onPress={testQr} appearance='ghost'>Test QR code</Button>
+      {svg !== null ? <SvgXml
+        getRef={(ref) => svgRef = ref}
+        xml={svg}
+        width='50%'
+        height='50%' /> : null}
     </SafeAreaView>
   )
 }

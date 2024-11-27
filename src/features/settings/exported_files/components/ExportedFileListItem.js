@@ -23,6 +23,9 @@ const fileIcons = {
     },
     [FileMimeTypes.ZIP]: {
         icon: 'archive-outline',
+    },
+    [FileMimeTypes.IMAGE]: {
+        icon: 'image-outline'
     }
 }
 

@@ -1,20 +1,20 @@
-import React, {useRef, createContext, MutableRefObject} from 'react';
-import {GestureHandlerRootView} from 'react-native-gesture-handler';
+import React, { useRef, createContext, MutableRefObject } from 'react';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import * as eva from '@eva-design/eva';
-import {createStore, combineReducers} from 'redux';
-import {Provider} from 'react-redux';
+import { createStore, combineReducers } from 'redux';
+import { Provider } from 'react-redux';
 import SplashScreen from 'react-native-splash-screen';
-import {SafeAreaProvider} from 'react-native-safe-area-context';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
 import {
   NavigationContainer,
   useNavigationContainerRef,
 } from '@react-navigation/native';
-import {ApplicationProvider, IconRegistry} from '@ui-kitten/components';
-import {EvaIconsPack} from '@ui-kitten/eva-icons';
-import {ModalService} from '@ui-kitten/components';
-import {AppNavigator} from './src/navigation/AppNavigator';
-import {CPIconsPack} from './assets/CPIcons';
-import {default as theme} from './src/styles/theme.json';
+import { ApplicationProvider, IconRegistry } from '@ui-kitten/components';
+import { EvaIconsPack } from '@ui-kitten/eva-icons';
+import { ModalService } from '@ui-kitten/components';
+import { AppNavigator } from './src/navigation/AppNavigator';
+import { CPIconsPack } from './assets/CPIcons';
+import { default as theme } from './src/styles/theme.json';
 import item from './src/store/reducers/item';
 import potentials from './src/store/reducers/potentials';
 import testPointList from './src/store/reducers/testPointList';
@@ -25,12 +25,13 @@ import map from './src/store/reducers/map';
 import settings from './src/store/reducers/settings';
 import exportSurvey from './src/store/reducers/export';
 import importData from './src/store/reducers/importData';
-import {BottomSheet} from './src/bottom_sheet';
+import { BottomSheet } from './src/bottom_sheet';
 import FullScreenLoader from './src/features/overlays/loader/Loader';
-import {ExportModal} from './src/features/overlays/export_modal/';
-import {SessionModal} from './src/features/overlays/session_modal/';
-import {Animated} from 'react-native';
+import { ExportModal } from './src/features/overlays/export_modal/';
+import { SessionModal } from './src/features/overlays/session_modal/';
+import { Animated } from 'react-native';
 import mapLayers from './src/store/reducers/mapLayers';
+import { Buffer as BufferDefault } from 'buffer';
 
 const rootReducer = combineReducers({
   subitem: subitem,
@@ -46,7 +47,7 @@ const rootReducer = combineReducers({
   mapLayers: mapLayers,
 });
 
-
+Buffer = BufferDefault
 const store = createStore(rootReducer);
 export const BS = createContext<MutableRefObject<any> | null>(null);
 export const ScrollRef = createContext<MutableRefObject<any> | null>(null);
@@ -54,7 +55,7 @@ export const ScrollRef = createContext<MutableRefObject<any> | null>(null);
 ModalService.setShouldUseTopInsets = true;
 
 export const version = '1.5.1';
-export const DEVELOPER_MODE_ON = false;
+export const DEVELOPER_MODE_ON = true;
 
 function App(): React.JSX.Element {
   /*
@@ -71,8 +72,8 @@ scrolling ref - used to implement title scrolling animation inside View screen. 
     <Provider store={store}>
       <IconRegistry icons={[EvaIconsPack, CPIconsPack]} />
       <SafeAreaProvider>
-        <ApplicationProvider {...eva} theme={{...eva.light, ...theme}}>
-          <GestureHandlerRootView style={{flex: 1}}>
+        <ApplicationProvider {...eva} theme={{ ...eva.light, ...theme }}>
+          <GestureHandlerRootView style={{ flex: 1 }}>
             <ScrollRef.Provider value={scrollingRef}>
               <BS.Provider value={bottomSheet}>
                 <NavigationContainer

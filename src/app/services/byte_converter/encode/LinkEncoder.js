@@ -25,6 +25,7 @@ import { SoilResistivityLayerEncoder } from "./encoders/subitems/subproperties/S
 import { StructureEncoder } from "./encoders/subitems/StructureEncoder"
 import { TestLeadEncoder } from "./encoders/subitems/TestLeadEncoder"
 import { Error, errors } from "../../../utils/Error"
+import { ExternalLinkTypes } from "../../../../constants/global"
 
 export class LinkEncoder extends Encoder {
     //Encodes item into a byte array returns as base64 string
@@ -66,9 +67,9 @@ export class LinkEncoder extends Encoder {
             throw new Error(errors.GENERAL, 'Unable to create link', 'Link length limit is reached', 834)
     }
 
-    encode(item, pipelines = [], referenceCells = [], potentialTypes = [], technician = "") {
+    encode(item, pipelines = [], referenceCells = [], potentialTypes = [], linkType = ExternalLinkTypes.NFC, technician = "") {
         const buffer = this._concat([
-            this.paramEncoder.encode(technician),
+            this.paramEncoder.encode(technician, linkType),
             this.itemEncoder.encode(item),
             this.subitemEncoder.encode(item.subitems, pipelines, referenceCells, potentialTypes)])
         this._writeBufSize(buffer)
