@@ -6,6 +6,7 @@ import { GeolocationRepository } from "../../repository/geolocation/GeolocationR
 import { PurchaseRepository } from "../../repository/inAppPurchases/PurchaseRepository";
 import { NetworkRepository } from "../../repository/network/NetworkRepository";
 import { NdefRepository } from "../../repository/nfc/ndefRepository";
+import { QRCodeRepository } from "../../repository/qrcodes/QRCodeRepository";
 import { XlsxRepository } from "../../repository/spreadsheet/XlsxRepository";
 import { AppRepository } from "../../repository/sqlite/AppRepository";
 import { AssetRepository } from "../../repository/sqlite/AssetRepository";
@@ -70,5 +71,8 @@ export const ndefRepo = new NdefRepository()
 
 //Spreadsheet
 export const xlsxRepo = new XlsxRepository()
+
+//QRCode
+export const qrCodeRepo = new QRCodeRepository()
 
 

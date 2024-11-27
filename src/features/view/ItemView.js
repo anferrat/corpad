@@ -10,6 +10,7 @@ import usePhotos from './hooks/usePhotos'
 import useNfcWriter from './hooks/useNfcWriter'
 import NfcModal from './components/nfc/NfcModal'
 import useCreateLabel from './hooks/useCreateLabel'
+import QRCodeModal from './components/qrcode/QRCodeModal'
 
 
 const ItemView = ({ itemId, itemType, navigateToMap, navigateToEditSubitem, navigateToEdit }) => {
@@ -71,6 +72,8 @@ const ItemView = ({ itemId, itemType, navigateToMap, navigateToEditSubitem, navi
                 status={status}
                 reset={reset}
                 handleTagErrorLink={handleTagErrorLink} />
+            <QRCodeModal
+                name={item.name} />
         </View>
     )
 }

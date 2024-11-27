@@ -31,14 +31,15 @@ export class ConvertItemToLink {
         else throw new Error(errors.GENERAL, `Item type ${itemType} is not supported.`)
     }
 
-    async execute(itemId, itemType) {
+    async execute(itemId, itemType, linkType) {
         const [[item], subitems, referenceCells, potentialTypes, pipelines] = await this._getFullList(itemId, itemType)
         item.setSubitems(subitems)
-        const link = this.linkEncoder.encode(item, pipelines, referenceCells, potentialTypes)
+        const link = this.linkEncoder.encode(item, pipelines, referenceCells, potentialTypes, linkType)
         const size = this.ndefRepo.getUriRecordSize(link)
         return {
             link,
-            size
+            size,
+            name: item.name
         }
     }
 }

@@ -43,31 +43,32 @@
         android:taskAffinity=""
         android:exported="true">
         <intent-filter>
-              <action android:name="android.intent.action.MAIN" />
-              <category android:name="android.intent.category.LAUNCHER" />
-          </intent-filter>
-        <intent-filter>
-        <action android:name="android.nfc.action.NDEF_DISCOVERED" />
-        <category android:name="android.intent.category.DEFAULT" />
-        <category android:name="android.intent.category.BROWSABLE" />
-        <data android:scheme="com.corpad" />
+          <action android:name="android.intent.action.MAIN" />
+          <category android:name="android.intent.category.LAUNCHER" />
         </intent-filter>
-          <intent-filter>
-            <action android:name="android.intent.action.VIEW" />
-            <category android:name="android.intent.category.DEFAULT" />
-            <data
-              android:mimeType="application/json"
-              android:host="*"
-              android:pathPattern=".*\\.json"/>
-              <data 
-              android:mimeType="application/octet-stream"
-              android:host="*"
-              android:pathPattern=".*\\.corpad"/>
-              <data 
-              android:mimeType="application/zip"
-              android:host="*"
-              android:pathPattern=".*\\.corpad"/>
-            </intent-filter>
+        <intent-filter>
+          <action android:name="android.nfc.action.NDEF_DISCOVERED" />
+          <category android:name="android.intent.category.DEFAULT" />
+          <category android:name="android.intent.category.BROWSABLE" />
+          <data android:scheme="com.corpad" />
+        </intent-filter>
+        <intent-filter>
+          <action android:name="android.intent.action.VIEW" />
+          <category android:name="android.intent.category.DEFAULT" />
+          <data
+            android:mimeType="application/json"
+            android:host="*"
+            android:pathPattern=".*\\.json"/>
+          <data 
+            android:mimeType="application/octet-stream"
+            android:host="*"
+            android:pathPattern=".*\\.corpad"/>
+          <data 
+            android:mimeType="application/zip"
+            android:host="*"
+            android:pathPattern=".*\\.corpad"/>
+          <data android:scheme="com.corpad" />
+        </intent-filter>
       </activity>
       <meta-data
      android:name="com.google.android.geo.API_KEY"

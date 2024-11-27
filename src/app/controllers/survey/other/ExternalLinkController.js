@@ -14,16 +14,18 @@ import { GetPipelineMatchingList } from "../../../services/survey/other/external
 import { Controller } from "../../../utils/Controller"
 import { geolocationCalculator, subitemFactory, warningHandler } from "../../_instances/general_services"
 import { listPresenter, potentialPresenter } from "../../_instances/presenters"
-import { defaultNameRepo, externalLinkRepo, ndefRepo, pipelineRepo, potentialRepo, potentialTypeRepo, rectifierRepo, referenceCellRepo, settingRepo, subitemRepo, surveyRepo, testPointRepo } from "../../_instances/repositories"
+import { defaultNameRepo, externalLinkRepo, fileSystemRepo, ndefRepo, pipelineRepo, potentialRepo, potentialTypeRepo, qrCodeRepo, rectifierRepo, referenceCellRepo, settingRepo, subitemRepo, surveyRepo, testPointRepo } from "../../_instances/repositories"
 import { AddNfcWritingListener } from "../../../services/survey/other/external_link/AddNfcWritingListener"
 import { ExternalLinkValidation } from "../../../validation/ExternalLinkValidation"
 import { LogExternalLinkRecord } from "../../../services/survey/other/external_link/LogExternalLinkRecord"
 import { GetExternalLinkRecords } from "../../../services/survey/other/external_link/GetExternalLinkRecords"
 import { DeleteAllExternalLinkRecords } from "../../../services/survey/other/external_link/DeleteAllExternalLinkRecords"
 import { ReadNfcTagIos } from "../../../services/survey/other/external_link/ReadNfcTagIos"
+import { CreateQrCode } from "../../../services/survey/other/external_link/CreateQrCode"
+import { ExportQrCode } from "../../../services/survey/other/external_link/ExportQrCode"
 
 class ExternalLinkController extends Controller {
-    constructor(defaultNameRepo, subitemFactory, linkDecoder, potentialPresenter, testPointRepo, rectifierRepo, geolocationCalculator, surveyRepo, settingRepo, subitemRepo, potentialRepo, potentialTypeRepo, referenceCellRepo, pipelineRepo, warningHandler, listPresenter, linkEncoder, ndefRepo, externalLinkRepo) {
+    constructor(defaultNameRepo, subitemFactory, linkDecoder, potentialPresenter, testPointRepo, rectifierRepo, geolocationCalculator, surveyRepo, settingRepo, subitemRepo, potentialRepo, potentialTypeRepo, referenceCellRepo, pipelineRepo, warningHandler, listPresenter, linkEncoder, ndefRepo, externalLinkRepo, qrCodeRepo, filesystemRepo) {
         super()
         this.generateCompositeItem = new GenerateCompositeItem(defaultNameRepo, subitemFactory)
         this.createPipelineMapService = new CreatePipelineMap()
@@ -41,6 +43,8 @@ class ExternalLinkController extends Controller {
         this.getExternalLinkRecordsService = new GetExternalLinkRecords(externalLinkRepo)
         this.deleteAllExternalLinkRecordsService = new DeleteAllExternalLinkRecords(externalLinkRepo)
         this.readNfcTagIosService = new ReadNfcTagIos(ndefRepo)
+        this.createQrCodeService = new CreateQrCode(qrCodeRepo, this.convertItemToLinkService)
+        this.exportQrCodeService = new ExportQrCode(qrCodeRepo, this.convertItemToLinkService, filesystemRepo)
 
         this.validation = new ExternalLinkValidation()
     }
@@ -112,6 +116,18 @@ class ExternalLinkController extends Controller {
             return this.readNfcTagIosService.execute()
         })
     }
+
+    createQrCode({ itemId, itemType }, onError = null, onSuccess = null) {
+        return super.controllerHandler(onSuccess, onError, 846, () => {
+            return this.createQrCodeService.execute(itemId, itemType)
+        })
+    }
+
+    exportQrCode({ itemId, itemType }, onError = null, onSuccess = null) {
+        return super.controllerHandler(onSuccess, onError, 846, () => {
+            return this.exportQrCodeService.execute(itemId, itemType)
+        })
+    }
 }
 
 const externalLinkController = new ExternalLinkController(
@@ -133,7 +149,9 @@ const externalLinkController = new ExternalLinkController(
     listPresenter,
     new LinkEncoder(),
     ndefRepo,
-    externalLinkRepo
+    externalLinkRepo,
+    qrCodeRepo,
+    fileSystemRepo
 )
 
 export const decodeLink = ({ link }, onError, onSuccess) => externalLinkController.decodeLink({ link }, onError, onSuccess)
@@ -157,3 +175,7 @@ export const getExternalLinkRecords = (onError, onSuccess) => externalLinkContro
 export const deleteAllExternalLinkRecords = (onError, onSuccess) => externalLinkController.deleteAllExternalLinkRecords(onError, onSuccess)
 
 export const readNfcTagIos = (onError, onSuccess) => externalLinkController.readNfcTagIos(onError, onSuccess)
+
+export const createQrCode = ({ itemId, itemType }, onError, onSuccess) => externalLinkController.createQrCode({ itemId, itemType }, onError, onSuccess)
+
+export const exportQrCode = ({ itemId, itemType }, onError, onSuccess) => externalLinkController.exportQrCode({ itemId, itemType }, onError, onSuccess)
