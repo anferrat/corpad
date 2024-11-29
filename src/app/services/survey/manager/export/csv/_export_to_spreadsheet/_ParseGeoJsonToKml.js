@@ -1,9 +1,10 @@
 import { Error, errors } from "../../../../../../utils/Error"
+import toKml from 'anferrat-tokml'
 
 
 export class _ParseGeoJsonToKml {
     constructor() {
-        this.toKmlConverter = require('tokml')
+        this.toKmlConverter = toKml
     }
 
     execute(geoJson, nameProperty) {

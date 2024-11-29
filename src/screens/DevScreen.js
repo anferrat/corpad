@@ -43,6 +43,10 @@ import { SubitemFactory } from '../app/services/other/SubitemFactory'
 import { StatReferenceCell } from '../app/entities/survey/subitems/StatReferenceCell'
 import { QRCodeRepository } from '../app/repository/qrcodes/QRCodeRepository'
 import { SvgXml } from 'react-native-svg';
+import toKml from 'anferrat-tokml'
+
+
+const geojson = `{"type":"FeatureCollection","features":[{"type":"Feature","properties":{"name":"TP1","marker-color":"#FF5D4F","marker-symbol":"R"},"geometry":{"coordinates":[-123.08682211427148,49.173958450285966],"type":"Point"}},{"type":"Feature","properties":{"name":"TP2","marker-color":"#FF5D4F","marker-symbol":"R"},"geometry":{"coordinates":[-123.04136365217397,49.19176384936921],"type":"Point"}},{"type":"Feature","properties":{"name":"TP3","marker-color":"#43C150","marker-symbol":"T"},"geometry":{"coordinates":[-123.03700589104736,49.174932338789716],"type":"Point"}}]}`
 
 
 const settings = new SettingRepository()
@@ -155,6 +159,15 @@ export default DevScreen = ({ navigation, route }) => {
     }
   }
 
+  const textCoverter = () => {
+    try {
+      console.log(toKml(JSON.parse(geojson), {simplestyle: true, name: 'name'}))
+    }
+    catch (er) {
+      console.log(er)
+    }
+  }
+
   return (
     <SafeAreaView style={{ ...globalStyle.screen, paddingTop: StatusBar.currentHeight }}>
       <FocusAwareStatusBar barStyle={'dark-content'} backgroundColor='transparent' translucent={true} />
@@ -171,6 +184,7 @@ export default DevScreen = ({ navigation, route }) => {
       <Button onPress={getItem} appearance='ghost'>Check items</Button>
       <Button onPress={encode} appearance='ghost'>Test encoding</Button>
       <Button onPress={testQr} appearance='ghost'>Test QR code</Button>
+      <Button onPress={textCoverter} appearance='ghost'>Test toKml</Button>
       {svg !== null ? <SvgXml
         getRef={(ref) => svgRef = ref}
         xml={svg}
