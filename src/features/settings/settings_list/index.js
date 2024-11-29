@@ -72,9 +72,8 @@ export const SettingsList = () => {
                 subtitle={'Control bluetooth multimeter settings'}
                 onPress={navigateToMultimeter} />
             <ListItem
-                icon={'nfc'}
-                pack='cp'
-                title={'NFC labels'}
+                icon={'pricetags'}
+                title={'QR code and NFC labels'}
                 subtitle={Platform.select({
                     android: 'View recently scanned labels',
                     ios: 'Launch NFC scanning and view recently scanned labels'

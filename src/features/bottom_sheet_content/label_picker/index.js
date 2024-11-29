@@ -13,6 +13,7 @@ const LabelPicker = ({ closeSheet, params }) => {
             style={styles.container}>
             <Text
                 style={styles.hint}
+                numberOfLines={3}
                 appearance='hint'>
                 The data will be saved to the label and can be accessed offline by anyone with Corpad app.
             </Text>
@@ -27,8 +28,7 @@ const LabelPicker = ({ closeSheet, params }) => {
                 onPress={onPressNFC}
                 title='Write to NFC tag'
                 icon='nfc-filled'
-                pack='cp'
-            />
+                pack='cp' />
         </View>
     )
 }
@@ -39,6 +39,7 @@ export default LabelPicker
 const styles = StyleSheet.create({
     hint: {
         paddingHorizontal: 12,
-        marginBottom: 24
+        height: 60,
+        textAlignVertical: 'top'
     }
 })
