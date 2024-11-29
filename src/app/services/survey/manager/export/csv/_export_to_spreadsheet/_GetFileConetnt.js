@@ -29,13 +29,16 @@ export class _GetFileContent {
     async _exportGeoJson(data, features, includeMapLayers) {
         const mapLayerFeatures = includeMapLayers ? await this._getMapLayerFeatures() : []
         const surveyMarkerFeatures = features
-            .map((feature, index) => ({
-                ...feature,
-                properties: {
-                    ...feature.properties,
-                    ...data[index]
-                }
-            }))
+            .map((feature, index) => {
+                const { Name, ...dataProperties } = data[index]
+                return ({
+                    ...feature,
+                    properties: {
+                        ...feature.properties,
+                        ...dataProperties
+                    }
+                })
+            })
             .filter(({ geometry }) => geometry.coordinates[0] !== null && geometry.coordinates[1] !== null)
         return {
             type: 'FeatureCollection',
