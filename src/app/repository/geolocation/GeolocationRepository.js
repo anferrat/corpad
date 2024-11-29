@@ -4,22 +4,20 @@ import { Error, errors } from '../../utils/Error'
 import { timeFix } from '../../config/geolocation';
 
 export class GeolocationRepository {
-    constructor() { 
+    constructor() {
         //Geolocation.setRNConfiguration({ skipPermissionRequests: false, locationProvider: 'android' })
     }
 
     async getCurrent() {
         try {
             return await new Promise((resolve, reject) => {
-                Geolocation.setRNConfiguration({ skipPermissionRequests: false, locationProvider: 'auto' })
                 Geolocation.getCurrentPosition(({ coords: { latitude, longitude, accuracy } }) => resolve({ latitude, longitude, accuracy }),
                     er => reject(er),
                     {
                         timeout: 10000,
-                        accuracy: { android: 'balanced' },
                         enableHighAccuracy: true,
                         maximumAge: 10,
-                        distanceFilter: 0.1,
+                        distanceFilter: 0,
                         showLocationDialog: true,
                         forceRequestLocation: true,
                     })
@@ -31,7 +29,6 @@ export class GeolocationRepository {
     }
 
     watch(callback) {
-        Geolocation.setRNConfiguration({ skipPermissionRequests: false, locationProvider: 'auto' })
         const watchId = Geolocation.watchPosition(({ coords: { latitude, longitude, accuracy } }) => {
             callback({ latitude, longitude, accuracy })
         },
@@ -39,14 +36,16 @@ export class GeolocationRepository {
                 throw new Error(errors.LOCATION, 'Unable to obtain current position', er, 800)
             },
             {
-                maximumAge: 200,
-                accuracy: { android: 'high' },
-                distanceFilter: 0.1,
-                fastestInterval: 1000,
+                maximumAge: 1000,
+                enableHighAccuracy: true,
+                distanceFilter: 0,
+                fastestInterval: 100,
                 interval: 1000,
-                timeout: 200
+                timeout: 10000
             })
-        return () => Geolocation.clearWatch(watchId)
+        return () => {
+            Geolocation.clearWatch(watchId)
+        }
     }
 
     getGpsTimeAdjustment(timeout = 10000) {
@@ -58,17 +57,8 @@ export class GeolocationRepository {
                     device: Date.now(),
                     gnss: timestamp
                 })
-            }, () => resolve({ device: null, gnss: null }), { enableHighAccuracy: true, timeout, maximumAge: 0 })
+            }, () => resolve({ device: null, gnss: null }), { enableHighAccuracy: true, maximumAge: 0, timeout })
         })
-    }
-
-    watchTimeAdjustment(callback) {
-        Geolocation.setRNConfiguration({ skipPermissionRequests: false, locationProvider: 'android' })
-        const watchId = Geolocation.watchPosition(
-            ({ timestamp }) => callback({ gnss: timestamp, device: Date.now() }),
-            (er) => { throw new Error(errors.LOCATION, 'Unable to get time adjustment', er, 800) },
-            { interval: 100, timeout: 10000, enableHighAccuracy: true, maximumAge: 0 })
-        return () => Geolocation.clearWatch(watchId)
     }
 
     recordTimeFix(gnss, device) {
