@@ -55,7 +55,7 @@ const QRCodeModal = ({ name }) => {
                         style={styles.button}
                         appearance='ghost'
                         onPress={onExportPress}>
-                        Export QR code label
+                        Export QR code
                     </Button>
                 </LoadingView>
             </View>
