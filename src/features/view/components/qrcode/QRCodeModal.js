@@ -12,7 +12,6 @@ import Avatar from './Avatar'
 
 const QRCodeModal = ({ name }) => {
     const { loading, visible, svg, itemType, onExportPress, onClosePress } = useQrCodeModal()
-    console.log(visible)
     return (
         <Modal
             visible={visible}
@@ -47,6 +46,8 @@ const QRCodeModal = ({ name }) => {
                     <Text
                         style={styles.hint}
                         category='s2'
+                        ellipsizeMode={'tail'}
+                        numberOfLines={4}
                         appearance='hint'>
                         If you share this with someone, they can scan it with their camera and read encoded data offline.
                     </Text>
@@ -67,17 +68,22 @@ export default QRCodeModal
 
 const styles = StyleSheet.create({
     modal: {
+        alignSelf: 'center',
         position: 'absolute',
-        top: getModalTop(410),
+        top: getModalTop(440),
         width: '80%',
         minWidth: 280,
-        height: 410
+        height: 440
     },
     code: {
-        marginTop: 24
+        position: 'absolute',
+        top: 100,
     },
     hint: {
-        textAlign: 'center'
+        position: 'absolute',
+        top: 300,
+        textAlign: 'center',
+        height: 80,
     },
     container: {
         flex: 1,
@@ -104,6 +110,7 @@ const styles = StyleSheet.create({
     title: {
         alignItems: 'center',
         position: 'absolute',
-        top: 48
+        height: 62,
+        top: 38
     }
 })
