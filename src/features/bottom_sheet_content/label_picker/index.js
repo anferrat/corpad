@@ -20,7 +20,7 @@ const LabelPicker = ({ closeSheet, params }) => {
             <MenuListItem
                 inactive={!isPro}
                 onPress={onPressQrCode}
-                title='Generate QR-code'
+                title='Generate QR code'
                 icon='qr-code'
                 pack='cp' />
             <MenuListItem
