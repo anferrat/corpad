@@ -50,6 +50,7 @@ const useExportLabels = (navigateToExportItem) => {
     const assetOptionAvailable = (itemType === ItemTypes.TEST_POINT || itemType === ItemTypes.RECTIFIER) && exportType !== ExportFormatTypes.KML && isPro
     const sortingOptionAvailable = exportType !== ExportFormatTypes.KML
     const mapLayerOptionAvailable = exportType === ExportFormatTypes.KML && isPro
+    const fileMimeType = exportType === ExportFormatTypes.KML ? FileMimeTypes.KML : FileMimeTypes.CSV
 
     useEffect(() => {
         componentMounted.current = true
@@ -87,7 +88,7 @@ const useExportLabels = (navigateToExportItem) => {
             navigateToExportItem()
             dispatch(resetExport())
             dispatch(hideLoader())
-            dispatch(setExportModal(true, response, FileMimeTypes.CSV))
+            dispatch(setExportModal(true, response, fileMimeType))
         }
         else {
             errorHandler(status)
