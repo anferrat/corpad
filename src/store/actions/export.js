@@ -13,6 +13,7 @@ export const SET_EXPORT_SUBITEM_PROPERTIES = 'SET_EXPORT_SUBITEM_PROPERTIES'
 export const SET_INCLUDE_ASSETS = 'SET_INCLUDE_ASSETS'
 export const SET_INCLUDE_MAP_LAYERS = 'SET_INCLUDE_MAP_LAYERS'
 export const SET_EXPORT_FORMAT = 'SET_EXPORT_FORMAT'
+export const SET_EXPORT_INITIAL_ITEM_PROPERTIES = 'SET_EXPORT_INITIAL_ITEM_PROPERTIES'
 
 export const setExportItemType = (itemType) =>
     ({ type: SET_EXPORT_ITEM_TYPE, itemType })
@@ -66,3 +67,7 @@ export const setIncludeMapLayers = (isChecked) => (
 
 export const resetExport = () =>
     ({ type: RESET_EXPORT })
+
+export const setInitialItemProperties = (properties) => (
+    { type: SET_EXPORT_INITIAL_ITEM_PROPERTIES, properties }
+)

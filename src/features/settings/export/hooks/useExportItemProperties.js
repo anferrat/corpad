@@ -1,6 +1,6 @@
 import { useDispatch, useSelector } from "react-redux"
 import { useCallback, useState, useEffect, useRef } from 'react'
-import { resetExport, setExportFormat, setExportItemType, setExportSorting, toggleExportItemProperty, toggleIncludeAssets, setIncludeMapLayers } from "../../../../store/actions/export"
+import { resetExport, setExportFormat, setExportItemType, setExportSorting, toggleExportItemProperty, toggleIncludeAssets, setIncludeMapLayers, setInitialItemProperties } from "../../../../store/actions/export"
 import { getExportItemProperties } from "../../../../app/controllers/survey/ExportController"
 import { errorHandler } from "../../../../helpers/error_handler"
 import { ExportFormatTypes, ItemTypes } from "../../../../constants/global"
@@ -31,8 +31,10 @@ const useExportItemProperties = ({ navigateToExportOverview, navigateToExportPot
         const loadData = async () => {
             const { status, response } = await getExportItemProperties({ itemType })
             if (status === 200) {
-                if (componentMounted.current)
+                if (componentMounted.current) {
                     setProperties(response)
+                    dispatch(setInitialItemProperties(response))
+                }
             }
             else errorHandler(status)
             if (componentMounted.current)
