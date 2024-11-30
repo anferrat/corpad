@@ -8,6 +8,11 @@ export const useToggle = ({ isChecked, onApply }) => {
             onApply(turnedOn)
     }, [turnedOn])
 
+    useEffect(() => {
+        if (turnedOn !== isChecked)
+            setTurnedOn(isChecked)
+    }, [isChecked])
+
     return {
         onToggle: setTurnedOn,
         toggledOn: turnedOn

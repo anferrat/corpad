@@ -5,7 +5,7 @@ import { timeFix } from '../../config/geolocation';
 
 export class GeolocationRepository {
     constructor() {
-        //Geolocation.setRNConfiguration({ skipPermissionRequests: false, locationProvider: 'android' })
+        Geolocation.setRNConfiguration({ locationProvider: 'playServices' })
     }
 
     async getCurrent() {
@@ -29,19 +29,21 @@ export class GeolocationRepository {
     }
 
     watch(callback) {
+        console.log('here')
         const watchId = Geolocation.watchPosition(({ coords: { latitude, longitude, accuracy } }) => {
+            console.log(latitude, longitude, accuracy)
             callback({ latitude, longitude, accuracy })
         },
             (er) => {
                 throw new Error(errors.LOCATION, 'Unable to obtain current position', er, 800)
             },
             {
-                maximumAge: 1000,
+                maximumAge: 10000,
                 enableHighAccuracy: true,
                 distanceFilter: 0,
                 fastestInterval: 100,
                 interval: 1000,
-                timeout: 10000
+                timeout: 10000,
             })
         return () => {
             Geolocation.clearWatch(watchId)
@@ -50,7 +52,7 @@ export class GeolocationRepository {
 
     getGpsTimeAdjustment(timeout = 10000) {
         //getiing timestamp from GPS
-        Geolocation.setRNConfiguration({ skipPermissionRequests: false, locationProvider: 'android' })
+        //Geolocation.setRNConfiguration({ skipPermissionRequests: false, locationProvider: 'android' })
         return new Promise((resolve) => {
             Geolocation.getCurrentPosition(({ timestamp }) => {
                 resolve({

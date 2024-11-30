@@ -7,7 +7,7 @@ const MoreOptionsSheet = (props) => {
         <View
             style={styles.mainView}>
             <MenuListItem
-                title='NFC labels'
+                title='QR code and NFC labels'
                 icon='nfc'
                 pack='cp'
                 onPress={props.navigateToExternalLinkSettings} />
