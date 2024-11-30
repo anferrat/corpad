@@ -48,10 +48,12 @@ export class _GetFileContent {
         return mapLayers.filter(({ visible }) => visible).map(({ data, strokeColor, strokeWidth }) => {
             return this._convertData(data).features.map(feature => {
                 const styleProps = this._getStyleProperties(feature.geometry?.type, strokeColor, strokeWidth)
+                const { name, ...otherProperties } = feature.properties
                 return ({
                     ...feature,
                     properties: {
-                        ...feature.properties,
+                        Name: name,
+                        ...otherProperties,
                         ...styleProps,
                     }
                 })
@@ -67,6 +69,7 @@ export class _GetFileContent {
                 return ({
                     ...feature,
                     properties: {
+                        Name,
                         ...feature.properties,
                         ...dataProperties
                     }
@@ -86,7 +89,7 @@ export class _GetFileContent {
                 return this.csvParser.unparse(data, headers)
             case ExportFormatTypes.KML:
                 const geoJson = await this._exportGeoJson(data, features, includeMapLayers)
-                return this.parseToKml.execute(geoJson, 'name')
+                return this.parseToKml.execute(geoJson, 'Name')
         }
     }
 }
