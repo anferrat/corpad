@@ -75,7 +75,7 @@ export class LinkEncoder extends Encoder {
         this._writeBufSize(buffer)
         const message = buffer.toString('base64')
         const urlMessage = base64url.fromBase64(message)
-        const link = 'com.corpad://l/' + encodeURIComponent(urlMessage)
+        const link = 'https://l.corpad.ca/' + encodeURIComponent(urlMessage)
         this._verifyLink(link)
         return link
     }

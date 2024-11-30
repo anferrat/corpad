@@ -72,10 +72,8 @@ export class LinkDecoder {
     }
 
     _extractData(link) {
-        const isValid = link.startsWith('com.corpad://l/')
-        if (isValid)
-            return Buffer.from(this._decodeBase64(link.substring(15)), 'base64')
-        else throw new Error(errors.GENERAL, 'Unable to extract data', 'Link is not valid')
+        const data = link.split('/').pop()
+        return Buffer.from(this._decodeBase64(data), 'base64')
     }
 
     decode(link) {

@@ -9,7 +9,7 @@ export class UrlResolver {
     }
 
     _getUrlType(url) {
-        if (url.startsWith('com.corpad://l/'))
+        if (url.startsWith('com.corpad://l/') || url.startsWith('https://l.corpad.ca'))
             return UrlTypes.DATA_LINK
         else return UrlTypes.FILE
     }
