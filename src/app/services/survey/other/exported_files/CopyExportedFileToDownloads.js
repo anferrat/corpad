@@ -8,8 +8,14 @@ export class CopyExportedFileToDownloads {
 
     async execute(path) {
         await this.permissions.storage()
-        const filename = path.substring(path.lastIndexOf('/') + 1, path.length)
+        const filename = path.split('\\').pop().split('/').pop()
         const destinationPath = await this.fileSystemRepo.getLocation(FileSystemLocations.DOWNLOADS)
-        await this.fileSystemRepo.copyFile(path, `${destinationPath}/${filename}`)
+        try {
+            await this.fileSystemRepo.copyFile(path, `${destinationPath}/${filename}`)
+        }
+        catch (er) {
+            throw new Error(errors.FILESYSTEM, 'Unable to save to Downloads', er, 416)
+        }
+        await this.fileSystemRepo.scanFile(`${destinationPath}/${filename}`)
     }
 }
