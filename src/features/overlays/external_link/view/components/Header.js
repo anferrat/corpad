@@ -4,6 +4,7 @@ import { Icon, Text } from '@ui-kitten/components'
 import { primary } from '../../../../../styles/colors'
 import { ExternalLinkTypeLabels } from '../../../../../constants/labels'
 import IconLine from '../../../../../components/ItemView/components/IconLine'
+import { ExternalLinkTypeIcons } from '../../../../../constants/icons'
 
 
 const Header = ({ linkType, tagId, technician }) => {
@@ -11,7 +12,7 @@ const Header = ({ linkType, tagId, technician }) => {
         <View
             style={styles.container}>
             <Icon
-                name='nfc'
+                name={ExternalLinkTypeIcons[linkType]}
                 fill={primary}
                 pack='cp'
                 style={styles.displayIcon} />

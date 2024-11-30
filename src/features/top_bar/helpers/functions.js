@@ -433,10 +433,10 @@ export const getHeader = (screen, params, navigation, dispatch, openMenu) => {
                     display: true,
                     isPrimary: true,
                     title: {
-                        title: 'Label discovered',
-                        subtitle: 'NFC label',
-                        icon: 'nfc-filled',
-                        pack: 'cp',
+                        title: 'Item discovered',
+                        subtitle: 'Label',
+                        icon: 'pricetags',
+                        pack: null,
                     },
                     left: null,
                     right: null
