@@ -2,7 +2,7 @@
 import QRCode from 'qrcode'
 import RNQRGenerator from 'rn-qr-generator'
 import { Error, errors } from '../../utils/Error'
-import { basic1000, control } from '../../../styles/colors'
+import { basic1000, basic1100, control } from '../../../styles/colors'
 
 export class QRCodeRepository {
     constructor() {
@@ -32,10 +32,10 @@ export class QRCodeRepository {
     }
 
     async generatePngFile(link, params = {
-        width: 100,
-        height: 100,
+        width: 600,
+        height: 600,
         color: {
-            dark: basic1000,
+            dark: basic1100,
             light: control
         }
     }) {
@@ -47,10 +47,10 @@ export class QRCodeRepository {
                 width,
                 correctionLevel: 'H',
                 padding: {
-                    top: 4,
-                    left: 4,
-                    bottom: 4,
-                    right: 4
+                    top: 20,
+                    left: 20,
+                    bottom: 20,
+                    right: 20
                 },
                 backgroundColor: color.light,
                 color: color.dark
