@@ -1,6 +1,6 @@
 import React from 'react'
 import { View, StyleSheet, ScrollView } from 'react-native'
-import { RadioGroup, CheckBox } from '@ui-kitten/components'
+import { RadioGroup } from '@ui-kitten/components'
 import Radio from './components/Radio'
 import { globalStyle } from '../../../styles/styles'
 import ItemSelectorCard from './components/item/ItemSelectorCard'
@@ -72,28 +72,20 @@ const ItemProperties = ({ navigateToExportOverview, navigateToExportPotentials, 
                     {mapLayerOptionAvailable ? <>
                         <Title
                             name={'MAP LAYERS'} />
-                        <View style={styles.checkbox}>
-                            <CheckBox
-                                checked={includeMapLayers}
-                                onChange={onCheckIncludeMapLayers}>
-                            </CheckBox>
-                            <CheckBoxText>
-                                Include visible map layers
-                            </CheckBoxText>
-                        </View>
+                        <CheckBoxText
+                            checked={includeMapLayers}
+                            onPress={onCheckIncludeMapLayers}>
+                            Include visible map layers
+                        </CheckBoxText>
                     </> : null}
                     {assetOptionAvailable ? <>
                         <Title
                             name={'IMAGES'} />
-                        <View style={styles.checkbox}>
-                            <CheckBox
-                                checked={includeAssets}
-                                onChange={setIncludeAssets}>
-                            </CheckBox>
-                            <CheckBoxText>
-                                Export images
-                            </CheckBoxText>
-                        </View>
+                        <CheckBoxText
+                            onPress={setIncludeAssets}
+                            checked={includeAssets}>
+                            Export images
+                        </CheckBoxText>
                     </> : null}
                     {sortingOptionAvailable ?
                         <>
@@ -151,8 +143,4 @@ const styles = StyleSheet.create({
     scrollView: {
         paddingBottom: 72
     },
-    checkbox: {
-        flexDirection: 'row',
-        marginBottom: 24
-    }
 })

@@ -43,7 +43,7 @@ const styles = StyleSheet.create({
         width: '100%'
     },
     button: {
-        width: 125
+        minWidth: 125
     },
     buttonText: {
         fontWeight: 'bold',
