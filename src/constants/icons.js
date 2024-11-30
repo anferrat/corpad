@@ -120,5 +120,5 @@ export const SubscriptionStatusIcons = Object.freeze({
 
 export const ExternalLinkTypeIcons = Object.freeze({
     [ExternalLinkTypes.NFC]: 'nfc',
-    [ExternalLinkTypes.QR_CODE]: 'qr'
+    [ExternalLinkTypes.QR_CODE]: 'qr-code'
 })

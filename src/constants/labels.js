@@ -519,7 +519,7 @@ export const FileMimeTypeLabels = Object.freeze({
 
 export const ExternalLinkTypeLabels = Object.freeze({
     [ExternalLinkTypes.NFC]: 'NFC label',
-    [ExternalLinkTypes.QR_CODE]: 'QR-code'
+    [ExternalLinkTypes.QR_CODE]: 'QR code'
 })
 
 export const TestPointReadingOptionLabels = Object.freeze({
