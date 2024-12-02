@@ -22,7 +22,7 @@ const Features = () => {
                 color='#FFAF95'
                 description='Connect multimeter over Bleutooth to capture voltage and current.' />
             <FeatureListItem
-                title='QR-code and NFC labels'
+                title='QR code and NFC labels'
                 icon='qr-code'
                 pack='cp'
                 color='#9AE2FE'
