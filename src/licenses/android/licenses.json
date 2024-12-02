@@ -83,6 +83,13 @@
     "licenseUrl": "https://github.com/xmldom/xmldom/blob/master/LICENSE",
     "parents": "corpad"
   },
+  "base64url": {
+    "licenses": "MIT",
+    "copyright": "Copyright (c) 2013-2016 Brian J. Brennan",
+    "repository": "https://github.com/brianloveswords/base64url",
+    "licenseUrl": "https://github.com/brianloveswords/base64url?tab=MIT-1-ov-file#readme",
+    "parents": "corpad"
+  },
   "ui-kitten/components": {
     "licenses": "MIT",
     "copyright": "Copyright (c) 2016 akveo.com",
@@ -123,6 +130,13 @@
     "copyright": "Copyright (c) 2015 Matthew Holt",
     "repository": "https://github.com/mholt/PapaParse",
     "licenseUrl": "https://github.com/mholt/PapaParse/raw/master/LICENSE",
+    "parents": "corpad"
+  },
+  "node-qrcode": {
+    "licenses": "MIT",
+    "copyright": "Copyright (c) 2012 Ryan Day",
+    "repository": "https://github.com/soldair/node-qrcode",
+    "licenseUrl": "https://github.com/soldair/node-qrcode?tab=MIT-1-ov-file#readme",
     "parents": "corpad"
   },
   "react": {
@@ -328,18 +342,25 @@
     "licenseUrl": "github:reduxjs/redux",
     "parents": "corpad"
   },
-  "rn-seven-segment-display": {
+  "rn-qr-generator": {
     "licenses": "MIT",
-    "copyright": "Copyright (c) 2019 msvargas",
-    "repository": "https://github.com/msvargas/rn-seven-segment-display",
-    "licenseUrl": "https://github.com/msvargas/rn-seven-segment-display",
+    "copyright": "Copyright (c) 2023 Gevorg Gasparyan",
+    "repository": "https://github.com/gevgasparyan/rn-qr-generator",
+    "licenseUrl": "https://github.com/gevgasparyan/rn-qr-generator?tab=MIT-1-ov-file#readme",
     "parents": "corpad"
   },
-  "tokml": {
+  "anferrat-tokml": {
     "licenses": "BSD 2-Clause",
-    "copyright": "Copyright (c) 2015, Mapbox All rights reserved.",
+    "copyright": "Copyright (c) 2024 Andrei Lomtev",
     "repository": "https://github.com/mapbox/tokml",
     "licenseUrl": "https://github.com/mapbox/tokml/blob/master/LICENSE.md",
+    "parents": "corpad"
+  },
+  "xlsx": {
+    "licenses": "Apache License 2.0",
+    "copyright": " Copyright (C) 2012-present   SheetJS LLC",
+    "repository": "https://github.com/SheetJS/sheetjs",
+    "licenseUrl": "https://github.com/SheetJS/sheetjs?tab=Apache-2.0-1-ov-file#readme",
     "parents": "corpad"
   },
   "yup": {

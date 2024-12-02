@@ -7,6 +7,7 @@ import com.facebook.react.defaults.DefaultReactActivityDelegate
 import org.devio.rn.splashscreen.SplashScreen
 import android.content.Intent
 import android.os.Bundle;
+import android.util.Log
 
 class MainActivity : ReactActivity() {
 
@@ -18,7 +19,7 @@ class MainActivity : ReactActivity() {
 
 override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(null)
-    if (!isTaskRoot) { // Google Files bypassing singleTask for some reason. Restarting activity in New task if it's the case
+    if (!isTaskRoot()) { // Google Files bypassing singleTask for some reason. Restarting activity in New task if it's the case
         val newIntent = Intent(intent)
         newIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
         startActivity(newIntent)
@@ -26,7 +27,6 @@ override fun onCreate(savedInstanceState: Bundle?) {
     }
     SplashScreen.show(this, R.style.SplashTheme, true)
 }
-
   /**
    * Returns the instance of the [ReactActivityDelegate]. We use [DefaultReactActivityDelegate]
    * which allows you to enable New Architecture with a single boolean flags [fabricEnabled]

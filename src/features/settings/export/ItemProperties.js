@@ -75,7 +75,7 @@ const ItemProperties = ({ navigateToExportOverview, navigateToExportPotentials, 
                         <CheckBoxText
                             checked={includeMapLayers}
                             onPress={onCheckIncludeMapLayers}>
-                            Include visible map layers
+                            Include map layers
                         </CheckBoxText>
                     </> : null}
                     {assetOptionAvailable ? <>

@@ -54,7 +54,7 @@ export const ScrollRef = createContext<MutableRefObject<any> | null>(null);
 
 ModalService.setShouldUseTopInsets = true;
 
-export const version = '1.5.1';
+export const version = '1.6';
 export const DEVELOPER_MODE_ON = false;
 
 function App(): React.JSX.Element {
