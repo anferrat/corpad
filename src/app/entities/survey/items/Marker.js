@@ -20,7 +20,7 @@ export class Marker extends SurveyItem {
         return {
             "type": "Feature",
             "properties": {
-                "name": this.name ?? 'Point',
+                "Name": this.name ?? 'Point',
                 "marker-color": StatusColors[this.status] ?? basic,
                 "marker-symbol": this.itemType === ItemTypes.TEST_POINT ? 't' : 'r'
             },
