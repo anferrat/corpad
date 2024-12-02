@@ -2,7 +2,7 @@ import React from 'react'
 import { View, StyleSheet } from 'react-native'
 import MultimeterPlaceholder from './MultimeterPlaceholder'
 import { globalStyle } from '../../../../../styles/styles'
-import { scanIcon, activity, pricetags } from '../../../../../components/Icons'
+import { scanIcon, activity, star } from '../../../../../components/Icons'
 import { Button, Text } from '@ui-kitten/components'
 import MultimeterListItem from './MultimeterListItem'
 import ConnectMultimeterModal from './ConnectMultimeterModal'
@@ -17,7 +17,7 @@ const UnpairedView = ({ scanning, scanDevices, scannedDevices, isBluetoothOn, pa
                     appearance={isPro ? 'filled' : 'ghost'}
                     disabled={pairing || scanning || !isBluetoothOn}
                     style={styles.scanButton}
-                    accessoryLeft={(isBluetoothOn ? (!isPro ? pricetags : (scanning || pairingId !== null ? activity : scanIcon)) : null)}
+                    accessoryLeft={(isBluetoothOn ? (!isPro ? star : (scanning || pairingId !== null ? activity : scanIcon)) : null)}
                     onPress={showModal}>
                     {isBluetoothOn ? (!isPro ? 'Upgrade to premium' : (pairingId !== null ? 'Pairing' : (scanning ? 'Searching for multimeters' : 'Search for multimeters'))) : 'Bluetooth is off'}</Button>
                 {scannedDevices.length !== 0 ?

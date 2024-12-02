@@ -52,3 +52,4 @@ export const optionIcon = (props) => <Icon name='options' {...props} />
 export const pricetags = (props) => <Icon name='pricetags' {...props} />
 export const hardDrive = (props) => <Icon name='hard-drive' {...props} />
 export const compass = (props) => <Icon name='compass' {...props} />
+export const star = (props) => <Icon name='star' {...props} />

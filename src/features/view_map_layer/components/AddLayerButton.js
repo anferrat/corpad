@@ -1,14 +1,14 @@
 import { Button, Text } from '@ui-kitten/components'
 import React from 'react'
 import { StyleSheet, View } from 'react-native'
-import { plus, pricetags } from '../../../components/Icons'
+import { plus, star } from '../../../components/Icons'
 
 
 const AddLayerButton = ({ onPress, inactive, isPro }) => {
     return (
         <Button
             disabled={inactive}
-            accessoryLeft={isPro ? (inactive ? null : plus) : pricetags}
+            accessoryLeft={isPro ? (inactive ? null : plus) : star}
             style={styles.button}
             onPress={onPress}
             appearance='ghost'>
