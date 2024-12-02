@@ -140,7 +140,7 @@ const settings = (state = initialState, action) => {
                 ...state,
                 subscription: {
                     ...state.subscription,
-                    status: SubscriptionStatuses.GRANTED,//action.subscriptionStatus,
+                    status: action.subscriptionStatus,
                     expirationTime: action.subscriptionExpirationTime
                 },
                 currentSurvey: {
