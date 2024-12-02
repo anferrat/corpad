@@ -5,7 +5,7 @@ import { timeFix } from '../../config/geolocation';
 
 export class GeolocationRepository {
     constructor() {
-        Geolocation.setRNConfiguration({ locationProvider: 'playServices' })
+        //Geolocation.setRNConfiguration({ locationProvider: 'playServices' })
     }
 
     async getCurrent() {
