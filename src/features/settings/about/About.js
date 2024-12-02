@@ -47,8 +47,9 @@ const styles = StyleSheet.create({
         flex: 1
     },
     logo: {
-        width: 120,
-        height: 120
+        width: 110,
+        height: 110,
+        marginBottom: 12,
     },
     logoView: {
         flex: .5,

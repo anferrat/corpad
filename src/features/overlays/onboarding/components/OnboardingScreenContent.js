@@ -46,14 +46,26 @@ export const lastVersionPages = [
     {
         backgroundColor: basic300,
         image: <Icon name='corpad-logo' fill={primary} pack='cp' style={styles.icon} />,
-        title: 'Updated to version 1.5',
+        title: 'Updated to version 1.6',
         subtitle: "We've enhanced your cathodic protection data capture experience."
     },
     {
         backgroundColor: basic300,
-        image: <Icon name='nfc' fill={primary} pack='cp' style={styles.icon} />,
-        title: 'NFC labels',
-        subtitle: 'Now you can write and read test point and rectifier data to/from NFC tags with your phone. Learn more at docs.corpad.ca/nfc.'
+        image: <Icon name='qr-code' fill={primary} pack='cp' style={styles.icon} />,
+        title: 'QR code labels',
+        subtitle: 'Test point and rectifier information can be stored inside a QR code. App users can read and use the data stored on the code.'
+    },
+    {
+        backgroundColor: basic300,
+        image: <Icon name='file-text' fill={primary} style={styles.icon} />,
+        title: 'New format support',
+        subtitle: 'Map layers now support .kmz, and .geojson. Import from spreadsheet works with .xlsx.'
+    },
+    {
+        backgroundColor: basic300,
+        image: <Icon name='funnel' fill={primary} style={styles.icon} />,
+        title: 'New filters',
+        subtitle: 'Test points can be filtered by pipeline. Added filters to markers on the map.'
     },
     {
         backgroundColor: basic300,
