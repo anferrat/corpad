@@ -15,8 +15,9 @@ const useRectifierSorting = ({ closeSheet }) => {
     }, [selectedSorting])
 
     const refresh = useCallback(() => {
-        dispatch(setSortingSetting(ItemTypes.RECTIFIER, sorting))
-    }, [])
+        dispatch(setSortingSetting(ItemTypes.RECTIFIER, selectedSorting))
+        closeSheet()
+    }, [selectedSorting])
 
     return { selectedSorting, setSelectedSorting, refresh }
 

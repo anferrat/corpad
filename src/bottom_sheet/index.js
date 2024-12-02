@@ -20,7 +20,7 @@ export const BottomSheet = React.forwardRef((props, bsRef) => {
         enableContentPanningGesture={false}
         enableHandlePanningGesture={false}
         index={-1}
-        snapPoints={[241 + bottom, 241 + bottom, 381 + bottom, 376 + bottom, 419 + bottom, 451 + bottom, 480 + bottom]}>
+        snapPoints={[234 + bottom, 236 + bottom, 381 + bottom, 385 + bottom, 416 + bottom, 445 + bottom, 480 + bottom]}>
         <BottomSheetContent />
     </BottomSheetDefault>
 })

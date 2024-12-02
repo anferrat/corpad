@@ -39,7 +39,8 @@ export default LabelPicker
 const styles = StyleSheet.create({
     hint: {
         paddingHorizontal: 12,
-        height: 60,
-        textAlignVertical: 'top'
+        height: 70,
+        textAlignVertical: 'top',
+        textAlign: 'center'
     }
 })

@@ -24,12 +24,14 @@ const ExternalLinkListItem = ({ name, timeRecorded, itemType, linkType, onPress,
                 <View>
                     <View>
                         <Text
+                            numberOfLines={1}
                             category='p1'>
                             {name}
                         </Text>
                         <Text
                             category='s2'
-                            appearance='hint'>
+                            appearance='hint'
+                            numberOfLines={1}>
                             Scanned on {getFullDate(timeRecorded)}
                         </Text>
                     </View>

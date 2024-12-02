@@ -114,7 +114,7 @@ export const getLocationAsync = async () => {
         return { latitude, longitude }
     }
     else {
-        errorHandler(902)
+        errorHandler(800)
         return { latitude: 0, longitude: 0 }
     }
 }
