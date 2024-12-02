@@ -44,6 +44,12 @@ export class LinkEncoder extends Encoder {
             this.codes
         )
 
+        this.PREFIXES = {
+            //Decoders can understand Link schema as well, however it causes bugs on pixels default qrcode scanner and needs app link verification on android.
+            LINK: 'https://l.corpad.ca/',
+            SCHEMA: 'com.corpad://l/'
+        }
+
         this.subitemEncoder = new SubitemEncoder(
             this.codes,
             new AnodeEncoder(this.codes, this.potentialEncoder, this.wireParamEncoder),
@@ -75,7 +81,7 @@ export class LinkEncoder extends Encoder {
         this._writeBufSize(buffer)
         const message = buffer.toString('base64')
         const urlMessage = base64url.fromBase64(message)
-        const link = 'https://l.corpad.ca/' + encodeURIComponent(urlMessage)
+        const link = this.PREFIXES.SCHEMA + encodeURIComponent(urlMessage)
         this._verifyLink(link)
         return link
     }
