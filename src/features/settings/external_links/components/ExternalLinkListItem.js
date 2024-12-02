@@ -6,8 +6,9 @@ import { androidRipple } from "../../../../styles/styles"
 import Pressable from "../../../../components/Pressable"
 import { getFullDate } from "../../../../helpers/functions"
 import { ExternalLinkTypeIcons } from "../../../../constants/icons"
+import { ExternalLinkTypeLabels, ItemTypeLabels } from "../../../../constants/labels"
 
-const ExternalLinkListItem = ({ name, timeRecorded, itemType, linkType, onPress, link }) => {
+const ExternalLinkListItem = ({ name, timeRecorded, linkType, itemType, onPress, link }) => {
     const onPressHandler = () => onPress(link)
     return (
         <Pressable
@@ -21,20 +22,26 @@ const ExternalLinkListItem = ({ name, timeRecorded, itemType, linkType, onPress,
                     pack='cp'
                     fill={primary}
                     style={styles.icon} />
-                <View>
-                    <View>
-                        <Text
-                            numberOfLines={1}
-                            category='p1'>
-                            {name}
-                        </Text>
-                        <Text
-                            category='s2'
-                            appearance='hint'
-                            numberOfLines={1}>
-                            Scanned on {getFullDate(timeRecorded)}
-                        </Text>
-                    </View>
+                <View
+                    style={styles.titles}>
+                    <Text
+                        numberOfLines={1}
+                        category='p1'>
+                        {name}
+                    </Text>
+                    <Text
+                        numberOfLines={1}
+                        category='s2'
+                        appearance='hint'>
+                        {ItemTypeLabels[itemType]} | {ExternalLinkTypeLabels[linkType]}
+                    </Text>
+                    <Text
+                        category='s2'
+                        appearance='hint'
+                        ellipsizeMode={'head'}
+                        numberOfLines={1}>
+                        Scanned on {getFullDate(timeRecorded)}
+                    </Text>
                 </View>
             </View>
             <Icon
@@ -49,7 +56,7 @@ export default React.memo(ExternalLinkListItem)
 
 const styles = StyleSheet.create({
     mainView: {
-        height: 60,
+        height: 80,
         flexDirection: "row",
         alignItems: 'center',
         padding: 12,
@@ -63,14 +70,18 @@ const styles = StyleSheet.create({
         flex: 1,
         alignItems: 'center'
     },
+    titles: {
+        flex: 1
+    },
     icon: {
         marginRight: 12,
         marginLeft: 6,
-        width: 35,
-        height: 35
+        width: 40,
+        height: 40
     },
     arrow: {
         width: 22,
-        height: 22
-    }
+        height: 22,
+        marginLeft: 12
+    },
 })

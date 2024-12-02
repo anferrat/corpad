@@ -6,16 +6,16 @@ export const NFC_RECORDS = [
     {
         id: 1,
         name: 'My tp hahah',
-        linkType: ExternalLinkTypes.NFC,
+        linkType: ExternalLinkTypes.QR_CODE,
         itemType: ItemTypes.TEST_POINT,
         link: 'ajajajajajja',
         timeRecorded: Date.UTC(2019, 4, 8, 11, 32, 3, 454)
     },
     {
         id: 11,
-        name: 'My tp hahah',
+        name: 'My tp h222222222222222222222222222222222222222222222222222222222222222222222ahah',
         linkType: ExternalLinkTypes.NFC,
-        itemType: ItemTypes.TEST_POINT,
+        itemType: ItemTypes.RECTIFIER,
         link: 'ajajajajajja',
         timeRecorded: Date.UTC(2019, 4, 8, 11, 32, 3, 454)
     },
@@ -23,7 +23,7 @@ export const NFC_RECORDS = [
         id: 2,
         name: 'My tp hahah',
         linkType: ExternalLinkTypes.NFC,
-        itemType: ItemTypes.TEST_POINT,
+        itemType: ItemTypes.RECTIFIER,
         link: 'ajajajajajja_2',
         timeRecorded: Date.UTC(2019, 4, 8, 11, 32, 4, 454)
     },
