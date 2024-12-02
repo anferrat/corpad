@@ -25,7 +25,6 @@ const SortingView = ({ selectedSorting, setSelectedSorting, closeSheet, refresh 
                 checked={selectedSorting === SortingOptions.NEAREST}
                 button='Refresh'
                 onButtonPress={refresh} />
-
         </>
     )
 }

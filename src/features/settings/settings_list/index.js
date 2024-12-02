@@ -47,7 +47,7 @@ export const SettingsList = () => {
                 subtitle={'Control default units for potential readings, add and remove potential reading types'}
                 onPress={navigateToPotentials} />
             <ListItem
-                icon={'image'}
+                icon={'image-outline'}
                 title={'Images'}
                 subtitle={'View all the images assigned to test points and rectifiers in this survey'}
                 onPress={navigateToImages} />
@@ -72,7 +72,7 @@ export const SettingsList = () => {
                 subtitle={'Control bluetooth multimeter settings'}
                 onPress={navigateToMultimeter} />
             <ListItem
-                icon={'pricetags'}
+                icon={'pricetags-outline'}
                 title={'QR code and NFC labels'}
                 subtitle={Platform.select({
                     android: 'View recently scanned labels',

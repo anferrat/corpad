@@ -16,7 +16,7 @@ export const BOTTOM_SHEET_VIEWS = {
     RECTIFIER_SORTING: { itemType: 'RECTIFIER', content: 'sorting', index: 4 },
     BASIC_MENU: { itemType: null, content: 'moreOptions', index: 0 },
     IMAGE_PICKER: { itemType: null, content: 'imagePicker', index: 0 },
-    EXPORT_LABEL: { itemType: null, content: 'export_label', index: 1 }
+    EXPORT_LABEL: { itemType: null, content: 'export_label', index: 0 }
 }
 
 
