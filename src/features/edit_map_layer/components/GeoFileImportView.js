@@ -36,7 +36,7 @@ const GeoFileImportView = ({ filename, size, onSelectFile }) => {
                     <Text
                         category='label'
                         appearance='hint'>
-                        File size limit: 3MB
+                        File size limit: 1MB
                     </Text>
                 </View>
             </>

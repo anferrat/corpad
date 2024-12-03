@@ -1,5 +1,5 @@
 import React from 'react'
-import { ActivityIndicator, StyleSheet } from 'react-native'
+import { ActivityIndicator, Platform, StyleSheet } from 'react-native'
 import { useAppLogo } from '../../hooks/useAppLogo'
 import { primary } from '../../../../styles/colors'
 import { Icon } from '@ui-kitten/components'
@@ -27,6 +27,10 @@ const styles = StyleSheet.create({
         width: 26,
         height: 26,
         marginLeft: 12,
-        marginRight: 20
+        marginRight: Platform.select({
+            ios: 16,
+            android: 20,
+            default: 20
+        })
     },
 })
