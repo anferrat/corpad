@@ -9,7 +9,7 @@ export class ReadExternalGeoFile {
         this.geoJsonValidation = geoJsonValidation
         this.parseToGeoJson = parseToGeoJson
         this.parseKmzToKmlService = parseKmzToKmlService
-        this.MAXIMUM_FILE_SIZE = 3145728
+        this.MAXIMUM_FILE_SIZE = 1048576
         this.MAX_FEATURE_NUMBER = 500
     }
 

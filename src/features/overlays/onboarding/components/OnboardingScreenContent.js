@@ -59,7 +59,7 @@ export const lastVersionPages = [
         backgroundColor: basic300,
         image: <Icon name='file-text' fill={primary} style={styles.icon} />,
         title: 'New format support',
-        subtitle: 'Map layers now support .kmz, and .geojson. Import from spreadsheet works with .xlsx.'
+        subtitle: 'Map layers now support .kmz and .geojson. Import from spreadsheet works with .xlsx.'
     },
     {
         backgroundColor: basic300,

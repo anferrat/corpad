@@ -94,7 +94,7 @@ const errorCodes = {
     431: 'Unable to save calculator data to file.',
     432: 'Unable to add photo',
     433: 'Unable to delete photo',
-    434: 'Unable to open GIS file. File has to be less than 3MB.',
+    434: 'Unable to open GIS file. File has to be less than 1MB.',
     435: 'Unable to open GIS file.',
     436: 'File format is not supported. Supported formats are .kml, .kmz, .gpx and .geojson',
     437: 'File has usupported format and cannot be loaded.',

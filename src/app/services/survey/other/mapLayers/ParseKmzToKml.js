@@ -14,17 +14,17 @@ export class ParseKmzToKml {
 
         const files = await this.fileSystemRepo.readDir(FileSystemLocations.TEMP)
 
-        files.filter(({ isFile, filename, path }) => {
+        const kmlFiles = files.filter(({ isFile, filename, path }) => {
             if (isFile) {
                 const file = new ExternalFile(path, filename)
-                file.getFileType()
-                return file.fileType === ExternalFileTypes.KEYHOLE_MARKUP_LANGUAGE
+                const fileType = file.getFileType()
+                return fileType === ExternalFileTypes.KEYHOLE_MARKUP_LANGUAGE
             }
             else
                 return false
         })
-        if (files.length > 0) {
-            const content = await this.fileSystemRepo.readFile(files[0].path)
+        if (kmlFiles.length > 0) {
+            const content = await this.fileSystemRepo.readFile(kmlFiles[0].path)
             await this.fileSystemRepo.removeDir(FileSystemLocations.TEMP)
             return content
         }

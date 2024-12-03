@@ -955,7 +955,7 @@ PODS:
     - React-Core
   - react-native-document-picker (9.3.0):
     - React-Core
-  - react-native-geolocation (3.2.1):
+  - react-native-geolocation (3.2.0):
     - DoubleConversion
     - glog
     - hermes-engine
@@ -1270,6 +1270,9 @@ PODS:
   - RNPurchases (7.28.0):
     - PurchasesHybridCommon (= 11.1.1)
     - React-Core
+  - RNQrGenerator (1.4.2):
+    - React
+    - ZXingObjC
   - RNReactNativeHapticFeedback (2.2.0):
     - React-Core
   - RNReanimated (3.13.0):
@@ -1331,6 +1334,9 @@ PODS:
   - SocketRocket (0.7.0)
   - SSZipArchive (2.4.3)
   - Yoga (0.0.0)
+  - ZXingObjC (3.6.9):
+    - ZXingObjC/All (= 3.6.9)
+  - ZXingObjC/All (3.6.9)
 
 DEPENDENCIES:
   - boost (from `../node_modules/react-native/third-party-podspecs/boost.podspec`)
@@ -1403,6 +1409,7 @@ DEPENDENCIES:
   - RNGestureHandler (from `../node_modules/react-native-gesture-handler`)
   - "RNGoogleSignin (from `../node_modules/@react-native-google-signin/google-signin`)"
   - RNPurchases (from `../node_modules/react-native-purchases`)
+  - RNQrGenerator (from `../node_modules/rn-qr-generator`)
   - RNReactNativeHapticFeedback (from `../node_modules/react-native-haptic-feedback`)
   - RNReanimated (from `../node_modules/react-native-reanimated`)
   - RNScreens (from `../node_modules/react-native-screens`)
@@ -1422,6 +1429,7 @@ SPEC REPOS:
     - RevenueCat
     - SocketRocket
     - SSZipArchive
+    - ZXingObjC
 
 EXTERNAL SOURCES:
   boost:
@@ -1561,6 +1569,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/@react-native-google-signin/google-signin"
   RNPurchases:
     :path: "../node_modules/react-native-purchases"
+  RNQrGenerator:
+    :path: "../node_modules/rn-qr-generator"
   RNReactNativeHapticFeedback:
     :path: "../node_modules/react-native-haptic-feedback"
   RNReanimated:
@@ -1616,7 +1626,7 @@ SPEC CHECKSUMS:
   React-Mapbuffer: 9f68550e7c6839d01411ac8896aea5c868eff63a
   react-native-ble-manager: 09724bad4d06b86a85e0cd7bd97196fecca15e9a
   react-native-document-picker: 5b97e24a7f1a1e4a50a72c540a043f32d29a70a2
-  react-native-geolocation: fe0562c94eb0b6334f266aea717448dfd9b08cd0
+  react-native-geolocation: 0dc0ee19de4cf2c85d42dd847e1e752a5a7a53d4
   react-native-image-picker: 3269f75c251cdcd61ab51b911dd30d6fff8c6169
   react-native-maps: 7b2c2cee95271592a92ba485eea1dec66a363a6e
   react-native-netinfo: 48c5f79a84fbc3ba1d28a8b0d04adeda72885fa8
@@ -1653,6 +1663,7 @@ SPEC CHECKSUMS:
   RNGestureHandler: 8dbcccada4a7e702e7dec9338c251b1cf393c960
   RNGoogleSignin: 9d0ecc3bff939ccef83cb3a26b874130b06a6e81
   RNPurchases: 1663e39aecc5d8730d97e349419cfd223c1c04ff
+  RNQrGenerator: 5c12ab86443a07e923735800679da7b6fcaaeb31
   RNReactNativeHapticFeedback: ec56a5f81c3941206fd85625fa669ffc7b4545f9
   RNReanimated: 9c213184c27dc4a2ed7e9ff41a4b0b9258bb54f0
   RNScreens: 5aeecbb09aa7285379b6e9f3c8a3c859bb16401c
@@ -1663,6 +1674,7 @@ SPEC CHECKSUMS:
   SocketRocket: abac6f5de4d4d62d24e11868d7a2f427e0ef940d
   SSZipArchive: fe6a26b2a54d5a0890f2567b5cc6de5caa600aef
   Yoga: 04f1db30bb810187397fa4c37dd1868a27af229c
+  ZXingObjC: 8898711ab495761b2dbbdec76d90164a6d7e14c5
 
 PODFILE CHECKSUM: 3be142abed1510144bdd428b7a1281c80309c0a0
 
