@@ -39,6 +39,8 @@ export class Codes {
             [CoarseFineOptions.D7]: 16,
             [CoarseFineOptions.D8]: 17,
             [CoarseFineOptions.D9]: 18,
+            [CoarseFineOptions.G]: 19, //don't ask
+            [CoarseFineOptions.J]: 20,
         })
 
         this.powerSources = Object.freeze({
