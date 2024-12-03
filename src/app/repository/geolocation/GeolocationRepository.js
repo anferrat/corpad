@@ -29,9 +29,7 @@ export class GeolocationRepository {
     }
 
     watch(callback) {
-        console.log('here')
         const watchId = Geolocation.watchPosition(({ coords: { latitude, longitude, accuracy } }) => {
-            console.log(latitude, longitude, accuracy)
             callback({ latitude, longitude, accuracy })
         },
             (er) => {
