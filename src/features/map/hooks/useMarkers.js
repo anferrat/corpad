@@ -5,7 +5,7 @@ import { getMarker, getMarkerList } from '../../../app/controllers/survey/items/
 import { getInitialMapRegion, shareLocationWithExtarnalApp } from '../../../app/controllers/survey/other/GeolocationController'
 import { errorHandler } from '../../../helpers/error_handler'
 import { activateMarker, deleteMarker, loadMarkers, resetMap, resetActiveMarkers, setMapReady, setNewItemMarker, toggleSatellite, updateMarker } from '../../../store/actions/map'
-import { updateMarker as updateMarkerRequest } from '../../../app/controllers/survey/items/MarkerController'
+import { updateMarkerCoordinates } from '../../../app/controllers/survey/items/MarkerController'
 import { hapticMedium, hapticMap } from '../../../native_libs/haptics'
 import { useIsFocused } from '@react-navigation/native'
 import { createItem } from '../../../app/controllers/survey/items/ItemController'
@@ -165,7 +165,7 @@ const useMarkers = ({ navigateToEdit, ref }) => {
         const latitide = roundCoord(lat)
         const longitude = roundCoord(lon)
         dispatch(updateMarker({ ...marker, latitude: latitide, longitude: longitude })) //timeModified is not updated. Doesnt break anything, but keep in mind
-        await updateMarkerRequest({ ...marker, latitude: latitide, longitude: longitude },
+        await updateMarkerCoordinates({ itemId: marker.id, itemType: marker.itemType, latitude: latitide, longitude: longitude },
             er => {
                 dispatch(updateMarker(marker))
                 errorHandler(er)

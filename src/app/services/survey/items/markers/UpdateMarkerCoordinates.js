@@ -1,8 +1,7 @@
-import { Marker } from "../../../../entities/survey/items/Marker"
 import { ItemTypes } from "../../../../../constants/global"
 import { Error, errors } from "../../../../utils/Error"
 
-export class UpdateMarker {
+export class UpdateMarkerCoordinates {
     constructor(testPointRepo, rectifierRepo, basicPresenter) {
         this.testPointRepo = testPointRepo
         this.rectifierRepo = rectifierRepo
@@ -18,10 +17,21 @@ export class UpdateMarker {
         else throw new Error(errors.GENERAL, `Item type ${itemType} is not supported`)
     }
 
-    async execute(markerData) {
-        const { id, uid, latitude, longitude, comment, location, status, testPointType, timeCreated, name, itemType } = markerData
+    _getMarker({ itemType, itemId }) {
+        switch (itemType) {
+            case ItemTypes.TEST_POINT:
+                return this.testPointRepo.getById([itemId])
+            case ItemTypes.RECTIFIER:
+                return this.rectifierRepo.getById([itemId])
+            default:
+                throw new Error(errors.GENERAL, `Item type ${itemType} is not supported`)
+        }
+    }
+
+    async execute({ itemType, itemId, latitude, longitude }) {
         const currentTime = Date.now()
-        const marker = new Marker(id, uid, name, status, timeCreated, currentTime, comment, itemType, testPointType, location, latitude, longitude)
+        const [marker] = await this._getMarker({ itemId, itemType })
+        marker.updateCoordinates({ latitude, longitude, timeModified: currentTime })
         return this.basicPresenter.execute(await this._updateMarker(marker))
     }
 
