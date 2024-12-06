@@ -1,5 +1,4 @@
 import { ItemTypes } from "../../../../constants/global"
-import { ExportMarkerSymbols } from "../../../../constants/icons"
 import { basic, StatusColors } from "../../../../styles/colors"
 import { SurveyItem } from "./SurveyItem"
 
@@ -14,6 +13,12 @@ export class Marker extends SurveyItem {
 
     getMarker() {
         return this
+    }
+
+    updateCoordinates({ latitude, longitude, timeModified }) {
+        this.latitude = latitude
+        this.longitude = longitude
+        this.timeModified = timeModified
     }
 
     getFeature() {
