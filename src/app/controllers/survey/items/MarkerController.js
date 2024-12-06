@@ -1,6 +1,6 @@
 import { GetMarker } from "../../../services/survey/items/markers/GetMarker"
 import { GetMarkerList } from "../../../services/survey/items/markers/GetMarkerList"
-import { UpdateMarker } from "../../../services/survey/items/markers/UpdateMarker"
+import { UpdateMarkerCoordinates } from "../../../services/survey/items/markers/UpdateMarkerCoordinates"
 import { Controller } from "../../../utils/Controller"
 import { MarkerValidation } from "../../../validation/MarkerValidation"
 import { permissions } from "../../_instances/general_services"
@@ -13,7 +13,7 @@ class MarkerController extends Controller {
         this.validation = new MarkerValidation()
         this.getMarkerService = new GetMarker(testPointRepo, rectifierRepo, basicPresenter)
         this.getMarkerListService = new GetMarkerList(testPointRepo, rectifierRepo, listPresenter, permissions)
-        this.updateMarkerService = new UpdateMarker(testPointRepo, rectifierRepo, basicPresenter)
+        this.updateMarkerCoordinatesService = new UpdateMarkerCoordinates(testPointRepo, rectifierRepo, basicPresenter)
     }
 
     getMarker(params, onError = null, onSuccess = null) {
@@ -29,10 +29,10 @@ class MarkerController extends Controller {
         })
     }
 
-    updateMarker(params, onError = null, onSuccess = null) {
+    updateMarkerCoordinates({ itemType, itemId, latitude, longitude }, onError = null, onSuccess = null) {
         return super.controllerHandler(onSuccess, onError, 616, async () => {
-            const markerData = this.validation.update(params)
-            return this.updateMarkerService.execute(markerData)
+            const markerData = this.validation.updateCoordinates({ itemType, itemId, latitude, longitude })
+            return this.updateMarkerCoordinatesService.execute(markerData)
         })
     }
 
@@ -50,4 +50,4 @@ export const getMarker = ({ itemType, itemId }, onError, onSuccess) => markerCon
 
 export const getMarkerList = ({ filters }, onError, onSuccess) => markerController.getList({ filters }, onError, onSuccess)
 
-export const updateMarker = ({ id, uid, latitude, longitude, comment, location, status, testPointType, timeCreated, name, itemType }, onError, onSuccess) => markerController.updateMarker({ id, uid, latitude, longitude, comment, location, status, testPointType, timeCreated, name, itemType }, onError, onSuccess)
+export const updateMarkerCoordinates = ({ itemId, itemType, latitude, longitude }, onError, onSuccess) => markerController.updateMarkerCoordinates({ itemId, itemType, latitude, longitude }, onError, onSuccess)

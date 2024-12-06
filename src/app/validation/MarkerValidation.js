@@ -30,15 +30,11 @@ export class MarkerValidation extends Validation {
             }))
     }
 
-    update(obj) {
+    updateCoordinates(obj) {
         return this.validate(obj,
             object({
-                id: this.id,
-                name: this.name,
-                status: this.status,
-                comment: this.comment,
+                itemId: this.id,
                 itemType: this.itemType,
-                location: this.smallText,
                 latitude: this.latitude.nullable(),
                 longitude: this.longitude.nullable(),
             }))
