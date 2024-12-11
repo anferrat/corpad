@@ -36,6 +36,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         padding: 12,
         height: 80,
+        flex: 1,
     },
     titleText: {
         fontWeight: 'bold',
@@ -47,7 +48,7 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between'
     },
     button: {
-        width: 90,
+        flexBasis: 90,
         marginLeft: 8
     }
 })
