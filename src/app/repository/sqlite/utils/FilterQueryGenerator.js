@@ -22,7 +22,7 @@ export class FilterQueryGenerator {
 
     _pipelineFilter(pipelines) {
         let isNullFiltered = ~pipelines.indexOf(PipelineFilterItems.NOT_ASSIGNED)
-        return `(EXISTS (SELECT 1 FROM cards WHERE cards.testPointId = testPoints.id AND (cards.pipelineId NOT IN ${this._toInValues(pipelines)}${!isNullFiltered ? 'OR cards.pipelineId IS NULL' : ''})))`
+        return `(EXISTS (SELECT 1 FROM cards WHERE cards.testPointId = testPoints.id AND (cards.pipelineId NOT IN ${this._toInValues(pipelines)}${!isNullFiltered ? 'OR cards.pipelineId IS NULL' : ''}))${!isNullFiltered ? 'OR NOT EXISTS (SELECT 1 FROM cards WHERE cards.testPointId = testPoints.id)' : ''})`
     }
 
     _rectifierMarkerFilter() {
