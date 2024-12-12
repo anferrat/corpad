@@ -11,7 +11,7 @@ export class WatchDistanseAndBearing {
                 accuracy: accuracy,
                 latitude,
                 longitude,
-                declination: this.geolocationRepo.getDeclination(latitude, longitude)
+                //declination: this.geolocationRepo.getDeclination(latitude, longitude)
             }))
         return { remove }
     }
