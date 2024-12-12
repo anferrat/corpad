@@ -11,7 +11,7 @@ const initLocation = {
     distance: null, //in m, distance between device and remote point
     accuracy: null, // in m, accuracy of current user position
     heading: null, // in deg (0 - 360) device position in respect to Magnetic North
-    declination: null //in deg difference between Magnetic and True North
+    //declination: null difference between Magnetic and True North - needs more testing, disabled for now. In the test seem to create additional offset
 }
 
 const initArroRotation = new Animated.Value(0)
@@ -44,14 +44,16 @@ const useNavigationWidget = () => {
                 const { status } = await getLocationPermission()
                 if (status == 200) {
                     positionWatch = watchDistanceAndBearing({
-                        onUpdate: ({ distance, bearing, accuracy, declination }) => {
-                            setlocation(state => ({ ...state, distance, bearing, accuracy, declination }))
+                        onUpdate: ({ distance, bearing, accuracy }) => {
+                            setlocation(state => ({ ...state, distance, bearing, accuracy }))
                         },
                         latitude: pointLatitude,
                         longitude: pointLongitude
                     },
                         er => errorHandler(er))
-                    headingWatch = watchDeviceHeading(({ heading }) => setlocation(state => ({ ...state, heading })),
+                    headingWatch = watchDeviceHeading(({ heading }) => {
+                        setlocation(state => ({ ...state, heading }))
+                    },
                         () => {
                             hideModal()
                             errorHandler(103)
@@ -81,7 +83,7 @@ const useNavigationWidget = () => {
 
 
     useEffect(() => {
-        if (location.heading && location.bearing) {
+        if (location.heading !== null && location.bearing !== null) {
             const diff = calculateResultHeading(location.heading, location.bearing, location.declination) //result heading of the user device in respect to remote point in deg (0 - 360) 
             const angle = calculateRotationAngle(rotation.current, diff) // arrow rotation angle. takes prev value and result heading to determine rotation (-infinity - +infinity)
             const firstReading = rotation.current === null
