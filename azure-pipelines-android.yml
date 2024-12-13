@@ -7,7 +7,6 @@ trigger: none
 
 variables:
   - group: AndroidUpload
-  Build.SourceBranch: refs/heads/devops
 
 pool:
   vmImage: 'ubuntu-latest'
