@@ -61,6 +61,25 @@ export class GeolocationRepository {
         })
     }
 
+    getDelta(timeout = 10000) {
+        //Getiing delta timestamp for time syncronization
+        try {
+            return new Promise((resolve, reject) => {
+                Geolocation.getCurrentPosition(({ timestamp }) => {
+                    const deviceTimestamp = Date.now()
+                    resolve({
+                        delta: timestamp - deviceTimestamp,
+                        deviceTimestamp
+                    })
+                },
+                    (er) => reject(er), { enableHighAccuracy: true, maximumAge: 0, timeout })
+            })
+        }
+        catch (er) {
+            throw new Error(errors.LOCATION, 'Unable to get device location data', er)
+        }
+    }
+
     recordTimeFix(gnss, device) {
         timeFix.gnss = gnss
         timeFix.device = device

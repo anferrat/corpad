@@ -22,6 +22,7 @@
     "@react-navigation/native": "^6.1.17",
     "@react-navigation/native-stack": "^6.10.0",
     "@robinbobin/react-native-google-drive-api-wrapper": "^1.2.4",
+    "@ruanitto/react-native-ntp-sync": "^1.1.2",
     "@shopify/flash-list": "^1.7.0",
     "@tmcw/togeojson": "^5.8.1",
     "@turf/bbox": "^6.5.0",

@@ -21,5 +21,6 @@ export const errors = Object.freeze({
     CAMERA: 'CameraError',
     PURCHASE: 'PurchaseError',
     NFC: 'NfcError',
-    QRCODE: 'QrCodeError'
+    QRCODE: 'QrCodeError',
+    TIME: 'TimeError',
 })

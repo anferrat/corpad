@@ -221,6 +221,7 @@ const errorCodes = {
     844: 'Unable to create QR-code xml string',
     845: 'Unable to create QR-code png file',
     846: 'Unable to generate QR code',
+    847: 'Time is currently syncing, please wait.',
     900: 'Unable to obtain permission to proceed with operation.',
     901: 'Need permission to write to Downloads folder.',
     902: 'Location permission was not granted.',
