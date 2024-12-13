@@ -26,7 +26,7 @@ steps:
   displayName: 'Extract Version Name from package.json'
 
 - script: npm run bootstrap-ui-kitten
-      displayName: 'Run UI Kitten Bootstrap Script'
+  displayName: 'Run UI Kitten Bootstrap Script'
 
 - task: Gradle@2
   inputs:
@@ -56,8 +56,10 @@ steps:
   inputs:
     contents: '**/*.aab'
     targetFolder: '$(build.artifactStagingDirectory)'
+  displayName: 'Copying artifact'
 
 - task: PublishBuildArtifacts@1
   inputs:
     PathtoPublish: $(Build.ArtifactStagingDirectory)
     artifactName: MyBuildOutputs
+  displayName: 'Publishing artifact'
