@@ -17,13 +17,6 @@ steps:
     versionSpec: '18.x'
   displayName: 'Install Node.js'
 
-- task: JavaToolInstaller@0
-    inputs:
-      versionSpec: '17'
-      jdkArchitectureOption: 'x64'
-      jdkSourceOption: 'PreInstalled'
-  displayName: 'Setup JDK 17'
-
 - script: yarn install
   displayName: 'Install dependencies'
 
