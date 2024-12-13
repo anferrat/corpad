@@ -647,3 +647,8 @@ export const RectifierReadingOptions = Object.freeze({
 export const PipelineFilterItems = Object.freeze({
     NOT_ASSIGNED: 'NOT_ASSIGNED'
 })
+
+export const TimeSyncSources = Object.freeze({
+    GPS: 'GPS',
+    NTP: 'NTP'
+})
