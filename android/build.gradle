@@ -1,7 +1,8 @@
 buildscript {
 
 def getMyVersionCode = { ->
-    def code = project.hasProperty('versionCode') ? versionCode.toInteger() : -1
+    def baseVersionCode = 44
+    def code = project.hasProperty('versionCode') ? (versionCode.toInteger() + baseVersionCode) : 1
     println "VersionCode is set to $code"
     return code
 }
