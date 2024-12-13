@@ -1,7 +1,7 @@
 import React from 'react'
 import { View, StyleSheet, Linking, Platform } from 'react-native'
 import { Icon, Text, Divider, ListItem } from '@ui-kitten/components'
-import { version } from '../../../../App'
+import { version } from '../../../../package.json'
 import { primary } from '../../../styles/colors'
 import { globalStyle } from '../../../styles/styles'
 import { ScrollView } from 'react-native-gesture-handler'
