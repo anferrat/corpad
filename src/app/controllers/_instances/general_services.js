@@ -14,10 +14,11 @@ import { UnitConverter } from "../../services/other/UnitConverter";
 import { WarningHandler } from "../../services/other/WarningHandler";
 import { MultimeterFactory } from "../../services/survey/other/multimeter/_devices/MultimeterFactory";
 import { GeoJsonValidation } from "../../validation/geoJson/GeoJsonValidation";
-import { bluetoothRepo, fileSystemRepo, xlsxRepo } from "./repositories";
+import { bluetoothRepo, fileSystemRepo, geolocationRepo, networkRepo, ntpRepo, xlsxRepo } from "./repositories";
 import { UrlFileAccess } from "../../services/other/UrlFileAccess";
 import { AlertHandler } from "../../services/other/AlertHandler";
 import { SpreadsheetDataParser } from "../../services/other/SpreadsheetDataParser";
+import { TimeService } from "../../services/survey/other/time/TimeService";
 
 export const fileNameGenerator = new FileNameGenerator()
 
@@ -56,3 +57,5 @@ export const getMapRegionFromBbox = new GetMapRegionFromBbox()
 export const urlFileAccessService = new UrlFileAccess()
 
 export const spreadsheetDataParser = new SpreadsheetDataParser(fileSystemRepo, commaSeparatedFileParser, xlsxRepo, alertHandler)
+
+export const timeService = new TimeService(ntpRepo, geolocationRepo, networkRepo, permissions)

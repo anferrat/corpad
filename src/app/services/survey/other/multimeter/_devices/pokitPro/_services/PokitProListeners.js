@@ -45,7 +45,7 @@ export class PokitProListeners {
         }).remove
     }
 
-    addTimeSyncedReadingListener(callback, peripheralId, onTime, offTime, firstCycle, getTimeAdjustment) {
+    addTimeSyncedReadingListener(callback, peripheralId, onTime, offTime, firstCycle, getTimeDelta) {
         let values = []
         let timestamps = []
         const removeListener = this.addReadingListener(({ value }) => {
@@ -54,8 +54,8 @@ export class PokitProListeners {
         }, peripheralId)
 
         const timer = setInterval(() => {
-            const timeAdjustment = getTimeAdjustment()
-            const [[cycle1, value1], [cycle2, value2]] = this.timeSyncedCaptureService.execute(values, timestamps, timeAdjustment, firstCycle, onTime, offTime)
+            const timeDelta = getTimeDelta()
+            const [[cycle1, value1], [cycle2, value2]] = this.timeSyncedCaptureService.execute(values, timestamps, timeDelta, firstCycle, onTime, offTime)
             callback({ cycle: cycle1, value: value1 })
             callback({ cycle: cycle2, value: value2 })
             values = []

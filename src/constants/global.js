@@ -650,5 +650,6 @@ export const PipelineFilterItems = Object.freeze({
 
 export const TimeSyncSources = Object.freeze({
     GPS: 'GPS',
-    NTP: 'NTP'
+    NTP: 'NTP',
+    MIXED: 'MIXED'
 })

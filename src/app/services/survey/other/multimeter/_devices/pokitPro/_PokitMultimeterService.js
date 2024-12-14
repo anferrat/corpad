@@ -82,14 +82,14 @@ export class _PokitMultimeterService {
         return this.captureService.stop(peripheralId)
     }
 
-    addReadingListener(onCapture, onError, { peripheralId, measurementType, syncMode, onTime, offTime, firstCycle, getTimeAdjustment }) {
+    addReadingListener(onCapture, onError, { peripheralId, measurementType, syncMode, onTime, offTime, firstCycle, getTimeDelta }) {
         //add listener for supported measurement type here
         const readingListener = this.readingListenerFactory.execute((data) => {
             if (data.isOverRange)
                 onError(new Error(errors.GENERAL, 'Unable to continue measurement', 'Reading is out of range for selected measurement type and multimeter', 825))
             else
                 onCapture(data)
-        }, peripheralId, measurementType, syncMode, onTime, offTime, firstCycle, getTimeAdjustment)
+        }, peripheralId, measurementType, syncMode, onTime, offTime, firstCycle, getTimeDelta)
 
         //add listener for mode swicthing (status service). if mode is not supported stop listening
         const statusListener = this.listenerService.addStatusListener(({ mode }) => {

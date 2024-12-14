@@ -6,6 +6,7 @@ import { GeolocationRepository } from "../../repository/geolocation/GeolocationR
 import { PurchaseRepository } from "../../repository/inAppPurchases/PurchaseRepository";
 import { NetworkRepository } from "../../repository/network/NetworkRepository";
 import { NdefRepository } from "../../repository/nfc/ndefRepository";
+import { NTPRepository } from "../../repository/ntp/NTPRepository";
 import { QRCodeRepository } from "../../repository/qrcodes/QRCodeRepository";
 import { XlsxRepository } from "../../repository/spreadsheet/XlsxRepository";
 import { AppRepository } from "../../repository/sqlite/AppRepository";
@@ -74,5 +75,8 @@ export const xlsxRepo = new XlsxRepository()
 
 //QRCode
 export const qrCodeRepo = new QRCodeRepository()
+
+//Network time sync
+export const ntpRepo = new NTPRepository()
 
 

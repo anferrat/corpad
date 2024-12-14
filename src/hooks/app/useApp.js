@@ -7,7 +7,7 @@ import { resetCurrentSurveySettings, setActiveMultimeterStatus, setSettingsOnApp
 import { errorHandler } from "../../helpers/error_handler"
 import { SurveyLoadingStatuses, UrlTypes } from "../../constants/global"
 import { addMultimeterStatusListener } from "../../app/controllers/MultimeterController"
-import useTimeAdjustment from "./useTimeAdjustment"
+import useTimeSync from "./useTimeSync"
 import { useNavigation } from '@react-navigation/native'
 
 const useApp = () => {
@@ -21,7 +21,7 @@ const useApp = () => {
   //determines if onboarding screen should be shown
   const isOnboardingVisible = useOnboardingScreen()
 
-  useTimeAdjustment()
+  useTimeSync()
 
   const [loading, setLoading] = useState(true)
   const [initialUrlLink, setInitialUrlLink] = useState({

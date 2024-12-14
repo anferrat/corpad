@@ -14,7 +14,7 @@ export class PokitProReadingListenerFactory {
         })
     }
 
-    execute(onCapture, peripheralId, measurementType, syncMode, onTime, offTime, firstCycle, getTimeAdjustment) {
+    execute(onCapture, peripheralId, measurementType, syncMode, onTime, offTime, firstCycle, getTimeDelta) {
         switch (measurementType) {
             case MultimeterMeasurementTypes.COUPON_CURRENT:
             case MultimeterMeasurementTypes.COUPON_CURRENT_AC:
@@ -30,7 +30,7 @@ export class PokitProReadingListenerFactory {
                     case MultimeterSyncModes.CYCLED:
                         return this.listenerService.addCyclicReadingListener(this._readingCallback(onCapture, measurementType), peripheralId, onTime, offTime)
                     case MultimeterSyncModes.GPS:
-                        return this.listenerService.addTimeSyncedReadingListener(this._readingCallback(onCapture, measurementType), peripheralId, onTime, offTime, firstCycle, getTimeAdjustment)
+                        return this.listenerService.addTimeSyncedReadingListener(this._readingCallback(onCapture, measurementType), peripheralId, onTime, offTime, firstCycle, getTimeDelta)
                     case MultimeterSyncModes.HIGH_LOW:
                         return this.listenerService.addHighLowReadingListener(this._readingCallback(onCapture, measurementType), peripheralId, onTime, offTime)
                     default: throw new Error(errors.GENERAL, 'Unable to start reading listener', 'Sync mode is not supported by this multimeter')

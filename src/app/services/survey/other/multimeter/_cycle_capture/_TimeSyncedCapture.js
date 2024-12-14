@@ -5,7 +5,7 @@ export class _TimeSyncedCapture {
     }
 
     _getCycleType(timestamp, firstCycle, onTime, offTime, delay = 100) { //delay equals approx update rate of multimeter
-        const date = new Date(timestamp+delay)
+        const date = new Date(timestamp + delay)
         const cycleTime = onTime + offTime
         const miliseconds = (date.getSeconds() * 1000) + date.getMilliseconds()
         const inCycleTime = miliseconds % cycleTime
@@ -17,9 +17,9 @@ export class _TimeSyncedCapture {
         else return MultimeterCycles.OFF
     }
 
-    execute(array, timestamps, timeAdjustment, firstCycle, onTime, offTime) {
+    execute(array, timestamps, timeDelta, firstCycle, onTime, offTime) {
         let shiftIndexes = []
-        const cycles = timestamps.map(timestamp => this._getCycleType(timeAdjustment + timestamp, firstCycle, onTime, offTime))
+        const cycles = timestamps.map(timestamp => this._getCycleType(timeDelta + timestamp, firstCycle, onTime, offTime))
         for (i = 0; i < cycles.length; i++) {
             if (i === cycles.length - 1) {
                 if (cycles[i] !== cycles[0])
