@@ -1,7 +1,5 @@
 import Geolocation from '@react-native-community/geolocation'
-import geomagnetism from 'geomagnetism'
 import { Error, errors } from '../../utils/Error'
-import { timeFix } from '../../config/geolocation';
 
 export class GeolocationRepository {
     constructor() {
@@ -48,19 +46,6 @@ export class GeolocationRepository {
         }
     }
 
-    getGpsTimeAdjustment(timeout = 10000) {
-        //getiing timestamp from GPS
-        //Geolocation.setRNConfiguration({ skipPermissionRequests: false, locationProvider: 'android' })
-        return new Promise((resolve) => {
-            Geolocation.getCurrentPosition(({ timestamp }) => {
-                resolve({
-                    device: Date.now(),
-                    gnss: timestamp
-                })
-            }, () => resolve({ device: null, gnss: null }), { enableHighAccuracy: true, maximumAge: 0, timeout })
-        })
-    }
-
     getDelta(timeout = 10000) {
         //Getiing delta timestamp for time syncronization
         try {
@@ -80,19 +65,11 @@ export class GeolocationRepository {
         }
     }
 
-    recordTimeFix(gnss, device) {
-        timeFix.gnss = gnss
-        timeFix.device = device
-    }
-
-    getTimeFix() {
-        return timeFix
-    }
-
-
     getDeclination(latitude, longitude) {
         try {
+            /* Declination has an error works only till Dec 10, need to update model
             return geomagnetism.model().point([latitude, longitude]).decl
+            */
         }
         catch (er) {
             throw new Error(errors.LOCATION, 'Unable to get declination', er, 801)

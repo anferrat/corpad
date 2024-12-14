@@ -65,15 +65,8 @@ export class InitializePurchases {
                     }
                 else
                     /*
-                /* LOCATION BASED TIME VERIFICATION - POSSIBLY MOVE IT TO A SEPARATE SERVICE
-                        {
-                        const isLocation = await this._isLocationAvailable()
-                        if (isLocation) {
-                            const { gnss } = await this.geolocationRepo.getGpsTimeAdjustment(5000)
-                            if (gnss)
-                                return await this._getStatus(gnss, status, offlineCount)
-                        }}
-                        */
+                    LOCATION BASED TIME VERIFICATION - POSSIBLY MOVE IT TO A SEPARATE SERVICE
+                    */
                     return await this._getStatus(Date.now(), status, offlineCount)
             }
         }

@@ -1,11 +1,9 @@
-
 import { Controller } from "../../../utils/Controller"
 import { GetCurrentPosition } from "../../../services/location/GetCurrentPosition"
 import { WatchPosition } from "../../../services/location/WatchPosition"
 import { GetInitialMapRegion } from "../../../services/location/GetInitialMapRegion"
 import { WatchDistanseAndBearing } from "../../../services/location/WatchDistanseAndBearing"
 import { GetDeclination } from "../../../services/location/GetDeclination"
-import { TimeAdjustmentListener } from "../../../services/location/TimeAdjustmentListener"
 import { ShareLocationWithExternalApp } from "../../../services/location/ShareLocationWithExternalApp"
 import { GeolocationValidation } from "../../../validation/GeolocationValidation"
 import { geolocationRepo } from "../../_instances/repositories"
@@ -22,7 +20,6 @@ class GeolocationController extends Controller {
         this.getMapRegionService = new GetInitialMapRegion(geolocationRepo, geolocationCalculator, permissions, getMapRegionFromBbox)
         this.watchDistanceAndBearingService = new WatchDistanseAndBearing(geolocationRepo, geolocationCalculator)
         this.getDeclinationService = new GetDeclination(geolocationRepo)
-        this.timeAdjustmentListenerService = new TimeAdjustmentListener(geolocationRepo, permissions)
         this.shareLocationWithExternalAppService = new ShareLocationWithExternalApp(this.linkingService)
 
         this.validation = new GeolocationValidation()
@@ -59,12 +56,6 @@ class GeolocationController extends Controller {
         })
     }
 
-    addTimeAdjustmentListener(callback, onError = null, onSuccess = null) {
-        return super.callbackHandler(onSuccess, onError, 100, () => {
-            return this.timeAdjustmentListenerService.addListener(callback)
-        })
-    }
-
     getDeclination(params, onError = null, onSuccess = null) {
         return super.callbackHandler(onSuccess, onError, 801, () => {
             const { latitude, longitude } = params
@@ -98,7 +89,5 @@ export const getCurrentPosition = (onError, onSuccess) => geolocationController.
 export const getInitialMapRegion = ({ markers }, onError, onSuccess) => geolocationController.getMapRegion({ markers }, onError, onSuccess)
 
 export const getDeclination = ({ latitude, longitude }, onError, onSuccess) => geolocationController.getDeclination({ latitude, longitude }, onError, onSuccess)
-
-export const addTimeAdjustmentListener = (callback, onError, onSuccess) => geolocationController.addTimeAdjustmentListener(callback, onError, onSuccess)
 
 export const shareLocationWithExtarnalApp = ({ latitude, longitude, name, provider }) => geolocationController.shareWithExternalApp({ latitude, longitude, name, provider })

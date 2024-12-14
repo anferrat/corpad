@@ -33,6 +33,7 @@ Targeting accuracy 50 ms. Actual accuracy depends...
             return false
         }
         catch (er) {
+            console.log(er)
             return false
         }
     }
@@ -62,15 +63,16 @@ Targeting accuracy 50 ms. Actual accuracy depends...
         //If source is not specified we attempt to use both starting with NTP (faster with internet)
         this.BUSY_FLAG = true
         let isSynced = false
-        if (source !== TimeSyncSources.GPS)
+        if (source === TimeSyncSources.NTP || source === TimeSyncSources.MIXED)
             isSynced = await this._requestNTPSync()
-        if (!isSynced && source !== TimeSyncSources.NTP)
+        if (!isSynced && (source === TimeSyncSources.GPS || source === TimeSyncSources.MIXED))
             isSynced = await this._requestGPSSync()
         this.BUSY_FLAG = false
+        console.log(isSynced, this.DELTA, this.LAST_SYNC_SOURCE)
         return isSynced
     }
 
-    addTimeSyncListener(callback, source = undefined) {
+    addListener(callback, source) {
         let timeFixInterval
 
         this._requestSync(source)
@@ -97,7 +99,7 @@ Targeting accuracy 50 ms. Actual accuracy depends...
         }
     }
 
-    syncTime(source = undefined) {
+    syncTime(source) {
         if (!this.BUSY_FLAG)
             return this._requestSync(source)
         else

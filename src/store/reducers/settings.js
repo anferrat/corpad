@@ -44,8 +44,8 @@ const initialState = {
         delay: null,
         firstCycle: null
     },
-    timeAdjustment: {
-        timeFix: false
+    timeSync: {
+        isSynced: false
     },
     bluetooth: {
         scanning: false,
@@ -330,8 +330,8 @@ const settings = (state = initialState, action) => {
         case SET_TIME_ADJUSTMENT:
             return {
                 ...state,
-                timeAdjustment: {
-                    timeFix: action.timeFix
+                timeSync: {
+                    isSynced: action.isSynced
                 }
             }
         case UPDATE_SUBSCRIPTION_STATUS:

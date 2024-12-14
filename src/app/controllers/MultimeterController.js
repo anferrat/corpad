@@ -18,11 +18,11 @@ import { MultimeterFactory } from "../services/survey/other/multimeter/_devices/
 import { GetOnOffPotentialPair } from "../services/survey/other/multimeter/GetOnOffPotentialPair"
 import { MultimeterValueConverter } from "../services/survey/other/multimeter/utils/MultimeterValueConverter"
 import { bluetoothRepo, geolocationRepo, potentialRepo, potentialTypeRepo, settingRepo } from "./_instances/repositories"
-import { appStateListener, permissions, unitConverter } from "./_instances/general_services"
+import { appStateListener, permissions, timeService, unitConverter } from "./_instances/general_services"
 import { CheckBleState } from "../services/survey/other/multimeter/CheckBleState"
 
 class MultimeterController extends Controller {
-    constructor(bluetoothRepo, settingRepo, geolocationRepo, potentialRepo, potentialTypeRepo, permissions, unitConverter, appStateListener) {
+    constructor(bluetoothRepo, settingRepo, geolocationRepo, potentialRepo, potentialTypeRepo, permissions, unitConverter, appStateListener, timeService) {
         super()
         this.multimeterFactory = new MultimeterFactory(bluetoothRepo)
 
@@ -49,7 +49,7 @@ class MultimeterController extends Controller {
 
         this.multimeterValueConverterService = new MultimeterValueConverter(unitConverter)
 
-        this.readingCaptureListenerService = new ReadingCaptureListener(geolocationRepo, this.multimeterFactory, this.multimeterValueConverterService)
+        this.readingCaptureListenerService = new ReadingCaptureListener(geolocationRepo, this.multimeterFactory, this.multimeterValueConverterService, timeService)
 
         this.checkBleStateService = new CheckBleState(bluetoothRepo)
 
@@ -170,7 +170,8 @@ const multimeterController = new MultimeterController(
     potentialTypeRepo,
     permissions,
     unitConverter,
-    appStateListener
+    appStateListener,
+    timeService
 )
 
 export const startMultimeterScan = async (onError, onSuccess) => await multimeterController.scan(onError, onSuccess)

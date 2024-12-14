@@ -27,7 +27,7 @@ const initField = {
 
 const useMultimeterListener = () => {
     const activeMultimeter = useSelector(state => state.settings.activeMultimeter)
-    const timeFix = useSelector(state => state.settings.timeAdjustment.timeFix)
+    const timeFix = useSelector(state => state.settings.timeSync.isSynced)
 
     const { onOffCaptureActive, onOffCaptureToggleHandler } = useOnOffCaptureActive()
 

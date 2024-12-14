@@ -2,17 +2,28 @@ import NtpClient from '@ruanitto/react-native-ntp-sync'
 import { Error, errors } from '../../utils/Error'
 
 export class NTPRepository {
-    clock = new NtpClient({
-        history: 1,
-        startOnline: true,
-        syncOnCreation: false,
-        autoSync: false
-    })
-    constructor() { }
+
+    constructor() {
+        this.clock = new NtpClient({
+            history: 1,
+            startOnline: true,
+            syncOnCreation: false,
+            autoSync: false,
+            servers:
+                [
+                    { server: "time.google.com", port: 123 },
+                    { server: "time.cloudflare.com", port: 123 },
+                    { server: "time.windows.com", port: 123 },
+                    { server: "0.pool.ntp.org", port: 123 },
+                    { server: "1.pool.ntp.org", port: 123 },
+                ]
+        })
+    }
 
     async getDelta() {
         try {
             const isSuccess = await this.clock.syncTime()
+
             if (isSuccess) {
                 const history = this.clock.getHistory()
                 return {
