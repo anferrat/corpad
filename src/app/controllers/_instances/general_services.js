@@ -58,4 +58,4 @@ export const urlFileAccessService = new UrlFileAccess()
 
 export const spreadsheetDataParser = new SpreadsheetDataParser(fileSystemRepo, commaSeparatedFileParser, xlsxRepo, alertHandler)
 
-export const timeService = new TimeService(ntpRepo, geolocationRepo, networkRepo, permissions)
+export const timeService = new TimeService(ntpRepo, geolocationRepo, networkRepo, permissions, appStateListener)
