@@ -7,11 +7,12 @@ Provides methods for automatic (listener) and manual(function call) time sync vi
 Delta between actual UTC and device time is available with getDelta method. 
 Targeting accuracy 50 ms. Actual accuracy depends...
     */
-    constructor(ntpRepo, geolocationRepo, networkRepo, permissions) {
+    constructor(ntpRepo, geolocationRepo, networkRepo, permissions, appStateListener) {
         this.ntpRepo = ntpRepo
         this.geolocationRepo = geolocationRepo
         this.networkRepo = networkRepo
         this.permissions = permissions
+        this.appStateListener = appStateListener
         this.BUSY_FLAG = false //time sync is in progress flag
         this.DELTA = null //time delta(UTC - Date.now())
         this.LAST_SYNC_DEVICE_TIMESTAMP = null //Date.now() at last sync
@@ -74,6 +75,22 @@ Targeting accuracy 50 ms. Actual accuracy depends...
 
     addListener(callback, source) {
         let timeFixInterval
+        let removeStateListener
+
+        const clearTimeFixInterval = () => timeFixInterval ? clearInterval(timeFixInterval) : null
+
+        const setTimeFixInterval = () => {
+            timeFixInterval = setInterval(async () => {
+                //Check if last delta was obtained recently
+                if (this.LAST_SYNC_DEVICE_TIMESTAMP !== null && this.LAST_SYNC_DEVICE_TIMESTAMP + this.TIME_FIX_LIFE_LENGTH > Date.now())
+                    callback(true)
+                else if (!this.BUSY_FLAG) {
+                    //When busy we skip request. User is getting delta manually 
+                    const isSynced = await this._requestSync(source)
+                    callback(isSynced)
+                }
+            }, this.TIME_FIX_CHECK_INTERVAL)
+        }
 
         this._requestSync(source)
             .then(isSynced => {
@@ -81,20 +98,11 @@ Targeting accuracy 50 ms. Actual accuracy depends...
                 callback(isSynced)
             })
             .finally(() => {
-                timeFixInterval = setInterval(async () => {
-                    //Check if last delta was obtained recently
-                    if (this.LAST_SYNC_DEVICE_TIMESTAMP !== null && this.LAST_SYNC_DEVICE_TIMESTAMP + this.TIME_FIX_LIFE_LENGTH > Date.now())
-                        callback(true)
-                    else if (!this.BUSY_FLAG) {
-                        //When busy we skip request. User is getting delta manually 
-                        const isSynced = await this._requestSync(source)
-                        callback(isSynced)
-                    }
-                }, this.TIME_FIX_CHECK_INTERVAL)
+                removeStateListener = this.appStateListener.appStateListenerWrapper(setTimeFixInterval, clearTimeFixInterval)
             })
         return () => {
-            if (timeFixInterval)
-                clearInterval(timeFixInterval)
+            if (removeStateListener)
+                removeStateListener()
             this._resetDelta()
         }
     }
