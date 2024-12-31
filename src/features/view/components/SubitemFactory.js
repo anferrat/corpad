@@ -22,6 +22,8 @@ const SubitemViewFactory = ({
   potentialUnit,
   potentialHint,
   pipelineList,
+  selectedCaptureField,
+  isCaptureLoading,
   updateShorted,
   validateVoltage,
   validatePotential,
@@ -34,13 +36,17 @@ const SubitemViewFactory = ({
   availableMeasurementTypes,
 }) => {
 
+  const selectedCatureFieldHandler = selectedCaptureField !== null && selectedCaptureField.subitemId === subitem.id ? selectedCaptureField : null
+
+  const isMultimeterCaptureLoading = Boolean(selectedCatureFieldHandler) && isCaptureLoading
+
   const onEdit = React.useCallback(() => {
     navigateToEditSubitem(subitem.id, false, subitem.type)
   }, [navigateToEditSubitem, subitem.id, subitem.type])
 
-  const onMultimeterPressHandler = React.useCallback((measurementType, potentialId = null) => {
-    onMultimeterPress(subitem.id, subitem.type, measurementType, potentialId)
-  }, [subitem.id, subitem.type, onMultimeterPress])
+  const onMultimeterPressHandler = React.useCallback((mType, property, potentialId = null, potentialIndex = null) => {
+    onMultimeterPress(mType, property, subitem.id, subitemIndex, potentialId, potentialIndex)
+  }, [subitem.id, subitem.type, onMultimeterPress, subitemIndex])
 
   switch (subitem.type) {
     case SubitemTypes.PIPELINE:
@@ -56,6 +62,8 @@ const SubitemViewFactory = ({
           updatePotentialValue={updatePotentialValue}
           validatePotential={validatePotential}
           onMultimeterPress={onMultimeterPressHandler}
+          selectedCaptureField={selectedCatureFieldHandler}
+          isMultimeterCaptureLoading={isMultimeterCaptureLoading}
         />
       )
     case SubitemTypes.ANODE:
@@ -70,6 +78,8 @@ const SubitemViewFactory = ({
           updatePotentialValue={updatePotentialValue}
           validatePotential={validatePotential}
           onMultimeterPress={onMultimeterPressHandler}
+          selectedCaptureField={selectedCatureFieldHandler}
+          isMultimeterCaptureLoading={isMultimeterCaptureLoading}
         />
       )
     case SubitemTypes.REFERENCE_CELL:
@@ -84,6 +94,8 @@ const SubitemViewFactory = ({
           updatePotentialValue={updatePotentialValue}
           validatePotential={validatePotential}
           onMultimeterPress={onMultimeterPressHandler}
+          selectedCaptureField={selectedCatureFieldHandler}
+          isMultimeterCaptureLoading={isMultimeterCaptureLoading}
         />
       )
     case SubitemTypes.COUPON:
@@ -101,6 +113,8 @@ const SubitemViewFactory = ({
           updatePotentialValue={updatePotentialValue}
           validatePotential={validatePotential}
           onMultimeterPress={onMultimeterPressHandler}
+          selectedCaptureField={selectedCatureFieldHandler}
+          isMultimeterCaptureLoading={isMultimeterCaptureLoading}
         />
       )
     case SubitemTypes.SHUNT:
@@ -115,6 +129,8 @@ const SubitemViewFactory = ({
           validateCurrent={validateCurrent}
           validateVoltageDrop={validateVoltageDrop}
           onMultimeterPress={onMultimeterPressHandler}
+          selectedCaptureField={selectedCatureFieldHandler}
+          isMultimeterCaptureLoading={isMultimeterCaptureLoading}
         />
       )
     case SubitemTypes.BOND:
@@ -142,7 +158,10 @@ const SubitemViewFactory = ({
           potentialHint={potentialHint}
           updatePotentialValue={updatePotentialValue}
           validatePotential={validatePotential}
-          onMultimeterPress={onMultimeterPressHandler} />
+          onMultimeterPress={onMultimeterPressHandler}
+          isMultimeterCaptureLoading={isMultimeterCaptureLoading}
+          selectedCaptureField={selectedCatureFieldHandler} />
+
       )
     case SubitemTypes.ISOLATION:
       return (
@@ -170,6 +189,8 @@ const SubitemViewFactory = ({
           updatePotentialValue={updatePotentialValue}
           validatePotential={validatePotential}
           onMultimeterPress={onMultimeterPressHandler}
+          isMultimeterCaptureLoading={isMultimeterCaptureLoading}
+          selectedCaptureField={selectedCatureFieldHandler}
         />
       )
     case SubitemTypes.TEST_LEAD:
@@ -184,6 +205,8 @@ const SubitemViewFactory = ({
           updatePotentialValue={updatePotentialValue}
           validatePotential={validatePotential}
           onMultimeterPress={onMultimeterPressHandler}
+          isMultimeterCaptureLoading={isMultimeterCaptureLoading}
+          selectedCaptureField={selectedCatureFieldHandler}
         />
       )
     case SubitemTypes.CIRCUIT:
@@ -197,6 +220,8 @@ const SubitemViewFactory = ({
           validateCurrent={validateCurrent}
           validateVoltage={validateVoltage}
           onMultimeterPress={onMultimeterPressHandler}
+          isMultimeterCaptureLoading={isMultimeterCaptureLoading}
+          selectedCaptureField={selectedCatureFieldHandler}
         />
       )
     case SubitemTypes.SOIL_RESISTIVITY:

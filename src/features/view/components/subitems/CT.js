@@ -3,7 +3,7 @@ import TextLine from '../../../../components/TextLine'
 import Header from '../Header'
 import Divider from '../Divider'
 import InputWithTitle from '../InputWithTitle'
-import { MultimeterMeasurementTypes } from '../../../../constants/global'
+import { MeasurementPropertyTypes } from '../../../../constants/global'
 
 const getRatio = (ratioCurrent, ratioVoltage) => {
     if (ratioCurrent && ratioVoltage)
@@ -25,14 +25,27 @@ const targetDisplayHandler = (min, max) => {
         else return min + ' - ' + max
 }
 
-const CT = ({ data, validateVoltage, validateCurrent, updatePropertyValue, onEdit, subitemIndex, availableMeasurementTypes, onMultimeterPress }) => {
+const CT = ({
+    data,
+    validateVoltage,
+    validateCurrent,
+    updatePropertyValue,
+    onEdit,
+    subitemIndex,
+    availableMeasurementTypes,
+    onMultimeterPress,
+    selectedCaptureField,
+    isMultimeterCaptureLoading
+}) => {
     const { name, type, voltage, current, targetMin, targetMax, valid, ratioCurrent, ratioVoltage } = data
 
     const targetDisplay = React.useMemo(() => targetDisplayHandler(targetMin, targetMax), [targetMin, targetMax])
 
     const shuntDisplay = React.useMemo(() => getRatio(ratioCurrent, ratioVoltage), [ratioCurrent, ratioVoltage])
 
-    const multimeterAvailable = ~availableMeasurementTypes.indexOf(MultimeterMeasurementTypes.VOLTAGE)
+    const multimeterAvailable = ~availableMeasurementTypes.indexOf(MeasurementPropertyTypes.VOLTAGE)
+
+    const isVoltageCaptureSelected = selectedCaptureField !== null && selectedCaptureField.property === 'voltage'
 
     const onChangeCurrent = React.useCallback((value) => updatePropertyValue(value, subitemIndex, 'current'), [subitemIndex, updatePropertyValue])
 
@@ -43,7 +56,7 @@ const CT = ({ data, validateVoltage, validateCurrent, updatePropertyValue, onEdi
     const onEndEditingVoltage = React.useCallback(() => validateVoltage(subitemIndex, data), [subitemIndex, voltage, validateVoltage])
 
     const onMultimeterPressHandler = React.useCallback(() => {
-        onMultimeterPress(MultimeterMeasurementTypes.VOLTAGE)
+        onMultimeterPress(MeasurementPropertyTypes.VOLTAGE, 'voltage')
     }, [onMultimeterPress])
 
     return (
@@ -63,6 +76,8 @@ const CT = ({ data, validateVoltage, validateCurrent, updatePropertyValue, onEdi
                 property='current'
                 unit={'A'} />
             <InputWithTitle
+                isCaptureLoading={isMultimeterCaptureLoading}
+                isCaptureSelected={isVoltageCaptureSelected}
                 multimeterAvailable={multimeterAvailable}
                 onMultimeterPress={onMultimeterPressHandler}
                 onChangeText={onChangeVoltage}

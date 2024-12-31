@@ -12,9 +12,8 @@ import { Share } from "../../services/other/Share";
 import { SubitemFactory } from "../../services/other/SubitemFactory";
 import { UnitConverter } from "../../services/other/UnitConverter";
 import { WarningHandler } from "../../services/other/WarningHandler";
-import { MultimeterFactory } from "../../services/survey/other/multimeter/_devices/MultimeterFactory";
 import { GeoJsonValidation } from "../../validation/geoJson/GeoJsonValidation";
-import { bluetoothRepo, fileSystemRepo, geolocationRepo, networkRepo, ntpRepo, xlsxRepo } from "./repositories";
+import { fileSystemRepo, geolocationRepo, networkRepo, ntpRepo, xlsxRepo } from "./repositories";
 import { UrlFileAccess } from "../../services/other/UrlFileAccess";
 import { AlertHandler } from "../../services/other/AlertHandler";
 import { SpreadsheetDataParser } from "../../services/other/SpreadsheetDataParser";
@@ -37,8 +36,6 @@ export const linkingService = new Linking()
 export const imagePicker = new ImagePicker()
 
 export const documentPicker = new DocumentPicker()
-
-export const multimeterFactory = new MultimeterFactory(bluetoothRepo)
 
 export const unitConverter = new UnitConverter()
 

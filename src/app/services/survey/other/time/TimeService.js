@@ -34,7 +34,6 @@ Targeting accuracy 50 ms. Actual accuracy depends...
             return false
         }
         catch (er) {
-            console.log(er)
             return false
         }
     }
@@ -69,7 +68,6 @@ Targeting accuracy 50 ms. Actual accuracy depends...
         if (!isSynced && (source === TimeSyncSources.GPS || source === TimeSyncSources.MIXED))
             isSynced = await this._requestGPSSync()
         this.BUSY_FLAG = false
-        console.log(isSynced, this.DELTA, this.LAST_SYNC_SOURCE)
         return isSynced
     }
 
@@ -77,9 +75,7 @@ Targeting accuracy 50 ms. Actual accuracy depends...
         let timeFixInterval
         let removeStateListener
 
-        const clearTimeFixInterval = () => timeFixInterval ? clearInterval(timeFixInterval) : null
-
-        const setTimeFixInterval = () => {
+        const addTimeFixInterval = () => {
             timeFixInterval = setInterval(async () => {
                 //Check if last delta was obtained recently
                 if (this.LAST_SYNC_DEVICE_TIMESTAMP !== null && this.LAST_SYNC_DEVICE_TIMESTAMP + this.TIME_FIX_LIFE_LENGTH > Date.now())
@@ -90,6 +86,8 @@ Targeting accuracy 50 ms. Actual accuracy depends...
                     callback(isSynced)
                 }
             }, this.TIME_FIX_CHECK_INTERVAL)
+            
+            return () => timeFixInterval ? clearInterval(timeFixInterval) : null
         }
 
         this._requestSync(source)
@@ -98,7 +96,7 @@ Targeting accuracy 50 ms. Actual accuracy depends...
                 callback(isSynced)
             })
             .finally(() => {
-                removeStateListener = this.appStateListener.appStateListenerWrapper(setTimeFixInterval, clearTimeFixInterval)
+                removeStateListener = this.appStateListener.appStateListenerWrapper(addTimeFixInterval)
             })
         return () => {
             if (removeStateListener)

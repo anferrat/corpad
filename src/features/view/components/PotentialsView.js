@@ -1,12 +1,25 @@
 import React from 'react'
 import PotentialInput from './PotentialInput'
 
-const PotentialsView = ({ unit, potentialHint, potentials, validatePotential, updatePotentialValue, subitemIndex, onMultimeterPress, availableMeasurementTypes }) => {
-
+const PotentialsView = ({
+    unit,
+    potentialHint,
+    potentials,
+    validatePotential,
+    updatePotentialValue,
+    subitemIndex,
+    onMultimeterPress,
+    availableMeasurementTypes,
+    selectedCaptureField,
+    isMultimeterCaptureLoading
+}) => {
     return (
         <>
-            {potentials?.map(({ id, uid, name, referenceCellName, referenceCellType, value, valid }, index) =>
-                <PotentialInput
+            {potentials?.map(({ id, uid, name, referenceCellName, referenceCellType, value, valid }, index) => {
+                const isCaptureSelected = selectedCaptureField !== null && selectedCaptureField.potentialId === id
+                return <PotentialInput
+                    isMultimeterCaptureLoading={isMultimeterCaptureLoading}
+                    isCaptureSelected={isCaptureSelected}
                     availableMeasurementTypes={availableMeasurementTypes}
                     onMultimeterPress={onMultimeterPress}
                     key={`PotentialInput - ${uid}`}
@@ -22,7 +35,8 @@ const PotentialsView = ({ unit, potentialHint, potentials, validatePotential, up
                     validatePotential={validatePotential}
                     updatePotentialValue={updatePotentialValue}
                     unit={unit}
-                />)}
+                />
+            })}
         </>
     )
 }

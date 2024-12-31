@@ -4,7 +4,20 @@ import Header from '../Header'
 import PotentialsView from '../PotentialsView'
 import Divider from '../Divider'
 
-const PL = ({ data, potentialUnit, potentialHint, updatePotentialValue, validatePotential, subitemIndex, onEdit, pipelineList, onMultimeterPress, availableMeasurementTypes }) => {
+const PL = ({
+    data,
+    potentialUnit,
+    potentialHint,
+    updatePotentialValue,
+    validatePotential,
+    subitemIndex,
+    onEdit,
+    pipelineList,
+    onMultimeterPress,
+    availableMeasurementTypes,
+    selectedCaptureField,
+    isMultimeterCaptureLoading
+}) => {
     const { name, type, wireColor, wireGauge, potentials, pipelineId } = data
     const pipelineIndex = pipelineList.findIndex(({ id }) => id === pipelineId)
     return (
@@ -17,6 +30,8 @@ const PL = ({ data, potentialUnit, potentialHint, updatePotentialValue, validate
                 onEdit={onEdit} />
             <Divider visible={potentials.length > 0 || ~pipelineIndex} />
             <PotentialsView
+                isMultimeterCaptureLoading={isMultimeterCaptureLoading}
+                selectedCaptureField={selectedCaptureField}
                 availableMeasurementTypes={availableMeasurementTypes}
                 onMultimeterPress={onMultimeterPress}
                 subitemIndex={subitemIndex}

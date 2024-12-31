@@ -23,4 +23,5 @@ export const errors = Object.freeze({
     NFC: 'NfcError',
     QRCODE: 'QrCodeError',
     TIME: 'TimeError',
+    MULTIMETER: 'MultimeterError'
 })

@@ -14,7 +14,9 @@ const RE = ({
   subitemIndex,
   onEdit,
   onMultimeterPress,
-  availableMeasurementTypes
+  availableMeasurementTypes,
+  selectedCaptureField,
+  isMultimeterCaptureLoading
 }) => {
   const { name, type, wireColor, wireGauge, potentials, rcType } = data
   return (
@@ -28,6 +30,8 @@ const RE = ({
       <Divider
         visible={potentials.length > 0 || rcType !== null} />
       <PotentialsView
+        isMultimeterCaptureLoading={isMultimeterCaptureLoading}
+        selectedCaptureField={selectedCaptureField}
         availableMeasurementTypes={availableMeasurementTypes}
         onMultimeterPress={onMultimeterPress}
         subitemIndex={subitemIndex}

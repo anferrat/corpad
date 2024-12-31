@@ -3,23 +3,33 @@ import { StyleSheet, View } from 'react-native'
 import { Text } from '@ui-kitten/components'
 import Input from '../../../components/Input'
 import { primary } from '../../../styles/colors'
-import IconButton from '../../../components/IconButton'
+import MultimeterButton from './MultimeterButton'
 
 
 const InputWithTitle = (props) => {
+    const { title, multimeterAvailable, isCaptureSelected, onMultimeterPress, isCaptureLoading } = props
     return (
         <View style={styles.mainView}>
-            <Text style={styles.title} category='s1' numberOfLines={1} ellipsizeMode={'tail'}>{props.title}</Text>
-            <View style={styles.input}>
-                {props.multimeterAvailable ?
-                    <IconButton
-                        style={styles.button}
-                        iconName='radio'
-                        onPress={props.onMultimeterPress}
-                    /> : null}
+            <Text
+                style={styles.title}
+                category='s1'
+                numberOfLines={1}
+                ellipsizeMode={'tail'}>
+                {title}
+            </Text>
+            <View
+                style={styles.input}>
+                <MultimeterButton
+                    isLoading={isCaptureLoading}
+                    isVisible={multimeterAvailable}
+                    onPress={onMultimeterPress}
+                    isSelected={isCaptureSelected} />
                 <Input
                     {...props}
-                    style={props.displayHint ? styles.inputViewLarge : styles.inputView}
+                    //disabled={!isCaptureLoading && isCaptureSelected}
+                    style={props.displayHint ?
+                        styles.inputViewLarge :
+                        styles.inputView}
                     textAlign='center' />
 
             </View>
@@ -53,9 +63,4 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center'
     },
-    button: {
-       marginBottom: 12,
-       marginRight: 12,
-       width: 40, 
-    }
 })

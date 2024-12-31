@@ -6,17 +6,18 @@ import { UpdateSubitem } from "../../../services/survey/subitems/subitem/UpdateS
 import { Controller } from "../../../utils/Controller"
 import { SubitemValidation } from "../../../validation/SubitemValidation"
 import { convertPotentialUnits, convertSubitemUnits } from "../../_instances/converters"
-import { multimeterFactory, subitemFactory, unitConverter } from "../../_instances/general_services"
+import { subitemFactory } from "../../_instances/general_services"
+import { multimeterPropertyCaptureParameters } from "../../_instances/multimeter"
 import { basicPresenter, listPresenter, potentialPresenter, subitemPresenter } from "../../_instances/presenters"
 import { defaultNameRepo, pipelineRepo, potentialRepo, potentialTypeRepo, rectifierRepo, referenceCellRepo, settingRepo, subitemRepo, testPointRepo } from "../../_instances/repositories"
 
 class SubitemController extends Controller {
-    constructor(subitemRepo, testPointRepo, pipelineRepo, rectifierRepo, defaultNameRepo, settingRepo, referenceCellRepo, potentialTypeRepo, potentialRepo, convertSubitemUnits, subitemPresenter, listPresenter, basicPresenter, potentialPresenter, subitemFactory, multimeterFactory, convertPotentialUnits) {
+    constructor(subitemRepo, testPointRepo, pipelineRepo, rectifierRepo, defaultNameRepo, settingRepo, referenceCellRepo, potentialTypeRepo, potentialRepo, convertSubitemUnits, subitemPresenter, listPresenter, basicPresenter, potentialPresenter, subitemFactory, multimeterPropertyCaptureParameters, convertPotentialUnits) {
         super()
         this.createSubitemService = new CreateSubitem(subitemRepo, basicPresenter, subitemFactory, settingRepo, referenceCellRepo, potentialTypeRepo, potentialRepo)
         this.deleteSubitemService = new DeleteSubitem(subitemRepo)
-        this.getSubitemByIdService = new GetSubitemById(subitemRepo, defaultNameRepo, testPointRepo, rectifierRepo, pipelineRepo, settingRepo, subitemPresenter,convertSubitemUnits)
-        this.getSubitemListService = new GetSubitemList(testPointRepo, rectifierRepo, referenceCellRepo, potentialTypeRepo, pipelineRepo, settingRepo, multimeterFactory, listPresenter, subitemPresenter, potentialPresenter, convertSubitemUnits, convertPotentialUnits)
+        this.getSubitemByIdService = new GetSubitemById(subitemRepo, defaultNameRepo, testPointRepo, rectifierRepo, pipelineRepo, settingRepo, subitemPresenter, convertSubitemUnits)
+        this.getSubitemListService = new GetSubitemList(testPointRepo, rectifierRepo, referenceCellRepo, potentialTypeRepo, pipelineRepo, settingRepo, multimeterPropertyCaptureParameters, listPresenter, subitemPresenter, potentialPresenter, convertSubitemUnits, convertPotentialUnits)
         this.updateSubitemService = new UpdateSubitem(subitemRepo, subitemPresenter, subitemFactory, convertSubitemUnits)
 
         this.validation = new SubitemValidation()
@@ -82,7 +83,7 @@ const subitemController = new SubitemController(
     basicPresenter,
     potentialPresenter,
     subitemFactory,
-    multimeterFactory,
+    multimeterPropertyCaptureParameters,
     convertPotentialUnits
 )
 

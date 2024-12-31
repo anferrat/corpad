@@ -3,7 +3,7 @@ import { OpenExternalSurvey } from "../services/app/OpenExternalSurvey"
 import { DatabaseInitialization } from "../services/survey/other/DatabaseInitialization"
 import { SettingInitialization } from "../services/survey/other/SettingInitialization"
 import { DefaultNameInitialization } from "../services/survey/other/default_names/DeafultNameInitialization"
-import { MultimeterInitialization } from "../services/survey/other/multimeter/MultimeterInitialization"
+import { MultimeterInitialization } from "../services/survey/other/multimeter/initialization/MultimeterInitialization"
 import { Controller } from "../utils/Controller"
 import { FileSystemInitialization } from "../services/survey_file/local/FileSystemInitialization"
 import { UrlListener } from "../services/app/UrlListener"
@@ -15,9 +15,10 @@ import { InitializePurchases } from "../services/purchases/InitializePurchases"
 import { UrlResolver } from "../services/app/UrlResolver"
 import { BlockUrlListener } from "../services/app/BlockUrlListener"
 import { UnblockUrlListener } from "../services/app/UnblockUrlListener"
+import { connectMultimeterService } from "./_instances/multimeter"
 
 class AppController extends Controller {
-    constructor(currentSurveyStatusService, googleDriveAuthorizationRepo, surveyRepo, bluetoothRepo, settingRepo, multimeterFactory, defaultNameRepo, loadExternalSurveyFileService, saveCurrentSurveyService, warningHandler, resetCurrentSurveyService, fileSystemRepo, appRepo, linkingService, networkRepo, externalFileContentResolver, purchaseRepo, geolocationRepo, permissions, urlFileAccess) {
+    constructor(currentSurveyStatusService, googleDriveAuthorizationRepo, surveyRepo, bluetoothRepo, settingRepo, defaultNameRepo, loadExternalSurveyFileService, saveCurrentSurveyService, warningHandler, resetCurrentSurveyService, fileSystemRepo, appRepo, linkingService, networkRepo, externalFileContentResolver, purchaseRepo, geolocationRepo, permissions, urlFileAccess, connectMultimeterService) {
         super()
 
         this.networkRepo = networkRepo
@@ -36,7 +37,7 @@ class AppController extends Controller {
 
         this.databaseInitializationService = new DatabaseInitialization(appRepo)
 
-        this.multimeterInitializationService = new MultimeterInitialization(bluetoothRepo, settingRepo, multimeterFactory)
+        this.multimeterInitializationService = new MultimeterInitialization(bluetoothRepo, connectMultimeterService)
 
         this.fileSystemInitializationService = new FileSystemInitialization(fileSystemRepo)
 
@@ -99,7 +100,6 @@ const appController = new AppController(
     surveyRepo,
     bluetoothRepo,
     settingRepo,
-    multimeterFactory,
     defaultNameRepo,
     loadExternalSurveyFileService,
     saveCurrentSurveyService,
@@ -113,7 +113,8 @@ const appController = new AppController(
     purchaseRepo,
     geolocationRepo,
     permissions,
-    urlFileAccessService
+    urlFileAccessService,
+    connectMultimeterService
 )
 
 export const initializeApp = (onError, onSuccess) => appController.init(onError, onSuccess)
@@ -129,3 +130,5 @@ export const blockUrlResolver = () => appController.blockUrlListener()
 export const unblockUrlResolver = () => appController.unblockUrlListener()
 
 export const openLink = ({ url }, onError, onSuccess) => appController.openLink({ url }, onError, onSuccess)
+
+export const addAppStateListener = (callback) => appStateListener.addStatusListener(callback)
