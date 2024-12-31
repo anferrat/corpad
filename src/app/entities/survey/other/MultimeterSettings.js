@@ -1,5 +1,5 @@
 export class MultimeterSettings {
-    constructor(peripheralId, name, type, onTime, offTime, delay, syncMode, firstCycle, onOffCaptureActive) {
+    constructor(peripheralId, name, type, onTime, offTime, delay, syncMode, firstCycle, onOffCaptureActive, timeSyncMode, offDelay, onSetup, captureRate) {
         this.peripheralId = peripheralId
         this.name = name
         this.type = type
@@ -9,5 +9,9 @@ export class MultimeterSettings {
         this.syncMode = syncMode
         this.firstCycle = firstCycle
         this.onOffCaptureActive = onOffCaptureActive
+        this.timeSyncMode = timeSyncMode
+        this.offDelay = offDelay
+        this.onSetup = onSetup
+        this.captureRate = captureRate
     }
 }

@@ -46,3 +46,7 @@ export const displayResistance = (r) => fixRealValue(r)
 export const displayResistivity = (r) => numberWithSpaces(fixRealValue(r))
 
 export const displaySpacing = (r) => fixRealValue(r)
+
+export const findPotentialIndexById = (subitem, potentialId) => {
+    return subitem.potentials.findIndex(pot => pot.id === potentialId)
+}

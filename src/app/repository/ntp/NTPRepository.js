@@ -27,7 +27,7 @@ export class NTPRepository {
             if (isSuccess) {
                 const history = this.clock.getHistory()
                 return {
-                    delta: -1 * history.deltas[0].dt,
+                    delta: history.deltas[0].dt,
                     deviceTimestamp: history.deltas[0].ntp - history.deltas[0].dt
                 }
             }

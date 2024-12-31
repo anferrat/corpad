@@ -12,21 +12,26 @@ export class AppStateListener {
         return AppState.currentState
     }
 
-    appStateListenerWrapper(addListener, removeListener) {
-        addListener()
+    /*
+    wrapper - takes a listener fucntion. listener should return removeListenerFunction. 
+    Allows to stop listeners when app goes in background and resumes listeners when app is in foreground
+     */
+
+    appStateListenerWrapper(addListener) {
+        let removeListener = addListener()
         const subsription = this.addStatusListener(nextAppState => {
             switch (nextAppState) {
                 case 'active':
-                    addListener()
+                    removeListener = addListener()
                     return
                 case 'inactive':
                 case 'background':
                 default:
-                    removeListener()
+                    removeListener ? removeListener() : null
             }
         })
         return () => {
-            removeListener()
+            removeListener ? removeListener() : null
             subsription.remove()
         }
     }

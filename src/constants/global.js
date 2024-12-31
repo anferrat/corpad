@@ -508,7 +508,7 @@ export const TimeUnits = Object.freeze({
     HOURS: 3
 })
 
-export const MultimeterMeasurementTypes = Object.freeze({
+export const MultimeterMeasurementTypes = Object.freeze({ //To be deleted
     POTENTIALS: "POTENTIALS",
     VOLTAGE: 'VOLTAGE',
     VOLTAGE_DROP: 'VOLTAGE_DROP',
@@ -652,4 +652,83 @@ export const TimeSyncSources = Object.freeze({
     GPS: 'GPS',
     NTP: 'NTP',
     MIXED: 'MIXED'
+})
+
+export const MultimeterModes = Object.freeze({
+    [MultimeterTypes.POKIT]: {
+        DC_VOLTS: 'DC_VOLTS',
+        AC_VOLTS: 'AC_VOLTS',
+        AC_AMPS: 'AC_AMPS',
+        DC_AMPS: 'DC_AMPS',
+        IDLE: 'IDLE'
+    }
+})
+
+export const MultimeterVoltageRanges = Object.freeze({
+    [MultimeterTypes.POKIT]: {
+        _250MV: '_250MV',
+        _2V: '_2V',
+        _10V: '_10V',
+        _30V: '_30V',
+        _60V: '_60V',
+        _125V: '_125V',
+        _400V: '_400V',
+        _600V: '_600V',
+        AUTO: 'AUTO'
+    }
+})
+
+export const MultimeterCurrentRanges = Object.freeze({
+    [MultimeterTypes.POKIT]: {
+        _500uA: '_500uA',
+        _2mA: '_2mA',
+        _10mA: '_10mA',
+        _125mA: '_125mA',
+        _300mA: '_300mA',
+        _3A: '_3A',
+        _10A: '_10A',
+        AUTO: 'AUTO'
+    }
+})
+
+export const MultimeterCaptureRate = Object.freeze({
+    _50Hz: '_50Hz',
+    _60Hz: '_60Hz'
+})
+
+export const MultimeterListenerEvents = Object.freeze({
+    READING_SET: 'READING_SET',
+    SINGLE_READ: 'SINGLE_READ',
+    BUTTON_PRESS: 'BUTTON_PRESS',
+    TOGGLE_ACTION: 'TOGGLE_ACTION',
+    NEW_RANGE: 'NEW_RANGE',
+    ON_READING: 'ON_READING',
+    OFF_READING: 'OFF_READING'
+})
+
+export const MultimeterButtonEvents = Object.freeze({
+    MAIN_BUTTON_ON_PRESS: 'MAIN_BUTTON_ON_PRESS',
+    MAIN_BUTTON_ON_RELEASE: 'MAIN_BUTTON_ON_RELEASE',
+    MAIN_BUTTON_ON_LONG_PRESS: 'MAIN_BUTTON_ON_LONG_PRESS',
+    UNKNOWN: 'UNKNOWN',
+})
+
+export const MultimeterReadingFlags = Object.freeze({
+    OVER_RANGE: 'OR',
+    UNDER_RANGE: 'UR',
+    OVER_LIMIT: 'OL'
+})
+
+export const MultimeterReadingTypes = Object.freeze({
+    CURRENT: 'AMPS',
+    VOLTAGE: 'VOLTS'
+})
+
+export const MeasurementPropertyTypes = Object.freeze({
+    POTENTIAL: "POTENTIAL",
+    POTENTIAL_AC: 'POTENTIAL_AC',
+    VOLTAGE: 'VOLTAGE',
+    VOLTAGE_DROP: 'VOLTAGE_DROP',
+    COUPON_CURRENT: 'COUPON_CURRENT',
+    COUPON_CURRENT_AC: 'COUPON_CURRENT_AC'
 })

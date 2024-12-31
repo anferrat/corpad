@@ -3,7 +3,19 @@ import Header from '../Header'
 import PotentialsView from '../PotentialsView'
 import Divider from '../Divider'
 
-const OT = ({ data, potentialUnit, potentialHint, updatePotentialValue, validatePotential, subitemIndex, onEdit, onMultimeterPress, availableMeasurementTypes }) => {
+const OT = ({
+    data,
+    potentialUnit,
+    potentialHint,
+    updatePotentialValue,
+    validatePotential,
+    subitemIndex,
+    onEdit,
+    onMultimeterPress,
+    availableMeasurementTypes,
+    selectedCaptureField,
+    isMultimeterCaptureLoading
+}) => {
     const { type, name, potentials, wireColor, wireGauge } = data
     return (
         <>
@@ -15,6 +27,8 @@ const OT = ({ data, potentialUnit, potentialHint, updatePotentialValue, validate
                 onEdit={onEdit} />
             <Divider visible={potentials.length > 0} />
             <PotentialsView
+                isMultimeterCaptureLoading={isMultimeterCaptureLoading}
+                selectedCaptureField={selectedCaptureField}
                 availableMeasurementTypes={availableMeasurementTypes}
                 onMultimeterPress={onMultimeterPress}
                 subitemIndex={subitemIndex}

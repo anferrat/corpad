@@ -32,6 +32,7 @@ import { SessionModal } from './src/features/overlays/session_modal/';
 import { Animated } from 'react-native';
 import mapLayers from './src/store/reducers/mapLayers';
 import { Buffer as BufferDefault } from 'buffer';
+import { ToastComponent } from './src/features/overlays/toast';
 
 const rootReducer = combineReducers({
   subitem: subitem,
@@ -54,7 +55,7 @@ export const ScrollRef = createContext<MutableRefObject<any> | null>(null);
 
 ModalService.setShouldUseTopInsets = true;
 
-export const DEVELOPER_MODE_ON = false;
+export const DEVELOPER_MODE_ON = true;
 
 function App(): React.JSX.Element {
   /*
@@ -68,28 +69,30 @@ scrolling ref - used to implement title scrolling animation inside View screen. 
   const navigationRef = useNavigationContainerRef();
   const scrollingRef = useRef(new Animated.Value(0));
   return (
-    <Provider store={store}>
-      <IconRegistry icons={[EvaIconsPack, CPIconsPack]} />
-      <SafeAreaProvider>
-        <ApplicationProvider {...eva} theme={{ ...eva.light, ...theme }}>
-          <GestureHandlerRootView style={{ flex: 1 }}>
-            <ScrollRef.Provider value={scrollingRef}>
-              <BS.Provider value={bottomSheet}>
-                <NavigationContainer
-                  onReady={SplashScreen.hide}
-                  ref={navigationRef}>
-                  <AppNavigator />
-                  <BottomSheet ref={bottomSheet} />
-                  <FullScreenLoader />
-                  <ExportModal navigationRef={navigationRef} />
-                  <SessionModal />
-                </NavigationContainer>
-              </BS.Provider>
-            </ScrollRef.Provider>
-          </GestureHandlerRootView>
-        </ApplicationProvider>
-      </SafeAreaProvider>
-    </Provider>
+      <Provider store={store}>
+        <IconRegistry icons={[EvaIconsPack, CPIconsPack]} />
+        <SafeAreaProvider>
+          <ApplicationProvider {...eva} theme={{ ...eva.light, ...theme }}>
+            <GestureHandlerRootView style={{ flex: 1 }}>
+              <ScrollRef.Provider value={scrollingRef}>
+                <BS.Provider value={bottomSheet}>
+                  <NavigationContainer
+                    onReady={SplashScreen.hide}
+                    ref={navigationRef}>
+
+                    <AppNavigator />
+                    <BottomSheet ref={bottomSheet} />
+                    <FullScreenLoader />
+                    <ExportModal navigationRef={navigationRef} />
+                    <SessionModal />
+                  </NavigationContainer>
+                  <ToastComponent />
+                </BS.Provider>
+              </ScrollRef.Provider>
+            </GestureHandlerRootView>
+          </ApplicationProvider>
+        </SafeAreaProvider>
+      </Provider>
   );
 }
 

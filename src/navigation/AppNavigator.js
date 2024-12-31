@@ -28,7 +28,6 @@ import ExportPotentials from '../screens/export/Potentials'
 import ExportSubitems from '../screens/export/Subitems'
 import ExportOverview from '../screens/export/Overview'
 import CycleSettings from '../screens/settings/CycleSettings'
-import { MultimeterModal } from '../features/overlays/multimeter'
 import EditMapLayer from '../screens/map_layer/Edit'
 import ViewMapLayer from '../screens/map_layer/View'
 import ViewMarkerInfo from '../screens/map_layer/ViewMarkerInfo'
@@ -47,7 +46,6 @@ export const AppNavigator = () => {
     <>
       {!loading ?
         <>
-          <MultimeterModal />
           <Paywall />
           <Stack.Navigator
             screenOptions={{

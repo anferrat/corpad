@@ -1,9 +1,25 @@
 import React from 'react'
 import InputWithTitle from './InputWithTitle'
 import { PotentialUnitLabels, ReferenceCellCodeLabels } from '../../../constants/labels'
-import { MultimeterMeasurementTypes } from '../../../constants/global'
+import { MeasurementPropertyTypes } from '../../../constants/global'
 
-const PotentialInput = ({ potentialId, name, referenceCellName, referenceCellType, value, valid, validatePotential, updatePotentialValue, unit, displayHint, subitemIndex, potentialIndex, onMultimeterPress, availableMeasurementTypes }) => {
+const PotentialInput = ({
+    potentialId,
+    name,
+    referenceCellName,
+    referenceCellType,
+    value,
+    valid,
+    validatePotential,
+    updatePotentialValue,
+    unit,
+    displayHint,
+    subitemIndex,
+    potentialIndex,
+    onMultimeterPress,
+    availableMeasurementTypes,
+    isCaptureSelected,
+    isMultimeterCaptureLoading }) => {
 
     const onEndEditing = React.useCallback(() => {
         validatePotential(value, unit, subitemIndex, potentialId, potentialIndex)
@@ -13,11 +29,11 @@ const PotentialInput = ({ potentialId, name, referenceCellName, referenceCellTyp
         updatePotentialValue(text, subitemIndex, potentialIndex)
     }, [subitemIndex, potentialIndex])
 
-    const multimeterAvailable = ~availableMeasurementTypes.indexOf(MultimeterMeasurementTypes.POTENTIALS)
+    const multimeterAvailable = ~availableMeasurementTypes.indexOf(MeasurementPropertyTypes.POTENTIAL)
 
     const onMultimeterPressHandler = React.useCallback(() => {
-        onMultimeterPress(MultimeterMeasurementTypes.POTENTIALS, potentialId)
-    }, [potentialId, onMultimeterPress])
+        onMultimeterPress(MeasurementPropertyTypes.POTENTIAL, 'potential', potentialId, potentialIndex)
+    }, [potentialId, onMultimeterPress, potentialIndex])
 
     const unitComp = React.useMemo(() => ({
         main: PotentialUnitLabels[unit],
@@ -26,6 +42,8 @@ const PotentialInput = ({ potentialId, name, referenceCellName, referenceCellTyp
 
     return (
         <InputWithTitle
+            isCaptureLoading={isMultimeterCaptureLoading}
+            isCaptureSelected={isCaptureSelected}
             onMultimeterPress={onMultimeterPressHandler}
             multimeterAvailable={multimeterAvailable}
             onEndEditing={onEndEditing}

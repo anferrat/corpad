@@ -1,8 +1,8 @@
-import { ItemTypes} from "../../../../../constants/global"
+import { ItemTypes } from "../../../../../constants/global"
 import { Error, errors } from "../../../../utils/Error"
 
 export class GetSubitemList {
-    constructor(testPointRepo, rectifierRepo, referenceCellRepo, potentialTypeRepo, pipelineRepo, settingRepo, multimeterFactory, listPresenter, subitemPresenter, potentialPresenter, convertSubitemUnits, convertPotentialUnits) {
+    constructor(testPointRepo, rectifierRepo, referenceCellRepo, potentialTypeRepo, pipelineRepo, settingRepo, multimeterPropertyCaptureParameters, listPresenter, subitemPresenter, potentialPresenter, convertSubitemUnits, convertPotentialUnits) {
         this.testPointRepo = testPointRepo
         this.rectifierRepo = rectifierRepo
         this.listPresenter = listPresenter
@@ -10,7 +10,7 @@ export class GetSubitemList {
         this.potentialTypeRepo = potentialTypeRepo
         this.pipelineRepo = pipelineRepo
         this.settingRepo = settingRepo
-        this.multimeterFactory = multimeterFactory
+        this.multimeterPropertyCaptureParameters = multimeterPropertyCaptureParameters
         this.subitemPresenter = subitemPresenter
         this.potentialPresenter = potentialPresenter
         this.convertSubitemUnits = convertSubitemUnits
@@ -38,7 +38,7 @@ export class GetSubitemList {
         else if (itemType === ItemTypes.RECTIFIER)
             return [this.rectifierRepo.getSubitemsById(id), [], [], [], this.settingRepo.get()]
         else if (itemType = ItemTypes.PIPELINE)
-            return [[], [], [], [], {}]
+            return [[], [], [], [], this.settingRepo.get()]
         else throw new Error(errors.GENERAL, `Item type ${itemType} is not supported.`)
     }
 
@@ -52,7 +52,7 @@ export class GetSubitemList {
         const [subitems, referenceCells, potentialTypes, pipelineList, settings] = await Promise.all(this._getFullList(id, itemType))
         const potentialUnit = settings.defaultPotentialUnit ?? null
         const { multimeter } = settings
-        const availableMeasurementTypes = multimeter && multimeter.type ? this.multimeterFactory.execute(multimeter.type).getSupportedMeasurementTypes() : []
+        const availableMeasurementTypes = multimeter.type ? this.multimeterPropertyCaptureParameters.getSupportedTypes(multimeter.type) : []
 
         const convertertedSubitems = subitems.map(subitem => {
             //Calculate data if needed for subitems

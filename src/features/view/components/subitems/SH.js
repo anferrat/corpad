@@ -4,11 +4,22 @@ import Header from '../Header'
 import Divider from '../Divider'
 import SidesDisplay from '../SidesDisplay'
 import InputWithTitle from '../InputWithTitle'
-import { MultimeterMeasurementTypes } from '../../../../constants/global'
+import { MeasurementPropertyTypes } from '../../../../constants/global'
 
 const getShuntRatio = (ratioVoltage, ratioCurrent) => ratioVoltage !== null && ratioCurrent !== null ? ratioVoltage + ' mV - ' + ratioCurrent + ' A' : null
 
-const SH = ({ data, validateVoltageDrop, updatePropertyValue, onEdit, idMap, subitemIndex, onMultimeterPress, availableMeasurementTypes }) => {
+const SH = ({
+    data,
+    validateVoltageDrop,
+    updatePropertyValue,
+    onEdit,
+    idMap,
+    subitemIndex,
+    onMultimeterPress,
+    availableMeasurementTypes,
+    selectedCaptureField,
+    isMultimeterCaptureLoading
+}) => {
     const { factorSelected, name, type, factor, ratioVoltage, ratioCurrent, voltageDrop, current, sideA, sideB, fromAtoB, valid } = data
 
     const shuntRatio = React.useMemo(() => getShuntRatio(ratioVoltage, ratioCurrent),
@@ -16,7 +27,9 @@ const SH = ({ data, validateVoltageDrop, updatePropertyValue, onEdit, idMap, sub
 
     const currentValue = current !== null ? current + ' A' : null
 
-    const multimeterAvailable = ~availableMeasurementTypes.indexOf(MultimeterMeasurementTypes.VOLTAGE_DROP)
+    const multimeterAvailable = ~availableMeasurementTypes.indexOf(MeasurementPropertyTypes.VOLTAGE_DROP)
+
+    const isVoltageDropCaptureSelected = selectedCaptureField !== null && selectedCaptureField.property === 'voltageDrop'
 
     const onChangeVoltageDrop = React.useCallback((value) =>
         updatePropertyValue(value, subitemIndex, 'voltageDrop'),
@@ -26,7 +39,7 @@ const SH = ({ data, validateVoltageDrop, updatePropertyValue, onEdit, idMap, sub
         [subitemIndex, data, validateVoltageDrop])
 
     const onMultimeterPressHandler = React.useCallback(() => {
-        onMultimeterPress(MultimeterMeasurementTypes.VOLTAGE_DROP)
+        onMultimeterPress(MeasurementPropertyTypes.VOLTAGE_DROP, 'voltageDrop')
     }, [onMultimeterPress])
 
     return (
@@ -50,6 +63,8 @@ const SH = ({ data, validateVoltageDrop, updatePropertyValue, onEdit, idMap, sub
                 value={factorSelected ? factor : shuntRatio}
                 unit={factorSelected ? 'A/mV' : null} />
             <InputWithTitle
+                isCaptureLoading={isMultimeterCaptureLoading}
+                isCaptureSelected={isVoltageDropCaptureSelected}
                 onMultimeterPress={onMultimeterPressHandler}
                 multimeterAvailable={multimeterAvailable}
                 onChangeText={onChangeVoltageDrop}

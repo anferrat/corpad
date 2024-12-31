@@ -19,8 +19,8 @@ export class SettingRepository extends SQLiteRepository {
                 const { pipelineNameAsDefault, defaultPotentialUnit, autoCreatePotentials, isSurveyNew, isCloud, originalHash, fileName, cloudId, lastSync, onboarding, multimeter } = result.rows.item(0)
                 const { versionOnboarding, editTestPoint, editReferenceCell, map, potentialTypes, editBond, main } = JSON.parse(onboarding ?? '{}')
                 const onboard = onboarding ? new Onboarding(versionOnboarding, editTestPoint, editReferenceCell, map, potentialTypes, editBond, main) : undefined
-                const { peripheralId, name, type, onTime, offTime, delay, syncMode, firstCycle, onOffCaptureActive } = JSON.parse(multimeter ?? '{}')
-                const multimeterSettings = multimeter ? new MultimeterSettings(peripheralId, name, type, onTime, offTime, delay, syncMode, firstCycle, onOffCaptureActive) : undefined
+                const { peripheralId, name, type, onTime, offTime, delay, syncMode, firstCycle, onOffCaptureActive, timeSyncMode, offDelay, onSetup, captureRate } = JSON.parse(multimeter ?? '{}')
+                const multimeterSettings = multimeter ? new MultimeterSettings(peripheralId, name, type, onTime, offTime, delay, syncMode, firstCycle, onOffCaptureActive, timeSyncMode, offDelay, onSetup, captureRate) : undefined
                 return new AppSettings(Boolean(pipelineNameAsDefault), defaultPotentialUnit, Boolean(autoCreatePotentials), Boolean(isSurveyNew), Boolean(isCloud), originalHash, fileName, cloudId, lastSync, onboard, multimeterSettings)
             }
         }

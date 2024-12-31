@@ -1,4 +1,4 @@
-import { GetOnOffPotentialPair } from "../../../services/survey/other/multimeter/GetOnOffPotentialPair"
+import { GetOnOffPotentialPair } from "../../../services/survey/other/multimeter/collect_readings/GetOnOffPotentialPair"
 import { CreatePotential } from "../../../services/survey/subitems/potentials/CreatePotential"
 import { DeletePotential } from "../../../services/survey/subitems/potentials/DeletePotential"
 import { GetPotentialList } from "../../../services/survey/subitems/potentials/GetPotentialList"

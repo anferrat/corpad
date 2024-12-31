@@ -5,7 +5,7 @@ import PotentialsView from '../PotentialsView'
 import Divider from '../Divider'
 import InputWithTitle from '../InputWithTitle'
 import { CouponTypeLabels } from '../../../../constants/labels'
-import { CouponTypes, MultimeterMeasurementTypes } from '../../../../constants/global'
+import { CouponTypes, MeasurementPropertyTypes } from '../../../../constants/global'
 
 const areaUnit = {
     main: 'cm',
@@ -19,10 +19,25 @@ const densityUnit = {
     format: 'super'
 }
 
-const CN = ({ data, validateCouponCurrent, updatePropertyValue, onEdit, subitemIndex, idMap, updatePotentialValue, validatePotential, potentialUnit, potentialHint, onMultimeterPress, availableMeasurementTypes }) => {
+const CN = ({
+    data,
+    validateCouponCurrent,
+    updatePropertyValue,
+    onEdit,
+    subitemIndex,
+    idMap,
+    updatePotentialValue,
+    validatePotential,
+    potentialUnit,
+    potentialHint,
+    onMultimeterPress,
+    availableMeasurementTypes,
+    selectedCaptureField,
+    isMultimeterCaptureLoading
+}) => {
     const { type, name, current, area, density, pipelineCardId, valid, potentials, couponType, wireColor, wireGauge } = data
 
-    const measurementType = couponType === CouponTypes.AC ? MultimeterMeasurementTypes.COUPON_CURRENT_AC : MultimeterMeasurementTypes.COUPON_CURRENT
+    const measurementType = couponType === CouponTypes.AC ? MeasurementPropertyTypes.COUPON_CURRENT_AC : MeasurementPropertyTypes.COUPON_CURRENT
 
     const onChangeCurrent = React.useCallback((value) => updatePropertyValue(value, subitemIndex, 'current'), [updatePropertyValue, subitemIndex])
 
@@ -32,8 +47,10 @@ const CN = ({ data, validateCouponCurrent, updatePropertyValue, onEdit, subitemI
 
     const multimeterAvailable = ~availableMeasurementTypes.indexOf(measurementType)
 
+    const isCouponCaptureSelected = selectedCaptureField !== null && selectedCaptureField.property === 'current'
+
     const onMultimeterPressCurrent = React.useCallback(() => {
-        onMultimeterPress(measurementType)
+        onMultimeterPress(measurementType, 'current')
     }, [onMultimeterPress, measurementType])
 
 
@@ -48,6 +65,8 @@ const CN = ({ data, validateCouponCurrent, updatePropertyValue, onEdit, subitemI
             <Divider
                 visible={true} />
             <PotentialsView
+                isMultimeterCaptureLoading={isMultimeterCaptureLoading}
+                selectedCaptureField={selectedCaptureField}
                 availableMeasurementTypes={availableMeasurementTypes}
                 onMultimeterPress={onMultimeterPress}
                 subitemIndex={subitemIndex}
@@ -73,6 +92,8 @@ const CN = ({ data, validateCouponCurrent, updatePropertyValue, onEdit, subitemI
                 value={density}
                 unit={densityUnit} />
             <InputWithTitle
+                isCaptureLoading={isMultimeterCaptureLoading}
+                isCaptureSelected={isCouponCaptureSelected}
                 multimeterAvailable={multimeterAvailable}
                 onMultimeterPress={onMultimeterPressCurrent}
                 onEndEditing={onEndEditingCurrent}

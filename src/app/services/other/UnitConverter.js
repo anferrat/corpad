@@ -8,9 +8,9 @@ export class UnitConverter {
         return parseFloat(number.toFixed(2))
     }
 
-    convertVolts(value, inputUnit, outputUnit) {
+    convertVolts(value, inputUnit, outputUnit, digits = undefined) {
         if (inputUnit === outputUnit || value === null) {
-            return value
+            return digits !== undefined ? parseFloat(value.toFixed(digits)) : value
         }
 
         let result = value
@@ -38,16 +38,16 @@ export class UnitConverter {
         }
 
         if (outputUnit === PotentialUnits.VOLTS || outputUnit === PotentialUnits.NEGATIVE_VOLTS) {
-            result = result.toFixed(3)
+            result = result.toFixed(digits ?? 3)
         } else {
-            result = result.toFixed(0)
+            result = result.toFixed(digits ?? 0)
         }
         return parseFloat(result)
     }
 
-    convertAmps(value, inputUnit, outputUnit) {
+    convertAmps(value, inputUnit, outputUnit, digits = undefined) {
         if (inputUnit === outputUnit || value === null) {
-            return value
+            return digits !== undefined ? parseFloat(value.toFixed(digits)) : value
         }
         let result = value
         switch (inputUnit) {
@@ -67,24 +67,24 @@ export class UnitConverter {
                 break
         }
         if (outputUnit === CurrentUnits.AMPS) {
-            result = result.toFixed(3)
+            result = result.toFixed(digits ?? 3)
         } else {
-            result = result.toFixed(3)
+            result = result.toFixed(digits ?? 3)
         }
         return parseFloat(result)
     }
 
-    convertArea(value, inputUnit, outputUnit) {
+    convertArea(value, inputUnit, outputUnit, digits = undefined) {
         //only works for cm2 and m2. change when added more
         if (inputUnit === outputUnit || value === null) {
             return value
         }
         else if (inputUnit === AreaUnits.CENTIMETER_SQUARE)
-            return parseFloat((value * 0.0001).toFixed(3))
-        else return parseFloat((value * 10000).toFixed(2))
+            return parseFloat((value * 0.0001).toFixed(digits ?? 3))
+        else return parseFloat((value * 10000).toFixed(digits ?? 2))
     }
 
-    convertFactor(value, inputUnit, outputUnit) {
+    convertFactor(value, inputUnit, outputUnit, digits = undefined) {
         if (inputUnit === outputUnit || value === null)
             return value
         let result = value
@@ -114,7 +114,7 @@ export class UnitConverter {
 
     }
 
-    convertLength(value, inputUnit, outputUnit) {
+    convertLength(value, inputUnit, outputUnit, digits = undefined) {
         if (inputUnit === outputUnit || value === null)
             return value
         let result = value
@@ -137,7 +137,7 @@ export class UnitConverter {
         return result
     }
 
-    convertResistivity(value, inputUnit, outputUnit) {
+    convertResistivity(value, inputUnit, outputUnit, digits = undefined) {
         if (inputUnit === outputUnit || value === null)
             return value
         let result = value

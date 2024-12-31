@@ -5,191 +5,135 @@ import { Button, Text } from '@ui-kitten/components'
 import { TestRepository } from '../app/repository/sqlite/TestRepo'
 import FocusAwareStatusBar from '../components/FocusAwareStatusBar'
 import { generateTestPoints, resetDatabase } from '../app/controllers/DevController'
-import { InitializePurchases } from '../app/services/purchases/InitializePurchases'
-import { geolocationRepo, networkRepo, purchaseRepo, settingRepo, testPointRepo } from '../app/controllers/_instances/repositories'
-import { permissions } from '../app/controllers/_instances/general_services'
-import { useDispatch } from 'react-redux'
-import { setActiveMultimeter, showPaywall, updateSubscriptionStatus } from '../store/actions/settings'
-import { SettingRepository } from '../app/repository/sqlite/SettingRepository'
-import { LinkEncoder } from '../app/services/byte_converter/encode/LinkEncoder'
-import { TestPoint } from '../app/entities/survey/items/TestPoint'
-import { Rectifier } from '../app/entities/survey/items/Rectifier'
-import { Anode } from '../app/entities/survey/subitems/Anode'
-import { Pipeline } from '../app/entities/survey/items/Pipeline'
-import { PipelineLead } from '../app/entities/survey/subitems/PipelineLead'
-import { Bond } from '../app/entities/survey/subitems/Bond'
-import { Coupon } from '../app/entities/survey/subitems/Coupon'
-import { Riser } from '../app/entities/survey/subitems/Riser'
-import { Shunt } from '../app/entities/survey/subitems/Shunt'
-import { Structure } from '../app/entities/survey/subitems/Structure'
-import { Potential } from '../app/entities/survey/subitems/Potential'
-import { PotentialType } from '../app/entities/survey/other/PotentialType'
-import { PermanentPotentialTypes, ReferenceCellTypes } from '../constants/global'
-import { ReferenceCell } from '../app/entities/survey/other/ReferenceCell'
+import { setActiveMultimeter, updateSubscriptionStatus } from '../store/actions/settings'
 import { pairMultimeter } from '../app/controllers/MultimeterController'
-import { SoilResistivity } from '../app/entities/survey/subitems/SoilResistivity'
-import { TestLead } from '../app/entities/survey/subitems/TestLead'
-import { Isolation } from '../app/entities/survey/subitems/Isolation'
-import { Circuit } from '../app/entities/survey/subitems/Circuit'
-import { AnodeBed } from '../app/entities/survey/subitems/AnodeBed'
-import { AnodeBedAnode } from '../app/entities/survey/subitems/AnodeBedAnode'
-import { SoilResistivityLayer } from '../app/entities/survey/subitems/SoilResistivityLayer'
-import { LinkDecoder } from '../app/services/byte_converter/decode/LinkDecoder'
-import { GenerateCompositeItem } from '../app/services/byte_converter/GenerateCompositeItem'
-import { DefaultNameRepository } from '../app/repository/sqlite/DefaultNameRepository'
-import { DefaultPotentialTypes } from '../app/services/byte_converter/constants/DefaultPotentialTypes'
-import { DefaultReferenceCells } from '../app/services/byte_converter/constants/DefaultReferenceCells'
-import { SubitemFactory } from '../app/services/other/SubitemFactory'
-import { StatReferenceCell } from '../app/entities/survey/subitems/StatReferenceCell'
-import { QRCodeRepository } from '../app/repository/qrcodes/QRCodeRepository'
-import { SvgXml } from 'react-native-svg';
-import toKml from 'anferrat-tokml'
+import { PokitProService } from '../app/services/survey/other/multimeter/devices/pokitPro/PokitProService'
+import { bluetoothRepo } from '../app/controllers/_instances/repositories'
+import { appStateListener, timeService } from '../app/controllers/_instances/general_services'
+import { MeasurementPropertyTypes, MultimeterCaptureRate, MultimeterCycles, MultimeterListenerEvents, MultimeterModes, MultimeterReadingTypes, MultimeterSyncModes, MultimeterTypes, MultimeterVoltageRanges, TimeSyncSources } from '../constants/global'
+import { PokitProAutoRange } from '../app/services/survey/other/multimeter/devices/pokitPro/services/PokitProAutoRange'
+import { Reading } from '../app/entities/survey/multimeter/Reading'
+import { CycleListener } from '../app/services/survey/other/multimeter/utils/CycleListener'
+import CycleView from '../components/CycleView'
+import Toast from 'react-native-toast-message'
 
-
-const geojson = `{"type":"FeatureCollection","features":[{"type":"Feature","properties":{"name":"TP1","marker-color":"#FF5D4F","marker-symbol":"R"},"geometry":{"coordinates":[-123.08682211427148,49.173958450285966],"type":"Point"}},{"type":"Feature","properties":{"name":"TP2","marker-color":"#FF5D4F","marker-symbol":"R"},"geometry":{"coordinates":[-123.04136365217397,49.19176384936921],"type":"Point"}},{"type":"Feature","properties":{"name":"TP3","marker-color":"#43C150","marker-symbol":"T"},"geometry":{"coordinates":[-123.03700589104736,49.174932338789716],"type":"Point"}}]}`
-
-
-const settings = new SettingRepository()
-const qrRepo = new QRCodeRepository()
 const count = 150
-const initPurchases = new InitializePurchases(purchaseRepo, networkRepo, geolocationRepo, settingRepo, permissions)
+
+let listener
+
+const pokitProService = new PokitProService(bluetoothRepo, appStateListener)
+
+const cycleListener = new CycleListener(timeService)
+
+const autoRangeService = new PokitProAutoRange()
+
+const reading = new Reading(-0.283, Date.now(), MultimeterReadingTypes.VOLTAGE, 3, null)
+
+const mmId = '28:76:81:A5:C6:27'
+
+const connectMultimeter = async () => {
+  try {
+    pokitProService.start(mmId)
+  }
+  catch (er) {
+    console.log(er)
+  }
+}
+
+const disconnectMultimeter = async () => {
+  try {
+    pokitProService.stop(mmId)
+  }
+  catch (er) {
+    console.log(er)
+  }
+}
+
+
+const startCapture = async () => {
+  try {
+    await pokitProService.setSettings(mmId, MultimeterModes.POKIT.DC_VOLTS, MultimeterVoltageRanges.POKIT._10V, false, MultimeterCaptureRate._60Hz, 2500)
+    listener = pokitProService.addListener(mmId, (type, value) => console.log(type, value), (er) => console.log(er))
+    //cycleListener.addListener(pokitProService, mmId, (type, value) => console.log(type, value), (er) => console.log(er), MultimeterSyncModes.CYCLED, 2000, 500, MultimeterCycles.ON, 70, 70)
+  }
+  catch (er) {
+    console.log(er)
+  }
+}
+
+const stopCapture = async () => {
+  try {
+    await pokitProService.setSettings(mmId, MultimeterModes.POKIT.IDLE)
+    listener ? listener.remove() : null
+  }
+  catch (er) {
+    console.log(er)
+  }
+}
 
 export default DevScreen = ({ navigation, route }) => {
-  let svgRef = null
-  if (svgRef)
-    svgRef.toDataURL(data => console.log(data))
-  const dispatch = useDispatch()
-  const [svg, setSvg] = useState(null)
-  const show = () => dispatch(showPaywall())
+  const [time, setTime] = useState(null)
+  const [delta, setDelta] = useState(null)
 
-  const setupMultimeter = () => {
-    const id = '228noname'
-    const multimeterType = 'POKIT'
-    const name = 'Pokit Pro'
-    pairMultimeter({ id, multimeterType, name }, () => { }, () => {
-      dispatch(setActiveMultimeter(true, id, name, multimeterType))
+  useEffect(() => {
+    const interval = setInterval(() => {
+      const del = timeService.getDelta()
+      setDelta(del)
+      const time = Date.now() + (del ?? 0)
+      const seconds = new Date(time).getSeconds()
+      setTime(seconds)
+    }, 20)
+    return () => {
+      clearInterval(interval)
+    }
+  }, [])
+
+  const syncGPSTime = () => {
+    //timeService.syncTime(TimeSyncSources.NTP)
+    Toast.show({
+      type: 'multimeterCaptureToast',
+      position: 'top',
+      autoHide: false,
+      swipeable: false,
+      props: {
+        onTime: 4000,
+        offTime: 1000,
+        multimeterType: MultimeterTypes.POKIT,
+        mType: MeasurementPropertyTypes.POTENTIAL,
+        firstCycleOn: true,
+        syncMode: MultimeterSyncModes.GPS,
+        isSingleRead: false
+      }
     })
-
   }
 
-  const encode = async () => {
-    const pipelines = [
-      new Pipeline(1, 'sdsdsds', 'Hui ego znaet', Date.now(), Date.now(), 'Nothis really', 3, null, true, null, null, 0),
-      new Pipeline(2, 'lowkey', 'Niche blyat', Date.now(), Date.now(), null, null, null, true, null, null, 0)
-    ]
-
-    const referenceCells = [
-      new ReferenceCell(1, 'sadsad', ReferenceCellTypes.COPPER_SULFATE, 'RC1', true)
-    ]
-
-    const potentialTypes = [
-      new PotentialType(1, 'asasasa', 'ON', PermanentPotentialTypes.ON, false),
-      new PotentialType(2, 'skdskdsd', 'OFF', PermanentPotentialTypes.OFF, false),
-      new PotentialType(3, 'aassa', 'Depol', PermanentPotentialTypes.DEPOL, false),
-      new PotentialType(4, 'sdsdsds', 'Disc', PermanentPotentialTypes.DISCONNECTED, false),
-      new PotentialType(5, 'sdasa', 'Connec', PermanentPotentialTypes.CONNECTED, false)
-    ]
-
-    const pipelineLead = new PipelineLead(2, 3, 'sdsdsdsd', 'My Pipe', null, 5, 3)
-    pipelineLead.setPotentials([
-      new Potential(1, 'asasas', 2, -0.890, 1, 1, true, null),
-      new Potential(2, 'dasds', 2, -0.540, 2, 1, true, null),
-    ])
-
-    const testPoint =
-      new TestPoint(3, '0bfd7953-e4ff-c758-1729-d91c0c40fcc9', 'CPTS-25', 0, Date.now(), Date.now(), 'In front of the house', '1332 Fern Dr', 51.111936, -114.175154, 0)
-    const subitems = [
-      new Anode(1, 3, '787hdhujk-2ud-4hy-kski', 'my Anode', 2, 1, 0),
-      pipelineLead,
-      new Bond(3, 3, 'dsdsdsdsdsdsd', 'Bond 1', true, 0.12, [1], [2], null),
-      new Coupon(4, 3, 'dsdsdss', 'Coupon 2', 5, 3, 2, 0, 23, null, 100, null),
-      //new Riser(5, 3, 'sdsdsds', 'Riser 2', 2, 4),
-      //new Shunt(6, 3, 'sdsdsdsd', 'Shunt 1', 0.322, 50, 20, true, 3, 15, true, [1], [2], 10),
-      //new Structure(7, 3, 'assasa', 'Jerr2', 'Nothing here'),
-      //new TestLead(8, 3, 'dksldks', 'Test lead 1', 4, 3),
-      //new Isolation(9, 3, 'asasasa', 'IK1', true, 0, true, -0.4, [5], [7]),
-      /*new SoilResistivity(10, 3, 'asasa', 'SR1', 0, 0, 'cidid', [
-        new SoilResistivityLayer(1, 'asasa', 10, 2, 5, null, null, null),
-        new SoilResistivityLayer(2, 'asasa', 10, 4, 6, null, null, null),
-        new SoilResistivityLayer(3, 'asasa', 10, 1, 9, null, null, null)
-      ]),
-      */
-      //new StatReferenceCell(11, 3, 'sdsdsdsdsds', 'RefCell', 0, 3, 4)
-    ]
-    testPoint.setSubitems(subitems)
-    const rectifier = new Rectifier(1, '787hdhujk-2ud-4hy-kski', 'hooks', 0, Date.now(), Date.now(), 'Very cool rectifier', 'Cant believe it', 51.111936, -114.175154, 'My basic', 'non34urbusiness', 0, null, null, 2, 43, 2, 4, null, 34)
-    rectifier.setSubitems([
-      new Circuit(1, 1, 'dasas', 'JKdjdj', null, null, 1, 2, 1.5, 2, null),
-      new AnodeBed(1, 1, '2323', 'Bed', 0, 0, 0, [
-        new AnodeBedAnode(1, 'asa', 1, 2.2, 3, 4),
-        new AnodeBedAnode(2, 'a32a', 1, 2.1, null, null),
-        new AnodeBedAnode(3, 'a21sa', 1, 2.7, null, null)])
-    ])
-    const encoder = new LinkEncoder()
-    const decoder = new LinkDecoder()
-    const genItem = new GenerateCompositeItem(new DefaultNameRepository(), new DefaultPotentialTypes(), new DefaultReferenceCells(), new SubitemFactory())
-    try {
-      const link = encoder.encode(testPoint, pipelines, referenceCells, potentialTypes)
-      navigation.navigate('ExternalLink', { link, shouldLog: true })
-      /*
-      const data = decoder.decode(link)
-      console.log('DECODED DATA')
-      const res = await genItem.execute(data)
-      console.log(res.item.subitems)
-      */
-    }
-    catch (er) {
-      console.log(er)
-    }
+  const hideToast = () => {
+    Toast.hide()
   }
 
   const makePremium = () => { dispatch(updateSubscriptionStatus(1, Date.now() + 1000000000)) }
 
-  const getItem = async () => {
-    console.log(await testPointRepo.getAll())
-  }
+  //autoRangeService.execute(MultimeterListenerEvents.SINGLE_READ, reading, MultimeterVoltageRanges.POKIT._250MV, (range) => console.log('NEW RANGE', range), () => { })
+  //console.log(reading)
 
-  const testQr = async () => {
-    try {
-      const ss = await qrRepo.generatePngFile('https://docs.corpad.ca')
-      console.log(ss)
-    }
-    catch (er) {
-      console.log(er)
-    }
-  }
-
-  const textCoverter = () => {
-    try {
-      console.log(toKml(JSON.parse(geojson), {simplestyle: true, name: 'name'}))
-    }
-    catch (er) {
-      console.log(er)
-    }
-  }
 
   return (
     <SafeAreaView style={{ ...globalStyle.screen, paddingTop: StatusBar.currentHeight }}>
       <FocusAwareStatusBar barStyle={'dark-content'} backgroundColor='transparent' translucent={true} />
       <Text category='h4' style={{ alignSelf: 'center', paddingBottom: 24 }}>Dev. options</Text>
       <Button onPress={() => navigation.goBack()} appearance='ghost'>Back to App</Button>
-      <Button onPress={async () => {
-        await generateTestPoints({ count });
-        //console.log('Test points generated')
-      }} appearance='ghost'>Generate {count} test points</Button>
+      <Button onPress={() => generateTestPoints({ count })} appearance='ghost'>Generate {count} test points</Button>
       <Button onPress={resetDatabase} appearance='ghost'>Reset DB</Button>
       <Button onPress={makePremium} appearance='ghost'>Make Premium</Button>
-      <Button onPress={show} appearance='ghost'>Show paywall</Button>
-      <Button onPress={setupMultimeter} appearance='ghost'>Setup multimeter</Button>
-      <Button onPress={getItem} appearance='ghost'>Check items</Button>
-      <Button onPress={encode} appearance='ghost'>Test encoding</Button>
-      <Button onPress={testQr} appearance='ghost'>Test QR code</Button>
-      <Button onPress={textCoverter} appearance='ghost'>Test toKml</Button>
-      {svg !== null ? <SvgXml
-        getRef={(ref) => svgRef = ref}
-        xml={svg}
-        width='50%'
-        height='50%' /> : null}
+      <Button onPress={connectMultimeter} appearance='ghost'>Connect</Button>
+      <Button onPress={disconnectMultimeter} appearance='ghost'>Disconnect</Button>
+      <Button onPress={startCapture} appearance='ghost'>Start capture</Button>
+      <Button onPress={stopCapture} appearance='ghost'>Stop Capture</Button>
+      <Button onPress={syncGPSTime} appearance='ghost'>Show toast</Button>
+      <Button onPress={hideToast} appearance='ghost'>Hide toast</Button>
+      <Text>Seconds: {time}, Delta: {delta}</Text>
+      <CycleView onTime={5000} offTime={1000} firstCycleOn={false} />
+     
     </SafeAreaView>
   )
 }

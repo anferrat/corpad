@@ -1,4 +1,4 @@
-import { ItemTypes, SubitemTypes, PipeDiameters, WireColors, TestPointTypes, PermanentPotentialTypes, SortingOptions, ItemStatuses, PipeSchedules, WireGauges, CurrentUnits, AreaUnits, CurrentDensityUnits, FactorUnits, PotentialUnits, AnodeMaterials, ReferenceCellTypes, IsolationTypes, CouponTypes, PipelineMaterials, PipelineProducts, PowerSources, TapOptions, CoarseFineOptions, ExportItemProperties, ExportSubitemProperties, CalculatorTypes, PipelineCoating, IsolationShorted, MultimeterTypes, TimeUnits, MultimeterMeasurementTypes, MultimeterCycles, MultimeterSyncModes, ImageSources, MapLayerFeatures, StrokeColors, StrokeWidths, ExportFormatTypes, LengthUnits, ResistivityUnits, AnodeBedEnclosureTypes, AnodeBedMaterialTypes, AnodeBedTypes, SubscriptionStatuses, FileMimeTypes, ExternalLinkTypes, TestPointReadingOptions, RectifierReadingOptions, PipelineFilterItems } from "./global"
+import { ItemTypes, SubitemTypes, PipeDiameters, WireColors, TestPointTypes, PermanentPotentialTypes, SortingOptions, ItemStatuses, PipeSchedules, WireGauges, CurrentUnits, AreaUnits, CurrentDensityUnits, FactorUnits, PotentialUnits, AnodeMaterials, ReferenceCellTypes, IsolationTypes, CouponTypes, PipelineMaterials, PipelineProducts, PowerSources, TapOptions, CoarseFineOptions, ExportItemProperties, ExportSubitemProperties, CalculatorTypes, PipelineCoating, IsolationShorted, MultimeterTypes, TimeUnits, MultimeterMeasurementTypes, MultimeterCycles, MultimeterSyncModes, ImageSources, MapLayerFeatures, StrokeColors, StrokeWidths, ExportFormatTypes, LengthUnits, ResistivityUnits, AnodeBedEnclosureTypes, AnodeBedMaterialTypes, AnodeBedTypes, SubscriptionStatuses, FileMimeTypes, ExternalLinkTypes, TestPointReadingOptions, RectifierReadingOptions, PipelineFilterItems, MeasurementPropertyTypes } from "./global"
 
 export const DefaultNames = Object.freeze({
     [ItemTypes.TEST_POINT]: 'TP',
@@ -537,4 +537,13 @@ export const RectifierReadingOptionLabels = Object.freeze({
 
 export const PipelineFilterItemLabels = Object.freeze({
     [PipelineFilterItems.NOT_ASSIGNED]: 'Non-pipelines and unassigned'
+})
+
+export const MeasurementPropertyTypeLabels = Object.freeze({
+    [MeasurementPropertyTypes.POTENTIAL]: 'Potentials (DC)',
+    [MeasurementPropertyTypes.POTENTIAL_AC]: 'Potentials (AC)',
+    [MeasurementPropertyTypes.VOLTAGE]: 'Voltage (DC)',
+    [MeasurementPropertyTypes.COUPON_CURRENT]: 'Coupon current (DC)',
+    [MeasurementPropertyTypes.COUPON_CURRENT_AC]: 'Coupon current (AC)',
+    [MeasurementPropertyTypes.VOLTAGE_DROP]: 'Voltage drop (DC)'
 })

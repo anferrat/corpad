@@ -5,13 +5,23 @@ import SubitemViewFactory from './components/SubitemFactory'
 import { globalStyle } from '../../styles/styles'
 import LoadingView from '../../components/LoadingView'
 import useSubitemListActions from './hooks/useSubitemListActions'
-import useMultimeterDataListener from './hooks/useMultimeterDataListener'
+import useMultimeterListener from './hooks/useMultimeterListener'
 
 
 const SubitemListView = ({ itemId, itemType, navigateToEditSubitem }) => {
     const { potentialUnit, potentialHint, subitems, pipelineList, loading, availableMeasurementTypes, idMap, dispatch } = useSubitemListData({ itemId, itemType })
     const { validatePotential, updatePotentialValue, updatePropertyValue, validateCouponCurrent, validateVoltageDrop, validateCurrent, updateShorted, validateVoltage } = useSubitemListActions(dispatch)
-    const { onMultimeterPress } = useMultimeterDataListener({ itemId, dispatch, potentialUnit })
+    const { onMultimeterPress, selectedCaptureField, isCaptureLoading } = useMultimeterListener({
+        potentialUnit,
+        subitems,
+        dispatch,
+        validatePotential,
+        updatePotentialValue,
+        updatePropertyValue,
+        validateCouponCurrent,
+        validateVoltageDrop,
+        validateVoltage,
+    })
     return (
         <LoadingView
             loading={loading}
@@ -29,6 +39,8 @@ const SubitemListView = ({ itemId, itemType, navigateToEditSubitem }) => {
                         potentialUnit={potentialUnit}
                         potentialHint={potentialHint}
                         pipelineList={pipelineList}
+                        selectedCaptureField={selectedCaptureField}
+                        isCaptureLoading={isCaptureLoading}
                         updateShorted={updateShorted}
                         validateVoltage={validateVoltage}
                         validatePotential={validatePotential}
