@@ -21,7 +21,7 @@ const PotentialInput = ({
     availableMeasurementTypes,
     isCaptureSelected,
     isMultimeterCaptureLoading }) => {
-//console.log(isAc)
+
     const onEndEditing = React.useCallback(() => {
         validatePotential(value, unit, subitemIndex, potentialId, potentialIndex, isAc)
     }, [potentialId, subitemIndex, potentialIndex, value, unit])

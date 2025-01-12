@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react'
+import React, { useEffect, useRef, useTransition } from 'react'
 import { ActivityIndicator, StyleSheet, View, Animated, RefreshControl } from 'react-native'
 import { useSelector, useDispatch } from 'react-redux'
 import { loadListState, setOffset, setRefresh, deleteItemFromList, updateList, resetListState } from '../../../store/actions/list'
@@ -17,6 +17,7 @@ const HEADER_HEIGHT = 40
 const ItemList = ({ itemType, navigateToView }) => {
     const dispatch = useDispatch()
     const t = useSelector(state => getListStateByType(itemType, state))
+    const [isTransitionLoading, startTransition] = useTransition()
     const headerRef = useRef(new Animated.Value(0))
     const minScroll = 1
 
@@ -76,7 +77,7 @@ const ItemList = ({ itemType, navigateToView }) => {
                     t.settings.appliedFilters,
                     t.settings.displayedReading
                 )
-                dispatch(loadListState(itemType, data, idList))
+                startTransition(() => dispatch(loadListState(itemType, data, idList)))
             }
             else {
                 // Id list is already fetched and loaded to state. just need to fetch data for the next page and load to state
@@ -86,7 +87,7 @@ const ItemList = ({ itemType, navigateToView }) => {
                     t.settings.appliedFilters,
                     t.settings.displayedReading
                 )
-                dispatch(loadListState(itemType, data, []))
+                startTransition(() => dispatch(loadListState(itemType, data, [])))
             }
             headerRef.current.setValue(0)
         }
@@ -129,8 +130,8 @@ const ItemList = ({ itemType, navigateToView }) => {
         return <FooterLoader
             loadingMore={!t.settings.endReached && t.idList.length !== 0}
             count={t.itemList.length}
-            refreshing={t.settings.refreshing} />
-    }, [t.settings.endReached, t.idList.length, t.settings.refreshing, t.itemList.length])
+            refreshing={t.settings.refreshing || isTransitionLoading} />
+    }, [t.settings.endReached, t.idList.length, t.settings.refreshing, t.itemList.length, isTransitionLoading])
 
     const renderEmptyListComponent = React.useCallback(() =>
         <EmptyListComponent
@@ -145,8 +146,8 @@ const ItemList = ({ itemType, navigateToView }) => {
 
     const Header = React.memo(() => <ListHeader
         itemType={itemType}
-        translateY={translateY}/>)
-
+        translateY={translateY} />)
+        
     return (
         <>
             <Header />
@@ -158,7 +159,7 @@ const ItemList = ({ itemType, navigateToView }) => {
                 refreshControl={<RefreshControl
                     progressViewOffset={40}
                     onRefresh={refreshHandler}
-                    refreshing={t.settings.refreshing}
+                    refreshing={t.settings.refreshing || isTransitionLoading}
                     colors={[primary]} />}
                 onEndReachedThreshold={6}
                 onEndReached={offsetHandler}

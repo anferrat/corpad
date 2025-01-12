@@ -15,7 +15,8 @@ const useMarkers = ({ navigateToEdit, ref }) => {
     const map = useSelector(state => state.map)
     const isFocused = useIsFocused()
     const dispatch = useDispatch()
-    const { loading, activeMarker, markers, newItemMarker, satelliteMode, activeMapLayerMarker, isFirstLoad, filters } = map
+    const { loading, activeMarker, markers, newItemMarker, satelliteMode, activeMapLayerMarker, isFirstLoad, filters, } = map
+
     const currentRegion = useRef({
         latitudeDelta: 0.0135,
         longitudeDelta: 0.0135,
