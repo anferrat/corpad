@@ -3,7 +3,7 @@ import { SubitemTypeLabels } from "../../../../../../../../constants/labels";
 
 export class _PotentialHeaderConverter {
     constructor() {
-        this.permanentPotentialTypeOrder = [PermanentPotentialTypes.ON, PermanentPotentialTypes.OFF, PermanentPotentialTypes.DEPOL, PermanentPotentialTypes.CONNECTED, PermanentPotentialTypes.DISCONNECTED]
+        this.permanentPotentialTypeOrder = [PermanentPotentialTypes.ON, PermanentPotentialTypes.OFF, PermanentPotentialTypes.AC, PermanentPotentialTypes.DEPOL, PermanentPotentialTypes.CONNECTED, PermanentPotentialTypes.DISCONNECTED]
     }
 
     execute(exportedValues, potentialTypes, pipelines, groupPotentialsByPipeline) {

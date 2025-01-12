@@ -10,6 +10,12 @@ export class GetDefaultPotentialTypes {
     execute() {
         return Object.values(PermanentPotentialTypes)
             .map(type =>
-                new PotentialType(null, guid(), PermanentPotentialTypeLabels[type], type, false))
+                new PotentialType(null, guid(), PermanentPotentialTypeLabels[type], type, type === PermanentPotentialTypes.AC))
+    }
+
+    getMissingDefaultTypes(potentialTypes) {
+        const defTypes = this.execute()
+        const typeSet = new Set(potentialTypes.map(({ type }) => type))
+        return defTypes.filter(defType => !typeSet.has(defType.type))
     }
 }

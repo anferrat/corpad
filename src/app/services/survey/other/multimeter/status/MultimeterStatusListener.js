@@ -12,8 +12,6 @@ export class MultimeterStatusListener {
                 const { multimeter } = await this.settingRepo.get()
                 if (multimeter.peripheralId === id && id !== null) {
                     callback({ isConnected: status })
-                    if (!status)
-                        await this.connectMultimeterService.execute(2000)
                 }
             }
             catch { }
@@ -38,10 +36,12 @@ export class MultimeterStatusListener {
             }
         })
 
-        return () => {
-            connect.remove()
-            disconnect.remove()
-            updateOnAppStateChange.remove()
+        return {
+            remove: () => {
+                connect.remove()
+                disconnect.remove()
+                updateOnAppStateChange.remove()
+            }
         }
     }
 }

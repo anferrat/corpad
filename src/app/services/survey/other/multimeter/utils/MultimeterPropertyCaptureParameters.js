@@ -31,7 +31,7 @@ export class MultimeterPropertyCaptureParameters {
             [MeasurementPropertyTypes.COUPON_CURRENT_AC]: {
                 [MultimeterTypes.POKIT]: {
                     mode: MultimeterModes.POKIT.AC_AMPS,
-                    range: MultimeterCurrentRanges.POKIT._500uA
+                    range: MultimeterCurrentRanges.POKIT.AUTO
                 }
             },
             [MeasurementPropertyTypes.VOLTAGE_DROP]: {

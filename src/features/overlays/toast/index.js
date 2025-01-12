@@ -12,30 +12,35 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context'
 
 export const toastConfig = {
     multimeterCaptureToast: (props) => {
-        const { onTime, offTime, multimeterType, mType, firstCycleOn, syncMode, isSingleRead } = props.props
+        const { onTime, offTime, multimeterType, mType, firstCycleOn, syncMode, isSingleRead, noFix } = props.props
         return (
             <View style={styles.wrapper}>
                 <View style={styles.container}>
                     <View style={styles.header}>
                         <View style={styles.indicator}>
-                            <WaveActivityIndicator size={20} color={primary} />
+                            <WaveActivityIndicator size={20} color={control} />
                         </View>
                         <View style={styles.title}>
                             <Text
+                                status='control'
                                 category='h6'>Capturing</Text>
                             <Text
+                                status='control'
                                 category='s2' appearance='hint'>{MultimeterTypeLabels[multimeterType]} | {MeasurementPropertyTypeLabels[mType]}</Text>
                         </View>
                     </View>
                     {!isSingleRead ? <>
-                        <Text style={styles.modeText}>
+                        <Text
+                            status='control'
+                            style={styles.modeText}>
                             <Text
+                                status='control'
                                 category='s2'
                                 appearance='hint'>
-                                Cycle capture mode:
+                                Cycle detection mode:
                             </Text> {isSingleRead ?
                                 MultimeterSyncModeLabels[MultimeterSyncModes.REAL_TIME] :
-                                MultimeterSyncModeLabels[syncMode]}
+                                MultimeterSyncModeLabels[syncMode]}{noFix ? ' (No time fix)' : null}
                         </Text>
                         <CycleView
                             onTime={onTime}
@@ -68,7 +73,7 @@ const styles = StyleSheet.create({
         paddingVertical: 12,
         paddingHorizontal: 12,
         borderRadius: 5,
-        backgroundColor: control,
+        backgroundColor: primary,
         marginHorizontal: 12,
         elevation: 5,
         flex: 1,

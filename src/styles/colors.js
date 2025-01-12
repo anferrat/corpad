@@ -16,6 +16,7 @@ export const primary200 = '#CEDCF9'
 export const primary400 = '#95A8DD'
 export const primary700 = '#38498F'
 export const success100 = "#E3FBDB"
+export const danger100 = '#FFEADB'
 export const control = '#fff'
 
 export const WireColorColors = Object.freeze({

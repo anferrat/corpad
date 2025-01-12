@@ -4,7 +4,7 @@ import { updateSubitem } from '../../../app/controllers/survey/subitems/SubitemC
 import { errorHandler } from '../../../helpers/error_handler'
 import { updatePotentialAction, updatePropertyAction } from '../store/actions/subitemList'
 import fieldValidation from '../../../helpers/validation'
-import { calculateCouponDensity, currentCalculation } from '../../../helpers/functions'
+import { calculateCouponDensity, currentCalculation, currentCalculation2 } from '../../../helpers/functions'
 import { EventRegister } from 'react-native-event-listeners'
 
 
@@ -19,8 +19,8 @@ const useSubitemListActions = (dispatch) => {
     }, [dispatch])
 
 
-    const validatePotential = useCallback(async (value, unit, subitemIndex, potentialId, potentialIndex) => {
-        const validation = fieldValidation(value, 'potential')
+    const validatePotential = useCallback(async (value, unit, subitemIndex, potentialId, potentialIndex, isAc) => {
+        const validation = fieldValidation(value, isAc ? 'potentialAc' : 'potential')
         if (validation.valid)
             await updatePotential({ id: potentialId, value: validation.value, unit: unit }, er => errorHandler(er), result => EventRegister.emit('POTENTIAL_UPDATED', result))
         dispatch(updatePotentialAction(subitemIndex, potentialIndex, validation.value, validation.valid))
@@ -68,6 +68,16 @@ const useSubitemListActions = (dispatch) => {
             dispatch(updatePropertyAction(subitemIndex, { voltage: value }, { voltage: valid }))
     }, [dispatch])
 
+    const validateVoltageDropForCircuit = useCallback(async (subitemIndex, subitem) => {
+        const { value, valid } = fieldValidation(subitem.voltageDrop, 'voltageDrop')
+        if (!valid || value === null)
+            dispatch(updatePropertyAction(subitemIndex, { voltageDrop: value }, { voltageDrop: valid }))
+        else {
+            const current = currentCalculation2(value, subitem.ratioCurrent, subitem.ratioVoltage)
+            await updateSubitem({ ...subitem, current: current, voltageDrop: value }, er => errorHandler(er), result => EventRegister.emit('SUBITEM_UPDATED', result))
+        }
+    }, [])
+
     return {
         validatePotential,
         updatePotentialValue,
@@ -76,7 +86,8 @@ const useSubitemListActions = (dispatch) => {
         validateVoltageDrop,
         validateCurrent,
         updateShorted,
-        validateVoltage
+        validateVoltage,
+        validateVoltageDropForCircuit
     }
 }
 

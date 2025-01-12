@@ -1,8 +1,9 @@
 import { SubitemTypes } from "../../../../../../constants/global"
 
 export class AdvancedJsonImport {
-    constructor(testPointRepo, rectifierRepo, pipelineRepo, subitemRepo, potentialTypeRepo, surveyRepo, referenceCellRepo, potentialRepo, mapLayerRepo, assetRepo) {
+    constructor(testPointRepo, rectifierRepo, pipelineRepo, subitemRepo, potentialTypeRepo, surveyRepo, referenceCellRepo, potentialRepo, mapLayerRepo, assetRepo, getDefaultPotentialTypes) {
         this.surveyRepo = surveyRepo
+        this.getDefaultPotentialTypes = getDefaultPotentialTypes
         this.testPointImport = new ImportAll(testPointRepo)
         this.rectifierImport = new ImportAll(rectifierRepo)
         this.pipelineImport = new ImportAll(pipelineRepo)
@@ -22,6 +23,9 @@ export class AdvancedJsonImport {
         if (!mainReferenceExist && referenceCells[0])
             referenceCells[0].makeMainReference()
 
+        //make sure that all required potential types are present
+        const allPotentialTypes = potentialTypes.concat(this.getDefaultPotentialTypes.getMissingDefaultTypes(potentialTypes))
+
         //Importing in 3 steps in order to keep reference for other items: 
         // 1 - items and extras
         // 2 - subitems and assets
@@ -31,7 +35,7 @@ export class AdvancedJsonImport {
             this.testPointImport.execute(testPoints),
             this.rectifierImport.execute(rectifiers),
             this.pipelineImport.execute(pipelines),
-            this.potentialTypeImport.execute(potentialTypes),
+            this.potentialTypeImport.execute(allPotentialTypes),
             this.referenceCellImport.execute(referenceCells),
             this.mapLayerImport.execute(mapLayers)
         ])

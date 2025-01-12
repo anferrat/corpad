@@ -9,6 +9,7 @@ const InvalidPropertyCaptionLabels = Object.freeze({
     latitude: 'Must be between -90 and +90',
     longitude: 'Must be between -180 and +180',
     number: 'Must be a number',
+    positiveNumber: 'Must be a positive number',
     tapValue: 'Must be a number between 0 and 100 %',
     smallText: 'Must be less than 80 characters',
     largeText: 'Must be less than 300 characters'
@@ -39,6 +40,8 @@ const getPropertyCaption = (property) => {
         case 'maxVoltage':
         case 'maxCurrent':
             return InvalidPropertyCaptionLabels.number
+        case 'potentialAc':
+            return InvalidPropertyCaptionLabels.positiveNumber
         default: return null
     }
 }
@@ -125,6 +128,7 @@ const InputField = React.forwardRef((props, ref) => {
             keyboardType={props.keyboardType !== 'numeric' ? props.keyboardType : Platform.select({
                 android: 'numeric',
                 ios: 'numbers-and-punctuation',
+                macos: 'numbers-and-punctuation',
                 default: 'numeric'
             })}
             onChangeText={onChangeText}

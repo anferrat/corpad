@@ -42,6 +42,19 @@ export const globalStyle = StyleSheet.create({
             overflow: 'hidden',
             zIndex: 1
         },
+        macos: {
+            shadowOffset: { width: 0, height: 1 },
+            shadowOpacity: 0.8,
+            shadowRadius: 2,
+            borderWidth: 1,
+            borderRadius: 6,
+            borderColor: basic300,
+            margin: 6,
+            marginTop: 12,
+            backgroundColor: '#fff',
+            overflow: 'hidden',
+            zIndex: 1
+        },
         android: {
             elevation: 3,
             borderRadius: 6,
@@ -63,6 +76,20 @@ export const globalStyle = StyleSheet.create({
 
     card: Platform.select({
         ios: {
+            shadowOffset: { width: 0, height: 1 },
+            shadowOpacity: 0.8,
+            shadowRadius: 2,
+            padding: 12,
+            borderWidth: 1,
+            borderRadius: 6,
+            borderColor: basic300,
+            margin: 6,
+            marginTop: 12,
+            backgroundColor: '#fff',
+            overflow: 'hidden',
+            zIndex: 1
+        },
+        macos: {
             shadowOffset: { width: 0, height: 1 },
             shadowOpacity: 0.8,
             shadowRadius: 2,

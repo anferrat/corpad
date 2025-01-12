@@ -7,6 +7,7 @@ export class ConnectMultimeter {
     }
 
     async _wait(func, delay) {
+
         if (delay === 0)
             return await func()
         return setTimeout(async () => {
@@ -24,13 +25,9 @@ export class ConnectMultimeter {
         if (peripheralId !== null && peripheralId) {
             await this.bluetoothRepo.checkState()
             const multimeterService = this.multimeterFactory.execute(type)
-            await this._wait(() => multimeterService.start(peripheralId), delay)
-            return {
-                isConnected: true
-            }
-        }
-        return {
-            isConnected: false
+            await this._wait(async () => {
+                await multimeterService.start(peripheralId)
+            }, delay)
         }
     }
 }

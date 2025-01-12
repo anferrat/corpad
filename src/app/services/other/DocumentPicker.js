@@ -11,6 +11,7 @@ export class DocumentPicker {
         return Platform.select({
             android: decodeURIComponent(uri),
             ios: decodeURIComponent(uri),
+            macos: decodeURIComponent(uri),
             default: uri
         })
     }
@@ -35,6 +36,7 @@ export class DocumentPicker {
         return await this.execute(Platform.select({
             android: [FileMimeTypes.JSON, FileMimeTypes.ZIP, FileMimeTypes.BINARY],
             ios: [FileTypeIdentifiers.SURVEY_FILE_WITH_ASSETS, FileTypeIdentifiers.JSON],
+            macos: [FileTypeIdentifiers.SURVEY_FILE_WITH_ASSETS, FileTypeIdentifiers.JSON],
             default: `*/*`
         }))
     }
@@ -43,6 +45,7 @@ export class DocumentPicker {
         return this.execute(Platform.select({
             android: [FileMimeTypes.TEXT, FileMimeTypes.XLSX],
             ios: [FileTypeIdentifiers.CSV, FileTypeIdentifiers.SPREADSHEET],
+            macos: [FileTypeIdentifiers.CSV, FileTypeIdentifiers.SPREADSHEET],
             default: [FileMimeTypes.TEXT, FileMimeTypes.XLSX]
         }))
     }
@@ -55,6 +58,7 @@ export class DocumentPicker {
         return this.execute(Platform.select({
             android: [FileMimeTypes.KML, FileMimeTypes.BINARY, FileMimeTypes.KMZ, FileMimeTypes.GEOJSON],
             ios: [FileTypeIdentifiers.KML, FileTypeIdentifiers.GPX, FileTypeIdentifiers.KMZ, FileTypeIdentifiers.GEOJSON],
+            macos: [FileTypeIdentifiers.KML, FileTypeIdentifiers.GPX, FileTypeIdentifiers.KMZ, FileTypeIdentifiers.GEOJSON],
             default: [FileMimeTypes.KML, FileMimeTypes.KMZ, FileMimeTypes.GEOJSON]
         }))
     }

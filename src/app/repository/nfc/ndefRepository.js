@@ -12,6 +12,9 @@ export class NdefRepository {
                 ios: {
                     alertMessage: message,
                 },
+                macos: {
+                    alertMessage: message,
+                },
                 android: {}
             }))
         }
@@ -63,7 +66,7 @@ export class NdefRepository {
     async readTag() {
         try {
             const message = await NfcManager.getTag()
-            if (Platform.OS === 'ios')
+            if (Platform.OS === 'ios' || Platform.OS === 'macos')
                 await NfcManager.setAlertMessageIOS('Success')
             return message
         }
@@ -89,7 +92,7 @@ export class NdefRepository {
             if (!bytes)
                 throw 'No data to write. Chech encoding.'
             await NfcManager.ndefHandler.writeNdefMessage(bytes)
-            if (Platform.OS === 'ios')
+            if (Platform.OS === 'ios' || Platform.OS === 'macos')
                 await NfcManager.setAlertMessageIOS('Success')
         }
         catch (er) {
@@ -102,7 +105,7 @@ export class NdefRepository {
     }
 
     async invalidateSessionIOS(errorMessage) {
-        if (Platform.OS === 'ios')
+        if (Platform.OS === 'ios' || Platform.OS === 'macos')
             await NfcManager.invalidateSessionWithErrorIOS(errorMessage)
     }
 }

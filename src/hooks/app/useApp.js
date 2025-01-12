@@ -3,12 +3,13 @@ import { useState, useRef, useEffect, useCallback } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import useOnboardingScreen from "./useOnboardingScreen"
 import { addUrlListener, addNetworkStatusListener, initializeApp } from "../../app/controllers/AppController"
-import { resetCurrentSurveySettings, setActiveMultimeterStatus, setSettingsOnAppLoad, setSurveySettings, updateLoader, updateNetworkStatus, hideLoader } from "../../store/actions/settings"
+import { resetCurrentSurveySettings, setSettingsOnAppLoad, setSurveySettings, updateLoader, updateNetworkStatus, hideLoader } from "../../store/actions/settings"
 import { errorHandler } from "../../helpers/error_handler"
 import { SurveyLoadingStatuses, UrlTypes } from "../../constants/global"
-import { addMultimeterStatusListener } from "../../app/controllers/MultimeterController"
 import useTimeSync from "./useTimeSync"
 import { useNavigation } from '@react-navigation/native'
+import { useMultimeterStatus } from "./useMultimeterStatus"
+import { disconnectMultimeter } from "../../app/controllers/MultimeterController"
 
 const useApp = () => {
 
@@ -22,6 +23,8 @@ const useApp = () => {
   const isOnboardingVisible = useOnboardingScreen()
 
   useTimeSync()
+
+  useMultimeterStatus()
 
   const [loading, setLoading] = useState(true)
   const [initialUrlLink, setInitialUrlLink] = useState({
@@ -77,8 +80,6 @@ const useApp = () => {
       }
     )
 
-    const multimeterListener = addMultimeterStatusListener(({ isConnected }) => dispatch(setActiveMultimeterStatus(isConnected)))
-
 
     //onAppLoad - sets up initial data for database, logs in with Google Drive, checks if survey already loaded
     const onAppLoad = async () => {
@@ -104,8 +105,7 @@ const useApp = () => {
         urlListener.response.remove()
       if (networkStatus)
         networkStatus()
-      if (multimeterListener.response)
-        multimeterListener.response()
+      disconnectMultimeter()
     }
   }, [])
 

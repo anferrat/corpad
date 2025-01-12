@@ -8,14 +8,16 @@ export class DefaultPotentialTypes {
             new PotentialType(2, 'default-uid-OFF', 'Off', PermanentPotentialTypes.OFF, false),
             new PotentialType(3, 'default-uid-DEPOL', 'Native', PermanentPotentialTypes.DEPOL, false),
             new PotentialType(4, 'default-uid-CONNECTED', 'Connected', PermanentPotentialTypes.CONNECTED, false),
-            new PotentialType(5, 'default-uid-DISCONNECTED', 'Disconnected', PermanentPotentialTypes.DISCONNECTED, false)
+            new PotentialType(5, 'default-uid-DISCONNECTED', 'Disconnected', PermanentPotentialTypes.DISCONNECTED, false),
+            new PotentialType(6, 'default-uid-AC', 'AC', PermanentPotentialTypes.AC, true)
         ]
         this.typeMap = new Map(
             [[PermanentPotentialTypes.ON, this.types[0]],
             [PermanentPotentialTypes.OFF, this.types[1]],
             [PermanentPotentialTypes.DEPOL, this.types[2]],
             [PermanentPotentialTypes.CONNECTED, this.types[3]],
-            [PermanentPotentialTypes.DISCONNECTED, this.types[4]]]
+            [PermanentPotentialTypes.DISCONNECTED, this.types[4]],
+            [PermanentPotentialTypes.AC, this.types[5]]]
         )
     }
 

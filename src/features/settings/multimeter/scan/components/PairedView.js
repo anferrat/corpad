@@ -1,15 +1,24 @@
 import React from "react"
 import { View, StyleSheet } from "react-native"
 import { Divider, Icon, ListItem, Text } from "@ui-kitten/components"
-import { danger, primary } from '../../../../../styles/colors'
+import { basic, danger, primary } from '../../../../../styles/colors'
 import { globalStyle } from "../../../../../styles/styles"
 import { MultimeterTypeLabels } from "../../../../../constants/labels"
 import StatusView from "./StatusView"
-import { connectIcon, optionIcon, activity } from "../../../../../components/Icons"
+import { activity } from "../../../../../components/Icons"
+import TimeSyncListItem from "./TimeSyncListItem"
+import usePairedView from "../hooks/usePairedView"
 
 const trashIcon = (props) => <Icon {...props} name='trash' fill={danger} />
 
-const PairedView = ({ name, type, connected, connecting, connect, unpair, navigateToCycleSettings }) => {
+const trashIconDisabled = (props) => <Icon {...props} name='trash' fill={basic} />
+
+const optionIcon = (props) => <Icon name='options' {...props} fill={primary} />
+
+const connectIcon = (props) => <Icon name='link-2' {...props} fill={primary} />
+
+const PairedView = ({ navigateToCycleSettings }) => {
+    const { name, type, connected, connecting, unpair, connect, unpairing } = usePairedView()
     return (
         <View style={globalStyle.card}>
             <Text
@@ -36,11 +45,9 @@ const PairedView = ({ name, type, connected, connecting, connect, unpair, naviga
                         </Text>
                     </View>
                 </View>
-
                 <StatusView
                     connected={connected}
-                    connecting={connecting}
-                />
+                    connecting={connecting} />
             </View>
             <Divider />
             <View style={styles.list}>
@@ -50,19 +57,21 @@ const PairedView = ({ name, type, connected, connecting, connect, unpair, naviga
                         onPress={connect}
                         disabled={connecting}
                         accessoryLeft={connecting ? activity : connectIcon}
-                        title={'Connect'}
-                        description={'Press button on PokitPro to wake it up before connecting'} /> : null}
+                        title={connecting ? 'Connecting' : 'Connect'}
+                        description={connecting ? null : 'Make sure multimeter is ready to connect'} /> : null}
+                <TimeSyncListItem />
                 <ListItem
                     style={styles.listItem}
                     accessoryLeft={optionIcon}
-                    title={'Cycle settings'}
+                    title={'Settings'}
                     onPress={navigateToCycleSettings}
-                    description='Adjust ON/OFF time cycles for potentials capture' />
+                    description='Adjust ON/OFF time cycles, capture rate and mode' />
                 <ListItem
+                    disabled={connecting}
                     style={styles.listItem}
                     title={'Unpair'}
                     onPress={unpair}
-                    accessoryLeft={trashIcon} />
+                    accessoryLeft={unpairing ? activity : (connecting ? trashIconDisabled : trashIcon)} />
             </View>
         </View>
     )

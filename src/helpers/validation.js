@@ -26,6 +26,8 @@ const validate = (v, type) => {
             return (reg('^[+-]?((90\.?0*$)|(([0-8]?[0-9])\.?[0-9]*$))').test(v) && (v <= 90) && (v >= -90) || isNull(v))
         case 'potential':
             return !isNaN(v)
+        case 'potentialAc':
+            return !isNaN(v) && v >= 0
         case 'name':
             return isNull(v) || reg('^[-a-zA-Z0-9_.\s() ]*$').test(v) && String(v).length <= 40
         case 'defaultName':

@@ -34,7 +34,7 @@ export const currentCalculation2 = (voltageDrop, ratioCurrent, ratioVoltage) => 
     const rc = fieldValidation(ratioCurrent, 'ratioCurrent')
     const rv = fieldValidation(ratioVoltage, 'ratioVoltage')
     if (v.valid && rv.valid && rc.valid && v.value !== null && v.value !== '' && rv.value !== null && rv.value !== '' && rc.value !== null && rc.value !== '' && rv.value !== 0) {
-        return (Math.round(((voltageDrop * ratioCurrent / ratioVoltage) + Number.EPSILON) * 10000) / 10000)
+        return Math.round(((voltageDrop * ratioCurrent / ratioVoltage)) * 10000) / 10000
     }
     else
         return null

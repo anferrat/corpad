@@ -1,28 +1,31 @@
 import React, { useCallback } from "react"
 import { View, StyleSheet, ActivityIndicator } from "react-native"
 import { Icon, Text } from "@ui-kitten/components"
-import { basic300, primary } from '../../../../../styles/colors'
+import { basic, basic300, primary } from '../../../../../styles/colors'
 import { androidRipple } from "../../../../../styles/styles"
 import { MultimeterTypeLabels } from "../../../../../constants/labels"
 import Pressable from "../../../../../components/Pressable"
 
 
-const MultimeterListItem = ({ id, name, type, pair, pairing }) => {
-    const onPress = useCallback(() => {
-        pair(id, name, type)
-    }, [id, name, type, pair])
+const MultimeterListItem = ({ id, name, type, onPress, pairing, disabled }) => {
+    const onPressHandler = useCallback(() => {
+        if (onPress)
+            onPress(id, name, type)
+    }, [id, name, type, onPress])
     return (
         <Pressable
-            onPress={onPress}
+            disabled={disabled}
+            onPress={onPressHandler}
             style={styles.mainView}
             android_ripple={androidRipple}>
             <View style={styles.titleView}>
                 <Icon
                     name='bluetooth'
-                    fill={primary}
+                    fill={disabled ? basic : primary}
                     style={styles.icon} />
                 <View>
                     <Text
+                        appearance={disabled ? 'hint' : 'default'}
                         category='p1'>
                         {name}
                     </Text>

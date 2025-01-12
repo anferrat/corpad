@@ -76,7 +76,7 @@ export const SettingsList = () => {
                 title={'QR code and NFC labels'}
                 subtitle={Platform.select({
                     android: 'View recently scanned labels',
-                    ios: 'Launch NFC scanning and view recently scanned labels'
+                    default: 'Launch NFC scanning and view recently scanned labels'
                 })}
                 onPress={navigateToExternalLinks} />
             <ListItem

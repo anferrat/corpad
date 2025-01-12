@@ -82,7 +82,8 @@ export class Codes {
             [PermanentPotentialTypes.OFF]: 2,
             [PermanentPotentialTypes.DEPOL]: 3,
             [PermanentPotentialTypes.CONNECTED]: 4,
-            [PermanentPotentialTypes.DISCONNECTED]: 5
+            [PermanentPotentialTypes.DISCONNECTED]: 5,
+            [PermanentPotentialTypes.AC]: 6
         })
         this.anodeMaterials = Object.freeze({
             [AnodeMaterials.MAGNEZIUM]: 1,

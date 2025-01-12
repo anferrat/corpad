@@ -17,6 +17,7 @@ import { CheckBleState } from "../services/survey/other/multimeter/status/CheckB
 import { PropertyFieldCapture } from "../services/survey/other/multimeter/collect_readings/PropertyFieldCapture"
 import { PropertyFieldCaptureSetup } from "../services/survey/other/multimeter/collect_readings/PropertyFieldCaptureSetup"
 import { connectMultimeterService, multimeterFactory, multimeterPropertyCaptureParameters } from "./_instances/multimeter"
+import { CheckConnectedDevices } from "../services/survey/other/multimeter/connect/CheckConnectedDevices"
 
 
 class MultimeterController extends Controller {
@@ -50,7 +51,15 @@ class MultimeterController extends Controller {
 
         this.checkBleStateService = new CheckBleState(bluetoothRepo)
 
+        this.checkConnectedDeviceService = new CheckConnectedDevices(bluetoothRepo, permissions)
+
         this.validation = new MultimeterValidation()
+    }
+
+    checkConnectedDevices(onError = null, onSuccess = null) {
+        return super.controllerHandler(onSuccess, onError, 100, () => {
+            return this.checkConnectedDeviceService.execute()
+        })
     }
 
     scan(onError = null, onSuccess = null) {
@@ -71,9 +80,9 @@ class MultimeterController extends Controller {
         })
     }
 
-    scanListener({ onDiscovered, pairedId }, onError = null, onSuccess = null) {
+    scanListener(callback, onError = null, onSuccess = null) {
         return super.callbackHandler(onSuccess, onError, 100, () => {
-            return this.multimeterScanListenerService.execute(onDiscovered, [pairedId])
+            return this.multimeterScanListenerService.execute(callback, [])
         })
     }
 
@@ -85,8 +94,7 @@ class MultimeterController extends Controller {
 
     updateSettings(params, onError = null, onSuccess = null) {
         return super.controllerHandler(onSuccess, onError, 652, async () => {
-            const multimeterType = this.validation.checkMultimeterType(params)
-            const multimeterData = this.validation.updateSettings(params, multimeterType)
+            const multimeterData = this.validation.updateSettings(params)
             return await this.updateMultimeterSettingService.execute(multimeterData)
         })
     }
@@ -105,15 +113,15 @@ class MultimeterController extends Controller {
         })
     }
 
-    unpairMultimeter(onError = null, onSuccess = null) {
+    unpairMultimeter(connected, onError = null, onSuccess = null) {
         return super.controllerHandler(onSuccess, onError, 653, async () => {
-            return await this.unpairMultimeterService.execute()
+            return await this.unpairMultimeterService.execute(connected)
         })
     }
 
-    connectMultimeter(onError = null, onSuccess = null) {
+    connectMultimeter(delay, onError = null, onSuccess = null) {
         return super.controllerHandler(onSuccess, onError, 651, async () => {
-            return await this.connectMultimeterService.execute()
+            return await this.connectMultimeterService.execute(delay)
         })
     }
 
@@ -165,27 +173,30 @@ const multimeterController = new MultimeterController(
     timeService,
     multimeterPropertyCaptureParameters,
     connectMultimeterService
+
 )
+
+export const checkConnectedDevices = (onError, onSuccess) => multimeterController.checkConnectedDevices(onError, onSuccess)
 
 export const startMultimeterScan = async (onError, onSuccess) => await multimeterController.scan(onError, onSuccess)
 
 export const stopMultimeterScan = async (onError, onSuccess) => await multimeterController.stopScan(onError, onSuccess)
 
-export const multimeterScanListener = ({ onDiscovered, pairedId }, onError, onSuccess) => multimeterController.scanListener({ onDiscovered, pairedId }, onError, onSuccess)
+export const multimeterScanListener = (callback, onError, onSuccess) => multimeterController.scanListener(callback, onError, onSuccess)
 
 export const multimeterStopScanListener = (callback, onError, onSuccess) => multimeterController.stopScanListener(callback, onError, onSuccess)
 
 export const getMultimeterSettings = (onError, onSuccess) => multimeterController.getSettings(onError, onSuccess)
 
-export const updateMultimeterSettings = ({ onTime, offTime, delay, syncMode, firstCycle, multimeterType }, onError, onSuccess) => multimeterController.updateSettings({ onTime, offTime, delay, syncMode, firstCycle, multimeterType }, onError, onSuccess)
+export const updateMultimeterSettings = ({ onTime, offTime, syncMode, firstCycle, onOffCaptureActive, timeSyncMode, onSetup, offDelay, captureRate }, onError, onSuccess) => multimeterController.updateSettings({ onTime, offTime, syncMode, firstCycle, onOffCaptureActive, timeSyncMode, onSetup, offDelay, captureRate }, onError, onSuccess)
 
 export const updateMultimeterOnOffCapture = ({ onOffCaptureActive }, onError, onSuccess) => multimeterController.updateOnOffCaptureSetting({ onOffCaptureActive }, onError, onSuccess)
 
 export const pairMultimeter = ({ id, multimeterType, name }, onError, onSuccess) => multimeterController.pairMultimeter({ id, multimeterType, name }, onError, onSuccess)
 
-export const unpairMultimeter = (onError, onSuccess) => multimeterController.unpairMultimeter(onError, onSuccess)
+export const unpairMultimeter = (connected, onError, onSuccess) => multimeterController.unpairMultimeter(connected, onError, onSuccess)
 
-export const connectMultimeter = (onError, onSuccess) => multimeterController.connectMultimeter(onError, onSuccess)
+export const connectMultimeter = (delay, onError, onSuccess) => multimeterController.connectMultimeter(delay, onError, onSuccess)
 
 export const disconnectMultimeter = (onError, onSuccess) => multimeterController.disconnectMultimeter(onError, onSuccess)
 

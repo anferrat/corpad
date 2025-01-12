@@ -52,6 +52,7 @@ const styles = StyleSheet.create({
   text: {
     fontFamily: Platform.select({
       ios: 'Courier',
+      macos: 'Courier',
       android: 'monospace',
       default: 'monospace'
     })

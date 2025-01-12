@@ -2,12 +2,13 @@ import { SubscriptionStatuses } from "../../../constants/global"
 
 
 export class AppInitialization {
-    constructor(currentSurveyStatusService, authorizationService, surveyRepo, multimeterInitializationService, defaultNamesInitializationService, settingRepo, settingInitializationService, databaseInitializationService, fileSystemInitializationService, linkingService, purchaseInitializationService, urlResolver) {
+    constructor(currentSurveyStatusService, authorizationService, surveyRepo, multimeterInitializationService, defaultNamesInitializationService, settingRepo, settingInitializationService, databaseInitializationService, fileSystemInitializationService, linkingService, purchaseInitializationService, urlResolver, potentialTypeInitialization) {
         this.currentSurveyStatusService = currentSurveyStatusService
         this.authorizationService = authorizationService
         this.surveyRepo = surveyRepo
         this.multimeterInitializationService = multimeterInitializationService
         this.defaultNamesInitializationService = defaultNamesInitializationService
+        this.potentialTypeInitialization = potentialTypeInitialization
         this.settingRepo = settingRepo
         this.settingInitializationService = settingInitializationService
         this.databaseInitializationService = databaseInitializationService
@@ -43,7 +44,10 @@ export class AppInitialization {
 
 
         if (isLoaded)
-            await this.surveyRepo.clearEmptyValues()
+            await Promise.all([
+                this.surveyRepo.clearEmptyValues(),
+                this.potentialTypeInitialization.execute()
+            ])
 
         let urlType
         let link
@@ -70,7 +74,7 @@ export class AppInitialization {
             isLoaded,
             urlType,
             link,
-            syncTime: syncTime ?? null,
+            syncTime: syncTime ?? null, //refers to survey, not actuall UTC time sync
             name: name ?? null,
             uid: uid,
             fileName: fileName ?? null,

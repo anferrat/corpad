@@ -27,13 +27,21 @@ import { surveyFileConverterInput, surveyFileConverterOutput } from "./converter
 import { warningHandler } from "./general_services";
 import { assetRepo, fileSystemRepo, googleDriveFileSystemRepo, mapLayerRepo, networkRepo, pipelineRepo, potentialRepo, potentialTypeRepo, rectifierRepo, referenceCellRepo, settingRepo, subitemRepo, surveyRepo, testPointRepo } from "./repositories";
 
+export const getDefaultPotentialTypesService = new GetDefaultPotentialTypes()
+
+const getDefaultPipelineSerivice = new GetDefaultPipeline()
+
+const getDefaultSurveyService = new GetDefaultSurvey()
+
+const getDefaultReferenceCellService = new GetDefaultReferenceCell()
+
 export const downloadFiles = new DownloadFiles(googleDriveFileSystemRepo, fileSystemRepo)
 
 export const uploadAssets = new UploadAssets(googleDriveFileSystemRepo)
 
-const jsonImportService = new SimpleJsonImport(surveyRepo)
+const jsonImportService = new SimpleJsonImport(surveyRepo, getDefaultPotentialTypesService)
 
-const advancedJsonImportService = new AdvancedJsonImport(testPointRepo, rectifierRepo, pipelineRepo, subitemRepo, potentialTypeRepo, surveyRepo, referenceCellRepo, potentialRepo, mapLayerRepo, assetRepo)
+const advancedJsonImportService = new AdvancedJsonImport(testPointRepo, rectifierRepo, pipelineRepo, subitemRepo, potentialTypeRepo, surveyRepo, referenceCellRepo, potentialRepo, mapLayerRepo, assetRepo, getDefaultPotentialTypesService)
 
 const surveyFileValidation = new SurveyFileContentValidation()
 
@@ -68,13 +76,6 @@ export const loadCloudSurveyFileService = new LoadSurvey(jsonImportService, adva
 
 export const loadExternalSurveyFileService = new LoadSurvey(jsonImportService, advancedJsonImportService, readExternalSurveyFileService, settingRepo, currentSurveyStatusService, warningHandler)
 
-const getDefaultPipelineSerivice = new GetDefaultPipeline()
-
-const getDefaultSurveyService = new GetDefaultSurvey()
-
-const getDefaultPotentialTypesService = new GetDefaultPotentialTypes()
-
-const getDefaultReferenceCellService = new GetDefaultReferenceCell()
 
 export const createSurveyService = new CreateSurvey(surveyRepo, potentialTypeRepo, currentSurveyStatusService, pipelineRepo, referenceCellRepo, settingRepo, getDefaultPipelineSerivice, getDefaultPotentialTypesService, getDefaultSurveyService, getDefaultReferenceCellService)
 

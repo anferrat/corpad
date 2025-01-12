@@ -6,20 +6,56 @@ import { scanIcon, activity, star } from '../../../../../components/Icons'
 import { Button, Text } from '@ui-kitten/components'
 import MultimeterListItem from './MultimeterListItem'
 import ConnectMultimeterModal from './ConnectMultimeterModal'
+import useMultimeterScan from '../hooks/useMultimeterScan'
 
 
-const UnpairedView = ({ scanning, scanDevices, scannedDevices, isBluetoothOn, pairDevice, pairingId, pairing, showModal, hideModal, visible, isPro }) => {
+const UnpairedView = ({ initialBleState }) => {
+    const {
+        visible,
+        isPro,
+        scannedDevices,
+        connectedDevices,
+        scanning,
+        isBluetoothOn,
+        pairingId,
+        connecting,
+        scanDevices,
+        pairDevice,
+        showModal,
+        hideModal
+    } = useMultimeterScan({ initialBleState })
     return (
         <View style={globalStyle.card}>
             <View style={styles.container}>
                 <MultimeterPlaceholder />
                 <Button
                     appearance={isPro ? 'filled' : 'ghost'}
-                    disabled={pairing || scanning || !isBluetoothOn}
+                    disabled={connecting || scanning || !isBluetoothOn || pairingId !== null}
                     style={styles.scanButton}
                     accessoryLeft={(isBluetoothOn ? (!isPro ? star : (scanning || pairingId !== null ? activity : scanIcon)) : null)}
                     onPress={showModal}>
                     {isBluetoothOn ? (!isPro ? 'Upgrade to premium' : (pairingId !== null ? 'Pairing' : (scanning ? 'Searching for multimeters' : 'Search for multimeters'))) : 'Bluetooth is off'}</Button>
+                {connectedDevices.length !== 0 ?
+                    <View
+                        style={styles.devices}>
+                        <Text
+                            style={styles.text}
+                            appearance='hint'
+                            category='label'>
+                            Connected with another app (unavailable)
+                        </Text>
+                        {connectedDevices.map(({ id, name, type }) => (
+                            <MultimeterListItem
+                                key={id}
+                                id={id}
+                                pairing={false}
+                                name={name}
+                                type={type}
+                                onPress={null}
+                                disabled={true}
+                            />
+                        ))}
+                    </View> : null}
                 {scannedDevices.length !== 0 ?
                     <View
                         style={styles.devices}>
@@ -36,7 +72,8 @@ const UnpairedView = ({ scanning, scanDevices, scannedDevices, isBluetoothOn, pa
                                 pairing={pairingId === id}
                                 name={name}
                                 type={type}
-                                pair={pairDevice}
+                                onPress={pairDevice}
+                                disabled={false}
                             />
                         ))}
                     </View> : null}
@@ -70,6 +107,9 @@ const styles = StyleSheet.create({
         justifyContent:
             'flex-start', width:
             '100%'
+    },
+    hint: {
+
     }
 
 })

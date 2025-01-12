@@ -71,6 +71,10 @@ Targeting accuracy 50 ms. Actual accuracy depends...
         return isSynced
     }
 
+    _checkExistedSync() {
+        return this.LAST_SYNC_DEVICE_TIMESTAMP !== null && this.LAST_SYNC_DEVICE_TIMESTAMP + this.TIME_FIX_LIFE_LENGTH > Date.now()
+    }
+
     addListener(callback, source) {
         let timeFixInterval
         let removeStateListener
@@ -78,22 +82,22 @@ Targeting accuracy 50 ms. Actual accuracy depends...
         const addTimeFixInterval = () => {
             timeFixInterval = setInterval(async () => {
                 //Check if last delta was obtained recently
-                if (this.LAST_SYNC_DEVICE_TIMESTAMP !== null && this.LAST_SYNC_DEVICE_TIMESTAMP + this.TIME_FIX_LIFE_LENGTH > Date.now())
-                    callback(true)
+                if (this._checkExistedSync())
+                    callback({ isSynced: true })
                 else if (!this.BUSY_FLAG) {
-                    //When busy we skip request. User is getting delta manually 
+                    //When busy we skip request. User is getting delta manually
+                    callback({ isSyncing: true })
                     const isSynced = await this._requestSync(source)
-                    callback(isSynced)
+                    callback({ isSynced, isSyncing: false })
                 }
             }, this.TIME_FIX_CHECK_INTERVAL)
-            
+
             return () => timeFixInterval ? clearInterval(timeFixInterval) : null
         }
-
+        callback({ isSyncing: true })
         this._requestSync(source)
             .then(isSynced => {
-                //Initial sync attempt when creating listener
-                callback(isSynced)
+                callback({ isSynced: isSynced || this._checkExistedSync(), isSyncing: false })
             })
             .finally(() => {
                 removeStateListener = this.appStateListener.appStateListenerWrapper(addTimeFixInterval)
@@ -101,7 +105,6 @@ Targeting accuracy 50 ms. Actual accuracy depends...
         return () => {
             if (removeStateListener)
                 removeStateListener()
-            this._resetDelta()
         }
     }
 
@@ -114,6 +117,14 @@ Targeting accuracy 50 ms. Actual accuracy depends...
 
     getDelta() {
         return this.DELTA !== null ? this.DELTA : undefined
+    }
+
+    getInfo() {
+        return {
+            delta: this.DELTA,
+            timestamp: this.LAST_SYNC_DEVICE_TIMESTAMP,
+            source: this.LAST_SYNC_SOURCE
+        }
     }
 
 }
