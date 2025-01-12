@@ -51,8 +51,7 @@ export class UpdateMultimeterSettings {
 
     async executeForUnpairing() {
         const { multimeter } = await this.settingRepo.get()
-        const newSet = await this._updateSettings({ peripheralId: null, type: null, name: null })
-        console.log(newSet)
+        await this._updateSettings({ peripheralId: null, type: null, name: null })
         return multimeter
     }
 

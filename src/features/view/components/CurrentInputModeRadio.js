@@ -5,7 +5,6 @@ import { Radio, RadioGroup, Text } from '@ui-kitten/components'
 
 const CurrentInputModeRadio = ({ isVoltageDropSelected, onChange, disabled }) => {
     const onChangeHandler = useCallback((value) => {
-        console.log(value)
         onChange(Boolean(value))
     }, [onChange])
     return (

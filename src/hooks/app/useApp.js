@@ -1,5 +1,5 @@
 //Used at the app root (navigation container)
-import { useState, useRef, useEffect, useCallback } from "react"
+import { useState, useRef, useEffect, useCallback, useTransition } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import useOnboardingScreen from "./useOnboardingScreen"
 import { addUrlListener, addNetworkStatusListener, initializeApp } from "../../app/controllers/AppController"
@@ -14,6 +14,7 @@ import { disconnectMultimeter } from "../../app/controllers/MultimeterController
 const useApp = () => {
 
   //What to display survey control screen or survey file manager screens?
+  const [isTransitionLoading, startTransition] = useTransition()
   const isLoaded = useSelector(state => state.settings.currentSurvey.isLoaded)
 
   //used to determine what survey file list screen to load first (cloud or device), or what survey type is currently opened
@@ -87,14 +88,17 @@ const useApp = () => {
       const { status, response } = await initializeApp()
       if (status === 200) {
         const { isLoaded, syncTime, name, uid, fileName, isCloud, isSigned, userName, onboarding, multimeter, subscriptionStatus, subscriptionExpirationTime, urlType, link } = response
-        dispatch(setSettingsOnAppLoad(isLoaded, syncTime, name, uid, fileName, isCloud, isSigned, userName, onboarding, multimeter, subscriptionStatus, subscriptionExpirationTime))
-        if (componentMounted.current) {
-          setLoading(false)
-          setTimeout(() => setInitialUrlLink({
-            urlType,
-            link
-          }), 500)
-        }
+        startTransition(() => {
+          dispatch(setSettingsOnAppLoad(isLoaded, syncTime, name, uid, fileName, isCloud, isSigned, userName, onboarding, multimeter, subscriptionStatus, subscriptionExpirationTime))
+          if (componentMounted.current) {
+            setLoading(false)
+            setTimeout(() => setInitialUrlLink({
+              urlType,
+              link
+            }), 500)
+          }
+        })
+
       }
     }
     onAppLoad()
@@ -110,7 +114,7 @@ const useApp = () => {
   }, [])
 
   return {
-    loading,
+    loading: loading || isTransitionLoading,
     isCloud,
     isLoaded,
     isOnboardingVisible
