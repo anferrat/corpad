@@ -22,7 +22,6 @@ export class PotentialTypeRepository extends SQLiteRepository {
     }
 
     async create(potentialType) {
-        console.log(potentialType)
         try {
             const { id, uid, name, type, isAc } = potentialType
             const result = await super.runSingleQueryTransaction(`INSERT INTO ${this.tableName} (id, uid, name, permType, custom, isAc) VALUES (?,?,?,?,?,?)`,
