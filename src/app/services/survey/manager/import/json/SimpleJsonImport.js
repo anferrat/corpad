@@ -1,8 +1,9 @@
 import { ItemTypes, SubitemTypes } from "../../../../../../constants/global"
 
 export class SimpleJsonImport {
-    constructor(surveyRepo) {
+    constructor(surveyRepo, getDefaultPotentialTypes) {
         this.surveyRepo = surveyRepo
+        this.getDefaultPotentialTypes = getDefaultPotentialTypes
     }
 
     async execute(surveyFile) {
@@ -31,7 +32,7 @@ export class SimpleJsonImport {
             .filter(({ anodes }) => Boolean(anodes) && anodes.length > 0)
             .map(({ anodes }) => anodes).flat()
 
-            //Getting Soil resistivity layers from soil resistivity subitems
+        //Getting Soil resistivity layers from soil resistivity subitems
         const soilResistivityLayers = cards
             .filter(({ layers }) => Boolean(layers) && layers.length > 0)
             .map(({ layers }) => layers).flat()
@@ -41,7 +42,11 @@ export class SimpleJsonImport {
         const mainReferenceExist = referenceCells.some(({ isMainReference }) => isMainReference)
         if (!mainReferenceExist && referenceCells[0])
             referenceCells[0].makeMainReference()
-        await this.surveyRepo.import({ testPoints, rectifiers, pipelines, cards, circuits, potentialTypes, survey, referenceCells, potentials, sides, assets, mapLayers, anodeBedAnodes, soilResistivityLayers })
+
+        //make sure that all required potential types are present
+        const allPotentialTypes = potentialTypes.concat(this.getDefaultPotentialTypes.getMissingDefaultTypes(potentialTypes))
+
+        await this.surveyRepo.import({ testPoints, rectifiers, pipelines, cards, circuits, potentialTypes: allPotentialTypes, survey, referenceCells, potentials, sides, assets, mapLayers, anodeBedAnodes, soilResistivityLayers })
     }
 
 }

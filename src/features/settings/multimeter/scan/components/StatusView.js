@@ -20,7 +20,7 @@ const StatusView = ({ connected }) => {
     )
 }
 
-export default StatusView
+export default React.memo(StatusView)
 
 const styles = StyleSheet.create({
     container: {

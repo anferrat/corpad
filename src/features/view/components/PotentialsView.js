@@ -15,9 +15,10 @@ const PotentialsView = ({
 }) => {
     return (
         <>
-            {potentials?.map(({ id, uid, name, referenceCellName, referenceCellType, value, valid }, index) => {
+            {potentials?.map(({ id, uid, name, referenceCellName, referenceCellType, value, valid, isAc }, index) => {
                 const isCaptureSelected = selectedCaptureField !== null && selectedCaptureField.potentialId === id
                 return <PotentialInput
+                    isAc={isAc}
                     isMultimeterCaptureLoading={isMultimeterCaptureLoading}
                     isCaptureSelected={isCaptureSelected}
                     availableMeasurementTypes={availableMeasurementTypes}

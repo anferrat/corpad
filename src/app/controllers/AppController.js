@@ -7,18 +7,19 @@ import { MultimeterInitialization } from "../services/survey/other/multimeter/in
 import { Controller } from "../utils/Controller"
 import { FileSystemInitialization } from "../services/survey_file/local/FileSystemInitialization"
 import { UrlListener } from "../services/app/UrlListener"
-import { currentSurveyStatusService, externalFileContentResolver, loadExternalSurveyFileService } from "./_instances/survey_file"
-import { appRepo, bluetoothRepo, defaultNameRepo, fileSystemRepo, geolocationRepo, googleDriveAuthorizationRepo, networkRepo, purchaseRepo, settingRepo, surveyRepo } from "./_instances/repositories"
-import { appStateListener, linkingService, multimeterFactory, permissions, urlFileAccessService, warningHandler } from "./_instances/general_services"
+import { currentSurveyStatusService, externalFileContentResolver, getDefaultPotentialTypesService, loadExternalSurveyFileService } from "./_instances/survey_file"
+import { appRepo, bluetoothRepo, defaultNameRepo, fileSystemRepo, geolocationRepo, googleDriveAuthorizationRepo, networkRepo, potentialTypeRepo, purchaseRepo, settingRepo, surveyRepo } from "./_instances/repositories"
+import { appStateListener, linkingService, permissions, urlFileAccessService, warningHandler } from "./_instances/general_services"
 import { resetCurrentSurveyService, saveCurrentSurveyService } from "./_instances/survey_manager"
 import { InitializePurchases } from "../services/purchases/InitializePurchases"
 import { UrlResolver } from "../services/app/UrlResolver"
 import { BlockUrlListener } from "../services/app/BlockUrlListener"
 import { UnblockUrlListener } from "../services/app/UnblockUrlListener"
 import { connectMultimeterService } from "./_instances/multimeter"
+import { PotentialTypeInitialization } from "../services/survey/other/PotentialTypeInitialization"
 
 class AppController extends Controller {
-    constructor(currentSurveyStatusService, googleDriveAuthorizationRepo, surveyRepo, bluetoothRepo, settingRepo, defaultNameRepo, loadExternalSurveyFileService, saveCurrentSurveyService, warningHandler, resetCurrentSurveyService, fileSystemRepo, appRepo, linkingService, networkRepo, externalFileContentResolver, purchaseRepo, geolocationRepo, permissions, urlFileAccess, connectMultimeterService) {
+    constructor(currentSurveyStatusService, googleDriveAuthorizationRepo, surveyRepo, bluetoothRepo, settingRepo, defaultNameRepo, loadExternalSurveyFileService, saveCurrentSurveyService, warningHandler, resetCurrentSurveyService, fileSystemRepo, appRepo, linkingService, networkRepo, externalFileContentResolver, purchaseRepo, geolocationRepo, permissions, urlFileAccess, connectMultimeterService, potentialTypeRepo, getDefaultPotentialTypes) {
         super()
 
         this.networkRepo = networkRepo
@@ -39,11 +40,13 @@ class AppController extends Controller {
 
         this.multimeterInitializationService = new MultimeterInitialization(bluetoothRepo, connectMultimeterService)
 
+        this.potentialTypeInitialization = new PotentialTypeInitialization(potentialTypeRepo, getDefaultPotentialTypes)
+
         this.fileSystemInitializationService = new FileSystemInitialization(fileSystemRepo)
 
         this.urlResolver = new UrlResolver(urlFileAccess, externalFileContentResolver, this.openExternalSurveyService)
 
-        this.appInitializationService = new AppInitialization(currentSurveyStatusService, googleDriveAuthorizationRepo, surveyRepo, this.multimeterInitializationService, this.defaultNameInitializationService, settingRepo, this.appSettingInitializationService, this.databaseInitializationService, this.fileSystemInitializationService, linkingService, this.purchaseInitializationService, this.urlResolver)
+        this.appInitializationService = new AppInitialization(currentSurveyStatusService, googleDriveAuthorizationRepo, surveyRepo, this.multimeterInitializationService, this.defaultNameInitializationService, settingRepo, this.appSettingInitializationService, this.databaseInitializationService, this.fileSystemInitializationService, linkingService, this.purchaseInitializationService, this.urlResolver, this.potentialTypeInitialization)
 
         this.urlListenerService = new UrlListener(linkingService, this.urlResolver)
 
@@ -114,7 +117,9 @@ const appController = new AppController(
     geolocationRepo,
     permissions,
     urlFileAccessService,
-    connectMultimeterService
+    connectMultimeterService,
+    potentialTypeRepo,
+    getDefaultPotentialTypesService
 )
 
 export const initializeApp = (onError, onSuccess) => appController.init(onError, onSuccess)

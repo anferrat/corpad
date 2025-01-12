@@ -18,7 +18,7 @@ export class Circuit extends Subitem {
 
     calculate() {
         if ((this.ratioCurrent || this.ratioCurrent === 0) && this.ratioVoltage && (this.voltageDrop || this.voltageDrop === 0)) {
-            this.current = this.voltageDrop / this.ratioVoltage * this.ratioCurrent
+            this.current = Math.round(this.voltageDrop / this.ratioVoltage * this.ratioCurrent * 1000) / 1000
         }
     }
 

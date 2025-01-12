@@ -1,6 +1,6 @@
 
 import { SubscriptionStatuses } from "../../constants/global"
-import { UPDATE_SETTING, LOAD_SETTINGS, SET_SURVEY_SAVING_STATUS, UPDATE_SURVEY_NAME, RESET_CURRENT_SURVEY_SETTINGS, LOAD_SESSION_STATE, UPDATE_ONBOARDING, SET_EXPORT_MODAL, UPDATE_LOADER, UPDATE_SESSION, UPDATE_NETWORK_STATUS, SET_SESSION_MODAL_VISIBLE, UPDATE_CURRENT_SURVEY_SETTINGS, SET_SETTINGS_ON_APP_LOAD, SET_SURVEY_SETTINGS, UPDATE_BOTTOM_SHEET_CONTENT, SET_BLUETOOTH_SCANNING, SET_ACTIVE_MULTIMETER, SET_ACTIVE_MULTIMETER_STATUS, SET_TIME_ADJUSTMENT, SET_ACTIVE_MULTIMETER_SETTINGS, UPDATE_LOADER_PROGRESS, HIDE_LOADER, UPDATE_SUBSCRIPTION_STATUS, SHOW_PAYWALL, HIDE_PAYWALL } from "../actions/settings"
+import { UPDATE_SETTING, LOAD_SETTINGS, SET_SURVEY_SAVING_STATUS, UPDATE_SURVEY_NAME, RESET_CURRENT_SURVEY_SETTINGS, LOAD_SESSION_STATE, UPDATE_ONBOARDING, SET_EXPORT_MODAL, UPDATE_LOADER, UPDATE_SESSION, UPDATE_NETWORK_STATUS, SET_SESSION_MODAL_VISIBLE, UPDATE_CURRENT_SURVEY_SETTINGS, SET_SETTINGS_ON_APP_LOAD, SET_SURVEY_SETTINGS, UPDATE_BOTTOM_SHEET_CONTENT, SET_BLUETOOTH_SCANNING, SET_ACTIVE_MULTIMETER, SET_ACTIVE_MULTIMETER_STATUS, SET_TIME_ADJUSTMENT, SET_ACTIVE_MULTIMETER_SETTINGS, UPDATE_LOADER_PROGRESS, HIDE_LOADER, UPDATE_SUBSCRIPTION_STATUS, SHOW_PAYWALL, HIDE_PAYWALL, SET_ACTIVE_MULTIMETER_CONNECTING } from "../actions/settings"
 
 const initialState = {
     bottomSheetContent: {  //BottomSheet component
@@ -35,17 +35,26 @@ const initialState = {
         mimeType: undefined,
     },
     activeMultimeter: {
-        id: null,
+        connecting: false,
+        connected: false,
         paired: false,
+        id: null,
         name: null,
         multimeterType: null,
-        connected: false,
         syncMode: null,
-        delay: null,
-        firstCycle: null
+        firstCycle: null,
+        onTime: null,
+        offTime: null,
+        firstCycle: null,
+        onSetup: null,
+        offDelay: null,
+        captureRate: null,
+        onOffCaptureActive: false
     },
     timeSync: {
-        isSynced: false
+        mode: null,
+        isSynced: false,
+        isSyncing: false
     },
     bluetooth: {
         scanning: false,
@@ -135,7 +144,6 @@ const settings = (state = initialState, action) => {
                 loader: initialState.loader
             }
         case SET_SETTINGS_ON_APP_LOAD: {
-            const multimeterPaired = action.multimeter.peripheralId !== null
             return {
                 ...state,
                 subscription: {
@@ -169,15 +177,22 @@ const settings = (state = initialState, action) => {
                 },
                 activeMultimeter: {
                     ...state.activeMultimeter,
-                    paired: multimeterPaired,
-                    id: multimeterPaired ? action.multimeter.peripheralId : null,
-                    name: multimeterPaired ? action.multimeter.name : null,
-                    multimeterType: multimeterPaired ? action.multimeter.type : null,
+                    paired: action.multimeter.peripheralId !== null,
+                    id: action.multimeter.peripheralId,
+                    name: action.multimeter.name,
+                    multimeterType: action.multimeter.type,
                     syncMode: action.multimeter.syncMode,
                     onTime: action.multimeter.onTime,
                     offTime: action.multimeter.offTime,
                     firstCycle: action.multimeter.fisrtCycle,
-                    delay: action.multimeter.delay,
+                    onSetup: action.multimeter.onSetup,
+                    offDelay: action.multimeter.offDelay,
+                    captureRate: action.multimeter.captureRate,
+                    onOffCaptureActive: action.multimeter.onOffCaptureActive
+                },
+                timeSync: {
+                    ...state.timeSync,
+                    mode: action.multimeter.timeSyncMode
                 }
             }
         }
@@ -312,7 +327,16 @@ const settings = (state = initialState, action) => {
                 ...state,
                 activeMultimeter: {
                     ...state.activeMultimeter,
-                    connected: action.connected
+                    connected: action.connected,
+                    connecting: false
+                }
+            }
+        case SET_ACTIVE_MULTIMETER_CONNECTING:
+            return {
+                ...state,
+                activeMultimeter: {
+                    ...state.activeMultimeter,
+                    connecting: action.connecting
                 }
             }
         case SET_ACTIVE_MULTIMETER_SETTINGS:
@@ -324,14 +348,23 @@ const settings = (state = initialState, action) => {
                     onTime: action.onTime,
                     offTime: action.offTime,
                     firstCycle: action.firstCycle,
-                    delay: action.delay,
+                    onSetup: action.onSetup,
+                    offDelay: action.offDelay,
+                    onOffCaptureActive: action.onOffCaptureActive,
+                    captureRate: action.captureRate
+                },
+                timeSync: {
+                    ...state.timeSync,
+                    mode: action.timeSyncMode
                 }
             }
         case SET_TIME_ADJUSTMENT:
             return {
                 ...state,
                 timeSync: {
-                    isSynced: action.isSynced
+                    ...state.timeSync,
+                    isSynced: action.isSynced !== undefined ? action.isSynced : state.timeSync.isSynced,
+                    isSyncing: action.isSyncing !== undefined ? action.isSyncing : state.timeSync.isSyncing
                 }
             }
         case UPDATE_SUBSCRIPTION_STATUS:

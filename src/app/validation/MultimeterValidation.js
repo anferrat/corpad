@@ -1,7 +1,5 @@
 import { object, string } from "yup"
 import { Validation } from "../utils/Validation"
-import { MultimeterTypes } from "../../constants/global"
-import { Error, errors } from "../utils/Error"
 
 export class MultimeterValidation extends Validation {
     constructor() {
@@ -14,21 +12,19 @@ export class MultimeterValidation extends Validation {
         return multimeterType
     }
 
-    updateSettings(obj, multimeterType) {
-        switch (multimeterType) {
-            case MultimeterTypes.POKIT:
-                return this.validate(obj,
-                    object({
-                        multimeterType: this.multimeterType.required(),
-                        onTime: this.number.min(1000).max(20000).integer().required().test('multipleOf', 'Must be aliquot to 1000', value => value % 1000 === 0),
-                        offTime: this.number.min(1000).max(20000).integer().required().test('multipleOf', 'Must be aliquot to 1000', value => value % 1000 === 0),
-                        delay: this.number.required(), //add delay schema when confirmed
-                        syncMode: this.multimeterSyncMode.required(),
-                        firstCycle: this.multimeterFirstCycle.required()
-                    }))
-            default:
-                throw new Error(errors.VALIDATION, 'Not supported multimeter type', 'Internal error, no such MM type')
-        }
+    updateSettings(obj) {
+        return this.validate(obj,
+            object({
+                onTime: this.number.min(200).max(60000).integer().required().test('multipleOf', 'Must be aliquot to 1000', value => value % 100 === 0),
+                offTime: this.number.min(200).max(60000).integer().required().test('multipleOf', 'Must be aliquot to 1000', value => value % 100 === 0),
+                syncMode: this.multimeterSyncMode.required(),
+                firstCycle: this.multimeterFirstCycle.required(),
+                onOffCaptureActive: this.bool.required(),
+                timeSyncMode: this.timeSyncMode.required(),
+                onSetup: this.number.min(20).max(Math.floor(obj.onTime / 2)).integer().required(),
+                offDelay: this.number.min(20).max(Math.floor(obj.offTime / 2)).integer().required(),
+                captureRate: this.captureRate.required()
+            }))
 
     }
 

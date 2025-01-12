@@ -36,6 +36,7 @@ const warningCodes = {
     60: 'Previously imported items will be deleted, this action cannot be reverted. Would you like to undo last import?',
     61: 'Are you sure you want to delete this layer?',
     62: 'Are you sure you want to delete all scanned label records?',
+    63: 'Are you sure you want to unpair this multimeter?'
 }
 
 const errorCodes = {
@@ -226,6 +227,7 @@ const errorCodes = {
     849: 'Unable to sync time',
     850: 'Auto range error, try again later',
     851: 'Unable to read data from multimeter',
+    853: 'Multimeter is not connected',
     900: 'Unable to obtain permission to proceed with operation.',
     901: 'Need permission to write to Downloads folder.',
     902: 'Location permission was not granted.',

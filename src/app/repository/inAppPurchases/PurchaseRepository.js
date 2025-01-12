@@ -13,6 +13,7 @@ export class PurchaseRepository {
         Purchases.configure({
             apiKey: Platform.select({
                 ios: appStoreKey,
+                macos: appStoreKey,
                 android: playStoreKey,
                 default: null
             })

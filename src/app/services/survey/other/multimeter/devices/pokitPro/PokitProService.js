@@ -10,9 +10,11 @@ import { PokitProAddReadingListener } from "./services/PokitProAddReadingListene
 import { PokitProAddButtonPressListener } from "./services/PokitProAddButtonPressListener"
 import { PokitProAutoRange } from "./services/PokitProAutoRange"
 import { PokitProLowCurrentConformation } from "./services/PokitProLowCurrentConformation"
+import { MultimeterAbstract } from "./MultimeterAbstract"
 
-export class PokitProService {
+export class PokitProService extends MultimeterAbstract {
     constructor(bluetoothRepo, warningHandler) {
+        super()
         this.bluetoothRepo = bluetoothRepo
         this.UUIDs = new PokitProUUID()
         this.constants = new PokitProConstants()
@@ -33,26 +35,30 @@ export class PokitProService {
 
 
     async start(peripheralId) {
-        await this.bluetoothRepo.connect(peripheralId)
-        await this.bluetoothRepo.retrieveServices(peripheralId)
-        await this.bluetoothRepo.startNotification(peripheralId, this.UUIDs.services.DSO, this.UUIDs.characteristics.DSO.READING)
-        await this.bluetoothRepo.startNotification(peripheralId, this.UUIDs.services.DSO, this.UUIDs.characteristics.DSO.METADATA)
-        await this.bluetoothRepo.startNotification(peripheralId, this.UUIDs.services.MULTIMETER, this.UUIDs.characteristics.MULTIMETER.READING)
-        await this.bluetoothRepo.startNotification(peripheralId, this.UUIDs.services.STATUS, this.UUIDs.characteristics.STATUS.BUTTON_PRESS)
-        await this.bluetoothRepo.startNotification(peripheralId, this.UUIDs.services.STATUS, this.UUIDs.characteristics.STATUS.STATUS)
+        await super.connectionWrapper(async () => {
+            await this.bluetoothRepo.connect(peripheralId)
+            await this.bluetoothRepo.retrieveServices(peripheralId)
+            await this.bluetoothRepo.startNotification(peripheralId, this.UUIDs.services.DSO, this.UUIDs.characteristics.DSO.READING)
+            await this.bluetoothRepo.startNotification(peripheralId, this.UUIDs.services.DSO, this.UUIDs.characteristics.DSO.METADATA)
+            await this.bluetoothRepo.startNotification(peripheralId, this.UUIDs.services.MULTIMETER, this.UUIDs.characteristics.MULTIMETER.READING)
+            await this.bluetoothRepo.startNotification(peripheralId, this.UUIDs.services.STATUS, this.UUIDs.characteristics.STATUS.BUTTON_PRESS)
+            await this.bluetoothRepo.startNotification(peripheralId, this.UUIDs.services.STATUS, this.UUIDs.characteristics.STATUS.STATUS)
+        })
     }
 
     async stop(peripheralId) {
-        await this.bluetoothRepo.stopNotification(peripheralId, this.UUIDs.services.DSO, this.UUIDs.characteristics.DSO.READING)
-        await this.bluetoothRepo.stopNotification(peripheralId, this.UUIDs.services.DSO, this.UUIDs.characteristics.DSO.METADATA)
-        await this.bluetoothRepo.stopNotification(peripheralId, this.UUIDs.services.MULTIMETER, this.UUIDs.characteristics.MULTIMETER.READING)
-        await this.bluetoothRepo.stopNotification(peripheralId, this.UUIDs.services.STATUS, this.UUIDs.characteristics.STATUS.BUTTON_PRESS)
-        await this.bluetoothRepo.stopNotification(peripheralId, this.UUIDs.services.STATUS, this.UUIDs.characteristics.STATUS.STATUS)
-        await this.bluetoothRepo.disconnect(peripheralId)
+        await super.connectionWrapper(async () => {
+            await this.bluetoothRepo.stopNotification(peripheralId, this.UUIDs.services.DSO, this.UUIDs.characteristics.DSO.READING)
+            await this.bluetoothRepo.stopNotification(peripheralId, this.UUIDs.services.DSO, this.UUIDs.characteristics.DSO.METADATA)
+            await this.bluetoothRepo.stopNotification(peripheralId, this.UUIDs.services.MULTIMETER, this.UUIDs.characteristics.MULTIMETER.READING)
+            await this.bluetoothRepo.stopNotification(peripheralId, this.UUIDs.services.STATUS, this.UUIDs.characteristics.STATUS.BUTTON_PRESS)
+            await this.bluetoothRepo.stopNotification(peripheralId, this.UUIDs.services.STATUS, this.UUIDs.characteristics.STATUS.STATUS)
+            await this.bluetoothRepo.disconnect(peripheralId)
+        })
     }
 
 
-    async setSettings(peripheralId, mode, range, isSingleRead, rate = MultimeterCaptureRate._60Hz, cycleTime = 1000) {
+    async setSettings(peripheralId, mode, range, isSingleRead, rate = MultimeterCaptureRate._60Hz, cycleTime = 1000, internal = false) {
         try {
             if (!this.COMMAND_LINK_IS_BUSY) {
                 this.COMMAND_LINK_IS_BUSY = true
@@ -62,7 +68,8 @@ export class PokitProService {
                 //Retrieving toggle status and verifying if toggle in the right position. Also getting current MM status
                 const { toggleStatus, status } = await this.pokitProGetDeviceStatusService.execute(peripheralId)
                 this.isModeSupportedService.execute(toggleStatus, mode, range)
-                await this.lowCurrentConformationService.execute(mode, toggleStatus)
+                if (!internal)
+                    await this.lowCurrentConformationService.execute(mode, toggleStatus)
                 const isDMMService = (MultimeterModes.POKIT.IDLE === mode && status !== 11) || isSingleRead //status 11 is freeRun DSO status
                 //getting payload from setting
                 const bytes = isDMMService ? this.dataConverter.DMMPayload(mode, range) : this.dataConverter.DSOSettingPayload(mode, range, rate, cycleTime)
@@ -116,7 +123,7 @@ export class PokitProService {
 
         const onOverLimit = async () => {
             removeListener()
-            this.setSettings(peripheralId, MultimeterModes.POKIT.IDLE).finally(() => {
+            this.setSettings(peripheralId, MultimeterModes.POKIT.IDLE, null, null, null, null, true).finally(() => {
                 onError(this.constants.errors.OVER_LIMIT)
             })
         }
@@ -124,7 +131,7 @@ export class PokitProService {
         const onRangeUpdate = (range) => {
             if (!updaingRange) {
                 updaingRange = true
-                this.setSettings(peripheralId, mode, range, isSingleRead, rate, cycleTime)
+                this.setSettings(peripheralId, mode, range, isSingleRead, rate, cycleTime, true)
                     .then(() => {
                         currentRange = range
                         onUpdate(MultimeterListenerEvents.NEW_RANGE, range)

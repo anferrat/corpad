@@ -1,6 +1,7 @@
 import BleManager from 'react-native-ble-manager'
 import { bleManagerEmitter } from '../../config/bluetooth'
 import { Error, errors } from '../../utils/Error'
+import { Platform } from 'react-native'
 
 
 export class BluetoothRepository {
@@ -39,17 +40,30 @@ export class BluetoothRepository {
 
     async connect(deviceId) {
         try {
-            await BleManager.connect(deviceId)
+            if (Platform.OS === 'ios' || Platform.OS === 'macos') {
+                let success = false
+                setTimeout(() => {
+                    if (!success) {
+                        BleManager.disconnect(deviceId)
+                        throw 'Timeout on iOS'
+                    }
+                }, 4000)
+                await BleManager.connect(deviceId)
+                success = true
+                return
+            }
+            else return await BleManager.connect(deviceId, { autoconnect: false })
         }
         catch (er) {
-            // connect request fails silently
-            // throw new Error(errors.BLUETOOTH, 'Unable to connect to the device', er, 802)
+            throw new Error(errors.BLUETOOTH, 'Unable to connect to the device', er, 802)
         }
     }
 
     async disconnect(deviceId) {
         try {
-            await BleManager.disconnect(deviceId)
+            await BleManager.disconnect(deviceId, false)
+            if (Platform.OS === 'android')
+                await BleManager.removePeripheral(deviceId)
         }
         catch (er) {
             throw new Error(errors.BLUETOOTH, 'Unable to disconnect from the device', er, 819)

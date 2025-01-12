@@ -36,7 +36,7 @@ export const importIcon = (props) => <Icon {...props} name='download-outline' />
 export const exportedFilesIcon = (props) => <Icon {...props} name='download' />
 export const openInIcon = (props) => <Icon {...props} name='external-link' />
 export const shareIcon = (props) => <Icon {...props} name={Platform.select({
-    ios: 'share-ios', default: 'share'
+    ios: 'share-ios', macos: 'share-ios', default: 'share'
 })} pack={Platform.select({ ios: 'cp', default: null })} />
 export const shareIosIcon = (props) => <Icon {...props} name='external-link' />
 export const refresh = (props) => <Icon {...props} name='refresh-outline' />

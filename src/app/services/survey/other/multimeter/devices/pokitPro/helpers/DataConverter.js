@@ -71,6 +71,20 @@ export class DataConverter {
         }
     }
 
+    _getUpdateRate(mode) {
+        switch (mode) {
+
+            case MultimeterModes.POKIT.DC_VOLTS:
+            case MultimeterModes.POKIT.DC_AMPS:
+                return 100
+            case MultimeterModes.POKIT.AC_VOLTS:
+            case MultimeterModes.POKIT.AC_AMPS:
+                return 250
+            default:
+                throw new Error(errors.MULTIMETER, 'Unable to obtain ranges for selected mode', 'No range is set for this multimeter mode')
+        }
+    }
+
     //OUTGOING DATA CONVERSION
 
     DSOSettingPayload(mode, range, rate, cycleTime) {
@@ -100,13 +114,13 @@ export class DataConverter {
         const buf = Buffer.allocUnsafe(6)
         if (mode === MultimeterModes.POKIT.IDLE) {
             buf.writeUInt8(this.constants.modes[MultimeterModes.POKIT.IDLE]) // mode - DC, AC volts or DC, AC amps - 01, 02, 03, 04 or 00 for idle
-            buf.writeUint8(2, 1) // range - see constants
-            buf.writeUint32LE(50, 2)
+            buf.writeUint8(255, 1) // range - see constants
+            buf.writeUint32LE(200, 2)
         }
         else {
             buf.writeUInt8(this.constants.modes[mode]) // mode - DC, AC volts or DC, AC amps - 01, 02, 03, 04
             buf.writeUint8(this._getRanges(mode)[range], 1) // range - see constants
-            buf.writeUint32LE(50, 2) //update Interval in miliseconds?? harware limit on this one, want it as smallas possible
+            buf.writeUint32LE(this._getUpdateRate(mode), 2) //update Interval in miliseconds, AC needs larger intervals, otherwise unit connection drops. 500 ms default in the app
         }
         return buf.toJSON().data
     }

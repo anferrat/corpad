@@ -12,6 +12,7 @@ export class FileSystemRepository {
         this.appFolder = Platform.select({
             android: RNFS.DocumentDirectoryPath,
             ios: RNFS.LibraryDirectoryPath,
+            macos: RNFS.LibraryDirectoryPath,
             default: RNFS.DocumentDirectoryPath
         })
         this.exportsFolder = `${RNFS.DocumentDirectoryPath}/exports`

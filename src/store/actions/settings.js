@@ -25,6 +25,7 @@ export const HIDE_LOADER = 'HIDE_LOADER'
 export const UPDATE_SUBSCRIPTION_STATUS = 'UPDATE_SUBSCRIPTION_STATUS'
 export const SHOW_PAYWALL = 'SHOW_PAYWALL'
 export const HIDE_PAYWALL = 'HIDE_PAYWALL'
+export const SET_ACTIVE_MULTIMETER_CONNECTING = 'SET_ACTIVE_MULTIMETER_CONNECTING'
 
 export const updateSetting = (setting, value) => {
     return { type: UPDATE_SETTING, setting: setting, value: value }
@@ -106,16 +107,20 @@ export const setActiveMultimeterStatus = (connected) => ({
     type: SET_ACTIVE_MULTIMETER_STATUS, connected
 })
 
+export const setActiveMultimeterConnecting = (connecting) => ({
+    type: SET_ACTIVE_MULTIMETER_CONNECTING, connecting
+})
+
 export const setBluetoothScanning = (scanning) => ({
     type: SET_BLUETOOTH_SCANNING, scanning
 })
 
-export const setIsTimeSynced = (isSynced) => ({
-    type: SET_TIME_ADJUSTMENT, isSynced
+export const setIsTimeSynced = (isSynced, isSyncing) => ({
+    type: SET_TIME_ADJUSTMENT, isSynced, isSyncing
 })
 
-export const setMultimeterSettings = (syncMode, onTime, offTime, delay, firstCycle) => ({
-    type: SET_ACTIVE_MULTIMETER_SETTINGS, syncMode, onTime, offTime, delay, firstCycle
+export const setMultimeterSettings = (syncMode, onTime, offTime, firstCycle, onSetup, offDelay, onOffCaptureActive, captureRate, timeSyncMode) => ({
+    type: SET_ACTIVE_MULTIMETER_SETTINGS, syncMode, onTime, offTime, firstCycle, onSetup, offDelay, onOffCaptureActive, captureRate, timeSyncMode
 })
 
 export const updateSubscriptionStatus = (status, expirationTime = 0) => ({

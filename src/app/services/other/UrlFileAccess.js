@@ -9,7 +9,7 @@ export class UrlFileAccess {
 
     async requestAccess(url) {
         try {
-            if (Platform.OS === 'ios')
+            if (Platform.OS === 'ios' || Platform.OS === 'macos')
                 await NativeModules.FileAccessModule.startAccessingSecurityScopedResource(url)
         }
         catch (er) {
@@ -19,7 +19,7 @@ export class UrlFileAccess {
 
     async revokeAccess() {
         try {
-            if (Platform.OS === 'ios')
+            if (Platform.OS === 'ios' || Platform.OS === 'macos')
                 await NativeModules.FileAccessModule.stopAccessingSecurityScopedResource()
         }
         catch {

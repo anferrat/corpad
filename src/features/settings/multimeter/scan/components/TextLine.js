@@ -28,7 +28,7 @@ const TextLine = ({ title, value, icon, pack, fill }) => {
     )
 }
 
-export default TextLine
+export default React.memo(TextLine)
 
 const styles = StyleSheet.create({
     container: {

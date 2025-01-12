@@ -1,39 +1,26 @@
 import React from 'react'
-import useActiveMultimeter from './hooks/useActiveMultimeter'
 import { ScrollView } from 'react-native-gesture-handler'
 import UnpairedView from './components/UnpairedView'
 import PairedView from './components/PairedView'
+import useMultimeter from './hooks/useMultimeter'
+import LoadingView from '../../../../components/LoadingView'
 
 
-const Multimeter = ({ navigateToMultimeterCycleSettings }) => {
-    const { scanning, scanDevices, activeMultimeter, scannedDevices, isBluetoothOn, pairDevice, unpairDevice, connecting, pairingId, connectToActiveMultimeter, pairing, hideModal, showModal, visible, isPro } = useActiveMultimeter()
-    const { multimeterType, paired, connected, name } = activeMultimeter
+const Multimeter = ({ navigateToMultimeterCycleSettings, goBack }) => {
+    const { paired, initialBleState, isLoading } = useMultimeter({ goBack })
+
     return (
-        <ScrollView>
-            {paired ?
-                <PairedView
-                    navigateToCycleSettings={navigateToMultimeterCycleSettings}
-                    name={name}
-                    type={multimeterType}
-                    connected={connected}
-                    connecting={connecting}
-                    connect={connectToActiveMultimeter}
-                    unpair={unpairDevice} /> :
-                <UnpairedView
-                    isPro={isPro}
-                    hideModal={hideModal}
-                    showModal={showModal}
-                    visible={visible}
-                    scanning={scanning}
-                    scanDevices={scanDevices}
-                    scannedDevices={scannedDevices}
-                    isBluetoothOn={isBluetoothOn}
-                    pairDevice={pairDevice}
-                    pairingId={pairingId}
-                    pairing={pairing}
-                />
-            }
-        </ScrollView>
+        <LoadingView
+            loading={isLoading}>
+            <ScrollView>
+                {paired ?
+                    <PairedView
+                        navigateToCycleSettings={navigateToMultimeterCycleSettings} /> :
+                    <UnpairedView
+                        initialBleState={initialBleState} />
+                }
+            </ScrollView>
+        </LoadingView>
     )
 }
 

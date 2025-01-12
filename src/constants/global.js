@@ -270,6 +270,7 @@ export const PermanentPotentialTypes = Object.freeze({
     ON: 'PERM_ON',
     OFF: 'PERM_OFF',
     DEPOL: 'PERM_NATIVE',
+    AC: 'AC',
     CONNECTED: 'PERM_CONNECTED',
     DISCONNECTED: 'PERM_DISCONNECTED'
 })

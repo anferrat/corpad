@@ -373,7 +373,7 @@ export const getHeader = (screen, params, navigation, dispatch, openMenu) => {
                     display: true,
                     left: 'back',
                     isPrimary: true,
-                    title: 'Cycle settings',
+                    title: 'Multimeter settings',
                     right: null
                 }
             case 'Spreadsheet':

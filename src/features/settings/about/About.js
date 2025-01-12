@@ -23,7 +23,7 @@ const About = (props) => {
             <View style={{ ...globalStyle.card, ...styles.card }}>
                 <View style={styles.logoView}>
                     <Icon name='corpad-logo' pack='cp' style={styles.logo} fill={primary} />
-                    <Text category='s2' appearance='hint' style={styles.text}>Corpad for {Platform.OS === 'ios' ? 'iOS' : (Platform.OS === 'android' ? 'Android' : 'Web')}. {`\n`}Version {version}</Text >
+                    <Text category='s2' appearance='hint' style={styles.text}>Corpad for {Platform.select({ ios: 'iOS', android: 'Android', macos: 'macOS', windows: 'Windows', web: 'Web', default: 'unknown' })}. {`\n`}Version {version}</Text >
                 </View>
                 <SubscriptionView />
                 <Divider />

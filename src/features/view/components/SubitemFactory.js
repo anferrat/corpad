@@ -32,6 +32,7 @@ const SubitemViewFactory = ({
   validateCouponCurrent,
   validateVoltageDrop,
   validateCurrent,
+  validateVoltageDropForCircuit,
   onMultimeterPress,
   availableMeasurementTypes,
 }) => {
@@ -45,7 +46,7 @@ const SubitemViewFactory = ({
   }, [navigateToEditSubitem, subitem.id, subitem.type])
 
   const onMultimeterPressHandler = React.useCallback((mType, property, potentialId = null, potentialIndex = null) => {
-    onMultimeterPress(mType, property, subitem.id, subitemIndex, potentialId, potentialIndex)
+    onMultimeterPress(mType, property, subitem.id, subitemIndex, subitem.type, potentialId, potentialIndex)
   }, [subitem.id, subitem.type, onMultimeterPress, subitemIndex])
 
   switch (subitem.type) {
@@ -220,6 +221,7 @@ const SubitemViewFactory = ({
           validateCurrent={validateCurrent}
           validateVoltage={validateVoltage}
           onMultimeterPress={onMultimeterPressHandler}
+          validateVoltageDropForCircuit={validateVoltageDropForCircuit}
           isMultimeterCaptureLoading={isMultimeterCaptureLoading}
           selectedCaptureField={selectedCatureFieldHandler}
         />

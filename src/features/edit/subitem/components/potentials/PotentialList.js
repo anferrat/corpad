@@ -5,8 +5,9 @@ const PotentialList = ({ potentials, updatePotentialHandler, deletePotentialHand
     return (
         <>
             {potentials.map((item, index) => {
-                const { id, uid, value, name, valid, referenceCellName, referenceCellType } = item
+                const { id, uid, value, name, valid, referenceCellName, referenceCellType, isAc } = item
                 return <PotentialField
+                    isAc={isAc}
                     deletePotentialHandler={deletePotentialHandler}
                     key={uid}
                     value={value}

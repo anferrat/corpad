@@ -33,7 +33,7 @@ const ConnectMultimeterModal = ({ onConnectRequest, hideModal, visible }) => {
     )
 }
 
-export default ConnectMultimeterModal
+export default React.memo(ConnectMultimeterModal)
 
 const styles = StyleSheet.create({
     backdrop: {

@@ -1,3 +1,5 @@
+import { CurrentUnits, PotentialUnits } from "../../../constants/global"
+
 export const combineLatLon = (lat, lon) => {
     const placeholder = (value) => value === null ? '??.??????' : value
     return lat === null && lon === null ? null : placeholder(lat) + ', ' + placeholder(lon)
@@ -47,6 +49,47 @@ export const displayResistivity = (r) => numberWithSpaces(fixRealValue(r))
 
 export const displaySpacing = (r) => fixRealValue(r)
 
-export const findPotentialIndexById = (subitem, potentialId) => {
+const findPotentialIndexById = (subitem, potentialId) => {
     return subitem.potentials.findIndex(pot => pot.id === potentialId)
+}
+
+export const getActiveFields = (selectedField, onPotentialId, offPotentialId, subitems) => {
+    const { potentialId, subitemIndex } = selectedField
+    if (!potentialId || !onPotentialId || !offPotentialId)
+        return [selectedField]
+    else
+        return [
+            {
+                ...selectedField,
+                potentialId: onPotentialId,
+                potentialIndex: findPotentialIndexById(subitems[subitemIndex], onPotentialId),
+            },
+            {
+                ...selectedField,
+                potentialId: offPotentialId,
+                potentialIndex: findPotentialIndexById(subitems[subitemIndex], offPotentialId),
+            }
+        ]
+}
+
+export const getInitialValues = (activeFields, subitems) => {
+    return activeFields.map(({ subitemIndex, potentialIndex, property }) => property === 'potential' || property === 'potentialAc' ? subitems[subitemIndex].potentials[potentialIndex].value : subitems[subitemIndex][property])
+}
+
+export const getUnit = (property, potentialUnit) => {
+    switch (property) {
+        case 'potential':
+        case 'potentialAc':
+            return potentialUnit
+        case 'voltageDrop':
+            return PotentialUnits.MILIVOLTS
+        case 'current':
+            return CurrentUnits.MICRO_AMPS
+        case 'voltage':
+            return PotentialUnits.VOLTS
+    }
+}
+
+export const getValue = (reading) => {
+    return reading.flag !== null ? reading.flag : reading.value
 }

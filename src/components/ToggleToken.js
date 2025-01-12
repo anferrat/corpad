@@ -6,17 +6,18 @@ import { androidRipple } from '../styles/styles'
 import Pressable from './Pressable'
 
 
-const ToggleToken = ({ checked, title, onPress, icon, pack }) => {
+const ToggleToken = ({ checked, title, onPress, icon, pack, disabled }) => {
     const check = checked ? 'checkmark-circle-2' : 'radio-button-off-outline'
     return (
         <View style={wrapperStyle}>
             <Pressable
+                disabled={disabled}
                 android_ripple={androidRipple}
                 style={styles.container}
                 onPress={onPress}>
                 <Icon
                     name={check}
-                    fill={checked ? primary : basic400}
+                    fill={checked && !disabled ? primary : basic400}
                     style={styles.icon} />
                 {icon ?
                     <Icon
@@ -26,6 +27,7 @@ const ToggleToken = ({ checked, title, onPress, icon, pack }) => {
                         style={styles.icon} />
                     : null}
                 <Text
+                    appearance={disabled ? 'hint' : 'default'}
                     style={styles.text}
                     category='s1'
                     ellipsizeMode={'tail'}
@@ -33,7 +35,7 @@ const ToggleToken = ({ checked, title, onPress, icon, pack }) => {
                     {title}
                 </Text>
             </Pressable>
-        </View>
+        </View >
     )
 }
 

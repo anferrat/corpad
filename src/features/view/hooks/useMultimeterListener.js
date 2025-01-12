@@ -1,51 +1,12 @@
 import { useCallback, useEffect, useState, useRef } from "react"
-import { CurrentUnits, MultimeterButtonEvents, MultimeterCycles, MultimeterListenerEvents, PotentialUnits, SubitemTypes } from "../../../constants/global"
-import { findPotentialIndexById } from "../helpers/functions"
+import Toast from "react-native-toast-message"
+import { MultimeterButtonEvents, MultimeterCycles, MultimeterListenerEvents, MultimeterSyncModes, SubitemTypes } from "../../../constants/global"
 import { addPropertyFieldListener, startPropertyFieldCapture, stopPropertyFieldCapture } from "../../../app/controllers/MultimeterController"
+import { getActiveFields, getInitialValues, getUnit, getValue } from "../helpers/functions"
 import { errorHandler } from "../../../helpers/error_handler"
 import { useIsFocused } from "@react-navigation/native"
 import { addAppStateListener } from "../../../app/controllers/AppController"
-import Toast from "react-native-toast-message"
-
-const getActiveFields = (selectedField, onPotentialId, offPotentialId, subitems) => {
-    const { potentialId, subitemIndex } = selectedField
-    if (!potentialId || !onPotentialId || !offPotentialId)
-        return [selectedField]
-    else
-        return [
-            {
-                ...selectedField,
-                potentialId: onPotentialId,
-                potentialIndex: findPotentialIndexById(subitems[subitemIndex], onPotentialId),
-            },
-            {
-                ...selectedField,
-                potentialId: offPotentialId,
-                potentialIndex: findPotentialIndexById(subitems[subitemIndex], offPotentialId),
-            }
-        ]
-}
-
-const getInitialValues = (activeFields, subitems) => {
-    return activeFields.map(({ subitemIndex, potentialIndex, property }) => property === 'potential' ? subitems[subitemIndex].potentials[potentialIndex].value : subitems[subitemIndex][property])
-}
-
-const getUnit = (property, potentialUnit) => {
-    switch (property) {
-        case 'potential':
-            return potentialUnit
-        case 'voltageDrop':
-            return PotentialUnits.MILIVOLTS
-        case 'current':
-            return CurrentUnits.MICRO_AMPS
-        case 'voltage':
-            return PotentialUnits.VOLTS
-    }
-}
-
-const getValue = (reading) => {
-    return reading.flag !== null ? reading.flag : reading.value
-}
+import { useSelector } from "react-redux"
 
 const useMultimeterListener = ({
     potentialUnit,
@@ -55,9 +16,11 @@ const useMultimeterListener = ({
     updatePropertyValue,
     validateCouponCurrent,
     validateVoltageDrop,
-    validateVoltage }) => {
+    validateVoltage,
+    validateVoltageDropForCircuit }) => {
 
-    //const isConnected = useSelector(state => state.settings.activeMultimeter.connected)
+    const isTimeSynced = useSelector(state => state.settings.timeSync.isSynced)
+    const isAvailable = useSelector(state => state.settings.activeMultimeter.connected && !state.settings.activeMultimeter.connecting)
     const [selectedField, setSelectedField] = useState(null)
     const [setupParams, setSetupParams] = useState(null)
     const [isLoading, setIsLoading] = useState(false)
@@ -66,7 +29,7 @@ const useMultimeterListener = ({
 
     const componentMounted = useRef(true)
 
-    const isListenerActive = Boolean(setupParams) && isFocused
+    const isListenerActive = Boolean(setupParams) && isFocused && isAvailable
 
     const isCaptureActive = selectedField !== null
 
@@ -77,7 +40,9 @@ const useMultimeterListener = ({
         }
     }, [])
 
-    const onMultimeterPress = useCallback(async (mType, property, subitemId, subitemIndex, potentialId, potentialIndex) => {
+    const onMultimeterPress = useCallback(async (mType, property, subitemId, subitemIndex, subitemType, potentialId, potentialIndex) => {
+        if (!isAvailable)
+            return errorHandler(853)
         if (isLoading) {
             return
         }
@@ -89,7 +54,8 @@ const useMultimeterListener = ({
                 subitemId,
                 subitemIndex,
                 potentialId,
-                potentialIndex
+                potentialIndex,
+                subitemType
             })
             setIsLoading(true)
         }
@@ -98,7 +64,7 @@ const useMultimeterListener = ({
             setSelectedField(null)
             setSetupParams(null)
         }
-    }, [isCaptureActive, isLoading])
+    }, [isCaptureActive, isLoading, isAvailable])
 
     useEffect(() => {
         if (isCaptureActive) {
@@ -106,7 +72,12 @@ const useMultimeterListener = ({
                 const { mType, potentialId, subitemId } = selectedField
                 const { response, status } = await startPropertyFieldCapture(mType, potentialId, subitemId)
                 if (status === 200) {
-                    setSetupParams(response)
+                    const noFix = response.syncMode === MultimeterSyncModes.GPS && !isTimeSynced
+                    setSetupParams({
+                        ...response,
+                        syncMode: noFix ? MultimeterSyncModes.HIGH_LOW : response.syncMode,
+                        noFix
+                    })
                     if (!componentMounted.current) {
                         stopPropertyFieldCapture((er) => { })
                     }
@@ -142,7 +113,8 @@ const useMultimeterListener = ({
                 syncMode,
                 mode,
                 range,
-                captureRate
+                captureRate,
+                noFix
             } = setupParams
             activeFields = getActiveFields(selectedField, onPotentialId, offPotentialId, subitems)
 
@@ -172,6 +144,7 @@ const useMultimeterListener = ({
                     mType: selectedField.mType,
                     firstCycleOn: firstCycle === MultimeterCycles.ON,
                     syncMode: syncMode,
+                    noFix,
                     isSingleRead: isSingleRead
                 }
             })
@@ -203,8 +176,8 @@ const useMultimeterListener = ({
 
 
     /*
-    1. IMPORTANT - subitems are needed inside this effect for proper DB updates, however if they change during MM capturing, the changes will be overriden if we capture.
-    2. Therefore we need to reset listener when subitem is changed here
+    1. IMPORTANT - subitems values are needed inside this effect for proper DB updates, however if they change during MM capturing, the changes will be overriden if we capture.
+    2. Therefore we need to reset listener when subitem is changed here. For now, there is no
     3. Also we need to remove listener an lost focus and app going inactive
     */
 
@@ -238,9 +211,14 @@ const useMultimeterListener = ({
         return await Promise.all([activeFields.map((activeField, index) => {
             switch (activeField.property) {
                 case 'potential':
-                    return validatePotential(currentValues[index], potentialUnit, activeField.subitemIndex, activeField.potentialId, activeField.potentialIndex)
+                case 'potentialAc':
+                    const isAc = activeField.property === 'potentialAc'
+                    return validatePotential(currentValues[index], potentialUnit, activeField.subitemIndex, activeField.potentialId, activeField.potentialIndex, isAc)
                 case 'voltageDrop':
-                    return validateVoltageDrop(activeField.subitemIndex, { ...subitems[activeField.subitemIndex], voltageDrop: currentValues[index] })
+                    if (subitems[activeField.subitemIndex].type === SubitemTypes.CIRCUIT)
+                        return validateVoltageDropForCircuit(activeField.subitemIndex, { ...subitems[activeField.subitemIndex], voltageDrop: currentValues[index] })
+                    else
+                        return validateVoltageDrop(activeField.subitemIndex, { ...subitems[activeField.subitemIndex], voltageDrop: currentValues[index] })
                 case 'voltage':
                     return validateVoltage(activeField.subitemIndex, { ...subitems[activeField.subitemIndex], voltage: currentValues[index] })
                 case 'current':
@@ -250,15 +228,16 @@ const useMultimeterListener = ({
         })])
     }, [validateVoltage, validateVoltageDrop, validatePotential, validateCouponCurrent, potentialUnit])
 
-    const updateProperty = (property, subitemIndex, potentialIndex, value) => {
-        property === 'potential' ?
-            updatePotentialValue(value, subitemIndex, potentialIndex) :
-            updatePropertyValue(value, subitemIndex, property)
-    }
-
     const updateActiveFieldValues = useCallback((activeFields, values) => {
         values.forEach((value, i) => updateProperty(activeFields[i].property, activeFields[i].subitemIndex, activeFields[i].potentialIndex, value))
     }, [updateProperty])
+
+    const updateProperty = useCallback((property, subitemIndex, potentialIndex, value) => {
+        if (property === 'potential' || property === 'potentialAc')
+            updatePotentialValue(value, subitemIndex, potentialIndex)
+        else
+            updatePropertyValue(value, subitemIndex, property)
+    }, [updatePropertyValue, updatePotentialValue])
 
     return {
         selectedCaptureField: selectedField,

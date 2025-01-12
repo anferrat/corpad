@@ -6,7 +6,7 @@ export class PotentialPresenter {
     }
 
     _getPotentialType(id, potentialTypeList) {
-        return potentialTypeList.find(item => item.id === id) ?? { name: 'Error' }
+        return potentialTypeList.find(item => item.id === id) ?? { name: 'Error', isAc: false }
     }
 
     executeWithList(potentials, potentialTypes, referenceCells, unit) {
@@ -25,6 +25,7 @@ export class PotentialPresenter {
                     referenceCellId: referenceCellId,
                     referenceCellName: referenceCell.name,
                     referenceCellType: referenceCell.rcType,
+                    isAc: potType.isAc,
                     isPortable: isPortableReference,
                     value: value,
                     prevValue: prevValue,
@@ -45,6 +46,7 @@ export class PotentialPresenter {
             referenceCellId: referenceCellId,
             referenceCellName: referenceCell.name,
             referenceCellType: referenceCell.rcType,
+            isAc: potType.isAc,
             isPortable: isPortableReference,
             value: value,
             valid: true,

@@ -16,6 +16,8 @@ import { Reading } from '../app/entities/survey/multimeter/Reading'
 import { CycleListener } from '../app/services/survey/other/multimeter/utils/CycleListener'
 import CycleView from '../components/CycleView'
 import Toast from 'react-native-toast-message'
+import { useDispatch } from 'react-redux'
+import { useNavigation } from '@react-navigation/native'
 
 const count = 150
 
@@ -71,47 +73,21 @@ const stopCapture = async () => {
   }
 }
 
-export default DevScreen = ({ navigation, route }) => {
-  const [time, setTime] = useState(null)
-  const [delta, setDelta] = useState(null)
 
-  useEffect(() => {
-    const interval = setInterval(() => {
-      const del = timeService.getDelta()
-      setDelta(del)
-      const time = Date.now() + (del ?? 0)
-      const seconds = new Date(time).getSeconds()
-      setTime(seconds)
-    }, 20)
-    return () => {
-      clearInterval(interval)
-    }
-  }, [])
 
-  const syncGPSTime = () => {
-    //timeService.syncTime(TimeSyncSources.NTP)
-    Toast.show({
-      type: 'multimeterCaptureToast',
-      position: 'top',
-      autoHide: false,
-      swipeable: false,
-      props: {
-        onTime: 4000,
-        offTime: 1000,
-        multimeterType: MultimeterTypes.POKIT,
-        mType: MeasurementPropertyTypes.POTENTIAL,
-        firstCycleOn: true,
-        syncMode: MultimeterSyncModes.GPS,
-        isSingleRead: false
-      }
-    })
-  }
-
-  const hideToast = () => {
-    Toast.hide()
-  }
+export default DevScreen = ({ navigation }) => {
+  const dispatch = useDispatch()
 
   const makePremium = () => { dispatch(updateSubscriptionStatus(1, Date.now() + 1000000000)) }
+
+  const openMMSettings = () => { navigation.navigate('CycleSettings') }
+
+  const pairM = async () => {
+    const { status, errorMessage } = await pairMultimeter({ id: mmId, multimeterType: MultimeterTypes.POKIT, name: 'Pokit Pro' })
+    console.log(errorMessage)
+    if (status === 200)
+      dispatch(setActiveMultimeter(true, mmId, 'Pokit Pro', MultimeterTypes.POKIT, false))
+  }
 
   //autoRangeService.execute(MultimeterListenerEvents.SINGLE_READ, reading, MultimeterVoltageRanges.POKIT._250MV, (range) => console.log('NEW RANGE', range), () => { })
   //console.log(reading)
@@ -129,11 +105,9 @@ export default DevScreen = ({ navigation, route }) => {
       <Button onPress={disconnectMultimeter} appearance='ghost'>Disconnect</Button>
       <Button onPress={startCapture} appearance='ghost'>Start capture</Button>
       <Button onPress={stopCapture} appearance='ghost'>Stop Capture</Button>
-      <Button onPress={syncGPSTime} appearance='ghost'>Show toast</Button>
-      <Button onPress={hideToast} appearance='ghost'>Hide toast</Button>
-      <Text>Seconds: {time}, Delta: {delta}</Text>
-      <CycleView onTime={5000} offTime={1000} firstCycleOn={false} />
-     
+      <Button onPress={stopCapture} appearance='ghost'>Stop Capture</Button>
+      <Button onPress={openMMSettings} appearance='ghost'>Open mm settings</Button>
+      <Button onPress={pairM} appearance='ghost'>Pair Multimeter</Button>
     </SafeAreaView>
   )
 }

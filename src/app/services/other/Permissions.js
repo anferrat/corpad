@@ -57,7 +57,7 @@ export class Permissions {
             if (!granted)
                 throw new Error(errors.PERMISSION, 'Unable to ontain location permission. You need to change location permission settings in order to use this feature.', 'Permission was not obtained', 902)
         }
-        else if (Platform.OS === 'ios') {
+        else if (Platform.OS === 'ios' || Platform.OS === 'macos') {
             Geolocation.requestAuthorization(
                 () => { },
                 () => {

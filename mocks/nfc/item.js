@@ -27,7 +27,8 @@ const potentialTypes = [
     new PotentialType(2, 'skdskdsd', 'OFF', PermanentPotentialTypes.OFF, false),
     new PotentialType(3, 'aassa', 'Depol', PermanentPotentialTypes.DEPOL, false),
     new PotentialType(4, 'sdsdsds', 'Disc', PermanentPotentialTypes.DISCONNECTED, false),
-    new PotentialType(5, 'sdasa', 'Connec', PermanentPotentialTypes.CONNECTED, false)
+    new PotentialType(5, 'sdasa', 'Connec', PermanentPotentialTypes.CONNECTED, false),
+    new PotentialType(6, 'sdasa', 'AC', PermanentPotentialTypes.AC, false)
 ]
 
 const pipelineLead = new PipelineLead(2, 3, 'sdsdsdsd', 'My Pipe', null, 5, 3)

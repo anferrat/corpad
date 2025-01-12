@@ -68,8 +68,8 @@ const usePotentialsData = ({ itemId, subitemId }) => {
     }, [dispatch])
 
     //updates potential value in state
-    const updatePotentialHandler = useCallback((value, index) => {
-        const validate = fieldValidation(value, 'potential')
+    const updatePotentialHandler = useCallback((value, index, isAc) => {
+        const validate = fieldValidation(value, isAc ? 'potentialAc' : 'potential')
         dispatch(updatePotentials(index, validate.value, validate.valid))
     }, [dispatch])
 

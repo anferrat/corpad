@@ -29,6 +29,7 @@ const styles = StyleSheet.create({
         marginLeft: 12,
         marginRight: Platform.select({
             ios: 16,
+            macos: 16,
             android: 20,
             default: 20
         })

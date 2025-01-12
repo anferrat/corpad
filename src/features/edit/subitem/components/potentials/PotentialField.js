@@ -56,9 +56,9 @@ const PotentialField = (props) => {
                 value={text}
                 valid={props.valid}
                 style={styles.input}
-                property='potential'
+                property={props.isAc ? 'potentialAc' : 'potential'}
                 onChangeText={setText}
-                onEndEditing={props.onSubmit.bind(this, text, props.index)}
+                onEndEditing={props.onSubmit.bind(this, text, props.index, props.isAc)}
                 unit={unit} />
             {removeButton}
         </View>

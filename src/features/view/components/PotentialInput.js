@@ -6,6 +6,7 @@ import { MeasurementPropertyTypes } from '../../../constants/global'
 const PotentialInput = ({
     potentialId,
     name,
+    isAc,
     referenceCellName,
     referenceCellType,
     value,
@@ -20,20 +21,24 @@ const PotentialInput = ({
     availableMeasurementTypes,
     isCaptureSelected,
     isMultimeterCaptureLoading }) => {
-
+//console.log(isAc)
     const onEndEditing = React.useCallback(() => {
-        validatePotential(value, unit, subitemIndex, potentialId, potentialIndex)
+        validatePotential(value, unit, subitemIndex, potentialId, potentialIndex, isAc)
     }, [potentialId, subitemIndex, potentialIndex, value, unit])
 
     const onChangeText = React.useCallback((text) => {
         updatePotentialValue(text, subitemIndex, potentialIndex)
     }, [subitemIndex, potentialIndex])
 
-    const multimeterAvailable = ~availableMeasurementTypes.indexOf(MeasurementPropertyTypes.POTENTIAL)
+    const multimeterAvailable = ~availableMeasurementTypes.indexOf(isAc ? MeasurementPropertyTypes.POTENTIAL_AC : MeasurementPropertyTypes.POTENTIAL)
 
     const onMultimeterPressHandler = React.useCallback(() => {
-        onMultimeterPress(MeasurementPropertyTypes.POTENTIAL, 'potential', potentialId, potentialIndex)
-    }, [potentialId, onMultimeterPress, potentialIndex])
+        onMultimeterPress(
+            isAc ? MeasurementPropertyTypes.POTENTIAL_AC : MeasurementPropertyTypes.POTENTIAL,
+            isAc ? 'potentialAc' : 'potential',
+            potentialId,
+            potentialIndex)
+    }, [potentialId, onMultimeterPress, potentialIndex, isAc])
 
     const unitComp = React.useMemo(() => ({
         main: PotentialUnitLabels[unit],
@@ -55,7 +60,7 @@ const PotentialInput = ({
             value={value}
             title={name}
             valid={valid}
-            property='potential'
+            property={isAc ? 'potentialAc' : 'potential'}
             unit={unitComp}
         />
     )

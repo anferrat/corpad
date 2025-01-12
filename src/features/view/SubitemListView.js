@@ -10,7 +10,7 @@ import useMultimeterListener from './hooks/useMultimeterListener'
 
 const SubitemListView = ({ itemId, itemType, navigateToEditSubitem }) => {
     const { potentialUnit, potentialHint, subitems, pipelineList, loading, availableMeasurementTypes, idMap, dispatch } = useSubitemListData({ itemId, itemType })
-    const { validatePotential, updatePotentialValue, updatePropertyValue, validateCouponCurrent, validateVoltageDrop, validateCurrent, updateShorted, validateVoltage } = useSubitemListActions(dispatch)
+    const { validatePotential, updatePotentialValue, updatePropertyValue, validateCouponCurrent, validateVoltageDrop, validateCurrent, updateShorted, validateVoltage, validateVoltageDropForCircuit } = useSubitemListActions(dispatch)
     const { onMultimeterPress, selectedCaptureField, isCaptureLoading } = useMultimeterListener({
         potentialUnit,
         subitems,
@@ -21,6 +21,7 @@ const SubitemListView = ({ itemId, itemType, navigateToEditSubitem }) => {
         validateCouponCurrent,
         validateVoltageDrop,
         validateVoltage,
+        validateVoltageDropForCircuit
     })
     return (
         <LoadingView
@@ -41,6 +42,7 @@ const SubitemListView = ({ itemId, itemType, navigateToEditSubitem }) => {
                         pipelineList={pipelineList}
                         selectedCaptureField={selectedCaptureField}
                         isCaptureLoading={isCaptureLoading}
+                        validateVoltageDropForCircuit={validateVoltageDropForCircuit}
                         updateShorted={updateShorted}
                         validateVoltage={validateVoltage}
                         validatePotential={validatePotential}
