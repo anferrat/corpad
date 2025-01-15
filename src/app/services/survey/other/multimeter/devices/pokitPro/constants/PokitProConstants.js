@@ -96,6 +96,7 @@ export class PokitProConstants {
 
         this.errors = {
             NOT_CONNECTED: new Error(errors.MULTIMETER, 'Setting update failed', 'Multimeter is not connected', 802),
+            SETTINGS_INVALID: new Error(errors.MULTIMETER, 'Unable to set settings', 'Invalid input parameters', 852),
             TOGGLE_POSITION: new Error(errors.MULTIMETER, 'Unable to set capture mode', 'Measurement is not supported by selected toggle. Please adjust the toggle', 824),
             OVER_LIMIT: new Error(errors.MULTIMETER, 'Unable to collect readings', 'Over the limit reading is detected', 825),
             AUTO_RANGE: new Error(errors.MULTIMETER, 'Unable to set up new range', 'Error in auto range code', 850),

@@ -18,6 +18,7 @@ import { PropertyFieldCapture } from "../services/survey/other/multimeter/collec
 import { PropertyFieldCaptureSetup } from "../services/survey/other/multimeter/collect_readings/PropertyFieldCaptureSetup"
 import { connectMultimeterService, multimeterFactory, multimeterPropertyCaptureParameters } from "./_instances/multimeter"
 import { CheckConnectedDevices } from "../services/survey/other/multimeter/connect/CheckConnectedDevices"
+import { UpdateMeasurementCharacteristic } from "../services/survey/other/multimeter/modal/UpdateMeasurementCharachteristic"
 
 
 class MultimeterController extends Controller {
@@ -52,6 +53,8 @@ class MultimeterController extends Controller {
         this.checkBleStateService = new CheckBleState(bluetoothRepo)
 
         this.checkConnectedDeviceService = new CheckConnectedDevices(bluetoothRepo, permissions)
+
+        this.updateMeasurementCharacteristicService = new UpdateMeasurementCharacteristic(multimeterFactory, settingRepo)
 
         this.validation = new MultimeterValidation()
     }
@@ -159,6 +162,12 @@ class MultimeterController extends Controller {
             return this.propertyFieldCaptureSetupService.onStop()
         })
     }
+
+    updateMeasurementCharacteristic({ mode, range }, onError = null, onSuccess = null) {
+        return super.controllerHandler(onSuccess, onError, 851, async () => {
+            return this.updateMeasurementCharacteristicService.execute({ range, mode })
+        })
+    }
 }
 
 const multimeterController = new MultimeterController(
@@ -209,3 +218,5 @@ export const addPropertyFieldListener = (onUpdate, onError, peripheralId, type, 
 export const startPropertyFieldCapture = (measurementType, potentialId, subitemId, onError, onSuccess) => multimeterController.startPropertyFieldCapture(measurementType, potentialId, subitemId, onError, onSuccess)
 
 export const stopPropertyFieldCapture = (onError, onSuccess) => multimeterController.stopPropertyFieldCapture(onError, onSuccess)
+
+export const updateMeasurementCharacteristic = ({ range, mode }, onError, onSuccess) => multimeterController.updateMeasurementCharacteristic({ range, mode }, onError, onSuccess)
