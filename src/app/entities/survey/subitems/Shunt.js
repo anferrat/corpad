@@ -21,10 +21,10 @@ export class Shunt extends Subitem {
 
     calculate() {
         if ((this.factor || this.factor === 0) && (this.voltageDrop || this.voltageDrop === 0)) {
-            this.current = parseFloat((this.factor * this.voltageDrop).toFixed(5))
+            this.current = parseFloat((this.factor * this.voltageDrop).toFixed(3))
         }
         else if ((this.ratioCurrent || this.ratioCurrent === 0) && this.ratioVoltage && (this.voltageDrop || this.voltageDrop === 0)) {
-            this.current = parseFloat((this.voltageDrop / this.ratioVoltage * this.ratioCurrent).toFixed(5))
+            this.current = parseFloat((this.voltageDrop / this.ratioVoltage * this.ratioCurrent).toFixed(3))
         }
 
         if (this.current < 0 && this.voltageDrop < 0) {

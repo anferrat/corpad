@@ -130,8 +130,8 @@ const ItemList = ({ itemType, navigateToView }) => {
         return <FooterLoader
             loadingMore={!t.settings.endReached && t.idList.length !== 0}
             count={t.itemList.length}
-            refreshing={t.settings.refreshing || isTransitionLoading} />
-    }, [t.settings.endReached, t.idList.length, t.settings.refreshing, t.itemList.length, isTransitionLoading])
+            refreshing={t.settings.refreshing} />
+    }, [t.settings.endReached, t.idList.length, t.settings.refreshing, t.itemList.length])
 
     const renderEmptyListComponent = React.useCallback(() =>
         <EmptyListComponent
@@ -147,7 +147,7 @@ const ItemList = ({ itemType, navigateToView }) => {
     const Header = React.memo(() => <ListHeader
         itemType={itemType}
         translateY={translateY} />)
-        
+
     return (
         <>
             <Header />

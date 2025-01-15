@@ -227,6 +227,7 @@ const errorCodes = {
     849: 'Unable to sync time',
     850: 'Auto range error, try again later',
     851: 'Unable to read data from multimeter',
+    852: 'Unable to set multimeter parameters. Mode/range is invalid',
     853: 'Multimeter is not connected',
     900: 'Unable to obtain permission to proceed with operation.',
     901: 'Need permission to write to Downloads folder.',

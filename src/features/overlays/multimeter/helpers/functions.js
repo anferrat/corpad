@@ -1,4 +1,4 @@
-import { MultimeterCycles, TimeUnits } from "../../../../constants/global";
+import { MultimeterCurrentRanges, MultimeterCycles, MultimeterModes, MultimeterTypes, MultimeterVoltageRanges, TimeUnits } from "../../../../constants/global";
 import { MultimeterCycleLabels, TimeUnitLabels } from "../../../../constants/labels";
 
 export const getCycleTimeLabel = (onTime, offTime) => {
@@ -17,5 +17,15 @@ export const formatNumber = (num) => {
         return num.toFixed(1);
     } else {
         return num.toFixed(0);
+    }
+}
+
+export const rangeOptions = {
+    [MultimeterTypes.POKIT]: {
+        [MultimeterModes.POKIT.AC_AMPS]: MultimeterCurrentRanges.POKIT,
+        [MultimeterModes.POKIT.DC_AMPS]: MultimeterCurrentRanges.POKIT,
+        [MultimeterModes.POKIT.AC_VOLTS]: MultimeterVoltageRanges.POKIT,
+        [MultimeterModes.POKIT.DC_VOLTS]: MultimeterVoltageRanges.POKIT,
+        [MultimeterModes.POKIT.IDLE]: {}
     }
 }
