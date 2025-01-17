@@ -40,17 +40,18 @@ export class BluetoothRepository {
 
     async connect(deviceId) {
         try {
+            //On iOS connection request doesn't timeout. Disconnect manually after timeout
             if (Platform.OS === 'ios' || Platform.OS === 'macos') {
-                let success = false
-                setTimeout(() => {
-                    if (!success) {
-                        BleManager.disconnect(deviceId)
-                        throw 'Timeout on iOS'
-                    }
-                }, 4000)
-                await BleManager.connect(deviceId)
-                success = true
-                return
+                const connect = async () => {
+                    await BleManager.connect(deviceId)
+                    return true
+                }
+                const timeout = () => new Promise(resolve => setTimeout(() => resolve(false), 5000))
+                const success = await Promise.race([connect(), timeout()])
+                if (!success) {
+                    await BleManager.disconnect(deviceId)
+                    throw 'Timeout on iOS'
+                }
             }
             else return await BleManager.connect(deviceId, { autoconnect: false })
         }
