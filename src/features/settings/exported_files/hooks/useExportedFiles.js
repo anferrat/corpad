@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
-import { Platform, ToastAndroid } from 'react-native'
 import { errorHandler, warningHandler } from '../../../../helpers/error_handler'
 import { deleteAllExportedFiles, deleteExportedFile, getExportedFileList, openFileIn, saveExportedFileToDownloads, shareFile } from '../../../../app/controllers/survey/other/ExportedFileController'
+import Toast from 'react-native-toast-message'
 
 const initFiles = []
 
@@ -32,8 +32,12 @@ const useExportedFiles = () => {
 
     const saveToDownloads = useCallback((path) => {
         saveExportedFileToDownloads({ path }, er => errorHandler(er), () => {
-            if (Platform.OS === 'android')
-                ToastAndroid.show('Saved', ToastAndroid.SHORT)
+            Toast.show({
+                type: 'successToast',
+                visibilityTime: 1000,
+                autoHide: true,
+                props: { text: 'Saved' }
+            })
         })
     }, [])
 
@@ -41,8 +45,12 @@ const useExportedFiles = () => {
         const confirm = await warningHandler(44, 'Delete', 'Cancel')
         if (confirm) {
             const { status } = await deleteExportedFile({ path }, er => errorHandler(er), () => {
-                if (Platform.OS === 'android')
-                    ToastAndroid.show(`${fileName} was deleted`, ToastAndroid.SHORT)
+                Toast.show({
+                    type: 'successToast',
+                    visibilityTime: 1000,
+                    autoHide: true,
+                    props: { text: `${fileName} was deleted`, status: 'danger' }
+                })
             })
 
             return status === 200
@@ -61,8 +69,12 @@ const useExportedFiles = () => {
                 deleteAllExportedFiles(
                     (er) => errorHandler(er),
                     () => {
-                        if (Platform.OS === 'android')
-                            ToastAndroid.show('All files were deleted', ToastAndroid.SHORT)
+                        Toast.show({
+                            type: 'successToast',
+                            visibilityTime: 1000,
+                            autoHide: true,
+                            props: { text: `All files were deleted`, status: 'danger' }
+                        })
                         setFiles(initFiles)
                     })
             }

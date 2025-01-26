@@ -1,4 +1,4 @@
-import { ItemTypes, SubitemTypes, PipeDiameters, WireColors, TestPointTypes, PermanentPotentialTypes, SortingOptions, ItemStatuses, PipeSchedules, WireGauges, CurrentUnits, AreaUnits, CurrentDensityUnits, FactorUnits, PotentialUnits, AnodeMaterials, ReferenceCellTypes, IsolationTypes, CouponTypes, PipelineMaterials, PipelineProducts, PowerSources, TapOptions, CoarseFineOptions, ExportItemProperties, ExportSubitemProperties, CalculatorTypes, PipelineCoating, IsolationShorted, MultimeterTypes, TimeUnits, MultimeterMeasurementTypes, MultimeterCycles, MultimeterSyncModes, ImageSources, MapLayerFeatures, StrokeColors, StrokeWidths, ExportFormatTypes, LengthUnits, ResistivityUnits, AnodeBedEnclosureTypes, AnodeBedMaterialTypes, AnodeBedTypes, SubscriptionStatuses, FileMimeTypes, ExternalLinkTypes, TestPointReadingOptions, RectifierReadingOptions, PipelineFilterItems, MeasurementPropertyTypes, TimeSyncSources } from "./global"
+import { ItemTypes, SubitemTypes, PipeDiameters, WireColors, TestPointTypes, PermanentPotentialTypes, SortingOptions, ItemStatuses, PipeSchedules, WireGauges, CurrentUnits, AreaUnits, CurrentDensityUnits, FactorUnits, PotentialUnits, AnodeMaterials, ReferenceCellTypes, IsolationTypes, CouponTypes, PipelineMaterials, PipelineProducts, PowerSources, TapOptions, CoarseFineOptions, ExportItemProperties, ExportSubitemProperties, CalculatorTypes, PipelineCoating, IsolationShorted, MultimeterTypes, TimeUnits, MultimeterMeasurementTypes, MultimeterCycles, MultimeterSyncModes, ImageSources, MapLayerFeatures, StrokeColors, StrokeWidths, ExportFormatTypes, LengthUnits, ResistivityUnits, AnodeBedEnclosureTypes, AnodeBedMaterialTypes, AnodeBedTypes, SubscriptionStatuses, FileMimeTypes, ExternalLinkTypes, TestPointReadingOptions, RectifierReadingOptions, PipelineFilterItems, MeasurementPropertyTypes, TimeSyncSources, MultimeterModes, MultimeterVoltageRanges, MultimeterCurrentRanges } from "./global"
 
 export const DefaultNames = Object.freeze({
     [ItemTypes.TEST_POINT]: 'TP',
@@ -411,7 +411,7 @@ export const CalculatorTypeFileNameLabels = Object.freeze({
 })
 
 export const MultimeterTypeLabels = Object.freeze({
-    [MultimeterTypes.POKIT]: 'Pokit multimeter'
+    [MultimeterTypes.POKIT]: 'Pokit Pro'
 })
 
 export const TimeUnitLabels = Object.freeze({
@@ -553,4 +553,32 @@ export const TimeSyncSourceLabels = Object.freeze({
     [TimeSyncSources.GPS]: 'GPS',
     [TimeSyncSources.NTP]: 'NTP',
     [TimeSyncSources.MIXED]: 'Mixed'
+})
+
+export const MultimeterModeLabels = Object.freeze({
+    [MultimeterModes.POKIT.AC_AMPS]: 'Current AC',
+    [MultimeterModes.POKIT.DC_AMPS]: 'Current DC',
+    [MultimeterModes.POKIT.DC_VOLTS]: 'Voltage DC',
+    [MultimeterModes.POKIT.AC_VOLTS]: 'Voltage AC',
+    [MultimeterModes.POKIT.IDLE]: 'Idle'
+})
+
+export const MultimeterRangeLabels = Object.freeze({
+    [MultimeterVoltageRanges.POKIT.AUTO]: 'Auto',
+    [MultimeterVoltageRanges.POKIT._250MV]: '250 mV',
+    [MultimeterVoltageRanges.POKIT._2V]: '2 V',
+    [MultimeterVoltageRanges.POKIT._10V]: '10 V',
+    [MultimeterVoltageRanges.POKIT._30V]: '30 V',
+    [MultimeterVoltageRanges.POKIT._60V]: '60 V',
+    [MultimeterVoltageRanges.POKIT._125V]: '125 V',
+    [MultimeterVoltageRanges.POKIT._400V]: '400 V',
+    [MultimeterVoltageRanges.POKIT._600V]: '600 V',
+    [MultimeterCurrentRanges.POKIT.AUTO]: 'Auto',
+    [MultimeterCurrentRanges.POKIT._500uA]: '0.5 mA',
+    [MultimeterCurrentRanges.POKIT._2mA]: '2 mA',
+    [MultimeterCurrentRanges.POKIT._10mA]: '10 mA',
+    [MultimeterCurrentRanges.POKIT._125mA]: '125 mA',
+    [MultimeterCurrentRanges.POKIT._300mA]: '300 mA',
+    [MultimeterCurrentRanges.POKIT._3A]: '3 A',
+    [MultimeterCurrentRanges.POKIT._10A]: '10 A'
 })

@@ -6,21 +6,25 @@ import useSurveyManager from './hooks/useSurveyManager'
 import { basic, control, danger, success, } from '../../../../styles/colors'
 
 
-const SurveyMenuSheet = React.memo(({ closeSheet, navigateToExport, navigateToSettings, navigateToMultimeter, navigateToCalculatorList }) => {
+const SurveyMenuSheet = React.memo(({ closeSheet, navigateToExport, navigateToSettings, navigateToMultimeter, navigateToCalculatorList, navigateToMultimeterModal }) => {
 
-    const { saveSurveyHandler, saveAndResetSurveyHandler, onPaywallShow, savingInProgress, syncTimeLabel, multimeterLablel, paired, connected, isPro, isVerify } = useSurveyManager({ hideSheet: closeSheet })
+    const { saveSurveyHandler, saveAndResetSurveyHandler, onPaywallShow, onMultimeterConnect, connecting, savingInProgress, syncTimeLabel, multimeterLablel, paired, connected, isPro, isVerify } = useSurveyManager({ hideSheet: closeSheet })
 
     return (
         <View style={styles.mainView}>
             {isPro || isVerify ?
                 <MenuListItem
+                    disabled={connecting}
                     title='Multimeter'
                     subtitle={multimeterLablel}
-                    icon='radio'
-                    onPress={navigateToMultimeter}
+                    icon={connecting ? 'activityIndicator' : 'radio'}
+                    onPress={connected ? navigateToMultimeterModal : navigateToMultimeter}
                     subtitleIcon={paired ? 'color-circle' : null}
                     subtitleIconPack='cp'
-                    subtitleIconColor={connected ? success : basic} /> :
+                    subtitleIconColor={connected ? success : basic}
+                    buttonIcon={!connected && paired && !connecting ? 'link-2' : undefined}
+                    onButtonIconPress={onMultimeterConnect}
+                /> :
                 <MenuListItem
                     title='Upgrade to premium'
                     textStatus='primary'

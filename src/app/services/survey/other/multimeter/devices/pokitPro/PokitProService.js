@@ -9,11 +9,11 @@ import { PokitProAddToggleListener } from "./services/PokitProAddToggleListener"
 import { PokitProAddReadingListener } from "./services/PokitProAddReadingListener"
 import { PokitProAddButtonPressListener } from "./services/PokitProAddButtonPressListener"
 import { PokitProAutoRange } from "./services/PokitProAutoRange"
-import { PokitProLowCurrentConformation } from "./services/PokitProLowCurrentConformation"
 import { MultimeterAbstract } from "./MultimeterAbstract"
+import { PokitProStatusListener } from "./services/PokitProStatusListener"
 
 export class PokitProService extends MultimeterAbstract {
-    constructor(bluetoothRepo, warningHandler) {
+    constructor(bluetoothRepo) {
         super()
         this.bluetoothRepo = bluetoothRepo
         this.UUIDs = new PokitProUUID()
@@ -26,10 +26,7 @@ export class PokitProService extends MultimeterAbstract {
         this.pokitProAddReadingListenerService = new PokitProAddReadingListener(bluetoothRepo, this.UUIDs, this.dataConverter)
         this.pokitProAddButtonPressListenerService = new PokitProAddButtonPressListener(bluetoothRepo, this.UUIDs, this.dataConverter)
         this.pokitProAutoRangeService = new PokitProAutoRange(this.constants)
-        this.lowCurrentConformationService = new PokitProLowCurrentConformation(warningHandler, this.constants)
-
         //Current state of Multimeter stored here, toggle status requested before each setting update
-        this.COMMAND_LINK_IS_BUSY = false
         this.READING_CAPTURE_TOGGLE_STATUS = null //keep tracks of toggle status during capture, throws on invalid toggle
     }
 
@@ -57,57 +54,45 @@ export class PokitProService extends MultimeterAbstract {
         })
     }
 
-
-    async setSettings(peripheralId, mode, range, isSingleRead, rate = MultimeterCaptureRate._60Hz, cycleTime = 1000, internal = false) {
-        try {
-            if (!this.COMMAND_LINK_IS_BUSY) {
-                this.COMMAND_LINK_IS_BUSY = true
-                const isConnected = await this.bluetoothRepo.isDeviceConnected(peripheralId)
-                if (!isConnected)
-                    throw this.constants.errors.NOT_CONNECTED
-                //Retrieving toggle status and verifying if toggle in the right position. Also getting current MM status
-                const { toggleStatus, status } = await this.pokitProGetDeviceStatusService.execute(peripheralId)
-                this.isModeSupportedService.execute(toggleStatus, mode, range)
-                if (!internal)
-                    await this.lowCurrentConformationService.execute(mode, toggleStatus)
-                const isDMMService = (MultimeterModes.POKIT.IDLE === mode && status !== 11) || isSingleRead //status 11 is freeRun DSO status
-                //getting payload from setting
-                const bytes = isDMMService ? this.dataConverter.DMMPayload(mode, range) : this.dataConverter.DSOSettingPayload(mode, range, rate, cycleTime)
-                await this.bluetoothRepo.write(
-                    peripheralId,
-                    isDMMService ? this.UUIDs.services.MULTIMETER : this.UUIDs.services.DSO,
-                    isDMMService ? this.UUIDs.characteristics.MULTIMETER.SETTINGS : this.UUIDs.characteristics.DSO.SETTINGS,
-                    bytes,
-                    bytes.length
-                )
-                //Updating state after recieving ACK
-                this.READING_CAPTURE_TOGGLE_STATUS = toggleStatus
-            }
-            else
-                throw this.constants.errors.SETTING_UPDATE_FAILED
-        }
-        catch (er) {
-            throw er
-        }
-        finally {
-            this.COMMAND_LINK_IS_BUSY = false
-        }
-
+    async _checkConnected(peripheralId) {
+        const isConnected = await this.bluetoothRepo.isDeviceConnected(peripheralId)
+        if (!isConnected)
+            throw this.constants.errors.NOT_CONNECTED
     }
 
-    addListener(peripheralId, mode, range, rate, isSingleRead, cycleTime, onUpdate, onError) {
+    async getToggleStatus(peripheralId) {
+        await this._checkConnected(peripheralId)
+        const { toggleStatus } = await this.pokitProGetDeviceStatusService.execute(peripheralId)
+        return toggleStatus
+    }
+
+    isSupported(toggleStatus, mode, range) {
+        return this.isModeSupportedService.execute(toggleStatus, mode, range)
+    }
+
+
+    async setSettings(peripheralId, mode, range, isSingleRead, rate = MultimeterCaptureRate._60Hz, cycleTime = 1000) {
+        await this._checkConnected(peripheralId)
+        //getting payload from setting
+        const bytes = isSingleRead ? this.dataConverter.DMMPayload(mode, range) : this.dataConverter.DSOSettingPayload(mode, range, rate, cycleTime)
+        await this.bluetoothRepo.write(
+            peripheralId,
+            isSingleRead ? this.UUIDs.services.MULTIMETER : this.UUIDs.services.DSO,
+            isSingleRead ? this.UUIDs.characteristics.MULTIMETER.SETTINGS : this.UUIDs.characteristics.DSO.SETTINGS,
+            bytes,
+            bytes.length)
+    }
+
+    addListener(peripheralId, toggleStatus, mode, range, rate, isSingleRead, cycleTime, onUpdate, onError) {
         let metaData = null
         let metaDataListener
         let readingListener
         let buttonPressListener
         let toggleListener
         let updaingRange = false
-        let toggleStatus = this.READING_CAPTURE_TOGGLE_STATUS
         let currentRange = range
 
         const getMetaData = () => metaData
-
-        const getToggleStatus = () => toggleStatus
 
         const removeListener = () => {
             metaDataListener ? metaDataListener() : null
@@ -116,14 +101,9 @@ export class PokitProService extends MultimeterAbstract {
             toggleListener ? toggleListener() : null
         }
 
-        const onErrorHandler = (error) => {
-            onError(error)
-            removeListener()
-        }
-
         const onOverLimit = async () => {
             removeListener()
-            this.setSettings(peripheralId, MultimeterModes.POKIT.IDLE, null, null, null, null, true).finally(() => {
+            this.setSettings(peripheralId, MultimeterModes.POKIT.IDLE, range, isSingleRead, rate, cycleTime).finally(() => {
                 onError(this.constants.errors.OVER_LIMIT)
             })
         }
@@ -131,7 +111,7 @@ export class PokitProService extends MultimeterAbstract {
         const onRangeUpdate = (range) => {
             if (!updaingRange) {
                 updaingRange = true
-                this.setSettings(peripheralId, mode, range, isSingleRead, rate, cycleTime, true)
+                this.setSettings(peripheralId, mode, range, isSingleRead, rate, cycleTime)
                     .then(() => {
                         currentRange = range
                         onUpdate(MultimeterListenerEvents.NEW_RANGE, range)
@@ -147,22 +127,21 @@ export class PokitProService extends MultimeterAbstract {
         metaDataListener = this.pokitProAddDSOMetadataListenerService.addListener(peripheralId, meta => metaData = meta)
 
         readingListener = this.pokitProAddReadingListenerService.addListener((type, reading) => {
-            this.pokitProAutoRangeService.execute(type, reading, currentRange, onRangeUpdate, onOverLimit, getToggleStatus, mode)
+            this.pokitProAutoRangeService.execute(type, reading, currentRange, onRangeUpdate, onOverLimit, toggleStatus, mode)
             onUpdate(type, reading)
         }, peripheralId, mode, rate, getMetaData)
-
-        toggleListener = this.pokitProAddToggleListenerService.addListener(status => {
-            toggleStatus = status
-            onUpdate(MultimeterListenerEvents.TOGGLE_ACTION)
-            const isSupported = this.isModeSupportedService.isSupported(status, mode, range) //use initial range here, since OL error will be thrown if value exeeded its range
-            if (!isSupported)
-                onErrorHandler(this.constants.errors.TOGGLE_POSITION)
-        }, peripheralId)
 
         buttonPressListener = this.pokitProAddButtonPressListenerService.addListener(event => {
             onUpdate(MultimeterListenerEvents.BUTTON_PRESS, event)
         }, peripheralId)
 
         return { remove: removeListener }
+    }
+
+    addToggleStatusListener(onUpdate, peripheralId) {
+        const toggleListener = this.pokitProAddToggleListenerService.addListener(onUpdate, peripheralId)
+        return {
+            remove: toggleListener
+        }
     }
 }

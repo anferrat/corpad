@@ -46,6 +46,7 @@ export default SettingDetails = ({ navigation, route }) => {
     const goBack = () => navigation.goBack()
     const navigateToLicenses = () => navigation.navigate('Licenses')
     const navigateToMultimeterCycleSettings = () => navigation.navigate('CycleSettings')
+    const navigateToMultimeterModal = () => navigation.navigate('Multimeter')
     const navigateToSpreadsheet = (uri, title) => navigation.navigate('Spreadsheet', { title: title, uri: uri })
     const navigateToExternalLink = (link, shouldLog) => navigation.navigate('ExternalLink', { link, shouldLog })
     const navigateToItem = (itemId, itemType) => navigation.navigate('ViewItem', { itemId, itemType })
@@ -58,6 +59,7 @@ export default SettingDetails = ({ navigation, route }) => {
                 navigateToSpreadsheet={navigateToSpreadsheet}
                 navigateToLicenses={navigateToLicenses}
                 navigateToExternalLink={navigateToExternalLink}
+                navigateToMultimeterModal={navigateToMultimeterModal}
                 goBack={goBack}
                 navigateToItem={navigateToItem}
                 setting={setting} />

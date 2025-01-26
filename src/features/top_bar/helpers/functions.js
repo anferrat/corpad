@@ -465,6 +465,10 @@ export const getHeader = (screen, params, navigation, dispatch, openMenu) => {
                     title: screen,
                     right: null
                 }
+            case 'Multimeter':
+                return {
+                    display: false,
+                }
         }
     else return {
         display: 'false'

@@ -1,9 +1,12 @@
 export class ReadingAbstract {
-    constructor(deviceTimestamp, type, unit, flag) {
+    constructor(id, deviceTimestamp, type, unit, flag, isAc, deviceType) {
+        this.id = id
         this.deviceTimestamp = deviceTimestamp
         this.type = type
         this.unit = unit
         this.flag = flag
+        this.isAc = isAc
+        this.deviceType = deviceType
     }
 
     setFlag(flag) {
@@ -12,5 +15,9 @@ export class ReadingAbstract {
 
     setUnit(unit) {
         this.unit = unit
+    }
+
+    setValue(value) {
+        this.value = value
     }
 }

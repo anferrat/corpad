@@ -40,16 +40,16 @@ export class CycleListener {
         }
     }
 
-    addListener(multimeterService, peripheralId, onUpdate, onError, syncMode, onTime, offTime, firstCycle, onSetup, offDelay, mode, range, rate) {
+    addListener(multimeterService, toggleStatus, peripheralId, onUpdate, onError, syncMode, onTime, offTime, firstCycle, onSetup, offDelay, mode, range, rate) {
         if (!multimeterService || !peripheralId || syncMode === undefined || !onTime || !offTime || !mode || !range || !rate)
             return { remove: () => { } }
-        const listener = multimeterService.addListener(peripheralId, mode, range, rate, false, onTime + offTime, (type, reading) => {
+        const listener = multimeterService.addListener(peripheralId, toggleStatus, mode, range, rate, false, onTime + offTime, (type, reading) => {
             if (type === MultimeterListenerEvents.READING_SET) {
                 const cycles = this._getOnOffFromSet(reading, syncMode, onTime, offTime, firstCycle, onSetup, offDelay)
                 const { on, off } = this._formatCycles(cycles)
                 if (onUpdate) {
-                    onUpdate(MultimeterListenerEvents.ON_READING, new Reading(on, null, reading.type, reading.unit, reading.flag))
-                    onUpdate(MultimeterListenerEvents.OFF_READING, new Reading(off, null, reading.type, reading.unit, reading.flag))
+                    onUpdate(MultimeterListenerEvents.ON_READING, new Reading(null, on, null, reading.type, reading.unit, reading.flag, reading.isAc, reading.deviceType))
+                    onUpdate(MultimeterListenerEvents.OFF_READING, new Reading(null, off, null, reading.type, reading.unit, reading.flag, reading.isAc, reading.deviceType))
                 }
             }
             else {

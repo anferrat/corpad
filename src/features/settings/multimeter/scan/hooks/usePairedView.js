@@ -23,14 +23,15 @@ const usePairedView = () => {
         const confirm = await warningHandler(63, 'Unpair', 'Cancel')
         if (connecting || !confirm)
             return
-        const { status } = await unpairMultimeter(connected)
-        if (status === 200) {
-            dispatch(setActiveMultimeter(false, null, null, null, false))
-            hapticMedium()
-            return
-        }
-        else if (componentMounted.current)
-            errorHandler(status)
+        await unpairMultimeter(connected, er => {
+            if (componentMounted.current)
+                errorHandler(er)
+        },
+            () => {
+                dispatch(setActiveMultimeter(false, null, null, null, false))
+                hapticMedium()
+            })
+        return
     }, [dispatch, connected, connecting])
 
     const connectToActiveMultimeter = useCallback(async () => {

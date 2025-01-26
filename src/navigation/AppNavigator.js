@@ -35,6 +35,7 @@ import Paywall from '../features/overlays/paywall'
 import ExternalLink from '../screens/externalLink/ExternalLink'
 import FindItem from '../screens/externalLink/FindItem'
 import PipelineMatching from '../screens/externalLink/PipelineMatching'
+import MultimeterScreen from '../screens/Multimeter'
 import { DEVELOPER_MODE_ON } from '../../App'
 
 
@@ -96,6 +97,7 @@ export const AppNavigator = () => {
               <Stack.Screen name='ExternalLink' component={ExternalLink} initialParams={{ link: null, shouldLog: false }} />
               <Stack.Screen name='FindItemInSurvey' component={FindItem} />
               <Stack.Screen name='PipelineMatching' component={PipelineMatching} />
+              <Stack.Screen name='Multimeter' component={MultimeterScreen} />
             </Stack.Group>
             <Stack.Group screenOptions={{ animation: 'fade_from_bottom' }}>
               <Stack.Screen name='CalculatorList' component={CalculatorList} />

@@ -4,8 +4,8 @@ import { errorHandler, warningHandler } from '../../../helpers/error_handler'
 import { useDispatch, useSelector } from 'react-redux'
 import { hideLoader, setSurveySettings, updateLoader, updateLoaderProgress, updateSession } from '../../../store/actions/settings'
 import { EventRegister } from 'react-native-event-listeners'
-import { Platform, ToastAndroid } from 'react-native'
 import { openLink } from '../../../app/controllers/AppController'
+import Toast from 'react-native-toast-message'
 
 const useSurveyFiles = ({ isCloud, navigateToSurveyFileList }) => {
     const isSignedIn = useSelector(state => state.settings.session.isSigned)
@@ -144,8 +144,12 @@ const useSurveyFiles = ({ isCloud, navigateToSurveyFileList }) => {
         dispatch(updateLoader('Saving survey to downloads', name))
         const { status } = await copySurveyFileToDownloads({ isCloud, cloudId, path, onDownload })
         if (status === 200) {
-            if (Platform.OS === "android")
-                ToastAndroid.show('Saved', ToastAndroid.SHORT)
+            Toast.show({
+                type: 'successToast',
+                visibilityTime: 1000,
+                autoHide: true,
+                props: { text: 'Saved to Downloads' }
+            })
         }
         else fileListErrorHandler(status)
         dispatch(hideLoader())

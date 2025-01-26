@@ -14,10 +14,8 @@ import { MeasurementPropertyTypes, MultimeterCaptureRate, MultimeterCycles, Mult
 import { PokitProAutoRange } from '../app/services/survey/other/multimeter/devices/pokitPro/services/PokitProAutoRange'
 import { Reading } from '../app/entities/survey/multimeter/Reading'
 import { CycleListener } from '../app/services/survey/other/multimeter/utils/CycleListener'
-import CycleView from '../components/CycleView'
-import Toast from 'react-native-toast-message'
 import { useDispatch } from 'react-redux'
-import { useNavigation } from '@react-navigation/native'
+
 
 const count = 150
 
@@ -29,7 +27,7 @@ const cycleListener = new CycleListener(timeService)
 
 const autoRangeService = new PokitProAutoRange()
 
-const reading = new Reading(-0.283, Date.now(), MultimeterReadingTypes.VOLTAGE, 3, null)
+const reading = new Reading(null, -0.283, Date.now(), MultimeterReadingTypes.VOLTAGE, 3, null, false, MultimeterTypes.POKIT)
 
 const mmId = '28:76:81:A5:C6:27'
 
@@ -88,7 +86,7 @@ export default DevScreen = ({ navigation }) => {
     if (status === 200)
       dispatch(setActiveMultimeter(true, mmId, 'Pokit Pro', MultimeterTypes.POKIT, false))
   }
-
+  const goToMM = () => navigation.navigate('Multimeter')
   //autoRangeService.execute(MultimeterListenerEvents.SINGLE_READ, reading, MultimeterVoltageRanges.POKIT._250MV, (range) => console.log('NEW RANGE', range), () => { })
   //console.log(reading)
 
@@ -108,6 +106,7 @@ export default DevScreen = ({ navigation }) => {
       <Button onPress={stopCapture} appearance='ghost'>Stop Capture</Button>
       <Button onPress={openMMSettings} appearance='ghost'>Open mm settings</Button>
       <Button onPress={pairM} appearance='ghost'>Pair Multimeter</Button>
+      <Button onPress={goToMM} appearance='ghost'>Show multimeter</Button>
     </SafeAreaView>
   )
 }
@@ -122,3 +121,8 @@ const sqlTest = async () => {
     //console.log(er)
   }
 }
+
+/*
+
+
+*/

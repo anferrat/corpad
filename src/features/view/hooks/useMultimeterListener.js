@@ -6,7 +6,9 @@ import { getActiveFields, getInitialValues, getUnit, getValue } from "../helpers
 import { errorHandler } from "../../../helpers/error_handler"
 import { useIsFocused } from "@react-navigation/native"
 import { addAppStateListener } from "../../../app/controllers/AppController"
-import { useSelector } from "react-redux"
+import { useDispatch, useSelector } from "react-redux"
+import { setActiveMultimeterExecuting } from "../../../store/actions/settings"
+import { getMultimeterModeLimit } from "../../../helpers/functions"
 
 const useMultimeterListener = ({
     potentialUnit,
@@ -20,10 +22,12 @@ const useMultimeterListener = ({
     validateVoltageDropForCircuit }) => {
 
     const isTimeSynced = useSelector(state => state.settings.timeSync.isSynced)
-    const isAvailable = useSelector(state => state.settings.activeMultimeter.connected && !state.settings.activeMultimeter.connecting)
+    const toggleStatus = useSelector(state => state.settings.activeMultimeter.toggleStatus)
+    const isAvailable = useSelector(state => state.settings.activeMultimeter.connected && !state.settings.activeMultimeter.connecting && !state.settings.activeMultimeter.executing && state.settings.activeMultimeter.toggleStatus !== null)
     const [selectedField, setSelectedField] = useState(null)
     const [setupParams, setSetupParams] = useState(null)
     const [isLoading, setIsLoading] = useState(false)
+    const dispatch = useDispatch()
     const isFocused = useIsFocused()
     const recordCapturedValues = useRef(false)
 
@@ -70,7 +74,7 @@ const useMultimeterListener = ({
         if (isCaptureActive) {
             const loadSetupParams = async () => {
                 const { mType, potentialId, subitemId } = selectedField
-                const { response, status } = await startPropertyFieldCapture(mType, potentialId, subitemId)
+                const { response, status } = await startPropertyFieldCapture(mType, potentialId, subitemId, toggleStatus)
                 if (status === 200) {
                     const noFix = response.syncMode === MultimeterSyncModes.GPS && !isTimeSynced
                     setSetupParams({
@@ -79,18 +83,19 @@ const useMultimeterListener = ({
                         noFix
                     })
                     if (!componentMounted.current) {
-                        stopPropertyFieldCapture((er) => { })
+                        stopPropertyFieldCapture(response.isSingleRead, (er) => { })
                     }
                 }
                 else {
                     status !== 101 ? errorHandler(status) : null
                     setIsLoading(false)
                     setSelectedField(null)
+                    setSetupParams(null)
                 }
             }
             loadSetupParams()
         }
-    }, [isCaptureActive])
+    }, [isCaptureActive, toggleStatus])
 
     useEffect(() => {
         let listener
@@ -98,6 +103,7 @@ const useMultimeterListener = ({
         let activeFields
         let initValues
         let currentValues
+        let isSingle
         if (isListenerActive) {
             const {
                 peripheralId,
@@ -117,7 +123,7 @@ const useMultimeterListener = ({
                 noFix
             } = setupParams
             activeFields = getActiveFields(selectedField, onPotentialId, offPotentialId, subitems)
-
+            isSingle = isSingleRead
             initValues = getInitialValues(activeFields, subitems)
             currentValues = initValues.map(v => v)
             const unit = getUnit(selectedField.property, potentialUnit)
@@ -129,7 +135,7 @@ const useMultimeterListener = ({
                     errorHandler(er.code ?? 100)
                     setSetupParams(null)
                 },
-                peripheralId, type, onTime, offTime, isSingleRead, firstCycle, onSetup, offDelay, syncMode, unit, mode, range, captureRate, selectedField.mType)
+                peripheralId, type, onTime, offTime, isSingleRead, firstCycle, onSetup, offDelay, syncMode, unit, mode, range, captureRate, selectedField.mType, toggleStatus)
             //
             appState = addAppStateListener(() => setSetupParams(null))
             Toast.show({
@@ -145,7 +151,8 @@ const useMultimeterListener = ({
                     firstCycleOn: firstCycle === MultimeterCycles.ON,
                     syncMode: syncMode,
                     noFix,
-                    isSingleRead: isSingleRead
+                    isSingleRead: isSingleRead,
+                    limit: getMultimeterModeLimit(mode, toggleStatus)
                 }
             })
             setIsLoading(false)
@@ -169,7 +176,8 @@ const useMultimeterListener = ({
             if (isListenerActive) {
                 setSelectedField(null)
                 setSetupParams(null)
-                stopPropertyFieldCapture((er) => { })
+                dispatch(setActiveMultimeterExecuting(true))
+                stopPropertyFieldCapture(isSingle, (er) => { }).finally(() => dispatch(setActiveMultimeterExecuting(false)))
             }
         }
     }, [isListenerActive])

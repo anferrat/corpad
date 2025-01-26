@@ -1,4 +1,4 @@
-import { CurrentUnits, MultimeterButtonEvents, MultimeterCaptureRate, MultimeterModes, MultimeterReadingTypes, PotentialUnits } from "../../../../../../../../constants/global"
+import { CurrentUnits, MultimeterButtonEvents, MultimeterCaptureRate, MultimeterModes, MultimeterReadingTypes, MultimeterToggleStatuses, MultimeterTypes, PotentialUnits } from "../../../../../../../../constants/global"
 import { Reading } from "../../../../../../../entities/survey/multimeter/Reading"
 import { ReadingSet } from "../../../../../../../entities/survey/multimeter/ReadingSet"
 import { Error, errors } from "../../../../../../../utils/Error"
@@ -6,6 +6,25 @@ import { Error, errors } from "../../../../../../../utils/Error"
 export class DataConverter {
     constructor(constants) {
         this.constants = constants
+    }
+
+    _getIsAc(mode) {
+        if (mode === MultimeterModes.POKIT.DC_AMPS || mode === MultimeterModes.POKIT.DC_VOLTS)
+            return false
+        else if (mode === MultimeterModes.POKIT.AC_VOLTS || mode === MultimeterModes.POKIT.AC_AMPS)
+            return true
+        else return null
+    }
+
+    _getToggleStatus(value) {
+        switch (value) {
+            case 0:
+                return MultimeterToggleStatuses.POKIT.VOLTAGE
+            case 1:
+                return MultimeterToggleStatuses.POKIT.SMALL_CURRENT
+            case 2:
+                return MultimeterToggleStatuses.POKIT.LARGE_CURRENT
+        }
     }
 
     _getRanges(mode) {
@@ -36,7 +55,7 @@ export class DataConverter {
         switch (mode) {
             case MultimeterModes.POKIT.AC_AMPS:
             case MultimeterModes.POKIT.DC_AMPS:
-                return CurrentUnits.AMPS
+                    return CurrentUnits.AMPS
             case MultimeterModes.POKIT.AC_VOLTS:
             case MultimeterModes.POKIT.DC_VOLTS:
                 return PotentialUnits.VOLTS
@@ -83,6 +102,26 @@ export class DataConverter {
             default:
                 throw new Error(errors.MULTIMETER, 'Unable to obtain ranges for selected mode', 'No range is set for this multimeter mode')
         }
+    }
+
+    _getModeFromStatus(status) {
+        switch (status) {
+            case 1:
+            case 11:
+                return MultimeterModes.POKIT.DC_VOLTS
+            case 2:
+                return MultimeterModes.POKIT.AC_VOLTS
+            case 3:
+                return MultimeterModes.POKIT.DC_AMPS
+            case 4:
+                return MultimeterModes.POKIT.AC_AMPS
+            case 0:
+                return MultimeterModes.POKIT.IDLE
+        }
+    }
+
+    _getIsSingleRead(status) {
+        status === 11
     }
 
     //OUTGOING DATA CONVERSION
@@ -152,7 +191,7 @@ export class DataConverter {
             const value = buf.readInt16LE(i * 2)
             readings.push(value * scalingFactor)
         }
-        return new ReadingSet(readings, deviceTimestamp, this.constants.sampleOffsets[rate], this._getReadingType(mode), this._getUnit(mode), null)
+        return new ReadingSet(null, readings, deviceTimestamp, this.constants.sampleOffsets[rate], this._getReadingType(mode), this._getUnit(mode), null, this._getIsAc(mode), MultimeterTypes.POKIT)
     }
 
     DMMResponse(bytes, mode) {
@@ -165,15 +204,17 @@ export class DataConverter {
             mode: buf.readUint8(5), //current mode of DMM. need to convert to constants if want to use,
             range: buf.readUint8(6), //current range 
         }
-        return new Reading(data.value, Date.now(), this._getReadingType(mode), this._getUnit(mode), null)
+        return new Reading(null, data.value, Date.now(), this._getReadingType(mode), this._getUnit(mode), null, this._getIsAc(mode), MultimeterTypes.POKIT)
     }
 
     statusResponse(bytes) {
         const buf = Buffer.from(bytes)
+        const status = Number(buf.readUInt8())
         return {
-            status: Number(buf.readUInt8()),
+            status,
+            mode: this._getModeFromStatus(status),
             battery: Number(buf.readFloatLE(1).toFixed(3)),
-            toggleStatus: Number(buf.readUInt8(6))
+            toggleStatus: this._getToggleStatus(Number(buf.readUInt8(6)))
         }
     }
 
