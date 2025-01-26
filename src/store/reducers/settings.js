@@ -1,6 +1,6 @@
 
 import { SubscriptionStatuses } from "../../constants/global"
-import { UPDATE_SETTING, LOAD_SETTINGS, SET_SURVEY_SAVING_STATUS, UPDATE_SURVEY_NAME, RESET_CURRENT_SURVEY_SETTINGS, LOAD_SESSION_STATE, UPDATE_ONBOARDING, SET_EXPORT_MODAL, UPDATE_LOADER, UPDATE_SESSION, UPDATE_NETWORK_STATUS, SET_SESSION_MODAL_VISIBLE, UPDATE_CURRENT_SURVEY_SETTINGS, SET_SETTINGS_ON_APP_LOAD, SET_SURVEY_SETTINGS, UPDATE_BOTTOM_SHEET_CONTENT, SET_BLUETOOTH_SCANNING, SET_ACTIVE_MULTIMETER, SET_ACTIVE_MULTIMETER_STATUS, SET_TIME_ADJUSTMENT, SET_ACTIVE_MULTIMETER_SETTINGS, UPDATE_LOADER_PROGRESS, HIDE_LOADER, UPDATE_SUBSCRIPTION_STATUS, SHOW_PAYWALL, HIDE_PAYWALL, SET_ACTIVE_MULTIMETER_CONNECTING } from "../actions/settings"
+import { UPDATE_SETTING, LOAD_SETTINGS, SET_SURVEY_SAVING_STATUS, UPDATE_SURVEY_NAME, RESET_CURRENT_SURVEY_SETTINGS, LOAD_SESSION_STATE, UPDATE_ONBOARDING, SET_EXPORT_MODAL, UPDATE_LOADER, UPDATE_SESSION, UPDATE_NETWORK_STATUS, SET_SESSION_MODAL_VISIBLE, UPDATE_CURRENT_SURVEY_SETTINGS, SET_SETTINGS_ON_APP_LOAD, SET_SURVEY_SETTINGS, UPDATE_BOTTOM_SHEET_CONTENT, SET_BLUETOOTH_SCANNING, SET_ACTIVE_MULTIMETER, SET_ACTIVE_MULTIMETER_STATUS, SET_TIME_ADJUSTMENT, SET_ACTIVE_MULTIMETER_SETTINGS, UPDATE_LOADER_PROGRESS, HIDE_LOADER, UPDATE_SUBSCRIPTION_STATUS, SHOW_PAYWALL, HIDE_PAYWALL, SET_ACTIVE_MULTIMETER_CONNECTING, SET_ACTIVE_MULTIMETER_EXECUTING, SET_ACTIVE_MULTIMETER_TOGGLE_STATUS } from "../actions/settings"
 
 const initialState = {
     bottomSheetContent: {  //BottomSheet component
@@ -35,9 +35,10 @@ const initialState = {
         mimeType: undefined,
     },
     activeMultimeter: {
-        connecting: false,
-        connected: false,
-        paired: false,
+        connecting: false, //true when device is attempting to connect to MM
+        connected: false, //true when MM is connected
+        executing: false, //true when command was sent to MM but response wansn't recieved yet
+        paired: false, //true when MM is paired (data is stored is DB and duplicates in state below)
         id: null,
         name: null,
         multimeterType: null,
@@ -49,7 +50,8 @@ const initialState = {
         onSetup: null,
         offDelay: null,
         captureRate: null,
-        onOffCaptureActive: false
+        onOffCaptureActive: false,
+        toggleStatus: null,
     },
     timeSync: {
         mode: null,
@@ -328,7 +330,8 @@ const settings = (state = initialState, action) => {
                 activeMultimeter: {
                     ...state.activeMultimeter,
                     connected: action.connected,
-                    connecting: false
+                    connecting: false,
+                    executing: action.connected ? state.activeMultimeter.executing : false,
                 }
             }
         case SET_ACTIVE_MULTIMETER_CONNECTING:
@@ -337,6 +340,22 @@ const settings = (state = initialState, action) => {
                 activeMultimeter: {
                     ...state.activeMultimeter,
                     connecting: action.connecting
+                }
+            }
+        case SET_ACTIVE_MULTIMETER_EXECUTING:
+            return {
+                ...state,
+                activeMultimeter: {
+                    ...state.activeMultimeter,
+                    executing: action.executing
+                }
+            }
+        case SET_ACTIVE_MULTIMETER_TOGGLE_STATUS:
+            return {
+                ...state,
+                activeMultimeter: {
+                    ...state.activeMultimeter,
+                    toggleStatus: action.toggleStatus,
                 }
             }
         case SET_ACTIVE_MULTIMETER_SETTINGS:

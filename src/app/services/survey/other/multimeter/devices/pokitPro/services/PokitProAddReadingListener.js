@@ -11,8 +11,8 @@ export class PokitProAddReadingListener {
     _mergeSets(sets) {
         if (!sets || sets.length === 0)
             return []
-        const { deviceTimestamp, offset, unit, type } = sets[0]
-        return new ReadingSet(sets.map(set => set.readings).flat(), deviceTimestamp, offset, type, unit, null)
+        const { id, deviceTimestamp, offset, unit, type, isAc, flag, deviceType } = sets[0]
+        return new ReadingSet(id, sets.map(set => set.readings).flat(), deviceTimestamp, offset, type, unit, flag, isAc, deviceType)
     }
 
     _getMetaData(getMetaData) {

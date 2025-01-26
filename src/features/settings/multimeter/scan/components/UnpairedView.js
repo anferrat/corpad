@@ -44,9 +44,9 @@ const UnpairedView = ({ initialBleState }) => {
                             category='label'>
                             Connected with another app (unavailable)
                         </Text>
-                        {connectedDevices.map(({ id, name, type }) => (
+                        {connectedDevices.map(({ id, name, type }, index) => (
                             <MultimeterListItem
-                                key={id}
+                                key={index}
                                 id={id}
                                 pairing={false}
                                 name={name}

@@ -1,7 +1,7 @@
 import React from 'react'
 import { Text, Icon } from '@ui-kitten/components'
 import { StyleSheet, Pressable } from 'react-native'
-import { primary } from '../../../styles/colors'
+import { basic200, primary } from '../../../styles/colors'
 import { copyToClipboard } from '../../../native_libs/clipboard'
 
 const IconLine = ({ value, pack, icon }) => {
@@ -14,6 +14,7 @@ const IconLine = ({ value, pack, icon }) => {
     else
         return (
             <Pressable
+                android_ripple={{ color: basic200 }}
                 style={styles.mainView}
                 onLongPress={clipboardHandler}>
                 <Icon

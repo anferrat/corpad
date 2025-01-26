@@ -1,4 +1,4 @@
-import { SubscriptionStatuses } from '../constants/global'
+import { MultimeterModes, MultimeterToggleStatuses, MultimeterTypes, SubscriptionStatuses } from '../constants/global'
 import fieldValidation from './validation'
 
 export const calculateCouponDensity = (current, area) => {
@@ -111,3 +111,16 @@ export const getFileSize = (bytes) => {
 
 export const isProStatus = status => status === SubscriptionStatuses.GRANTED || status === SubscriptionStatuses.UNKNOWN_GRANTED
 export const isVerifyStatus = status => status === SubscriptionStatuses.UNKNOWN_NOT_GRANTED
+
+export const getMultimeterModeLimit = (mode, toggleStatus) => {
+    switch (mode) {
+        case MultimeterModes.POKIT.DC_AMPS:
+        case MultimeterModes.POKIT.AC_AMPS:
+            return toggleStatus === MultimeterToggleStatuses.POKIT.SMALL_CURRENT ? '300 mA' : '10 A/30 s'
+        case MultimeterModes.POKIT.DC_VOLTS:
+        case MultimeterModes.POKIT.AC_VOLTS:
+            return '600 V'
+        default:
+            return 'Er'
+    }
+}

@@ -1,4 +1,4 @@
-import { MultimeterCaptureRate, MultimeterCurrentRanges, MultimeterModes, MultimeterVoltageRanges } from "../../../../../../../../constants/global"
+import { MultimeterCaptureRate, MultimeterCurrentRanges, MultimeterModes, MultimeterToggleStatuses, MultimeterVoltageRanges } from "../../../../../../../../constants/global"
 import { Error, errors } from "../../../../../../../utils/Error"
 
 export class PokitProMaxRangeValues {
@@ -65,13 +65,7 @@ export class PokitProConstants {
             [MultimeterModes.POKIT.DC_AMPS]: 3,
             [MultimeterModes.POKIT.AC_AMPS]: 4,
             [MultimeterModes.POKIT.IDLE]: 0
-        }
-
-        this.toggleStatuses = {
-            VOLTAGE: 0,
-            SMALL_CURRENT: 1,
-            CURRENT: 2
-        }
+        }       
 
         this.samplingWindows = { //in microseconds
             [MultimeterCaptureRate._50Hz]: 20000,

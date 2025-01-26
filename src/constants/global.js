@@ -697,6 +697,14 @@ export const MultimeterCaptureRate = Object.freeze({
     _60Hz: '_60Hz'
 })
 
+export const MultimeterToggleStatuses = Object.freeze({
+    [MultimeterTypes.POKIT]: {
+        VOLTAGE: 'VOLTAGE',
+        SMALL_CURRENT: 'SMALL_CURRENT',
+        LARGE_CURRENT: 'LARGE_CURRENT'
+    }
+})
+
 export const MultimeterListenerEvents = Object.freeze({
     READING_SET: 'READING_SET',
     SINGLE_READ: 'SINGLE_READ',

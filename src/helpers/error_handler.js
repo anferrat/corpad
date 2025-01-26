@@ -36,7 +36,8 @@ const warningCodes = {
     60: 'Previously imported items will be deleted, this action cannot be reverted. Would you like to undo last import?',
     61: 'Are you sure you want to delete this layer?',
     62: 'Are you sure you want to delete all scanned label records?',
-    63: 'Are you sure you want to unpair this multimeter?'
+    63: 'Are you sure you want to unpair this multimeter?',
+    64: 'Are you sure that you want to delete all readings?',
 }
 
 const errorCodes = {
@@ -166,6 +167,11 @@ const errorCodes = {
     662: 'Unable to get external links',
     663: 'Unable to delete external links',
     661: 'Unable to read map layer data.',
+    662: 'Unable to create multimeter reading record',
+    663: 'Unable to delete multimeter reading record',
+    664: 'Unable to get multimeter reading records',
+    665: 'Unable to delete multimeter reading records',
+    666: 'Unable to export multimeter history records',
     700: 'Unable to complete Google Drive operation.',
     701: 'Unable to read/create cloud app directory.',
     702: 'Unable to read cloud app directory.',
@@ -229,6 +235,9 @@ const errorCodes = {
     851: 'Unable to read data from multimeter',
     852: 'Unable to set multimeter parameters. Mode/range is invalid',
     853: 'Multimeter is not connected',
+    854: 'Unable to obtain default multimeter parameters',
+    855: 'Unable to stop capturing multimeter readings',
+    856: 'Unable to get multimeter toggle status',
     900: 'Unable to obtain permission to proceed with operation.',
     901: 'Need permission to write to Downloads folder.',
     902: 'Location permission was not granted.',

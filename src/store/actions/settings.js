@@ -26,6 +26,8 @@ export const UPDATE_SUBSCRIPTION_STATUS = 'UPDATE_SUBSCRIPTION_STATUS'
 export const SHOW_PAYWALL = 'SHOW_PAYWALL'
 export const HIDE_PAYWALL = 'HIDE_PAYWALL'
 export const SET_ACTIVE_MULTIMETER_CONNECTING = 'SET_ACTIVE_MULTIMETER_CONNECTING'
+export const SET_ACTIVE_MULTIMETER_EXECUTING = 'SET_ACTIVE_MULTIMETER_EXECUTING'
+export const SET_ACTIVE_MULTIMETER_TOGGLE_STATUS = 'SET_ACTIVE_MULTIMETER_TOGGLE_STATUS'
 
 export const updateSetting = (setting, value) => {
     return { type: UPDATE_SETTING, setting: setting, value: value }
@@ -123,6 +125,10 @@ export const setMultimeterSettings = (syncMode, onTime, offTime, firstCycle, onS
     type: SET_ACTIVE_MULTIMETER_SETTINGS, syncMode, onTime, offTime, firstCycle, onSetup, offDelay, onOffCaptureActive, captureRate, timeSyncMode
 })
 
+export const setActiveMultimeterExecuting = (executing) => (
+    { type: SET_ACTIVE_MULTIMETER_EXECUTING, executing }
+)
+
 export const updateSubscriptionStatus = (status, expirationTime = 0) => ({
     type: UPDATE_SUBSCRIPTION_STATUS, status, expirationTime
 })
@@ -134,3 +140,10 @@ export const showPaywall = () => ({
 export const hidePaywall = () => ({
     type: HIDE_PAYWALL
 })
+
+export const setActiveMultimeterToggleStatus = (toggleStatus) => {
+    console.log(toggleStatus)
+    return ({
+        type: SET_ACTIVE_MULTIMETER_TOGGLE_STATUS, toggleStatus
+    })
+}

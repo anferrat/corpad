@@ -15,6 +15,7 @@ import { CalculatorRepository } from "../../repository/sqlite/CalculatorReposito
 import { DefaultNameRepository } from "../../repository/sqlite/DefaultNameRepository";
 import { ExternalLinkRepo } from "../../repository/sqlite/ExternalLinkRepo";
 import { MapLayerRepository } from "../../repository/sqlite/MapLayerRepository";
+import { MultimeterReadingRepository } from "../../repository/sqlite/MultimeterReadingRepository";
 import { PipelineRepository } from "../../repository/sqlite/PipelineRepository";
 import { PotentialRepository } from "../../repository/sqlite/PotentialRepository";
 import { PotentialTypeRepository } from "../../repository/sqlite/PotentialTypeRepository";
@@ -45,6 +46,7 @@ export const testPointRepo = new TestPointRepository()
 export const testRepo = new TestRepository()
 export const surveyFileRepo = new SurveyFileRepo()
 export const externalLinkRepo = new ExternalLinkRepo()
+export const multimeterReadingRepo = new MultimeterReadingRepository()
 
 //NETWORK
 export const networkRepo = new NetworkRepository()

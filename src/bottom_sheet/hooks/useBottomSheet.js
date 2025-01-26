@@ -78,6 +78,11 @@ const useBottomSheetContent = () => {
         closeSheet()
     }, [navigation, closeSheet])
 
+    const navigateToMultimeterModal = useCallback(() => {
+        navigation.navigate('Multimeter')
+        closeSheet()
+    }, [navigation, closeSheet])
+
     return {
         params,
         selectedRoute,
@@ -89,6 +94,7 @@ const useBottomSheetContent = () => {
         navigateToCalculatorList,
         navigateToMultimeter,
         navigateToExternalLinkSettings,
+        navigateToMultimeterModal,
         closeSheet
     }
 }

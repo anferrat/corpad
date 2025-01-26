@@ -1,4 +1,4 @@
-import { MultimeterCurrentRanges, MultimeterListenerEvents, MultimeterVoltageRanges } from "../../../../../../../../constants/global"
+import { MultimeterCurrentRanges, MultimeterListenerEvents, MultimeterToggleStatuses, MultimeterVoltageRanges } from "../../../../../../../../constants/global"
 import { MultimeterRangeSettings } from "../../../../../../../entities/survey/multimeter/MultimeterRangeSettings"
 import { LimitDetector } from "../helpers/auto_range/LimitDetector"
 import { RangeSelector } from "../helpers/auto_range/RangeSelector"
@@ -42,11 +42,11 @@ export class PokitProAutoRange {
 
     _getLimitDetectorService(mode, toggleStatus) {
         switch (toggleStatus) {
-            case this.constants.toggleStatuses.VOLTAGE:
+            case MultimeterToggleStatuses.POKIT.VOLTAGE:
                 return this.voltageLimitDetectorService
-            case this.constants.toggleStatuses.SMALL_CURRENT:
+            case MultimeterToggleStatuses.POKIT.SMALL_CURRENT:
                 return this.smallCurrentLimitDetectorService
-            case this.constants.toggleStatuses.CURRENT:
+            case MultimeterToggleStatuses.POKIT.LARGE_CURRENT:
                 return this.currentLimitDetectorService
             default:
                 return undefined
@@ -55,11 +55,11 @@ export class PokitProAutoRange {
 
     _getRangeSelectorService(mode, toggleStatus) {
         switch (toggleStatus) {
-            case this.constants.toggleStatuses.VOLTAGE:
+            case MultimeterToggleStatuses.POKIT.VOLTAGE:
                 return this.voltageRangeSelectorService
-            case this.constants.toggleStatuses.SMALL_CURRENT:
+            case MultimeterToggleStatuses.POKIT.SMALL_CURRENT:
                 return this.smallCurrentRangeSelectorService
-            case this.constants.toggleStatuses.CURRENT:
+            case MultimeterToggleStatuses.POKIT.LARGE_CURRENT:
                 return this.currentRangeSelectorService
             default:
                 return undefined
@@ -80,8 +80,7 @@ export class PokitProAutoRange {
         }
     }
 
-    execute(type, reading, range, onRangeUpdate, onOverLimit, getToggleStatus, mode) {
-        const toggleStatus = getToggleStatus()
+    execute(type, reading, range, onRangeUpdate, onOverLimit, toggleStatus, mode) {
         const flag = this._getFlag(type, reading, range, toggleStatus, mode)
         reading.setFlag(flag)
         const rangeSelectorService = this._getRangeSelectorService(mode, toggleStatus)

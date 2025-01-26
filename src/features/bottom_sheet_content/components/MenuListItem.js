@@ -4,64 +4,80 @@ import { StyleSheet, View, ActivityIndicator } from 'react-native'
 import { basic, primary } from '../../../styles/colors'
 import { androidRipple } from '../../../styles/styles'
 import Pressable from '../../../components/Pressable'
+import IconButton from '../../../components/IconButton'
 
 
-const MenuListItem = ({ iconColor, icon, pack, title, subtitle, onPress, disabled, subtitleIcon, subtitleIconPack, subtitleIconColor, textStatus, inactive }) => {
+const MenuListItem = ({ iconColor, icon, pack, title, subtitle, onPress, disabled, subtitleIcon, subtitleIconPack, subtitleIconColor, textStatus, inactive, buttonIcon, onButtonIconPress }) => {
     const color = inactive ? basic : (iconColor ?? primary)
     return (
+
         <Pressable
             disabled={disabled}
             android_ripple={androidRipple}
             style={styles.pressable}
             onPress={onPress}>
-            {icon === 'activityIndicator' ?
-                <ActivityIndicator
-                    style={styles.icon}
-                    size='small'
-                    color={color} /> :
-                <Icon
-                    name={icon}
-                    pack={pack}
-                    style={styles.icon}
-                    fill={color} />
-            }
-            <View>
-                <Text
-                    category='s1'
-                    appearance={inactive ? 'hint' : 'default'}
-                    status={textStatus ?? 'basic'} >
-                    {title}
-                </Text>
-                {subtitle ?
-                    <View
-                        style={styles.subtitleView}>
-                        {subtitleIcon ?
-                            <Icon
-                                name={subtitleIcon}
-                                fill={subtitleIconColor ?? basic}
-                                style={styles.subtitleIcon}
-                                pack={subtitleIconPack ?? 'cp'} />
-                            : null}
-                        <Text
-                            category='s2'
-                            appearance='hint'>
-                            {subtitle}
-                        </Text>
-                    </View> : null}
+            <View style={styles.wrapper}>
+                {icon === 'activityIndicator' ?
+                    <ActivityIndicator
+                        style={styles.icon}
+                        size='small'
+                        color={color} /> :
+                    <Icon
+                        name={icon}
+                        pack={pack}
+                        style={styles.icon}
+                        fill={color} />
+                }
+                <View>
+                    <Text
+                        category='s1'
+                        appearance={inactive ? 'hint' : 'default'}
+                        status={textStatus ?? 'basic'} >
+                        {title}
+                    </Text>
+                    {subtitle ?
+                        <View
+                            style={styles.subtitleView}>
+                            {subtitleIcon ?
+                                <Icon
+                                    name={subtitleIcon}
+                                    fill={subtitleIconColor ?? basic}
+                                    style={styles.subtitleIcon}
+                                    pack={subtitleIconPack ?? 'cp'} />
+                                : null}
+                            <Text
+                                category='s2'
+                                appearance='hint'>
+                                {subtitle}
+                            </Text>
+                        </View> : null}
+                </View>
             </View>
-        </Pressable >
+            {
+                buttonIcon ?
+                    <IconButton
+                        iconName={buttonIcon}
+                        color={primary}
+                        onPress={onButtonIconPress} /> : null
+            }
+        </Pressable>
     )
 }
 
 export default MenuListItem
 
 const styles = StyleSheet.create({
+    wrapper: {
+        flexDirection: 'row',
+        alignItems: 'center'
+    },
     pressable: {
+        justifyContent: 'space-between',
+        height: 70,
+        paddingVertical: 12,
+        paddingHorizontal: 15,
         flexDirection: 'row',
         alignItems: 'center',
-        paddingVertical: 12,
-        paddingLeft: 15,
-        height: 70,
     },
     icon: {
         height: 25,

@@ -1,7 +1,7 @@
 import { Controller } from "../utils/Controller"
 import { MultimeterValidation } from "../validation/MultimeterValidation"
 import { bluetoothRepo, potentialRepo, potentialTypeRepo, settingRepo } from "./_instances/repositories"
-import { appStateListener, permissions, timeService, unitConverter } from "./_instances/general_services"
+import { appStateListener, permissions, timeService, unitConverter, warningHandler } from "./_instances/general_services"
 import { MultimeterScan } from "../services/survey/other/multimeter/connect/MultimeterScan"
 import { MultimeterStopScan } from "../services/survey/other/multimeter/connect/MultimeterStopScan"
 import { MultimeterStopScanListener } from "../services/survey/other/multimeter/connect/MultimeterStopScanListener"
@@ -19,10 +19,15 @@ import { PropertyFieldCaptureSetup } from "../services/survey/other/multimeter/c
 import { connectMultimeterService, multimeterFactory, multimeterPropertyCaptureParameters } from "./_instances/multimeter"
 import { CheckConnectedDevices } from "../services/survey/other/multimeter/connect/CheckConnectedDevices"
 import { UpdateMeasurementCharacteristic } from "../services/survey/other/multimeter/modal/UpdateMeasurementCharachteristic"
+import { MultimeterModalStartup } from "../services/survey/other/multimeter/modal/MultimeterModalStartup"
+import { MultimeterModalReadingListener } from "../services/survey/other/multimeter/modal/MultimeterModalReadingListener"
+import { MultimeterModalStopCapture } from "../services/survey/other/multimeter/modal/MultimeterModalStopCapture"
+import { GetMultimeterToggleStatus } from "../services/survey/other/multimeter/status/GetMultimeterToggleStatus"
+import { MultimeterToggleStatusListener } from "../services/survey/other/multimeter/status/MultimeterToggleStatusListener"
 
 
 class MultimeterController extends Controller {
-    constructor(multimeterFactory, bluetoothRepo, settingRepo, potentialRepo, potentialTypeRepo, permissions, unitConverter, appStateListener, timeService, multimeterPropertyCaptureParameters, connectMultimeterService) {
+    constructor(multimeterFactory, bluetoothRepo, settingRepo, potentialRepo, potentialTypeRepo, permissions, unitConverter, appStateListener, timeService, multimeterPropertyCaptureParameters, connectMultimeterService, warningHandler) {
         super()
         this.multimeterFactory = multimeterFactory
 
@@ -46,15 +51,25 @@ class MultimeterController extends Controller {
 
         this.getOnOffPotentialService = new GetOnOffPotentialPair(potentialRepo, potentialTypeRepo)
 
-        this.propertyFieldCaptureSetupService = new PropertyFieldCaptureSetup(settingRepo, multimeterFactory, multimeterPropertyCaptureParameters, this.getOnOffPotentialService, permissions)
+        this.propertyFieldCaptureSetupService = new PropertyFieldCaptureSetup(settingRepo, multimeterFactory, multimeterPropertyCaptureParameters, this.getOnOffPotentialService, permissions, warningHandler)
 
-        this.propertyFieldCaptureService = new PropertyFieldCapture(settingRepo, this.multimeterFactory, timeService, unitConverter)
+        this.propertyFieldCaptureService = new PropertyFieldCapture(this.multimeterFactory, timeService, unitConverter)
 
         this.checkBleStateService = new CheckBleState(bluetoothRepo)
 
         this.checkConnectedDeviceService = new CheckConnectedDevices(bluetoothRepo, permissions)
 
         this.updateMeasurementCharacteristicService = new UpdateMeasurementCharacteristic(multimeterFactory, settingRepo)
+
+        this.multimeterModalStartupService = new MultimeterModalStartup(settingRepo, multimeterFactory)
+
+        this.multimeterModalReadingListenerService = new MultimeterModalReadingListener(multimeterFactory, unitConverter)
+
+        this.modalStopCaptureService = new MultimeterModalStopCapture(multimeterFactory)
+
+        this.getMultimeterToggleStatusService = new GetMultimeterToggleStatus(multimeterFactory)
+
+        this.multimeterToggleStatusListenerService = new MultimeterToggleStatusListener(multimeterFactory)
 
         this.validation = new MultimeterValidation()
     }
@@ -141,31 +156,61 @@ class MultimeterController extends Controller {
         })
     }
 
-    addMultimeterStatusListener(callback, onError = null, onSuccess = null) {
+    addMultimeterStatusListener(callback, peripheralId, onError = null, onSuccess = null) {
         return super.callbackHandler(onSuccess, onError, 100, () => {
-            return this.multimeterStatusListenerService.execute(callback)
+            return this.multimeterStatusListenerService.execute(callback, peripheralId)
         })
     }
 
-    addPropertyFieldListener(onUpdate, onError, peripheralId, type, onTime, offTime, isSingleRead, firstCycle, onSetup, offDelay, syncMode, unit, mode, range, captureRate, measurementType) {
-        return this.propertyFieldCaptureService.addListener(onUpdate, onError, peripheralId, type, onTime, offTime, isSingleRead, firstCycle, onSetup, offDelay, syncMode, unit, mode, range, captureRate, measurementType)
+    addPropertyFieldListener(onUpdate, onError, peripheralId, type, onTime, offTime, isSingleRead, firstCycle, onSetup, offDelay, syncMode, unit, mode, range, captureRate, measurementType, toggleStatus) {
+        return this.propertyFieldCaptureService.addListener(onUpdate, onError, peripheralId, type, onTime, offTime, isSingleRead, firstCycle, onSetup, offDelay, syncMode, unit, mode, range, captureRate, measurementType, toggleStatus)
     }
 
-    startPropertyFieldCapture(measurementType, potentialId, subitemId, onError = null, onSuccess = null) {
+    startPropertyFieldCapture(measurementType, potentialId, subitemId, toggleStatus, onError = null, onSuccess = null) {
         return super.controllerHandler(onSuccess, onError, 851, async () => {
-            return this.propertyFieldCaptureSetupService.onStart(measurementType, potentialId, subitemId)
+            return this.propertyFieldCaptureSetupService.onStart(measurementType, potentialId, subitemId, toggleStatus)
         })
     }
 
-    stopPropertyFieldCapture(onError = null, onSuccess = null) {
+    stopPropertyFieldCapture(isSingleRead, onError = null, onSuccess = null) {
         return super.controllerHandler(onSuccess, onError, 851, async () => {
-            return this.propertyFieldCaptureSetupService.onStop()
+            return this.propertyFieldCaptureSetupService.onStop(isSingleRead)
         })
     }
 
     updateMeasurementCharacteristic({ mode, range }, onError = null, onSuccess = null) {
         return super.controllerHandler(onSuccess, onError, 851, async () => {
             return this.updateMeasurementCharacteristicService.execute({ range, mode })
+        })
+    }
+
+    getToggleStatus({ peripheralId, multimeterType }, onError = null, onSuccess = null) {
+        return super.controllerHandler(onSuccess, onError, 856, async () => {
+            return this.getMultimeterToggleStatusService.execute(peripheralId, multimeterType)
+        })
+    }
+
+    modalStartup(toggleStatus, onError = null, onSuccess = null) {
+        return super.controllerHandler(onSuccess, onError, 854, async () => {
+            return this.multimeterModalStartupService.execute(toggleStatus)
+        })
+    }
+
+    modalReadingListener(onUpdate, onRangeChange, onButtonPress, onError, peripheralId, type, mode, range, rate, toggleStatus) {
+        return super.callbackHandler(null, onError, 100, () => {
+            return this.multimeterModalReadingListenerService.addListener(onUpdate, onRangeChange, onButtonPress, onError, peripheralId, type, mode, range, rate, toggleStatus)
+        })
+    }
+
+    modalStopCapture({ peripheralId, multimeterType }, onError = null, onSuccess = null) {
+        return super.controllerHandler(onSuccess, onError, 855, async () => {
+            return this.modalStopCaptureService.execute(peripheralId, multimeterType)
+        })
+    }
+
+    addToggleStatusListener(callback, onError, peripheralId, multimeterType) {
+        return super.callbackHandler(null, onError, 100, () => {
+            return this.multimeterToggleStatusListenerService.addListener(callback, multimeterType, peripheralId)
         })
     }
 }
@@ -181,8 +226,8 @@ const multimeterController = new MultimeterController(
     appStateListener,
     timeService,
     multimeterPropertyCaptureParameters,
-    connectMultimeterService
-
+    connectMultimeterService,
+    warningHandler
 )
 
 export const checkConnectedDevices = (onError, onSuccess) => multimeterController.checkConnectedDevices(onError, onSuccess)
@@ -209,14 +254,24 @@ export const connectMultimeter = (delay, onError, onSuccess) => multimeterContro
 
 export const disconnectMultimeter = (onError, onSuccess) => multimeterController.disconnectMultimeter(onError, onSuccess)
 
-export const addMultimeterStatusListener = (callback, onError, onSuccess) => multimeterController.addMultimeterStatusListener(callback, onError, onSuccess)
+export const addMultimeterStatusListener = (callback, peripheralId, onError, onSuccess) => multimeterController.addMultimeterStatusListener(callback, peripheralId, onError, onSuccess)
 
 export const checkBleState = (onError, onSuccess) => multimeterController.checkState(onError, onSuccess)
 
-export const addPropertyFieldListener = (onUpdate, onError, peripheralId, type, onTime, offTime, isSingleRead, firstCycle, onSetup, offDelay, syncMode, unit, mode, range, captureRate, measurementType) => multimeterController.addPropertyFieldListener(onUpdate, onError, peripheralId, type, onTime, offTime, isSingleRead, firstCycle, onSetup, offDelay, syncMode, unit, mode, range, captureRate, measurementType)
+export const addPropertyFieldListener = (onUpdate, onError, peripheralId, type, onTime, offTime, isSingleRead, firstCycle, onSetup, offDelay, syncMode, unit, mode, range, captureRate, measurementType, toggleStatus) => multimeterController.addPropertyFieldListener(onUpdate, onError, peripheralId, type, onTime, offTime, isSingleRead, firstCycle, onSetup, offDelay, syncMode, unit, mode, range, captureRate, measurementType, toggleStatus)
 
-export const startPropertyFieldCapture = (measurementType, potentialId, subitemId, onError, onSuccess) => multimeterController.startPropertyFieldCapture(measurementType, potentialId, subitemId, onError, onSuccess)
+export const startPropertyFieldCapture = (measurementType, potentialId, subitemId, toggleStatus, onError, onSuccess) => multimeterController.startPropertyFieldCapture(measurementType, potentialId, subitemId, toggleStatus, onError, onSuccess)
 
-export const stopPropertyFieldCapture = (onError, onSuccess) => multimeterController.stopPropertyFieldCapture(onError, onSuccess)
+export const stopPropertyFieldCapture = (isSingleRead, onError, onSuccess) => multimeterController.stopPropertyFieldCapture(isSingleRead, onError, onSuccess)
 
 export const updateMeasurementCharacteristic = ({ range, mode }, onError, onSuccess) => multimeterController.updateMeasurementCharacteristic({ range, mode }, onError, onSuccess)
+
+export const multimeterModalStartup = (toggleStatus, onError, onSuccess) => multimeterController.modalStartup(toggleStatus, onError, onSuccess)
+
+export const multimeterModalReadingListener = (onUpdate, onRangeChange, onButtonPress, onError, peripheralId, type, mode, range, rate, toggleStatus) => multimeterController.modalReadingListener(onUpdate, onRangeChange, onButtonPress, onError, peripheralId, type, mode, range, rate, toggleStatus)
+
+export const multimeterModalStopCapture = ({ peripheralId, multimeterType }, onError, onSuccess) => multimeterController.modalStopCapture({ peripheralId, multimeterType }, onError, onSuccess)
+
+export const getMultimeterToggleStatus = ({ peripheralId, multimeterType }, onError, onSuccess) => multimeterController.getToggleStatus({ peripheralId, multimeterType }, onError, onSuccess)
+
+export const addMultimeterToggleStatusListener = (callback, onError, peripheralId, multimeterType) => multimeterController.addToggleStatusListener(callback, onError, peripheralId, multimeterType)

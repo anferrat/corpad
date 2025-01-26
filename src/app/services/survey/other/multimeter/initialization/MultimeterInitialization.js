@@ -12,6 +12,7 @@ export class MultimeterInitialization {
                 await this.connectMultimeterService.execute(this.CONNECTION_DELAY)
         }
         catch (er) {
+            console.log(er)
             //No errors on app initialization
         }
     }

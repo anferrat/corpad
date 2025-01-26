@@ -17,7 +17,9 @@ const optionIcon = (props) => <Icon name='options' {...props} fill={primary} />
 
 const connectIcon = (props) => <Icon name='link-2' {...props} fill={primary} />
 
-const PairedView = ({ navigateToCycleSettings }) => {
+const modalIcon = (props) => <Icon name='radio' {...props} fill={primary} />
+
+const PairedView = ({ navigateToCycleSettings, navigateToMultimeterModal }) => {
     const { name, type, connected, connecting, unpair, connect, unpairing } = usePairedView()
     return (
         <View style={globalStyle.card}>
@@ -60,6 +62,12 @@ const PairedView = ({ navigateToCycleSettings }) => {
                         title={connecting ? 'Connecting' : 'Connect'}
                         description={connecting ? null : 'Make sure multimeter is ready to connect'} /> : null}
                 <TimeSyncListItem />
+                <ListItem
+                    disabled={connecting}
+                    style={styles.listItem}
+                    title={'Open multimeter'}
+                    onPress={navigateToMultimeterModal}
+                    accessoryLeft={modalIcon} />
                 <ListItem
                     style={styles.listItem}
                     accessoryLeft={optionIcon}

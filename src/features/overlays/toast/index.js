@@ -1,18 +1,19 @@
 import React from 'react'
 import { View, StyleSheet } from 'react-native'
-import { Text } from '@ui-kitten/components'
+import { Icon, Text } from '@ui-kitten/components'
 import Toast, { BaseToast, ErrorToast } from 'react-native-toast-message'
 import { MeasurementPropertyTypeLabels, MultimeterSyncModeLabels, MultimeterTypeLabels } from '../../../constants/labels'
 import { MultimeterSyncModes } from '../../../constants/global'
 import CycleView from '../../../components/CycleView'
-import { control, primary } from '../../../styles/colors'
+import { basic200, control, danger, primary, success } from '../../../styles/colors'
 import WaveActivityIndicator from '../../../components/WaveActivityIndicator'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
+import MultimeterLimitWarning from './components/MultimeterLimitWarning'
 
 
 export const toastConfig = {
     multimeterCaptureToast: (props) => {
-        const { onTime, offTime, multimeterType, mType, firstCycleOn, syncMode, isSingleRead, noFix } = props.props
+        const { onTime, offTime, multimeterType, mType, firstCycleOn, syncMode, isSingleRead, noFix, limit } = props.props
         return (
             <View style={styles.wrapper}>
                 <View style={styles.container}>
@@ -29,6 +30,7 @@ export const toastConfig = {
                                 category='s2' appearance='hint'>{MultimeterTypeLabels[multimeterType]} | {MeasurementPropertyTypeLabels[mType]}</Text>
                         </View>
                     </View>
+                    <MultimeterLimitWarning value={limit} />
                     {!isSingleRead ? <>
                         <Text
                             status='control'
@@ -48,6 +50,26 @@ export const toastConfig = {
                             firstCycleOn={firstCycleOn}
                         />
                     </> : null}
+                </View>
+            </View>
+        )
+    },
+    successToast: (props) => {
+        const { text, status } = props.props
+        return (
+            <View style={styles.wrapper}>
+                <View
+                    style={{ ...styles.success, backgroundColor: status === 'danger' ? danger : success }}>
+                    <Icon
+                        name='checkmark-circle-2'
+                        fill={control}
+                        style={styles.successIcon} />
+                    <Text
+                        numberOfLines={1}
+                        ellipsizeMode='middle'
+                        style={styles.successText}
+                        category='p1'
+                        status='control'>{text}</Text>
                 </View>
             </View>
         )
@@ -90,5 +112,25 @@ const styles = StyleSheet.create({
     },
     modeText: {
         marginBottom: 6
+    },
+    successText: {
+        textAlignVertical: 'center',
+        flex: 1
+    },
+    success: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        paddingVertical: 12,
+        paddingHorizontal: 12,
+        borderRadius: 5,
+        backgroundColor: success,
+        marginHorizontal: 12,
+        elevation: 5,
+        flex: 1,
+    },
+    successIcon: {
+        width: 30,
+        height: 30,
+        marginRight: 12
     }
 })

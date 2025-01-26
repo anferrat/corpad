@@ -57,9 +57,9 @@ export class ReadingConverter {
 
     execute(reading, outputUnit, measurementType) {
         if (reading instanceof Reading) {
-            const { value, deviceTimestamp, type, unit, flag } = reading
+            const { id, value, deviceTimestamp, type, unit, flag, isAc, deviceType } = reading
             const newValue = this._convertValue(value, type, unit, outputUnit, measurementType)
-            return new Reading(newValue, deviceTimestamp, type, unit, flag)
+            return new Reading(id, newValue, deviceTimestamp, type, unit, flag, isAc, deviceType)
         }
         else
             return reading

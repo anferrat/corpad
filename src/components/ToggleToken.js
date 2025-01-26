@@ -1,5 +1,5 @@
 import React from 'react'
-import { Platform, StyleSheet, View } from 'react-native'
+import { ActivityIndicator, Platform, StyleSheet, View } from 'react-native'
 import { Icon, Text } from '@ui-kitten/components'
 import { basic, basic300, basic400, control, primary } from '../styles/colors'
 import { androidRipple } from '../styles/styles'
@@ -19,13 +19,13 @@ const ToggleToken = ({ checked, title, onPress, icon, pack, disabled }) => {
                     name={check}
                     fill={checked && !disabled ? primary : basic400}
                     style={styles.icon} />
-                {icon ?
+                {icon ? (icon === 'activity' ? <ActivityIndicator style={styles.icon} size='small' color={primary} /> :
                     <Icon
                         name={icon}
                         pack={pack}
                         fill={basic}
                         style={styles.icon} />
-                    : null}
+                ) : null}
                 <Text
                     appearance={disabled ? 'hint' : 'default'}
                     style={styles.text}
@@ -61,6 +61,7 @@ const styles = StyleSheet.create({
         flex: -1,
         flexDirection: 'row',
         alignItems: 'center',
+        justifyContent: 'center',
         padding: 8,
         paddingRight: 12,
         borderRadius: 20,

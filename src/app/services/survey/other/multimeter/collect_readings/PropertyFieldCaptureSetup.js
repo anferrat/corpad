@@ -1,12 +1,15 @@
 import { MeasurementPropertyTypes, MultimeterModes } from "../../../../../../constants/global"
+import { Error, errors } from "../../../../../utils/Error"
+import { MultimeterPropertyCaptureWarnings } from "../utils/MultimeterPropertyCaptureWarnings"
 
 export class PropertyFieldCaptureSetup {
-    constructor(settingRepo, multimeterFactory, multimeterPropertyCaptureParameters, getOnOffPairService, permissions) {
+    constructor(settingRepo, multimeterFactory, multimeterPropertyCaptureParameters, getOnOffPairService, permissions, warningHandler) {
         this.settingRepo = settingRepo
         this.multimeterFactory = multimeterFactory
         this.params = multimeterPropertyCaptureParameters.params
         this.getOnOffPairService = getOnOffPairService
         this.permissions = permissions
+        this.warnings = new MultimeterPropertyCaptureWarnings(warningHandler)
     }
 
     _isSingleRead(measurementPropertyType, onOffCaptureActive, forceSingleRead) {
@@ -26,7 +29,7 @@ export class PropertyFieldCaptureSetup {
         }
     }
 
-    async onStart(measurementPropertyType, potentialId, subitemId) {
+    async onStart(measurementPropertyType, potentialId, subitemId, toggleStatus) {
         const [{ multimeter }, { on, off }] = await Promise.all(
             [
                 this.settingRepo.get(),
@@ -41,6 +44,12 @@ export class PropertyFieldCaptureSetup {
         const { mode, range } = this.params[measurementPropertyType][type]
         const multimeterService = this.multimeterFactory.execute(type)
         const isSingleRead = this._isSingleRead(measurementPropertyType, onOffCaptureActive, forceSingleRead)
+        const { isValid, isSupported } = multimeterService.isSupported(toggleStatus, mode, range)
+        if (!isValid)
+            throw new Error(errors.MULTIMETER, `Unable to set ${mode} and ${range} settings`, 'Invalid input parameters', 852)
+        if (!isSupported)
+            throw new Error(errors.MULTIMETER, 'Unable to set capture mode', 'Measurement is not supported by selected toggle. Please adjust the toggle', 824)
+        await this.warnings.execute(toggleStatus, mode)
         await multimeterService.setSettings(peripheralId, mode, range, isSingleRead, captureRate, onTime + offTime)
         return {
             peripheralId,
@@ -60,9 +69,9 @@ export class PropertyFieldCaptureSetup {
         }
     }
 
-    async onStop() {
+    async onStop(isSingleRead) {
         const { multimeter: { type, peripheralId } } = await this.settingRepo.get()
         const multimeterService = this.multimeterFactory.execute(type)
-        await multimeterService.setSettings(peripheralId, MultimeterModes[type].IDLE)
+        await multimeterService.setSettings(peripheralId, MultimeterModes[type].IDLE, null, isSingleRead, null, null)
     }
 }

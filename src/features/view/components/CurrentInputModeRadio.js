@@ -11,18 +11,18 @@ const CurrentInputModeRadio = ({ isVoltageDropSelected, onChange, disabled }) =>
         <>
             <Text
                 category='label'
-                appearance='hint'>Measurement type</Text>
+                appearance='hint'>Current measurement</Text>
             <RadioGroup
                 style={styles.container}
                 selectedIndex={Number(Boolean(isVoltageDropSelected))}
                 onChange={onChangeHandler}>
                 <Radio
                     disabled={disabled}>
-                    Current
+                    Direct
                 </Radio>
                 <Radio
                     disabled={disabled}>
-                    Voltage drop
+                    Shunt
                 </Radio>
             </RadioGroup>
         </>

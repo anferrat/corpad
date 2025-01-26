@@ -9,7 +9,6 @@ import { SurveyLoadingStatuses, UrlTypes } from "../../constants/global"
 import useTimeSync from "./useTimeSync"
 import { useNavigation } from '@react-navigation/native'
 import { useMultimeterStatus } from "./useMultimeterStatus"
-import { disconnectMultimeter } from "../../app/controllers/MultimeterController"
 
 const useApp = () => {
 
@@ -109,7 +108,6 @@ const useApp = () => {
         urlListener.response.remove()
       if (networkStatus)
         networkStatus()
-      disconnectMultimeter()
     }
   }, [])
 

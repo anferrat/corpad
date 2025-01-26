@@ -1,71 +1,91 @@
 import React from 'react'
-import { StyleSheet, Modal } from 'react-native'
-import ModalHeader from './components/ModalHeader'
-import DisplayView from './components/DisplayView'
-import CaptureButtonBar from './components/CaptureButtonBar'
-import MultimeterParameters from './components/MultimeterParameters'
-import useMultimeterListener from './hooks/useMultimeterListener'
-import { MultimeterCycles } from '../../../constants/global'
-import ConnectingView from './components/ConnectingView'
-import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context'
+import { Modal, StyleSheet } from 'react-native'
+import ModeView from './components/ModeView'
+import MultimeterDisplay from './components/MultimeterDisplay'
+import RangeView from './components/RangeView'
+import { SafeAreaView } from 'react-native-safe-area-context'
+import BottomButton from '../../../components/BottomButton'
+import useMultimeterModal from './hooks/useMultimeterModal'
+import ButtonView from './components/ButtonView'
+import HistoryModalContent from './components/HistoryModalContent'
+import MultimeterLoadingView from './components/MultimeterLoadingView'
+import { control } from '../../../styles/colors'
+import MultimeterLimitWarning from './components/MultimeterLimitWarning'
 
-const edges = ['top', 'bottom', 'left', 'right']
-
-export const MultimeterModal = () => {
+const MultimeterModal = ({ goBack }) => {
     const {
-        onTime,
-        offTime,
-        visible,
-        onOffCaptureActive,
-        onOffCaptureAvailable,
-        values,
-        syncMode,
-        measurementType,
+        reading,
         onHold,
-        setupCompleted,
-        noGps,
-        onModalClose,
-        onOffCaptureToggleHandler,
-        onPauseHandler,
-        onResumeHandler,
-        onCapture,
-    } = useMultimeterListener()
+        connecting,
+        paired,
+        connected,
+        executing,
+        saveReading,
+        onSetRange,
+        onSetMode,
+        toggleOnHold,
+        showModal,
+        hideModal,
+        modalVisible,
+        updatingRange,
+        updatingMode,
+        modes,
+        ranges,
+        isAvailable,
+        loading,
+        selectedMode,
+        selectedRange,
+        limit } = useMultimeterModal({ goBack })
+
+    const updating = updatingMode !== null || updatingRange !== null
     return (
-        <Modal
-            onRequestClose={onModalClose}
-            visible={visible}>
-            <SafeAreaProvider>
-                <SafeAreaView
-                    edges={edges}
-                    style={styles.container}>
-                    <ModalHeader
-                        measurementType={measurementType}
-                        onModalClose={onModalClose} />
-                    <DisplayView
-                        onOffCaptureActive={onOffCaptureActive}
-                        onOffCaptureAvailable={onOffCaptureAvailable}
+        <>
+            <SafeAreaView
+                style={styles.area}>
+                <MultimeterLoadingView
+                    executing={executing}
+                    connected={connected}
+                    connecting={connecting}
+                    loading={loading}
+                    isAvailable={isAvailable}
+                    paired={paired}>
+                    {selectedMode !== null ? <MultimeterLimitWarning
+                        value={limit} /> : null}
+                    <ModeView
+                        modes={modes}
+                        onSelect={onSetMode}
+                        updatingMode={updatingMode}
+                        updating={updating}
+                        selectedMode={selectedMode} />
+                    <MultimeterDisplay
+                        reading={reading} />
+                    <ButtonView
+                        reading={reading}
                         onHold={onHold}
-                        values={values}
-                        onPlayHandler={onResumeHandler}
-                        onHoldHandler={onPauseHandler} />
-                    <ConnectingView
-                        connecting={!setupCompleted} />
-                    <MultimeterParameters
-                        noGps={noGps}
-                        onTime={onTime}
-                        offTime={offTime}
-                        syncMode={syncMode}
-                        onValue={values[MultimeterCycles.ON]}
-                        offValue={values[MultimeterCycles.OFF]}
-                        onOffCaptureAvailable={onOffCaptureAvailable}
-                        onOffCaptureActive={onOffCaptureActive}
-                        onOffCaptureToggleHandler={onOffCaptureToggleHandler} />
-                </SafeAreaView>
-                <CaptureButtonBar
-                    onCapture={onCapture}
-                    onCancel={onModalClose} />
-            </SafeAreaProvider>
-        </Modal>
+                        saveReading={saveReading}
+                        showModal={showModal}
+                        toggleOnHold={toggleOnHold} />
+                    <RangeView
+                        ranges={ranges}
+                        onSelect={onSetRange}
+                        updatingRange={updatingRange}
+                        updating={updating}
+                        selectedRange={selectedRange} />
+                </MultimeterLoadingView>
+                <BottomButton
+                    onPress={goBack}
+                    title='Back'
+                    icon='undo' />
+                <Modal
+                    onRequestClose={hideModal}
+                    statusBarTranslucent={true}
+                    animationType='fade'
+                    visible={modalVisible}>
+                    <HistoryModalContent
+                        hideModal={hideModal} />
+                </Modal>
+            </SafeAreaView>
+        </>
     )
 }
 
@@ -73,4 +93,12 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
     },
+    area: {
+        flex: 1,
+        paddingBottom: 72,
+        backgroundColor: control,
+        justifyContent: 'center'
+    }
 })
+
+export default MultimeterModal

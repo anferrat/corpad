@@ -104,6 +104,7 @@ const useImageList = ({ goBack, navigateToItem }) => {
                 { path: selectedMedia.source.uri, name: selectedMedia.fileName },
                 er => errorHandler(er),
                 () => {
+                    //use ToastAndroid here since image view will be covering other Toasts
                     if (Platform.OS === 'android')
                         ToastAndroid.showWithGravity('Saved to Downloads', 1000, ToastAndroid.BOTTOM)
                 }

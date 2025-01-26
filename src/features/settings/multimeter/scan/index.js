@@ -6,7 +6,7 @@ import useMultimeter from './hooks/useMultimeter'
 import LoadingView from '../../../../components/LoadingView'
 
 
-const Multimeter = ({ navigateToMultimeterCycleSettings, goBack }) => {
+const Multimeter = ({ navigateToMultimeterCycleSettings, goBack, navigateToMultimeterModal }) => {
     const { paired, initialBleState, isLoading } = useMultimeter({ goBack })
 
     return (
@@ -15,6 +15,7 @@ const Multimeter = ({ navigateToMultimeterCycleSettings, goBack }) => {
             <ScrollView>
                 {paired ?
                     <PairedView
+                        navigateToMultimeterModal={navigateToMultimeterModal}
                         navigateToCycleSettings={navigateToMultimeterCycleSettings} /> :
                     <UnpairedView
                         initialBleState={initialBleState} />

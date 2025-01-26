@@ -14,7 +14,7 @@ import LabelPicker from '../features/bottom_sheet_content/label_picker'
 //implemented as single screen, possible to have embeded navigator inside
 
 const BottomSheetContent = () => {
-    const { selectedRoute, params, navigateToImport, navigateToEdit, navigateToSettings, navigateToExport, navigateToExportedFiles, navigateToCalculatorList, navigateToMultimeter, navigateToExternalLinkSettings, closeSheet } = useBottomSheetContent()
+    const { selectedRoute, params, navigateToImport, navigateToEdit, navigateToSettings, navigateToExport, navigateToExportedFiles, navigateToCalculatorList, navigateToMultimeter, navigateToExternalLinkSettings, navigateToMultimeterModal, closeSheet } = useBottomSheetContent()
     return (
         <Router
             selectedRoute={selectedRoute}>
@@ -32,6 +32,7 @@ const BottomSheetContent = () => {
                     navigateToMultimeter={navigateToMultimeter}
                     navigateToExport={navigateToExport}
                     navigateToSettings={navigateToSettings}
+                    navigateToMultimeterModal={navigateToMultimeterModal}
                     closeSheet={closeSheet} />
             </Route>
             <Route

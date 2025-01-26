@@ -24,7 +24,8 @@ export class AppRepository extends SQLiteRepository {
                 super.runQuery(tx, 'CREATE TABLE IF NOT EXISTS potentialTypes (id INTEGER PRIMARY KEY NOT NULL, uid TEXT NOT NULL, name TEXT NOT NULL, custom BOOLEAN, permType TEXT, isAc BOOLEAN)', []),
                 super.runQuery(tx, `CREATE TABLE IF NOT EXISTS mapLayers (id INTEGER PRIMARY KEY NOT NULL, uid TEXT NOT NULL, name TEXT, timeCreated INTEGER, timeModified INTEGER, comment TEXT, strokeColor INTEGER, strokeWidth INTEGER, fillColor INTEGER, visible BOOLEAN DEFAULT 1, data TEXT)`, []),
                 super.runQuery(tx, 'CREATE TABLE IF NOT EXISTS surveyFiles (id INTEGER PRIMARY KEY NOT NULL, uid TEXT, name TEXT, filename TEXT, cloudId TEXT, path TEXT, hash TEXT, isCloud BOOLEAN, timeModified INTEGER, assetCount INTEGER, tpCount INTEGER, rtCount INTEGER, plCount INTEGER, successRate REAL)'),
-                super.runQuery(tx, `CREATE TABLE IF NOT EXISTS externalLinks (id INTEGER PRIMARY KEY NOT NULL, tagId INTEGER, name TEXT, linkType TEXT, technician TEXT, timeRecorded INTEGER, itemType TEXT, location TEXT, link TEXT)`, [])
+                super.runQuery(tx, `CREATE TABLE IF NOT EXISTS externalLinks (id INTEGER PRIMARY KEY NOT NULL, tagId INTEGER, name TEXT, linkType TEXT, technician TEXT, timeRecorded INTEGER, itemType TEXT, location TEXT, link TEXT)`, []),
+                super.runQuery(tx, `CREATE TABLE IF NOT EXISTS multimeterReadings (id INTEGER PRIMARY KEY NOT NULL, value REAL, deviceTimestamp INTEGER, type TEXT, unit TEXT, flag TEXT, isSet BOOLEAN, latitude REAL, longitude REAL, isAc BOOLEAN, deviceType TEXT)`, []),
             ])
 
             await super.runMultiQueryTransaction(tx => [

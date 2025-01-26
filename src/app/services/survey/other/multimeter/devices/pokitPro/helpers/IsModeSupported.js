@@ -1,4 +1,4 @@
-import { MultimeterCurrentRanges, MultimeterModes, MultimeterVoltageRanges } from "../../../../../../../../constants/global"
+import { MultimeterCurrentRanges, MultimeterModes, MultimeterToggleStatuses, MultimeterVoltageRanges } from "../../../../../../../../constants/global"
 
 export class isModeSupported {
     constructor(constants) {
@@ -32,11 +32,11 @@ export class isModeSupported {
         if (this._isIdleSettings(mode))
             return true
         switch (toggleStatus) {
-            case this.constants.toggleStatuses.VOLTAGE:
+            case MultimeterToggleStatuses.POKIT.VOLTAGE:
                 return this._isVoltageSettings(mode, range)
-            case this.constants.toggleStatuses.SMALL_CURRENT:
+            case MultimeterToggleStatuses.POKIT.SMALL_CURRENT:
                 return this._isSmallCurrentSettings(mode, range)
-            case this.constants.toggleStatuses.CURRENT:
+            case MultimeterToggleStatuses.POKIT.LARGE_CURRENT:
                 return this._isCurrentSettings(mode, range)
             default:
                 return false
@@ -45,10 +45,10 @@ export class isModeSupported {
 
     execute(toggleStatus, mode, range) {
         const isValid = this._isValid(mode, range)
-        if (!isValid)
-            throw this.constants.errors.SETTINGS_INVALID
         const isSupported = this.isSupported(toggleStatus, mode, range)
-        if (!isSupported)
-            throw this.constants.errors.TOGGLE_POSITION
+        return {
+            isValid,
+            isSupported
+        }
     }
 }
