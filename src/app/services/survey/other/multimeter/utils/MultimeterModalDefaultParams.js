@@ -27,6 +27,11 @@ export class MultimeterModalDefaultParams {
                     default:
                         throw new Error(errors.MULTIMETER, 'Unable to get default parameters', 'Toggle status is unknown')
                 }
+            case MultimeterTypes.DVM2130:
+                return {
+                    mode: MultimeterModes.DVM2130.DC_VOLTS,
+                    range: MultimeterVoltageRanges.DVM2130._5V
+                }
             default:
                 throw new Error(errors.MULTIMETER, 'Unable to get default parameters', 'Multimeter type is not supported')
         }
@@ -56,6 +61,11 @@ export class MultimeterModalDefaultParams {
                         }
                     default:
                         throw new Error(errors.MULTIMETER, 'Unable to get default parameters', 'Toggle status is unknown')
+                }
+            case MultimeterTypes.DVM2130:
+                return {
+                    modes: [MultimeterModes.DVM2130.DC_VOLTS, MultimeterModes.DVM2130.AC_VOLTS],
+                    ranges: [MultimeterVoltageRanges.DVM2130._5V, MultimeterVoltageRanges.DVM2130._250V]
                 }
             default:
                 throw new Error(errors.MULTIMETER, 'Unable to get default parameters', 'Multimeter type is not supported')

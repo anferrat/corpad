@@ -25,6 +25,8 @@ export class ModalReadingConverter {
         switch (mode) {
             case MultimeterModes.POKIT.DC_VOLTS:
             case MultimeterModes.POKIT.AC_VOLTS:
+            case MultimeterModes.DVM2130.DC_VOLTS:
+            case MultimeterModes.DVM2130.AC_VOLTS:
                 if (range === MultimeterVoltageRanges.POKIT._250MV)
                     return PotentialUnits.MILIVOLTS
                 else return PotentialUnits.VOLTS
@@ -38,7 +40,7 @@ export class ModalReadingConverter {
 
 
     execute(reading, mode, range, toggleStatus) {
-        const newUnit = this._getUnit(mode, range, toggleStatus)
+        const newUnit = this._getUnit(mode, range, toggleStatus) ?? reading.unit
         const converter = this._getConverter(reading.type)
         const newValue = converter(reading.value, reading.unit, newUnit, 3)
         reading.setValue(newValue)

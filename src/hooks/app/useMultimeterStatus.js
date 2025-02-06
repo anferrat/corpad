@@ -7,13 +7,14 @@ import useIsAppStateActive from "../useIsAppStateActive"
 
 export const useMultimeterStatus = () => {
     const connected = useSelector(state => state.settings.activeMultimeter.connected)
+    const connecting = useSelector(state => state.settings.activeMultimeter.connecting)
     const multimeterType = useSelector(state => state.settings.activeMultimeter.multimeterType)
     const peripheralId = useSelector(state => state.settings.activeMultimeter.id)
     const isStateActive = useIsAppStateActive()
     const toggleStatusObtained = useSelector(state => state.settings.activeMultimeter.toggleStatus !== null)
     const dispatch = useDispatch()
     const [toggleStatusRequested, setToggleStatusRequested] = useState(false)
-    const isToggleStatusAvailable = connected && peripheralId && multimeterType && isStateActive
+    const isToggleStatusAvailable = connected && !connecting && peripheralId && multimeterType && isStateActive
     const isToggleStatusNeeded = isToggleStatusAvailable && !toggleStatusObtained && !toggleStatusRequested
     const TOGGLE_STATUS_REQUEST_DELAY = 0
     const TOGGLE_STATUS_RESEND_REQUEST_DELAY = 2000
@@ -39,7 +40,7 @@ export const useMultimeterStatus = () => {
         return () => {
             toggleListener !== null ? toggleListener.response.remove() : null
         }
-    }, [connected])
+    }, [connected, connecting, peripheralId, peripheralId, isStateActive])
 
     useEffect(() => {
         if (isToggleStatusNeeded)
@@ -55,13 +56,13 @@ export const useMultimeterStatus = () => {
                         setToggleStatusRequested(false)
                     }, TOGGLE_STATUS_RESEND_REQUEST_DELAY))
             }, TOGGLE_STATUS_REQUEST_DELAY)
-    }, [isToggleStatusNeeded])
+    }, [connected, connecting, peripheralId, multimeterType, isStateActive, isToggleStatusAvailable, toggleStatusObtained, toggleStatusRequested])
 
     useEffect(() => () => {
         //reset toggle status when app is in background
-        if (isStateActive)
+        if (isStateActive || !connected || peripheralId === null)
             dispatch(setActiveMultimeterToggleStatus(null))
-    }, [isStateActive])
+    }, [isStateActive, connected, peripheralId])
 
 
     useEffect(() => {
@@ -80,9 +81,6 @@ export const useMultimeterStatus = () => {
         })
         return () => {
             EventRegister.removeEventListener(isConnectingListener)
-            //disconnects MM on app close
-            dispatch(setActiveMultimeterStatus(false))
-            disconnectMultimeter()
         }
     }, [])
 }

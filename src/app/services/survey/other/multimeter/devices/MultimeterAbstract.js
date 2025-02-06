@@ -3,8 +3,14 @@ import { EventRegister } from "react-native-event-listeners";
 export class MultimeterAbstract {
     constructor() { }
 
-    connectionWrapper(func) {
+    async connectionWrapper(func) {
         EventRegister.emitEvent('MULTIMETER_IS_CONNECTING', true)
-        return func().finally(() => EventRegister.emitEvent('MULTIMETER_IS_CONNECTING', false))
+        try {
+            return await func()
+        }
+        finally {
+            EventRegister.emitEvent('MULTIMETER_IS_CONNECTING', false)
+        }
+
     }
 }

@@ -11,6 +11,8 @@ import HistoryModalContent from './components/HistoryModalContent'
 import MultimeterLoadingView from './components/MultimeterLoadingView'
 import { control } from '../../../styles/colors'
 import MultimeterLimitWarning from './components/MultimeterLimitWarning'
+import DisplayModeButtons from './components/DisplayModeButtons'
+import MultimeterGraph from './components/MultimeterGraph'
 
 const MultimeterModal = ({ goBack }) => {
     const {
@@ -20,12 +22,18 @@ const MultimeterModal = ({ goBack }) => {
         paired,
         connected,
         executing,
+        historyReadings,
         saveReading,
         onSetRange,
         onSetMode,
         toggleOnHold,
         showModal,
         hideModal,
+        onDigitPress,
+        onGraphPress,
+        onEndEditingYMax,
+        onEndEditingXMax,
+        displayMode,
         modalVisible,
         updatingRange,
         updatingMode,
@@ -35,7 +43,13 @@ const MultimeterModal = ({ goBack }) => {
         loading,
         selectedMode,
         selectedRange,
-        limit } = useMultimeterModal({ goBack })
+        limit,
+        xMax,
+        yMax,
+        xMaxValid,
+        yMaxValid,
+        graphYUnit,
+    } = useMultimeterModal({ goBack })
 
     const updating = updatingMode !== null || updatingRange !== null
     return (
@@ -43,6 +57,7 @@ const MultimeterModal = ({ goBack }) => {
             <SafeAreaView
                 style={styles.area}>
                 <MultimeterLoadingView
+                    showModal={showModal}
                     executing={executing}
                     connected={connected}
                     connecting={connecting}
@@ -57,9 +72,26 @@ const MultimeterModal = ({ goBack }) => {
                         updatingMode={updatingMode}
                         updating={updating}
                         selectedMode={selectedMode} />
-                    <MultimeterDisplay
-                        reading={reading} />
+                    <DisplayModeButtons
+                        onDigitPress={onDigitPress}
+                        onGraphPress={onGraphPress}
+                        selectedMode={displayMode}
+                    />
+                    {displayMode === 0 ?
+                        <MultimeterDisplay
+                            reading={reading} /> :
+                        <MultimeterGraph
+                            graphYUnit={graphYUnit}
+                            xMax={xMax}
+                            yMax={yMax}
+                            xMaxValid={xMaxValid}
+                            yMaxValid={yMaxValid}
+                            onEndEditingYMax={onEndEditingYMax}
+                            onEndEditingXMax={onEndEditingXMax}
+                            history={historyReadings}
+                        />}
                     <ButtonView
+                        displayMode={displayMode}
                         reading={reading}
                         onHold={onHold}
                         saveReading={saveReading}

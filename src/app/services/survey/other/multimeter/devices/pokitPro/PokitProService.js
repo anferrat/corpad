@@ -9,8 +9,7 @@ import { PokitProAddToggleListener } from "./services/PokitProAddToggleListener"
 import { PokitProAddReadingListener } from "./services/PokitProAddReadingListener"
 import { PokitProAddButtonPressListener } from "./services/PokitProAddButtonPressListener"
 import { PokitProAutoRange } from "./services/PokitProAutoRange"
-import { MultimeterAbstract } from "./MultimeterAbstract"
-import { PokitProStatusListener } from "./services/PokitProStatusListener"
+import { MultimeterAbstract } from "../MultimeterAbstract"
 
 export class PokitProService extends MultimeterAbstract {
     constructor(bluetoothRepo) {
@@ -65,6 +64,7 @@ export class PokitProService extends MultimeterAbstract {
         const { toggleStatus } = await this.pokitProGetDeviceStatusService.execute(peripheralId)
         return toggleStatus
     }
+    
 
     isSupported(toggleStatus, mode, range) {
         return this.isModeSupportedService.execute(toggleStatus, mode, range)

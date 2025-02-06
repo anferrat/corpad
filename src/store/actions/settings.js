@@ -142,7 +142,6 @@ export const hidePaywall = () => ({
 })
 
 export const setActiveMultimeterToggleStatus = (toggleStatus) => {
-    console.log(toggleStatus)
     return ({
         type: SET_ACTIVE_MULTIMETER_TOGGLE_STATUS, toggleStatus
     })

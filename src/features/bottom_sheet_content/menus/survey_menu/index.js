@@ -14,14 +14,13 @@ const SurveyMenuSheet = React.memo(({ closeSheet, navigateToExport, navigateToSe
         <View style={styles.mainView}>
             {isPro || isVerify ?
                 <MenuListItem
-                    disabled={connecting}
                     title='Multimeter'
                     subtitle={multimeterLablel}
                     icon={connecting ? 'activityIndicator' : 'radio'}
-                    onPress={connected ? navigateToMultimeterModal : navigateToMultimeter}
+                    onPress={connected && !connecting ? navigateToMultimeterModal : navigateToMultimeter}
                     subtitleIcon={paired ? 'color-circle' : null}
                     subtitleIconPack='cp'
-                    subtitleIconColor={connected ? success : basic}
+                    subtitleIconColor={connected && !connecting ? success : basic}
                     buttonIcon={!connected && paired && !connecting ? 'link-2' : undefined}
                     onButtonIconPress={onMultimeterConnect}
                 /> :

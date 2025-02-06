@@ -120,6 +120,9 @@ export const getMultimeterModeLimit = (mode, toggleStatus) => {
         case MultimeterModes.POKIT.DC_VOLTS:
         case MultimeterModes.POKIT.AC_VOLTS:
             return '600 V'
+        case MultimeterModes.DVM2130.DC_VOLTS:
+        case MultimeterModes.DVM2130.AC_VOLTS:
+            return '250 V'
         default:
             return 'Er'
     }

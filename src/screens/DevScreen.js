@@ -2,94 +2,80 @@ import React, { useEffect, useState } from 'react'
 import { globalStyle } from '../styles/styles'
 import { SafeAreaView, StatusBar } from 'react-native'
 import { Button, Text } from '@ui-kitten/components'
-import { TestRepository } from '../app/repository/sqlite/TestRepo'
 import FocusAwareStatusBar from '../components/FocusAwareStatusBar'
 import { generateTestPoints, resetDatabase } from '../app/controllers/DevController'
-import { setActiveMultimeter, updateSubscriptionStatus } from '../store/actions/settings'
-import { pairMultimeter } from '../app/controllers/MultimeterController'
-import { PokitProService } from '../app/services/survey/other/multimeter/devices/pokitPro/PokitProService'
-import { bluetoothRepo } from '../app/controllers/_instances/repositories'
-import { appStateListener, timeService } from '../app/controllers/_instances/general_services'
-import { MeasurementPropertyTypes, MultimeterCaptureRate, MultimeterCycles, MultimeterListenerEvents, MultimeterModes, MultimeterReadingTypes, MultimeterSyncModes, MultimeterTypes, MultimeterVoltageRanges, TimeSyncSources } from '../constants/global'
-import { PokitProAutoRange } from '../app/services/survey/other/multimeter/devices/pokitPro/services/PokitProAutoRange'
-import { Reading } from '../app/entities/survey/multimeter/Reading'
-import { CycleListener } from '../app/services/survey/other/multimeter/utils/CycleListener'
+import { updateSubscriptionStatus } from '../store/actions/settings'
 import { useDispatch } from 'react-redux'
+import { View } from "react-native";
+import { CartesianChart, Line, useChartTransformState } from "victory-native";
+import montserrat from '../../assets/fonts/Montserrat.ttf'
+import { useFont } from '@shopify/react-native-skia'
+import { GestureHandlerRootView } from 'react-native-gesture-handler'
+import { Dvm2130Service } from '../app/services/survey/other/multimeter/devices/dvm2130/Dvm2130Service'
+import { bluetoothRepo } from '../app/controllers/_instances/repositories'
+import { MultimeterCaptureRate, MultimeterModes, MultimeterToggleStatuses, MultimeterVoltageRanges } from '../constants/global'
 
 
 const count = 150
 
-let listener
+const DATA = Array.from({ length: 31 }, (_, i) => ({
+  day: i,
+  highTmp: 40 + 30 * Math.random(),
+}))
 
-const pokitProService = new PokitProService(bluetoothRepo, appStateListener)
+const service = new Dvm2130Service(bluetoothRepo)
 
-const cycleListener = new CycleListener(timeService)
+const peripheralId = 'ED:67:6A:29:BC:95'
 
-const autoRangeService = new PokitProAutoRange()
 
-const reading = new Reading(null, -0.283, Date.now(), MultimeterReadingTypes.VOLTAGE, 3, null, false, MultimeterTypes.POKIT)
-
-const mmId = '28:76:81:A5:C6:27'
-
-const connectMultimeter = async () => {
+const connectMM = async () => {
   try {
-    pokitProService.start(mmId)
+    await service.start(peripheralId)
   }
   catch (er) {
     console.log(er)
   }
 }
 
-const disconnectMultimeter = async () => {
+const disconnectMM = async () => {
   try {
-    pokitProService.stop(mmId)
+    await service.stop(peripheralId)
   }
   catch (er) {
     console.log(er)
   }
 }
-
-
-const startCapture = async () => {
-  try {
-    await pokitProService.setSettings(mmId, MultimeterModes.POKIT.DC_VOLTS, MultimeterVoltageRanges.POKIT._10V, false, MultimeterCaptureRate._60Hz, 2500)
-    listener = pokitProService.addListener(mmId, (type, value) => console.log(type, value), (er) => console.log(er))
-    //cycleListener.addListener(pokitProService, mmId, (type, value) => console.log(type, value), (er) => console.log(er), MultimeterSyncModes.CYCLED, 2000, 500, MultimeterCycles.ON, 70, 70)
-  }
-  catch (er) {
-    console.log(er)
-  }
-}
-
-const stopCapture = async () => {
-  try {
-    await pokitProService.setSettings(mmId, MultimeterModes.POKIT.IDLE)
-    listener ? listener.remove() : null
-  }
-  catch (er) {
-    console.log(er)
-  }
-}
-
 
 
 export default DevScreen = ({ navigation }) => {
   const dispatch = useDispatch()
+  const font = useFont(montserrat, 12)
+  const [data, setData] = useState(DATA)
+  const [range, setRange] = useState(MultimeterVoltageRanges.DVM2130._250V)
+  const [viewport, setViewport] = useState({
+    x: [15, 30],
+    y: [40, 80],
+  })
 
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setData(state => state.concat({
+        day: state.length,
+        highTmp: 40 + 30 * Math.random(),
+      })
+      )
+      setViewport(state => ({ ...state, x: [state.x[0] + 1, state.x[1] + 1] }))
+    }, 100)
+
+    return () => {
+      clearInterval(interval)
+    }
+  }, [])
+
+  const { state } = useChartTransformState({})
   const makePremium = () => { dispatch(updateSubscriptionStatus(1, Date.now() + 1000000000)) }
 
-  const openMMSettings = () => { navigation.navigate('CycleSettings') }
-
-  const pairM = async () => {
-    const { status, errorMessage } = await pairMultimeter({ id: mmId, multimeterType: MultimeterTypes.POKIT, name: 'Pokit Pro' })
-    console.log(errorMessage)
-    if (status === 200)
-      dispatch(setActiveMultimeter(true, mmId, 'Pokit Pro', MultimeterTypes.POKIT, false))
-  }
-  const goToMM = () => navigation.navigate('Multimeter')
-  //autoRangeService.execute(MultimeterListenerEvents.SINGLE_READ, reading, MultimeterVoltageRanges.POKIT._250MV, (range) => console.log('NEW RANGE', range), () => { })
-  //console.log(reading)
-
+  const [xDomain, setXDomain] = useState([0, 10]);
 
   return (
     <SafeAreaView style={{ ...globalStyle.screen, paddingTop: StatusBar.currentHeight }}>
@@ -99,30 +85,38 @@ export default DevScreen = ({ navigation }) => {
       <Button onPress={() => generateTestPoints({ count })} appearance='ghost'>Generate {count} test points</Button>
       <Button onPress={resetDatabase} appearance='ghost'>Reset DB</Button>
       <Button onPress={makePremium} appearance='ghost'>Make Premium</Button>
-      <Button onPress={connectMultimeter} appearance='ghost'>Connect</Button>
-      <Button onPress={disconnectMultimeter} appearance='ghost'>Disconnect</Button>
-      <Button onPress={startCapture} appearance='ghost'>Start capture</Button>
-      <Button onPress={stopCapture} appearance='ghost'>Stop Capture</Button>
-      <Button onPress={stopCapture} appearance='ghost'>Stop Capture</Button>
-      <Button onPress={openMMSettings} appearance='ghost'>Open mm settings</Button>
-      <Button onPress={pairM} appearance='ghost'>Pair Multimeter</Button>
-      <Button onPress={goToMM} appearance='ghost'>Show multimeter</Button>
+      <View style={{ height: 300, borderWidth: 1, }}>
+        <CartesianChart
+          padding={0}
+          data={data}
+          xKey="day"
+          yKeys={["highTmp"]}
+          viewport={viewport}
+          transformState={state}
+          xAxis={{
+            font,
+            tickCount: 5,
+            formatXLabel: (x) => x + ' day',
+            //enableRescaling: true
+          }}
+          yAxis={[{
+            font,
+            tickCount: 4
+          }]}
+          transformConfig={{
+            pan: { dimensions: "x" },
+          }}
+        >
+          {({ points }) => (
+            <Line points={points.highTmp} color="red" strokeWidth={3} />
+          )}
+        </CartesianChart>
+      </View>
     </SafeAreaView>
   )
-}
-
-const sqlTest = async () => {
-  try {
-    const repo = new TestRepository()
-    const result = await repo.test('SELECT * FROM rectifiers')
-    //console.log('response: ', result)
-  }
-  catch (er) {
-    //console.log(er)
-  }
 }
 
 /*
 
 
-*/
+      */

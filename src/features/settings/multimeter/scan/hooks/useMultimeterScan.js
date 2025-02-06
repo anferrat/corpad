@@ -1,6 +1,6 @@
 import { useCallback, useState, useEffect, useRef } from 'react'
 import { useDispatch, useSelector } from "react-redux"
-import { startMultimeterScan, stopMultimeterScan, multimeterScanListener, multimeterStopScanListener, pairMultimeter, checkConnectedDevices } from '../../../../../app/controllers/MultimeterController'
+import { startMultimeterScan, stopMultimeterScan, multimeterScanListener, multimeterStopScanListener, pairMultimeter, checkConnectedDevices, connectMultimeter } from '../../../../../app/controllers/MultimeterController'
 import { addBluetoothStatusListener } from '../../../../../app/controllers/AppController'
 import { setActiveMultimeter, showPaywall } from '../../../../../store/actions/settings'
 import { errorHandler } from '../../../../../helpers/error_handler'
@@ -74,6 +74,7 @@ const useMultimeterScan = ({ initialBleState }) => {
                 if (status === 200) {
                     dispatch(setActiveMultimeter(true, id, name, multimeterType))
                     hapticMedium()
+                    await connectMultimeter(100)
                 }
                 else if (componentMounted.current)
                     errorHandler(status)
@@ -92,7 +93,7 @@ const useMultimeterScan = ({ initialBleState }) => {
             setConnectedDevices(initialState)
             await checkConnectedDevices(
                 null,
-                alreadyConnected => setConnectedDevices(alreadyConnected)
+                alreadyConnected => setConnectedDevices([])//turned it off for now, needs more work
             )
             const { status } = await startMultimeterScan()
             if (status === 200) {
