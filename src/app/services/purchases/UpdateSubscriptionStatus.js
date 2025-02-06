@@ -13,12 +13,14 @@ export class UpdateSubscriptionStatus {
         if (status.isActive)
             return {
                 status: SubscriptionStatuses.GRANTED,
-                expirationTime: status.expirationTime
+                expirationTime: status.expirationTime,
+                managmentUrl: status.managmentUrl
             }
         else
             return {
                 status: SubscriptionStatuses.NOT_GRANTED,
-                expirationTime: status.expirationTime
+                expirationTime: status.expirationTime,
+                managmentUrl: status.managmentUrl
             }
     }
 }

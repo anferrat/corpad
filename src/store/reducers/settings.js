@@ -1,6 +1,6 @@
 
 import { SubscriptionStatuses } from "../../constants/global"
-import { UPDATE_SETTING, LOAD_SETTINGS, SET_SURVEY_SAVING_STATUS, UPDATE_SURVEY_NAME, RESET_CURRENT_SURVEY_SETTINGS, LOAD_SESSION_STATE, UPDATE_ONBOARDING, SET_EXPORT_MODAL, UPDATE_LOADER, UPDATE_SESSION, UPDATE_NETWORK_STATUS, SET_SESSION_MODAL_VISIBLE, UPDATE_CURRENT_SURVEY_SETTINGS, SET_SETTINGS_ON_APP_LOAD, SET_SURVEY_SETTINGS, UPDATE_BOTTOM_SHEET_CONTENT, SET_BLUETOOTH_SCANNING, SET_ACTIVE_MULTIMETER, SET_ACTIVE_MULTIMETER_STATUS, SET_TIME_ADJUSTMENT, SET_ACTIVE_MULTIMETER_SETTINGS, UPDATE_LOADER_PROGRESS, HIDE_LOADER, UPDATE_SUBSCRIPTION_STATUS, SHOW_PAYWALL, HIDE_PAYWALL, SET_ACTIVE_MULTIMETER_CONNECTING, SET_ACTIVE_MULTIMETER_EXECUTING, SET_ACTIVE_MULTIMETER_TOGGLE_STATUS } from "../actions/settings"
+import { UPDATE_SETTING, LOAD_SETTINGS, SET_SURVEY_SAVING_STATUS, UPDATE_SURVEY_NAME, RESET_CURRENT_SURVEY_SETTINGS, LOAD_SESSION_STATE, UPDATE_ONBOARDING, SET_EXPORT_MODAL, UPDATE_LOADER, UPDATE_SESSION, UPDATE_NETWORK_STATUS, SET_SESSION_MODAL_VISIBLE, UPDATE_CURRENT_SURVEY_SETTINGS, SET_SETTINGS_ON_APP_LOAD, SET_SURVEY_SETTINGS, UPDATE_BOTTOM_SHEET_CONTENT, SET_BLUETOOTH_SCANNING, SET_ACTIVE_MULTIMETER, SET_ACTIVE_MULTIMETER_STATUS, SET_TIME_ADJUSTMENT, SET_ACTIVE_MULTIMETER_SETTINGS, UPDATE_LOADER_PROGRESS, HIDE_LOADER, UPDATE_SUBSCRIPTION_STATUS, SHOW_PAYWALL, HIDE_PAYWALL, SET_ACTIVE_MULTIMETER_CONNECTING, SET_ACTIVE_MULTIMETER_EXECUTING, SET_ACTIVE_MULTIMETER_TOGGLE_STATUS, SET_BLE_INITIALIZED } from "../actions/settings"
 
 const initialState = {
     bottomSheetContent: {  //BottomSheet component
@@ -11,7 +11,8 @@ const initialState = {
     subscription: {
         status: SubscriptionStatuses.PENDING,
         paywallVisible: false,
-        expirationTime: 0
+        expirationTime: 0,
+        managmentUrl: null
     },
     lastImport: {
         itemType: null,
@@ -60,6 +61,7 @@ const initialState = {
     },
     bluetooth: {
         scanning: false,
+        initialized: false
     },
     session: {
         userName: null,
@@ -151,7 +153,12 @@ const settings = (state = initialState, action) => {
                 subscription: {
                     ...state.subscription,
                     status: action.subscriptionStatus,
-                    expirationTime: action.subscriptionExpirationTime
+                    expirationTime: action.subscriptionExpirationTime,
+                    managmentUrl: action.managmentUrl
+                },
+                bluetooth: {
+                    ...state.bluetooth,
+                    initialized: action.bleInitialized,
                 },
                 currentSurvey: {
                     ...state.currentSurvey,
@@ -391,7 +398,8 @@ const settings = (state = initialState, action) => {
                 subscription: {
                     ...state.subscription,
                     status: action.status,
-                    expirationTime: action.expirationTime
+                    expirationTime: action.expirationTime,
+                    managmentUrl: managmentUrl
                 }
             }
         case SHOW_PAYWALL:
@@ -408,6 +416,14 @@ const settings = (state = initialState, action) => {
                 subscription: {
                     ...state.subscription,
                     paywallVisible: false
+                }
+            }
+        case SET_BLE_INITIALIZED:
+            return {
+                ...state,
+                bluetooth: {
+                    ...state.bluetooth,
+                    initialized: action.bleInitialized
                 }
             }
         default:

@@ -68,7 +68,7 @@ export default React.memo(MultimeterGraph)
 
 const styles = StyleSheet.create({
     container: {
-        minHeight: 150,
+        minHeight: 250,
         borderWidth: 0,
         flex: 1
     },

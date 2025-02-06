@@ -1,19 +1,15 @@
 import { ONBOARDING_VERSION } from "../../../../config/Onboarding"
 
 export class MarkOnboardingVisited {
-    constructor(settingRepo, multimeterInitializationService) {
+    constructor(settingRepo) {
         this.settingRepo = settingRepo
-        this.multimeterInitializationService = multimeterInitializationService
     }
 
     async execute() {
         const { onboarding } = await this.settingRepo.get()
         onboarding.versionOnboarding = ONBOARDING_VERSION
         onboarding.main = false
-        await Promise.all([
-            this.settingRepo.updateOnboarding(onboarding),
-            this.multimeterInitializationService.execute(false)
-        ])
+        await this.settingRepo.updateOnboarding(onboarding)
         return ONBOARDING_VERSION
     }
 }

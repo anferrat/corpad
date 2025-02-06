@@ -8,17 +8,19 @@ export class PurchaseSubscription {
 
     async execute(pack) {
         await this.networkRepo.isInternetOnCheck()
-        const { expirationTime, isActive } = await this.purchaseRepo.purchase(pack)
+        const { expirationTime, isActive, managmentUrl } = await this.purchaseRepo.purchase(pack)
         if (isActive) {
             return {
                 status: SubscriptionStatuses.GRANTED,
                 expirationTime: expirationTime,
+                managmentUrl
             }
         }
         else
             return {
-                status: SubscriptionStatuses.GRANTED,
+                status: SubscriptionStatuses.NOT_GRANTED,
                 expirationTime: expirationTime,
+                managmentUrl
             }
     }
 }

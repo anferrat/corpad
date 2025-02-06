@@ -28,6 +28,7 @@ export const HIDE_PAYWALL = 'HIDE_PAYWALL'
 export const SET_ACTIVE_MULTIMETER_CONNECTING = 'SET_ACTIVE_MULTIMETER_CONNECTING'
 export const SET_ACTIVE_MULTIMETER_EXECUTING = 'SET_ACTIVE_MULTIMETER_EXECUTING'
 export const SET_ACTIVE_MULTIMETER_TOGGLE_STATUS = 'SET_ACTIVE_MULTIMETER_TOGGLE_STATUS'
+export const SET_BLE_INITIALIZED = 'SET_BLE_INITIALIZED'
 
 export const updateSetting = (setting, value) => {
     return { type: UPDATE_SETTING, setting: setting, value: value }
@@ -93,8 +94,8 @@ export const setSessionModalVisible = (visible) => {
     return { type: SET_SESSION_MODAL_VISIBLE, visible }
 }
 
-export const setSettingsOnAppLoad = (isLoaded, syncTime, name, uid, fileName, isCloud, isSigned, userName, onboarding, multimeter, subscriptionStatus, subscriptionExpirationTime) => {
-    return { type: SET_SETTINGS_ON_APP_LOAD, isLoaded, syncTime, name, uid, fileName, isCloud, isSigned, userName, onboarding, multimeter, subscriptionStatus, subscriptionExpirationTime }
+export const setSettingsOnAppLoad = (isLoaded, syncTime, name, uid, fileName, isCloud, isSigned, userName, onboarding, multimeter, subscriptionStatus, subscriptionExpirationTime, managmentUrl, bleInitialized) => {
+    return { type: SET_SETTINGS_ON_APP_LOAD, isLoaded, syncTime, name, uid, fileName, isCloud, isSigned, userName, onboarding, multimeter, subscriptionStatus, subscriptionExpirationTime, managmentUrl, bleInitialized }
 }
 
 export const updateBottomSheetContent = (itemType, content, params) => ({
@@ -129,8 +130,8 @@ export const setActiveMultimeterExecuting = (executing) => (
     { type: SET_ACTIVE_MULTIMETER_EXECUTING, executing }
 )
 
-export const updateSubscriptionStatus = (status, expirationTime = 0) => ({
-    type: UPDATE_SUBSCRIPTION_STATUS, status, expirationTime
+export const updateSubscriptionStatus = (status, expirationTime = 0, managmentUrl) => ({
+    type: UPDATE_SUBSCRIPTION_STATUS, status, expirationTime, managmentUrl
 })
 
 export const showPaywall = () => ({
@@ -146,3 +147,7 @@ export const setActiveMultimeterToggleStatus = (toggleStatus) => {
         type: SET_ACTIVE_MULTIMETER_TOGGLE_STATUS, toggleStatus
     })
 }
+
+export const setBleInitialized = (bleInitialized) => ({
+    type: SET_BLE_INITIALIZED, bleInitialized
+})

@@ -26,14 +26,16 @@ export class InitializePurchases {
             await this.settingRepo.updateOfflineCount(this.OFFLINE_COUNT_LIMIT)
             return {
                 status: SubscriptionStatuses.UNKNOWN_NOT_GRANTED,
-                expirationTime: status.expirationTime
+                expirationTime: status.expirationTime,
+                managmentUrl: status.managmentUrl
             }
         }
         else {
             await this.settingRepo.updateOfflineCount(offlineCount + 1)
             return {
                 status: SubscriptionStatuses.UNKNOWN_GRANTED,
-                expirationTime: status.expirationTime
+                expirationTime: status.expirationTime,
+                managmentUrl: status.managmentUrl
             }
         }
     }
@@ -46,13 +48,15 @@ export class InitializePurchases {
             if (!status.isActive)
                 return {
                     status: SubscriptionStatuses.NOT_GRANTED,
-                    expirationTime: status.expirationTime
+                    expirationTime: status.expirationTime,
+                    managmentUrl: null
                 }
             else if (isInternetOn) {
                 await this.settingRepo.updateOfflineCount(0)
                 return {
                     status: SubscriptionStatuses.GRANTED,
-                    expirationTime: status.expirationTime
+                    expirationTime: status.expirationTime,
+                    managmentUrl: status.managmentUrl,
                 }
             }
             else {
@@ -61,7 +65,8 @@ export class InitializePurchases {
                 if (offlineCount >= this.OFFLINE_COUNT_LIMIT)
                     return {
                         status: SubscriptionStatuses.UNKNOWN_NOT_GRANTED,
-                        expirationTime: status.expirationTime
+                        expirationTime: status.expirationTime,
+                        managmentUrl: status.managmentUrl,
                     }
                 else
                     /*
@@ -73,7 +78,8 @@ export class InitializePurchases {
         catch (er) {
             return {
                 status: SubscriptionStatuses.UNKNOWN_NOT_GRANTED,
-                expirationTime: null
+                expirationTime: null,
+                managmentUrl: null
             }
         }
     }

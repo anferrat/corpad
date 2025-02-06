@@ -55,19 +55,19 @@ class MultimeterController extends Controller {
 
         this.propertyFieldCaptureService = new PropertyFieldCapture(this.multimeterFactory, timeService, unitConverter)
 
-        this.checkBleStateService = new CheckBleState(bluetoothRepo)
+        this.checkBleStateService = new CheckBleState(bluetoothRepo, permissions)
 
         this.checkConnectedDeviceService = new CheckConnectedDevices(bluetoothRepo, permissions)
 
-        this.updateMeasurementCharacteristicService = new UpdateMeasurementCharacteristic(multimeterFactory, settingRepo)
+        this.updateMeasurementCharacteristicService = new UpdateMeasurementCharacteristic(multimeterFactory, settingRepo, permissions)
 
-        this.multimeterModalStartupService = new MultimeterModalStartup(settingRepo, multimeterFactory)
+        this.multimeterModalStartupService = new MultimeterModalStartup(settingRepo, multimeterFactory, permissions)
 
         this.multimeterModalReadingListenerService = new MultimeterModalReadingListener(multimeterFactory, unitConverter)
 
         this.modalStopCaptureService = new MultimeterModalStopCapture(multimeterFactory)
 
-        this.getMultimeterToggleStatusService = new GetMultimeterToggleStatus(multimeterFactory)
+        this.getMultimeterToggleStatusService = new GetMultimeterToggleStatus(multimeterFactory, permissions)
 
         this.multimeterToggleStatusListenerService = new MultimeterToggleStatusListener(multimeterFactory)
 
@@ -150,9 +150,9 @@ class MultimeterController extends Controller {
         })
     }
 
-    checkState(onError = null, onSuccess = null) {
+    checkState(bleInitialized, onError = null, onSuccess = null) {
         return super.controllerHandler(onSuccess, onError, 100, async () => {
-            return await this.checkBleStateService.execute()
+            return await this.checkBleStateService.execute(bleInitialized)
         })
     }
 
@@ -256,7 +256,7 @@ export const disconnectMultimeter = (onError, onSuccess) => multimeterController
 
 export const addMultimeterStatusListener = (callback, peripheralId, onError, onSuccess) => multimeterController.addMultimeterStatusListener(callback, peripheralId, onError, onSuccess)
 
-export const checkBleState = (onError, onSuccess) => multimeterController.checkState(onError, onSuccess)
+export const checkBleState = (bleInitialized, onError, onSuccess) => multimeterController.checkState(bleInitialized, onError, onSuccess)
 
 export const addPropertyFieldListener = (onUpdate, onError, peripheralId, type, onTime, offTime, isSingleRead, firstCycle, onSetup, offDelay, syncMode, unit, mode, range, captureRate, measurementType, toggleStatus) => multimeterController.addPropertyFieldListener(onUpdate, onError, peripheralId, type, onTime, offTime, isSingleRead, firstCycle, onSetup, offDelay, syncMode, unit, mode, range, captureRate, measurementType, toggleStatus)
 

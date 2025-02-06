@@ -73,7 +73,7 @@ export default DevScreen = ({ navigation }) => {
   }, [])
 
   const { state } = useChartTransformState({})
-  const makePremium = () => { dispatch(updateSubscriptionStatus(1, Date.now() + 1000000000)) }
+  const makePremium = () => { dispatch(updateSubscriptionStatus(1, Date.now() + 1000000000), 'https://corpad.ca') }
 
   const [xDomain, setXDomain] = useState([0, 10]);
 

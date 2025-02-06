@@ -55,6 +55,14 @@
     "licenseUrl": "https://github.com/RobinBobin/react-native-google-drive-api-wrapper",
     "parents": "corpad"
   },
+  "@ruanitto/react-native-ntp-sync": {
+    "licenses": "MIT",
+    "copyright": "Copyright (c) 2020 Incrementing",
+    "repository": "https://github.com/ruanitto/react-native-ntp-sync",
+    "licenseUrl": "https://github.com/ruanitto/react-native-ntp-sync?tab=MIT-1-ov-file#readme",
+    "parents": "corpad"
+  },
+
   "@shopify/flash-list": {
     "licenses": "MIT",
     "copyright": "Copyright 2022-present, Shopify Inc.",
@@ -148,7 +156,7 @@
   },
   "react-native": {
     "licenses": "MIT",
-    "copyright": "Copyright (c) [2015-2016] [Horcrux]",
+    "copyright": "Copyright (c) Meta Platforms, Inc. and affiliates.",
     "repository": "github:facebook/react-native",
     "licenseUrl": "github:facebook/react-native",
     "parents": "corpad"

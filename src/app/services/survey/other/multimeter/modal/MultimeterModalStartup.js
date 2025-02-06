@@ -2,13 +2,15 @@ import { Error, errors } from "../../../../../utils/Error"
 import { MultimeterModalDefaultParams } from "../utils/MultimeterModalDefaultParams"
 
 export class MultimeterModalStartup {
-    constructor(settingRepo, multimeterFactory) {
+    constructor(settingRepo, multimeterFactory, permissions) {
         this.settingRepo = settingRepo
         this.defaultParamService = new MultimeterModalDefaultParams()
         this.multimeterFactory = multimeterFactory
+        this.permissions = permissions
     }
 
     async execute(toggleStatus) {
+        await this.permissions.bluetooth()
         const { multimeter: { captureRate, type, peripheralId } } = await this.settingRepo.get()
         if (!type)
             throw new Error(errors.MULTIMETER, 'Unable to get multimeter type', 'No paired multimeter found')

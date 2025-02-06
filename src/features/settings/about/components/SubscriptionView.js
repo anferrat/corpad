@@ -9,7 +9,7 @@ import useAbout from '../hooks/useAbout'
 
 
 const SubscriptionView = () => {
-    const { status, expirationTime, onShowPaywall } = useAbout()
+    const { status, expirationTime, onShowPaywall, onManageLinkOpen } = useAbout()
     const isPro = isProStatus(status)
     const isVerify = isVerifyStatus(status)
     return (
@@ -22,44 +22,36 @@ const SubscriptionView = () => {
             </Text>
             <Divider />
             <View style={styles.row}>
-                <View
-                    style={styles.title}>
-                    <Icon
-                        name={SubscriptionStatusIcons[status]}
-                        style={styles.icon}
-                        fill={SubscriptionStatusColors[status]}
-                    />
-                    <Text
-                        style={styles.text}>
-                        {SubscriptionStatusLabels[status]}
-                    </Text>
+                <View>
+                    <View
+                        style={styles.title}>
+                        <Icon
+                            name={SubscriptionStatusIcons[status]}
+                            style={styles.icon}
+                            fill={SubscriptionStatusColors[status]} />
+                        <Text
+                            style={styles.text}>
+                            {SubscriptionStatusLabels[status]}
+                        </Text>
+                        {isPro ?
+                            <Text
+                                numberOfLines={1}
+                                ellipsizeMode={'head'}
+                                category='c2' appearance='hint'>
+                                (Expires on {getFormattedDate(expirationTime)})
+                            </Text> : null}
+                    </View>
                 </View>
-                {isPro ? <View>
-                    <Text
-                        category='c2' appearance='hint'>
-                        Expires
-                    </Text>
-                    <Text
-                        category='s2'>
-                       {getFormattedDate(expirationTime)}
-                    </Text>
-                </View>
-
-                    :
-                    <Button
+                {isPro ? <Button
+                    onPress={onManageLinkOpen}
+                    size='small'
+                    appearance='ghost'>Manage</Button> : <Button
                         onPress={onShowPaywall}
                         appearance='ghost'
                         size='small'>
-                        {isVerify ? 'Check' : 'Upgrade'}
-                    </Button>}
+                    {isVerify ? 'Check' : 'Upgrade'}
+                </Button>}
             </View>
-            {isPro ?
-                <Text
-                    style={styles.hint}
-                    category='c2'
-                    appearance='hint'>
-                    To unsubscribe please go to "Manage subscriptions" tab in your app store settings.
-                </Text> : null}
         </View>
     )
 }
@@ -82,10 +74,12 @@ const styles = StyleSheet.create({
         alignItems: 'center'
     },
     title: {
-        flexDirection: 'row'
+        flexDirection: 'row',
+        alignItems: 'center'
     },
     text: {
-        fontWeight: 'bold'
+        fontWeight: 'bold',
+        marginRight: 6
     },
     label: {
         paddingLeft: 12,

@@ -38,7 +38,7 @@ export class PurchaseRepository {
             const { customerInfo, productIdentifier } = await Purchases.purchasePackage(pack)
             if (typeof customerInfo.entitlements.active['Premium'] !== "undefined") {
                 const { identifier, isActive, expirationDate } = customerInfo.entitlements.active['Premium']
-                return new SubscriptionStatus(identifier, isActive, Date.parse(expirationDate), false)
+                return new SubscriptionStatus(identifier, isActive, Date.parse(expirationDate), false, customerInfo.managementURL)
             }
             else throw 'Identifier was not updated'
         }
@@ -56,10 +56,10 @@ export class PurchaseRepository {
             if (customerInfo.entitlements.active.isEmpty)
                 throw 'No entitlements'
             const { identifier, isActive, expirationDate } = customerInfo.entitlements.active['Premium']
-            return new SubscriptionStatus(identifier, isActive, Date.parse(expirationDate), false)
+            return new SubscriptionStatus(identifier, isActive, Date.parse(expirationDate), false, customerInfo.managementURL)
         }
         catch (er) {
-            return new SubscriptionStatus(null, false, null, false)
+            return new SubscriptionStatus(null, false, null, false, null)
         }
     }
 
@@ -67,10 +67,10 @@ export class PurchaseRepository {
         try {
             const customerInfo = await Purchases.restorePurchases()
             if (customerInfo.entitlements.active.isEmpty)
-                return new SubscriptionStatus(null, false, null, false)
+                return new SubscriptionStatus(null, false, null, false, null)
             else {
                 const { identifier, isActive, expirationDate } = customerInfo.entitlements.active['Premium']
-                return new SubscriptionStatus(identifier, isActive, Date.parse(expirationDate), false)
+                return new SubscriptionStatus(identifier, isActive, Date.parse(expirationDate), false, customerInfo.managementURL)
             }
         }
         catch (er) {
