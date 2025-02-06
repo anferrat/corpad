@@ -5,7 +5,7 @@ export class CheckBleState {
     }
 
     async execute(bleInitialized) {
-        await permissions.bluetooth()
+        await this.permissions.bluetooth()
         if (!bleInitialized)
             await this.bluetoothRepo.init()
         const state = await this.bluetoothRepo.checkState()
