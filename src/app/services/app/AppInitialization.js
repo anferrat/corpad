@@ -25,7 +25,7 @@ export class AppInitialization {
         //Get settings, reset the ones are not found.
         const settings = await this.settingInitializationService.execute()
 
-        //Initialize bluetooth module, only if onboarding is not displayed, otherwise initialize it after onboarding update. (No notification should be displayed during onboarding)
+
 
         let [{ isLoaded, syncTime, name, fileName, isCloud, uid }, { isSigned, userName }, initialUrl, { status, expirationTime, managmentUrl }] = await Promise.all([
             this.currentSurveyStatusService.execute(),
@@ -36,8 +36,10 @@ export class AppInitialization {
             this.fileSystemInitializationService.execute(),
         ])
 
+        //Initialize bluetooth module, only if there is a paired multimeter, otherwise initialize later in settings when trying to scan for mutimeter
+        const initializeBleOnLaunch = settings.multimeter.peripheralId !== null
 
-        if (!settings.onboarding.main) {
+        if (initializeBleOnLaunch) {
             const autoConnect = status === SubscriptionStatuses.GRANTED || status === SubscriptionStatuses.UNKNOWN_GRANTED
             await this.multimeterInitializationService.execute(autoConnect)
         }
@@ -86,7 +88,7 @@ export class AppInitialization {
             subscriptionStatus: status,
             subscriptionExpirationTime: expirationTime,
             managmentUrl,
-            bleInitialized: !settings.onboarding.main
+            bleInitialized: initializeBleOnLaunch
         }
     }
 }
