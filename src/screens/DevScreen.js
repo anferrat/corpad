@@ -33,7 +33,7 @@ const connectMM = async () => {
     await service.start(peripheralId)
   }
   catch (er) {
-    console.log(er)
+    //console.log(er)
   }
 }
 
@@ -42,7 +42,7 @@ const disconnectMM = async () => {
     await service.stop(peripheralId)
   }
   catch (er) {
-    console.log(er)
+    //console.log(er)
   }
 }
 

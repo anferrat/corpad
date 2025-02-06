@@ -23,7 +23,6 @@ export const useMultimeterGraph = (history, xMax, yMax) => {
     }), [font])
 
     useEffect(() => {
-        console.log('here')
         if (xMax)
             setXValue(xMax / 1000)
     }, [xMax])
