@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react"
 import { EventRegister } from "react-native-event-listeners"
 import { useDispatch, useSelector } from "react-redux"
-import { addMultimeterStatusListener, addMultimeterToggleStatusListener, connectMultimeter, disconnectMultimeter, getMultimeterToggleStatus } from "../../app/controllers/MultimeterController"
+import { addMultimeterStatusListener, addMultimeterToggleStatusListener, connectMultimeter, getMultimeterToggleStatus } from "../../app/controllers/MultimeterController"
 import { setActiveMultimeterConnecting, setActiveMultimeterStatus, setActiveMultimeterToggleStatus } from "../../store/actions/settings"
 import useIsAppStateActive from "../useIsAppStateActive"
 
@@ -10,12 +10,13 @@ export const useMultimeterStatus = () => {
     const connecting = useSelector(state => state.settings.activeMultimeter.connecting)
     const multimeterType = useSelector(state => state.settings.activeMultimeter.multimeterType)
     const peripheralId = useSelector(state => state.settings.activeMultimeter.id)
+    const bleInitialized = useSelector(state => state.settings.bluetooth.initialized)
     const isStateActive = useIsAppStateActive()
     const toggleStatusObtained = useSelector(state => state.settings.activeMultimeter.toggleStatus !== null)
     const dispatch = useDispatch()
     const [toggleStatusRequested, setToggleStatusRequested] = useState(false)
     const isToggleStatusAvailable = connected && !connecting && peripheralId && multimeterType && isStateActive
-    const isToggleStatusNeeded = isToggleStatusAvailable && !toggleStatusObtained && !toggleStatusRequested
+    const isToggleStatusNeeded = isToggleStatusAvailable && !toggleStatusObtained && !toggleStatusRequested && bleInitialized
     const TOGGLE_STATUS_REQUEST_DELAY = 0
     const TOGGLE_STATUS_RESEND_REQUEST_DELAY = 2000
 

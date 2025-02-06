@@ -27,7 +27,7 @@ export class AppInitialization {
 
         //Initialize bluetooth module, only if onboarding is not displayed, otherwise initialize it after onboarding update. (No notification should be displayed during onboarding)
 
-        let [{ isLoaded, syncTime, name, fileName, isCloud, uid }, { isSigned, userName }, initialUrl, { status, expirationTime }] = await Promise.all([
+        let [{ isLoaded, syncTime, name, fileName, isCloud, uid }, { isSigned, userName }, initialUrl, { status, expirationTime, managmentUrl }] = await Promise.all([
             this.currentSurveyStatusService.execute(),
             this.authorizationService.checkSignInStatus(),
             this.linkingService.getInitialUrl(),
@@ -84,7 +84,9 @@ export class AppInitialization {
             onboarding: settings.onboarding,
             multimeter: settings.multimeter,
             subscriptionStatus: status,
-            subscriptionExpirationTime: expirationTime
+            subscriptionExpirationTime: expirationTime,
+            managmentUrl,
+            bleInitialized: !settings.onboarding.main
         }
     }
 }

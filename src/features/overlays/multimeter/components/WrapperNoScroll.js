@@ -45,7 +45,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         flexDirection: 'row',
         flexWrap: 'wrap',
-        marginHorizontal: 12
+        marginHorizontal: 6
     },
     text: {
         paddingLeft: 12
