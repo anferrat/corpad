@@ -19,7 +19,7 @@ export const mainPages = [
         backgroundColor: basic300,
         image: <Icon name='onboarding-create' pack='cp' fill={primary} style={styles.icon} />,
         title: 'Data capture',
-        subtitle: ' Take photos, assign GPS coordinates, and plot data on the map with our user-friendly interface'
+        subtitle: 'Take photos, assign GPS coordinates, and plot data on the map with our user-friendly interface'
     },
     {
         backgroundColor: basic300,
@@ -46,27 +46,22 @@ export const lastVersionPages = [
     {
         backgroundColor: basic300,
         image: <Icon name='corpad-logo' fill={primary} pack='cp' style={styles.icon} />,
-        title: 'Updated to version 1.6',
+        title: 'Updated to version 1.6.2',
         subtitle: "We've enhanced your cathodic protection data capture experience."
     },
     {
         backgroundColor: basic300,
-        image: <Icon name='qr-code' fill={primary} pack='cp' style={styles.icon} />,
-        title: 'QR code labels',
-        subtitle: 'Test point and rectifier information can be stored inside a QR code. App users can read and use the data stored on the code.'
+        image: <Icon name='radio' fill={primary} style={styles.icon} />,
+        title: 'Enhanced multimeter support',
+        subtitle: 'New multimeter module is available. Added support for a new model. Check https://docs.corpad.ca/multimeter for more info.'
     },
     {
         backgroundColor: basic300,
-        image: <Icon name='file-text' fill={primary} style={styles.icon} />,
-        title: 'New format support',
-        subtitle: 'Map layers now support .kmz and .geojson. Import from spreadsheet works with .xlsx.'
+        image: <Icon name='grid' fill={primary} style={styles.icon} />,
+        title: 'Updated potential types',
+        subtitle: 'New default potential type - "AC" is added'
     },
-    {
-        backgroundColor: basic300,
-        image: <Icon name='funnel' fill={primary} style={styles.icon} />,
-        title: 'New filters',
-        subtitle: 'Test points can be filtered by pipeline. Added filters to markers on the map.'
-    },
+
     {
         backgroundColor: basic300,
         image: <Icon name='smiling-face' fill={primary} style={styles.icon} />,

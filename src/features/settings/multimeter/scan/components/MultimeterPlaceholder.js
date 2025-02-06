@@ -10,7 +10,7 @@ import { errorHandler } from '../../../../../helpers/error_handler'
 
 const MultimeterPlaceholder = () => {
     const handleLink = () => {
-        openLink({ url: 'https://www.corpad.ca/multimeters' },
+        openLink({ url: 'https://docs.corpad.ca/multimeter/models' },
             er => errorHandler(er))
     }
     return (
@@ -41,7 +41,7 @@ const MultimeterPlaceholder = () => {
                         appearance='hint'
                         status='primary'
                         category='s2'
-                        style={styles.description}> corpad.ca/multimeters.
+                        style={styles.description}> docs.corpad.ca/multimeter/models.
                     </Text>
                 </Pressable>
             </View>

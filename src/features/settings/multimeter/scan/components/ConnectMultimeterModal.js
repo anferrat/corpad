@@ -23,7 +23,7 @@ const ConnectMultimeterModal = ({ onConnectRequest, hideModal, visible }) => {
             </View>
             <Text
                 style={styles.hint}>
-                Press button on your multimeter and subsequently, select "Continue."</Text>
+                Make sure that multimeter is ready to connect and press "Continue."</Text>
             <Button
                 accessoryRight={accessory}
                 onPress={onConnectRequest}>
