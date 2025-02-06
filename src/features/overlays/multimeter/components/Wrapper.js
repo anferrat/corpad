@@ -52,7 +52,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
     },
     scrollViewWrapper: {
-        height: 60,
+        height: 55,
     },
     text: {
         paddingLeft: 12

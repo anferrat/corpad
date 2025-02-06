@@ -38,6 +38,7 @@ const styles = StyleSheet.create({
     },
     wrapper: {
         flex: -1,
+        maxHeight: 200,
         justifyContent: 'center',
     },
     scrollViewWrapper: {

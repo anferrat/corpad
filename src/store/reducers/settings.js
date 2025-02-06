@@ -330,7 +330,6 @@ const settings = (state = initialState, action) => {
                 activeMultimeter: {
                     ...state.activeMultimeter,
                     connected: action.connected,
-                    connecting: false,
                     executing: action.connected ? state.activeMultimeter.executing : false,
                 }
             }

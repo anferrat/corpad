@@ -1,16 +1,11 @@
 export class PairMultimeter {
-    constructor(permissions, multimeterFactory, updateMultimeterSettingsService) {
-        this.permissions = permissions
-        this.multimeterFactory = multimeterFactory
+    constructor(updateMultimeterSettingsService) {
         this.updateMultimeterSettingsService = updateMultimeterSettingsService
     }
 
     async execute(multimeterData) {
         const { id, multimeterType, name } = multimeterData
-        await this.permissions.bluetooth()
-        await Promise.all([
-            this.updateMultimeterSettingsService.executeForPairing({ id, multimeterType, name }),
-            this.multimeterFactory.execute(multimeterType).start(id)])
+        await this.updateMultimeterSettingsService.executeForPairing({ id, multimeterType, name })
         return
     }
 }

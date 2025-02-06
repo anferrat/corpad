@@ -18,7 +18,7 @@ const useSurveyManager = ({ hideSheet }) => {
 
     const syncTimeLabel = (lastSyncTime === null ? 'Never saved' : `Last synced: ${getFormattedDate(lastSyncTime)}`)
 
-    const multimeterLablel = paired ? (`${connected ? 'Connected' : 'Disconnected'} | ${MultimeterTypeLabels[multimeterType]}`) : null
+    const multimeterLablel = paired ? (`${connected && !connecting ? 'Connected' : 'Disconnected'} | ${MultimeterTypeLabels[multimeterType]}`) : null
 
     const onUpload = useCallback((total, count) => dispatch(updateLoaderProgress(true, 'Uploading assets', total, count)))
 

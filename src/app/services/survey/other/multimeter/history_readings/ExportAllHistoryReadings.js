@@ -28,11 +28,9 @@ export class ExportAllHistoryReadings {
 
     async execute() {
         const historyReadings = await this.multimeterReadingRepo.getAll()
-        console.log(historyReadings)
         const header = [['Time', 'Value', 'Unit', 'Multimeter']]
         const array = header.concat(
             historyReadings.map(({ value, deviceTimestamp, unit, type, isAc, deviceType }) => [getFullDate(deviceTimestamp), this._getValue(value), this._getUnitLabel(type, unit, isAc), MultimeterTypeLabels[deviceType]]))
-        console.log(array)
         const content = this.csvParser.unparse(array)
 
         const name = this.fileNameGenerator.execute('History_readings', 'csv')

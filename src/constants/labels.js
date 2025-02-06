@@ -411,7 +411,8 @@ export const CalculatorTypeFileNameLabels = Object.freeze({
 })
 
 export const MultimeterTypeLabels = Object.freeze({
-    [MultimeterTypes.POKIT]: 'Pokit Pro'
+    [MultimeterTypes.POKIT]: 'Pokit Pro',
+    [MultimeterTypes.DVM2130]: 'DVM 2130'
 })
 
 export const TimeUnitLabels = Object.freeze({
@@ -560,7 +561,10 @@ export const MultimeterModeLabels = Object.freeze({
     [MultimeterModes.POKIT.DC_AMPS]: 'Current DC',
     [MultimeterModes.POKIT.DC_VOLTS]: 'Voltage DC',
     [MultimeterModes.POKIT.AC_VOLTS]: 'Voltage AC',
-    [MultimeterModes.POKIT.IDLE]: 'Idle'
+    [MultimeterModes.DVM2130.DC_VOLTS]: 'Voltage DC',
+    [MultimeterModes.DVM2130.AC_VOLTS]: 'Voltage AC',
+    [MultimeterModes.POKIT.IDLE]: 'Idle',
+    [MultimeterModes.DVM2130.IDLE]: 'Idle'
 })
 
 export const MultimeterRangeLabels = Object.freeze({
@@ -580,5 +584,8 @@ export const MultimeterRangeLabels = Object.freeze({
     [MultimeterCurrentRanges.POKIT._125mA]: '125 mA',
     [MultimeterCurrentRanges.POKIT._300mA]: '300 mA',
     [MultimeterCurrentRanges.POKIT._3A]: '3 A',
-    [MultimeterCurrentRanges.POKIT._10A]: '10 A'
+    [MultimeterCurrentRanges.POKIT._10A]: '10 A',
+    [MultimeterVoltageRanges.DVM2130._500mV]: '500 mV',
+    [MultimeterVoltageRanges.DVM2130._5V]: '5 V',
+    [MultimeterVoltageRanges.DVM2130._250V]: '250  V',
 })

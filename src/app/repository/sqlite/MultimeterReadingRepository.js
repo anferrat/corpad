@@ -22,7 +22,6 @@ export class MultimeterReadingRepository extends SQLiteRepository {
         try {
             const result = await this.runSingleQueryTransaction(`SELECT * FROM multimeterReadings ORDER BY deviceTimestamp DESC`, [])
             return this.generateArray(result.rows.length, result.rows.item).map(({ id, value, deviceTimestamp, type, unit, flag, isAc, deviceType }) => {
-                console.log(id, value, deviceTimestamp, type, unit, flag, isAc, deviceType)
                 return new Reading(id, value, deviceTimestamp, type, unit, flag, isAc, deviceType)
             })
         }

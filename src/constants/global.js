@@ -465,7 +465,8 @@ export const CurrentDensityUnits = Object.freeze({
 })
 
 export const MultimeterTypes = Object.freeze({
-    POKIT: 'POKIT'
+    POKIT: 'POKIT',
+    DVM2130: 'DVM2130',
 })
 
 export const MultimeterServices = Object.freeze({
@@ -662,6 +663,11 @@ export const MultimeterModes = Object.freeze({
         AC_AMPS: 'AC_AMPS',
         DC_AMPS: 'DC_AMPS',
         IDLE: 'IDLE'
+    },
+    [MultimeterTypes.DVM2130]: {
+        DC_VOLTS: 'DVM_DC_VOLTS',
+        AC_VOLTS: 'DVM_AC_VOLTS',
+        IDLE: 'DVM_IDLE'
     }
 })
 
@@ -676,6 +682,11 @@ export const MultimeterVoltageRanges = Object.freeze({
         _400V: '_400V',
         _600V: '_600V',
         AUTO: 'AUTO'
+    },
+    [MultimeterTypes.DVM2130]: {
+        _500mV: '_500mV',
+        _5V: '_5V',
+        _250V: '_250V'
     }
 })
 
@@ -702,6 +713,9 @@ export const MultimeterToggleStatuses = Object.freeze({
         VOLTAGE: 'VOLTAGE',
         SMALL_CURRENT: 'SMALL_CURRENT',
         LARGE_CURRENT: 'LARGE_CURRENT'
+    },
+    [MultimeterTypes.DVM2130]: {
+        DEFAULT: 'DEFAULT'
     }
 })
 

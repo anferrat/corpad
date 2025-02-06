@@ -40,7 +40,7 @@ class MultimeterController extends Controller {
         this.getMultimeterSettingsService = new GetMultimeterSettings(settingRepo)
         this.updateMultimeterSettingService = new UpdateMultimeterSettings(settingRepo)
 
-        this.pairMultimeterService = new PairMultimeter(permissions, this.multimeterFactory, this.updateMultimeterSettingService)
+        this.pairMultimeterService = new PairMultimeter(this.updateMultimeterSettingService)
         this.unpairMultimeterService = new UnpairMultimeter(permissions, this.multimeterFactory, this.updateMultimeterSettingService)
 
         this.connectMultimeterService = connectMultimeterService

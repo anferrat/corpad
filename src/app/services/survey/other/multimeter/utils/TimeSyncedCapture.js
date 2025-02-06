@@ -41,14 +41,13 @@ export class TimeSyncedCapture {
             return [[MultimeterCycles.ON, null], [MultimeterCycles.OFF, null]]
 
         const cycles = timestamps.map(timestamp => this._getCycleType(timestamp, firstCycle, onTime, offTime))
-        /*
-        const test = array.map((v, i) => ({
+
+       /* const test = array.map((v, i) => ({
             v: v.toFixed(2),
             s: new Date(timestamps[i]).getSeconds(),
             c: cycles[i] ? 'ON' : 'OFF'
         }))
-        console.log(test)
-        */
+*/
         const transitionIndex = this._getTransitionIndex(cycles)
         const isOnOffTransition = cycles[transitionIndex] === MultimeterCycles.ON
 

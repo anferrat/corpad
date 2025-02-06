@@ -1,4 +1,4 @@
-import { MultimeterCaptureRate, MultimeterCycles, MultimeterListenerEvents, MultimeterSyncModes } from "../../../../../../constants/global"
+import { MultimeterCycles, MultimeterListenerEvents, MultimeterSyncModes } from "../../../../../../constants/global"
 import { Reading } from "../../../../../entities/survey/multimeter/Reading"
 import { Error, errors } from "../../../../../utils/Error"
 import { HighLowCapture } from "./HighLowCapture"
