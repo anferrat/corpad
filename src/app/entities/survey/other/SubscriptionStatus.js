@@ -1,9 +1,9 @@
 export class SubscriptionStatus {
-    constructor(identifier, isActive, expirationTime, offlineFlag, managmentUrl) {
+    constructor(identifier, isActive, expirationTime, offlineFlag, managementUrl) {
         this.isActive = isActive
         this.identifier = identifier
         this.expirationTime = expirationTime
         this.offlineFlag = offlineFlag
-        this.managmentUrl = managmentUrl
+        this.managementUrl = managementUrl
     }
 }

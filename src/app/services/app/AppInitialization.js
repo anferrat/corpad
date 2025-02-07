@@ -27,7 +27,7 @@ export class AppInitialization {
 
 
 
-        let [{ isLoaded, syncTime, name, fileName, isCloud, uid }, { isSigned, userName }, initialUrl, { status, expirationTime, managmentUrl }] = await Promise.all([
+        let [{ isLoaded, syncTime, name, fileName, isCloud, uid }, { isSigned, userName }, initialUrl, { status, expirationTime, managementUrl }] = await Promise.all([
             this.currentSurveyStatusService.execute(),
             this.authorizationService.checkSignInStatus(),
             this.linkingService.getInitialUrl(),
@@ -87,7 +87,7 @@ export class AppInitialization {
             multimeter: settings.multimeter,
             subscriptionStatus: status,
             subscriptionExpirationTime: expirationTime,
-            managmentUrl,
+            managementUrl,
             bleInitialized: initializeBleOnLaunch
         }
     }
