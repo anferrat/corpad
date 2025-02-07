@@ -42,7 +42,7 @@ const usePaywall = () => {
         await purchaseSubscription(
             { pack: price.pack },
             (er) => er !== 101 ? errorHandler(er) : null,
-            ({ status, expirationTime, managmentUrl }) => dispatch(updateSubscriptionStatus(status, expirationTime, managmentUrl)))
+            ({ status, expirationTime, managementUrl }) => dispatch(updateSubscriptionStatus(status, expirationTime, managementUrl)))
         setProcessing(false)
     }, [price.pack])
 
@@ -51,7 +51,7 @@ const usePaywall = () => {
             setProcessing(true)
             await verifySubscription(
                 (er) => errorHandler(er),
-                ({ status, expirationTime, managmentUrl }) => dispatch(updateSubscriptionStatus(status, expirationTime, managmentUrl))
+                ({ status, expirationTime, managementUrl }) => dispatch(updateSubscriptionStatus(status, expirationTime, managementUrl))
             )
             setProcessing(false)
         }
@@ -63,7 +63,7 @@ const usePaywall = () => {
         setProcessing(true)
         await restorePurchases(
             (er) => errorHandler(er),
-            ({ status, expirationTime, managmentUrl }) => dispatch(updateSubscriptionStatus(status, expirationTime, managmentUrl)))
+            ({ status, expirationTime, managementUrl }) => dispatch(updateSubscriptionStatus(status, expirationTime, managementUrl)))
         setProcessing(false)
     }, [])
 

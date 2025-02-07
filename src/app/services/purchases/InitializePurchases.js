@@ -27,7 +27,7 @@ export class InitializePurchases {
             return {
                 status: SubscriptionStatuses.UNKNOWN_NOT_GRANTED,
                 expirationTime: status.expirationTime,
-                managmentUrl: status.managmentUrl
+                managementUrl: status.managementUrl
             }
         }
         else {
@@ -35,7 +35,7 @@ export class InitializePurchases {
             return {
                 status: SubscriptionStatuses.UNKNOWN_GRANTED,
                 expirationTime: status.expirationTime,
-                managmentUrl: status.managmentUrl
+                managementUrl: status.managementUrl
             }
         }
     }
@@ -49,14 +49,14 @@ export class InitializePurchases {
                 return {
                     status: SubscriptionStatuses.NOT_GRANTED,
                     expirationTime: status.expirationTime,
-                    managmentUrl: null
+                    managementUrl: null
                 }
             else if (isInternetOn) {
                 await this.settingRepo.updateOfflineCount(0)
                 return {
                     status: SubscriptionStatuses.GRANTED,
                     expirationTime: status.expirationTime,
-                    managmentUrl: status.managmentUrl,
+                    managementUrl: status.managementUrl,
                 }
             }
             else {
@@ -66,7 +66,7 @@ export class InitializePurchases {
                     return {
                         status: SubscriptionStatuses.UNKNOWN_NOT_GRANTED,
                         expirationTime: status.expirationTime,
-                        managmentUrl: status.managmentUrl,
+                        managementUrl: status.managementUrl,
                     }
                 else
                     /*
@@ -79,7 +79,7 @@ export class InitializePurchases {
             return {
                 status: SubscriptionStatuses.UNKNOWN_NOT_GRANTED,
                 expirationTime: null,
-                managmentUrl: null
+                managementUrl: null
             }
         }
     }

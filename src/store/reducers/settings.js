@@ -12,7 +12,7 @@ const initialState = {
         status: SubscriptionStatuses.PENDING,
         paywallVisible: false,
         expirationTime: 0,
-        managmentUrl: null
+        managementUrl: null
     },
     lastImport: {
         itemType: null,
@@ -154,7 +154,7 @@ const settings = (state = initialState, action) => {
                     ...state.subscription,
                     status: action.subscriptionStatus,
                     expirationTime: action.subscriptionExpirationTime,
-                    managmentUrl: action.managmentUrl
+                    managementUrl: action.managementUrl
                 },
                 bluetooth: {
                     ...state.bluetooth,
@@ -399,7 +399,7 @@ const settings = (state = initialState, action) => {
                     ...state.subscription,
                     status: action.status,
                     expirationTime: action.expirationTime,
-                    managmentUrl: managmentUrl
+                    managementUrl: managementUrl
                 }
             }
         case SHOW_PAYWALL:

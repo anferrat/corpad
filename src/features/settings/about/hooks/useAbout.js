@@ -5,11 +5,11 @@ import { openLink } from "../../../../app/controllers/AppController"
 import { errorHandler } from "../../../../helpers/error_handler"
 
 const useAbout = () => {
-    const { status, expirationTime, managmentUrl } = useSelector(state => state.settings.subscription)
+    const { status, expirationTime, managementUrl } = useSelector(state => state.settings.subscription)
     const dispatch = useDispatch()
     const onShowPaywall = useCallback(() => dispatch(showPaywall()), [])
 
-    const onManageLinkOpen = () => managmentUrl !== null ? openLink({ url: managmentUrl }, er => errorHandler(er)) : null
+    const onManageLinkOpen = () => managementUrl !== null ? openLink({ url: managementUrl }, er => errorHandler(er)) : null
 
     return {
         status,

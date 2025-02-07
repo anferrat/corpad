@@ -15,7 +15,7 @@ export class RestorePurchases {
             return {
                 status: SubscriptionStatuses.GRANTED,
                 expirationTime: subscriptionStatus.expirationTime,
-                managmentUrl: subscriptionStatus.managmentUrl
+                managementUrl: subscriptionStatus.managementUrl
             }
         else
             throw new Error(errors.PURCHASE, 'Unable to restore purchases', 'No purchases to restore', 118)

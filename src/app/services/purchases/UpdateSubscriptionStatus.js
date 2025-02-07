@@ -14,13 +14,13 @@ export class UpdateSubscriptionStatus {
             return {
                 status: SubscriptionStatuses.GRANTED,
                 expirationTime: status.expirationTime,
-                managmentUrl: status.managmentUrl
+                managementUrl: status.managementUrl
             }
         else
             return {
                 status: SubscriptionStatuses.NOT_GRANTED,
                 expirationTime: status.expirationTime,
-                managmentUrl: status.managmentUrl
+                managementUrl: status.managementUrl
             }
     }
 }

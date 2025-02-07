@@ -94,8 +94,8 @@ export const setSessionModalVisible = (visible) => {
     return { type: SET_SESSION_MODAL_VISIBLE, visible }
 }
 
-export const setSettingsOnAppLoad = (isLoaded, syncTime, name, uid, fileName, isCloud, isSigned, userName, onboarding, multimeter, subscriptionStatus, subscriptionExpirationTime, managmentUrl, bleInitialized) => {
-    return { type: SET_SETTINGS_ON_APP_LOAD, isLoaded, syncTime, name, uid, fileName, isCloud, isSigned, userName, onboarding, multimeter, subscriptionStatus, subscriptionExpirationTime, managmentUrl, bleInitialized }
+export const setSettingsOnAppLoad = (isLoaded, syncTime, name, uid, fileName, isCloud, isSigned, userName, onboarding, multimeter, subscriptionStatus, subscriptionExpirationTime, managementUrl, bleInitialized) => {
+    return { type: SET_SETTINGS_ON_APP_LOAD, isLoaded, syncTime, name, uid, fileName, isCloud, isSigned, userName, onboarding, multimeter, subscriptionStatus, subscriptionExpirationTime, managementUrl, bleInitialized }
 }
 
 export const updateBottomSheetContent = (itemType, content, params) => ({
@@ -130,8 +130,8 @@ export const setActiveMultimeterExecuting = (executing) => (
     { type: SET_ACTIVE_MULTIMETER_EXECUTING, executing }
 )
 
-export const updateSubscriptionStatus = (status, expirationTime = 0, managmentUrl) => ({
-    type: UPDATE_SUBSCRIPTION_STATUS, status, expirationTime, managmentUrl
+export const updateSubscriptionStatus = (status, expirationTime = 0, managementUrl) => ({
+    type: UPDATE_SUBSCRIPTION_STATUS, status, expirationTime, managementUrl
 })
 
 export const showPaywall = () => ({
