@@ -74,14 +74,12 @@ const styles = StyleSheet.create({
     label: {
         flexBasis: 90,
         textAlignVertical: 'center',
-        height: '100%',
         paddingBottom: 12
     },
     dash: {
         flex: .3,
         textAlign: 'center',
         textAlignVertical: 'center',
-        height: '100%',
         paddingBottom: 12,
     }
 })
