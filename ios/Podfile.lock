@@ -987,13 +987,15 @@ PODS:
     - React-Core
   - react-native-safe-area-context (4.10.7):
     - React-Core
-  - react-native-slider (4.5.5):
+  - react-native-skia (1.10.2):
     - DoubleConversion
     - glog
     - hermes-engine
     - RCT-Folly (= 2024.01.01.00)
     - RCTRequired
     - RCTTypeSafety
+    - React
+    - React-callinvoker
     - React-Codegen
     - React-Core
     - React-debug
@@ -1245,6 +1247,8 @@ PODS:
     - React-perflogger (= 0.74.3)
     - React-utils (= 0.74.3)
   - RevenueCat (4.43.2)
+  - RNCClipboard (1.16.1):
+    - React-Core
   - RNFlashList (1.7.0):
     - DoubleConversion
     - glog
@@ -1268,7 +1272,7 @@ PODS:
     - Yoga
   - RNFS (2.20.0):
     - React-Core
-  - RNGestureHandler (2.17.1):
+  - RNGestureHandler (2.22.1):
     - DoubleConversion
     - glog
     - hermes-engine
@@ -1404,7 +1408,7 @@ DEPENDENCIES:
   - "react-native-netinfo (from `../node_modules/@react-native-community/netinfo`)"
   - react-native-nfc-manager (from `../node_modules/react-native-nfc-manager`)
   - react-native-safe-area-context (from `../node_modules/react-native-safe-area-context`)
-  - "react-native-slider (from `../node_modules/@react-native-community/slider`)"
+  - "react-native-skia (from `../node_modules/@shopify/react-native-skia`)"
   - react-native-splash-screen (from `../node_modules/react-native-splash-screen`)
   - react-native-sqlite-storage (from `../node_modules/react-native-sqlite-storage`)
   - react-native-udp (from `../node_modules/react-native-udp`)
@@ -1431,6 +1435,7 @@ DEPENDENCIES:
   - React-runtimescheduler (from `../node_modules/react-native/ReactCommon/react/renderer/runtimescheduler`)
   - React-utils (from `../node_modules/react-native/ReactCommon/react/utils`)
   - ReactCommon/turbomodule/core (from `../node_modules/react-native/ReactCommon`)
+  - "RNCClipboard (from `../node_modules/@react-native-clipboard/clipboard`)"
   - "RNFlashList (from `../node_modules/@shopify/flash-list`)"
   - RNFS (from `../node_modules/react-native-fs`)
   - RNGestureHandler (from `../node_modules/react-native-gesture-handler`)
@@ -1537,8 +1542,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-nfc-manager"
   react-native-safe-area-context:
     :path: "../node_modules/react-native-safe-area-context"
-  react-native-slider:
-    :path: "../node_modules/@react-native-community/slider"
+  react-native-skia:
+    :path: "../node_modules/@shopify/react-native-skia"
   react-native-splash-screen:
     :path: "../node_modules/react-native-splash-screen"
   react-native-sqlite-storage:
@@ -1591,6 +1596,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon/react/utils"
   ReactCommon:
     :path: "../node_modules/react-native/ReactCommon"
+  RNCClipboard:
+    :path: "../node_modules/@react-native-clipboard/clipboard"
   RNFlashList:
     :path: "../node_modules/@shopify/flash-list"
   RNFS:
@@ -1665,7 +1672,7 @@ SPEC CHECKSUMS:
   react-native-netinfo: 48c5f79a84fbc3ba1d28a8b0d04adeda72885fa8
   react-native-nfc-manager: eb48fbfb7b41e054854465313613cfa7940302b8
   react-native-safe-area-context: 422017db8bcabbada9ad607d010996c56713234c
-  react-native-slider: 646f6727b04b619ec62d6547fe90b8f561950036
+  react-native-skia: 0ad46c343efa90dbca39d14fe4e2f0d44f1b450e
   react-native-splash-screen: 4312f786b13a81b5169ef346d76d33bc0c6dc457
   react-native-sqlite-storage: f6d515e1c446d1e6d026aa5352908a25d4de3261
   react-native-udp: df79c3cb72c4e71240cd3ce4687bfb8a137140d5
@@ -1693,9 +1700,10 @@ SPEC CHECKSUMS:
   React-utils: a06061b3887c702235d2dac92dacbd93e1ea079e
   ReactCommon: f00e436b3925a7ae44dfa294b43ef360fbd8ccc4
   RevenueCat: 3d934653b7e8b09af88fd47e9e84cfaf5d0a89ba
+  RNCClipboard: d7a8903d32692b0a1e71738c3825465a9acae10e
   RNFlashList: e9b57a5553639f9b528cc50ab53f25831722ed62
   RNFS: 4ac0f0ea233904cb798630b3c077808c06931688
-  RNGestureHandler: 8dbcccada4a7e702e7dec9338c251b1cf393c960
+  RNGestureHandler: f7abf21d594742be28a3a72528069225a3187e26
   RNGoogleSignin: 9d0ecc3bff939ccef83cb3a26b874130b06a6e81
   RNPurchases: 1663e39aecc5d8730d97e349419cfd223c1c04ff
   RNQrGenerator: 5c12ab86443a07e923735800679da7b6fcaaeb31
