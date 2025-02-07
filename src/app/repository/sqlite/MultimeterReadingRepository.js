@@ -10,8 +10,9 @@ export class MultimeterReadingRepository extends SQLiteRepository {
     async create(reading) {
         try {
             const { value, deviceTimestamp, type, unit, flag, isAc, deviceType } = reading
-            const result = await this.runSingleQueryTransaction(`INSERT INTO multimeterReadings (value, deviceTimestamp, type, unit, flag, isSet, isAc, deviceType) VALUES (?,?,?,?,?,?,?,?)`, [value, deviceTimestamp, type, unit, flag, false, isAc, deviceType])
-            return new Reading(result.insertId, value, deviceTimestamp, type, unit, flag, isAc, deviceType)
+            const unitVal = typeof unit === 'number' ? unit.toFixed(0) : unit
+            const result = await this.runSingleQueryTransaction(`INSERT INTO multimeterReadings (value, deviceTimestamp, type, unit, flag, isSet, isAc, deviceType) VALUES (?,?,?,?,?,?,?,?)`, [value, deviceTimestamp, type, unitVal, flag, false, isAc, deviceType])
+            return new Reading(result.insertId, value, deviceTimestamp, type, unitVal, flag, isAc, deviceType)
         }
         catch (er) {
             throw new Error(errors.DATABASE, 'Unable to create multimeter reading record', er)
