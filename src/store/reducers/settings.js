@@ -399,7 +399,7 @@ const settings = (state = initialState, action) => {
                     ...state.subscription,
                     status: action.status,
                     expirationTime: action.expirationTime,
-                    managementUrl: managementUrl
+                    managementUrl: action.managementUrl
                 }
             }
         case SHOW_PAYWALL:

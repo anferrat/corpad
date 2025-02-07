@@ -49,33 +49,8 @@ const disconnectMM = async () => {
 
 export default DevScreen = ({ navigation }) => {
   const dispatch = useDispatch()
-  const font = useFont(montserrat, 12)
-  const [data, setData] = useState(DATA)
-  const [range, setRange] = useState(MultimeterVoltageRanges.DVM2130._250V)
-  const [viewport, setViewport] = useState({
-    x: [15, 30],
-    y: [40, 80],
-  })
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setData(state => state.concat({
-        day: state.length,
-        highTmp: 40 + 30 * Math.random(),
-      })
-      )
-      setViewport(state => ({ ...state, x: [state.x[0] + 1, state.x[1] + 1] }))
-    }, 100)
-
-    return () => {
-      clearInterval(interval)
-    }
-  }, [])
-
-  const { state } = useChartTransformState({})
   const makePremium = () => { dispatch(updateSubscriptionStatus(1, Date.now() + 1000000000), 'https://corpad.ca') }
 
-  const [xDomain, setXDomain] = useState([0, 10]);
 
   return (
     <SafeAreaView style={{ ...globalStyle.screen, paddingTop: StatusBar.currentHeight }}>
@@ -85,33 +60,7 @@ export default DevScreen = ({ navigation }) => {
       <Button onPress={() => generateTestPoints({ count })} appearance='ghost'>Generate {count} test points</Button>
       <Button onPress={resetDatabase} appearance='ghost'>Reset DB</Button>
       <Button onPress={makePremium} appearance='ghost'>Make Premium</Button>
-      <View style={{ height: 300, borderWidth: 1, }}>
-        <CartesianChart
-          padding={0}
-          data={data}
-          xKey="day"
-          yKeys={["highTmp"]}
-          viewport={viewport}
-          transformState={state}
-          xAxis={{
-            font,
-            tickCount: 5,
-            formatXLabel: (x) => x + ' day',
-            //enableRescaling: true
-          }}
-          yAxis={[{
-            font,
-            tickCount: 4
-          }]}
-          transformConfig={{
-            pan: { dimensions: "x" },
-          }}
-        >
-          {({ points }) => (
-            <Line points={points.highTmp} color="red" strokeWidth={3} />
-          )}
-        </CartesianChart>
-      </View>
+
     </SafeAreaView>
   )
 }
