@@ -1,9 +1,11 @@
 import Geolocation from '@react-native-community/geolocation'
 import { Error, errors } from '../../utils/Error'
+import { GetGeolocationTimeDelta } from './GetGeolocationTimeDelta'
 
 export class GeolocationRepository {
     constructor() {
         //Geolocation.setRNConfiguration({ locationProvider: 'playServices' })
+        this.getDeltaService = new GetGeolocationTimeDelta()
     }
 
     async getCurrent() {
@@ -46,23 +48,8 @@ export class GeolocationRepository {
         }
     }
 
-    getDelta(timeout = 10000) {
-        //Getiing delta timestamp for time syncronization
-        try {
-            return new Promise((resolve, reject) => {
-                Geolocation.getCurrentPosition(({ timestamp }) => {
-                    const deviceTimestamp = Date.now()
-                    resolve({
-                        delta: timestamp - deviceTimestamp,
-                        deviceTimestamp
-                    })
-                },
-                    (er) => reject(er), { enableHighAccuracy: true, maximumAge: 0, timeout })
-            })
-        }
-        catch (er) {
-            throw new Error(errors.LOCATION, 'Unable to get device location data', er)
-        }
+    getDelta(timeout) {
+        return this.getDeltaService.execute(timeout)
     }
 
     getDeclination(latitude, longitude) {
