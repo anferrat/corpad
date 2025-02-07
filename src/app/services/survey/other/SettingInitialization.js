@@ -7,7 +7,7 @@ import { MultimeterSettings } from "../../../entities/survey/other/MultimeterSet
 export class SettingInitialization {
     constructor(settingRepo) {
         this.settingRepo = settingRepo
-        this.DEFAULT_MULTIMETER_SETTINGS = new MultimeterSettings(null, null, null, 4000, 1000, null, MultimeterSyncModes.HIGH_LOW, MultimeterCycles.ON, true, TimeSyncSources.MIXED, 100, 200, MultimeterCaptureRate._60Hz)
+        this.DEFAULT_MULTIMETER_SETTINGS = new MultimeterSettings(null, null, null, 4000, 1000, null, MultimeterSyncModes.HIGH_LOW, MultimeterCycles.ON, true, TimeSyncSources.MIXED, 200, 200, MultimeterCaptureRate._60Hz)
     }
 
     _verifyMultimeterSettings(multimeter) {
