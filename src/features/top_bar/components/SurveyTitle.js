@@ -7,13 +7,15 @@ import { primary } from '../../../styles/colors'
 import { useNavigation } from '@react-navigation/native'
 import { hapticKeyboardPress } from '../../../native_libs/haptics'
 import Pressable from '../../../components/Pressable'
+import { DEVELOPER_MODE_ON } from '../../../../App'
 
 const SurveyTitle = () => {
     const title = useSelector(state => state.settings.currentSurvey.name)
     const navigation = useNavigation()
     const navigateToSurveyOverview = () => {
         hapticKeyboardPress()
-        navigation.navigate('SettingDetails', { setting: 'info' })
+        DEVELOPER_MODE_ON ? navigation.navigate('DevScreen') :
+            navigation.navigate('SettingDetails', { setting: 'info' })
     }
     return (
         <View style={styles.pressableWrapper}>

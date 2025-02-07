@@ -6,6 +6,7 @@ import { useNavigation } from '@react-navigation/native'
 import { hapticKeyboardPress } from '../../../native_libs/haptics'
 import { useSelector } from 'react-redux'
 import { isProStatus, isVerifyStatus } from '../../../helpers/functions'
+import { DEVELOPER_MODE_ON } from '../../../../App'
 
 const MainMenuTitle = () => {
     const navigation = useNavigation()
@@ -14,7 +15,8 @@ const MainMenuTitle = () => {
     const isVerify = isVerifyStatus(subscriptionStatus)
     const goToAbout = () => {
         hapticKeyboardPress()
-        navigation.navigate('SettingDetails', { setting: 'about' })
+        DEVELOPER_MODE_ON ? navigation.navigate('DevScreen') :
+            navigation.navigate('SettingDetails', { setting: 'about' })
     }
     return (
         <Pressable
