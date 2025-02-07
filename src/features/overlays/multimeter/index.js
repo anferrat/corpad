@@ -1,5 +1,5 @@
 import React from 'react'
-import { Modal, StyleSheet } from 'react-native'
+import { Modal, StatusBar, StyleSheet } from 'react-native'
 import ModeView from './components/ModeView'
 import MultimeterDisplay from './components/MultimeterDisplay'
 import RangeView from './components/RangeView'
@@ -56,6 +56,8 @@ const MultimeterModal = ({ goBack }) => {
         <>
             <SafeAreaView
                 style={styles.area}>
+                <StatusBar barStyle='dark-content'
+                    backgroundColor='transparent' />
                 <MultimeterLoadingView
                     showModal={showModal}
                     executing={executing}
