@@ -23,8 +23,8 @@ export class ExportQrCode {
         //4. Copying qrcode file
         await this.filesystemRepo.copyFile(uri, destinationPath)
 
-        //cleaning up cache directory
-        await this.filesystemRepo.removeDir(FileSystemLocations.CACHE)
+        //Removing original qrcode file 
+        await this.filesystemRepo.unlink(uri)
 
         return {
             path: destinationPath,
