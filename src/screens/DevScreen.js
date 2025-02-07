@@ -4,7 +4,7 @@ import { SafeAreaView, StatusBar } from 'react-native'
 import { Button, Text } from '@ui-kitten/components'
 import FocusAwareStatusBar from '../components/FocusAwareStatusBar'
 import { generateTestPoints, resetDatabase } from '../app/controllers/DevController'
-import { updateSubscriptionStatus } from '../store/actions/settings'
+import { setActiveMultimeter, updateSubscriptionStatus } from '../store/actions/settings'
 import { useDispatch } from 'react-redux'
 import { View } from "react-native";
 import { CartesianChart, Line, useChartTransformState } from "victory-native";
@@ -13,7 +13,8 @@ import { useFont } from '@shopify/react-native-skia'
 import { GestureHandlerRootView } from 'react-native-gesture-handler'
 import { Dvm2130Service } from '../app/services/survey/other/multimeter/devices/dvm2130/Dvm2130Service'
 import { bluetoothRepo } from '../app/controllers/_instances/repositories'
-import { MultimeterCaptureRate, MultimeterModes, MultimeterToggleStatuses, MultimeterVoltageRanges } from '../constants/global'
+import { MultimeterCaptureRate, MultimeterModes, MultimeterToggleStatuses, MultimeterTypes, MultimeterVoltageRanges } from '../constants/global'
+import { connectMultimeter, pairMultimeter } from '../app/controllers/MultimeterController'
 
 
 const count = 150
@@ -50,7 +51,11 @@ const disconnectMM = async () => {
 export default DevScreen = ({ navigation }) => {
   const dispatch = useDispatch()
   const makePremium = () => { dispatch(updateSubscriptionStatus(1, Date.now() + 1000000000), 'https://corpad.ca') }
-
+  const connectFakeMultimeter = async () => {
+    await pairMultimeter({ id: 'fake', multimeterType: MultimeterTypes.POKIT, name: 'Pokit Pro' })
+    dispatch(setActiveMultimeter(true, 'fake', 'Pokit Pro', MultimeterTypes.POKIT, false))
+    await connectMultimeter(100)
+  }
 
   return (
     <SafeAreaView style={{ ...globalStyle.screen, paddingTop: StatusBar.currentHeight }}>
@@ -60,7 +65,7 @@ export default DevScreen = ({ navigation }) => {
       <Button onPress={() => generateTestPoints({ count })} appearance='ghost'>Generate {count} test points</Button>
       <Button onPress={resetDatabase} appearance='ghost'>Reset DB</Button>
       <Button onPress={makePremium} appearance='ghost'>Make Premium</Button>
-
+      <Button onPress={connectFakeMultimeter} appearance='ghost'>Connect fake multimeter</Button>
     </SafeAreaView>
   )
 }
