@@ -2,7 +2,6 @@ import { fieldProperties } from '../../../constants/fieldProperties'
 import { deleteItem } from '../handlers/deleteItem'
 import { deleteSubitem } from '../handlers/deleteSubitem'
 import { openExternalSurvey } from '../handlers/openExternalFile'
-import { DEVELOPER_MODE_ON } from '../../../../App'
 import { deleteImportSubitem } from '../../../store/actions/importData'
 import { warningHandler } from '../../../helpers/error_handler'
 import { ItemTypes } from '../../../constants/global'
@@ -210,11 +209,7 @@ export const getHeader = (screen, params, navigation, dispatch, openMenu) => {
                             icon: 'more-vertical-outline',
                             onPress: openMenu
                         },
-                    ].concat(DEVELOPER_MODE_ON ? {
-                        icon: 'eye',
-                        onPress: () => navigation.navigate('DevScreen')
-                    } : []
-                    )
+                    ]
                 }
             case 'Map':
                 return {
@@ -338,11 +333,7 @@ export const getHeader = (screen, params, navigation, dispatch, openMenu) => {
                             icon: 'plus',
                             onPress: () => navigation.navigate('CreateSurvey', { withImport: false })
                         }
-                    ].concat(DEVELOPER_MODE_ON ? {
-                        icon: 'eye',
-                        onPress: () => navigation.navigate('DevScreen')
-                    } : []
-                    )
+                    ]
                 }
             case 'CreateSurvey':
                 return {
