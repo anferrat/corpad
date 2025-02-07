@@ -57,14 +57,12 @@ const styles = StyleSheet.create({
     label: {
         flexBasis: 50,
         textAlignVertical: 'center',
-        height: '100%',
         paddingBottom: 12
     },
     dash: {
         flex: .3,
         textAlign: 'center',
         textAlignVertical: 'center',
-        height: '100%',
         paddingBottom: 12,
     }
 })
