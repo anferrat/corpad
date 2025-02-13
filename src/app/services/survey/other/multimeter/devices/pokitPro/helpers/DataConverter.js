@@ -41,21 +41,20 @@ export class DataConverter {
     }
 
     _getNumberOfReadings(cycleTime, rate) {
-        switch (rate) {
-            case MultimeterCaptureRate._50Hz:
-                return Math.floor((cycleTime / 1000) * 50)
-            case MultimeterCaptureRate._60Hz:
-            default:
-                return Math.floor((cycleTime / 1000) * 60)
-
-        }
+        const cycleSeconds = (cycleTime / 1000)
+        const freq = rate === MultimeterCaptureRate._50Hz ? 50 : 60
+        const maxNumberOfReadingsPerSecond = Math.floor(8192 / cycleSeconds)
+        const readingPerCycle = Math.floor(maxNumberOfReadingsPerSecond / freq)
+        if (readingPerCycle === 0)
+            throw new Error(errors.MULTIMETER, 'Unable to get number of readings', 'Cycle time is too long to capture on/off')
+        return (readingPerCycle > 12 ? 12 : readingPerCycle) * freq * cycleSeconds
     }
 
     _getUnit(mode) {
         switch (mode) {
             case MultimeterModes.POKIT.AC_AMPS:
             case MultimeterModes.POKIT.DC_AMPS:
-                    return CurrentUnits.AMPS
+                return CurrentUnits.AMPS
             case MultimeterModes.POKIT.AC_VOLTS:
             case MultimeterModes.POKIT.DC_VOLTS:
                 return PotentialUnits.VOLTS
@@ -128,6 +127,8 @@ export class DataConverter {
 
     DSOSettingPayload(mode, range, rate, cycleTime) {
         const buf = Buffer.allocUnsafe(17)
+        const cycleEdge = 100 //measurement edge added before and fter cycle time for accurate averaging - in ms
+        const fullCycleTime = cycleTime + 2 * cycleEdge
         if (mode === MultimeterModes.POKIT.IDLE) {
             buf.writeUint8(this.constants.DSOCommands.STOP_CAPTURE)
             //4 bytes trigger value float skipped
@@ -142,8 +143,8 @@ export class DataConverter {
             //4 bytes trigger value float skipped
             buf.writeUInt8(this.constants.modes[mode], 5) //mode - DC, AC volts or DC, AC amps - 01, 02, 03, 04
             buf.writeUInt8(this._getRanges(mode)[range], 6) // range - see constants
-            buf.writeUint32LE(cycleTime * 1000, 7) //sampling window in mircoseconds
-            buf.writeUint16LE(this._getNumberOfReadings(cycleTime, rate), 11) // number of samples to collect within a sample window
+            buf.writeUint32LE(fullCycleTime * 1000, 7) //sampling window in mircoseconds
+            buf.writeUint16LE(this._getNumberOfReadings(fullCycleTime, rate), 11) // number of samples to collect within a sample window
             buf.writeUint32BE(this.constants.DSOSettingUnknownBytes.START_CAPTURE, 13) // unknown bytes, differ depending on command
         }
         return buf.toJSON().data

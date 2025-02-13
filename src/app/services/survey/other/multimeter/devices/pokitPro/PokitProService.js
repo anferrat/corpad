@@ -129,7 +129,7 @@ export class PokitProService extends MultimeterAbstract {
         readingListener = this.pokitProAddReadingListenerService.addListener((type, reading) => {
             this.pokitProAutoRangeService.execute(type, reading, currentRange, onRangeUpdate, onOverLimit, toggleStatus, mode)
             onUpdate(type, reading)
-        }, peripheralId, mode, rate, getMetaData)
+        }, peripheralId, mode, rate, getMetaData, cycleTime)
 
         buttonPressListener = this.pokitProAddButtonPressListenerService.addListener(event => {
             onUpdate(MultimeterListenerEvents.BUTTON_PRESS, event)
