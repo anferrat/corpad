@@ -20,4 +20,8 @@ export class ReadingAbstract {
     setValue(value) {
         this.value = value
     }
+
+    setTime(timestamp) {
+        this.deviceTimestamp = timestamp
+    }
 }

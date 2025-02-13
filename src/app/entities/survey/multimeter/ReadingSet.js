@@ -6,4 +6,8 @@ export class ReadingSet extends ReadingAbstract {
         this.readings = readings
         this.offset = offset
     }
+
+    setReadings(readings) {
+        this.readings = readings
+    }
 }
