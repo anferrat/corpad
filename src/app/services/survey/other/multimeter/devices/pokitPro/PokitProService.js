@@ -64,7 +64,7 @@ export class PokitProService extends MultimeterAbstract {
         const { toggleStatus } = await this.pokitProGetDeviceStatusService.execute(peripheralId)
         return toggleStatus
     }
-    
+
 
     isSupported(toggleStatus, mode, range) {
         return this.isModeSupportedService.execute(toggleStatus, mode, range)
@@ -74,11 +74,12 @@ export class PokitProService extends MultimeterAbstract {
     async setSettings(peripheralId, mode, range, isSingleRead, rate = MultimeterCaptureRate._60Hz, cycleTime = 1000) {
         await this._checkConnected(peripheralId)
         //getting payload from setting
-        const bytes = isSingleRead ? this.dataConverter.DMMPayload(mode, range) : this.dataConverter.DSOSettingPayload(mode, range, rate, cycleTime)
+        const isDSOService = !isSingleRead || mode === MultimeterModes.POKIT.DC_VOLTS
+        const bytes = isDSOService ? this.dataConverter.DSOSettingPayload(mode, range, rate, cycleTime, isSingleRead) : this.dataConverter.DMMPayload(mode, range)
         await this.bluetoothRepo.write(
             peripheralId,
-            isSingleRead ? this.UUIDs.services.MULTIMETER : this.UUIDs.services.DSO,
-            isSingleRead ? this.UUIDs.characteristics.MULTIMETER.SETTINGS : this.UUIDs.characteristics.DSO.SETTINGS,
+            !isDSOService ? this.UUIDs.services.MULTIMETER : this.UUIDs.services.DSO,
+            !isDSOService ? this.UUIDs.characteristics.MULTIMETER.SETTINGS : this.UUIDs.characteristics.DSO.SETTINGS,
             bytes,
             bytes.length)
     }
@@ -129,7 +130,7 @@ export class PokitProService extends MultimeterAbstract {
         readingListener = this.pokitProAddReadingListenerService.addListener((type, reading) => {
             this.pokitProAutoRangeService.execute(type, reading, currentRange, onRangeUpdate, onOverLimit, toggleStatus, mode)
             onUpdate(type, reading)
-        }, peripheralId, mode, rate, getMetaData, cycleTime)
+        }, peripheralId, mode, rate, getMetaData, cycleTime, isSingleRead)
 
         buttonPressListener = this.pokitProAddButtonPressListenerService.addListener(event => {
             onUpdate(MultimeterListenerEvents.BUTTON_PRESS, event)

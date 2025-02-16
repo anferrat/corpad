@@ -40,14 +40,15 @@ export class DataConverter {
         }
     }
 
-    _getNumberOfReadings(cycleTime, rate) {
+    _getNumberOfReadings(cycleTime, rate, isSingleRead) {
+        const maxNumberOfSamplesPerCycle = isSingleRead ? 100 : 12
         const cycleSeconds = (cycleTime / 1000)
         const freq = rate === MultimeterCaptureRate._50Hz ? 50 : 60
         const maxNumberOfReadingsPerSecond = Math.floor(8192 / cycleSeconds)
         const readingPerCycle = Math.floor(maxNumberOfReadingsPerSecond / freq)
         if (readingPerCycle === 0)
             throw new Error(errors.MULTIMETER, 'Unable to get number of readings', 'Cycle time is too long to capture on/off')
-        return (readingPerCycle > 12 ? 12 : readingPerCycle) * freq * cycleSeconds
+        return (readingPerCycle > maxNumberOfSamplesPerCycle ? maxNumberOfSamplesPerCycle : readingPerCycle) * freq * cycleSeconds
     }
 
     _getUnit(mode) {
@@ -94,10 +95,10 @@ export class DataConverter {
 
             case MultimeterModes.POKIT.DC_VOLTS:
             case MultimeterModes.POKIT.DC_AMPS:
-                return 100
+                return 300
             case MultimeterModes.POKIT.AC_VOLTS:
             case MultimeterModes.POKIT.AC_AMPS:
-                return 250
+                return 300
             default:
                 throw new Error(errors.MULTIMETER, 'Unable to obtain ranges for selected mode', 'No range is set for this multimeter mode')
         }
@@ -125,10 +126,12 @@ export class DataConverter {
 
     //OUTGOING DATA CONVERSION
 
-    DSOSettingPayload(mode, range, rate, cycleTime) {
+    DSOSettingPayload(mode, range, rate, cycleTime, isSingleRead) {
         const buf = Buffer.allocUnsafe(17)
         const cycleEdge = 100 //measurement edge added before and fter cycle time for accurate averaging - in ms
-        const fullCycleTime = cycleTime + 2 * cycleEdge
+        const numberOfCycles = 2//rate === MultimeterCaptureRate._50Hz ? 5 : 6
+        const fullCycleTime = isSingleRead ? Math.round(numberOfCycles * this.constants.sampleOffsets[rate]) : cycleTime + 2 * cycleEdge
+        const numberOfSamples = this._getNumberOfReadings(fullCycleTime, rate, isSingleRead)
         if (mode === MultimeterModes.POKIT.IDLE) {
             buf.writeUint8(this.constants.DSOCommands.STOP_CAPTURE)
             //4 bytes trigger value float skipped
@@ -144,7 +147,7 @@ export class DataConverter {
             buf.writeUInt8(this.constants.modes[mode], 5) //mode - DC, AC volts or DC, AC amps - 01, 02, 03, 04
             buf.writeUInt8(this._getRanges(mode)[range], 6) // range - see constants
             buf.writeUint32LE(fullCycleTime * 1000, 7) //sampling window in mircoseconds
-            buf.writeUint16LE(this._getNumberOfReadings(fullCycleTime, rate), 11) // number of samples to collect within a sample window
+            buf.writeUint16LE(numberOfSamples, 11) // number of samples to collect within a sample window
             buf.writeUint32BE(this.constants.DSOSettingUnknownBytes.START_CAPTURE, 13) // unknown bytes, differ depending on command
         }
         return buf.toJSON().data

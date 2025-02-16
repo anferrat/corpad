@@ -37,7 +37,7 @@ export class DataConverter {
     }
 
     _throttle(func) {
-        if (this.count < 3) {
+        if (this.count < 2) {
             this.count++
             return
         }
