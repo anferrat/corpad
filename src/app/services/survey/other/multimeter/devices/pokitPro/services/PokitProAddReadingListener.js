@@ -1,4 +1,5 @@
 import { MultimeterCaptureRate, MultimeterListenerEvents } from "../../../../../../../../constants/global"
+import { Reading } from "../../../../../../../entities/survey/multimeter/Reading"
 import { ReadingSet } from "../../../../../../../entities/survey/multimeter/ReadingSet"
 
 export class PokitProAddReadingListener {
@@ -57,29 +58,40 @@ export class PokitProAddReadingListener {
             return meta
     }
 
-    addListener(callback, id, mode, rate, getMetaData, cycleTime) {
+    addListener(callback, id, mode, rate, getMetaData, cycleTime, isSingleRead) {
         const sets = []
         let i = null
         const listener = this.bluetoothRepo.newCharacteristicValueListener(({ peripheral, service, characteristic, value }) => {
             if (peripheral === id && service === this.uuids.services.DSO && characteristic === this.uuids.characteristics.DSO.READING) {
-                const { scalingFactor, numberOfReadings, batchIndex, samplingRate } = getMetaData()
-                const readingSet = this.dataConverter.DSOResponse(value, scalingFactor, mode, rate)
-                if (i !== batchIndex)
-                    sets.length = 0
-                sets.push(readingSet)
-                i = batchIndex
-                if (sets.reduce((prev, next) => prev + next.readings.length, 0) >= numberOfReadings) {
-                    const newSet = this._mergeSets(sets)
-                    const lowPassFileterd = this._lowPassFilter(newSet.readings, samplingRate)
-                    const avgReadings = this._averageReadings(lowPassFileterd, samplingRate, rate)
-                    const edgeNumber = this._getEdgeNumber(avgReadings, rate, cycleTime)
-                    avgReadings.splice(0, edgeNumber)
-                    avgReadings.splice(-avgReadings.length, edgeNumber)
-                    const adjustedTimestamp = Math.round(newSet.deviceTimestamp - edgeNumber * newSet.offset)
-                    newSet.setReadings(avgReadings)
-                    newSet.setTime(adjustedTimestamp)
-                    callback(MultimeterListenerEvents.READING_SET, newSet)
-                    sets.length = 0
+                const metaData = getMetaData()
+                if (metaData) {
+                    const { scalingFactor, numberOfReadings, batchIndex, samplingRate } = getMetaData()
+                    const readingSet = this.dataConverter.DSOResponse(value, scalingFactor, mode, rate)
+                    if (i !== batchIndex)
+                        sets.length = 0
+                    sets.push(readingSet)
+                    i = batchIndex
+                    if (sets.reduce((prev, next) => prev + next.readings.length, 0) >= numberOfReadings) {
+                        const newSet = this._mergeSets(sets)
+                        if (isSingleRead) {
+                            const avgReadings = this._averageReadings(newSet.readings, samplingRate, rate)
+                            const avgValue = avgReadings.reduce((prev, next) => prev + next, 0) / avgReadings.length
+                            const reading = new Reading(null, avgValue, newSet.deviceTimestamp, newSet.type, newSet.unit, newSet.flag, newSet.isAc, newSet.deviceType)
+                            callback(MultimeterListenerEvents.SINGLE_READ, reading)
+                        }
+                        else {
+                            const lowPassFileterd = this._lowPassFilter(newSet.readings, samplingRate)
+                            const avgReadings = this._averageReadings(lowPassFileterd, samplingRate, rate)
+                            const edgeNumber = this._getEdgeNumber(avgReadings, rate, cycleTime)
+                            avgReadings.splice(0, edgeNumber)
+                            avgReadings.splice(-avgReadings.length, edgeNumber)
+                            const adjustedTimestamp = Math.round(newSet.deviceTimestamp - edgeNumber * newSet.offset)
+                            newSet.setReadings(avgReadings)
+                            newSet.setTime(adjustedTimestamp)
+                            callback(MultimeterListenerEvents.READING_SET, newSet)
+                        }
+                        sets.length = 0
+                    }
                 }
             }
             if (peripheral === id && service === this.uuids.services.MULTIMETER && characteristic === this.uuids.characteristics.MULTIMETER.READING) {

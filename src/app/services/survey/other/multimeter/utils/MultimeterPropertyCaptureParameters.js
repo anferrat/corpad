@@ -27,7 +27,7 @@ export class MultimeterPropertyCaptureParameters {
             [MeasurementPropertyTypes.VOLTAGE]: {
                 [MultimeterTypes.POKIT]: {
                     mode: MultimeterModes.POKIT.DC_VOLTS,
-                    range: MultimeterVoltageRanges.POKIT.AUTO
+                    range: MultimeterVoltageRanges.POKIT._2V
                 },
                 [MultimeterTypes.DVM2130]: {
                     mode: MultimeterModes.DVM2130.DC_VOLTS,
@@ -57,7 +57,7 @@ export class MultimeterPropertyCaptureParameters {
             [MeasurementPropertyTypes.VOLTAGE_DROP]: {
                 [MultimeterTypes.POKIT]: {
                     mode: MultimeterModes.POKIT.DC_VOLTS,
-                    range: MultimeterVoltageRanges.POKIT._2V
+                    range: MultimeterVoltageRanges.POKIT._250MV
                 },
                 [MultimeterTypes.DVM2130]: {
                     mode: MultimeterModes.DVM2130.DC_VOLTS,

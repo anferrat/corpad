@@ -21,7 +21,7 @@ export class PokitProConstants {
             [MultimeterVoltageRanges.POKIT._125V]: 5,
             [MultimeterVoltageRanges.POKIT._400V]: 6,
             [MultimeterVoltageRanges.POKIT._600V]: 7,
-            [MultimeterVoltageRanges.POKIT.AUTO]: 255
+            [MultimeterVoltageRanges.POKIT.AUTO]: 1 //255 255 is correct value here, however its not supported for DSO, and we are using DSO for DC voltage measurements, cause DMM is bot accurate on PokitPro
         }
 
         this.currentRanges = {
