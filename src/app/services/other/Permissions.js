@@ -51,6 +51,24 @@ export class Permissions {
         }
     }
 
+    async _locationIos() {
+        try {
+            await Promise.race([
+                new Promise((resolve, reject) => {
+                    Geolocation.requestAuthorization(
+                        resolve,
+                        () => reject(new Error(errors.PERMISSION, 'Unable to obtain location permission. You need to allow to use location to use this feature.', 'Permission was not obtained', 902))
+                    )
+                }),
+                new Promise((_, reject) => setTimeout(() => reject(new Error(errors.PERMISSION, 'Unable to obtain location permission. You need to allow to use location to use this feature.', 'Permission timeout', 902)), 500))
+            ])
+        }
+        catch (er) {
+            throw er
+        }
+
+    }
+
     async location() {
         if (Platform.OS === 'android') {
             const granted = await this._locationAndroid()
@@ -58,12 +76,7 @@ export class Permissions {
                 throw new Error(errors.PERMISSION, 'Unable to ontain location permission. You need to change location permission settings in order to use this feature.', 'Permission was not obtained', 902)
         }
         else if (Platform.OS === 'ios' || Platform.OS === 'macos') {
-            Geolocation.requestAuthorization(
-                () => { },
-                () => {
-                    throw new Error(errors.PERMISSION, 'Unable to ontain location permission. You need to allow to use location to use this feature.', 'Permission was not obtained', 902)
-                }
-            )
+            await this._locationIos()
         }
     }
 
