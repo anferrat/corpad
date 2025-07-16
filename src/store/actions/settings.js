@@ -29,6 +29,7 @@ export const SET_ACTIVE_MULTIMETER_CONNECTING = 'SET_ACTIVE_MULTIMETER_CONNECTIN
 export const SET_ACTIVE_MULTIMETER_EXECUTING = 'SET_ACTIVE_MULTIMETER_EXECUTING'
 export const SET_ACTIVE_MULTIMETER_TOGGLE_STATUS = 'SET_ACTIVE_MULTIMETER_TOGGLE_STATUS'
 export const SET_BLE_INITIALIZED = 'SET_BLE_INITIALIZED'
+export const SET_IS_CALCULATOR_DISPLAYED = 'SET_IS_CALCULATOR_DISPLAYED'
 
 export const updateSetting = (setting, value) => {
     return { type: UPDATE_SETTING, setting: setting, value: value }
@@ -94,8 +95,8 @@ export const setSessionModalVisible = (visible) => {
     return { type: SET_SESSION_MODAL_VISIBLE, visible }
 }
 
-export const setSettingsOnAppLoad = (isLoaded, syncTime, name, uid, fileName, isCloud, isSigned, userName, onboarding, multimeter, subscriptionStatus, subscriptionExpirationTime, managementUrl, bleInitialized) => {
-    return { type: SET_SETTINGS_ON_APP_LOAD, isLoaded, syncTime, name, uid, fileName, isCloud, isSigned, userName, onboarding, multimeter, subscriptionStatus, subscriptionExpirationTime, managementUrl, bleInitialized }
+export const setSettingsOnAppLoad = (isLoaded, syncTime, name, uid, fileName, isCloud, isSigned, userName, onboarding, multimeter, subscriptionStatus, subscriptionExpirationTime, managementUrl, bleInitialized, isCalculatorDisplayed) => {
+    return { type: SET_SETTINGS_ON_APP_LOAD, isLoaded, syncTime, name, uid, fileName, isCloud, isSigned, userName, onboarding, multimeter, subscriptionStatus, subscriptionExpirationTime, managementUrl, bleInitialized, isCalculatorDisplayed }
 }
 
 export const updateBottomSheetContent = (itemType, content, params) => ({
@@ -150,4 +151,8 @@ export const setActiveMultimeterToggleStatus = (toggleStatus) => {
 
 export const setBleInitialized = (bleInitialized) => ({
     type: SET_BLE_INITIALIZED, bleInitialized
+})
+
+export const setIsCalculatorDisplayed = (isDisplayed) => ({
+    type: SET_IS_CALCULATOR_DISPLAYED, isDisplayed
 })

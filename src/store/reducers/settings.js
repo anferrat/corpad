@@ -1,6 +1,6 @@
 
 import { SubscriptionStatuses } from "../../constants/global"
-import { UPDATE_SETTING, LOAD_SETTINGS, SET_SURVEY_SAVING_STATUS, UPDATE_SURVEY_NAME, RESET_CURRENT_SURVEY_SETTINGS, LOAD_SESSION_STATE, UPDATE_ONBOARDING, SET_EXPORT_MODAL, UPDATE_LOADER, UPDATE_SESSION, UPDATE_NETWORK_STATUS, SET_SESSION_MODAL_VISIBLE, UPDATE_CURRENT_SURVEY_SETTINGS, SET_SETTINGS_ON_APP_LOAD, SET_SURVEY_SETTINGS, UPDATE_BOTTOM_SHEET_CONTENT, SET_BLUETOOTH_SCANNING, SET_ACTIVE_MULTIMETER, SET_ACTIVE_MULTIMETER_STATUS, SET_TIME_ADJUSTMENT, SET_ACTIVE_MULTIMETER_SETTINGS, UPDATE_LOADER_PROGRESS, HIDE_LOADER, UPDATE_SUBSCRIPTION_STATUS, SHOW_PAYWALL, HIDE_PAYWALL, SET_ACTIVE_MULTIMETER_CONNECTING, SET_ACTIVE_MULTIMETER_EXECUTING, SET_ACTIVE_MULTIMETER_TOGGLE_STATUS, SET_BLE_INITIALIZED } from "../actions/settings"
+import { UPDATE_SETTING, LOAD_SETTINGS, SET_SURVEY_SAVING_STATUS, UPDATE_SURVEY_NAME, RESET_CURRENT_SURVEY_SETTINGS, LOAD_SESSION_STATE, UPDATE_ONBOARDING, SET_EXPORT_MODAL, UPDATE_LOADER, UPDATE_SESSION, UPDATE_NETWORK_STATUS, SET_SESSION_MODAL_VISIBLE, UPDATE_CURRENT_SURVEY_SETTINGS, SET_SETTINGS_ON_APP_LOAD, SET_SURVEY_SETTINGS, UPDATE_BOTTOM_SHEET_CONTENT, SET_BLUETOOTH_SCANNING, SET_ACTIVE_MULTIMETER, SET_ACTIVE_MULTIMETER_STATUS, SET_TIME_ADJUSTMENT, SET_ACTIVE_MULTIMETER_SETTINGS, UPDATE_LOADER_PROGRESS, HIDE_LOADER, UPDATE_SUBSCRIPTION_STATUS, SHOW_PAYWALL, HIDE_PAYWALL, SET_ACTIVE_MULTIMETER_CONNECTING, SET_ACTIVE_MULTIMETER_EXECUTING, SET_ACTIVE_MULTIMETER_TOGGLE_STATUS, SET_BLE_INITIALIZED, SET_IS_CALCULATOR_DISPLAYED } from "../actions/settings"
 
 const initialState = {
     bottomSheetContent: {  //BottomSheet component
@@ -88,6 +88,9 @@ const initialState = {
         isCloudSurvey: false, //is current survey on cloud
         savingInProgress: false, //survey is being saved
         lastSyncTime: null, // last time survey was saved or the time when survey was opened
+    },
+    map: {
+        isCalculatorDisplayed: false
     }
 
 }
@@ -202,6 +205,10 @@ const settings = (state = initialState, action) => {
                 timeSync: {
                     ...state.timeSync,
                     mode: action.multimeter.timeSyncMode
+                },
+                map: {
+                    ...state.map,
+                    isCalculatorDisplayed: action.isCalculatorDisplayed
                 }
             }
         }
@@ -424,6 +431,14 @@ const settings = (state = initialState, action) => {
                 bluetooth: {
                     ...state.bluetooth,
                     initialized: action.bleInitialized
+                }
+            }
+        case SET_IS_CALCULATOR_DISPLAYED:
+            return {
+                ...state,
+                map: {
+                    ...state.map,
+                    isCalculatorDisplayed: action.isDisplayed
                 }
             }
         default:

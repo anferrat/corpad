@@ -11,6 +11,7 @@ export class AppSettings {
         lastSync,
         onboarding,
         multimeter,
+        isCalculatorDisplayed
     ) {
         this.pipelineNameAsDefault = pipelineNameAsDefault
         this.defaultPotentialUnit = defaultPotentialUnit
@@ -23,6 +24,7 @@ export class AppSettings {
         this.lastSync = lastSync
         this.onboarding = onboarding
         this.multimeter = multimeter
+        this.isCalculatorDisplayed = isCalculatorDisplayed
         this.updated = [] //probably not used
     }
 }

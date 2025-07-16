@@ -35,7 +35,7 @@ export class SettingInitialization {
         //Takes settings as argument, creates new settings objects and writes to db. undefined values for settings are replaced with standard ones
         const settings = await this.settingRepo.get()
 
-        const { pipelineNameAsDefault, defaultPotentialUnit, autoCreatePotentials, isSurveyNew, isCloud, originalHash, fileName, cloudId, lastSync, onboarding, multimeter } = settings
+        const { pipelineNameAsDefault, defaultPotentialUnit, autoCreatePotentials, isSurveyNew, isCloud, originalHash, fileName, cloudId, lastSync, onboarding, multimeter, isCalculatorDisplayed } = settings
         const newOnboarding = new Onboarding(null, true, true, true, true, true, true)
         const newSettings = new AppSettings(
             pipelineNameAsDefault ?? true,
@@ -48,7 +48,8 @@ export class SettingInitialization {
             cloudId ?? null,
             lastSync ?? null,
             onboarding ?? newOnboarding,
-            this._verifyMultimeterSettings(multimeter))
+            this._verifyMultimeterSettings(multimeter),
+            isCalculatorDisplayed ?? true)
         await this.settingRepo.update(newSettings)
         return newSettings
     }
