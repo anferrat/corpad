@@ -4,7 +4,7 @@ import { useDispatch } from 'react-redux'
 import { ScrollView } from 'react-native-gesture-handler'
 import ResultView from './ResultView'
 import CalculatorComponent from './CalculatorComponent'
-import { initialCalculatorData, initialValidObject, validateAll, getResult } from './helpers'
+import { initialCalculatorData, initialValidObject, validateAll, getResult, addCoordinatesToExportedObject } from './helpers'
 import UnitSelector from './UnitSelector'
 import { errorHandler } from '../../helpers/error_handler'
 import HistoryModal from './HistoryModal'
@@ -19,6 +19,7 @@ const LoaderCalculator = (props) => {
         disabled: false,
         savedInHistory: false,
         calculatorId: null,
+        timeCreatedInHistory: null,
         calculator: {
             isMetric: true,
             name: null,
@@ -30,6 +31,8 @@ const LoaderCalculator = (props) => {
         }
     })
     const [valid, setValid] = useState(initialValidObject[props.calculatorType])
+
+    const [coordValid, setCoordValid] = useState({ latitude: true, longitude: true })
 
     const setIsMetric = React.useCallback((useImperial) => {
         setData(old => ({ ...old, calculator: { ...old.calculator, isMetric: !useImperial } }))
@@ -45,7 +48,7 @@ const LoaderCalculator = (props) => {
                 calculator: {
                     ...old.calculator,
                     result: result.result,
-                    exportedObject: result.exportedObject,
+                    exportedObject: addCoordinatesToExportedObject(data.calculator.latitude, data.calculator.longitude, result.exportedObject),
                     name: result.label,
                 }
             }))
@@ -54,12 +57,13 @@ const LoaderCalculator = (props) => {
             errorHandler(505)
             setValid(validate.valid)
         }
-    }, [setValid, valid, props.calculatorType, setData, data.calculator.isMetric, data.calculator.given])
+    }, [setValid, valid, props.calculatorType, setData, data.calculator.isMetric, data.calculator.given, data.calculator.latitude, data.calculator.longitude])
 
     const resetCalculator = React.useCallback(() => {
         setData({
             disabled: false,
             savedInHistory: false,
+            timeCreatedInHistory: null,
             calculatorId: null,
             calculator: {
                 isMetric: true,
@@ -92,8 +96,8 @@ const LoaderCalculator = (props) => {
     const saveCalculatorToDataBase = React.useCallback(async (calculatorData) => {
         const { response, status, errorMessage } = await saveCalculator({ data: calculatorData, calculatorType: props.calculatorType, latitude: null, longitude: null, name: calculatorData.name })
         if (status === 200) {
-            const { id } = response
-            setData(old => ({ ...old, savedInHistory: true, calculatorId: id }))
+            const { id, timeCreated } = response
+            setData(old => ({ ...old, savedInHistory: true, calculatorId: id, timeCreatedInHistory: timeCreated }))
             return {
                 status: 200
             }
@@ -104,9 +108,10 @@ const LoaderCalculator = (props) => {
         }
     }, [setData])
 
-    const loadCalculatorFromDataBase = React.useCallback((data, id) => {
+    const loadCalculatorFromDataBase = React.useCallback((data, id, timeCreated) => {
         setData(old => ({
             ...old,
+            timeCreatedInHistory: timeCreated,
             savedInHistory: false,
             disabled: true,
             calculatorId: id,
@@ -164,6 +169,9 @@ const LoaderCalculator = (props) => {
                 result={data.calculator.result}
                 display={data.calculator.result !== null} />
             <CalculatorComponent
+                timeCreated={data.timeCreatedInHistory}
+                latitude={data.calculator.latitude}
+                longitude={data.calculator.longitude}
                 calculatorType={props.calculatorType}
                 data={data.calculator.given}
                 disabled={data.disabled}
@@ -171,6 +179,8 @@ const LoaderCalculator = (props) => {
                 setData={setData}
                 setValid={setValid}
                 valid={valid}
+                coordValid={coordValid}
+                setCoordValid={setCoordValid}
             />
         </ScrollView>
         {!data.disabled ?

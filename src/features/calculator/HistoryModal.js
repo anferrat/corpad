@@ -40,9 +40,9 @@ const HistoryModal = (props) => {
         setLoading(true)
     }, [setVisible, setLoading])
 
-    const loadCalculatorHandler = React.useCallback(async (data, id) => {
+    const loadCalculatorHandler = React.useCallback(async (data, id, timeCreated) => {
         setLoading(true)
-        setTimeout(() => { props.loadHandler(data, id) }, 20)
+        setTimeout(() => { props.loadHandler(data, id, timeCreated) }, 20)
         setVisible(false)
     }, [props.loadHandler, setLoading, setVisible])
 
@@ -50,7 +50,7 @@ const HistoryModal = (props) => {
         return (
             <HistoryListItem
                 active={props.activeCalculatorId === item.id}
-                onPress={loadCalculatorHandler.bind(this, item.data, item.id)}
+                onPress={loadCalculatorHandler.bind(this, item.data, item.id, item.timeCreated)}
                 onDeleteHandler={deleteHistoryItem.bind(this, item.id)}
                 icon={CalculatorTypeIcons[props.calculatorType]}
                 pack={CalculatorTypeIconPacks[props.calculatorType]}
@@ -91,7 +91,7 @@ const HistoryModal = (props) => {
                 <SafeAreaProvider>
                     <Header
                         onBackPress={hideModal}
-                        title='Saved calculations'/>
+                        title='Saved calculations' />
                     <LoadingView loading={loading}>
                         <FlatList
                             ListEmptyComponent={<EmptyListComponent title={'No calculations found'} description={'After completing a calculation press save button to find it here.'} icon='list-outline' />}

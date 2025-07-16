@@ -503,3 +503,16 @@ export const getResult = (data, calculatorType, isMetric) => {
             }
     }
 }
+
+export const addCoordinatesToExportedObject = (latitude, longitude, exportedObject) => {
+    if (latitude !== null && latitude !== undefined && longitude !== null && longitude !== undefined) {
+        const l = exportedObject[0].length
+        return [
+            ...exportedObject,
+            [...new Array(l).fill('')],
+            ['Latitude', latitude, ...new Array(l - 2).fill('')],
+            ['Longitude', longitude, ...new Array(l - 2).fill('')],
+        ]
+    }
+    else return exportedObject
+}
