@@ -10,7 +10,7 @@ const TimeCreatedView = ({ timeCreated, disabled }) => {
     return (
         <View
             style={styles.container}>
-            <Text category='label' appearance='hint'>Created</Text>
+            <Text category='label' appearance='hint'>Calculated</Text>
             <Text category='s2' appearance='hint'>{getFullDate(timeCreated)}</Text>
         </View>
     )

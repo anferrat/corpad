@@ -19,7 +19,7 @@ const LoaderCalculator = (props) => {
         disabled: false,
         savedInHistory: false,
         calculatorId: null,
-        timeCreatedInHistory: null,
+        timeCreated: null,
         calculator: {
             isMetric: true,
             name: null,
@@ -42,13 +42,15 @@ const LoaderCalculator = (props) => {
         const validate = validateAll(data.calculator.given, props.calculatorType)
         if (validate.isValid) {
             const result = getResult(data.calculator.given, props.calculatorType, data.calculator.isMetric)
+            const timestamp = Date.now()
             setData(old => ({
                 ...old,
                 disabled: true,
+                timeCreated: timestamp,
                 calculator: {
                     ...old.calculator,
                     result: result.result,
-                    exportedObject: addCoordinatesToExportedObject(data.calculator.latitude, data.calculator.longitude, result.exportedObject),
+                    exportedObject: addCoordinatesToExportedObject(data.calculator.latitude, data.calculator.longitude, result.exportedObject, timestamp),
                     name: result.label,
                 }
             }))
@@ -63,7 +65,7 @@ const LoaderCalculator = (props) => {
         setData({
             disabled: false,
             savedInHistory: false,
-            timeCreatedInHistory: null,
+            timeCreated: null,
             calculatorId: null,
             calculator: {
                 isMetric: true,
@@ -93,11 +95,11 @@ const LoaderCalculator = (props) => {
         }
     }, [dispatch])
 
-    const saveCalculatorToDataBase = React.useCallback(async (calculatorData) => {
-        const { response, status, errorMessage } = await saveCalculator({ data: calculatorData, calculatorType: props.calculatorType, latitude: null, longitude: null, name: calculatorData.name })
+    const saveCalculatorToDataBase = React.useCallback(async () => {
+        const { response, status, errorMessage } = await saveCalculator({ data: data.calculator, calculatorType: props.calculatorType, latitude: data.calculator.latitude, longitude: data.calculator.longitude, name: data.calculator.name, timeCreated: data.timeCreated })
         if (status === 200) {
-            const { id, timeCreated } = response
-            setData(old => ({ ...old, savedInHistory: true, calculatorId: id, timeCreatedInHistory: timeCreated }))
+            const { id } = response
+            setData(old => ({ ...old, savedInHistory: true, calculatorId: id, timeCreated: data.timeCreated }))
             return {
                 status: 200
             }
@@ -106,12 +108,12 @@ const LoaderCalculator = (props) => {
             errorHandler(status)
             return status
         }
-    }, [setData])
+    }, [setData, data.calculator, data.timeCreated, data.calculator.longitude, data.calculator.latitude])
 
     const loadCalculatorFromDataBase = React.useCallback((data, id, timeCreated) => {
         setData(old => ({
             ...old,
-            timeCreatedInHistory: timeCreated,
+            timeCreated: timeCreated,
             savedInHistory: false,
             disabled: true,
             calculatorId: id,
@@ -160,7 +162,7 @@ const LoaderCalculator = (props) => {
             </View>
             <ResultView
                 savedInHistory={data.savedInHistory}
-                saveHandler={saveCalculatorToDataBase.bind(this, data.calculator)}
+                saveHandler={saveCalculatorToDataBase}
                 deleteOption={data.calculatorId !== null && !data.savedInHistory}
                 onDeleteHandler={deleteCalculatorFromDataBase.bind(this, data.calculatorId)}
                 resetHandler={resetCalculator}
@@ -169,7 +171,7 @@ const LoaderCalculator = (props) => {
                 result={data.calculator.result}
                 display={data.calculator.result !== null} />
             <CalculatorComponent
-                timeCreated={data.timeCreatedInHistory}
+                timeCreated={data.timeCreated}
                 latitude={data.calculator.latitude}
                 longitude={data.calculator.longitude}
                 calculatorType={props.calculatorType}
