@@ -10,18 +10,39 @@ export class SettingRepository extends SQLiteRepository {
         this.tableName = 'settings'
     }
 
+    async _getConfig() {
+        //config is a new table for storing key/value pair. new settings params are stored here and not in the settings table, because it needs to be altered. bad design...
+        try {
+            const result = await super.runSingleQueryTransaction(`SELECT id, value FROM config`)
+            if (result.rows.length > 0)
+                return Object.fromEntries(super.generateArray(result.rows.length, result.rows.item))
+            else return {}
+        }
+        catch (er) {
+            return {}
+        }
+    }
+
+    async _setConfig(isCalculatorDisplayed) {
+        await super.runMultiQueryTransaction(tx => [
+            super.runQuery(tx, 'DELETE FROM config WHERE id="isCalculatorDisplayed"'),
+            super.runQuery(tx, 'INSERT INTO config (id, value) VALUES ("isCalculatorDisplayed", ?)', [isCalculatorDisplayed])
+        ])
+    }
+
     async get() {
         try {
             const result = await super.runSingleQueryTransaction(`SELECT * from settings LIMIT 1`)
             if (result.rows.length === 0)
                 return {}
             else {
+                const { isCalculatorDisplayed } = await this._getConfig()
                 const { pipelineNameAsDefault, defaultPotentialUnit, autoCreatePotentials, isSurveyNew, isCloud, originalHash, fileName, cloudId, lastSync, onboarding, multimeter } = result.rows.item(0)
                 const { versionOnboarding, editTestPoint, editReferenceCell, map, potentialTypes, editBond, main } = JSON.parse(onboarding ?? '{}')
                 const onboard = onboarding ? new Onboarding(versionOnboarding, editTestPoint, editReferenceCell, map, potentialTypes, editBond, main) : undefined
                 const { peripheralId, name, type, onTime, offTime, delay, syncMode, firstCycle, onOffCaptureActive, timeSyncMode, offDelay, onSetup, captureRate } = JSON.parse(multimeter ?? '{}')
                 const multimeterSettings = multimeter ? new MultimeterSettings(peripheralId, name, type, onTime, offTime, delay, syncMode, firstCycle, onOffCaptureActive, timeSyncMode, offDelay, onSetup, captureRate) : undefined
-                return new AppSettings(Boolean(pipelineNameAsDefault), defaultPotentialUnit, Boolean(autoCreatePotentials), Boolean(isSurveyNew), Boolean(isCloud), originalHash, fileName, cloudId, lastSync, onboard, multimeterSettings)
+                return new AppSettings(Boolean(pipelineNameAsDefault), defaultPotentialUnit, Boolean(autoCreatePotentials), Boolean(isSurveyNew), Boolean(isCloud), originalHash, fileName, cloudId, lastSync, onboard, multimeterSettings, isCalculatorDisplayed)
             }
         }
         catch (er) {
@@ -123,9 +144,21 @@ export class SettingRepository extends SQLiteRepository {
         }
     }
 
+    async updateIsCalculatorDisplayed(isCalculatorDisplayed) {
+        try {
+            await super.runMultiQueryTransaction(tx => [
+                super.runQuery(tx, 'DELETE FROM config WHERE id="isCalculatorDisplayed"'),
+                super.runQuery(tx, 'INSERT INTO config (id, value) VALUES ("isCalculatorDisplayed", ?)', [isCalculatorDisplayed])
+            ])
+        }
+        catch (er) {
+            throw new Error(errors.DATABASE, 'Unable to update display calculator setting', er)
+        }
+    }
+
     async update(settings) {
         try {
-            const { pipelineNameAsDefault, defaultPotentialUnit, autoCreatePotentials, isSurveyNew, isCloud, originalHash, fileName, cloudId, lastSync, onboarding, multimeter } = settings
+            const { pipelineNameAsDefault, defaultPotentialUnit, autoCreatePotentials, isSurveyNew, isCloud, originalHash, fileName, cloudId, lastSync, onboarding, multimeter, isCalculatorDisplayed } = settings
             const onboardingValue = JSON.stringify(onboarding)
             const multimeterValue = JSON.stringify(multimeter)
             await this.runMultiQueryTransaction(tx => [
@@ -133,7 +166,7 @@ export class SettingRepository extends SQLiteRepository {
                 this.runQuery(tx, `INSERT INTO settings (pipelineNameAsDefault, defaultPotentialUnit, autoCreatePotentials, onboarding, isSurveyNew, isCloud, originalHash, fileName, cloudId, lastSync, multimeter) VALUES (?,?,?,?,?,?,?,?,?,?,?)`,
                     [pipelineNameAsDefault, defaultPotentialUnit, Boolean(autoCreatePotentials), onboardingValue, isSurveyNew, isCloud, originalHash, fileName, cloudId, lastSync, multimeterValue])
             ])
-
+            await this._setConfig(isCalculatorDisplayed)
             return settings
         }
         catch (er) {

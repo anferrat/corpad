@@ -88,7 +88,8 @@ export class AppInitialization {
             subscriptionStatus: status,
             subscriptionExpirationTime: expirationTime,
             managementUrl,
-            bleInitialized: initializeBleOnLaunch
+            bleInitialized: initializeBleOnLaunch,
+            isCalculatorDisplayed: settings.isCalculatorDisplayed
         }
     }
 }

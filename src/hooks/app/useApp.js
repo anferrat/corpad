@@ -86,9 +86,9 @@ const useApp = () => {
       componentMounted.current = true
       const { status, response } = await initializeApp()
       if (status === 200) {
-        const { isLoaded, syncTime, name, uid, fileName, isCloud, isSigned, userName, onboarding, multimeter, subscriptionStatus, subscriptionExpirationTime, urlType, link, managementUrl, bleInitialized } = response
+        const { isLoaded, syncTime, name, uid, fileName, isCloud, isSigned, userName, onboarding, multimeter, subscriptionStatus, subscriptionExpirationTime, urlType, link, managementUrl, bleInitialized, isCalculatorDisplayed } = response
         startTransition(() => {
-          dispatch(setSettingsOnAppLoad(isLoaded, syncTime, name, uid, fileName, isCloud, isSigned, userName, onboarding, multimeter, subscriptionStatus, subscriptionExpirationTime, managementUrl, bleInitialized))
+          dispatch(setSettingsOnAppLoad(isLoaded, syncTime, name, uid, fileName, isCloud, isSigned, userName, onboarding, multimeter, subscriptionStatus, subscriptionExpirationTime, managementUrl, bleInitialized, isCalculatorDisplayed))
           if (componentMounted.current) {
             setLoading(false)
             setTimeout(() => setInitialUrlLink({
