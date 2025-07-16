@@ -54,6 +54,10 @@ export const addMarker = { uri: 'add_marker' }
 
 export const activePointIcon = { uri: mapIcons.default[4] }
 
+export const calculatorIcon = { uri: 'calculator' }
+
+export const activeCalculatorIcon = { uri: 'active_calculator' }
+
 const pointIcons = {
     false: {
         [StrokeColors.BLUE]: { uri: 'point_inactive_blue' },
