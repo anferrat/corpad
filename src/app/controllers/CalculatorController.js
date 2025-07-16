@@ -8,6 +8,7 @@ import { CalculatorValidation } from "../validation/CalculatorValidation"
 import { calculatorRepo, fileSystemRepo } from "./_instances/repositories"
 import { basicPresenter, listPresenter } from "./_instances/presenters"
 import { commaSeparatedFileParser, fileNameGenerator } from "./_instances/general_services"
+import { GetAllCalculatorsForDisplay } from "../services/calculator/GetAllCalculatorsForDisplay"
 
 class CalculatorController extends Controller {
     constructor(calculatorRepo, fileSystemRepo, listPresenter, basicPresenter, commaSeparatedFileParser, fileNameGenerator) {
@@ -17,7 +18,7 @@ class CalculatorController extends Controller {
         this.getCalculatorService = new GetCalculator(calculatorRepo, basicPresenter)
         this.getCalculatorListByTypeService = new GetCalculatorListByType(calculatorRepo, listPresenter)
         this.writeCalculatorToFile = new WriteCalculatorToFile(fileSystemRepo, commaSeparatedFileParser, fileNameGenerator)
-
+        this.getAllCalculatorsForDisplayService = new GetAllCalculatorsForDisplay(calculatorRepo)
         this.validation = new CalculatorValidation()
     }
 
@@ -62,6 +63,12 @@ class CalculatorController extends Controller {
             return await this.writeCalculatorToFile.execute(exportData, fileName)
         })
     }
+
+    getAllForDisplay(onError = null, onSuccess = null) {
+        return super.controllerHandler(onSuccess, onError, 649, async () => {
+            return await this.getAllCalculatorsForDisplayService.execute()
+        })
+    }
 }
 
 const calculatorController = new CalculatorController(
@@ -86,3 +93,5 @@ export const getCalculatorById = async ({ id }, onError, onSuccess) => await cal
 export const getCalculatorListByType = async ({ calculatorType }, onError, onSuccess) => await calculatorController.getList({ calculatorType }, onError, onSuccess)
 
 export const saveCalculatorDataToFile = async ({ exportData, fileName }, onError, onSuccess) => await calculatorController.saveToFile({ exportData, fileName }, onError, onSuccess)
+
+export const getAllCalculatorsForDisplay = async (onError, onSuccess) => await calculatorController.getAllForDisplay(onError, onSuccess)
