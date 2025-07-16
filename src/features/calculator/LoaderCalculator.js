@@ -4,7 +4,7 @@ import { useDispatch } from 'react-redux'
 import { ScrollView } from 'react-native-gesture-handler'
 import ResultView from './ResultView'
 import CalculatorComponent from './CalculatorComponent'
-import { initialCalculatorData, initialValidObject, validateAll, getResult, addCoordinatesToExportedObject } from './helpers'
+import { initialCalculatorData, initialValidObject, validateAll, getResult, addCoordinatesToExportedObject, addTimeToExportedObject } from './helpers'
 import UnitSelector from './UnitSelector'
 import { errorHandler } from '../../helpers/error_handler'
 import HistoryModal from './HistoryModal'
@@ -50,7 +50,12 @@ const LoaderCalculator = (props) => {
                 calculator: {
                     ...old.calculator,
                     result: result.result,
-                    exportedObject: addCoordinatesToExportedObject(data.calculator.latitude, data.calculator.longitude, result.exportedObject, timestamp),
+                    exportedObject: addTimeToExportedObject(
+                        timestamp,
+                        addCoordinatesToExportedObject(
+                            data.calculator.latitude,
+                            data.calculator.longitude,
+                            result.exportedObject)),
                     name: result.label,
                 }
             }))

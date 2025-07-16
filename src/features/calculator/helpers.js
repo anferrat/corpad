@@ -1,6 +1,7 @@
 import fieldValidation from '../../helpers/validation'
 import { thicknessTable, outerDiameters, npsList } from '../../constants/thicknessTable'
 import { referenceCellValues, referenceCellCodes, referenceCellElectrodes } from './reference_cell/ReferenceConverter'
+import { getFullDate } from '../../helpers/functions'
 
 const numberWithSpaces = (x) => { //move to calculator
     if (!isNaN(x) && x !== null && x !== undefined) {
@@ -515,4 +516,12 @@ export const addCoordinatesToExportedObject = (latitude, longitude, exportedObje
         ]
     }
     else return exportedObject
+}
+
+export const addTimeToExportedObject = (timestamp, exportedObject) => {
+    const timeString = getFullDate(timestamp)
+    return [
+        ...exportedObject,
+        ['Date and time', timeString, ...new Array(exportedObject[0].length).fill('')]
+    ]
 }
