@@ -58,4 +58,15 @@ export class CalculatorRepository extends SQLiteRepository {
         }
     }
 
+    async getAllForMap() {
+        try {
+            const { rows } = await this.runSingleQueryTransaction('SELECT id, timeCreated, calculatorType, data, name, latitude, longitude FROM calculators WHERE latitude IS NOT NULL AND longitude IS NOT NULL', [])
+            const { timeCreated, calculatorType, data, name, latitude, longitude } = rows.item(0)
+            return new Calculator(id, name, calculatorType, JSON.parse(data), timeCreated, latitude, longitude)
+        }
+        catch (err) {
+            throw new Error(errors.DATABASE, 'Unable to get calculators for map', err)
+        }
+    }
+
 }
