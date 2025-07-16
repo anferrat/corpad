@@ -13,6 +13,7 @@ export class CalculatorValidation extends Validation {
                 name: string().required(),
                 latitude: this.latitude.nullable(),
                 logitude: this.longitude.nullable(),
+                timeCreated: this.timestamp,
                 data: object()
             }))
     }
@@ -31,7 +32,7 @@ export class CalculatorValidation extends Validation {
             }))
     }
 
-   getById(obj) {
+    getById(obj) {
         return this.validate(obj,
             object({
                 id: this.id

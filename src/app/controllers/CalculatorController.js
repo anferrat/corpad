@@ -23,8 +23,8 @@ class CalculatorController extends Controller {
 
     save(params, onError = null, onSuccess = null) {
         return super.controllerHandler(onSuccess, onError, 647, async () => {
-            const { data, name, calculatorType, latitude, longitude } = this.validation.save(params)
-            return await this.saveCalculatorService.execute({ data, name, calculatorType, latitude, longitude })
+            const { data, name, calculatorType, latitude, longitude, timeCreated } = this.validation.save(params)
+            return await this.saveCalculatorService.execute({ data, name, calculatorType, latitude, longitude, timeCreated })
         })
     }
 
@@ -74,7 +74,7 @@ const calculatorController = new CalculatorController(
 )
 
 
-export const saveCalculator = async ({ data, name, calculatorType, latitude, longitude }, onError, onSuccess) => await calculatorController.save({ data, name, calculatorType, latitude, longitude }, onError, onSuccess)
+export const saveCalculator = async ({ data, name, calculatorType, latitude, longitude, timeCreated }, onError, onSuccess) => await calculatorController.save({ data, name, calculatorType, latitude, longitude, timeCreated }, onError, onSuccess)
 
 export const deleteCalculator = async ({ id }, onError, onSuccess) => await calculatorController.delete({ id }, onError, onSuccess)
 

@@ -7,8 +7,7 @@ export class SaveCalculator {
     }
 
     async execute(calculatorData) {
-        const { name, calculatorType, data, latitude, longitude } = calculatorData
-        const timeCreated = Date.now()
+        const { name, calculatorType, data, latitude, longitude, timeCreated } = calculatorData
         const calculator = new Calculator(null, name, calculatorType, data, timeCreated, latitude, longitude)
         return this.basicPresenter.execute(await this.calculatorRepo.save(calculator))
     }
