@@ -20,7 +20,7 @@ export class CalculatorRepository extends SQLiteRepository {
 
     async getList(type) {
         try {
-            const { rows } = await this.runSingleQueryTransaction('SELECT * FROM calculators WHERE calculatorType=?', [type])
+            const { rows } = await this.runSingleQueryTransaction('SELECT * FROM calculators WHERE calculatorType=? ORDER BY timeCreated DESC', [type])
             return super.generateArray(rows.length, rows.item).map(({ id, timeCreated, calculatorType, data, name, latitude, longitude }) =>
                 new Calculator(id, name, calculatorType, JSON.parse(data), timeCreated, latitude, longitude))
         }
