@@ -87,7 +87,6 @@ export const deleteCalculator = async ({ id }, onError, onSuccess) => await calc
 
 export const deleteCalculatorsByType = async ({ calculatorType }, onError, onSuccess) => await calculatorController.deleteAll({ calculatorType }, onError, onSuccess)
 
-//Actually never used. please use, when calculator implementation is updated
 export const getCalculatorById = async ({ id }, onError, onSuccess) => await calculatorController.getById({ id }, onError, onSuccess)
 
 export const getCalculatorListByType = async ({ calculatorType }, onError, onSuccess) => await calculatorController.getList({ calculatorType }, onError, onSuccess)

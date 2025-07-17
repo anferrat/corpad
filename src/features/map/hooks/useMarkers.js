@@ -15,7 +15,7 @@ const useMarkers = ({ navigateToEdit, ref }) => {
     const map = useSelector(state => state.map)
     const isFocused = useIsFocused()
     const dispatch = useDispatch()
-    const { loading, activeMarker, markers, newItemMarker, satelliteMode, activeMapLayerMarker, isFirstLoad, filters, } = map
+    const { loading, activeMarker, markers, newItemMarker, satelliteMode, activeMapLayerMarker, isFirstLoad, filters, activeCalculatorMarker } = map
 
     const currentRegion = useRef({
         latitudeDelta: 0.0135,
@@ -158,9 +158,9 @@ const useMarkers = ({ navigateToEdit, ref }) => {
 
     const onMapPress = useCallback(() => {
         //Reseting active and newItem markers if selected
-        if (activeMarker.id !== null || newItemMarker.active || activeMapLayerMarker.layerId !== null)
+        if (activeMarker.id !== null || newItemMarker.active || activeMapLayerMarker.layerId !== null || activeCalculatorMarker.calculatorId !== null)
             dispatch(resetActiveMarkers())
-    }, [activeMarker.id !== null, newItemMarker.active, dispatch, activeMapLayerMarker.layerId !== null])
+    }, [activeMarker.id !== null, newItemMarker.active, dispatch, activeMapLayerMarker.layerId !== null, activeCalculatorMarker.calculatorId !== null])
 
     const updateMarkerHandler = useCallback(async (marker, lat, lon) => {
         const latitide = roundCoord(lat)

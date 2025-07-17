@@ -5,21 +5,12 @@ import LoaderCalculator from '../../features/calculator/LoaderCalculator'
 import LoadingView from '../../components/LoadingView'
 
 export default CalculatorScreen = ({ navigation, route }) => {
-    const { calculatorType } = route.params
-    const [loading, setLoading] = useState(true)
-
-    useEffect(() => {
-        setTimeout(() => {
-            setLoading(false)
-        }, 20)
-    }, [])
-
+    const { calculatorType, calculatorId } = route.params
     return (
         <SafeAreaView style={globalStyle.screen}>
-            <LoadingView loading={loading}>
-                <LoaderCalculator
-                    calculatorType={calculatorType} />
-            </LoadingView>
+            <LoaderCalculator
+                calculatorId={calculatorId}
+                calculatorType={calculatorType} />
         </SafeAreaView>
     )
 }

@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { View, StyleSheet } from 'react-native'
 import { useDispatch } from 'react-redux'
 import { ScrollView } from 'react-native-gesture-handler'
@@ -9,12 +9,15 @@ import UnitSelector from './UnitSelector'
 import { errorHandler } from '../../helpers/error_handler'
 import HistoryModal from './HistoryModal'
 import { setExportModal } from '../../store/actions/settings'
-import { deleteCalculator, deleteCalculatorsByType, saveCalculator, saveCalculatorDataToFile } from '../../app/controllers/CalculatorController'
+import { deleteCalculator, deleteCalculatorsByType, getCalculatorById, saveCalculator, saveCalculatorDataToFile } from '../../app/controllers/CalculatorController'
 import { CalculatorTypeFileNameLabels } from '../../constants/labels'
 import BottomButton from '../../components/BottomButton'
+import LoadingView from '../../components/LoadingView'
 
 const LoaderCalculator = (props) => {
     const dispatch = useDispatch()
+    const [isLoading, setIsLoading] = useState(true)
+    const componentMounted = useRef(true)
     const [data, setData] = useState({
         disabled: false,
         savedInHistory: false,
@@ -36,7 +39,41 @@ const LoaderCalculator = (props) => {
 
     const setIsMetric = React.useCallback((useImperial) => {
         setData(old => ({ ...old, calculator: { ...old.calculator, isMetric: !useImperial } }))
-    }, [props.setData])
+    }, [])
+
+    const loadCalculatorFromDataBase = React.useCallback((data, id, timeCreated) => {
+        setData(old => ({
+            ...old,
+            timeCreated: timeCreated,
+            savedInHistory: false,
+            disabled: true,
+            calculatorId: id,
+            calculator: data
+        }))
+        setValid(initialValidObject[props.calculatorType])
+    }, [setData])
+
+    useEffect(() => {
+        componentMounted.current = true
+        if (props.calculatorId) {
+            const loadData = async () => {
+                const { response, status } = await getCalculatorById({ id: props.calculatorId })
+                if (status === 200)
+                    loadCalculatorFromDataBase(response.data, props.calculatorId, response.timeCreated)
+                else errorHandler(status)
+                setIsLoading(false)
+            }
+            loadData()
+        }
+        else {
+            setTimeout(() => {
+                setIsLoading(false)
+            }, 20)
+        }
+        return () => {
+            componentMounted.current = false
+        }
+    }, [])
 
     const calculateResult = React.useCallback(() => {
         const validate = validateAll(data.calculator.given, props.calculatorType)
@@ -115,17 +152,7 @@ const LoaderCalculator = (props) => {
         }
     }, [setData, data.calculator, data.timeCreated, data.calculator.longitude, data.calculator.latitude])
 
-    const loadCalculatorFromDataBase = React.useCallback((data, id, timeCreated) => {
-        setData(old => ({
-            ...old,
-            timeCreated: timeCreated,
-            savedInHistory: false,
-            disabled: true,
-            calculatorId: id,
-            calculator: data
-        }))
-        setValid(initialValidObject[props.calculatorType])
-    }, [setData])
+
 
     const deleteCalculatorFromDataBase = React.useCallback(async (id) => {
         const { status, errorMessage } = await deleteCalculator({ id })
@@ -150,53 +177,55 @@ const LoaderCalculator = (props) => {
     }, [props.calculatorType])
 
     return <>
-        <ScrollView contentContainerStyle={data.disabled ? styles.scrollViewEmpty : styles.scrollViewNormal}>
-            <View style={styles.topRow}>
-                <UnitSelector
+        <LoadingView loading={isLoading}>
+            <ScrollView contentContainerStyle={data.disabled ? styles.scrollViewEmpty : styles.scrollViewNormal}>
+                <View style={styles.topRow}>
+                    <UnitSelector
+                        calculatorType={props.calculatorType}
+                        disabled={data.disabled}
+                        setIsMetric={setIsMetric}
+                        isMetric={data.calculator.isMetric} />
+                    <HistoryModal
+                        activeCalculatorId={data.calculatorId}
+                        onDeleteHandler={deleteCalculatorFromDataBase}
+                        onDeleteAllHandler={deleteAllHistory}
+                        resetCalculator={resetCalculator}
+                        loadHandler={loadCalculatorFromDataBase}
+                        calculatorType={props.calculatorType} />
+                </View>
+                <ResultView
+                    savedInHistory={data.savedInHistory}
+                    saveHandler={saveCalculatorToDataBase}
+                    deleteOption={data.calculatorId !== null && !data.savedInHistory}
+                    onDeleteHandler={deleteCalculatorFromDataBase.bind(this, data.calculatorId)}
+                    resetHandler={resetCalculator}
+                    exportHandler={exportCalculatorData.bind(this, data.calculator.exportedObject)}
                     calculatorType={props.calculatorType}
+                    result={data.calculator.result}
+                    display={data.calculator.result !== null} />
+                <CalculatorComponent
+                    timeCreated={data.timeCreated}
+                    latitude={data.calculator.latitude}
+                    longitude={data.calculator.longitude}
+                    calculatorType={props.calculatorType}
+                    data={data.calculator.given}
                     disabled={data.disabled}
-                    setIsMetric={setIsMetric}
-                    isMetric={data.calculator.isMetric} />
-                <HistoryModal
-                    activeCalculatorId={data.calculatorId}
-                    onDeleteHandler={deleteCalculatorFromDataBase}
-                    onDeleteAllHandler={deleteAllHistory}
-                    resetCalculator={resetCalculator}
-                    loadHandler={loadCalculatorFromDataBase}
-                    calculatorType={props.calculatorType} />
-            </View>
-            <ResultView
-                savedInHistory={data.savedInHistory}
-                saveHandler={saveCalculatorToDataBase}
-                deleteOption={data.calculatorId !== null && !data.savedInHistory}
-                onDeleteHandler={deleteCalculatorFromDataBase.bind(this, data.calculatorId)}
-                resetHandler={resetCalculator}
-                exportHandler={exportCalculatorData.bind(this, data.calculator.exportedObject)}
-                calculatorType={props.calculatorType}
-                result={data.calculator.result}
-                display={data.calculator.result !== null} />
-            <CalculatorComponent
-                timeCreated={data.timeCreated}
-                latitude={data.calculator.latitude}
-                longitude={data.calculator.longitude}
-                calculatorType={props.calculatorType}
-                data={data.calculator.given}
-                disabled={data.disabled}
-                isMetric={data.calculator.isMetric}
-                setData={setData}
-                setValid={setValid}
-                valid={valid}
-                coordValid={coordValid}
-                setCoordValid={setCoordValid}
-            />
-        </ScrollView>
-        {!data.disabled ?
-            <BottomButton
-                icon='calculator'
-                pack='cp'
-                title={'Calculate'}
-                onPress={calculateResult}
-            /> : null}
+                    isMetric={data.calculator.isMetric}
+                    setData={setData}
+                    setValid={setValid}
+                    valid={valid}
+                    coordValid={coordValid}
+                    setCoordValid={setCoordValid}
+                />
+            </ScrollView>
+            {!data.disabled ?
+                <BottomButton
+                    icon='calculator'
+                    pack='cp'
+                    title={'Calculate'}
+                    onPress={calculateResult}
+                /> : null}
+        </LoadingView>
     </>
 }
 

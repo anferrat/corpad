@@ -1,7 +1,7 @@
 export class GetCalculator {
     constructor(calculatorRepo, basicPresenter) {
         this.calculatorRepo = calculatorRepo
-        this.basicpresenter = basicPresenter
+        this.basicPresenter = basicPresenter
     }
 
     async execute(id) {
