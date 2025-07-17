@@ -13,6 +13,7 @@ export const RESET_ACTIVE_MAP_LAYER_MARKER = 'RESET_ACTIVE_MAP_LAYER_MARKER'
 export const APPLY_MAP_FILTER = 'APPLY_MAP_FILTER'
 export const RESET_MAP_FILTERS = 'RESET_MAP_FILTERS'
 export const RESET_MAP = 'RESET_MAP'
+export const SET_ACTIVE_CALCULATOR_MARKER = 'SET_ACTIVE_CALCULATOR_MARKER'
 
 export const loadMarkers = (list) => {
     return { type: LOAD_MARKERS, list: list }
@@ -68,4 +69,8 @@ export const resetMapFilters = () => {
 
 export const refreshMarkers = () => {
     return { type: REFRESH_MARKERS }
+}
+
+export const setActiveCalculatorMarker = (calculatorId, calculatorType, latitude, longitude, name) => {
+    return { type: SET_ACTIVE_CALCULATOR_MARKER, calculatorId, calculatorType, latitude, longitude, name }
 }

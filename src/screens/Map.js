@@ -7,6 +7,7 @@ const MapScreen = ({ navigation }) => {
   const navigateToEdit = (id, itemType) => navigation.navigate('EditItem', { itemId: id, isNew: true, itemType: itemType })
   const navigateToViewMapLayer = () => navigation.navigate('ViewMapLayer')
   const navigateToViewMapLayerMarker = (layerId, markerIndex) => navigation.navigate('ViewMarkerInfo', { layerId, markerIndex })
+  const navigateToCalculatorView = (calculatorId, calculatorType) => navigation.navigate('Calculator', { calculatorType, calculatorId })
   return (
     <>
       <OnboardingOverlayEditMap
@@ -15,6 +16,7 @@ const MapScreen = ({ navigation }) => {
         navigateToViewMapLayer={navigateToViewMapLayer}
         navigateToViewMapLayerMarker={navigateToViewMapLayerMarker}
         navigateToView={navigateToView}
+        navigateToCalculatorView={navigateToCalculatorView}
         navigateToEdit={navigateToEdit} />
     </>
   )

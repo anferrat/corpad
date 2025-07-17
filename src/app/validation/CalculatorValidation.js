@@ -12,7 +12,7 @@ export class CalculatorValidation extends Validation {
                 calculatorType: this.calculatorType,
                 name: string().required(),
                 latitude: this.latitude.nullable(),
-                logitude: this.longitude.nullable(),
+                longitude: this.longitude.nullable(),
                 timeCreated: this.timestamp,
                 data: object()
             }))

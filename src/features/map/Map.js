@@ -11,8 +11,9 @@ import FocusAwareStatusBar from '../../components/FocusAwareStatusBar'
 import useMarkers from './hooks/useMarkers'
 import ControlBar from './ControlBar'
 import GeoJsonLayers from './components/GeoJsonLayers'
+import CalculatorLayer from './components/CalculatorLayer'
 
-const Map = ({ navigateToView, navigateToEdit, navigateToViewMapLayer, navigateToViewMapLayerMarker }) => {
+const Map = ({ navigateToView, navigateToEdit, navigateToViewMapLayer, navigateToViewMapLayerMarker, navigateToCalculatorView }) => {
     const ref = useRef()
     const {
         markers,
@@ -63,6 +64,7 @@ const Map = ({ navigateToView, navigateToEdit, navigateToViewMapLayer, navigateT
                 showsIndoors={false}
                 style={styles.map}>
                 <GeoJsonLayers />
+                <CalculatorLayer />
                 {markers.map(m =>
                     <PointMarker
                         key={m.uid}
@@ -95,6 +97,7 @@ const Map = ({ navigateToView, navigateToEdit, navigateToViewMapLayer, navigateT
             <MarkerInfo
                 navigateToView={navigateToView}
                 navigateToMapLayerPointView={navigateToViewMapLayerMarker}
+                navigateToCalculatorView={navigateToCalculatorView}
                 shareActiveLocation={shareActiveLocation}
                 zoomToCoordinates={zoomToCoordinates} />
             <NewItemView

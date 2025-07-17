@@ -8,7 +8,7 @@ import Pressable from '../../../components/Pressable'
 import useActiveMarkerInfo from '../hooks/useActiveMarkerInfo'
 
 
-const MarkerInfo = ({ zoomToCoordinates, navigateToView, navigateToMapLayerPointView, shareActiveLocation }) => {
+const MarkerInfo = ({ zoomToCoordinates, navigateToView, navigateToMapLayerPointView, shareActiveLocation, navigateToCalculatorView }) => {
     const { visible,
         name,
         subtitle,
@@ -18,7 +18,7 @@ const MarkerInfo = ({ zoomToCoordinates, navigateToView, navigateToMapLayerPoint
         subtitleIcon,
         onPress,
         onLongPress,
-        onShare } = useActiveMarkerInfo({ zoomToCoordinates, navigateToView, navigateToMapLayerPointView, shareActiveLocation })
+        onShare } = useActiveMarkerInfo({ zoomToCoordinates, navigateToView, navigateToMapLayerPointView, shareActiveLocation, navigateToCalculatorView })
     return (
         <MarkerInfoView
             onSharePress={onShare}
