@@ -64,7 +64,8 @@ const Map = ({ navigateToView, navigateToEdit, navigateToViewMapLayer, navigateT
                 showsIndoors={false}
                 style={styles.map}>
                 <GeoJsonLayers />
-                <CalculatorLayer />
+                <CalculatorLayer
+                    animateToCoordinates={animateToCoordinates} />
                 {markers.map(m =>
                     <PointMarker
                         key={m.uid}

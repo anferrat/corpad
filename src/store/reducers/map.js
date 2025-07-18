@@ -1,4 +1,4 @@
-import { LOAD_MARKERS, REFRESH_MARKERS, DELETE_MARKER, UPDATE_MARKER, SET_NEW_ITEM_MARKER, TOGGLE_SATELLITE_MODE, ACTIVATE_MARKER, RESET_ACTIVE_MARKERS, SET_MAP_READY, SET_ACTIVE_MAP_LAYER_MARKER, RESET_ACTIVE_MAP_LAYER_MARKER, APPLY_MAP_FILTER, RESET_MAP_FILTERS, RESET_MAP, SET_ACTIVE_CALCULATOR_MARKER } from "../actions/map"
+import { LOAD_MARKERS, REFRESH_MARKERS, DELETE_MARKER, UPDATE_MARKER, SET_NEW_ITEM_MARKER, TOGGLE_SATELLITE_MODE, ACTIVATE_MARKER, RESET_ACTIVE_MARKERS, SET_MAP_READY, SET_ACTIVE_MAP_LAYER_MARKER, RESET_ACTIVE_MAP_LAYER_MARKER, APPLY_MAP_FILTER, RESET_MAP_FILTERS, RESET_MAP, SET_ACTIVE_CALCULATOR_MARKER, RESET_ACTIVE_CALCULATOR_MARKER } from "../actions/map"
 
 const initialState = {
     //FYI markers with lat === null or lon === null will still exist in this list. make sure, to filter them out when accessing markers
@@ -187,6 +187,14 @@ const map = (state = initialState, action) => {
                     activeMapLayerMarker: initialState.activeMapLayerMarker
                 }
             else return state
+        case RESET_ACTIVE_CALCULATOR_MARKER:
+            if (action.forceReset || action.calculatorId === state.activeCalculatorMarker.calculatorId)
+                return {
+                    ...state,
+                    activeCalculatorMarker: initialState.activeCalculatorMarker
+                }
+            else
+                return state
         case REFRESH_MARKERS:
             return {
                 ...state,

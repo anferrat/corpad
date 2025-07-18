@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useCallback, useEffect, useRef, useState } from 'react'
 import { View, StyleSheet } from 'react-native'
 import { useDispatch } from 'react-redux'
 import { ScrollView } from 'react-native-gesture-handler'
@@ -13,6 +13,7 @@ import { deleteCalculator, deleteCalculatorsByType, getCalculatorById, saveCalcu
 import { CalculatorTypeFileNameLabels } from '../../constants/labels'
 import BottomButton from '../../components/BottomButton'
 import LoadingView from '../../components/LoadingView'
+import { EventRegister } from 'react-native-event-listeners'
 
 const LoaderCalculator = (props) => {
     const dispatch = useDispatch()
@@ -142,6 +143,7 @@ const LoaderCalculator = (props) => {
         if (status === 200) {
             const { id } = response
             setData(old => ({ ...old, savedInHistory: true, calculatorId: id, timeCreated: data.timeCreated }))
+            EventRegister.emit('CALCULATOR_CREATED', response)
             return {
                 status: 200
             }
@@ -157,6 +159,7 @@ const LoaderCalculator = (props) => {
     const deleteCalculatorFromDataBase = React.useCallback(async (id) => {
         const { status, errorMessage } = await deleteCalculator({ id })
         if (status === 200) {
+            EventRegister.emit('CALCULATOR_DELETED', id)
             return true
         }
         else {
@@ -168,6 +171,7 @@ const LoaderCalculator = (props) => {
     const deleteAllHistory = React.useCallback(async () => {
         const { status, errorMessage } = await deleteCalculatorsByType({ calculatorType: props.calculatorType })
         if (status === 200) {
+            EventRegister.emit('CALCULATOR_GROUP_DELETED')
             return true
         }
         else {
@@ -175,6 +179,18 @@ const LoaderCalculator = (props) => {
             return false
         }
     }, [props.calculatorType])
+
+    const showCalculatorOnMap = useCallback(() => {
+        props.navigateToMap()
+        EventRegister.emit('SHOW_CALCULATOR_ON_MAP',
+            {
+                calculatorId: data.calculatorId,
+                calculatorType: props.calculatorType,
+                latitude: data.calculator.latitude,
+                longitude: data.calculator.longitude,
+                name: data.calculator.name
+            })
+    }, [data.calculatorId, data.calculator.latitude, data.calculator.longitude, data.calculator.name])
 
     return <>
         <LoadingView loading={isLoading}>
@@ -204,6 +220,8 @@ const LoaderCalculator = (props) => {
                     result={data.calculator.result}
                     display={data.calculator.result !== null} />
                 <CalculatorComponent
+                    isSaved={data.calculatorId !== null}
+                    showCalculatorOnMap={showCalculatorOnMap}
                     timeCreated={data.timeCreated}
                     latitude={data.calculator.latitude}
                     longitude={data.calculator.longitude}
