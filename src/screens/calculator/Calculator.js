@@ -6,11 +6,13 @@ import LoadingView from '../../components/LoadingView'
 
 export default CalculatorScreen = ({ navigation, route }) => {
     const { calculatorType, calculatorId } = route.params
+    const navigateToMap = () => navigation.navigate('Map')
     return (
         <SafeAreaView style={globalStyle.screen}>
             <LoaderCalculator
                 calculatorId={calculatorId}
-                calculatorType={calculatorType} />
+                calculatorType={calculatorType}
+                navigateToMap={navigateToMap} />
         </SafeAreaView>
     )
 }

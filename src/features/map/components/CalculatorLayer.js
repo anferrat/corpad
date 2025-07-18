@@ -6,8 +6,8 @@ import { setActiveCalculatorMarker } from '../../../store/actions/map'
 import ActiveCalculatorMarker from './markers/ActiveCalculatorMarker'
 
 
-const CalculatorLayer = ({ }) => {
-    const { markers } = useCalculatorMarkers()
+const CalculatorLayer = ({ animateToCoordinates }) => {
+    const { markers } = useCalculatorMarkers(animateToCoordinates)
     const { calculatorId, latitude, longitude } = useSelector(state => state.map.activeCalculatorMarker)
     const dispatch = useDispatch()
     const onPress = useCallback((calculatorId, calculatorType, latitude, longitude, name) => {

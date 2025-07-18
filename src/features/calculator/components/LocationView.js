@@ -4,9 +4,10 @@ import useLocationView from '../hooks/useLocationView'
 import InputField from '../../../components/Input'
 import IconButton from '../../../components/IconButton'
 import LocationModal from './LocationModal'
+import { useSelector } from 'react-redux'
 
 
-const LocationView = ({ setCalculatorData, setCoordValid, latitude, longitude, latitudeValid, longitudeValid, disabled }) => {
+const LocationView = ({ setCalculatorData, setCoordValid, latitude, longitude, latitudeValid, longitudeValid, disabled, showCalculatorOnMap, isSaved }) => {
     const {
         onLatitudeChange,
         onLongitudeChange,
@@ -17,6 +18,7 @@ const LocationView = ({ setCalculatorData, setCoordValid, latitude, longitude, l
         hideModal,
         updateLatAndLon
     } = useLocationView(setCalculatorData, setCoordValid, latitude, longitude)
+    const isSurveyLoaded = useSelector(state => state.settings.currentSurvey.isLoaded)
     if (disabled && latitude === null && longitude === null)
         return null
     return (
@@ -44,13 +46,12 @@ const LocationView = ({ setCalculatorData, setCoordValid, latitude, longitude, l
                 value={longitude}
                 valid={longitudeValid}
                 label='Longitude' />
-            {!disabled ? //potentially work on show on map button here, also needs to request to refresh calculator
+            {!disabled || isSaved && isSurveyLoaded ?
                 <View style={styles.button}>
                     <IconButton
-                        iconName='navigation'
-                        onPress={showModal} />
-                </View>
-                : null}
+                        iconName={disabled ? 'globe-2' : 'navigation'}
+                        onPress={disabled ? showCalculatorOnMap : showModal} />
+                </View> : null}
             <LocationModal
                 visible={visible}
                 updateLatAndLon={updateLatAndLon}

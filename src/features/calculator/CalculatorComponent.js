@@ -38,7 +38,9 @@ const CalculatorComponent = (props) => {
             disabled={props.disabled}
         />
         <LocationView
+            isSaved={props.isSaved}
             disabled={props.disabled}
+            showCalculatorOnMap={props.showCalculatorOnMap}
             setCalculatorData={setCalculatorData}
             setCoordValid={props.setCoordValid}
             latitude={props.latitude}
