@@ -78,7 +78,7 @@ const LoaderCalculator = (props) => {
 
     const calculateResult = React.useCallback(() => {
         const validate = validateAll(data.calculator.given, props.calculatorType)
-        if (validate.isValid) {
+        if (validate.isValid && coordValid.latitude && coordValid.longitude) {
             const result = getResult(data.calculator.given, props.calculatorType, data.calculator.isMetric)
             const timestamp = Date.now()
             setData(old => ({
@@ -102,7 +102,7 @@ const LoaderCalculator = (props) => {
             errorHandler(505)
             setValid(validate.valid)
         }
-    }, [setValid, valid, props.calculatorType, setData, data.calculator.isMetric, data.calculator.given, data.calculator.latitude, data.calculator.longitude])
+    }, [setValid, valid, props.calculatorType, setData, data.calculator.isMetric, data.calculator.given, data.calculator.latitude, data.calculator.longitude, coordValid])
 
     const resetCalculator = React.useCallback(() => {
         setData({
