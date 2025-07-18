@@ -33,9 +33,10 @@ const useActiveMarkerInfo = ({ zoomToCoordinates, navigateToView, navigateToMapL
             shareActiveLocation(activeMarker.latitude, activeMarker.longitude, activeMarker.name)
         else if (activeMapLayerMarkerVisible)
             shareActiveLocation(activeMapLayerMarker.latitude, activeMapLayerMarker.longitude, activeMapLayerMarker.name)
-        else if (activeCalculatorMarkerVisibe)
-            shareActiveLocation(calculatorMarker.latitude, calculatorMarker.longitude, calculatorMarker.name)
-    }, [activeMarkerVisible, activeMapLayerMarkerVisible, activeMarker.latitude, activeMarker.longitude, activeMarker.name, activeMapLayerMarker.latitude, activeMapLayerMarker.longitude, activeMapLayerMarker.name, shareActiveLocation, calculatorMarker.latitude, calculatorMarker.longitude, calculatorMarker.name])
+        else if (activeCalculatorMarkerVisibe) {
+            shareActiveLocation(calculatorMarker.latitude, calculatorMarker.longitude, CalculatorTypeLabels[calculatorMarker.calculatorType])
+        }
+    }, [activeMarkerVisible, activeMapLayerMarkerVisible, activeCalculatorMarkerVisibe, activeMarker.latitude, activeMarker.longitude, activeMarker.name, activeMapLayerMarker.latitude, activeMapLayerMarker.longitude, activeMapLayerMarker.name, shareActiveLocation, calculatorMarker.latitude, calculatorMarker.longitude, calculatorMarker.calculatorType])
 
     if (activeMarkerVisible) {
         const subtitle = activeMarkerVisible ?
@@ -77,7 +78,7 @@ const useActiveMarkerInfo = ({ zoomToCoordinates, navigateToView, navigateToMapL
             subtitle: `Calculator | ${CalculatorTypeLabels[calculatorMarker.calculatorType]}`,
             location: null,
             subtitleIcon: null,
-            icon: `map-pointer`,
+            icon: `map-calculator`,
             iconColor: primary,
             onPress: onPress,
             onLongPress: onLongPress,
