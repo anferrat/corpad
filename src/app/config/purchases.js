@@ -1,3 +1,3 @@
-export const playStoreKey = 'goog_GLvMNNTVSmrjWbGlXwqiKzhgnqu'
+export const playStoreKey = ''
 
-export const appStoreKey = 'appl_YwogQrUGIAHXeLdrhgaufIghRdQ'
+export const appStoreKey = ''
