@@ -41,6 +41,12 @@ export class InitializePurchases {
     }
 
     async execute() {
+        return {
+            status: SubscriptionStatuses.GRANTED,
+            expirationTime: 2059974000000,
+            managementUrl: null
+        }
+        /*
         try {
             this.purchaseRepo.init()
             const isInternetOn = await this.networkRepo.checkConnection()
@@ -69,11 +75,12 @@ export class InitializePurchases {
                         managementUrl: status.managementUrl,
                     }
                 else
-                    /*
-                    LOCATION BASED TIME VERIFICATION - POSSIBLY MOVE IT TO A SEPARATE SERVICE
-                    */
+                    
+                    // LOCATION BASED TIME VERIFICATION - POSSIBLY MOVE IT TO A SEPARATE SERVICE
+                    
                     return await this._getStatus(Date.now(), status, offlineCount)
             }
+            
         }
         catch (er) {
             return {
@@ -82,5 +89,6 @@ export class InitializePurchases {
                 managementUrl: null
             }
         }
+            */
     }
 }

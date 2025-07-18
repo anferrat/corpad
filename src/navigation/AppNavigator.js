@@ -47,7 +47,6 @@ export const AppNavigator = () => {
     <>
       {!loading ?
         <>
-          <Paywall />
           <Stack.Navigator
             screenOptions={{
               headerShown: true,
