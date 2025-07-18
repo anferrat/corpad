@@ -14,8 +14,9 @@ export class SettingRepository extends SQLiteRepository {
         //config is a new table for storing key/value pair. new settings params are stored here and not in the settings table, because it needs to be altered. bad design...
         try {
             const result = await super.runSingleQueryTransaction(`SELECT id, value FROM config`)
+            console.log(super.generateArray(result.rows.length, result.rows.item))
             if (result.rows.length > 0)
-                return Object.fromEntries(super.generateArray(result.rows.length, result.rows.item))
+                return Object.fromEntries(super.generateArray(result.rows.length, result.rows.item).map(({ id, value }) => [id, value]))
             else return {}
         }
         catch (er) {
@@ -26,7 +27,7 @@ export class SettingRepository extends SQLiteRepository {
     async _setConfig(isCalculatorDisplayed) {
         await super.runMultiQueryTransaction(tx => [
             super.runQuery(tx, 'DELETE FROM config WHERE id="isCalculatorDisplayed"'),
-            super.runQuery(tx, 'INSERT INTO config (id, value) VALUES ("isCalculatorDisplayed", ?)', [isCalculatorDisplayed])
+            super.runQuery(tx, 'INSERT INTO config (id, value) VALUES ("isCalculatorDisplayed", ?)', [Number(isCalculatorDisplayed)])
         ])
     }
 
@@ -42,7 +43,7 @@ export class SettingRepository extends SQLiteRepository {
                 const onboard = onboarding ? new Onboarding(versionOnboarding, editTestPoint, editReferenceCell, map, potentialTypes, editBond, main) : undefined
                 const { peripheralId, name, type, onTime, offTime, delay, syncMode, firstCycle, onOffCaptureActive, timeSyncMode, offDelay, onSetup, captureRate } = JSON.parse(multimeter ?? '{}')
                 const multimeterSettings = multimeter ? new MultimeterSettings(peripheralId, name, type, onTime, offTime, delay, syncMode, firstCycle, onOffCaptureActive, timeSyncMode, offDelay, onSetup, captureRate) : undefined
-                return new AppSettings(Boolean(pipelineNameAsDefault), defaultPotentialUnit, Boolean(autoCreatePotentials), Boolean(isSurveyNew), Boolean(isCloud), originalHash, fileName, cloudId, lastSync, onboard, multimeterSettings, isCalculatorDisplayed)
+                return new AppSettings(Boolean(pipelineNameAsDefault), defaultPotentialUnit, Boolean(autoCreatePotentials), Boolean(isSurveyNew), Boolean(isCloud), originalHash, fileName, cloudId, lastSync, onboard, multimeterSettings, Boolean(Number(isCalculatorDisplayed)))
             }
         }
         catch (er) {
@@ -148,7 +149,7 @@ export class SettingRepository extends SQLiteRepository {
         try {
             await super.runMultiQueryTransaction(tx => [
                 super.runQuery(tx, 'DELETE FROM config WHERE id="isCalculatorDisplayed"'),
-                super.runQuery(tx, 'INSERT INTO config (id, value) VALUES ("isCalculatorDisplayed", ?)', [isCalculatorDisplayed])
+                super.runQuery(tx, 'INSERT INTO config (id, value) VALUES ("isCalculatorDisplayed", ?)', [Number(isCalculatorDisplayed)])
             ])
         }
         catch (er) {

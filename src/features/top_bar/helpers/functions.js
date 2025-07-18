@@ -135,7 +135,7 @@ export const getHeader = (screen, params, navigation, dispatch, openMenu) => {
                     left: 'back',
                     title: {
                         title: 'Map',
-                        subtitle: 'Layers',
+                        subtitle: 'Settings',
                         icon: 'globe-2',
                         pack: null
                     }
