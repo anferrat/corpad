@@ -2,12 +2,13 @@ import React from 'react'
 import { View, StyleSheet, ScrollView } from 'react-native'
 import MapLayerListItem from './components/MapLayerListItem'
 import { globalStyle } from '../../styles/styles'
-import { Text } from '@ui-kitten/components'
+import { CheckBox, Text } from '@ui-kitten/components'
 import AddLayerButton from './components/AddLayerButton'
 import BottomButton from '../../components/BottomButton'
 import useMapLayers from './hooks/useMapLayers'
 import EmptyMapLayerListComponent from './components/EmptyMapLayerListComponent'
 import LoadingView from '../../components/LoadingView'
+import useCalculatorOptions from './hooks/useCalculatorOptions'
 
 
 export const ViewMapLayer = ({ navigateToEditMapLayer, goBack }) => {
@@ -22,9 +23,22 @@ export const ViewMapLayer = ({ navigateToEditMapLayer, goBack }) => {
         onAddLayer,
         onGoTo
     } = useMapLayers({ navigateToEditMapLayer, goBack })
+    const { isChecked, toggleCalculator } = useCalculatorOptions()
     return (
         <>
             <ScrollView>
+                <View style={styles.card}>
+                    <View style={styles.headerRow}>
+                        <Text
+                            appearance='hint'
+                            category='label'>Calculator options</Text>
+                    </View>
+                    <CheckBox
+                        onChange={toggleCalculator}
+                        style={styles.checkbox}
+                        checked={isChecked}
+                    >Display calculator markers</CheckBox>
+                </View>
                 <View style={styles.card}>
                     <LoadingView loading={!visible}>
                         <View style={styles.headerRow}>
@@ -86,5 +100,10 @@ const styles = StyleSheet.create({
     },
     showHeader: {
         flexBasis: 50
+    },
+    checkbox: {
+        flex: 1,
+        marginBottom: 12,
+        marginHorizontal: 12
     }
 })

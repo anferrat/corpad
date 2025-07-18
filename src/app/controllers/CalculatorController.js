@@ -5,13 +5,14 @@ import { GetCalculatorListByType } from "../services/calculator/GetCalculatorLis
 import { SaveCalculator } from "../services/calculator/SaveCalculator"
 import { WriteCalculatorToFile } from "../services/calculator/WriteCalculatorToFile"
 import { CalculatorValidation } from "../validation/CalculatorValidation"
-import { calculatorRepo, fileSystemRepo } from "./_instances/repositories"
+import { calculatorRepo, fileSystemRepo, settingRepo } from "./_instances/repositories"
 import { basicPresenter, listPresenter } from "./_instances/presenters"
 import { commaSeparatedFileParser, fileNameGenerator } from "./_instances/general_services"
 import { GetAllCalculatorsForDisplay } from "../services/calculator/GetAllCalculatorsForDisplay"
+import { UpdateCalculatorMarkerDisplaySetting } from "../services/calculator/UpdateCalculatorMarkerDisplaySetting"
 
 class CalculatorController extends Controller {
-    constructor(calculatorRepo, fileSystemRepo, listPresenter, basicPresenter, commaSeparatedFileParser, fileNameGenerator) {
+    constructor(calculatorRepo, fileSystemRepo, listPresenter, basicPresenter, commaSeparatedFileParser, fileNameGenerator, settingRepo) {
         super()
         this.saveCalculatorService = new SaveCalculator(calculatorRepo, basicPresenter)
         this.deleteCalculatorService = new DeleteCalculator(calculatorRepo)
@@ -19,6 +20,7 @@ class CalculatorController extends Controller {
         this.getCalculatorListByTypeService = new GetCalculatorListByType(calculatorRepo, listPresenter)
         this.writeCalculatorToFile = new WriteCalculatorToFile(fileSystemRepo, commaSeparatedFileParser, fileNameGenerator)
         this.getAllCalculatorsForDisplayService = new GetAllCalculatorsForDisplay(calculatorRepo)
+        this.updateCalculatorMarkerDisplaySettingService = new UpdateCalculatorMarkerDisplaySetting(settingRepo)
         this.validation = new CalculatorValidation()
     }
 
@@ -69,6 +71,12 @@ class CalculatorController extends Controller {
             return await this.getAllCalculatorsForDisplayService.execute()
         })
     }
+
+    updateIsMarkerDisplayedSetting(isDisplayed, onError = null, onSuccess = null) {
+        return super.controllerHandler(onSuccess, onError, 637, async () => {
+            return await this.updateCalculatorMarkerDisplaySettingService.execute(isDisplayed)
+        })
+    }
 }
 
 const calculatorController = new CalculatorController(
@@ -77,7 +85,8 @@ const calculatorController = new CalculatorController(
     listPresenter,
     basicPresenter,
     commaSeparatedFileParser,
-    fileNameGenerator
+    fileNameGenerator,
+    settingRepo
 )
 
 
@@ -94,3 +103,5 @@ export const getCalculatorListByType = async ({ calculatorType }, onError, onSuc
 export const saveCalculatorDataToFile = async ({ exportData, fileName }, onError, onSuccess) => await calculatorController.saveToFile({ exportData, fileName }, onError, onSuccess)
 
 export const getAllCalculatorsForDisplay = async (onError, onSuccess) => await calculatorController.getAllForDisplay(onError, onSuccess)
+
+export const updateIsCalculatorMarkerDisplayedSetting = async (isDisplayed, onError, onSuccess) => await calculatorController.updateIsMarkerDisplayedSetting(isDisplayed, onError, onSuccess)
