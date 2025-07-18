@@ -14,7 +14,6 @@ export class SettingRepository extends SQLiteRepository {
         //config is a new table for storing key/value pair. new settings params are stored here and not in the settings table, because it needs to be altered. bad design...
         try {
             const result = await super.runSingleQueryTransaction(`SELECT id, value FROM config`)
-            console.log(super.generateArray(result.rows.length, result.rows.item))
             if (result.rows.length > 0)
                 return Object.fromEntries(super.generateArray(result.rows.length, result.rows.item).map(({ id, value }) => [id, value]))
             else return {}
