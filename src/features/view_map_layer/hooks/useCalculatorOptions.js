@@ -3,7 +3,6 @@ import { setIsCalculatorDisplayed } from "../../../store/actions/settings"
 import { useCallback, useState } from "react"
 import { resetCalculatorActiveMarker } from "../../../store/actions/map"
 import { updateIsCalculatorMarkerDisplayedSetting } from "../../../app/controllers/CalculatorController"
-import { settingRepo } from "../../../app/controllers/_instances/repositories"
 
 const useCalculatorOptions = () => {
     const [isUpdating, setIsUpdating] = useState(false)
@@ -14,7 +13,6 @@ const useCalculatorOptions = () => {
         if (!isUpdating) {
             setIsUpdating(true)
             const { status } = await updateIsCalculatorMarkerDisplayedSetting(newState)
-            console.log(await settingRepo._getConfig())
             if (status === 200) {
                 dispatch(setIsCalculatorDisplayed(newState))
                 if (!newState)
