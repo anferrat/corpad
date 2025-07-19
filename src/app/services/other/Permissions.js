@@ -11,6 +11,7 @@ export class Permissions {
         this.BLUETOOTH = "android.permission.BLUETOOTH"
         this.BLUETOOTH_ADMIN = "android.permission.BLUETOOTH_ADMIN"
         this.WRITE_EXTERNAL_STORAGE = PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE
+        this.IOS_LOCATION_PERMISSION_GRANTED = 'N/A'
     }
 
     async _isGranted(permission) {
@@ -53,15 +54,28 @@ export class Permissions {
 
     async _locationIos() {
         try {
-            await Promise.race([
-                new Promise((resolve, reject) => {
-                    Geolocation.requestAuthorization(
-                        resolve,
-                        () => reject(new Error(errors.PERMISSION, 'Unable to obtain location permission. You need to allow to use location to use this feature.', 'Permission was not obtained', 902))
-                    )
-                }),
-                new Promise((_, reject) => setTimeout(() => reject(new Error(errors.PERMISSION, 'Unable to obtain location permission. You need to allow to use location to use this feature.', 'Permission timeout', 902)), 500))
-            ])
+            switch (this.IOS_LOCATION_PERMISSION_GRANTED) {
+                case 'N/A':
+                    await Promise.race([
+                        new Promise((resolve, reject) => {
+                            Geolocation.requestAuthorization(
+                                () => {
+                                    this.IOS_LOCATION_PERMISSION_GRANTED = true
+                                    resolve()
+                                },
+                                () => {
+                                    this.IOS_LOCATION_PERMISSION_GRANTED = false
+                                    reject(new Error(errors.PERMISSION, 'Unable to obtain location permission. You need to allow to use location to use this feature.', 'Permission was not obtained', 902))
+                                }
+                            )
+                        }),
+                        new Promise((_, reject) => setTimeout(() => reject(new Error(errors.PERMISSION, 'Unable to obtain location permission. You need to allow to use location to use this feature.', 'Permission timeout', 902)), 5000))
+                    ])
+                    return
+                case false:
+                    throw new Error(errors.PERMISSION, 'Unable to obtain location permission. You need to allow to use location to use this feature.', 'Permission was not obtained', 902)
+            }
+
         }
         catch (er) {
             throw er
