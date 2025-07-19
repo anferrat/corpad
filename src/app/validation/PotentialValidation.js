@@ -36,6 +36,7 @@ export class PotentialValidation extends Validation {
             id: this.id.required(),
             value: this.number.required().nullable(),
             unit: this.potentialUnit.required(),
+            isAc: this.bool.required()
         }))
     }
 

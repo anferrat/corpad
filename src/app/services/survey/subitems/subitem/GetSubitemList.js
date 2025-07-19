@@ -1,4 +1,4 @@
-import { ItemTypes } from "../../../../../constants/global"
+import { ItemTypes, PermanentPotentialTypes } from "../../../../../constants/global"
 import { Error, errors } from "../../../../utils/Error"
 
 export class GetSubitemList {
@@ -15,6 +15,11 @@ export class GetSubitemList {
         this.potentialPresenter = potentialPresenter
         this.convertSubitemUnits = convertSubitemUnits
         this.convertPotentialUnits = convertPotentialUnits
+    }
+
+    _getAcTypeId(potentialTypes) {
+        const index = potentialTypes.findIndex(({ type }) => type === PermanentPotentialTypes.AC)
+        return ~index ? potentialTypes[index].id : null
     }
 
     _getBasicList(id, itemType) {
@@ -51,6 +56,7 @@ export class GetSubitemList {
     async executeWithData(id, itemType) {
         const [subitems, referenceCells, potentialTypes, pipelineList, settings] = await Promise.all(this._getFullList(id, itemType))
         const potentialUnit = settings.defaultPotentialUnit ?? null
+        const acTypeId = this._getAcTypeId(potentialTypes)
         const { multimeter } = settings
         const availableMeasurementTypes = multimeter.type ? this.multimeterPropertyCaptureParameters.getSupportedTypes(multimeter.type) : []
 
@@ -59,7 +65,7 @@ export class GetSubitemList {
             subitem.calculate()
 
             //Convert units to display potentials
-            const convertedPotentials = this.convertPotentialUnits.execute(subitem.potentials, potentialUnit, false)
+            const convertedPotentials = this.convertPotentialUnits.execute(subitem.potentials, potentialUnit, acTypeId, false)
 
             const convertedSubitem = this.convertSubitemUnits.execute(subitem, false)
 

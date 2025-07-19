@@ -22,7 +22,7 @@ const useSubitemListActions = (dispatch) => {
     const validatePotential = useCallback(async (value, unit, subitemIndex, potentialId, potentialIndex, isAc) => {
         const validation = fieldValidation(value, isAc ? 'potentialAc' : 'potential')
         if (validation.valid)
-            await updatePotential({ id: potentialId, value: validation.value, unit: unit }, er => errorHandler(er), result => EventRegister.emit('POTENTIAL_UPDATED', result))
+            await updatePotential({ id: potentialId, value: validation.value, unit: unit, isAc }, er => errorHandler(er), result => EventRegister.emit('POTENTIAL_UPDATED', result))
         dispatch(updatePotentialAction(subitemIndex, potentialIndex, validation.value, validation.valid))
     }, [dispatch])
 

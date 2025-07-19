@@ -2,6 +2,7 @@ import React from 'react'
 import InputWithTitle from './InputWithTitle'
 import { PotentialUnitLabels, ReferenceCellCodeLabels } from '../../../constants/labels'
 import { MeasurementPropertyTypes } from '../../../constants/global'
+import { correctPotentialUnit } from '../../../helpers/functions'
 
 const PotentialInput = ({
     potentialId,
@@ -41,9 +42,9 @@ const PotentialInput = ({
     }, [potentialId, onMultimeterPress, potentialIndex, isAc])
 
     const unitComp = React.useMemo(() => ({
-        main: PotentialUnitLabels[unit],
+        main: PotentialUnitLabels[correctPotentialUnit(unit, isAc)],
         script: ReferenceCellCodeLabels[referenceCellType]
-    }), [unit, referenceCellType])
+    }), [unit, referenceCellType, isAc])
 
     return (
         <InputWithTitle
