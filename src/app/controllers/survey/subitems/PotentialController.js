@@ -45,8 +45,8 @@ class PotentialController extends Controller {
 
     update(params, onError = null, onSuccess = null) {
         return super.controllerHandler(onSuccess, onError, 611, async () => {
-            const { id, value, unit } = this.validation.update(params)
-            return this.updatePotentialService.execute(id, value, unit)
+            const { id, value, unit, isAc } = this.validation.update(params)
+            return this.updatePotentialService.execute(id, value, unit, isAc)
         })
     }
 

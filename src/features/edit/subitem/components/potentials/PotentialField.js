@@ -4,6 +4,7 @@ import { Text } from '@ui-kitten/components'
 import IconButton from '../../../../../components/IconButton'
 import Input from '../../../../../components/Input'
 import { ReferenceCellCodeLabels, PotentialUnitLabels } from '../../../../../constants/labels'
+import { correctPotentialUnit } from '../../../../../helpers/functions'
 
 const displayTitle = (title) => <Text
     appearance='hint'
@@ -30,7 +31,7 @@ const PotentialField = (props) => {
     </Text>, [props.title])
 
     const unit = React.useMemo(() => ({
-        main: PotentialUnitLabels[props.unit],
+        main: PotentialUnitLabels[correctPotentialUnit(props.unit, props.isAc)],
         script: ReferenceCellCodeLabels[props.referenceCellType]
     }), [])
 
