@@ -13,7 +13,7 @@ export const mainPages = [
         backgroundColor: basic300,
         image: <Icon name='corpad-logo' fill={primary} pack='cp' style={styles.icon} />,
         title: 'Welcome to Corpad',
-        subtitle: 'Streamline your cathodic protection data capture with ease using our offline-capable mobile app'
+        subtitle: 'Welcome to the new era of cathodic protection data collection'
     },
     {
         backgroundColor: basic300,
@@ -46,27 +46,27 @@ export const lastVersionPages = [
     {
         backgroundColor: basic300,
         image: <Icon name='corpad-logo' fill={primary} pack='cp' style={styles.icon} />,
-        title: 'Updated to version 1.6.2',
-        subtitle: "We've enhanced your cathodic protection data capture experience."
+        title: 'Updated to version 1.6.4',
+        subtitle: "New version of the app was installed. We've enhanced your cathodic protection data capture experience."
     },
     {
         backgroundColor: basic300,
-        image: <Icon name='radio' fill={primary} style={styles.icon} />,
-        title: 'Enhanced multimeter support',
-        subtitle: 'New multimeter module is available. Added support for a new model. Check https://docs.corpad.ca/multimeter for more info.'
+        image: <Icon name='shopping-cart' fill={primary} style={styles.icon} />,
+        title: 'Free for all',
+        subtitle: 'Enjoy all premium features for free. It includes assigning images to the test point, adding external .kml or .gpx data on the map, creating NFC and QR-code labels and connecting Bluetooth multimeter to collect readings.'
     },
     {
         backgroundColor: basic300,
-        image: <Icon name='grid' fill={primary} style={styles.icon} />,
-        title: 'Updated potential types',
-        subtitle: 'New default potential type - "AC" is added'
+        image: <Icon name='calculator' fill={primary} style={styles.icon} pack='cp' />,
+        title: 'Calculator improvments',
+        subtitle: 'Latitude and longitude can now be assigned to corrosion calculations and their markers will be displayed on the map.'
     },
 
     {
         backgroundColor: basic300,
         image: <Icon name='smiling-face' fill={primary} style={styles.icon} />,
         title: "Don't miss out",
-        subtitle: "We're committed to delivering ongoing improvements and updates. Stay tuned for future enhancements and new features that will further streamline your fieldwork."
+        subtitle: "We're committed to delivering ongoing improvements and updates. Check docs.corpad.ca for more info about new features."
     },
 ]
 
