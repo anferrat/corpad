@@ -1,4 +1,4 @@
-import { MultimeterModes, MultimeterToggleStatuses, MultimeterTypes, SubscriptionStatuses } from '../constants/global'
+import { MultimeterModes, MultimeterToggleStatuses, MultimeterTypes, PotentialUnits, SubscriptionStatuses } from '../constants/global'
 import fieldValidation from './validation'
 
 export const calculateCouponDensity = (current, area) => {
@@ -126,4 +126,8 @@ export const getMultimeterModeLimit = (mode, toggleStatus) => {
         default:
             return 'Er'
     }
+}
+
+export const correctPotentialUnit = (unit, isAc) => {
+    return !isAc ? unit : (unit === PotentialUnits.NEGATIVE_MILIVOLTS ? PotentialUnits.MILIVOLTS : (unit === PotentialUnits.NEGATIVE_VOLTS ? PotentialUnits.VOLTS : unit))
 }
