@@ -1,10 +1,7 @@
-plugins {
-    id("com.google.android.libraries.mapsplatform.secrets-gradle-plugin")
-}
-
 apply plugin: "com.android.application"
 apply plugin: "org.jetbrains.kotlin.android"
 apply plugin: "com.facebook.react"
+apply plugin: "com.google.android.libraries.mapsplatform.secrets-gradle-plugin"
 
 import com.android.build.OutputFile
 
