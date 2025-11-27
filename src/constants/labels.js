@@ -314,7 +314,7 @@ export const PowerSourceLabels = Object.freeze({
 
 export const TapOptionLabels = Object.freeze({
     [TapOptions.AUTO]: 'Automatic',
-    [TapOptions.COARSE_FINE]: 'Corase-Fine',
+    [TapOptions.COARSE_FINE]: 'Coarse-Fine',
     [TapOptions.RESISTOR]: 'VA %'
 })
 
@@ -588,4 +588,5 @@ export const MultimeterRangeLabels = Object.freeze({
     [MultimeterVoltageRanges.DVM2130._500mV]: '500 mV',
     [MultimeterVoltageRanges.DVM2130._5V]: '5 V',
     [MultimeterVoltageRanges.DVM2130._250V]: '250  V',
+
 })
