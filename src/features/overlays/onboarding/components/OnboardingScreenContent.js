@@ -36,7 +36,7 @@ export const mainPages = [
     {
         backgroundColor: basic300,
         image: <Icon name='onboarding-export' pack='cp' fill={primary} style={styles.icon} />,
-        title: 'Efficient data dandling',
+        title: 'Efficient data handling',
         subtitle: 'Easily import and export data with CSV and KML files and back up surveys to the cloud'
     }
 ]
@@ -69,6 +69,7 @@ export const lastVersionPages = [
         subtitle: "We're committed to delivering ongoing improvements and updates. Check docs.corpad.ca for more info about new features."
     },
 ]
+
 
 
 
