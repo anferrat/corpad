@@ -92,6 +92,7 @@ export const Unit = (props) => {
 
 
 const InputField = React.forwardRef((props, ref) => {
+    const { onChangeText: onChange, unit, disabled, displayHint, hintIcon, hintTitle } = props
 
     const renderCaption = React.useCallback(() => {
         if (!props.valid) {
@@ -113,12 +114,12 @@ const InputField = React.forwardRef((props, ref) => {
 
     const styleObject = React.useMemo(() => ({ ...props.style, paddingBottom: 12, borderWidth: props.disabled ? 0 : 1 }), [props.style, props.disabled])
     const value = React.useMemo(() => toString(props.value), [props.value])
-    const accessory = React.useMemo(() => <>
-        <Unit unit={props.unit} disabled={props.disabled} />
-        <InfoHint displayHint={props.displayHint} icon={props.hintIcon} title={props.hintTitle} />
-    </>, [props.unit, props.disabled, props.displayHint, props.hintIcon, props.hintTitle])
+    const accessory = React.useCallback(() => <>
+        <Unit unit={unit} disabled={disabled} />
+        <InfoHint displayHint={displayHint} icon={hintIcon} title={hintTitle} />
+    </>, [unit, disabled, displayHint, hintIcon, hintTitle])
 
-    const onChangeText = React.useCallback((text) => !props.onChangeText ? null : props.onChangeText(text === '' ? null : text), [props.onChangeText])
+    const onChangeText = React.useCallback((text) => !onChange ? null : onChange(text === '' ? null : text), [onChange])
 
     return (
         <Input
@@ -157,7 +158,7 @@ const InfoHint = (props) => {
                 style={styles.hintIcon}
                 fill={primary} />
         </Pressable>
-    }, [])
+    }, [props.icon])
     if (props.displayHint)
         return (
             <Popover

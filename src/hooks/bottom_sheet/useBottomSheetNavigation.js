@@ -25,11 +25,11 @@ export const useBottomSheetNavigation = () => {
     const dispatch = useDispatch()
 
     const openBottomSheet = useCallback(({ itemType, content, index }, params = {}) => {
-        if (bottomSheet.current.snapToIndex)
+        dispatch(updateBottomSheetContent(itemType, content, params))
+        if (bottomSheet?.current?.snapToIndex)
             bottomSheet.current.snapToIndex(index)
         else errorHandler(108)
-        dispatch(updateBottomSheetContent(itemType, content, params))
-    }, [])
+    }, [bottomSheet, dispatch])
 
     const openBasicMenu = () => openBottomSheet(BOTTOM_SHEET_VIEWS.BASIC_MENU)
 
@@ -67,4 +67,3 @@ export const useBottomSheetNavigation = () => {
         openExportLabel
     }
 }
-

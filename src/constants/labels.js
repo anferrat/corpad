@@ -157,26 +157,26 @@ export const PipeScheduleLabels = Object.freeze({
 })
 
 export const WireGaugeLabels = Object.freeze({
-    [WireGauges.AVG0_PLUS]: '> AVG 0',
-    [WireGauges.AVG0]: 'AVG 0',
-    [WireGauges.AVG1]: 'AVG 1',
-    [WireGauges.AVG2]: 'AVG 2',
-    [WireGauges.AVG3]: 'AVG 3',
-    [WireGauges.AVG4]: 'AVG 4',
-    [WireGauges.AVG5]: 'AVG 5',
-    [WireGauges.AVG6]: 'AVG 6',
-    [WireGauges.AVG7]: 'AVG 7',
-    [WireGauges.AVG8]: 'AVG 8',
-    [WireGauges.AVG9]: 'AVG 9',
-    [WireGauges.AVG10]: 'AVG 10',
-    [WireGauges.AVG11]: 'AVG 11',
-    [WireGauges.AVG12]: 'AVG 12',
-    [WireGauges.AVG13]: 'AVG 13',
-    [WireGauges.AVG14]: 'AVG 14',
-    [WireGauges.AVG15]: 'AVG 15',
-    [WireGauges.AVG16]: 'AVG 16',
-    [WireGauges.AVG17]: 'AVG 17',
-    [WireGauges.AVG17_MINUS]: '< AVG 17'
+    [WireGauges.AVG0_PLUS]: '> AWG 0',
+    [WireGauges.AVG0]: 'AWG 0',
+    [WireGauges.AVG1]: 'AWG 1',
+    [WireGauges.AVG2]: 'AWG 2',
+    [WireGauges.AVG3]: 'AWG 3',
+    [WireGauges.AVG4]: 'AWG 4',
+    [WireGauges.AVG5]: 'AWG 5',
+    [WireGauges.AVG6]: 'AWG 6',
+    [WireGauges.AVG7]: 'AWG 7',
+    [WireGauges.AVG8]: 'AWG 8',
+    [WireGauges.AVG9]: 'AWG 9',
+    [WireGauges.AVG10]: 'AWG 10',
+    [WireGauges.AVG11]: 'AWG 11',
+    [WireGauges.AVG12]: 'AWG 12',
+    [WireGauges.AVG13]: 'AWG 13',
+    [WireGauges.AVG14]: 'AWG 14',
+    [WireGauges.AVG15]: 'AWG 15',
+    [WireGauges.AVG16]: 'AWG 16',
+    [WireGauges.AVG17]: 'AWG 17',
+    [WireGauges.AVG17_MINUS]: '< AWG 17'
 })
 
 export const CurrentUnitLabels = Object.freeze({
