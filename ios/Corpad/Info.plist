@@ -96,6 +96,8 @@
 	<string>You need to grant location permissions to use map and capture GPS coordinates.</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>You need to grant permission to access library in order to use images.</string>
+	<key>RCTNewArchEnabled</key>
+	<true/>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen.storyboard</string>
 	<key>UIRequiredDeviceCapabilities</key>

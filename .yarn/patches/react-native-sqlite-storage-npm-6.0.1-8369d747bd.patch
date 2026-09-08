@@ -1,0 +1,36 @@
+diff --git a/platforms/android/build.gradle b/platforms/android/build.gradle
+index ff79b10c94a1d7ee2fadaaaceee7d4eefb55313e..4697c068e382ef66563265a8065abbabf760c0d7 100644
+--- a/platforms/android/build.gradle
++++ b/platforms/android/build.gradle
+@@ -1,14 +1,3 @@
+-buildscript {
+-    repositories {
+-        google()
+-        jcenter()
+-    }
+-
+-    dependencies {
+-        classpath 'com.android.tools.build:gradle:3.1.4'
+-    }
+-}
+-
+ apply plugin: 'com.android.library'
+ 
+ def safeExtGet(prop, fallback) {
+@@ -16,6 +5,7 @@ def safeExtGet(prop, fallback) {
+ }
+ 
+ android {
++    namespace 'org.pgsqlite'
+     compileSdkVersion safeExtGet('compileSdkVersion', 23)
+     buildToolsVersion safeExtGet('buildToolsVersion', '27.0.3')
+ 
+diff --git a/platforms/android/src/main/AndroidManifest.xml b/platforms/android/src/main/AndroidManifest.xml
+index 0bdb302ec1657aa3ba7b38d54a92133ee775a5ee..9a40236b94715132bb1e1fab5816fbcd58da432c 100644
+--- a/platforms/android/src/main/AndroidManifest.xml
++++ b/platforms/android/src/main/AndroidManifest.xml
+@@ -1,3 +1,3 @@
+ <?xml version="1.0" encoding="utf-8"?>
+-<manifest xmlns:android="http://schemas.android.com/apk/res/android" package="org.pgsqlite" >
++<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+ </manifest>

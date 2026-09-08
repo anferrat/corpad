@@ -1,0 +1,104 @@
+diff --git a/src/components/ball-indicator/index.js b/src/components/ball-indicator/index.js
+index 8c97fbda5df01fdd4ef173cf54c26711ca65e8db..b25b8a9332c284ab6dc3d87a666f89e9fa10100c 100644
+--- a/src/components/ball-indicator/index.js
++++ b/src/components/ball-indicator/index.js
+@@ -64,7 +64,7 @@ export default class BallIndicator extends PureComponent {
+     };
+ 
+     return (
+-      <Animated.View style={[styles.layer, layerStyle]} {...{ key: index }}>
++      <Animated.View key={index} style={[styles.layer, layerStyle]}>
+         <Animated.View style={ballStyle} />
+       </Animated.View>
+     );
+diff --git a/src/components/bar-indicator/index.js b/src/components/bar-indicator/index.js
+index ad06a55cd145a705f30723aedd7bd87ad2e617a0..22fb25f915de87010a4358ac6d9f54b7ebd8e277 100644
+--- a/src/components/bar-indicator/index.js
++++ b/src/components/bar-indicator/index.js
+@@ -94,7 +94,7 @@ export default class BarIndicator extends PureComponent {
+     };
+ 
+     return (
+-      <View style={containerStyle} {...{ key: index }}>
++      <View key={index} style={containerStyle}>
+         <Animated.View style={topStyle} />
+         <Animated.View style={bottomStyle} />
+       </View>
+diff --git a/src/components/dot-indicator/index.js b/src/components/dot-indicator/index.js
+index b49cbfdbe173bdd53b0c9289055a42ef7acfe06a..870efb18083d09450ef305eb14f4a88a8c3b11bf 100644
+--- a/src/components/dot-indicator/index.js
++++ b/src/components/dot-indicator/index.js
+@@ -57,7 +57,7 @@ export default class DotIndicator extends PureComponent {
+     };
+ 
+     return (
+-      <Animated.View style={style} {...{ key: index }} />
++      <Animated.View key={index} style={style} />
+     );
+   }
+ 
+diff --git a/src/components/material-indicator/index.js b/src/components/material-indicator/index.js
+index bf7edc4f085bada64d9b2b6dc33af306948f8db3..546d5d148ff2db2e062f64100d0e162cc67e8ff7 100644
+--- a/src/components/material-indicator/index.js
++++ b/src/components/material-indicator/index.js
+@@ -107,7 +107,7 @@ export default class MaterialIndicator extends PureComponent {
+     };
+ 
+     return (
+-      <Animated.View style={styles.layer} {...{ key: index }}>
++      <Animated.View key={index} style={styles.layer}>
+         <Animated.View style={layerStyle}>
+           <Animated.View style={[containerStyle, offsetStyle]} collapsable={false}>
+             <Animated.View style={viewportStyle}>
+diff --git a/src/components/pulse-indicator/index.js b/src/components/pulse-indicator/index.js
+index 53bcf92dec3aa754464309b45c9694418ead2322..17d2469cb5c4fd7d35b4546ae2c1a5bb2539f751 100644
+--- a/src/components/pulse-indicator/index.js
++++ b/src/components/pulse-indicator/index.js
+@@ -51,7 +51,7 @@ export default class PulseIndicator extends PureComponent {
+     };
+ 
+     return (
+-      <Animated.View style={styles.layer} {...{ key: index }}>
++      <Animated.View key={index} style={styles.layer}>
+         <Animated.View style={pulseStyle} />
+       </Animated.View>
+     );
+diff --git a/src/components/skype-indicator/index.js b/src/components/skype-indicator/index.js
+index 8a988dfa1988b94197bc519706684d1c8c4dae49..9f4b35e5479aa5b36b637966fa3ea1a6bd636938 100644
+--- a/src/components/skype-indicator/index.js
++++ b/src/components/skype-indicator/index.js
+@@ -68,7 +68,7 @@ export default class SkypeIndicator extends PureComponent {
+     };
+ 
+     return (
+-      <Animated.View style={[styles.layer, layerStyle]} {...{ key: index }}>
++      <Animated.View key={index} style={[styles.layer, layerStyle]}>
+         <Animated.View style={ballStyle} />
+       </Animated.View>
+     );
+diff --git a/src/components/ui-activity-indicator/index.js b/src/components/ui-activity-indicator/index.js
+index dcde1e5a6121735b59765beed37b3829bcddeea0..da0cb05f2932072a1211cf3224bd33751d4d85df 100644
+--- a/src/components/ui-activity-indicator/index.js
++++ b/src/components/ui-activity-indicator/index.js
+@@ -61,7 +61,7 @@ export default class UIActivityIndicator extends PureComponent {
+     };
+ 
+     return (
+-      <Animated.View style={[styles.layer, layerStyle]} {...{ key: index }}>
++      <Animated.View key={index} style={[styles.layer, layerStyle]}>
+         <Animated.View style={barStyle} />
+       </Animated.View>
+     );
+diff --git a/src/components/wave-indicator/index.js b/src/components/wave-indicator/index.js
+index 2de37d53a4000674a0c66f784e8fd967a32969c4..0f62183e7aaaaf88944659957f30c02591fbb389 100644
+--- a/src/components/wave-indicator/index.js
++++ b/src/components/wave-indicator/index.js
+@@ -64,7 +64,7 @@ export default class WaveIndicator extends PureComponent {
+     };
+ 
+     return (
+-      <Animated.View style={styles.layer} {...{ key: index }}>
++      <Animated.View key={index} style={styles.layer}>
+         <Animated.View style={waveStyle} />
+       </Animated.View>
+     );

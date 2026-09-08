@@ -4,7 +4,6 @@ import com.facebook.react.ReactActivity
 import com.facebook.react.ReactActivityDelegate
 import com.facebook.react.defaults.DefaultNewArchitectureEntryPoint.fabricEnabled
 import com.facebook.react.defaults.DefaultReactActivityDelegate
-import org.devio.rn.splashscreen.SplashScreen
 import android.content.Intent
 import android.os.Bundle;
 import android.util.Log
@@ -25,7 +24,6 @@ override fun onCreate(savedInstanceState: Bundle?) {
         startActivity(newIntent)
         finish()
     }
-    SplashScreen.show(this, R.style.SplashTheme, true)
 }
   /**
    * Returns the instance of the [ReactActivityDelegate]. We use [DefaultReactActivityDelegate]

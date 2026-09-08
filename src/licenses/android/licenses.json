@@ -168,11 +168,11 @@
     "licenseUrl": "https://github.com/innoveit/react-native-ble-manager/blob/master/LICENSE",
     "parents": "corpad"
   },
-  "react-native-document-picker": {
+  "@react-native-documents/picker": {
     "licenses": "MIT",
-    "copyright": "Copyright (c) 2016 Elyx0",
-    "repository": "https://github.com/rnmods/react-native-document-picker",
-    "licenseUrl": "https://github.com/rnmods/react-native-document-picker/raw/master/LICENSE.md",
+    "copyright": "Copyright (c) React Native Documents contributors",
+    "repository": "https://github.com/react-native-documents/document-picker",
+    "licenseUrl": "https://github.com/react-native-documents/document-picker/blob/main/LICENSE",
     "parents": "corpad"
   },
   "react-native-event-listeners": {
@@ -259,13 +259,6 @@
     "licenseUrl": "https://github.com/jfilter/react-native-onboarding-swiper/raw/master/LICENSE",
     "parents": "corpad"
   },
-  "react-native-purchases": {
-    "licenses": "MIT",
-    "copyright": "Copyright (c) 2018 RevenueCat, Inc.",
-    "repository": "https://github.com/RevenueCat/react-native-purchases",
-    "licenseUrl": "https://github.com/RevenueCat/react-native-purchases/blob/main/LICENSE",
-    "parents": "corpad"
-  },
   "react-native-reanimated": {
     "licenses": "MIT",
     "copyright": "Copyright (c) 2016 Software Mansion <swmansion.com>",
@@ -294,25 +287,11 @@
     "licenseUrl": "https://github.com/lucasferreira/react-native-send-intent",
     "parents": "corpad"
   },
-  "react-native-sensors": {
-    "licenses": "MIT",
-    "copyright": "Copyright (c) 2017 Daniel Schmidt",
-    "repository": "https://github.com/react-native-sensors/react-native-sensors",
-    "licenseUrl": "https://github.com/react-native-sensors/react-native-sensors/raw/master/LICENSE",
-    "parents": "corpad"
-  },
   "react-native-share": {
     "licenses": "MIT",
     "copyright": "Copyright (c) 2015 Esteban Fuentealba 🇨🇱, Mateus Andrade 🇧🇷, Mike Hardy 🇪🇨, João Marins 🇧🇷",
     "repository": "https://github.com/react-native-community/react-native-share",
     "licenseUrl": "https://github.com/react-native-community/react-native-share/raw/master/LICENSE",
-    "parents": "corpad"
-  },
-  "react-native-splash-screen": {
-    "licenses": "MIT",
-    "copyright": "Copyright (c) 2016 Jia PengHui",
-    "repository": "https://github.com/crazycodeboy/react-native-splash-screen",
-    "licenseUrl": "https://github.com/crazycodeboy/react-native-splash-screen/raw/master/LICENSE",
     "parents": "corpad"
   },
   "react-native-sqlite-storage": {
