@@ -33,7 +33,7 @@ const usePhotos = ({ itemId, itemType }) => {
     }, [])
 
     const scrollToStart = useCallback(() => {
-        if (listRef.current.scrollToIndex)
+        if (listRef.current?.scrollToIndex)
             listRef.current.scrollToIndex({ index: 0, animated: true })
     }, [])
 
@@ -41,6 +41,11 @@ const usePhotos = ({ itemId, itemType }) => {
     const isVisible = itemType !== ItemTypes.PIPELINE
 
     const { openImagePicker } = useBottomSheetNavigation()
+
+    useEffect(() => {
+        if (photos.length > 0 && isVisible)
+            scrollToStart()
+    }, [photos, isVisible, scrollToStart])
 
     useEffect(() => {
         componentMounted.current = true
@@ -55,8 +60,6 @@ const usePhotos = ({ itemId, itemType }) => {
             if (status === 200) {
                 if (componentMounted.current) {
                     setPhotos(response)
-                    if (response.length > 0)
-                        scrollToStart()
                 }
             }
             else
@@ -72,7 +75,6 @@ const usePhotos = ({ itemId, itemType }) => {
                 if (status === 200) {
                     setPhotos(state => [response].concat(state))
                     EventRegister.emit('ASSET_ADDED', response)
-                    scrollToStart()
                 }
                 else errorHandler(status)
                 dispatch(hideLoader())
@@ -81,11 +83,7 @@ const usePhotos = ({ itemId, itemType }) => {
 
         const onPhotoRemoved = EventRegister.addEventListener('ASSET_REMOVED', (item) => {
             if (item.itemId === itemId && item.itemType === itemType && isFocused) {
-                setPhotos(state => {
-                    if (state.length > 1)
-                        scrollToStart()
-                    return state.filter(({ id }) => id !== item.assetId)
-                })
+                setPhotos(state => state.filter(({ id }) => id !== item.assetId))
             }
         })
         return () => {

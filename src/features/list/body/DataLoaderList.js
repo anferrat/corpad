@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useTransition } from 'react'
+import React, { useEffect, useRef } from 'react'
 import { ActivityIndicator, StyleSheet, View, Animated, RefreshControl } from 'react-native'
 import { useSelector, useDispatch } from 'react-redux'
 import { loadListState, setOffset, setRefresh, deleteItemFromList, updateList, resetListState } from '../../../store/actions/list'
@@ -17,7 +17,6 @@ const HEADER_HEIGHT = 40
 const ItemList = ({ itemType, navigateToView }) => {
     const dispatch = useDispatch()
     const t = useSelector(state => getListStateByType(itemType, state))
-    const [isTransitionLoading, startTransition] = useTransition()
     const headerRef = useRef(new Animated.Value(0))
     const minScroll = 1
 
@@ -62,22 +61,30 @@ const ItemList = ({ itemType, navigateToView }) => {
     }, [t.settings.appliedFilters, t.settings.displayedReading])
 
     useEffect(() => { //loading data from database to state
+        let cancelled = false
+
         const loadMoreDataFromDB = async () => {
             if (!t.settings.idListLoaded) { //checks if idList fetched. (if we update filters, sorting or refresh, idList resets)
                 const coord = t.settings.sorting === 4 ? await getLocationAsync() : { latitude: 0, longitude: 0 }
+                if (cancelled) return
+
                 const idList = await fetchIdList( //first fetching list of ids of all the elements
                     itemType,
                     t.settings.appliedFilters,
                     t.settings.sorting,
                     coord.latitude,
                     coord.longitude)
+                if (cancelled) return
+
                 const data = await fetchData( //fetching data using fetched list of ids with pagination
                     itemType,
                     idList.slice(t.settings.offset * t.settings.limit, t.settings.limit),
                     t.settings.appliedFilters,
                     t.settings.displayedReading
                 )
-                startTransition(() => dispatch(loadListState(itemType, data, idList)))
+                if (cancelled) return
+
+                dispatch(loadListState(itemType, data, idList))
             }
             else {
                 // Id list is already fetched and loaded to state. just need to fetch data for the next page and load to state
@@ -87,13 +94,21 @@ const ItemList = ({ itemType, navigateToView }) => {
                     t.settings.appliedFilters,
                     t.settings.displayedReading
                 )
-                startTransition(() => dispatch(loadListState(itemType, data, [])))
+                if (cancelled) return
+
+                dispatch(loadListState(itemType, data, []))
             }
+
+            if (cancelled) return
             headerRef.current.setValue(0)
         }
 
         if (t.settings.refreshing && !t.settings.endReached) {
             loadMoreDataFromDB()
+        }
+
+        return () => {
+            cancelled = true
         }
     }, [t.settings.refreshing])
 
@@ -159,7 +174,7 @@ const ItemList = ({ itemType, navigateToView }) => {
                 refreshControl={<RefreshControl
                     progressViewOffset={40}
                     onRefresh={refreshHandler}
-                    refreshing={t.settings.refreshing || isTransitionLoading}
+                    refreshing={t.settings.refreshing}
                     colors={[primary]} />}
                 onEndReachedThreshold={6}
                 onEndReached={offsetHandler}
