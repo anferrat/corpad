@@ -3,7 +3,6 @@ import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import * as eva from '@eva-design/eva';
 import { createStore, combineReducers } from 'redux';
 import { Provider } from 'react-redux';
-import SplashScreen from 'react-native-splash-screen';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import {
   NavigationContainer,
@@ -53,7 +52,6 @@ const store = createStore(rootReducer);
 export const BS = createContext<MutableRefObject<any> | null>(null);
 export const ScrollRef = createContext<MutableRefObject<any> | null>(null);
 
-ModalService.setShouldUseTopInsets = true;
 
 export const DEVELOPER_MODE_ON = __DEV__;
 
@@ -77,7 +75,6 @@ scrolling ref - used to implement title scrolling animation inside View screen. 
             <ScrollRef.Provider value={scrollingRef}>
               <BS.Provider value={bottomSheet}>
                 <NavigationContainer
-                  onReady={SplashScreen.hide}
                   ref={navigationRef}>
 
                   <AppNavigator />

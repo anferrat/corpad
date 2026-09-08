@@ -1,5 +1,5 @@
 import React from 'react'
-import { SafeAreaView } from 'react-native'
+import { SafeAreaView } from 'react-native-safe-area-context'
 import { ImportSubitem } from '../../features/import/item/subitem'
 import { globalStyle } from '../../styles/styles'
 
@@ -13,7 +13,7 @@ const ImportSubitemScreen = ({ navigation, route }) => {
             })
 
     return (
-        <SafeAreaView style={globalStyle.screen}>
+        <SafeAreaView style={globalStyle.screen} edges={['left', 'right', 'bottom']}>
             <ImportSubitem
                 goBack={navigation.goBack}
                 subitemIndex={route?.params?.subitemIndex ?? null}

@@ -1,5 +1,5 @@
 import React from 'react'
-import { SafeAreaView } from 'react-native'
+import { SafeAreaView } from 'react-native-safe-area-context'
 import { globalStyle } from '../../styles/styles'
 import FindItemInSurvey from '../../features/overlays/external_link/find'
 
@@ -15,7 +15,8 @@ export default ExternalLinkScreen = ({ route, navigation }) => {
 
     return (
         <SafeAreaView
-            style={globalStyle.screen}>
+            style={globalStyle.screen}
+            edges={['left', 'right', 'bottom']}>
             <FindItemInSurvey
                 uid={uid}
                 itemType={itemType}

@@ -1,6 +1,6 @@
 import React from 'react'
 import { globalStyle } from '../../styles/styles'
-import { SafeAreaView } from 'react-native'
+import { SafeAreaView } from 'react-native-safe-area-context'
 import { DefaultNames } from '../../features/settings/default_names/index'
 import { ReferenceCells } from '../../features/settings/reference_cells/index'
 import { PotentialTypes } from '../../features/settings/potentials/index'
@@ -51,7 +51,7 @@ export default SettingDetails = ({ navigation, route }) => {
     const navigateToExternalLink = (link, shouldLog) => navigation.navigate('ExternalLink', { link, shouldLog })
     const navigateToItem = (itemId, itemType) => navigation.navigate('ViewItem', { itemId, itemType })
     return (
-        <SafeAreaView style={globalStyle.screen}>
+        <SafeAreaView style={globalStyle.screen} edges={['left', 'right', 'bottom']}>
             <OnboardingOverlayPotentialtypes
                 visible={setting === 'potentials'} />
             <Setting

@@ -1,5 +1,6 @@
 import React from 'react'
-import { View, SafeAreaView } from 'react-native'
+import { View } from 'react-native'
+import { SafeAreaView } from 'react-native-safe-area-context'
 import { globalStyle } from '../../styles/styles'
 import { ExternalLinkView } from '../../features/overlays/external_link/view'
 
@@ -21,7 +22,8 @@ export default ExternalLinkScreen = ({ route, navigation }) => {
 
     return (
         <SafeAreaView
-            style={globalStyle.screen}>
+            style={globalStyle.screen}
+            edges={['left', 'right', 'bottom']}>
             <ExternalLinkView
                 navigateToFindItem={navigateToFindItem}
                 navigateToItem={navigateToItem}

@@ -1,5 +1,5 @@
 import React from 'react'
-import { SafeAreaView } from 'react-native'
+import { SafeAreaView } from 'react-native-safe-area-context'
 import { globalStyle } from '../../styles/styles'
 import PipelineMatching from '../../features/overlays/external_link/add'
 
@@ -17,7 +17,8 @@ export default PipelineMatchingScreen = ({ route, navigation }) => {
 
     return (
         <SafeAreaView
-            style={globalStyle.screen}>
+            style={globalStyle.screen}
+            edges={['left', 'right', 'bottom']}>
             <PipelineMatching
                 goBack={goBack}
                 navigateToItem={navigateToItem}

@@ -13,13 +13,13 @@ const RadioListItem = ({ title, onSelect, value, checked, onButtonPress, button 
                 style={styles.radio}
                 onChange={onChange}
                 checked={checked}>
-                <>
+                {evaProps =>
                     <Text
-                        style={styles.text}
-                        category={'p2'} > 
+                        {...evaProps}
+                        style={[evaProps.style, styles.text]}
+                        category='p2'>
                         {title}
-                    </Text>
-                </>
+                    </Text>}
             </Radio>
             {checked && button ?
                 <Button

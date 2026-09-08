@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react'
-import { SafeAreaView } from 'react-native'
+import { SafeAreaView } from 'react-native-safe-area-context'
 import { globalStyle } from '../styles/styles'
 import { CommonActions } from '@react-navigation/native'
 import ViewItem from '../features/view'
@@ -23,14 +23,14 @@ const ViewItemScreen = ({ navigation, route }) => {
 
     const navigateToEditSubitem = (subitemId, isNew, subitemType) => navigation.navigate('EditSubitem', { isNew: isNew, itemId: itemId, subitemId: subitemId, subitemType: subitemType })
 
-    const navigateToMap = () => navigation.navigate('Map')
+    const navigateToMap = () => navigation.navigate('PipelineSurvey', { screen: 'Map' })
 
     const goBack = () => navigation.goBack()
 
     // when working with map it's better to use go back, when working with lists goTo List. Maybe need to add the way to see where user navigated from (map or list) but in case of new item creates complication, so leave it for now
 
     return (
-        <SafeAreaView style={globalStyle.screen}>
+        <SafeAreaView style={globalStyle.screen} edges={['left', 'right', 'bottom']}>
             <ViewItem
                 itemId={itemId}
                 itemType={itemType}

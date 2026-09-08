@@ -1,6 +1,6 @@
 import React from 'react'
 import { globalStyle } from '../styles/styles'
-import { SafeAreaView } from 'react-native'
+import { SafeAreaView } from 'react-native-safe-area-context'
 import { SurveyFileList } from '../features/survey_list'
 
 
@@ -9,7 +9,7 @@ export default SurveyList = ({ route, navigation }) => {
     const navigateToCreateSurvey = (withImport) => navigation.navigate('CreateSurvey', { withImport })
     const navigateToSurveyFileList = ({ isCloud }) => navigation.navigate(!isCloud ? 'DeviceSurveyList' : 'CloudSurveyList')
     return (
-        <SafeAreaView style={globalStyle.screen}>
+        <SafeAreaView style={globalStyle.screen} edges={['left', 'right', 'bottom']}>
             <SurveyFileList
                 isCloud={isCloud}
                 navigateToSurveyFileList={navigateToSurveyFileList}

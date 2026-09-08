@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { globalStyle } from '../styles/styles'
-import { SafeAreaView, StatusBar } from 'react-native'
+import { SafeAreaView } from 'react-native-safe-area-context'
 import { Button, Text } from '@ui-kitten/components'
 import FocusAwareStatusBar from '../components/FocusAwareStatusBar'
 import { generateTestPoints, resetDatabase } from '../app/controllers/DevController'
@@ -58,7 +58,7 @@ export default DevScreen = ({ navigation }) => {
   }
 
   return (
-    <SafeAreaView style={{ ...globalStyle.screen, paddingTop: StatusBar.currentHeight }}>
+    <SafeAreaView style={globalStyle.screen}>
       <FocusAwareStatusBar barStyle={'dark-content'} backgroundColor='transparent' translucent={true} />
       <Text category='h4' style={{ alignSelf: 'center', paddingBottom: 24 }}>Dev. options</Text>
       <Button onPress={() => navigation.goBack()} appearance='ghost'>Back to App</Button>

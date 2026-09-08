@@ -1,80 +1,17 @@
-import { Platform } from "react-native"
-import Purchases from 'react-native-purchases';
-import { appStoreKey, playStoreKey } from "../../config/purchases";
-import { Error, errors } from "../../utils/Error";
 import { SubscriptionStatus } from "../../entities/survey/other/SubscriptionStatus";
 
 export class PurchaseRepository {
-    constructor() {
+    _freeStatus() {
+        return new SubscriptionStatus('free', true, 2059974000000, false, null)
     }
 
-    init() {
-        Purchases.setLogLevel(Purchases.LOG_LEVEL.DEBUG)
-        Purchases.configure({
-            apiKey: Platform.select({
-                ios: appStoreKey,
-                macos: appStoreKey,
-                android: playStoreKey,
-                default: null
-            })
-        })
-    }
+    init() {}
 
-    async getOfferings() {
-        try {
-            const offerings = await Purchases.getOfferings()
-            if (offerings.all["default"] !== null && offerings.all["default"].availablePackages.length !== 0)
-                return offerings.all["default"].availablePackages[0]
-            else throw "No available packages"
-        }
-        catch (er) {
-            throw new Error(errors.PURCHASE, 'Unable to get offers', er)
-        }
-    }
+    async getOfferings() { return null }
 
-    async purchase(pack) {
-        //package is a package from getOfferings method
-        try {
-            const { customerInfo, productIdentifier } = await Purchases.purchasePackage(pack)
-            if (typeof customerInfo.entitlements.active['Premium'] !== "undefined") {
-                const { identifier, isActive, expirationDate } = customerInfo.entitlements.active['Premium']
-                return new SubscriptionStatus(identifier, isActive, Date.parse(expirationDate), false, customerInfo.managementURL)
-            }
-            else throw 'Identifier was not updated'
-        }
-        catch (er) {
-            if (er.userCancelled)
-                throw new Error(errors.PURCHASE, 'Unable to complete the purchase', 'Cancelled by user', 101)
-            else
-                throw new Error(errors.PURCHASE, 'Unable to complete the purchase', er)
-        }
-    }
+    async purchase() { return this._freeStatus() }
 
-    async getStatus() {
-        try {
-            const customerInfo = await Purchases.getCustomerInfo()
-            if (customerInfo.entitlements.active.isEmpty)
-                throw 'No entitlements'
-            const { identifier, isActive, expirationDate } = customerInfo.entitlements.active['Premium']
-            return new SubscriptionStatus(identifier, isActive, Date.parse(expirationDate), false, customerInfo.managementURL)
-        }
-        catch (er) {
-            return new SubscriptionStatus(null, false, null, false, null)
-        }
-    }
+    async getStatus() { return this._freeStatus() }
 
-    async restorePurchases() {
-        try {
-            const customerInfo = await Purchases.restorePurchases()
-            if (customerInfo.entitlements.active.isEmpty)
-                return new SubscriptionStatus(null, false, null, false, null)
-            else {
-                const { identifier, isActive, expirationDate } = customerInfo.entitlements.active['Premium']
-                return new SubscriptionStatus(identifier, isActive, Date.parse(expirationDate), false, customerInfo.managementURL)
-            }
-        }
-        catch (er) {
-            throw new Error(errors.PURCHASE, 'Unable to restore purchases', er)
-        }
-    }
+    async restorePurchases() { return this._freeStatus() }
 }

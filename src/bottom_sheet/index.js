@@ -3,22 +3,43 @@ import BottomSheetDefault, { BottomSheetBackdrop } from '@gorhom/bottom-sheet'
 import BottomSheetContent from './BottomSheetContent'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { EventRegister } from 'react-native-event-listeners'
+import { runOnJS } from 'react-native-reanimated'
 
-export const BottomSheet = React.forwardRef((props, bsRef) => {
+export const BottomSheet = React.forwardRef((_props, bsRef) => {
     const { bottom } = useSafeAreaInsets()
-    const renderBackdrop = (props) => <BottomSheetBackdrop
-        {...props}
+    const renderBackdrop = (backdropProps) => <BottomSheetBackdrop
+        {...backdropProps}
         appearsOnIndex={0}
         disappearsOnIndex={-1} />
 
     const onClose = () => EventRegister.emit('BOTTOM_SHEET_CLOSING')
+    const closeFromGesture = () => bsRef.current?.close()
+    const gestureEventsHandlersHook = () => ({
+        handleOnStart: () => {
+            'worklet'
+        },
+        handleOnChange: () => {
+            'worklet'
+        },
+        handleOnEnd: (_source, { translationY }) => {
+            'worklet'
+            if (translationY > 80)
+                runOnJS(closeFromGesture)()
+        },
+        handleOnFinalize: () => {
+            'worklet'
+        },
+    })
 
     return <BottomSheetDefault
         ref={bsRef}
         onClose={onClose}
         backdropComponent={renderBackdrop}
-        enableContentPanningGesture={false}
+        enableContentPanningGesture
         enableHandlePanningGesture={false}
+        enablePanDownToClose={false}
+        enableDynamicSizing={false}
+        gestureEventsHandlersHook={gestureEventsHandlersHook}
         index={-1}
         snapPoints={[234 + bottom, 236 + bottom, 381 + bottom, 385 + bottom, 416 + bottom, 445 + bottom, 480 + bottom]}>
         <BottomSheetContent />
