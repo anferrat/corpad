@@ -26,7 +26,7 @@ export default TabNavigator = () => {
             }}>
             <Screen name='TestPoints' component={List} initialParams={{ itemType: 'TEST_POINT' }} />
             <Screen name='Pipelines' component={List} initialParams={{ itemType: 'PIPELINE' }} />
-            <Screen name='Map' component={MapScreen} options={{ lazy: false }} />
+            <Screen name='Map' component={MapScreen} options={{ lazy: true }} />
             <Screen name='Rectifiers' component={List} initialParams={{ itemType: 'RECTIFIER' }} />
         </Navigator>
     )
