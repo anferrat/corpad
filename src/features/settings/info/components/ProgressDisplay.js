@@ -1,9 +1,9 @@
 import React, { useState } from 'react'
 import { View, StyleSheet } from 'react-native'
-import { CircularProgressBar } from '@ui-kitten/components'
-import { StatusColors, basic, danger, success, warning } from '../../../../styles/colors'
+import { StatusColors } from '../../../../styles/colors'
 import LegendItem from './LegendItem'
 import ButtonSelector from '../../../../components/ButtonSelector'
+import CircularProgress from './CircularProgress'
 import { calculateProgress } from '../helpers/functions'
 import { ItemStatuses, ItemTypes } from '../../../../constants/global'
 import { StatusLabels } from '../../../../constants/labels'
@@ -13,9 +13,6 @@ const buttons = [
     { title: 'Test points' },
     { title: 'Rectifiers' }
 ]
-
-const statusColors = [success, warning, danger, basic]
-
 
 const ProgressDisplay = ({ status, count }) => {
     const [activeItem, setActiveItem] = useState(0)
@@ -31,13 +28,9 @@ const ProgressDisplay = ({ status, count }) => {
             </View>
             <View style={styles.progress}>
                 <View style={styles.circle}>
-                    <CircularProgressBar
+                    <CircularProgress
                         progress={calculateProgress(status, count, itemType)}
-                        animating={true}
-                        status='success'
-                        style={styles.progressCircle}
-                        size='giant' />
-
+                    />
                 </View>
                 <View style={styles.legend}>
                     {
@@ -74,24 +67,15 @@ const styles = StyleSheet.create({
     progress: {
         marginTop: 24,
         alignItems: 'center',
-        justifyContent: 'center',
         justifyContent: 'space-between',
-        alignItems: 'center',
         flexDirection: 'row',
     },
     tabView: {
         flexDirection: 'row',
         justifyContent: 'space-evenly'
     },
-    progressText: {
-        fontSize: 18
-    },
     legend: {
         flex: 1,
         paddingLeft: 24
-    },
-    progressCircle: {
-        height: 140,
-        width: 140
     }
 })
