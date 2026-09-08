@@ -1,7 +1,7 @@
 import React, { useRef, useState, useCallback } from 'react'
 import { View, StyleSheet, Animated, Platform } from 'react-native'
 import Pressable from '../../../components/Pressable'
-import { Text, Icon, CircularProgressBar } from '@ui-kitten/components'
+import { Text, Icon, ProgressBar } from '@ui-kitten/components'
 import { basic, basic300, control } from '../../../styles/colors'
 import { androidRipple } from '../../../styles/styles'
 import { getFormattedDate } from '../../../helpers/functions'
@@ -25,7 +25,7 @@ const SurveyFileListItem = ({ name, uid, fileName, timeModified, tpCount, rectif
             Animated.timing(scale.current, {
                 toValue: 0,
                 duration: 400,
-                useNativeDriver: false
+                useNativeDriver: true
             }).start(() => removeSurveyFromList({ path, cloudId }))
         }
     }, [path, cloudId, hash, fileName, uid])
@@ -55,10 +55,6 @@ const SurveyFileListItem = ({ name, uid, fileName, timeModified, tpCount, rectif
 
     return (
         <Animated.View style={{
-            height: scale.current.interpolate({
-                inputRange: [0, 1],
-                outputRange: [0, 140],
-            }),
             transform: [{ scale: scale.current }]
         }}>
             <Pressable
@@ -67,12 +63,6 @@ const SurveyFileListItem = ({ name, uid, fileName, timeModified, tpCount, rectif
                 onPress={handleLoadSurvey}>
                 <View style={styles.mainView} >
                     <View style={styles.titleView}>
-                        <CircularProgressBar
-                            progress={passedItems}
-                            animating={false}
-                            status='success'
-                            style={styles.circle}
-                            size='large' />
                         <View
                             style={styles.titleData}>
                             <Text
@@ -108,6 +98,11 @@ const SurveyFileListItem = ({ name, uid, fileName, timeModified, tpCount, rectif
                                     {getFormattedDate(timeModified)}
                                 </Text>
                             </View>
+                            <ProgressBar
+                                progress={passedItems}
+                                animating={false}
+                                status='success'
+                                style={styles.progressBar} />
                         </View>
                     </View>
                     <SurveyFileListItemMenu
@@ -150,7 +145,6 @@ export default SurveyFileListItem
 
 const styles = StyleSheet.create({
     mainView: {
-        height: 100,
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
@@ -182,9 +176,6 @@ const styles = StyleSheet.create({
             }
         })
     ]),
-    circle: {
-        marginRight: 20,
-    },
     smallIcon: {
         width: 16,
         height: 16,
@@ -200,6 +191,10 @@ const styles = StyleSheet.create({
         marginTop: 4,
         alignItems: 'center',
         flexDirection: 'row',
+    },
+    progressBar: {
+        width: '100%',
+        marginTop: 8,
     },
     titleView: {
         flex: 1,
