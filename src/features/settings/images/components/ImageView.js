@@ -29,21 +29,14 @@ const ImageView = () => {
         timeCreated={timeCreated}
     />)
     return (
-        <>
-            {isViewVisible ?
-                <StatusBar
-                    backgroundColor='#000'
-                    barStyle={'light-content'}
-                    translucent={true} /> : null}
-            <ImageViewDefault
-                onImageIndexChange={onImageIndexChange}
-                FooterComponent={footer}
-                presentationStyle='fullScreen'
-                images={uriList}
-                imageIndex={selectedIndex}
-                visible={isViewVisible}
-                onRequestClose={onImageViewClose} />
-        </>
+        <ImageViewDefault
+            onImageIndexChange={onImageIndexChange}
+            FooterComponent={footer}
+            presentationStyle='overFullScreen'
+            images={uriList}
+            imageIndex={selectedIndex}
+            visible={isViewVisible}
+            onRequestClose={onImageViewClose} />
     )
 }
 
