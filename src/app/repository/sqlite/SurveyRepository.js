@@ -92,6 +92,17 @@ export class SurveyRepository extends SQLiteRepository {
         }
     }
 
+    async updateUid(uid) {
+        try {
+            const result = await this.runSingleQueryTransaction('UPDATE survey SET uid = ?', [uid])
+            if (result.rowsAffected === 0)
+                throw 'Survey UID was not updated'
+        }
+        catch (err) {
+            throw new Error(errors.DATABASE, 'Unable to update survey UID', err)
+        }
+    }
+
     async updateName(name) {
         try {
             const result = await this.runSingleQueryTransaction('UPDATE survey SET name = ?', [name])

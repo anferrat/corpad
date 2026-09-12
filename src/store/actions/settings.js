@@ -51,8 +51,8 @@ export const loadSettings = (settings) => {
     return { type: LOAD_SETTINGS, settings: settings }
 }
 
-export const updateCurrentSurveySettings = (syncTime, fileName) => {
-    return { type: UPDATE_CURRENT_SURVEY_SETTINGS, syncTime, fileName }
+export const updateCurrentSurveySettings = (syncTime, fileName, isCloudSurvey, uid) => {
+    return { type: UPDATE_CURRENT_SURVEY_SETTINGS, syncTime, fileName, isCloudSurvey, uid }
 }
 
 export const setSurveySaving = (savingInProgress) => {

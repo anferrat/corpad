@@ -228,6 +228,8 @@ const settings = (state = initialState, action) => {
                     ...state.currentSurvey,
                     lastSyncTime: action.syncTime,
                     fileName: action.fileName,
+                    isCloudSurvey: action.isCloudSurvey ?? state.currentSurvey.isCloudSurvey,
+                    uid: action.uid ?? state.currentSurvey.uid,
                     savingInProgress: false
                 }
             }

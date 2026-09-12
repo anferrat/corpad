@@ -32,12 +32,16 @@ export class SaveCurrentSurvey {
         //savedAsLocal shows if cloud survey was converted to local. If so, updates isCloud setting
         const { savedAsLocal } = saved
 
+        if (savedAsLocal)
+            await this.surveyRepo.updateUid(surveyFile.survey.uid)
+
         //Update settings 
         await this.settingRepo.updateSurveySettings({ isSurveyNew: 0, cloudId: saved.cloudId, lastSync: syncTime, fileName: saved.fileName, originalHash: saved.hash, isCloud: !savedAsLocal && isCloud })
 
         return {
             fileName: saved.fileName,
             isCloud: !savedAsLocal && isCloud,
+            uid: surveyFile.survey.uid,
             syncTime: syncTime,
             cloudId: saved.cloudId
         }

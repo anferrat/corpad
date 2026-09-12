@@ -39,8 +39,8 @@ const useSurveyManager = ({ hideSheet }) => {
             dispatch(setSurveySaving(true))
             const { response, status } = await saveSurvey({}, surveyManagerErrorHandler)
             if (status === 200) {
-                const { fileName, syncTime } = response
-                dispatch(updateCurrentSurveySettings(syncTime, fileName))
+                const { fileName, isCloud, syncTime, uid } = response
+                dispatch(updateCurrentSurveySettings(syncTime, fileName, isCloud, uid))
             }
             else dispatch(setSurveySaving(false))
         }
