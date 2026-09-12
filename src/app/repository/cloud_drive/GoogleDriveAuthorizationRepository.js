@@ -1,6 +1,6 @@
 import { Error, errors } from "../../utils/Error";
 import { gdrive, config, folderIds } from "../../config/cloud_drive";
-import { GoogleSignin, statusCodes } from '@react-native-google-signin/google-signin';
+import { GoogleSignin } from '@react-native-google-signin/google-signin';
 
 export class GoogleDriveAuthorizationRepository {
     constructor() {
@@ -10,18 +10,19 @@ export class GoogleDriveAuthorizationRepository {
     async signIn() {
         try {
             await GoogleSignin.hasPlayServices()
-            const userInfo = await GoogleSignin.signIn()
+            const response = await GoogleSignin.signIn()
+            if (response.type !== 'success')
+                throw new Error(errors.GENERAL, 'Sign in cancelled', 'Cancelled by user', 101)
             const token = (await GoogleSignin.getTokens()).accessToken
             gdrive.accessToken = token
             return {
-                userName: userInfo.user.name
+                userName: response.data.user.name
             }
         }
         catch (er) {
-            if (er.code === statusCodes.SIGN_IN_CANCELLED)
-                throw new Error(errors.GENERAL, 'Sign in cancelled', 'Cancelled by user', 101)
-            else
-                throw new Error(errors.AUTH, 'Unable to sign in', er, 303)
+            if (er.code === 101)
+                throw er
+            throw new Error(errors.AUTH, 'Unable to sign in', er, 303)
         }
     }
 
@@ -34,13 +35,20 @@ export class GoogleDriveAuthorizationRepository {
                         userName: null
                     })
                 }, 2000)
-                const userInfo = await GoogleSignin.signInSilently()
+                const response = await GoogleSignin.signInSilently()
+                if (response.type !== 'success') {
+                    clearTimeout(timer)
+                    return resolve({
+                        isSigned: false,
+                        userName: null
+                    })
+                }
                 const token = (await GoogleSignin.getTokens()).accessToken
                 clearTimeout(timer)
                 gdrive.accessToken = token
                 resolve({
                     isSigned: true,
-                    userName: userInfo.user.name
+                    userName: response.data.user.name
                 })
             }
             catch (er) {
