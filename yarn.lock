@@ -3017,7 +3017,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@ui-kitten/components@npm:^5.3.0":
+"@ui-kitten/components@npm:5.3.1":
   version: 5.3.1
   resolution: "@ui-kitten/components@npm:5.3.1"
   dependencies:
@@ -3029,6 +3029,21 @@ __metadata:
   peerDependencies:
     react-native-svg: "*"
   checksum: 4c0adf1728f5c1264e41bd3827c48c80692bbc0d82c67ce404e1271d3723ede27cda9690bde725952fdee9e009dafc4e52e81fa4d0cff51ac3ced92e6b4eea8f
+  languageName: node
+  linkType: hard
+
+"@ui-kitten/components@patch:@ui-kitten/components@npm%3A5.3.1#./.yarn/patches/@ui-kitten-components-npm-5.3.1-0c45fa17a3.patch::locator=corpad%40workspace%3A.":
+  version: 5.3.1
+  resolution: "@ui-kitten/components@patch:@ui-kitten/components@npm%3A5.3.1#./.yarn/patches/@ui-kitten-components-npm-5.3.1-0c45fa17a3.patch::version=5.3.1&hash=87c777&locator=corpad%40workspace%3A."
+  dependencies:
+    "@eva-design/dss": ^2.2.0
+    "@eva-design/processor": ^2.2.0
+    fecha: 3.0.3
+    hoist-non-react-statics: ^3.2.1
+    lodash.merge: ^4.6.1
+  peerDependencies:
+    react-native-svg: "*"
+  checksum: 0200ca96f28fa3ea86b53dc4e0e91c32744b3ffc298d89f6ed246089a647df057eaf4d0abeb70147651fa8b963e095c0dce12b10fd63ca56b4011bb5bf8c7db3
   languageName: node
   linkType: hard
 

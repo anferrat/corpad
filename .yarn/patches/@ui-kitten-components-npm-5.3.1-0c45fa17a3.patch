@@ -1,0 +1,39 @@
+diff --git a/ui/radio/radio.component.js b/ui/radio/radio.component.js
+index d700afc6c391764a41fa63db38f8346b70bb5ef5..6cf109c821c9c4709b2492e7af7d990c3ac5a137 100644
+--- a/ui/radio/radio.component.js
++++ b/ui/radio/radio.component.js
+@@ -66,6 +66,25 @@ const theme_1 = require("../../theme");
+  * @overview-example RadioTheming
+  * In most cases this is redundant, if [custom theme is configured](guides/branding).
+  */
++const AnimatedIcon = ({ checked, style }) => {
++    const innerScaleAnim = react_1.default.useRef(new react_native_1.Animated.Value(checked ? 1 : 0)).current;
++    const prevCheckedRef = react_1.default.useRef(checked);
++    react_1.default.useEffect(() => {
++        if (prevCheckedRef.current !== checked) {
++            prevCheckedRef.current = checked;
++            react_native_1.Animated.spring(innerScaleAnim, {
++                toValue: checked ? 1 : 0,
++                useNativeDriver: true,
++                friction: 6,
++                tension: 80,
++            }).start();
++        }
++    }, [checked, innerScaleAnim]);
++    return (<react_native_1.Animated.View style={[style, {
++            transform: [{ scale: innerScaleAnim }],
++            opacity: innerScaleAnim,
++        }]}/>);
++};
+ let Radio = class Radio extends react_1.default.Component {
+     onMouseEnter = (event) => {
+         this.props.eva.dispatch([theme_1.Interaction.HOVER]);
+@@ -126,7 +145,7 @@ let Radio = class Radio extends react_1.default.Component {
+         <react_native_1.View style={styles.highlightContainer}>
+           <react_native_1.View style={[evaStyle.highlight, styles.highlight]}/>
+           <react_native_1.View style={[evaStyle.selectContainer, styles.selectContainer]}>
+-            <react_native_1.View style={evaStyle.icon}/>
++            <AnimatedIcon checked={this.props.checked} style={evaStyle.icon}/>
+           </react_native_1.View>
+         </react_native_1.View>
+         <devsupport_1.FalsyText style={evaStyle.text} component={children}/>
