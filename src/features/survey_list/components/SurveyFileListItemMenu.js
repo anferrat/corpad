@@ -5,16 +5,17 @@ import { basic } from '../../../styles/colors'
 import IconButton from '../../../components/IconButton'
 
 
-const FileListItemMenu = ({ children, showMenu, hideMenu, visible }) => {
+const FileListItemMenu = ({ children, showMenu, hideMenu, visible, disabled }) => {
 
     const renderAnchor = React.useCallback(() =>
         <View>
             <IconButton
                 color={basic}
                 iconName='more-vertical'
-                onPress={showMenu} />
+                onPress={showMenu}
+                disabled={disabled} />
         </View>,
-        [showMenu])
+        [disabled, showMenu])
 
     return (
         <View>

@@ -17,6 +17,7 @@ export const CreateSurvey = ({ withImport, navigateToImport }) => {
         isBlank,
         selectedSurveyIndex,
         surveyList,
+        creating,
         isSigned,
         surveyListLoading,
         visible,
@@ -81,8 +82,9 @@ export const CreateSurvey = ({ withImport, navigateToImport }) => {
             </ScrollView >
             <BottomButton
                 title={withImport ? 'Next' : 'Create'}
-                icon={withImport ? 'arrow-circle-right' : 'file-add-outline'}
+                icon={creating ? 'loading' : (withImport ? 'arrow-circle-right' : 'file-add-outline')}
                 iconPosition={withImport ? 'right' : 'left'}
+                disabled={creating}
                 onPress={createSurveyHandler} />
         </View>
     )

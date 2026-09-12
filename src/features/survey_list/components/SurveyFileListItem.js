@@ -9,12 +9,15 @@ import SurveyFileListItemMenu from './SurveyFileListItemMenu'
 import SurveyFileListItemMenuItem from './SurveyFileListItemMenuItem'
 import SurveyFileListItemIconBar from './SurveyFileListItemIconBar'
 
-const SurveyFileListItem = ({ name, uid, fileName, timeModified, tpCount, rectifierCount, pipelineCount, passedItems, cloudId, path, hash, isCloud, isSignedIn, loadSurvey, deleteSurvey, removeSurveyFromList, shareSurveyFile, copyToAlternateFolder, copyToDownloads }) => {
+const SurveyFileListItem = ({ name, uid, fileName, timeModified, tpCount, rectifierCount, pipelineCount, passedItems, cloudId, path, hash, isCloud, isSignedIn, surveyLoading, loadSurvey, deleteSurvey, removeSurveyFromList, shareSurveyFile, copyToAlternateFolder, copyToDownloads }) => {
     const scale = useRef(new Animated.Value(1))
     const isAndroid = Platform.OS === 'android'
     const [menuVisible, setMenuVisible] = useState(false)
 
-    const showMenu = useCallback(() => setMenuVisible(true), [])
+    const showMenu = useCallback(() => {
+        if (!surveyLoading)
+            setMenuVisible(true)
+    }, [surveyLoading])
 
     const hideMenu = useCallback(() => setMenuVisible(false), [])
 
@@ -28,30 +31,32 @@ const SurveyFileListItem = ({ name, uid, fileName, timeModified, tpCount, rectif
                 useNativeDriver: true
             }).start(() => removeSurveyFromList({ path, cloudId }))
         }
-    }, [path, cloudId, hash, fileName, uid])
+    }, [cloudId, deleteSurvey, fileName, hash, hideMenu, path, removeSurveyFromList, uid])
 
     const handleLoadSurvey = useCallback(() => {
+        if (surveyLoading)
+            return
         hideMenu()
         loadSurvey({ path, cloudId, fileName })
 
-    }, [path, cloudId, fileName])
+    }, [cloudId, fileName, hideMenu, loadSurvey, path, surveyLoading])
 
     const handleShareSurveyFile = useCallback(async () => {
         hideMenu()
         shareSurveyFile({ path, cloudId, name })
-    }, [path, cloudId, name])
+    }, [cloudId, hideMenu, name, path, shareSurveyFile])
 
     const handleCopyToDownloads = useCallback(() => {
         hideMenu()
         copyToDownloads({ path, cloudId, name })
 
-    }, [path, cloudId, name])
+    }, [cloudId, copyToDownloads, hideMenu, name, path])
 
     const handleCopyToAlternateFolder = useCallback(() => {
         hideMenu()
         copyToAlternateFolder({ path, cloudId, name })
 
-    }, [path, cloudId, name])
+    }, [cloudId, copyToAlternateFolder, hideMenu, name, path])
 
     return (
         <Animated.View style={{
@@ -60,7 +65,8 @@ const SurveyFileListItem = ({ name, uid, fileName, timeModified, tpCount, rectif
             <Pressable
                 style={styles.pressable}
                 android_ripple={androidRipple}
-                onPress={handleLoadSurvey}>
+                onPress={handleLoadSurvey}
+                disabled={surveyLoading}>
                 <View style={styles.mainView} >
                     <View style={styles.titleView}>
                         <View
@@ -108,7 +114,8 @@ const SurveyFileListItem = ({ name, uid, fileName, timeModified, tpCount, rectif
                     <SurveyFileListItemMenu
                         showMenu={showMenu}
                         hideMenu={hideMenu}
-                        visible={menuVisible}>
+                        visible={menuVisible}
+                        disabled={surveyLoading}>
                         {isAndroid ? <SurveyFileListItemMenuItem
                             onPress={handleCopyToDownloads}
                             title='Save to Downloads'

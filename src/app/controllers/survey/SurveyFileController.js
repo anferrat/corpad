@@ -16,10 +16,11 @@ import { ShareSurveyFile } from "../../services/survey_file/local/ShareSurveyFil
 import { SaveSurveyFileToDownloads } from "../../services/survey_file/local/SaveSurveyFileToDownloads"
 import { CopyCloudSurveyFileToLocal } from "../../services/survey_file/cloud/CopyCloudSurveyFileToLocal"
 import { GetSurveyFileMetadata } from "../../converters/survey_file/GetSurveyFileMetadata"
+import { surveyOperationLock } from "../_instances/survey_operation"
 
 
 class SurveyFileController extends Controller {
-    constructor(fileSystemRepo, cloudFileSystemRepo, networkRepo, loadLocalSurveyFileService, loadCloudSurveyFileService, loadExternalServiceFileService, createSurveyService, createSurveyFromTemplateService, surveyFileListPresenter, shareService, permissions, documentPicker, convertFileToSurveyService, surveyFileConverterOutput, uploadAssets, downloadFiles, exportSurveyFile, exportCloudSurveyFile, deleteAssetsService, assetFileDownloadControl, getSurveyFileMetaDataService, surveyFileRepo) {
+    constructor(fileSystemRepo, cloudFileSystemRepo, networkRepo, loadLocalSurveyFileService, loadCloudSurveyFileService, loadExternalServiceFileService, createSurveyService, createSurveyFromTemplateService, surveyFileListPresenter, shareService, permissions, documentPicker, convertFileToSurveyService, surveyFileConverterOutput, uploadAssets, downloadFiles, exportSurveyFile, exportCloudSurveyFile, deleteAssetsService, assetFileDownloadControl, getSurveyFileMetaDataService, surveyFileRepo, surveyOperationLock) {
         super()
 
         this.getLocalSurveyFileListService = new GetSurveyFileList(fileSystemRepo, surveyFileListPresenter, getSurveyFileMetaDataService, surveyFileRepo)
@@ -38,6 +39,7 @@ class SurveyFileController extends Controller {
 
         this.createSurveyService = createSurveyService
         this.createSurveyFromTemplateService = createSurveyFromTemplateService
+        this.surveyOperationLock = surveyOperationLock
 
         this.shareCloudSurveyFile = new ShareSurveyFile(exportCloudSurveyFile, fileSystemRepo, shareService)
         this.saveCloudSurveyFileToDownloads = new SaveSurveyFileToDownloads(exportCloudSurveyFile, fileSystemRepo, permissions)
@@ -73,18 +75,21 @@ class SurveyFileController extends Controller {
 
     loadFile(params, onError = null, onSuccess = null) {
         return super.controllerHandler(onSuccess, onError, 423, async () => {
-            const { isCloud, path, cloudId, onDownload } = this.validation.loadFile(params)
-            if (isCloud)
-                return await this.loadCloudSurveyFileService.execute(cloudId, onDownload)
-            else
-                return await this.loadSurveyFileService.execute(path)
+            return await this.surveyOperationLock.execute(async () => {
+                const { isCloud, path, cloudId, onDownload } = this.validation.loadFile(params)
+                if (isCloud)
+                    return await this.loadCloudSurveyFileService.execute(cloudId, onDownload)
+                else
+                    return await this.loadSurveyFileService.execute(path)
+            })
         })
     }
-
     pickExternalFile(params, onError = null, onSuccess = null) {
         return super.controllerHandler(onSuccess, onError, 420, async () => {
-            const { onStatusChanged } = params
-            return await this.pickExternalSurveyFileService.execute(onStatusChanged)
+            return await this.surveyOperationLock.execute(async () => {
+                const { onStatusChanged } = params
+                return await this.pickExternalSurveyFileService.execute(onStatusChanged)
+            })
         })
     }
 
@@ -131,11 +136,13 @@ class SurveyFileController extends Controller {
 
     async create(params, onError = null, onSuccess = null) {
         return super.controllerHandler(onSuccess, onError, 415, async () => {
-            const { isBlank, isCloud, path, name, includeAssets } = params
-            if (isBlank || path === null)
-                return await this.createSurveyService.execute(name, isCloud)
-            else
-                return await this.createSurveyFromTemplateService.execute(name, isCloud, path, includeAssets)
+            return await this.surveyOperationLock.execute(async () => {
+                const { isBlank, isCloud, path, name, includeAssets } = params
+                if (isBlank || path === null)
+                    return await this.createSurveyService.execute(name, isCloud)
+                else
+                    return await this.createSurveyFromTemplateService.execute(name, isCloud, path, includeAssets)
+            })
         })
     }
 
@@ -163,7 +170,8 @@ const surveyFileController = new SurveyFileController(
     deleteAssetsService,
     assetFileDownloadControl,
     new GetSurveyFileMetadata(),
-    surveyFileRepo
+    surveyFileRepo,
+    surveyOperationLock
 )
 
 export const getSurveyFileList = ({ isCloud }, onError, onSuccess) => surveyFileController.getList({ isCloud }, onError, onSuccess)

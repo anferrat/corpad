@@ -6,7 +6,7 @@ import SurveyFileListItem from './components/SurveyFileListItem'
 import SurveyFileListHeader from './components/SurveyFileListHeader'
 
 export const SurveyFileList = ({ navigateToCreateSurvey, isCloud, navigateToSurveyFileList }) => {
-    const { fileList, loading, initialLoad, isSignedIn, refreshHandler, loadSurvey, deleteSurvey, removeSurveyFromList, shareSurveyFile, copyToAlternateFolder, copyToDownloads, docLinkHandler } = useSurveyFiles({ isCloud, navigateToSurveyFileList })
+    const { fileList, loading, surveyLoading, initialLoad, isSignedIn, refreshHandler, loadSurvey, deleteSurvey, removeSurveyFromList, shareSurveyFile, copyToAlternateFolder, copyToDownloads, docLinkHandler } = useSurveyFiles({ isCloud, navigateToSurveyFileList })
 
     const isEmpty = (fileList[0].data.length + fileList[1].data.length) === 0
 
@@ -26,6 +26,7 @@ export const SurveyFileList = ({ navigateToCreateSurvey, isCloud, navigateToSurv
             passedItems={successRate}
             timeModified={timeModified}
             isSignedIn={isSignedIn}
+            surveyLoading={surveyLoading}
             loadSurvey={loadSurvey}
             deleteSurvey={deleteSurvey}
             removeSurveyFromList={removeSurveyFromList}
@@ -33,7 +34,7 @@ export const SurveyFileList = ({ navigateToCreateSurvey, isCloud, navigateToSurv
             copyToAlternateFolder={copyToAlternateFolder}
             copyToDownloads={copyToDownloads}
         />
-    }, [isSignedIn])
+    }, [copyToAlternateFolder, copyToDownloads, deleteSurvey, isCloud, isSignedIn, loadSurvey, removeSurveyFromList, shareSurveyFile, surveyLoading])
 
     const keyExtractor = React.useCallback(item => isCloud ? item.cloudId : item.path, [isCloud])
 
@@ -43,7 +44,7 @@ export const SurveyFileList = ({ navigateToCreateSurvey, isCloud, navigateToSurv
             initialLoad={initialLoad}
             onCreate={navigateToCreateSurvey}
             isCloud={isCloud} />,
-        [initialLoad, isCloud, navigateToCreateSurvey])
+        [docLinkHandler, initialLoad, isCloud, navigateToCreateSurvey])
 
     const ListHeaderComponent = React.useMemo(() => <SurveyFileListHeader isCloud={isCloud} />, [isCloud])
     //List header disappears when list is empty, teherfore this kind of hack is used. change in future

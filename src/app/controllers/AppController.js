@@ -17,9 +17,10 @@ import { BlockUrlListener } from "../services/app/BlockUrlListener"
 import { UnblockUrlListener } from "../services/app/UnblockUrlListener"
 import { connectMultimeterService } from "./_instances/multimeter"
 import { PotentialTypeInitialization } from "../services/survey/other/PotentialTypeInitialization"
+import { surveyOperationLock } from "./_instances/survey_operation"
 
 class AppController extends Controller {
-    constructor(currentSurveyStatusService, googleDriveAuthorizationRepo, surveyRepo, bluetoothRepo, settingRepo, defaultNameRepo, loadExternalSurveyFileService, saveCurrentSurveyService, warningHandler, resetCurrentSurveyService, fileSystemRepo, appRepo, linkingService, networkRepo, externalFileContentResolver, purchaseRepo, geolocationRepo, permissions, urlFileAccess, connectMultimeterService, potentialTypeRepo, getDefaultPotentialTypes) {
+    constructor(currentSurveyStatusService, googleDriveAuthorizationRepo, surveyRepo, bluetoothRepo, settingRepo, defaultNameRepo, loadExternalSurveyFileService, saveCurrentSurveyService, warningHandler, resetCurrentSurveyService, fileSystemRepo, appRepo, linkingService, networkRepo, externalFileContentResolver, purchaseRepo, geolocationRepo, permissions, urlFileAccess, connectMultimeterService, potentialTypeRepo, getDefaultPotentialTypes, surveyOperationLock) {
         super()
 
         this.networkRepo = networkRepo
@@ -30,7 +31,7 @@ class AppController extends Controller {
 
         this.purchaseInitializationService = new InitializePurchases(purchaseRepo, networkRepo, geolocationRepo, settingRepo, permissions)
 
-        this.openExternalSurveyService = new OpenExternalSurvey(loadExternalSurveyFileService, saveCurrentSurveyService, warningHandler, currentSurveyStatusService, resetCurrentSurveyService, fileSystemRepo)
+        this.openExternalSurveyService = new OpenExternalSurvey(loadExternalSurveyFileService, saveCurrentSurveyService, warningHandler, currentSurveyStatusService, resetCurrentSurveyService, fileSystemRepo, surveyOperationLock)
 
         this.defaultNameInitializationService = new DefaultNameInitialization(defaultNameRepo)
 
@@ -119,7 +120,8 @@ const appController = new AppController(
     urlFileAccessService,
     connectMultimeterService,
     potentialTypeRepo,
-    getDefaultPotentialTypesService
+    getDefaultPotentialTypesService,
+    surveyOperationLock
 )
 
 export const initializeApp = (onError, onSuccess) => appController.init(onError, onSuccess)

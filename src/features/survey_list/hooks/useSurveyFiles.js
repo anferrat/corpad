@@ -20,7 +20,9 @@ const useSurveyFiles = ({ isCloud, navigateToSurveyFileList }) => {
         }
     ])
     const componentMounted = useRef(true)
+    const surveyLoadingRef = useRef(false)
     const [loading, setLoading] = useState(true)
+    const [surveyLoading, setSurveyLoading] = useState(false)
     const [initialLoad, setInitialLoad] = useState(false)
 
     const dispatch = useDispatch()
@@ -35,7 +37,7 @@ const useSurveyFiles = ({ isCloud, navigateToSurveyFileList }) => {
             componentMounted.current = false
             EventRegister.removeEventListener(refreshListener)
         }
-    }, [])
+    }, [isCloud])
 
     const fileListErrorHandler = useCallback((errorStatus) => {
         //Handle remote requests. 302 status - user is not signed. 
@@ -73,20 +75,34 @@ const useSurveyFiles = ({ isCloud, navigateToSurveyFileList }) => {
                     setInitialLoad(true)
                 }
             )
-    }, [loading])
+    }, [fileListErrorHandler, isCloud, loading])
 
     const refreshHandler = useCallback(() => setLoading(true), [])
 
     const loadSurvey = useCallback(async ({ path, cloudId, fileName }) => {
-        const displayPath = isCloud ? `gdrive/Corpad/${fileName}` : path
-        dispatch(updateLoader('Loading survey', displayPath))
-        const { response, status } = await loadSurveyFile({ isCloud, path, cloudId, onDownload })
-        if (status === 200)
-            dispatch(setSurveySettings(response.name, response.fileName, response.syncTime, response.isCloud, response.isLoaded, response.uid))
-        else if (status !== 101)
-            fileListErrorHandler(status)
-        dispatch(hideLoader())
-    }, [isCloud, fileListErrorHandler])
+        if (surveyLoadingRef.current)
+            return
+
+        surveyLoadingRef.current = true
+        if (componentMounted.current)
+            setSurveyLoading(true)
+
+        try {
+            const displayPath = isCloud ? `gdrive/Corpad/${fileName}` : path
+            dispatch(updateLoader('Loading survey', displayPath))
+            const { response, status } = await loadSurveyFile({ isCloud, path, cloudId, onDownload })
+            if (status === 200)
+                dispatch(setSurveySettings(response.name, response.fileName, response.syncTime, response.isCloud, response.isLoaded, response.uid))
+            else if (status !== 101)
+                fileListErrorHandler(status)
+        }
+        finally {
+            surveyLoadingRef.current = false
+            if (componentMounted.current)
+                setSurveyLoading(false)
+            dispatch(hideLoader())
+        }
+    }, [dispatch, fileListErrorHandler, isCloud, onDownload])
 
     const deleteSurvey = useCallback(async ({ path, cloudId, hash, fileName, uid }) => {
         //Returns true if file delete successfuly and false if not. (for onRemove animation)
@@ -100,7 +116,7 @@ const useSurveyFiles = ({ isCloud, navigateToSurveyFileList }) => {
             return status === 200
         }
         return false
-    }, [isCloud, fileListErrorHandler])
+    }, [dispatch, fileListErrorHandler, isCloud])
 
     const removeSurveyFromList = useCallback(({ path, cloudId }) => {
         if (componentMounted.current) {
@@ -124,13 +140,13 @@ const useSurveyFiles = ({ isCloud, navigateToSurveyFileList }) => {
         if (status !== 200)
             fileListErrorHandler(status)
 
-    }, [isCloud, fileListErrorHandler])
+    }, [dispatch, fileListErrorHandler, isCloud, onDownload])
 
 
     const copyToAlternateFolder = useCallback(async ({ path, cloudId, name }) => {
         //copies from device to cloud and cloud to device
         dispatch(updateLoader(isCloud ? 'Copying survey to device' : 'Copying survey to gdrive', name))
-        const { status, errorMessage } = isCloud ? await copyCloudSurveyFileToDevice({ cloudId, onDownload }) : await copySurveyFileToCloud({ path, onUpload })
+        const { status } = isCloud ? await copyCloudSurveyFileToDevice({ cloudId, onDownload }) : await copySurveyFileToCloud({ path, onUpload })
         if (status !== 200)
             fileListErrorHandler(status)
         else {
@@ -138,7 +154,7 @@ const useSurveyFiles = ({ isCloud, navigateToSurveyFileList }) => {
             navigateToSurveyFileList({ isCloud: !isCloud })
         }
         dispatch(hideLoader())
-    }, [isCloud, fileListErrorHandler, onDownload, onUpload])
+    }, [dispatch, fileListErrorHandler, isCloud, navigateToSurveyFileList, onDownload, onUpload])
 
     const copyToDownloads = useCallback(async ({ path, cloudId, name }) => {
         dispatch(updateLoader('Saving survey to downloads', name))
@@ -153,7 +169,7 @@ const useSurveyFiles = ({ isCloud, navigateToSurveyFileList }) => {
         }
         else fileListErrorHandler(status)
         dispatch(hideLoader())
-    }, [fileListErrorHandler, onDownload])
+    }, [dispatch, fileListErrorHandler, isCloud, onDownload])
 
     const docLinkHandler = useCallback(() => {
         openLink({ url: 'https://docs.corpad.ca' },
@@ -164,6 +180,7 @@ const useSurveyFiles = ({ isCloud, navigateToSurveyFileList }) => {
     return {
         fileList,
         loading,
+        surveyLoading,
         initialLoad,
         isSignedIn,
         refreshHandler,

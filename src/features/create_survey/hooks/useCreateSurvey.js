@@ -17,12 +17,14 @@ const useCreateSurvey = (withImport, navigateToImport) => {
     const [selectedSurveyIndex, setSelectedSurveyIndex] = useState(null)
     const [surveyList, setSurveyList] = useState([])
     const [surveyListLoading, setSurveyListLoading] = useState(true)
+    const [creating, setCreating] = useState(false)
     const [visible, setVisible] = useState(false)
     const isSigned = useSelector(state => state.settings.session.isSigned)
     const subscriptionStatus = useSelector(state => state.settings.subscription.status)
     const isPro = isProStatus(subscriptionStatus)
     const dispatch = useDispatch()
     const componentMounted = useRef(true)
+    const creatingRef = useRef(false)
     const optionsAvailable = !withImport
     const assetOptionAvailable = isPro
 
@@ -37,6 +39,9 @@ const useCreateSurvey = (withImport, navigateToImport) => {
                 }
         }
         loadData()
+        return () => {
+            componentMounted.current = false
+        }
     }, [])
 
     const onChangeName = useCallback((value) => { setName(state => ({ ...state, name: value })) }, [])
@@ -57,27 +62,40 @@ const useCreateSurvey = (withImport, navigateToImport) => {
             setIsCloud(true)
         else
             dispatch(setSessionModalVisible(true))
-    }, [isSigned])
+    }, [dispatch, isSigned])
 
     const toggleTemplateSetting = useCallback((index) => setIsBlank(!Boolean(index)), [])
 
     const toggleView = () => setVisible(state => !state)
 
     const createSurveyHandler = useCallback(async () => {
+        if (creatingRef.current)
+            return
+
         const { valid, value } = fieldValidation(name.name, 'name')
         if (valid) {
-            const name = value === null ? 'New survey' : value
-            dispatch(updateLoader('Creating survey', `Name: ${name}`))
-            const path = surveyList[selectedSurveyIndex] ? surveyList[selectedSurveyIndex].path : null
-            await createSurvey(
-                { isBlank, isCloud, path, name, includeAssets: includeAssets && isPro },
-                (er) => errorHandler(er),
-                ({ name, fileName, isCloud, syncTime, uid }) => {
-                    dispatch(setSurveySettings(name, fileName, syncTime, isCloud, true, uid))
-                    if (withImport)
-                        navigateToImport()
-                })
-            dispatch(hideLoader())
+            creatingRef.current = true
+            try {
+                if (componentMounted.current)
+                    setCreating(true)
+                const name = value === null ? 'New survey' : value
+                dispatch(updateLoader('Creating survey', `Name: ${name}`))
+                const path = surveyList[selectedSurveyIndex] ? surveyList[selectedSurveyIndex].path : null
+                await createSurvey(
+                    { isBlank, isCloud, path, name, includeAssets: includeAssets && isPro },
+                    (er) => errorHandler(er),
+                    ({ name, fileName, isCloud, syncTime, uid }) => {
+                        dispatch(setSurveySettings(name, fileName, syncTime, isCloud, true, uid))
+                        if (withImport)
+                            navigateToImport()
+                    })
+            }
+            finally {
+                creatingRef.current = false
+                if (componentMounted.current)
+                    setCreating(false)
+                dispatch(hideLoader())
+            }
         }
         else {
             errorHandler(506)
@@ -86,7 +104,7 @@ const useCreateSurvey = (withImport, navigateToImport) => {
                 valid: valid
             })
         }
-    }, [name.name, isBlank, isCloud, surveyList, selectedSurveyIndex, includeAssets, isPro])
+    }, [dispatch, includeAssets, isBlank, isCloud, isPro, name.name, navigateToImport, selectedSurveyIndex, surveyList, withImport])
 
     return {
         name: name.name,
@@ -95,6 +113,7 @@ const useCreateSurvey = (withImport, navigateToImport) => {
         isBlank,
         selectedSurveyIndex,
         surveyList,
+        creating,
         isSigned,
         surveyListLoading,
         visible,
