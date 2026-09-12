@@ -7,6 +7,7 @@ import useCreateSurvey from './hooks/useCreateSurvey'
 import NameEditInput from './components/NameEditInput'
 import TemplateSelector from './components/TemplateSelector'
 import { control } from '../../styles/colors'
+import { useSafeAreaInsets } from 'react-native-safe-area-context'
 
 export const CreateSurvey = ({ withImport, navigateToImport }) => {
     const {
@@ -32,12 +33,13 @@ export const CreateSurvey = ({ withImport, navigateToImport }) => {
         createSurveyHandler,
         toggleView
     } = useCreateSurvey(withImport, navigateToImport)
+    const insets = useSafeAreaInsets()
     return (
         <View
             style={styles.container}>
             <ScrollView
                 bounces={false}
-                contentContainerStyle={styles.mainView}>
+                contentContainerStyle={[styles.mainView, { paddingBottom: insets.bottom + 84 }]}>
                 <NameEditInput
                     name={name}
                     nameValid={nameValid}
@@ -93,7 +95,6 @@ const styles = StyleSheet.create({
     },
     mainView: {
         padding: 12,
-        paddingBottom: 72
     },
     surveyTypeView: {
         flexDirection: 'row',
