@@ -43,6 +43,14 @@ export const normalizeDegrees = (degree) => {
     return ((degree % 360) + 360) % 360
 }
 
+export const applyDeclination = (bearing, declination) => {
+    if (!Number.isFinite(bearing) || !Number.isFinite(declination))
+        return bearing
+
+    // Positive declination means magnetic north is east of true north.
+    return normalizeDegrees(bearing - declination)
+}
+
 export const createBearingVector = (bearing) => {
     'worklet'
     const radians = bearing * Math.PI / 180

@@ -9,6 +9,7 @@ export class WatchDistanseAndBearing {
             callback({
                 ...this.geolocationCalculator.haversine(pointLatitude, pointLongitude, latitude, longitude),
                 accuracy: accuracy,
+                declination: this.geolocationRepo.getDeclination(latitude, longitude),
                 latitude,
                 longitude,
                 //declination: this.geolocationRepo.getDeclination(latitude, longitude)

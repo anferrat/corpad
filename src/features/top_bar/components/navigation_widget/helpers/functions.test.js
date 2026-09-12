@@ -1,4 +1,5 @@
 import {
+    applyDeclination,
     calculateTiltCompensatedAngle,
     calculateAngularDistance,
     getNearbyExitRadius,
@@ -30,6 +31,12 @@ describe('navigation widget calculations', () => {
     test('normalizes negative and wrapped angles', () => {
         expect(normalizeDegrees(-90)).toBe(270)
         expect(normalizeDegrees(450)).toBe(90)
+    })
+
+    test('converts true bearing to magnetic bearing using east-positive declination', () => {
+        expect(applyDeclination(90, 10)).toBe(80)
+        expect(applyDeclination(5, -10)).toBe(15)
+        expect(applyDeclination(2, 10)).toBe(352)
     })
 
     test('smooths bearings across the north boundary', () => {

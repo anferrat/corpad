@@ -1,4 +1,5 @@
 import Geolocation from '@react-native-community/geolocation'
+import geomagnetism from 'geomagnetism'
 import { Error, errors } from '../../utils/Error'
 import { GetGeolocationTimeDelta } from './GetGeolocationTimeDelta'
 
@@ -6,6 +7,7 @@ export class GeolocationRepository {
     constructor() {
         //Geolocation.setRNConfiguration({ locationProvider: 'playServices' })
         this.getDeltaService = new GetGeolocationTimeDelta()
+        this.geomagneticModel = geomagnetism.model()
     }
 
     async getCurrent() {
@@ -55,9 +57,7 @@ export class GeolocationRepository {
 
     getDeclination(latitude, longitude) {
         try {
-            /* Declination has an error works only till Dec 10, need to update model
-            return geomagnetism.model().point([latitude, longitude]).decl
-            */
+            return this.geomagneticModel.point([latitude, longitude]).decl
         }
         catch (er) {
             throw new Error(errors.LOCATION, 'Unable to get declination', er, 801)

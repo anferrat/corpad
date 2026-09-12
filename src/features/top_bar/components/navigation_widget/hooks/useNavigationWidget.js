@@ -2,12 +2,13 @@ import { useState, useRef, useEffect, useCallback } from 'react'
 import { useSelector } from 'react-redux'
 import { getLocationPermission, watchDistanceAndBearing } from '../../../../../app/controllers/survey/other/GeolocationController'
 import { errorHandler } from '../../../../../helpers/error_handler'
-import { getCardinalDirection, smoothBearing, updateNearbyState } from '../helpers/functions'
+import { applyDeclination, getCardinalDirection, smoothBearing, updateNearbyState } from '../helpers/functions'
 
 const initLocation = {
     bearing: null,
     distance: null,
-    accuracy: null
+    accuracy: null,
+    declination: null
 }
 
 const LOCATION_TIMEOUT = 12000
@@ -72,11 +73,12 @@ const useNavigationWidget = () => {
                     }
                 }, LOCATION_TIMEOUT)
                 positionWatch = watchDistanceAndBearing({
-                    onUpdate: ({ distance, bearing, accuracy }) => {
+                    onUpdate: ({ distance, bearing, accuracy, declination }) => {
                         if (cancelled)
                             return
 
-                        const smoothedBearing = smoothBearing(filteredBearing.current, bearing, distance, accuracy)
+                        const magneticBearing = applyDeclination(bearing, declination)
+                        const smoothedBearing = smoothBearing(filteredBearing.current, magneticBearing, distance, accuracy)
                         filteredBearing.current = smoothedBearing
                         setNearby(current => updateNearbyState(current, distance, accuracy))
 
@@ -90,7 +92,7 @@ const useNavigationWidget = () => {
                             }
                         }
 
-                        setLocation(state => ({ ...state, distance, bearing: smoothedBearing, accuracy }))
+                        setLocation(state => ({ ...state, distance, bearing: smoothedBearing, accuracy, declination }))
                     },
                     latitude: pointLatitude,
                     longitude: pointLongitude,

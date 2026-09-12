@@ -35,7 +35,7 @@
     "anferrat-tokml": "git://github.com/anferrat/tokml",
     "base64url": "^3.0.1",
     "buffer": "^6.0.3",
-    "geomagnetism": "^0.1.1",
+    "geomagnetism": "^0.2.0",
     "lodash.debounce": "^4.0.8",
     "papaparse": "^5.4.1",
     "qrcode": "^1.5.4",
