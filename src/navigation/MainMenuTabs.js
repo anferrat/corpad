@@ -14,9 +14,10 @@ const { Navigator, Screen } = createBottomTabNavigator()
 export default TabNavigator = () => {
     const { isCloudSurvey, openBasicMenu, isSigned, isInternetOn } = useSurveyListBottomTabs()
     const insets = useSafeAreaInsets()
+    const canOpenCloudSurveyList = isCloudSurvey && isSigned && isInternetOn
     return (
         <Navigator
-            initialRouteName={isCloudSurvey ? 'CloudSurveyList' : 'DeviceSurveyList'}
+            initialRouteName={canOpenCloudSurveyList ? 'CloudSurveyList' : 'DeviceSurveyList'}
             tabBar={props => <MainMenuBottomTabs {...props} openBasicMenu={openBasicMenu} />}
             screenOptions={{
                 //insets has to be passed to header from the top, to avoid glitching when swicthing between screens
