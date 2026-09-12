@@ -31,9 +31,9 @@ class GeolocationController extends Controller {
         })
     }
 
-    watchDistanceAndBearing({ latitude, longitude, onUpdate }, onError = null, onSuccess = null) {
+    watchDistanceAndBearing({ latitude, longitude, onUpdate, watchOptions = {} }, onError = null, onSuccess = null) {
         return super.callbackHandler(onSuccess, onError, 800, () => {
-            return this.watchDistanceAndBearingService.execute(onUpdate, latitude, longitude)
+            return this.watchDistanceAndBearingService.execute(onUpdate, latitude, longitude, watchOptions)
         })
     }
 
@@ -82,7 +82,7 @@ export const getLocationPermission = (onError, onSuccess) => geolocationControll
 
 export const watchPosition = (callback, onError, onSuccess) => geolocationController.watch(callback, onError, onSuccess)
 
-export const watchDistanceAndBearing = ({ onUpdate, latitude, longitude }, onError, onSuccess) => geolocationController.watchDistanceAndBearing({ onUpdate, latitude, longitude }, onError, onSuccess)
+export const watchDistanceAndBearing = ({ onUpdate, latitude, longitude, watchOptions }, onError, onSuccess) => geolocationController.watchDistanceAndBearing({ onUpdate, latitude, longitude, watchOptions }, onError, onSuccess)
 
 export const getCurrentPosition = (onError, onSuccess) => geolocationController.getCurrent(onError, onSuccess)
 

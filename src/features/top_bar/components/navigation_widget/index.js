@@ -1,5 +1,5 @@
 import React from 'react'
-import { Animated, StyleSheet, View } from 'react-native'
+import { StyleSheet, View } from 'react-native'
 import { Text, Icon, Modal, Button } from '@ui-kitten/components'
 import { basic300, control, primary } from '../../../../styles/colors'
 import useNavigationWidget from './hooks/useNavigationWidget'
@@ -9,108 +9,90 @@ import LoadingView from '../../../../components/LoadingView'
 import DirectionLabel from './components/DirectionLabel'
 import { getModalTop } from '../../../../styles/dimensions'
 import { compass } from '../../../../components/Icons'
-
+import NavigationArrow from './components/NavigationArrow'
+import NearbyLocationMarker from './components/NearbyLocationMarker'
 
 const NavigationWidget = () => {
     const {
         showModal,
         visible,
         location,
-        arrowRotation,
         enabled,
         direction,
         hideModal,
         name,
-        loading
+        loading,
+        nearby,
+        sensorEnabled,
+        handleSensorUnavailable,
+        handleArrowReady
     } = useNavigationWidget()
-    const { distance, bearing, heading, accuracy } = location
+    const { distance, bearing, accuracy } = location
 
-    if (enabled)
-        return (
-            <>
-                <Button
-                    accessoryLeft={compass}
-                    onPress={showModal}
-                    appearance='ghost'>
-                    Compass
-                </Button>
-                <Modal
-                    style={styles.modal}
-                    visible={visible}
-                    onBackdropPress={hideModal}
-                    backdropStyle={styles.backdrop}>
-                    <View
-                        style={styles.container}>
-                        <View
-                            style={styles.titleContainer}>
-                            <Icon
-                                name={'compass'}
-                                style={styles.compassIcon}
-                                fill={primary} />
-                            <Text
-                                category={'h6'}
-                                style={styles.title}
-                                numberOfLines={1}
-                                ellipsizeMode={'tail'}>
-                                Direction to: {name}
-                            </Text>
-                        </View>
-                        <LoadingView loading={loading}>
-                            <Animated.View
-                                style={{
-                                    ...styles.arrow,
-                                    transform: [{
-                                        rotate: arrowRotation.current.interpolate({
-                                            inputRange: [0, 360],
-                                            outputRange: ['0deg', '360deg']
-                                        })
-                                    }]
-                                }}>
-                                <Icon
-                                    name='navigation'
-                                    fill={primary}
-                                    style={styles.icon} />
-                            </Animated.View>
-                            <View style={styles.values}>
-                                <DirectionLabel value={`${direction} (${Math.round(bearing)}\u00b0)`} />
-                                <ListItem
-                                    title={'Distance: '}
-                                    value={getDistance(distance)} />
-                                <ListItem
-                                    title={'Accuracy: '}
-                                    value={getDistance(accuracy)} />
-                            </View>
-                        </LoadingView>
-                        <Button
-                            style={styles.closeButton}
-                            onPress={hideModal}
-                            appearance='ghost'>
-                            Close
-                        </Button>
+    if (!enabled)
+        return null
+
+    return (
+        <>
+            <Button
+                accessoryLeft={compass}
+                onPress={showModal}
+                appearance='ghost'>
+                Compass
+            </Button>
+            <Modal
+                style={styles.modal}
+                visible={visible}
+                onBackdropPress={hideModal}
+                backdropStyle={styles.backdrop}>
+                <View style={styles.container}>
+                    <View style={styles.titleContainer}>
+                        <Icon
+                            name='compass'
+                            style={styles.compassIcon}
+                            fill={primary} />
+                        <Text
+                            category='h6'
+                            style={styles.title}
+                            numberOfLines={1}
+                            ellipsizeMode='tail'>
+                            Direction to: {name}
+                        </Text>
                     </View>
-                </Modal>
-            </>
-        )
-    else return null
+                    {nearby && <NearbyLocationMarker />}
+                    {!nearby && sensorEnabled && <NavigationArrow
+                        bearing={bearing}
+                        loading={loading}
+                        onReady={handleArrowReady}
+                        onUnavailable={handleSensorUnavailable} />}
+                    <LoadingView loading={!nearby && loading}>
+                        <View style={styles.values}>
+                            {!nearby && <DirectionLabel value={`${direction} (${Math.round(bearing)}\u00b0)`} />}
+                            <ListItem
+                                title='Distance: '
+                                value={getDistance(distance)} />
+                            <ListItem
+                                title='Accuracy: '
+                                value={getDistance(accuracy)} />
+                        </View>
+                    </LoadingView>
+                    <Button
+                        style={styles.closeButton}
+                        onPress={hideModal}
+                        appearance='ghost'>
+                        Close
+                    </Button>
+                </View>
+            </Modal>
+        </>
+    )
 }
-
-
 
 export default NavigationWidget
 
 const styles = StyleSheet.create({
     backdrop: {
         backgroundColor: 'rgba(0,0,0,0.5)'
-    },
-    arrow: {
-        marginTop: 12,
-        alignSelf: 'center',
-        justifyContent: 'center',
-        alignItems: 'center'
-    },
-    icon: {
-        width: 80,
-        height: 80,
     },
     compassIcon: {
         width: 25,
@@ -120,8 +102,8 @@ const styles = StyleSheet.create({
     modal: {
         width: '80%',
         position: 'absolute',
-        top: getModalTop(300),
-        height: 300,
+        top: getModalTop(320),
+        height: 320,
     },
     container: {
         backgroundColor: control,
@@ -133,7 +115,6 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         borderColor: basic300
     },
-
     titleContainer: {
         width: '100%',
         flexDirection: 'row',

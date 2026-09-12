@@ -94,6 +94,8 @@
 	<string>You need to grant location permissions to use map and capture GPS coordinates.</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>You need to grant location permissions to use map and capture GPS coordinates.</string>
+	<key>NSMotionUsageDescription</key>
+	<string>You need to access device motion to show the direction to a test point.</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>You need to grant permission to access library in order to use images.</string>
 	<key>RCTNewArchEnabled</key>

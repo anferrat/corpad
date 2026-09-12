@@ -4,7 +4,7 @@ export class WatchDistanseAndBearing {
         this.geolocationCalculator = geolocationCalculator
     }
 
-    execute(callback, pointLatitude, pointLongitude) {
+    execute(callback, pointLatitude, pointLongitude, watchOptions = {}) {
         const remove = this.geolocationRepo.watch(({ latitude, longitude, accuracy }) =>
             callback({
                 ...this.geolocationCalculator.haversine(pointLatitude, pointLongitude, latitude, longitude),
@@ -12,7 +12,7 @@ export class WatchDistanseAndBearing {
                 latitude,
                 longitude,
                 //declination: this.geolocationRepo.getDeclination(latitude, longitude)
-            }))
+            }), watchOptions)
         return { remove }
     }
 }

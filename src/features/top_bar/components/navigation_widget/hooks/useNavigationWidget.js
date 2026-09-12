@@ -1,115 +1,132 @@
 import { useState, useRef, useEffect, useCallback } from 'react'
-import { Animated } from 'react-native'
-import { useSelector } from "react-redux"
-import { getLocationPermission, watchDistanceAndBearing } from "../../../../../app/controllers/survey/other/GeolocationController"
-import { watchDeviceHeading } from '../../../../../app/controllers/survey/other/SensorController'
-import { calculateRotationAngle, calculateResultHeading, getCardinalDirection } from '../helpers/functions'
+import { useSelector } from 'react-redux'
+import { getLocationPermission, watchDistanceAndBearing } from '../../../../../app/controllers/survey/other/GeolocationController'
 import { errorHandler } from '../../../../../helpers/error_handler'
+import { getCardinalDirection, smoothBearing, updateNearbyState } from '../helpers/functions'
 
 const initLocation = {
-    bearing: null, // in deg (0-360) of remote point in respect to True North (Spherical Earth)
-    distance: null, //in m, distance between device and remote point
-    accuracy: null, // in m, accuracy of current user position
-    heading: null, // in deg (0 - 360) device position in respect to Magnetic North
-    //declination: null difference between Magnetic and True North - needs more testing, disabled for now. In the test seem to create additional offset
+    bearing: null,
+    distance: null,
+    accuracy: null
 }
 
-const initArroRotation = new Animated.Value(0)
+const LOCATION_TIMEOUT = 12000
 
 const useNavigationWidget = () => {
     const pointLatitude = useSelector(state => state.item.view.latitude)
     const pointLongitude = useSelector(state => state.item.view.longitude)
     const name = useSelector(state => state.item.view.name)
-    const [location, setlocation] = useState(initLocation)
-    const enabled = pointLatitude && pointLongitude //determines if widget can be used for test point
-    const [visible, setVisisble] = useState(false)
-    const [loading, setLoading] = useState(true) // true when orientation and location data available and obtained
-    const componentMounted = useRef(true)
+    const [location, setLocation] = useState(initLocation)
+    const [visible, setVisible] = useState(false)
+    const [loading, setLoading] = useState(true)
+    const [sensorEnabled, setSensorEnabled] = useState(false)
+    const [nearby, setNearby] = useState(false)
+    const filteredBearing = useRef(null)
+    const locationReady = useRef(false)
+    const sensorUnavailable = useRef(false)
+    const enabled = pointLatitude !== null && pointLatitude !== undefined && pointLongitude !== null && pointLongitude !== undefined
     const direction = getCardinalDirection(location.bearing)
-    const arrowRotation = useRef(initArroRotation) //holds animated rotation value for arrow in deg (-infinity to infinity)
-    const rotation = useRef(null) //hold prevoius rotation value in deg (-infinity to infinity)
 
-    useEffect(() => {
-        componentMounted.current = true
-        return () => {
-            componentMounted.current = false
+    const showModal = useCallback(() => {
+        if (enabled)
+            setVisible(true)
+    }, [enabled])
+
+    const hideModal = useCallback(() => {
+        setVisible(false)
+        setSensorEnabled(false)
+        setLoading(true)
+    }, [])
+
+    const handleSensorUnavailable = useCallback(() => {
+        sensorUnavailable.current = true
+        if (locationReady.current) {
+            hideModal()
+            errorHandler(103)
         }
+    }, [hideModal])
+
+    const handleArrowReady = useCallback(() => {
+        setLoading(false)
     }, [])
 
     useEffect(() => {
         let positionWatch
-        let headingWatch
-        const onLoad = async () => {
-            if (visible) {
-                const { status } = await getLocationPermission()
-                if (status == 200) {
-                    positionWatch = watchDistanceAndBearing({
-                        onUpdate: ({ distance, bearing, accuracy }) => {
-                            setlocation(state => ({ ...state, distance, bearing, accuracy }))
-                        },
-                        latitude: pointLatitude,
-                        longitude: pointLongitude
-                    },
-                        er => errorHandler(er))
-                    headingWatch = watchDeviceHeading(({ heading }) => {
-                        setlocation(state => ({ ...state, heading }))
-                    },
-                        () => {
-                            hideModal()
-                            errorHandler(103)
-                        })
-                }
-                else {
-                    setVisisble(false)
-                    setLoading(true)
-                    errorHandler(902)
-                }
-            }
-        }
-        onLoad()
-        return () => {
-            if (visible) {
-                if (headingWatch)
-                    headingWatch.response.remove()
-                if (positionWatch)
-                    positionWatch.response.remove()
-            }
-            setlocation(initLocation)
-            rotation.current = null
-            arrowRotation.current.setValue(0)
-        }
-    },
-        [visible])
+        let locationTimeout
+        let cancelled = false
 
+        const loadLocation = async () => {
+            if (!visible)
+                return
+
+            const { status } = await getLocationPermission()
+            if (cancelled)
+                return
+
+            if (status === 200) {
+                setSensorEnabled(true)
+                locationTimeout = setTimeout(() => {
+                    if (!cancelled && !locationReady.current) {
+                        hideModal()
+                        errorHandler(800)
+                    }
+                }, LOCATION_TIMEOUT)
+                positionWatch = watchDistanceAndBearing({
+                    onUpdate: ({ distance, bearing, accuracy }) => {
+                        if (cancelled)
+                            return
+
+                        const smoothedBearing = smoothBearing(filteredBearing.current, bearing, distance, accuracy)
+                        filteredBearing.current = smoothedBearing
+                        setNearby(current => updateNearbyState(current, distance, accuracy))
+
+                        if (!locationReady.current) {
+                            locationReady.current = true
+                            clearTimeout(locationTimeout)
+                            if (sensorUnavailable.current) {
+                                hideModal()
+                                errorHandler(103)
+                                return
+                            }
+                        }
+
+                        setLocation(state => ({ ...state, distance, bearing: smoothedBearing, accuracy }))
+                    },
+                    latitude: pointLatitude,
+                    longitude: pointLongitude,
+                    watchOptions: {
+                        maximumAge: 1000,
+                        fastestInterval: 500,
+                        interval: 1000
+                    }
+                }, er => errorHandler(er))
+            }
+            else {
+                hideModal()
+                errorHandler(902)
+            }
+        }
+
+        loadLocation()
+
+        return () => {
+            cancelled = true
+            setSensorEnabled(false)
+            clearTimeout(locationTimeout)
+            if (positionWatch?.response?.remove)
+                positionWatch.response.remove()
+            setLocation(initLocation)
+            filteredBearing.current = null
+            setNearby(false)
+            locationReady.current = false
+            sensorUnavailable.current = false
+        }
+    }, [hideModal, pointLatitude, pointLongitude, visible])
 
     useEffect(() => {
-        if (location.heading !== null && location.bearing !== null) {
-            const diff = calculateResultHeading(location.heading, location.bearing, location.declination) //result heading of the user device in respect to remote point in deg (0 - 360) 
-            const angle = calculateRotationAngle(rotation.current, diff) // arrow rotation angle. takes prev value and result heading to determine rotation (-infinity - +infinity)
-            const firstReading = rotation.current === null
-            rotation.current = angle
-            if (firstReading)
-                arrowRotation.current.setValue(angle)
-            else
-                Animated.timing(arrowRotation.current, {
-                    toValue: angle,
-                    duration: 250,
-                    useNativeDriver: true
-                }).start()
-            if (loading)
-                setLoading(false)
-        }
-    }, [location, arrowRotation, rotation])
-
-    const showModal = useCallback(() => {
-        if (enabled)
-            setVisisble(true)
-    }, [enabled])
-
-    const hideModal = useCallback(() => {
-        setVisisble(false)
-        setLoading(true)
-    }, [])
+        if (!nearby)
+            setLoading(true)
+    }, [nearby])
 
     return {
         name,
@@ -117,10 +134,13 @@ const useNavigationWidget = () => {
         showModal,
         visible,
         location,
-        arrowRotation,
         hideModal,
         direction,
-        loading
+        loading,
+        nearby,
+        sensorEnabled,
+        handleSensorUnavailable,
+        handleArrowReady
     }
 }
 

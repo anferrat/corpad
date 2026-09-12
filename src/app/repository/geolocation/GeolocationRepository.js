@@ -28,7 +28,7 @@ export class GeolocationRepository {
         }
     }
 
-    watch(callback) {
+    watch(callback, watchOptions = {}) {
         const watchId = Geolocation.watchPosition(({ coords: { latitude, longitude, accuracy } }) => {
             callback({ latitude, longitude, accuracy })
         },
@@ -42,6 +42,7 @@ export class GeolocationRepository {
                 fastestInterval: 100,
                 interval: 1000,
                 timeout: 10000,
+                ...watchOptions
             })
         return () => {
             Geolocation.clearWatch(watchId)
