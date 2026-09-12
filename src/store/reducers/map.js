@@ -1,10 +1,11 @@
-import { LOAD_MARKERS, REFRESH_MARKERS, DELETE_MARKER, UPDATE_MARKER, SET_NEW_ITEM_MARKER, TOGGLE_SATELLITE_MODE, ACTIVATE_MARKER, RESET_ACTIVE_MARKERS, SET_MAP_READY, SET_ACTIVE_MAP_LAYER_MARKER, RESET_ACTIVE_MAP_LAYER_MARKER, APPLY_MAP_FILTER, RESET_MAP_FILTERS, RESET_MAP, SET_ACTIVE_CALCULATOR_MARKER, RESET_ACTIVE_CALCULATOR_MARKER } from "../actions/map"
+import { LOAD_MARKERS, REFRESH_MARKERS, DELETE_MARKER, UPDATE_MARKER, SET_NEW_ITEM_MARKER, TOGGLE_SATELLITE_MODE, ACTIVATE_MARKER, RESET_ACTIVE_MARKERS, SET_MAP_READY, REQUEST_SHOW_MARKER_ON_MAP, CLEAR_PENDING_MAP_MARKER, SET_ACTIVE_MAP_LAYER_MARKER, RESET_ACTIVE_MAP_LAYER_MARKER, APPLY_MAP_FILTER, RESET_MAP_FILTERS, RESET_MAP, SET_ACTIVE_CALCULATOR_MARKER, RESET_ACTIVE_CALCULATOR_MARKER } from "../actions/map"
 
 const initialState = {
     //FYI markers with lat === null or lon === null will still exist in this list. make sure, to filter them out when accessing markers
     markers: [],  //contains markers of items in current survey, access by id and itemType. uid as key
     loading: true, //indicates that map is loading markers (markers load once when survey loads for the first time)
     mapReady: false, //onMapReady status from rn-maps
+    pendingMarker: null, //marker requested before the map is ready
     satelliteMode: false, // is satellite view on/off
     isFirstLoad: true, //flag determines if markers were loaded once before, or its a first time
     filters: {
@@ -149,6 +150,19 @@ const map = (state = initialState, action) => {
             return {
                 ...state,
                 mapReady: true
+            }
+        case REQUEST_SHOW_MARKER_ON_MAP:
+            return {
+                ...state,
+                pendingMarker: {
+                    itemId: action.itemId,
+                    itemType: action.itemType,
+                }
+            }
+        case CLEAR_PENDING_MAP_MARKER:
+            return {
+                ...state,
+                pendingMarker: null
             }
         case SET_ACTIVE_MAP_LAYER_MARKER:
             return {

@@ -1,10 +1,10 @@
-import { useCallback, useRef, useEffect } from 'react'
+import { useCallback, useRef, useEffect, useState } from 'react'
 import { EventRegister } from 'react-native-event-listeners'
 import { useSelector, useDispatch } from 'react-redux'
 import { getMarker, getMarkerList } from '../../../app/controllers/survey/items/MarkerController'
 import { getInitialMapRegion, shareLocationWithExtarnalApp } from '../../../app/controllers/survey/other/GeolocationController'
 import { errorHandler } from '../../../helpers/error_handler'
-import { activateMarker, deleteMarker, loadMarkers, resetMap, resetActiveMarkers, setMapReady, setNewItemMarker, toggleSatellite, updateMarker } from '../../../store/actions/map'
+import { activateMarker, clearPendingMapMarker, deleteMarker, loadMarkers, resetMap, resetActiveMarkers, setMapReady, setNewItemMarker, toggleSatellite, updateMarker } from '../../../store/actions/map'
 import { updateMarkerCoordinates } from '../../../app/controllers/survey/items/MarkerController'
 import { hapticMedium, hapticMap } from '../../../native_libs/haptics'
 import { useIsFocused } from '@react-navigation/native'
@@ -15,7 +15,8 @@ const useMarkers = ({ navigateToEdit, ref }) => {
     const map = useSelector(state => state.map)
     const isFocused = useIsFocused()
     const dispatch = useDispatch()
-    const { loading, activeMarker, markers, newItemMarker, satelliteMode, activeMapLayerMarker, isFirstLoad, filters, activeCalculatorMarker } = map
+    const { loading, activeMarker, markers, newItemMarker, satelliteMode, activeMapLayerMarker, isFirstLoad, filters, activeCalculatorMarker, mapReady, pendingMarker } = map
+    const [initialCameraState, setInitialCameraState] = useState('idle')
 
     const currentRegion = useRef({
         latitudeDelta: 0.0135,
@@ -27,6 +28,9 @@ const useMarkers = ({ navigateToEdit, ref }) => {
         latitude: 0,
         longitude: 0,
     })
+    const pendingCameraTimeoutRef = useRef(null)
+    const pendingCameraRef = useRef(false)
+    const mountedRef = useRef(true)
     const activeMarkerRef = useRef({
         itemType: null,
         itemId: null
@@ -38,22 +42,34 @@ const useMarkers = ({ navigateToEdit, ref }) => {
             dispatch(loadMarkers(response))
             if (isFirstLoad) {
                 //onLoad animate to initial region. if active marker exist on load, it will animate to active marker instead
+                if (pendingMarker)
+                    return
+
                 if (activeMarkerRef.current.itemType === null) {
+                    setInitialCameraState('preparing')
                     const regionData = await getInitialMapRegion({ markers: response })
-                    ref.current.animateToRegion(regionData.response)
+                    if (ref.current?.animateToRegion) {
+                        setInitialCameraState('animating')
+                        ref.current.animateToRegion(regionData.response)
+                    }
+                    else
+                        setInitialCameraState('idle')
                 }
                 else
                     activateMarkerFromSource(activeMarkerRef.current)
             }
         }
-    }, [dispatch, isFirstLoad, filters])
+    }, [dispatch, filters, isFirstLoad, pendingMarker])
 
     const activateMarkerFromSource = useCallback(async ({ itemId, itemType }) => {
         const { status, response } = await getMarker({ itemType, itemId })
         if (status === 200)
-            if (response.latitide !== null && response.longitude !== null && response.name !== null)
+            if (response.latitude !== null && response.longitude !== null && response.name !== null) {
                 //check null for name as well. newly created items may be
                 dispatch(activateMarker(response))
+                return response
+            }
+        return null
     }, [dispatch])
 
     useEffect(() => {
@@ -84,31 +100,15 @@ const useMarkers = ({ navigateToEdit, ref }) => {
                 ref.current.animateToRegion(mapRegion, 1000)
         })
 
-        const onDisplayHandler = EventRegister.addEventListener('selectOnMap', ({ itemId, itemType }) => {
-            if (!loading) {
-                if (activeMarkerRef.current.itemId !== itemId && activeMarkerRef.current.itemType !== itemType)
-                    activateMarkerFromSource({ itemId, itemType })
-            }
-            else {
-                activeMarkerRef.current.itemId = itemId
-                activeMarkerRef.current.itemType = itemType
-            }
-        })
-
         return () => {
             EventRegister.removeEventListener(onUpdateHandler)
             EventRegister.removeEventListener(onDeleteHandler)
-            EventRegister.removeEventListener(onDisplayHandler)
             EventRegister.removeEventListener(onAnimateToRegion)
         }
     }, [loading, activeMarkerRef, dispatch])
 
-    useEffect(() => () => {
-        dispatch(resetMap())
-    }, [])
-
     useEffect(() => {
-        if (!loading && isFocused && activeMarkerRef.current.itemId !== null && activeMarkerRef.current.itemType !== null) {
+        if (!loading && isFocused && !pendingCameraRef.current && activeMarkerRef.current.itemId !== null && activeMarkerRef.current.itemType !== null) {
             activateMarkerFromSource(activeMarkerRef.current)
             activeMarkerRef.current.itemType = null
             activeMarkerRef.current.itemId = null
@@ -116,9 +116,9 @@ const useMarkers = ({ navigateToEdit, ref }) => {
     }, [isFocused, loading, activeMarkerRef])
 
     useEffect(() => {
-        if (activeMarker.latitude && activeMarker.longitude)
+        if (mapReady && isFocused && initialCameraState === 'idle' && !pendingCameraRef.current && activeMarker.latitude !== null && activeMarker.longitude !== null)
             animateToCoordinates(activeMarker.latitude, activeMarker.longitude)
-    }, [activeMarker.latitude, activeMarker.longitude])
+    }, [activeMarker.latitude, activeMarker.longitude, animateToCoordinates, initialCameraState, isFocused, mapReady])
 
     const zoomToCoordinates = useCallback((latitude, longitude) => {
         const LATITUDE_OFFSET = 0.00007 //offset due to info view overlay
@@ -141,13 +141,49 @@ const useMarkers = ({ navigateToEdit, ref }) => {
         }, 300)
     }, [currentRegion, ref])
 
+    useEffect(() => {
+        if (!pendingMarker || loading || !isFocused || !mapReady || initialCameraState !== 'idle')
+            return
+
+        pendingCameraRef.current = true
+        dispatch(clearPendingMapMarker())
+        activateMarkerFromSource(pendingMarker).then(marker => {
+            if (!mountedRef.current)
+                return
+
+            if (!marker) {
+                pendingCameraRef.current = false
+                return
+            }
+
+            if (pendingCameraTimeoutRef.current !== null)
+                clearTimeout(pendingCameraTimeoutRef.current)
+
+            pendingCameraTimeoutRef.current = setTimeout(() => {
+                pendingCameraTimeoutRef.current = null
+                pendingCameraRef.current = false
+                if (isFocused && mapReady)
+                    zoomToCoordinates(marker.latitude, marker.longitude)
+            }, 300)
+        })
+    }, [activateMarkerFromSource, dispatch, initialCameraState, isFocused, loading, mapReady, pendingMarker, zoomToCoordinates])
+
+    useEffect(() => () => {
+        mountedRef.current = false
+        if (pendingCameraTimeoutRef.current !== null)
+            clearTimeout(pendingCameraTimeoutRef.current)
+        dispatch(resetMap())
+    }, [])
+
 
     const onRegionChange = useCallback(({ latitude, longitude, latitudeDelta, longitudeDelta }) => {
         currentRegion.current.latitude = latitude
         currentRegion.current.longitude = longitude
         currentRegion.current.latitudeDelta = latitudeDelta
         currentRegion.current.longitudeDelta = longitudeDelta
-    }, [currentRegion])
+        if (initialCameraState === 'animating')
+            setInitialCameraState('idle')
+    }, [currentRegion, initialCameraState])
 
     const onUserLocationChange = useCallback(({ nativeEvent }) => {
         if (nativeEvent && nativeEvent.coordinate && nativeEvent.coordinate.latitude && nativeEvent.coordinate.longitude) {

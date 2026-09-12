@@ -9,6 +9,7 @@ import { createSubitem as createSubitemRequest } from "../../../app/controllers/
 import { hapticDelete } from "../../../native_libs/haptics"
 import fieldValidation from '../../../helpers/validation'
 import { ItemTypes } from "../../../constants/global"
+import { requestShowMarkerOnMap } from "../../../store/actions/map"
 
 const warningCodes = {
     TEST_POINT: 55,
@@ -116,10 +117,10 @@ const useItemData = ({ itemId, itemType, navigateToMap, navigateToEditSubitem })
 
     const displayOnMap = useCallback(() => {
         if (item.latitude !== null && item.longitude !== null) {
-            EventRegister.emit('selectOnMap', { itemId, itemType })
+            dispatch(requestShowMarkerOnMap(itemId, itemType))
             navigateToMap()
         }
-    }, [item.latitude, item.longitude, navigateToMap])
+    }, [dispatch, item.latitude, item.longitude, itemId, itemType, navigateToMap])
 
     const createSubitem = useCallback(async (type) => {
         const { response, status } = await createSubitemRequest({ subitemType: type, itemId }, er => errorHandler(er))

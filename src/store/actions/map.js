@@ -8,6 +8,8 @@ export const TOGGLE_SATELLITE_MODE = 'TOGGLE_SATELLITE_MODE'
 export const ACTIVATE_MARKER = 'ACTIVATE_MARKER'
 export const RESET_ACTIVE_MARKERS = 'RESET_ACTIVE_MARKERS'
 export const SET_MAP_READY = 'SET_MAP_READY'
+export const REQUEST_SHOW_MARKER_ON_MAP = 'REQUEST_SHOW_MARKER_ON_MAP'
+export const CLEAR_PENDING_MAP_MARKER = 'CLEAR_PENDING_MAP_MARKER'
 export const SET_ACTIVE_MAP_LAYER_MARKER = 'SET_ACTIVE_MAP_LAYER_MARKER'
 export const RESET_ACTIVE_MAP_LAYER_MARKER = 'RESET_ACTIVE_MAP_LAYER_MARKER'
 export const APPLY_MAP_FILTER = 'APPLY_MAP_FILTER'
@@ -58,6 +60,14 @@ export const resetActiveMarkers = () => {
 
 export const setMapReady = () => {
     return { type: SET_MAP_READY }
+}
+
+export const requestShowMarkerOnMap = (itemId, itemType) => {
+    return { type: REQUEST_SHOW_MARKER_ON_MAP, itemId, itemType }
+}
+
+export const clearPendingMapMarker = () => {
+    return { type: CLEAR_PENDING_MAP_MARKER }
 }
 
 export const applyMapFilter = (filterType, filter) => {
