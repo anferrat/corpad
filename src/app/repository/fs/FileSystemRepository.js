@@ -50,7 +50,7 @@ export class FileSystemRepository {
 
     async copyFile(filePath, destinationPath) {
         try {
-            await RNFS.copyFile(filePath, destinationPath)
+            await RNFS.copyFile(filePath, destinationPath, {})
         }
         catch (er) {
             throw new Error(errors.FILESYSTEM, 'Error while copying file', er, 404)
@@ -84,7 +84,7 @@ export class FileSystemRepository {
             if (!(await RNFS.exists(directory + '/' + fileName)))
                 return fileName
             else {
-                for (i = 1; i <= MAX_FILE_INDEX; i++) {
+                for (var i = 1; i <= MAX_FILE_INDEX; i++) {
                     if (!(await RNFS.exists(`${directory}/(${i})${fileName}`)))
                         return `(${i})${fileName}`
                 }
@@ -199,6 +199,8 @@ export class FileSystemRepository {
     async getLocation(location, uid = null) {
         //returns path of FileSystemLocation constants. creates directory if not exists
         const path = this._getLocationPath(location, uid)
+        if (location === FileSystemLocations.CACHE)
+            return await this.createDirectory(path)
         if (location === FileSystemLocations.ASSETS || location === FileSystemLocations.CURRENT_ASSETS)
             await this.createDirectory(this.assetsFolder)
         if (location === FileSystemLocations.TEMP_SURVEY || location === FileSystemLocations.TEMP_ASSETS)
@@ -273,7 +275,7 @@ export class FileSystemRepository {
             return await fileType(path)
         }
         catch {
-            throw new Error(errors.FILESYSTEM, 'Unable to get file type', er)
+            throw new Error(errors.FILESYSTEM, 'Unable to get file type')
         }
     }
 

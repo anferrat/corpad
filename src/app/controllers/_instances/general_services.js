@@ -25,7 +25,7 @@ export const permissions = new Permissions()
 
 export const commaSeparatedFileParser = new CommaSeparatedFileParser()
 
-export const shareService = new Share()
+export const shareService = new Share(fileSystemRepo)
 
 export const openInExternalAppService = new OpenInExternalApp()
 
