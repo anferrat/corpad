@@ -146,7 +146,7 @@ const settings = (state = initialState, action) => {
                 lastImport: initialState.lastImport,
                 currentSurvey: {
                     ...initialState.currentSurvey,
-                    isCloudSurvey: state.currentSurvey.isCloudSurvey
+                    isCloudSurvey: action.isCloudSurvey ?? state.currentSurvey.isCloudSurvey
                 },
                 loader: initialState.loader
             }

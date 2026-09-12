@@ -37,7 +37,7 @@ export class SaveCurrentSurvey {
 
         return {
             fileName: saved.fileName,
-            isCloud: isCloud,
+            isCloud: !savedAsLocal && isCloud,
             syncTime: syncTime,
             cloudId: saved.cloudId
         }

@@ -59,8 +59,8 @@ export const setSurveySaving = (savingInProgress) => {
     return { type: SET_SURVEY_SAVING_STATUS, savingInProgress: savingInProgress }
 }
 
-export const resetCurrentSurveySettings = () => {
-    return { type: RESET_CURRENT_SURVEY_SETTINGS }
+export const resetCurrentSurveySettings = (isCloudSurvey) => {
+    return { type: RESET_CURRENT_SURVEY_SETTINGS, isCloudSurvey }
 }
 
 export const updateSurveyName = (name) => {

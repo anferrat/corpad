@@ -51,9 +51,9 @@ const useSurveyManager = ({ hideSheet }) => {
             hapticMedium()
             hideSheet()
             dispatch(updateLoader('Saving survey', fileName))
-            const { status } = await saveAndResetSurvey({ onUpload }, surveyManagerErrorHandler)
+            const { response, status } = await saveAndResetSurvey({ onUpload }, surveyManagerErrorHandler)
             if (status === 200) {
-                dispatch(resetCurrentSurveySettings())
+                dispatch(resetCurrentSurveySettings(response.isCloud))
             }
             dispatch(hideLoader())
         }
