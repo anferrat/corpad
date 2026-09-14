@@ -1,17 +1,17 @@
 {
   "images" : [
     {
-      "filename" : "mn_basic.png",
+      "filename" : "mn_default.png",
       "idiom" : "universal",
       "scale" : "1x"
     },
     {
-      "filename" : "mn_basic 1.png",
+      "filename" : "mn_default 1.png",
       "idiom" : "universal",
       "scale" : "2x"
     },
     {
-      "filename" : "mn_basic 2.png",
+      "filename" : "mn_default 2.png",
       "idiom" : "universal",
       "scale" : "3x"
     }
