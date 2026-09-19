@@ -2175,13 +2175,23 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@react-native-community/geolocation@npm:^3.4.0":
+"@react-native-community/geolocation@npm:3.4.0":
   version: 3.4.0
   resolution: "@react-native-community/geolocation@npm:3.4.0"
   peerDependencies:
     react: "*"
     react-native: "*"
   checksum: 4a1a334de5b8345ee5ca9af987718a4cdd0b401b6d024268330c98736eccd0bebf45fd1d4cb396558f429a4670e5b29da0b5b7ebd4e51ca12972d4b08b55d4bc
+  languageName: node
+  linkType: hard
+
+"@react-native-community/geolocation@patch:@react-native-community/geolocation@npm%3A3.4.0#./.yarn/patches/@react-native-community-geolocation-npm-3.4.0-4692b5dc27.patch::locator=corpad%40workspace%3A.":
+  version: 3.4.0
+  resolution: "@react-native-community/geolocation@patch:@react-native-community/geolocation@npm%3A3.4.0#./.yarn/patches/@react-native-community-geolocation-npm-3.4.0-4692b5dc27.patch::version=3.4.0&hash=082d6b&locator=corpad%40workspace%3A."
+  peerDependencies:
+    react: "*"
+    react-native: "*"
+  checksum: de1373a05bc2feb983e50584560e62fbd96c38afaec707cf7ce4ff39e6f4aee0a5f0cf96c7618aa9b6ea99e560b0492436755b901f42502d5a7b5779e4b04589
   languageName: node
   linkType: hard
 

@@ -100,6 +100,7 @@
   "packageManager": "yarn@3.6.4",
   "resolutions": {
     "react-native-indicators@^0.17.0": "patch:react-native-indicators@npm%3A0.17.0#./.yarn/patches/react-native-indicators-npm-0.17.0-f53ffd7772.patch",
-    "@ui-kitten/components@^5.3.0": "patch:@ui-kitten/components@npm%3A5.3.1#./.yarn/patches/@ui-kitten-components-npm-5.3.1-0c45fa17a3.patch"
+    "@ui-kitten/components@^5.3.0": "patch:@ui-kitten/components@npm%3A5.3.1#./.yarn/patches/@ui-kitten-components-npm-5.3.1-0c45fa17a3.patch",
+    "@react-native-community/geolocation@^3.4.0": "patch:@react-native-community/geolocation@npm%3A3.4.0#./.yarn/patches/@react-native-community-geolocation-npm-3.4.0-4692b5dc27.patch"
   }
 }

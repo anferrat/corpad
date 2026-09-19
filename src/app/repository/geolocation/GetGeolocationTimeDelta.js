@@ -1,24 +1,20 @@
 import Geolocation from '@react-native-community/geolocation'
 import { Error, errors } from '../../utils/Error'
-import { Platform } from 'react-native'
 
 export class GetGeolocationTimeDelta {
-    constructor() {
-        this.error_correction = Platform.select({ android: 20, default: 0 })
-    }
-
     async execute(timeout = 10000) {
+        let watch
         try {
             const deltas = []
             let lastDeviceTimestamp
-            let watch
             await Promise.race([
                 new Promise((resolve, reject) => {
-                    watch = Geolocation.watchPosition(({ timestamp }) => {
-                        const deviceTimestamp = Date.now()
-                        const delta = timestamp - deviceTimestamp
-                        deltas.push(delta)
-                        lastDeviceTimestamp = deviceTimestamp
+                    watch = Geolocation.watchPosition(position => {
+                        const sample = this._getTimeSample(position)
+                        if (!sample)
+                            return
+                        deltas.push(sample.delta)
+                        lastDeviceTimestamp = sample.deviceTimestamp
                         if (deltas.length >= 7)
                             resolve()
                     },
@@ -39,7 +35,7 @@ export class GetGeolocationTimeDelta {
             if (deltas.length < 3 || !lastDeviceTimestamp)
                 throw 'Timeout error'
             else {
-                const delta = this._filterAndAverage(deltas) - this.error_correction
+                const delta = this._filterAndAverage(deltas)
                 return {
                     delta,
                     deviceTimestamp: lastDeviceTimestamp
@@ -50,6 +46,29 @@ export class GetGeolocationTimeDelta {
             if (watch)
                 Geolocation.clearWatch(watch)
             throw new Error(errors.LOCATION, 'Unable to get time delta', er)
+        }
+    }
+
+    _getTimeSample({ timestamp, locationElapsedRealtimeMillis, nativeElapsedRealtimeMillis, nativeTimestamp }) {
+        if (!Number.isFinite(timestamp))
+            return null
+
+        if (Number.isFinite(locationElapsedRealtimeMillis) &&
+            Number.isFinite(nativeElapsedRealtimeMillis) &&
+            Number.isFinite(nativeTimestamp)) {
+            const locationAge = nativeElapsedRealtimeMillis - locationElapsedRealtimeMillis
+            if (locationAge < 0)
+                return null
+            return {
+                delta: timestamp + locationAge - nativeTimestamp,
+                deviceTimestamp: nativeTimestamp
+            }
+        }
+
+        const deviceTimestamp = Date.now()
+        return {
+            delta: timestamp - deviceTimestamp,
+            deviceTimestamp
         }
     }
 

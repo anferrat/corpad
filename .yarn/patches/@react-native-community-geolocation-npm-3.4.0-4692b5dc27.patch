@@ -1,0 +1,39 @@
+diff --git a/android/src/main/java/com/reactnativecommunity/geolocation/BaseLocationManager.java b/android/src/main/java/com/reactnativecommunity/geolocation/BaseLocationManager.java
+index 02d2e8541ee43bc6508a7ba41ccd5b5fc5c247ef..8e891b1380ccd35016b4ddc21820ff6c4a8717cd 100644
+--- a/android/src/main/java/com/reactnativecommunity/geolocation/BaseLocationManager.java
++++ b/android/src/main/java/com/reactnativecommunity/geolocation/BaseLocationManager.java
+@@ -3,6 +3,7 @@ package com.reactnativecommunity.geolocation;
+ import android.location.Location;
+ import android.os.Build;
+ import android.os.Bundle;
++import android.os.SystemClock;
+ 
+ import com.facebook.react.bridge.Arguments;
+ import com.facebook.react.bridge.Callback;
+@@ -30,6 +31,12 @@ public abstract class BaseLocationManager {
+         coords.putDouble("speed", location.getSpeed());
+         map.putMap("coords", coords);
+         map.putDouble("timestamp", location.getTime());
++        long locationElapsedRealtimeNanos = location.getElapsedRealtimeNanos();
++        if (locationElapsedRealtimeNanos > 0) {
++            map.putDouble("locationElapsedRealtimeMillis", locationElapsedRealtimeNanos / 1_000_000L);
++            map.putDouble("nativeElapsedRealtimeMillis", SystemClock.elapsedRealtime());
++            map.putDouble("nativeTimestamp", System.currentTimeMillis());
++        }
+ 
+         Bundle bundle = location.getExtras();
+         if (bundle != null) {
+diff --git a/js/NativeRNCGeolocation.ts b/js/NativeRNCGeolocation.ts
+index 8f6ab11b82a1f4e4058b39725c3fb9499855c084..6ee517688f5168974eceb7d46e84aafe806a0880 100644
+--- a/js/NativeRNCGeolocation.ts
++++ b/js/NativeRNCGeolocation.ts
+@@ -29,6 +29,9 @@ export type GeolocationResponse = {
+     speed: number | null;
+   };
+   timestamp: number;
++  locationElapsedRealtimeMillis?: number;
++  nativeElapsedRealtimeMillis?: number;
++  nativeTimestamp?: number;
+ };
+ 
+ export type GeolocationError = {
