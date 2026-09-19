@@ -1,23 +1,26 @@
-import { MultimeterTypes } from "../../../../../../constants/global"
-import { Error, errors } from "../../../../../utils/Error"
-import { MultimeterScanServiceUuids } from "../utils/MultimeterScanServiceUuids"
-
 export class CheckConnectedDevices {
-    constructor(bluetoothRepo, permissions) {
+    constructor(bluetoothRepo, permissions, settingRepo) {
         this.bluetoothRepo = bluetoothRepo
         this.permissions = permissions
-        this.list = new MultimeterScanServiceUuids().list
+        this.settingRepo = settingRepo
     }
 
     async execute() {
         await this.permissions.bluetooth()
-        const [info] = await this.bluetoothRepo.getConnectedDevices(this.list)
-        if (info)
-            return [{
-                peripheralId: info.id,
-                name: info.name,
-                type: MultimeterTypes.POKIT
-            }]
-        else return []
+        const { multimeter } = await this.settingRepo.get()
+        const { peripheralId, name, type } = multimeter
+
+        if (!peripheralId || !type)
+            return []
+
+        const isConnected = await this.bluetoothRepo.isDeviceConnected(peripheralId)
+        if (!isConnected)
+            return []
+
+        return [{
+            id: peripheralId,
+            name,
+            type
+        }]
     }
 }

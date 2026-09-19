@@ -57,7 +57,7 @@ class MultimeterController extends Controller {
 
         this.checkBleStateService = new CheckBleState(bluetoothRepo, permissions)
 
-        this.checkConnectedDeviceService = new CheckConnectedDevices(bluetoothRepo, permissions)
+        this.checkConnectedDeviceService = new CheckConnectedDevices(bluetoothRepo, permissions, settingRepo)
 
         this.updateMeasurementCharacteristicService = new UpdateMeasurementCharacteristic(multimeterFactory, settingRepo, permissions)
 

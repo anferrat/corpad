@@ -1,5 +1,4 @@
 import BleManager from 'react-native-ble-manager'
-import { bleManagerEmitter } from '../../config/bluetooth'
 import { Error, errors } from '../../utils/Error'
 import { Platform } from 'react-native'
 
@@ -13,18 +12,19 @@ export class BluetoothRepository {
     async init() {
         //Only call this once
         try {
-            return await BleManager.start({ shaowAlert: false })
+            return await BleManager.start({ showAlert: false })
         }
         catch (er) {
             throw new Error(errors.BLUETOOTH, 'Unable to initialize bluetooth module', er, 803)
         }
     }
 
-    async scan(serviceUUIDs, seconds, allowDuplicates, options) {
+    async scan(serviceUUIDs = [], seconds = 0, allowDuplicates = false, options = {}) {
         try {
-            return await BleManager.scan(serviceUUIDs, seconds, allowDuplicates, options)
+            return await BleManager.scan({ serviceUUIDs, seconds, allowDuplicates, ...options })
         }
         catch (er) {
+            console.log(er)
             throw new Error(errors.BLUETOOTH, 'Unable to scan for bluetooth devices', er, 817)
         }
     }
@@ -34,7 +34,7 @@ export class BluetoothRepository {
             return await BleManager.stopScan()
         }
         catch (er) {
-            throw new Error(errors.BLUETOOTH, 'Unable to stop scan for bluetooth devices', er, 817)
+            throw new Error(errors.BLUETOOTH, 'Unable to stop scan for bluetooth devices', er, 820)
         }
     }
 
@@ -155,7 +155,7 @@ export class BluetoothRepository {
 
     bluetoothStatusListener(callback) {
         try {
-            return bleManagerEmitter.addListener('BleManagerDidUpdateState', ({ state }) => {
+            return BleManager.onDidUpdateState(({ state }) => {
                 callback(state === 'on')
             })
         }
@@ -166,16 +166,16 @@ export class BluetoothRepository {
 
     bluetoothScanStoppedListener(callback) {
         try {
-            return bleManagerEmitter.addListener('BleManagerStopScan', callback)
+            return BleManager.onStopScan(callback)
         }
         catch (er) {
-            throw new Error(errors.BLUETOOTH, 'Unable to detect bluetoth state change', er, 814)
+            throw new Error(errors.BLUETOOTH, 'Unable to detect bluetooth scan status', er, 814)
         }
     }
 
     connectedDevicesListener(callback) {
         try {
-            return bleManagerEmitter.addListener('BleManagerConnectPeripheral', ({ peripheral }) => callback(peripheral))
+            return BleManager.onConnectPeripheral(({ peripheral }) => callback(peripheral))
         }
         catch (er) {
             throw new Error(errors.BLUETOOTH, 'Unable to listen for connected devices', er, 818)
@@ -184,7 +184,7 @@ export class BluetoothRepository {
 
     disconnectedDevicesListener(callback) {
         try {
-            return bleManagerEmitter.addListener('BleManagerDisconnectPeripheral', ({ peripheral }) => callback(peripheral))
+            return BleManager.onDisconnectPeripheral(({ peripheral }) => callback(peripheral))
         }
         catch (er) {
             throw new Error(errors.BLUETOOTH, 'Unable to listen for disconnected devices', er, 821)
@@ -193,7 +193,8 @@ export class BluetoothRepository {
 
     discoverPeripheralListener(callback) {
         try {
-            return bleManagerEmitter.addListener('BleManagerDiscoverPeripheral', ({ id, name, rssi, advertising: { serviceUUIDs, isConnectable } }) => {
+            return BleManager.onDiscoverPeripheral(({ id, name, rssi, advertising }) => {
+                const { serviceUUIDs, isConnectable } = advertising || {}
                 callback(id, name, rssi, serviceUUIDs, isConnectable)
             })
         }
@@ -204,7 +205,7 @@ export class BluetoothRepository {
 
     newCharacteristicValueListener(callback) {
         try {
-            return bleManagerEmitter.addListener("BleManagerDidUpdateValueForCharacteristic", (data) => {
+            return BleManager.onDidUpdateValueForCharacteristic((data) => {
                 const { value, peripheral, characteristic, service } = data
                 callback({ value, peripheral, service, characteristic })
             })
