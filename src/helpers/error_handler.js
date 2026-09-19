@@ -38,6 +38,7 @@ const warningCodes = {
     62: 'Are you sure you want to delete all scanned label records?',
     63: 'Are you sure you want to unpair this multimeter?',
     64: 'Are you sure that you want to delete all readings?',
+    65: 'You have unsaved changes. Are you sure you want to leave without saving?',
 }
 
 const errorCodes = {

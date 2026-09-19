@@ -8,6 +8,7 @@ import { EventRegister } from "react-native-event-listeners"
 import { createSubitem as createSubitemRequest } from "../../../../app/controllers/survey/subitems/SubitemController"
 import { updateItemPhotos } from "../../../../app/controllers/survey/other/MediaController"
 import { isProStatus } from "../../../../helpers/functions"
+import useUnsavedChanges from '../../../../hooks/useUnsavedChanges'
 
 const useItemData = ({ itemId, itemType, isNew, navigateToView, navigateToSubitem }) => {
 
@@ -19,6 +20,14 @@ const useItemData = ({ itemId, itemType, isNew, navigateToView, navigateToSubite
     const dispatch = useDispatch()
     const deleteOnExit = useRef(isNew)
     const componentMounted = useRef(true)
+    const deletionMatcher = useCallback(({ itemId: deletedItemId, itemType: deletedItemType }) => deletedItemId === itemId && deletedItemType === itemType, [itemId, itemType])
+    const { allowRemoval } = useUnsavedChanges({
+        data: item,
+        ready: !loading,
+        saving: item.saving,
+        deletionEvent: 'GLOBAL_ITEM_DELETED',
+        deletionMatcher,
+    })
 
 
     useEffect(() => {
@@ -48,6 +57,7 @@ const useItemData = ({ itemId, itemType, isNew, navigateToView, navigateToSubite
             )
             if (status === 200 && images.status === 200) {
                 deleteOnExit.current = false
+                allowRemoval()
                 navigateToView()
             }
             else {
@@ -70,7 +80,7 @@ const useItemData = ({ itemId, itemType, isNew, navigateToView, navigateToSubite
                 dispatch(resetState())
             }
         }
-    }, [dispatch, navigateToView, deleteOnExit])
+    }, [dispatch, navigateToView, allowRemoval])
 
     const update = useCallback((value, property) => dispatch(updateEditItemProperty(value, property)), [dispatch])
 
