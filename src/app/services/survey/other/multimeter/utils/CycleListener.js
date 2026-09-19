@@ -29,7 +29,9 @@ export class CycleListener {
             case MultimeterSyncModes.CYCLED:
                 return this.shiftDetectionCaptureService.execute(readings, onTime, offTime)
             case MultimeterSyncModes.GPS:
-                const timeDelta = this.timeService.getDelta() ?? 0
+                const timeDelta = this.timeService.getDelta()
+                if (timeDelta === undefined)
+                    return [[MultimeterCycles.ON, null], [MultimeterCycles.OFF, null]]
                 const timestamps = readings.map((_, index) => {
                     //device timestamp in UTC adjusted with timeDelta. First reading in set was taking in offset * length ms. Delay added to compenstae for border effects
                     return Math.round(deviceTimestamp + timeDelta - (readings.length - index) * offset)

@@ -52,6 +52,8 @@ export class ReadingSetListener {
     }
 
     _getAverageDelta(readings, indexes, rate) {
+        if (indexes.length === 0)
+            return null
         const sum = indexes.reduce((s, i) => {
             const delta = readings[i].timestamp - this.dataConverter.getDvmTimestamp(readings[i].value) - this.ERROR * this._getOffset(rate)
             return s + delta
@@ -77,6 +79,8 @@ export class ReadingSetListener {
                         break
                 }
                 const delta = this._getAverageDelta(readings, reliableIndexes, rate)
+                if (delta === null || !Number.isFinite(delta))
+                    continue
                 const readingSet = this._generateSet(readings, delta, mode, rate, range)
                 callback(MultimeterListenerEvents.READING_SET, readingSet, range)
             }

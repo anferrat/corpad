@@ -82,9 +82,9 @@ export class PokitProAddReadingListener {
                         else {
                             const lowPassFileterd = this._lowPassFilter(newSet.readings, samplingRate)
                             const avgReadings = this._averageReadings(lowPassFileterd, samplingRate, rate)
-                            const edgeNumber = this._getEdgeNumber(avgReadings, rate, cycleTime)
+                            const edgeNumber = Math.max(0, this._getEdgeNumber(avgReadings, rate, cycleTime))
                             avgReadings.splice(0, edgeNumber)
-                            avgReadings.splice(-avgReadings.length, edgeNumber)
+                            avgReadings.splice(-edgeNumber, edgeNumber)
                             const adjustedTimestamp = Math.round(newSet.deviceTimestamp - edgeNumber * newSet.offset)
                             newSet.setReadings(avgReadings)
                             newSet.setTime(adjustedTimestamp)

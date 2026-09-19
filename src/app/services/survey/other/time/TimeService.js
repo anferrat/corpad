@@ -16,18 +16,24 @@ Targeting accuracy 50 ms. Actual accuracy depends...
         this.BUSY_FLAG = false //time sync is in progress flag
         this.DELTA = null //time delta(UTC - Date.now())
         this.LAST_SYNC_DEVICE_TIMESTAMP = null //Date.now() at last sync
+        this.LAST_SYNC_MONOTONIC_TIMESTAMP = null //monotonic timestamp at last sync
         this.LAST_SYNC_SOURCE = null //NTP or GPS
         this.TIME_FIX_LIFE_LENGTH = 300000 //5 min
         this.TIME_FIX_CHECK_INTERVAL = 60000 //1 min
     }
 
+    _getMonotonicTimestamp() {
+        return typeof global.performance?.now === 'function' ? global.performance.now() : Date.now()
+    }
+
     async _requestNTPSync() {
         try {
-            const isInternetOn = this.networkRepo.checkConnection()
+            const isInternetOn = await this.networkRepo.checkConnection()
             if (isInternetOn) {
                 const { delta, deviceTimestamp } = await this.ntpRepo.getDelta()
                 this.DELTA = delta
                 this.LAST_SYNC_DEVICE_TIMESTAMP = deviceTimestamp
+                this.LAST_SYNC_MONOTONIC_TIMESTAMP = this._getMonotonicTimestamp()
                 this.LAST_SYNC_SOURCE = TimeSyncSources.NTP
                 return true
             }
@@ -44,6 +50,7 @@ Targeting accuracy 50 ms. Actual accuracy depends...
             const { delta, deviceTimestamp } = await this.geolocationRepo.getDelta()
             this.DELTA = delta
             this.LAST_SYNC_DEVICE_TIMESTAMP = deviceTimestamp
+            this.LAST_SYNC_MONOTONIC_TIMESTAMP = this._getMonotonicTimestamp()
             this.LAST_SYNC_SOURCE = TimeSyncSources.GPS
             return true
         }
@@ -55,6 +62,7 @@ Targeting accuracy 50 ms. Actual accuracy depends...
     _resetDelta() {
         this.DELTA = null
         this.LAST_SYNC_DEVICE_TIMESTAMP = null
+        this.LAST_SYNC_MONOTONIC_TIMESTAMP = null
         this.LAST_SYNC_SOURCE = null
         this.BUSY_FLAG = false
     }
@@ -72,17 +80,18 @@ Targeting accuracy 50 ms. Actual accuracy depends...
     }
 
     _checkExistedSync() {
-        return this.LAST_SYNC_DEVICE_TIMESTAMP !== null && this.LAST_SYNC_DEVICE_TIMESTAMP + this.TIME_FIX_LIFE_LENGTH > Date.now()
+        return this.LAST_SYNC_MONOTONIC_TIMESTAMP !== null &&
+            this._getMonotonicTimestamp() - this.LAST_SYNC_MONOTONIC_TIMESTAMP < this.TIME_FIX_LIFE_LENGTH
     }
 
     addListener(callback, source) {
         let timeFixInterval
         let removeStateListener
 
-        const addTimeFixInterval = () => {
-            timeFixInterval = setInterval(async () => {
+        const addTimeFixInterval = (forceSync = false) => {
+            const checkTimeFix = async (shouldSync = false) => {
                 //Check if last delta was obtained recently
-                if (this._checkExistedSync())
+                if (!shouldSync && this._checkExistedSync())
                     callback({ isSynced: true })
                 else if (!this.BUSY_FLAG) {
                     //When busy we skip request. User is getting delta manually
@@ -90,7 +99,11 @@ Targeting accuracy 50 ms. Actual accuracy depends...
                     const isSynced = await this._requestSync(source)
                     callback({ isSynced, isSyncing: false })
                 }
-            }, this.TIME_FIX_CHECK_INTERVAL)
+            }
+
+            // Check immediately after foregrounding instead of waiting for the interval.
+            checkTimeFix(forceSync)
+            timeFixInterval = setInterval(() => checkTimeFix(), this.TIME_FIX_CHECK_INTERVAL)
 
             return () => timeFixInterval ? clearInterval(timeFixInterval) : null
         }
@@ -116,14 +129,15 @@ Targeting accuracy 50 ms. Actual accuracy depends...
     }
 
     getDelta() {
-        return this.DELTA !== null ? this.DELTA : undefined
+        return this._checkExistedSync() && this.DELTA !== null ? this.DELTA : undefined
     }
 
     getInfo() {
+        const isSynced = this._checkExistedSync()
         return {
-            delta: this.DELTA,
-            timestamp: this.LAST_SYNC_DEVICE_TIMESTAMP,
-            source: this.LAST_SYNC_SOURCE
+            delta: isSynced ? this.DELTA : null,
+            timestamp: isSynced ? this.LAST_SYNC_DEVICE_TIMESTAMP : null,
+            source: isSynced ? this.LAST_SYNC_SOURCE : null
         }
     }
 

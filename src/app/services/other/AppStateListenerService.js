@@ -18,11 +18,11 @@ export class AppStateListener {
      */
 
     appStateListenerWrapper(addListener) {
-        let removeListener = addListener()
+        let removeListener = addListener(false)
         const subsription = this.addStatusListener(nextAppState => {
             switch (nextAppState) {
                 case 'active':
-                    removeListener = addListener()
+                    removeListener = addListener(true)
                     return
                 case 'inactive':
                 case 'background':
