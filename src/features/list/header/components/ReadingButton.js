@@ -20,20 +20,14 @@ const ReadingButton = ({ onPress, itemType, reading }) => {
 export default ReadingButton
 
 const styles = StyleSheet.create({
-    buttonText: {
-        paddingHorizontal: 6,
-        fontWeight: 'bold',
-    },
-    icon: {
-        width: 18,
-        height: 18
-    },
     pressable: {
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
         flexDirection: 'row',
-        alignItems: 'center',
-        paddingHorizontal: 12
+        gap: 12,
+        paddingLeft: 12,
+        paddingHorizontal: 6,
+        wrapContent: 'wrap',
     }
 })

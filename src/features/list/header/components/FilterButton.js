@@ -15,8 +15,8 @@ const FilterButton = (props) => {
                 style={styles.buttonText}
                 status='primary'
                 category='s1'
-                numberOfLines={1}
-                ellipsizeMode={'head'}>
+                numberOfLines={2}
+                ellipsizeMode='tail'>
                 {props.title}
             </Text>
             <Icon
@@ -32,19 +32,22 @@ export default FilterButton
 
 const styles = StyleSheet.create({
     buttonText: {
-        paddingHorizontal: 6,
+        paddingHorizontal: 8,
         fontWeight: 'bold',
+        flexShrink: 1,
+        textAlign: 'center',
     },
     icon: {
         width: 18,
-        height: 18
+        height: 18,
+        marginLeft: 5,
     },
     pressable: {
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
         flexDirection: 'row',
-        alignItems: 'center',
-        paddingHorizontal: 12
+        paddingHorizontal: 4,
+        paddingVertical: 2,
     }
 })

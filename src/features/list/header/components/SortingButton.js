@@ -14,12 +14,16 @@ const SortingButton = ({ isIcon, value, arrowIcon, onPress }) => {
             android_ripple={androidRipple}>
             <Text style={styles.buttonText}
                 status='primary'
-                category='s1'>{translateList('sort')}</Text>
+                category='s1'
+                numberOfLines={2}
+                ellipsizeMode='tail'>{translateList('sort')}</Text>
             {!isIcon ?
                 <Text
                     style={styles.iconText}
                     status='primary'
-                    category='p2'>
+                    category='p2'
+                    numberOfLines={2}
+                    ellipsizeMode='tail'>
                     {value}
                 </Text> :
                 <Icon
@@ -42,10 +46,12 @@ const styles = StyleSheet.create({
     buttonText: {
         fontWeight: 'bold',
         paddingRight: 6,
+        textAlign: 'center',
     },
     iconText: {
         fontWeight: 'bold',
-        paddingRight: 3
+        paddingRight: 3,
+        flexShrink: 1,
     },
     icon: {
         width: 18,
@@ -61,7 +67,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         flexDirection: 'row',
-        alignItems: 'center',
-        paddingHorizontal: 12
+        paddingHorizontal: 6,
+        paddingVertical: 0,
     }
 })

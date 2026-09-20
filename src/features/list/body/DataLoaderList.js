@@ -10,9 +10,7 @@ import { getLocationAsync, fetchData, fetchIdList } from '../helpers/functions'
 import FlatList from './components/FlatList'
 import { primary } from '../../../styles/colors'
 import { EventRegister } from 'react-native-event-listeners'
-import ListHeader from '../header'
-
-const HEADER_HEIGHT = 40
+import ListHeader, { HEADER_HEIGHT } from '../header'
 
 const ItemList = ({ itemType, navigateToView }) => {
     const dispatch = useDispatch()
@@ -172,7 +170,7 @@ const ItemList = ({ itemType, navigateToView }) => {
                 ListEmptyComponent={renderEmptyListComponent}
                 data={t.itemList}
                 refreshControl={<RefreshControl
-                    progressViewOffset={40}
+                    progressViewOffset={HEADER_HEIGHT}
                     onRefresh={refreshHandler}
                     refreshing={t.settings.refreshing}
                     colors={[primary]} />}
@@ -206,7 +204,7 @@ const styles = StyleSheet.create({
     container: {
         flexGrow: 1,
         paddingBottom: 52,
-        marginTop: 40
+        marginTop: HEADER_HEIGHT
     },
     containerPipeline: {
         flexGrow: 1,

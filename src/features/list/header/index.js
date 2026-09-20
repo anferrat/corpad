@@ -7,6 +7,7 @@ import { basic300 } from '../../../styles/colors'
 import { useBottomSheetNavigation } from '../../../hooks/bottom_sheet/useBottomSheetNavigation'
 import { ItemTypes } from '../../../constants/global'
 
+export const HEADER_HEIGHT = 48
 
 const ListHeader = ({ itemType, translateY, opacity }) => {
     const { openRectifierReadingMenu, openTestPointFilterMenu, openTestPointReadingMenu, openTestPointSortingMenu, openRectifierSortingMenu } = useBottomSheetNavigation()
@@ -58,17 +59,17 @@ const styles = StyleSheet.create({
     },
     sorting: {
         justifyContent: 'center',
-        height: 40,
-        flex: 1.1,
+        height: HEADER_HEIGHT,
+        flex: 1.3,
     },
     filter: {
         justifyContent: 'center',
-        height: 40,
+        height: HEADER_HEIGHT,
         flex: 1.1,
     },
     reading: {
         justifyContent: 'center',
-        height: 40,
+        height: HEADER_HEIGHT,
         flex: 1.8,
     }
 })
