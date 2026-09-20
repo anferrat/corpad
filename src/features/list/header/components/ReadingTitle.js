@@ -23,13 +23,13 @@ const IconTitle = ({ titleKey, icon, pack }) => {
 }
 
 const ReadingTitle = ({ reading, itemType }) => {
-    return <View style={styles.wrapper}>{
+    return <>{
         ReadingParameters[itemType][reading].filter(({ unit }) => unit !== '').map(({ titleKey, icon, pack }) => <IconTitle
             key={titleKey}
             pack={pack}
             icon={icon}
             titleKey={titleKey}
-        />)}</View>
+        />)}</>
 }
 
 export default ReadingTitle
@@ -54,5 +54,5 @@ const styles = StyleSheet.create({
     title: {
         fontWeight: 'bold',
         textAlign: 'center',
-    }
+    },
 })
