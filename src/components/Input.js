@@ -120,7 +120,7 @@ const InputField = React.forwardRef((props, ref) => {
     const value = React.useMemo(() => toString(props.value), [props.value])
     const fieldProperty = fieldProperties[props.property]
     const label = fieldProperty?.label ?? props.label
-    const placeholder = fieldProperty?.placeholder ?? props.placeholder
+    const placeholder = props.placeholder ?? fieldProperty?.placeholder
     const accessory = React.useCallback(() => <>
         <Unit unit={unit} disabled={disabled} />
         <InfoHint displayHint={displayHint} icon={hintIcon} title={hintTitle} />

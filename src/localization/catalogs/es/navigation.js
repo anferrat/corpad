@@ -6,8 +6,8 @@ export default {
     cloud: 'Nube',
     more: 'Más',
     testPoints: 'Puntos de prueba',
-    pipelines: 'Tuberías',
+    pipelines: 'Líneas',
     add: 'Añadir',
     map: 'Mapa',
-    rectifiers: 'Rectificadores'
+    rectifiers: 'Rectif.'
 }

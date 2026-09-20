@@ -11,5 +11,5 @@ export default {
     searching: 'Buscando...',
     openIn: 'Abrir en',
     maps: 'Mapas',
-    filter: 'Filtrar'
+    filter: 'Filtros'
 }

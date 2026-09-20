@@ -3,6 +3,7 @@ import spanishCalculator from './calculator'
 import { errorMessages, errorTitles, warningMessages } from './errorMessages'
 
 export default {
+    ...englishMessages,
     common: {
         ...englishMessages.common,
         add: 'Añadir',
@@ -36,8 +37,8 @@ export default {
     },
     dates: {
         months: {
-            jan: 'ene', feb: 'feb', mar: 'mar', apr: 'abr', may: 'may', jun: 'jun',
-            jul: 'jul', aug: 'ago', sep: 'sep', oct: 'oct', nov: 'nov', dec: 'dic'
+            jan: 'Ene', feb: 'Feb', mar: 'Mar', apr: 'Abr', may: 'May', jun: 'Jun',
+            jul: 'Jul', aug: 'Ago', sep: 'Sep', oct: 'Oct', nov: 'Nov', dec: 'Dic'
         }
     },
     navigation: {
@@ -221,7 +222,6 @@ export default {
         terms: 'Términos y condiciones',
         alreadySubscribed: '¿Ya está suscrito? Intente'
     },
-    ...englishMessages,
     actions: {
         ...englishMessages.actions,
         ok: 'Aceptar',
@@ -300,7 +300,11 @@ export default {
         model: {label: 'Modelo', placeholder: 'Modelo del rectificador'},
         serialNumber: {label: 'Número de serie', placeholder: 'Número de serie del rectificador'},
         licenseNumber: {label: 'Licencia #', placeholder: 'p. ej. 35388-11'},
+        tapFine: {label: 'Ajuste fino', placeholder: '#'},
+        tapCoarse: {label: 'Ajuste grueso', placeholder: '#'},
         powerSource: {label: 'Fuente de alimentación', placeholder: 'Seleccionar fuente'},
+        maxVoltage: {label: 'Voltios CC', placeholder: null},
+        maxCurrent: {label: 'Amperios CC', placeholder: null},
         current: {label: 'Corriente', placeholder: null},
         area: {label: 'Área', placeholder: null},
         couponType: {label: 'Tipo de cupón', placeholder: 'Seleccionar tipo'},

@@ -186,7 +186,7 @@ export const SubitemTypeLabels = createLabelMap('SubitemTypeLabels', {
     [SubitemTypes.BOND]: 'Bond',
     [SubitemTypes.CIRCUIT]: 'Rectifier circuit',
     [SubitemTypes.COUPON]: 'Coupon',
-    [SubitemTypes.ISOLATION]: 'Isolation assambley',
+    [SubitemTypes.ISOLATION]: 'Isolation assembly',
     [SubitemTypes.PIPELINE]: 'Pipeline test lead',
     [SubitemTypes.REFERENCE_CELL]: 'Stationary reference lead',
     [SubitemTypes.RISER]: 'Pipeline riser',
@@ -318,7 +318,7 @@ export const ResistivityUnitDescriptionLabels = createLabelMap('ResistivityUnitD
 
 
 export const PotentialUnitDescriptionLabels = createLabelMap('PotentialUnitDescriptionLabels', {
-    [PotentialUnits.MILIVOLTS]: 'Milivolts',
+    [PotentialUnits.MILIVOLTS]: 'Millivolts',
     [PotentialUnits.NEGATIVE_MILIVOLTS]: 'Neg. milivolts',
     [PotentialUnits.NEGATIVE_VOLTS]: 'Neg. volts',
     [PotentialUnits.VOLTS]: 'Volts'
@@ -395,7 +395,7 @@ export const PowerSourceLabels = createLabelMap('PowerSourceLabels', {
 
 export const TapOptionLabels = createLabelMap('TapOptionLabels', {
     [TapOptions.AUTO]: 'Automatic',
-    [TapOptions.COARSE_FINE]: 'Corase-Fine',
+    [TapOptions.COARSE_FINE]: 'Coarse-Fine',
     [TapOptions.RESISTOR]: 'VA %'
 })
 
@@ -478,7 +478,7 @@ export const CalculatorTypeDescriptionLabels = createLabelMap('CalculatorTypeDes
     [CalculatorTypes.CURRENT_FOUR_WIRE]: 'Calculate in-line current using voltage drop between two points and calculated pipe resistance.',
     [CalculatorTypes.CURRENT_TWO_WIRE]: 'Calculate in-line current using pipe diameter and voltage drop between two points.',
     [CalculatorTypes.REFERENCE_CELL]: 'Convert voltage values with reference to different cell types.',
-    [CalculatorTypes.SHUNT]: 'Covert voltage drop across a shunt to current using shunt factor or ratio.',
+    [CalculatorTypes.SHUNT]: 'Convert voltage drop across a shunt to current using shunt factor or ratio.',
     [CalculatorTypes.WENNER]: 'Calculate resistivity of soil layers using Wenner method and Barnes analysis.'
 })
 
@@ -560,9 +560,9 @@ export const ExportFormatTypeLabeles = createLabelMap('ExportFormatTypeLabeles',
 })
 
 export const AnodeBedEnclosureTypeLabels = createLabelMap('AnodeBedEnclosureTypeLabels', {
-    [AnodeBedEnclosureTypes.BURIED]: 'Buired',
+    [AnodeBedEnclosureTypes.BURIED]: 'Buried',
     [AnodeBedEnclosureTypes.JUNCTION_BOX]: 'Junction box',
-    [AnodeBedEnclosureTypes.UNDEGROUND_BOX]: 'Undeground box'
+    [AnodeBedEnclosureTypes.UNDEGROUND_BOX]: 'Underground box'
 })
 
 export const AnodeBedMateriaTypelLabels = createLabelMap('AnodeBedMateriaTypelLabels', {
