@@ -5,6 +5,7 @@ import { createSurvey, getSurveyFileList } from '../../../app/controllers/survey
 import { hideLoader, setSessionModalVisible, setSurveySettings, updateLoader } from '../../../store/actions/settings'
 import { errorHandler } from '../../../helpers/error_handler'
 import { isProStatus } from '../../../helpers/functions'
+import { translateCreateSurvey } from '../../../localization'
 
 const useCreateSurvey = (withImport, navigateToImport) => {
     const [name, setName] = useState({
@@ -79,7 +80,7 @@ const useCreateSurvey = (withImport, navigateToImport) => {
                 if (componentMounted.current)
                     setCreating(true)
                 const name = value === null ? 'New survey' : value
-                dispatch(updateLoader('Creating survey', `Name: ${name}`))
+                dispatch(updateLoader(translateCreateSurvey('creatingSurvey'), translateCreateSurvey('nameLabel', {name})))
                 const path = surveyList[selectedSurveyIndex] ? surveyList[selectedSurveyIndex].path : null
                 await createSurvey(
                     { isBlank, isCloud, path, name, includeAssets: includeAssets && isPro },

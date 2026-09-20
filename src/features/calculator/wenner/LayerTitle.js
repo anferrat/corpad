@@ -3,13 +3,14 @@ import { View, StyleSheet } from 'react-native'
 import { Text, Icon } from '@ui-kitten/components'
 import { basic } from '../../../styles/colors'
 import SingleIconButton from '../../../components/IconButton'
+import { translateCalculator } from '../../../localization'
 
 const LayerTitle = (props) => {
     return (
         <View style={styles.title}>
             <View style={styles.titleRow}>
                 <Icon style={styles.icon} name='layers-outline' fill={basic} />
-                <Text appearance='hint'>Layer {(props.index + 1)}</Text>
+                <Text appearance='hint'>{translateCalculator('results.layer')} {(props.index + 1)}</Text>
             </View>
             {props.index !== 0 && !props.disabled ? <SingleIconButton
                 iconName={'close'}

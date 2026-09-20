@@ -3,6 +3,7 @@ import FilterListItem from '../FilterListItem'
 import { MapFilterScreens } from '../../constants/constants'
 import SheetHeader from '../../../components/SheetHeader'
 import { useMapFilterCounter } from '../../hooks/map_filters/useMapFilterCounter'
+import { translateBottomSheet } from '../../../../../localization'
 
 
 const MapFilterList = ({ onPressListItem, closeSheet }) => {
@@ -10,16 +11,16 @@ const MapFilterList = ({ onPressListItem, closeSheet }) => {
     return (
         <>
             <SheetHeader
-                title='Filters'
+                title={translateBottomSheet('filters')}
                 onClosePress={closeSheet} />
             <FilterListItem
-                title='Status'
+                title={translateBottomSheet('status')}
                 onPress={onPressListItem}
                 counter={statusCounter}
                 routeKey={MapFilterScreens.STATUS_FILTER}
                 disabled={false} />
             <FilterListItem
-                title='Marker type'
+                title={translateBottomSheet('markerType')}
                 onPress={onPressListItem}
                 counter={markerTypeCounter}
                 routeKey={MapFilterScreens.MARKER_TYPE_FILTER}

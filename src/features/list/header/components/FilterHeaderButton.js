@@ -2,6 +2,7 @@ import React from 'react'
 import FilterButton from './FilterButton'
 import { ItemTypes } from '../../../../constants/global'
 import { useFilter } from '../hooks/useFilter'
+import { translateList } from '../../../../localization'
 
 const FilterHeaderButton = ({ itemType, openSheet }) => {
     const counter = useFilter({ itemType })
@@ -9,7 +10,7 @@ const FilterHeaderButton = ({ itemType, openSheet }) => {
         return <FilterButton
             icon={counter > 0 ? 'funnel' : 'funnel-outline'}
             onPress={openSheet}
-            title={`Filter${counter ? ` (${counter})` : ''}`}
+            title={`${translateList('filter')}${counter ? ` (${counter})` : ''}`}
         />
     else return null
 }

@@ -1,6 +1,7 @@
 import React from 'react'
 import { View, StyleSheet } from 'react-native'
 import { Toggle, Text } from '@ui-kitten/components'
+import { translate } from '../../localization'
 
 
 const UnitSelector = (props) => {
@@ -10,7 +11,7 @@ const UnitSelector = (props) => {
         return (
             <View style={styles.toggleView}>
                 <Toggle checked={!props.isMetric} onChange={props.setIsMetric} disabled={props.disabled} />
-                <Text category='s2' appearance='hint' style={styles.text}>Imperial units</Text>
+                <Text category='s2' appearance='hint' style={styles.text}>{translate('calculator.imperialUnits')}</Text>
             </View>)
 }
 

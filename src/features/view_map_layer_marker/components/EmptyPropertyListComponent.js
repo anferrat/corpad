@@ -1,6 +1,7 @@
 import { Text } from '@ui-kitten/components'
 import React from 'react'
 import { View, StyleSheet } from 'react-native'
+import { translateMapLayerMarker } from '../../../localization'
 
 
 const EmptyPropertyListComponent = () => {
@@ -9,7 +10,7 @@ const EmptyPropertyListComponent = () => {
       <Text
         category='label'
         appearance='hint'>
-        No properties found.
+        {translateMapLayerMarker('noProperties')}
       </Text>
     </View>
   )

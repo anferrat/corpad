@@ -7,16 +7,16 @@ import { plusCircle } from "../../../../components/Icons"
 import { ReferenceCellTypes } from "../../../../constants/global"
 import { ReferenceCellTypeLabels } from "../../../../constants/labels"
 import { getModalTop } from "../../../../styles/dimensions"
+import { translateSettings } from '../../../../localization'
 
 const accessory = {
     icon: 'RE',
     pack: 'cp'
 }
 
-const referenceCellTypes = Object.values(ReferenceCellTypes).map(type => ({ item: ReferenceCellTypeLabels[type], index: type }))
-
 const NewRefCellModal = ({ onChangeName, onChangeType, rcType, name, visible, dismissModal, nameValid, rcTypeValid, addReferenceCell }) => {
     const inputRef = useRef()
+    const referenceCellTypes = React.useMemo(() => Object.values(ReferenceCellTypes).map(type => ({ item: ReferenceCellTypeLabels[type], index: type })), [])
 
     useEffect(() => {
         const watch = setTimeout(() => {
@@ -39,7 +39,7 @@ const NewRefCellModal = ({ onChangeName, onChangeType, rcType, name, visible, di
                 <Input
                     maxLength={40}
                     ref={inputRef}
-                    label='Name'
+                    label={translateSettings('name')}
                     valid={nameValid}
                     value={name}
                     property='name_not_empty'
@@ -50,15 +50,15 @@ const NewRefCellModal = ({ onChangeName, onChangeType, rcType, name, visible, di
                     onSelect={onChangeType}
                     itemList={referenceCellTypes}
                     selectedIndex={rcType}
-                    placeholder="Select type"
+                    placeholder={translateSettings('selectType')}
                     valid={rcTypeValid}
-                    label='Reference cell type' />
+                    label={translateSettings('referenceCellType')} />
                 <Button
                     onPress={addReferenceCell}
-                    title='Add'
+                      title={translateSettings('add')}
                     accessoryLeft={plusCircle}
                     style={styles.button}>
-                    Create
+                      {translateSettings('create')}
                 </Button>
             </ScrollView>
         </Modal>

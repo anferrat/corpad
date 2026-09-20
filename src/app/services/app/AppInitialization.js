@@ -2,7 +2,7 @@ import { SubscriptionStatuses } from "../../../constants/global"
 
 
 export class AppInitialization {
-    constructor(currentSurveyStatusService, authorizationService, surveyRepo, multimeterInitializationService, defaultNamesInitializationService, settingRepo, settingInitializationService, databaseInitializationService, fileSystemInitializationService, linkingService, purchaseInitializationService, urlResolver, potentialTypeInitialization) {
+    constructor(currentSurveyStatusService, authorizationService, surveyRepo, multimeterInitializationService, defaultNamesInitializationService, settingRepo, settingInitializationService, databaseInitializationService, fileSystemInitializationService, linkingService, purchaseInitializationService, urlResolver, potentialTypeInitialization, localizationInitializationService) {
         this.currentSurveyStatusService = currentSurveyStatusService
         this.authorizationService = authorizationService
         this.surveyRepo = surveyRepo
@@ -16,6 +16,7 @@ export class AppInitialization {
         this.linkingService = linkingService
         this.purchaseInitializationService = purchaseInitializationService
         this.urlResolver = urlResolver
+        this.localizationInitializationService = localizationInitializationService
     }
 
     async execute() {
@@ -24,6 +25,9 @@ export class AppInitialization {
 
         //Get settings, reset the ones are not found.
         const settings = await this.settingInitializationService.execute()
+
+        //Set the active labels before services that create default data run.
+        await this.localizationInitializationService.execute()
 
 
 

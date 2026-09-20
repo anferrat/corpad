@@ -1,6 +1,7 @@
 import { Text } from '@ui-kitten/components'
 import React from 'react'
 import { StyleSheet, View } from 'react-native'
+import { translateMapLayer } from '../../../localization'
 
 
 const EmptyMapLayerListComponent = () => {
@@ -11,7 +12,7 @@ const EmptyMapLayerListComponent = () => {
             style={styles.text}
             category='s2'
             appearance='hint'>
-            Import markers, polylines and polygons into the survey from geodata file.
+            {translateMapLayer('emptyDescription')}
         </Text>
     </View>
 }

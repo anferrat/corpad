@@ -4,6 +4,7 @@ import Unit from '../../../components/Unit'
 import { Icon, Text } from '@ui-kitten/components'
 import { WireColorColors } from '../../../styles/colors'
 import { WireGaugeLabels } from '../../../constants/labels'
+import { translateView } from '../../../localization'
 
 
 const AnodeBedAnodeView = ({ current, wireColor, wireGauge, index }) => {
@@ -25,7 +26,7 @@ const AnodeBedAnodeView = ({ current, wireColor, wireGauge, index }) => {
                         style={styles.text}
                         category={'s2'}
                         appearance='hint'>
-                        Anode #{index + 1} {wireGauge !== null ? ` (${WireGaugeLabels[wireGauge]})` : null}</Text>
+                        {translateView('anode')} #{index + 1} {wireGauge !== null ? ` (${WireGaugeLabels[wireGauge]})` : null}</Text>
 
                 </View>
                 <View

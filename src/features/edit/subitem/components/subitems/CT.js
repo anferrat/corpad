@@ -7,6 +7,7 @@ import CircuitShuntView from '../CircuitShuntView'
 import { Button } from '@ui-kitten/components'
 import { arrowUp, arrowDown } from '../../../../../components/Icons'
 import NameInput from '../NameInput'
+import { translateEdit } from '../../../../../localization'
 
 const CT = ({ data, update, validate }) => {
     const [expanded, setExpanded] = useState(false)
@@ -61,7 +62,7 @@ const CT = ({ data, update, validate }) => {
                 accessoryRight={expanded ? arrowUp : arrowDown}
                 appearance='ghost'
                 style={styles.button}>
-                Current calculation
+                {translateEdit('currentCalculation')}
             </Button>
             {expanded ?
                 <View style={styles.shuntView}>

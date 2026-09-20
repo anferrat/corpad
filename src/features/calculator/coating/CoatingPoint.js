@@ -3,6 +3,7 @@ import { View, StyleSheet } from 'react-native'
 import DataLine from './DataLine'
 import PointLabel from '../components/PointLabel'
 import InputDataField from './InputDataField'
+import { translateCalculator } from '../../../localization'
 
 
 const CoatingPoint = (props) => {
@@ -17,14 +18,14 @@ const CoatingPoint = (props) => {
                 disabled={props.disabled}
                 setValue={props.setValue}
                 setValid={props.setValid}
-                label='Average soil resistivity'
+                label={translateCalculator('inputs.averageSoilResistivity')}
                 value={props.data.resistivity}
                 valid={props.valid.resistivity}
                 unit={`\u03A9-cm`} />
             <View style={styles.mainView}>
                 <View style={styles.inputs}>
                     <DataLine
-                        label='Current'
+                         label={translateCalculator('inputs.current')}
                         property='current'
                         point={props.point}
                         data={props.data.current}
@@ -35,7 +36,7 @@ const CoatingPoint = (props) => {
                         disabled={props.disabled}
                     />
                     <DataLine
-                        label='Potentials'
+                         label={translateCalculator('inputs.potentials')}
                         property='potential'
                         point={props.point}
                         data={props.data.potential}

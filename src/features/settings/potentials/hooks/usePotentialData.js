@@ -4,6 +4,7 @@ import { createPotentialType, deletePotentialType, getPotentialSettingData, upda
 import { errorHandler, warningHandler } from "../../../../helpers/error_handler"
 import useModal from "../../../../hooks/useModal"
 import fieldValidation from '../../../../helpers/validation'
+import { translateSettings } from '../../../../localization'
 
 const initPotentialName = {
     value: null,
@@ -83,7 +84,7 @@ const usePotentialData = () => {
     }, [])
 
     const deletePotential = useCallback(async (id) => {
-        const confirm = await warningHandler(21, 'Delete', 'Cancel')
+        const confirm = await warningHandler(21, translateSettings('delete'), translateSettings('cancel'))
         if (confirm) {
             const { status } = await deletePotentialType({ id: id }, er => errorHandler(er))
             if (status === 200 && componentMounted.current)

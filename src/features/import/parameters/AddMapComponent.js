@@ -9,6 +9,7 @@ import { fieldProperties } from '../../../constants/fieldProperties'
 import { errorHandler } from '../../../helpers/error_handler'
 import IconButton from '../../../components/IconButton'
 import MapperStatusHint from './components/MapperStatusHint'
+import { translateImport } from '../../../localization'
 
 const fileIcon = {
     name: 'file-text-outline',
@@ -22,7 +23,7 @@ const AddMapComponent = (props) => {
     const [selectedMap, setSelectedMap] = useState([])
     const [valid, setValid] = useState([true, true])
     const fieldValues = React.useMemo(() => getFieldIndexes(props.fieldValues, props.attributeMap), [props.fieldValues, props.attributeMap])
-    const fieldValuesDisplay = React.useMemo(() => fieldValues.map(v => v.item === "" ? { ...v, item: '<Empty>' } : v), [fieldValues])
+    const fieldValuesDisplay = React.useMemo(() => fieldValues.map(v => v.item === "" ? { ...v, item: translateImport('parameters.empty') } : v), [fieldValues])
     const propertyList = React.useMemo(() => getPropertyIndexes(props.itemList, props.attributeMap), [props.itemList, props.attributeMap])
     const accessoryList = React.useMemo(() => {
         if (fieldProperties[props.property].accessoryList)
@@ -73,7 +74,7 @@ const AddMapComponent = (props) => {
                 <Select
                     valid={valid[0]}
                     disabled={fieldValuesEmpty || propertyListEmpty}
-                    label={'Property value'}
+                    label={translateImport('parameters.propertyValue')}
                     placeholderOption={true}
                     placeholder={fieldProperties[props.property].placeholder}
                     accessoryList={accessoryList}
@@ -87,8 +88,8 @@ const AddMapComponent = (props) => {
                 <MultiSelect
                     valid={valid[1]}
                     disabled={fieldValuesEmpty || propertyListEmpty}
-                    label={'Values from spreadsheet'}
-                    placeholder={'Select values'}
+                    label={translateImport('parameters.valuesFromSpreadsheet')}
+                    placeholder={translateImport('parameters.selectValues')}
                     style={styles.select}
                     itemList={fieldValuesDisplay}
                     selectedItems={selectedMap}

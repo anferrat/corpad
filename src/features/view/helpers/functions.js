@@ -1,4 +1,5 @@
 import { CurrentUnits, PotentialUnits } from "../../../constants/global"
+import { translateView } from '../../../localization'
 
 export const combineLatLon = (lat, lon) => {
     const placeholder = (value) => value === null ? '??.??????' : value
@@ -7,7 +8,7 @@ export const combineLatLon = (lat, lon) => {
 
 export const getCountTitle = (count) => {
     if (count !== undefined) {
-        return `${count} test point${count !== 1 ? 's' : ''}`
+        return translateView('testPoints', { count })
     }
     else return null
 }

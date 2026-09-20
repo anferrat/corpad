@@ -11,6 +11,7 @@ import { setActiveMultimeterExecuting } from "../../../../store/actions/settings
 import { getMultimeterModeLimit } from "../../../../helpers/functions"
 import { getDefaultYMax, getInitialHistoryState, getYUnitByMode, initialHistoryState, updateReading } from "../helpers/functions"
 import { validateXLimit, validateYLimit } from "../helpers/validation"
+import { translateMultimeterOverlay } from '../../../../localization'
 
 const initState = {
     last: null,
@@ -152,7 +153,7 @@ export const useMultimeterModal = ({ goBack }) => {
                 type: 'successToast',
                 visibilityTime: 1000,
                 autoHide: true,
-                props: { text: 'Reading saved' }
+                 props: { text: translateMultimeterOverlay('readingSaved') }
             }))
     }, [])
 

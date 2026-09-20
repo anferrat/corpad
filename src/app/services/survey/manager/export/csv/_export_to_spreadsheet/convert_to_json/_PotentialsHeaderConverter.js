@@ -1,5 +1,5 @@
 import { PermanentPotentialTypes, SubitemTypes } from "../../../../../../../../constants/global";
-import { SubitemTypeLabels } from "../../../../../../../../constants/labels";
+import { SubitemTypeLabels } from "../../../../../../../../constants/exportLabels";
 
 export class _PotentialHeaderConverter {
     constructor() {

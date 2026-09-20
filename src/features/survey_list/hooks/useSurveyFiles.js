@@ -6,16 +6,17 @@ import { hideLoader, setSurveySettings, updateLoader, updateLoaderProgress, upda
 import { EventRegister } from 'react-native-event-listeners'
 import { openLink } from '../../../app/controllers/AppController'
 import Toast from 'react-native-toast-message'
+import { translateSurveyList } from '../../../localization'
 
 const useSurveyFiles = ({ isCloud, navigateToSurveyFileList }) => {
     const isSignedIn = useSelector(state => state.settings.session.isSigned)
     const [fileList, setFileList] = useState([
         {
-            title: 'Today',
+            title: translateSurveyList('today'),
             data: []
         },
         {
-            title: 'Earlier',
+            title: translateSurveyList('earlier'),
             data: []
         }
     ])
@@ -48,11 +49,11 @@ const useSurveyFiles = ({ isCloud, navigateToSurveyFileList }) => {
     }, [dispatch])
 
     const onDownload = useCallback((total, count) =>
-        dispatch(updateLoaderProgress(true, 'Downloading assets', total, count)),
+        dispatch(updateLoaderProgress(true, translateSurveyList('downloadingAssets'), total, count)),
         [dispatch])
 
     const onUpload = useCallback((total, count) =>
-        dispatch(updateLoaderProgress(true, 'Uploading assets', total, count)),
+        dispatch(updateLoaderProgress(true, translateSurveyList('uploadingAssets'), total, count)),
         [dispatch])
 
     useEffect(() => {
@@ -89,7 +90,7 @@ const useSurveyFiles = ({ isCloud, navigateToSurveyFileList }) => {
 
         try {
             const displayPath = isCloud ? `gdrive/Corpad/${fileName}` : path
-            dispatch(updateLoader('Loading survey', displayPath))
+            dispatch(updateLoader(translateSurveyList('loadingSurvey'), displayPath))
             const { response, status } = await loadSurveyFile({ isCloud, path, cloudId, onDownload })
             if (status === 200)
                 dispatch(setSurveySettings(response.name, response.fileName, response.syncTime, response.isCloud, response.isLoaded, response.uid))
@@ -106,11 +107,11 @@ const useSurveyFiles = ({ isCloud, navigateToSurveyFileList }) => {
 
     const deleteSurvey = useCallback(async ({ path, cloudId, hash, fileName, uid }) => {
         //Returns true if file delete successfuly and false if not. (for onRemove animation)
-        const confirm = await warningHandler(43, 'Delete')
+        const confirm = await warningHandler(43, translateSurveyList('delete'), translateSurveyList('cancel'))
         if (confirm) {
             const displayPath = isCloud ? `gdrive/Corpad/${fileName}` : path
             if (isCloud)
-                dispatch(updateLoader('Deleteing survey', displayPath))
+                dispatch(updateLoader(translateSurveyList('deletingSurvey'), displayPath))
             const { status } = await deleteSurveyFile({ isCloud, path, hash, cloudId, uid }, fileListErrorHandler)
             dispatch(hideLoader())
             return status === 200
@@ -134,7 +135,7 @@ const useSurveyFiles = ({ isCloud, navigateToSurveyFileList }) => {
     }, [isCloud])
 
     const shareSurveyFile = useCallback(async ({ path, cloudId, name }) => {
-        dispatch(updateLoader('Exporting survey', name))
+        dispatch(updateLoader(translateSurveyList('exportingSurvey'), name))
         const { status } = await shareFile({ path, cloudId, isCloud, onDownload })
         dispatch(hideLoader())
         if (status !== 200)
@@ -145,7 +146,7 @@ const useSurveyFiles = ({ isCloud, navigateToSurveyFileList }) => {
 
     const copyToAlternateFolder = useCallback(async ({ path, cloudId, name }) => {
         //copies from device to cloud and cloud to device
-        dispatch(updateLoader(isCloud ? 'Copying survey to device' : 'Copying survey to gdrive', name))
+        dispatch(updateLoader(isCloud ? translateSurveyList('copyingToDevice') : translateSurveyList('copyingToCloud'), name))
         const { status } = isCloud ? await copyCloudSurveyFileToDevice({ cloudId, onDownload }) : await copySurveyFileToCloud({ path, onUpload })
         if (status !== 200)
             fileListErrorHandler(status)
@@ -157,14 +158,14 @@ const useSurveyFiles = ({ isCloud, navigateToSurveyFileList }) => {
     }, [dispatch, fileListErrorHandler, isCloud, navigateToSurveyFileList, onDownload, onUpload])
 
     const copyToDownloads = useCallback(async ({ path, cloudId, name }) => {
-        dispatch(updateLoader('Saving survey to downloads', name))
+        dispatch(updateLoader(translateSurveyList('savingToDownloads'), name))
         const { status } = await copySurveyFileToDownloads({ isCloud, cloudId, path, onDownload })
         if (status === 200) {
             Toast.show({
                 type: 'successToast',
                 visibilityTime: 1000,
                 autoHide: true,
-                props: { text: 'Saved to Downloads' }
+                props: { text: translateSurveyList('savedToDownloads') }
             })
         }
         else fileListErrorHandler(status)

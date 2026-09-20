@@ -7,6 +7,7 @@ import LoadingView from '../../../components/LoadingView'
 import EmptyListComponent from './components/EmptyListComponent'
 import ExternalLinkListItem from './components/ExternalLinkListItem'
 import BottomButton from '../../../components/BottomButton'
+import { translateSettings } from '../../../localization'
 
 
 const ExternalLinkSettings = ({ navigateToExternalLink }) => {
@@ -35,7 +36,7 @@ const ExternalLinkSettings = ({ navigateToExternalLink }) => {
                                 appearance='outline'
                                 onPress={onReadTagIos}
                                 style={styles.button}>
-                                Read NFC label
+                                {translateSettings('readNfc')}
                             </Button>
                             : null}
                         <View
@@ -44,7 +45,7 @@ const ExternalLinkSettings = ({ navigateToExternalLink }) => {
                                 style={styles.listTitle}
                                 appearance='hint'
                                 category='label'>
-                                Recently scanned labels
+                                {translateSettings('recentlyScanned')}
                             </Text>
                             {records.length === 0 ?
                                 <EmptyListComponent /> :
@@ -64,7 +65,7 @@ const ExternalLinkSettings = ({ navigateToExternalLink }) => {
             </ScrollView>
             <BottomButton
                 onPress={onDeleteAll}
-                title='Delete all'
+                title={translateSettings('deleteAll')}
                 icon='trash'
                 disabled={loading || (records.length === 0)}
             />

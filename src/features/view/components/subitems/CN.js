@@ -6,6 +6,7 @@ import Divider from '../Divider'
 import InputWithTitle from '../InputWithTitle'
 import { CouponTypeLabels } from '../../../../constants/labels'
 import { CouponTypes, MeasurementPropertyTypes } from '../../../../constants/global'
+import { translateView } from '../../../../localization'
 
 const areaUnit = {
     main: 'cm',
@@ -76,19 +77,19 @@ const CN = ({
                 potentialHint={potentialHint}
                 potentials={potentials} />
             <TextLine
-                title='Connected to'
-                value={pipeSubitem.name ?? 'Disconnected'}
+                title={translateView('connectedTo')}
+                value={pipeSubitem.name ?? translateView('disconnected')}
                 icon={pipeSubitem.type ?? null}
                 pack='cp' />
             <TextLine
-                title='Type'
+                title={translateView('type')}
                 value={CouponTypeLabels[couponType] ?? null} />
             <TextLine
-                title='Area'
+                title={translateView('area')}
                 value={area}
                 unit={areaUnit} />
             <TextLine
-                title='Density'
+                title={translateView('density')}
                 value={density}
                 unit={densityUnit} />
             <InputWithTitle
@@ -101,7 +102,7 @@ const CN = ({
                 keyboardType='numeric'
                 value={current}
                 valid={valid.current}
-                title='Current'
+                title={translateView('current')}
                 property='current'
                 unit={'\u00B5A'}
             />

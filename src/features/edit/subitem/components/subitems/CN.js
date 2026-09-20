@@ -7,14 +7,14 @@ import CurrentDensityView from '../CurrentDensityView'
 import NameInput from '../NameInput'
 import { CouponTypes } from '../../../../../constants/global'
 import { CouponTypeLabels } from '../../../../../constants/labels'
+import { translateEdit } from '../../../../../localization'
 
 const couponAttachmentTypes = ['PL', 'RS']
-
-const couponTypes = Object.values(CouponTypes).map(type => ({ item: CouponTypeLabels[type], index: type }))
 
 const CNCard = ({ subitemList, itemId, subitemId, data, update, validate, validateCouponHandler }) => {
 
     const { pipelineCardId, name, defaultName, couponType, current, area, density, wireColor, wireGauge, valid } = data
+    const couponTypes = React.useMemo(() => Object.values(CouponTypes).map(type => ({ item: CouponTypeLabels[type], index: type })), [])
 
     const itemList = React.useMemo(() =>
         subitemList.filter(({ type }) => ~couponAttachmentTypes.indexOf(type))
@@ -52,9 +52,9 @@ const CNCard = ({ subitemList, itemId, subitemId, data, update, validate, valida
                         property='pipelineCardId'
                         itemList={itemList}
                         selectedIndex={selectedIndex}
-                        placeholder="Disconnected"
                         placeholderOption={true}
-                        label='Connected to' />
+                        placeholder={translateEdit('disconnected')}
+                        label={translateEdit('connectedTo')} />
                 </View>
                 <View style={styles.rightSide}>
                     <Select
@@ -63,8 +63,8 @@ const CNCard = ({ subitemList, itemId, subitemId, data, update, validate, valida
                         property='couponType'
                         itemList={couponTypes}
                         selectedIndex={couponType}
-                        placeholder="Type"
-                        label='Coupon type' />
+                        placeholder={translateEdit('type')}
+                        label={translateEdit('couponType')} />
                 </View>
             </View>
             <CurrentDensityView

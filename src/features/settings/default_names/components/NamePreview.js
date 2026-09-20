@@ -3,6 +3,7 @@ import { View, StyleSheet } from 'react-native'
 import { Text, Icon } from '@ui-kitten/components'
 import { basic, basic300 } from '../../../../styles/colors'
 import { ItemTypeLabels, SubitemTypeLabels } from '../../../../constants/labels'
+import { translateSettings } from '../../../../localization'
 
 const index = Math.floor(Math.random() * 100) + 1
 
@@ -15,7 +16,7 @@ const NamePreview = ({ name, type, pipelineNameAsDefault, pipelineNameSettingAct
                 category='label'
                 appearance='hint'
                 style={styles.text}
-            >Example</Text>
+            >{translateSettings('example')}</Text>
             <View
                 style={styles.mainView}>
                 <View
@@ -24,7 +25,7 @@ const NamePreview = ({ name, type, pipelineNameAsDefault, pipelineNameSettingAct
                     <View
                         style={styles.subtitle}>
                         <Text category='s2' appearance='hint'>
-                            {ItemTypeLabels[type] ?? SubitemTypeLabels[type] ?? 'Error'}
+                            {ItemTypeLabels[type] ?? SubitemTypeLabels[type] ?? translateSettings('error')}
                         </Text>
                         <Icon
                             fill={basic}

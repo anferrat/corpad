@@ -3,6 +3,7 @@ import { View, StyleSheet } from 'react-native'
 import MenuListItem from '../components/MenuListItem'
 import { Text } from '@ui-kitten/components'
 import { useLabelPicker } from './hooks/useLabelPicker'
+import { translateBottomSheet } from '../../../localization'
 
 
 const LabelPicker = ({ closeSheet, params }) => {
@@ -15,18 +16,18 @@ const LabelPicker = ({ closeSheet, params }) => {
                 style={styles.hint}
                 numberOfLines={3}
                 appearance='hint'>
-                The data will be saved to the label and can be accessed offline by anyone with Corpad app.
+                {translateBottomSheet('labelHint')}
             </Text>
             <MenuListItem
                 inactive={!isPro}
                 onPress={onPressQrCode}
-                title='Generate QR code'
+                title={translateBottomSheet('generateQr')}
                 icon='qr-code'
                 pack='cp' />
             <MenuListItem
                 inactive={!isPro}
                 onPress={onPressNFC}
-                title='Write to NFC tag'
+                title={translateBottomSheet('writeNfc')}
                 icon='nfc-filled'
                 pack='cp' />
         </View>

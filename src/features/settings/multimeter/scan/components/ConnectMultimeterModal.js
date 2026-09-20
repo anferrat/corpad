@@ -3,6 +3,7 @@ import { View, StyleSheet } from 'react-native'
 import { Modal, Text, Button, Icon } from '@ui-kitten/components'
 import { primary, control } from '../../../../../styles/colors'
 import { getModalTop } from '../../../../../styles/dimensions'
+import { translateMultimeterSettings } from '../../../../../localization'
 
 const accessory = (props) => <Icon {...props} name='arrow-circle-right' />
 
@@ -19,15 +20,15 @@ const ConnectMultimeterModal = ({ onConnectRequest, hideModal, visible }) => {
                 <Text
                     category={'h6'}
                     style={styles.hint}>
-                    Connect device</Text>
+                     {translateMultimeterSettings('connectDevice')}</Text>
             </View>
             <Text
                 style={styles.hint}>
-                Make sure that multimeter is ready to connect and press "Continue."</Text>
+                 {translateMultimeterSettings('connectHint')}</Text>
             <Button
                 accessoryRight={accessory}
                 onPress={onConnectRequest}>
-                Continue
+                 {translateMultimeterSettings('continue')}
             </Button>
         </Modal>
     )

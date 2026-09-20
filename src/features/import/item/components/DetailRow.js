@@ -5,6 +5,7 @@ import IconButton from '../../../../components/IconButton'
 import { warning, danger, primary } from '../../../../styles/colors'
 import WarningPoints from './WarningPoints'
 import Pressable from '../../../../components/Pressable'
+import { translateImport } from '../../../../localization'
 
 const DetailRow = ({ index, warnings, success }) => {
     const [expanded, setExpanded] = useState(false)
@@ -18,17 +19,17 @@ const DetailRow = ({ index, warnings, success }) => {
                 <View>
                     <View style={styles.title}>
                         <Icon name={'hash-outline'} style={{ width: 18, height: 18, marginRight: 6, marginTop: 2 }} fill={primary} />
-                        <Text category='p1'>Row {index + 1}</Text>
+                        <Text category='p1'>{translateImport('item.row', { count: index + 1 })}</Text>
                     </View>
                     <View style={styles.subtitle}>
                         {success ?
                             <>
-                                <Text status='warning' category='c2'>{warnings.length} warning{warnings.length !== 1 ? 's' : ''}</Text>
+                                <Text status='warning' category='c2'>{translateImport('item.warnings', { count: warnings.length })}</Text>
                                 <Icon name={'alert-triangle-outline'} style={styles.icon} fill={warning} />
                             </>
                             :
                             <>
-                                <Text status='danger' category='c2'>Error</Text>
+                                <Text status='danger' category='c2'>{translateImport('item.error')}</Text>
                                 <Icon style={styles.icon} name={'alert-circle-outline'} fill={danger} />
                             </>
                         }

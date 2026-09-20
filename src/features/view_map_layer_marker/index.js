@@ -8,6 +8,7 @@ import Labels from './components/Labels'
 import Title from './components/Title'
 import BottomButton from '../../components/BottomButton'
 import EmptyPropertyListComponent from './components/EmptyPropertyListComponent'
+import { translateMapLayerMarker } from '../../localization'
 
 const MapLayerMarkerView = ({ layerId, markerIndex, goBack }) => {
     const { name, layerName, properties, layerColor } = useMapLayerMarkerView(layerId, markerIndex)
@@ -41,7 +42,7 @@ const MapLayerMarkerView = ({ layerId, markerIndex, goBack }) => {
             </ScrollView>
             <BottomButton
                 icon='undo'
-                title='Back'
+                title={translateMapLayerMarker('back')}
                 onPress={goBack}
             />
         </>

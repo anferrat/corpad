@@ -5,6 +5,7 @@ import Divider from '../Divider'
 import SidesDisplay from '../SidesDisplay'
 import InputWithTitle from '../InputWithTitle'
 import { MeasurementPropertyTypes } from '../../../../constants/global'
+import { translateView } from '../../../../localization'
 
 const getShuntRatio = (ratioVoltage, ratioCurrent) => ratioVoltage !== null && ratioCurrent !== null ? ratioVoltage + ' mV - ' + ratioCurrent + ' A' : null
 
@@ -59,7 +60,7 @@ const SH = ({
             <Divider
                 visible={true} />
             <TextLine
-                title={factorSelected ? 'Factor' : 'Shunt ratio'}
+                 title={factorSelected ? translateView('factor') : translateView('shuntRatio')}
                 value={factorSelected ? factor : shuntRatio}
                 unit={factorSelected ? 'A/mV' : null} />
             <InputWithTitle
@@ -72,11 +73,10 @@ const SH = ({
                 value={voltageDrop}
                 valid={valid.voltageDrop}
                 onEndEditing={onEndEditingCurrent}
-                title='Voltage drop'
+                 title={translateView('voltageDrop')}
                 property='voltageDrop'
                 unit={'mV'} />
         </>
     )
 }
 export default SH
-

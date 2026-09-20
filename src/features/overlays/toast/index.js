@@ -9,6 +9,7 @@ import { basic200, control, danger, primary, success } from '../../../styles/col
 import WaveActivityIndicator from '../../../components/WaveActivityIndicator'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import MultimeterLimitWarning from './components/MultimeterLimitWarning'
+import { translateOverlay } from '../../../localization'
 
 
 export const toastConfig = {
@@ -24,7 +25,7 @@ export const toastConfig = {
                         <View style={styles.title}>
                             <Text
                                 status='control'
-                                category='h6'>Capturing</Text>
+                                category='h6'>{translateOverlay('toast.capturing')}</Text>
                             <Text
                                 status='control'
                                 category='s2' appearance='hint'>{MultimeterTypeLabels[multimeterType]} | {MeasurementPropertyTypeLabels[mType]}</Text>
@@ -39,10 +40,10 @@ export const toastConfig = {
                                 status='control'
                                 category='s2'
                                 appearance='hint'>
-                                Cycle detection mode:
+                                {translateOverlay('toast.cycleDetectionMode')}
                             </Text> {isSingleRead ?
                                 MultimeterSyncModeLabels[MultimeterSyncModes.REAL_TIME] :
-                                MultimeterSyncModeLabels[syncMode]}{noFix ? ' (No time fix)' : null}
+                                MultimeterSyncModeLabels[syncMode]}{noFix ? translateOverlay('toast.noTimeFix') : null}
                         </Text>
                         <CycleView
                             onTime={onTime}

@@ -11,6 +11,7 @@ import FileListItemMenuItem from "./FileListItemMenuItem"
 import Pressable from "../../../../components/Pressable"
 import { FileMimeTypes } from "../../../../constants/global"
 import { FileMimeTypeLabels } from "../../../../constants/labels"
+import { translateSettings } from '../../../../localization'
 
 const fileIcons = {
     [FileMimeTypes.CSV]: {
@@ -108,25 +109,25 @@ const ExportedFileListItem = ({ deleteFile, removeFileFromList, saveToDownloads,
                         visible={visible}>
                         {isCsv ?
                             <FileListItemMenuItem
-                                title={'Preview'}
+                                 title={translateSettings('preview')}
                                 icon={'eye-outline'}
                                 onPress={handlePreview} /> : null}
                         <FileListItemMenuItem
-                            title={'Share'}
+                             title={translateSettings('share')}
                             icon={isAndroid ? 'share-outline' : 'share-ios'}
                             pack={isAndroid ? null : 'cp'}
                             onPress={handleShareFile} />
                         {isAndroid ? <FileListItemMenuItem
-                            title={'Open in...'}
+                             title={translateSettings('openIn')}
                             icon={'external-link-outline'}
                             onPress={handleOpenIn} /> : null}
                         {isAndroid ? <FileListItemMenuItem
-                            title={'Save to Downloads'}
+                             title={translateSettings('saveToDownloads')}
                             icon={'download-outline'}
                             onPress={handleSaveToDownloads} /> : null}
                         <FileListItemMenuItem
                             status='danger'
-                            title={'Delete'}
+                             title={translateSettings('delete')}
                             icon={'trash-outline'}
                             onPress={handleDelete} />
                     </FileListItemMenu>

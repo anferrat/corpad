@@ -9,6 +9,7 @@ import SidesDisplay from '../SidesDisplay'
 import { isEqualIK } from '../../helpers/comparators'
 import { IsolationShortedLabels, IsolationTypeLabels } from '../../../../constants/labels'
 import { IsolationShorted } from '../../../../constants/global'
+import { translateView } from '../../../../localization'
 
 const IK = ({ data, updateShorted, updatePropertyValue, validateCurrent, onEdit, idMap, subitemIndex }) => {
     const { name, type, current, fromAtoB, isolationType, shorted, sideA, sideB, valid } = data
@@ -35,13 +36,13 @@ const IK = ({ data, updateShorted, updatePropertyValue, validateCurrent, onEdit,
                 sideA={sideA}
                 sideB={sideB} />
             <Divider visible={true} />
-            <TextLine title='Isolation type' value={IsolationTypeLabels[isolationType] ?? null} />
+            <TextLine title={translateView('isolationType')} value={IsolationTypeLabels[isolationType] ?? null} />
             <View style={styles.shortedView}>
                 <Toggle
                     style={styles.toggle}
                     status={shorted ? 'danger' : 'primary'}
                     checked={Boolean(shorted)}
-                    title='Shorted'
+                    title={translateView('shorted')}
                     onChange={onToggle}>
                     <Text>{IsolationShortedLabels[IsolationShorted.SHORTED]}</Text>
                 </Toggle>
@@ -54,7 +55,7 @@ const IK = ({ data, updateShorted, updatePropertyValue, validateCurrent, onEdit,
                             value={current}
                             valid={valid.current}
                             property='current'
-                            label='Current'
+                            label={translateView('current')}
                             unit={'A'} />
                     </View> :
                     null}

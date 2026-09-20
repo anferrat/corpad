@@ -7,6 +7,7 @@ import AddPhotoButton from './AddPhotoButton'
 import PhotoListItem from './PhotoListItem'
 import useItemPhotos from '../../hooks/useItemPhotos'
 import { Text } from '@ui-kitten/components'
+import { translateEdit } from '../../../../../localization'
 
 const getItemLayout = (_, index) => {
     const length = dimensions.length + dimensions.separator
@@ -31,7 +32,7 @@ const PhotoView = ({ itemId, itemType, imageUris }) => {
         <View style={styles.mainView}>
             <Text
                 appearance='hint'
-                category='label'>Images ({imageUris.length}/6)</Text>
+                category='label'>{translateEdit('imagesCount', {count: imageUris.length})}</Text>
             <FlatList
                 ListFooterComponent={() => <AddPhotoButton
                     onPress={onAddPhoto}

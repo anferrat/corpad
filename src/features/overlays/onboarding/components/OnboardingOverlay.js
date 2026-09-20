@@ -2,8 +2,9 @@ import React from 'react'
 import { Text, Icon } from '@ui-kitten/components'
 import { View, StyleSheet } from 'react-native'
 import OnboardingOverlayWrapper from './OnboardingOverlayWrapper'
-import { onboardingPoints } from '../helpers/constants'
+import { getOnboardingPoints } from '../helpers/constants'
 import { control } from '../../../../styles/colors'
+import { translateOverlay } from '../../../../localization'
 
 
 const OnboardingOverlay = ({ onboarding, icon, pack }) => {
@@ -17,7 +18,7 @@ const OnboardingOverlay = ({ onboarding, icon, pack }) => {
                         style={styles.mainIcon}
                         fill={control} />
                 </View>
-                {onboardingPoints[onboarding].map(point => (
+                {getOnboardingPoints(onboarding).map(point => (
                     <View
                         style={styles.pointView}
                         key={point}>
@@ -37,7 +38,7 @@ const OnboardingOverlay = ({ onboarding, icon, pack }) => {
                 status='control'
                 category={'p1'}
                 style={styles.hint}>
-                Tap to continue
+                {translateOverlay('onboarding.tapToContinue')}
             </Text>
         </OnboardingOverlayWrapper>
     )

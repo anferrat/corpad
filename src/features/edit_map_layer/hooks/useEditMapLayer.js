@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react"
+import { useCallback, useEffect, useMemo, useState } from "react"
 import { StrokeColors, StrokeWidths } from "../../../constants/global"
 import { createMapLayer, getMapLayerById, readGeoFile, updateMapLayer as updateMapLayerRequest } from "../../../app/controllers/survey/other/MapLayerController"
 import { errorHandler } from "../../../helpers/error_handler"
@@ -12,23 +12,14 @@ import { resetActiveMapLayerMarker } from "../../../store/actions/map"
 import { hapticMedium } from "../../../native_libs/haptics"
 import { MapLayerStrokeColors } from "../../../styles/colors"
 import { hideLoader, updateLoader } from "../../../store/actions/settings"
-
-const colorList = Object.values(StrokeColors).map((color, index) => ({ index, item: StrokeColorLabels[color], value: color }))
-
-const widthList = Object.values(StrokeWidths).map((width, index) => ({ index, item: StrokeWidthLabels[width], value: width }))
-
-const colorAccessories = colorList.map(({ value }) => ({
-    icon: 'color-circle',
-    pack: 'cp',
-    fill: MapLayerStrokeColors[value]
-}))
+import { translateMapLayer } from '../../../localization'
 
 const useEditMapLayer = ({ isNew, layerId }) => {
     const navigation = useNavigation()
     const dispatch = useDispatch()
     const [data, setData] = useState({
         name: null,
-        defaultName: 'New layer',
+        defaultName: translateMapLayer('newLayer'),
         comment: null,
         colorIndex: 0,
         widthIndex: 0,
@@ -47,6 +38,14 @@ const useEditMapLayer = ({ isNew, layerId }) => {
     })
 
     const [loading, setLoading] = useState(true)
+
+    const colorList = useMemo(() => Object.values(StrokeColors).map((color, index) => ({ index, item: StrokeColorLabels[color], value: color })), [])
+    const widthList = useMemo(() => Object.values(StrokeWidths).map((width, index) => ({ index, item: StrokeWidthLabels[width], value: width })), [])
+    const colorAccessories = useMemo(() => colorList.map(({ value }) => ({
+        icon: 'color-circle',
+        pack: 'cp',
+        fill: MapLayerStrokeColors[value]
+    })), [colorList])
 
     const onChangeName = useCallback((value) => setData(state => ({ ...state, name: value })), [])
 
@@ -92,7 +91,7 @@ const useEditMapLayer = ({ isNew, layerId }) => {
         const isValid = valid.name && valid.comment
         if (isValid) {
             const { name, defaultName, comment, colorIndex, widthIndex, visible } = data
-            dispatch(updateLoader('Saving'))
+            dispatch(updateLoader(translateMapLayer('saving')))
             if (isNew) {
                 hapticMedium()
                 if (geoFile.filename) {
@@ -147,7 +146,7 @@ const useEditMapLayer = ({ isNew, layerId }) => {
             }
         }
         loadData()
-    }, [])
+    }, [colorList, isNew, layerId, navigation, onSelectFile, widthList])
 
     return {
         data,

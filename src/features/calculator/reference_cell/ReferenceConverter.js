@@ -5,16 +5,18 @@ import fieldValidation from '../../../helpers/validation'
 import InputDataField from './InputDataField'
 import SelectDataField from './SelectDataField'
 import { primary } from '../../../styles/colors'
+import { translateCalculator } from '../../../localization'
 
 export const referenceCellElectrodes = ['Cu/CuSO4(sat)', 'Hg/HgCl2/KCl(sat)', 'Ag/AgCl/sea water', 'Ag/AgCl/KCl(sat)', 'Ag/AgCl/3.5M KCl', 'Ag/AgCl/3M KCl', 'Ag/AgCl/1M KCl', 'Ag/AgCl/0.6M KCl', 'Zn', 'H']
 export const referenceCellNames = ['Copper/Copper sulfate', 'Saturated calomel', 'Silver/Silver chloride', 'Silver/Silver chloride', 'Silver/Silver chloride', 'Silver/Silver chloride', 'Silver/Silver chloride', 'Silver/Silver chloride', 'Zinc', 'Standard hydrogen']
+const referenceCellNameKeys = ['copperSulfate', 'saturatedCalomel', 'silverChloride', 'silverChloride', 'silverChloride', 'silverChloride', 'silverChloride', 'silverChloride', 'zinc', 'standardHydrogen']
 export const referenceCellCodes = ['CSE', 'SCE', 'SSC', 'SSC', 'SSC', 'SSC', 'SSC', 'SSC', 'ZRE', 'SHE']
 export const referenceCellValues = [0.316, 0.244, 0.266, 0.199, 0.205, 0.210, 0.235, 0.250, -0.8, 0]
 
 const ReferenceConverter = (props) => {
 
     //const referenceCellTemperatureCoefficients = [0.9, -0.76, -0.33, -0.7, -0.7, -0.67, -0.5, -0.48, +0.871] need to find good data source
-    const refCellList = React.useMemo(() => referenceCellElectrodes.map((rc, i) => `${rc} - ${referenceCellNames[i]}`), [])
+    const refCellList = referenceCellElectrodes.map((rc, i) => `${rc} - ${translateCalculator(`referenceCells.${referenceCellNameKeys[i]}`)}`)
 
     const setValue = React.useCallback((property, value) => {
         props.setData(old => ({ ...old, calculator: { ...old.calculator, given: { ...old.calculator.given, [property]: value } } }))
@@ -47,8 +49,8 @@ const ReferenceConverter = (props) => {
                     style={styles.select}
                     disabled={props.disabled}
                     valid={props.valid.initialType}
-                    label={'Base reference type'}
-                    placeholder={'Select reference type'}
+                    label={translateCalculator('inputs.baseReferenceType')}
+                    placeholder={translateCalculator('inputs.selectReferenceType')}
                     property={'initialType'}
                     selectedIndex={props.data.initialType}
                     itemList={refCellList}
@@ -58,8 +60,8 @@ const ReferenceConverter = (props) => {
                     style={styles.select}
                     disabled={props.disabled}
                     valid={props.valid.targetType}
-                    label={'Target reference type'}
-                    placeholder={'Select reference type'}
+                    label={translateCalculator('inputs.targetReferenceType')}
+                    placeholder={translateCalculator('inputs.selectReferenceType')}
                     property={'targetType'}
                     selectedIndex={props.data.targetType}
                     itemList={refCellList}
@@ -70,7 +72,7 @@ const ReferenceConverter = (props) => {
                 property={'potential'}
                 setValue={setValue}
                 setValid={setValid}
-                label='Base potential reading'
+                label={translateCalculator('inputs.basePotentialReading')}
                 value={props.data.potential}
                 valid={props.valid.potential}
                 unit={potentialUnit}

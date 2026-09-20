@@ -5,6 +5,7 @@ import { errorHandler } from "../../../helpers/error_handler"
 import { getItemDisplayData, getItemIdList } from '../../../app/controllers/survey/items/ItemController'
 import { getCurrentPosition } from '../../../app/controllers/survey/other/GeolocationController'
 import { ItemTypeSingleIcons, TestPointTypeIcons } from '../../../constants/icons'
+import { translateList } from '../../../localization'
 
 export const firstReading = (readingList) => {
     if (readingList.length !== 0)
@@ -30,7 +31,7 @@ const getTapSettings = (tapSetting, tapCoarse, tapFine, tapValue) => {
     else if (tapSetting === 1 && tapValue !== null)
         return tapValue + ' %'
     else if (tapSetting === 2)
-        return 'Automatic'
+        return translateList('automatic')
     else return null
 }
 
@@ -45,7 +46,7 @@ const itemDataHandler = (type, value) => {
         case DisplayCardDataTypes.TAP:
             return getTapSettings(value.setting, value.coarse, value.fine, value.value)
         case DisplayCardDataTypes.ASSETS:
-            return `Images: ${value}`
+            return translateList('images', {count: value})
         default: return null
     }
 }
@@ -57,7 +58,7 @@ const dataListHandler = (dataList) => Object.fromEntries(
 
 const readingListHandler = (readingList, displayedReading) => readingList.map((item) => ({
     ...item,
-    v1: displayedReading === 4 ? valueFormatter(item.v1 ? 'Shorted' : null) : valueFormatter(item.v1),
+        v1: displayedReading === 4 ? valueFormatter(item.v1 ? translateList('shorted') : null) : valueFormatter(item.v1),
     v2: valueFormatter(item.v2)
 }))
 
@@ -90,7 +91,7 @@ export const fetchData = async (itemType, idList, filters, displayedReading) => 
                     timeModified: Date.now(),
                     status: 3,
                     name: '#ERROR#',
-                    subtitle: 'Item not found',
+                    subtitle: translateList('itemNotFound'),
                     icon: 'default',
                     dataList: {},
                     readingList: [],

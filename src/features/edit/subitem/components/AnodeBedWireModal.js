@@ -4,6 +4,7 @@ import { View, StyleSheet } from 'react-native'
 import WireView from './WireView'
 import { control } from '../../../../styles/colors'
 import { getModalTop } from '../../../../styles/dimensions'
+import { translateEdit } from '../../../../localization'
 
 
 const AnodeBedWireModal = ({ visible, hideModal, update, wireColor, wireGauge, index, updateAnodeWireProperties }) => {
@@ -36,7 +37,7 @@ const AnodeBedWireModal = ({ visible, hideModal, update, wireColor, wireGauge, i
                 <Text
                     style={styles.text}
                     category={'h6'}>
-                    Anode #{index + 1}
+                    {translateEdit('anode')} #{index + 1}
                 </Text>
                 <WireView
                     update={updatePoperty}
@@ -48,7 +49,7 @@ const AnodeBedWireModal = ({ visible, hideModal, update, wireColor, wireGauge, i
                         style={styles.check}
                         checked={applyToAll}
                         onChange={setApplyToAll}>
-                        Apply to all
+                        {translateEdit('applyToAll')}
                     </CheckBox>
                 </View>
                 <View style={styles.buttons}>
@@ -56,7 +57,7 @@ const AnodeBedWireModal = ({ visible, hideModal, update, wireColor, wireGauge, i
                         appearance={'outline'}
                         style={styles.button}
                         onPress={onApply}>
-                        Apply
+                        {translateEdit('apply')}
                     </Button>
                 </View>
             </View>

@@ -6,6 +6,7 @@ import { basic300 } from '../../../../styles/colors'
 import { globalStyle } from '../../../../styles/styles'
 import DetailRow from './DetailRow'
 import EmptyDetailsComponent from './EmptyDetailsComponent'
+import { translateImport } from '../../../../localization'
 
 const ModalDetails = ({ hideModal, warnings }) => {
 
@@ -22,12 +23,12 @@ const ModalDetails = ({ hideModal, warnings }) => {
     return (
         <>
             <Header
-                title={'Import details'}
+                title={translateImport('item.details')}
                 onBackPress={hideModal} />
             <View style={styles.mainView}>
                 <View style={globalStyle.card}>
                     <FlatList
-                    ListHeaderComponent={<Text category='label' appearance='hint' style={styles.title}>Imported rows with issues</Text>}
+                    ListHeaderComponent={<Text category='label' appearance='hint' style={styles.title}>{translateImport('item.importedRows')}</Text>}
                         ListEmptyComponent={EmptyDetailsComponent}
                         keyExtractor={(item) => item.rowIndex}
                         data={warnings}

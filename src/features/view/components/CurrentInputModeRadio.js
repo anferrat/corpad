@@ -1,6 +1,7 @@
 import React, { useCallback } from 'react'
 import { View, StyleSheet } from 'react-native'
 import { Radio, RadioGroup, Text } from '@ui-kitten/components'
+import { translateView } from '../../../localization'
 
 
 const CurrentInputModeRadio = ({ isVoltageDropSelected, onChange, disabled }) => {
@@ -11,18 +12,18 @@ const CurrentInputModeRadio = ({ isVoltageDropSelected, onChange, disabled }) =>
         <>
             <Text
                 category='label'
-                appearance='hint'>Current measurement</Text>
+                appearance='hint'>{translateView('currentMeasurement')}</Text>
             <RadioGroup
                 style={styles.container}
                 selectedIndex={Number(Boolean(isVoltageDropSelected))}
                 onChange={onChangeHandler}>
                 <Radio
                     disabled={disabled}>
-                    Direct
+                    {translateView('direct')}
                 </Radio>
                 <Radio
                     disabled={disabled}>
-                    Shunt
+                    {translateView('shunt')}
                 </Radio>
             </RadioGroup>
         </>

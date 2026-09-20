@@ -93,20 +93,20 @@ class ExternalLinkController extends Controller {
     }
 
     logExternalLink(data, onError = null, onSuccess = null) {
-        return super.controllerHandler(onSuccess, onError, 661, () => {
+        return super.controllerHandler(onSuccess, onError, 667, () => {
             const { tagId, name, linkType, technician, itemType, location, link } = this.validation.logExternalLink(data)
             return this.logExternalLinkService.execute({ tagId, name, linkType, technician, itemType, location, link })
         })
     }
 
     getExternalLinkRecords(onError = null, onSuccess = null) {
-        return super.controllerHandler(onSuccess, onError, 662, () => {
+        return super.controllerHandler(onSuccess, onError, 668, () => {
             return this.getExternalLinkRecordsService.execute()
         })
     }
 
     deleteAllExternalLinkRecords(onError = null, onSuccess = null) {
-        return super.controllerHandler(onSuccess, onError, 663, () => {
+        return super.controllerHandler(onSuccess, onError, 669, () => {
             return this.deleteAllExternalLinkRecordsService.execute()
         })
     }

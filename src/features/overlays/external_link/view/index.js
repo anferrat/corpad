@@ -8,6 +8,7 @@ import BottomButton from '../../../../components/BottomButton'
 import LoadingView from '../../../../components/LoadingView'
 import ControlButtons from './components/ControlButtons'
 import Header from './components/Header'
+import { translateOverlay } from '../../../../localization'
 
 export const ExternalLinkView = ({ link, shouldLog, navigateToFindItem, navigateToPipelineMatching, goBack, navigateToItem, navigateToSurvey }) => {
     const { tagId, technician, item, pipelines, potentialUnit, linkType, isSurveyLoaded, loading, isCreating, goToFindInSurvey, addToSurvey } = useExternalLink({ link, shouldLog, navigateToFindItem, navigateToPipelineMatching, goBack, navigateToItem, navigateToSurvey })
@@ -34,7 +35,7 @@ export const ExternalLinkView = ({ link, shouldLog, navigateToFindItem, navigate
                         appearance='hint'
                         category='h6'
                         style={styles.label}>
-                        {'Loading...'}
+                        {translateOverlay('externalLink.loading')}
                     </Text> : null}
                 <View
                     style={styles.itemView}>
@@ -50,7 +51,7 @@ export const ExternalLinkView = ({ link, shouldLog, navigateToFindItem, navigate
             <BottomButton
                 disabled={isCreating}
                 onPress={goBack}
-                title='Back'
+                title={translateOverlay('externalLink.back')}
                 icon='undo'
             />
         </>

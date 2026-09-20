@@ -6,6 +6,7 @@ import { SubscriptionStatusIcons } from '../../../../constants/icons'
 import { SubscriptionStatusLabels } from '../../../../constants/labels'
 import { getFormattedDate, isProStatus, isVerifyStatus } from '../../../../helpers/functions'
 import useAbout from '../hooks/useAbout'
+import { translateSettings } from '../../../../localization'
 
 
 const SubscriptionView = () => {
@@ -18,7 +19,7 @@ const SubscriptionView = () => {
                 style={styles.label}
                 category='label'
                 appearance='hint'>
-                Subscription
+                {translateSettings('subscription')}
             </Text>
             <Divider />
             <View style={styles.row}>
@@ -38,18 +39,18 @@ const SubscriptionView = () => {
                                 numberOfLines={1}
                                 ellipsizeMode={'head'}
                                 category='c2' appearance='hint'>
-                                (Expires on {getFormattedDate(expirationTime)})
+                                {translateSettings('expiresOn', {date: getFormattedDate(expirationTime)})}
                             </Text> : null}
                     </View>
                 </View>
                 {isPro ? <Button
                     onPress={onManageLinkOpen}
                     size='small'
-                    appearance='ghost'>Manage</Button> : <Button
+                     appearance='ghost'>{translateSettings('manage')}</Button> : <Button
                         onPress={onShowPaywall}
                         appearance='ghost'
                         size='small'>
-                    {isVerify ? 'Check' : 'Upgrade'}
+                    {isVerify ? translateSettings('check') : translateSettings('upgrade')}
                 </Button>}
             </View>
         </View>

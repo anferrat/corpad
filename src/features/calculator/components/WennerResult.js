@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import { View, StyleSheet, } from 'react-native'
 import ButtonSelector from '../../../components/ButtonSelector'
 import ResultRow from './ResultRow'
+import { translateCalculator } from '../../../localization'
 
 const WennerResult = (props) => {
     const [averageDisplay, setAverageDisplay] = useState(0)
@@ -10,7 +11,7 @@ const WennerResult = (props) => {
         {resultValues.length > 1 ?
             <View style={styles.buttonSelector}>
                 <ButtonSelector
-                    buttons={[{ title: 'Average' }, { title: 'Layers' }]}
+                    buttons={[{ title: translateCalculator('selectors.average') }, { title: translateCalculator('selectors.layers') }]}
                     selectedIndex={averageDisplay}
                     setSelected={setAverageDisplay}
                 />
@@ -18,11 +19,11 @@ const WennerResult = (props) => {
         {resultValues.map((r, i) => <ResultRow
             key={`(${r.a1} - ${r.a2} ${props.result.spacingUnit}) ${i}`}
             icon='layers-outline'
-            title={`Layer`}
+            title={translateCalculator('results.layer')}
             subtitle={`(${r.a1} - ${r.a2} ${props.result.spacingUnit})`}
             results={[
-                { title: 'Resistance', value: r.resistance, unit: props.result.resistanceUnit },
-                { title: 'Resistivity', value: r.resistivity, unit: props.result.resistivityUnit }
+                { title: translateCalculator('inputs.resistance'), value: r.resistance, unit: props.result.resistanceUnit },
+                { title: translateCalculator('results.resistivity'), value: r.resistivity, unit: props.result.resistivityUnit }
             ]}
         />)}
     </View>

@@ -2,6 +2,7 @@ import React from 'react'
 import { Toggle } from '@ui-kitten/components'
 import { View, StyleSheet } from 'react-native'
 import Input from '../../../../components/Input'
+import { translateEdit } from '../../../../localization'
 
 const IsolationView = ({ shorted, current, valid, update, validate, updateShortedHandler }) => {
 
@@ -16,7 +17,7 @@ const IsolationView = ({ shorted, current, valid, update, validate, updateShorte
                 status={shorted ? 'danger' : 'basic'}
                 checked={Boolean(shorted)}
                 onChange={updateShortedHandler}>
-                Shorted
+                {translateEdit('shorted')}
             </Toggle>
             {shorted ?
                 <Input
@@ -26,7 +27,6 @@ const IsolationView = ({ shorted, current, valid, update, validate, updateShorte
                     keyboardType='numeric'
                     unit={'A'}
                     property='current'
-                    label='Shorting current'
                     style={styles.input}
                     valid={valid}
                     value={current} /> : null}

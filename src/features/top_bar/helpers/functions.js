@@ -7,12 +7,14 @@ import { warningHandler } from '../../../helpers/error_handler'
 import { ItemTypes } from '../../../constants/global'
 import { CalculatorTypeTitleLabels, ItemTypeLabels, SubitemTypeLabels } from '../../../constants/labels'
 import { CalculatorTypeIconPacks, CalculatorTypeIcons } from '../../../constants/icons'
+import { translate } from '../../../localization'
 import { deleteMapLayer } from '../handlers/deleteMapLayer'
+import { translateTopBar } from '../../../localization'
 
 
 export const getEditTitle = (globalState, type) => {
     const state = ~Object.values(ItemTypes).indexOf(type) ? globalState.item.edit : globalState.subitem
-    return (state?.name === null || state?.name === '') ? state?.defaultName : state?.name ?? 'Loading...'
+    return (state?.name === null || state?.name === '') ? state?.defaultName : state?.name ?? translateTopBar('loading')
 }
 
 export const getEditSubtype = (state, type) => ~Object.values(ItemTypes).indexOf(type) ? state.item.edit?.testPointType : state.subitem.type
@@ -20,29 +22,31 @@ export const getEditSubtype = (state, type) => ~Object.values(ItemTypes).indexOf
 const getTitleBySettingType = (setting) => {
     switch (setting) {
         case 'defaultNames':
-            return 'Default names'
+            return translate('settings.defaultNames')
         case 'potentials':
-            return 'Potentials'
+            return translate('settings.potentials')
         case 'refCells':
-            return 'Reference cells'
+            return translate('settings.referenceCells')
         case 'export':
-            return 'Export to spreadsheet'
+            return translateTopBar('exportToSpreadsheet')
         case 'exportedFiles':
-            return 'Exported files'
+            return translate('settings.exportedFiles')
         case 'info':
-            return 'Survey overview'
+            return translate('settings.surveyOverview')
         case 'about':
-            return 'About'
+            return translate('settings.about')
+        case 'localization':
+            return translate('settings.language')
         case 'licenses':
-            return 'Licenses'
+            return translateTopBar('licenses')
         case 'multimeter':
-            return 'Multimeter'
+            return translate('settings.digitalMultimeter')
         case 'externalLinks':
-            return 'QR code and NFC labels'
+            return translate('settings.externalLinks')
         case 'photos':
-            return 'Images'
+            return translate('settings.images')
         default:
-            return 'Settings'
+            return translate('common.settings')
     }
 }
 /*
@@ -86,8 +90,8 @@ export const getHeader = (screen, params, navigation, dispatch, openMenu) => {
                     isPrimary: true,
                     left: 'back',
                     title: {
-                        title: 'Export survey',
-                        subtitle: 'Item properties',
+                        title: translate('navigation.exportSurvey'),
+                        subtitle: translate('navigation.itemProperties'),
                         icon: 'download-outline',
                         pack: null
                     }
@@ -98,8 +102,8 @@ export const getHeader = (screen, params, navigation, dispatch, openMenu) => {
                     isPrimary: true,
                     left: 'back',
                     title: {
-                        title: 'Export survey',
-                        subtitle: 'Potentials',
+                        title: translate('navigation.exportSurvey'),
+                        subtitle: translate('settings.potentials'),
                         icon: 'download-outline',
                         pack: null
                     }
@@ -110,8 +114,8 @@ export const getHeader = (screen, params, navigation, dispatch, openMenu) => {
                     isPrimary: true,
                     left: 'back',
                     title: {
-                        title: 'Export survey',
-                        subtitle: 'More properties',
+                        title: translate('navigation.exportSurvey'),
+                        subtitle: translate('navigation.moreProperties'),
                         icon: 'download-outline',
                         pack: null
                     }
@@ -122,8 +126,8 @@ export const getHeader = (screen, params, navigation, dispatch, openMenu) => {
                     isPrimary: true,
                     left: 'back',
                     title: {
-                        title: 'Export survey',
-                        subtitle: 'Overview',
+                        title: translate('navigation.exportSurvey'),
+                        subtitle: translate('navigation.overview'),
                         icon: 'download-outline',
                         pack: null
                     }
@@ -134,8 +138,8 @@ export const getHeader = (screen, params, navigation, dispatch, openMenu) => {
                     isPrimary: true,
                     left: 'back',
                     title: {
-                        title: 'Map',
-                        subtitle: 'Settings',
+                        title: translate('navigation.map'),
+                        subtitle: translate('navigation.mapSettings'),
                         icon: 'globe-2',
                         pack: null
                     }
@@ -145,7 +149,7 @@ export const getHeader = (screen, params, navigation, dispatch, openMenu) => {
                     display: true,
                     isPrimary: true,
                     left: 'back',
-                    title: 'Marker properties'
+                    title: translate('navigation.markerProperties')
                 }
             case "EditMapLayer":
                 return {
@@ -153,8 +157,8 @@ export const getHeader = (screen, params, navigation, dispatch, openMenu) => {
                     isPrimary: true,
                     left: 'back',
                     title: {
-                        title: 'Map',
-                        subtitle: 'Create new layer',
+                        title: translate('navigation.map'),
+                        subtitle: translate('navigation.createLayer'),
                         icon: 'globe-2',
                         pack: null
                     },
@@ -222,7 +226,7 @@ export const getHeader = (screen, params, navigation, dispatch, openMenu) => {
                     left: 'back',
                     title: {
                         title: ItemTypeLabels[params.itemType] ?? '',
-                        subtitle: 'Import from spreadsheet',
+                        subtitle: translate('navigation.importSpreadsheet'),
                         icon: false,
                         pack: null,
                     },
@@ -235,7 +239,7 @@ export const getHeader = (screen, params, navigation, dispatch, openMenu) => {
                     left: 'back',
                     title: {
                         title: SubitemTypeLabels[params.subitemType] ?? '',
-                        subtitle: 'Import settings',
+                        subtitle: translate('navigation.importSettings'),
                         icon: false,
                         pack: null,
                     },
@@ -257,7 +261,7 @@ export const getHeader = (screen, params, navigation, dispatch, openMenu) => {
                     display: true,
                     isPrimary: true,
                     left: 'back',
-                    title: 'Import from spreadsheet',
+                    title: translate('navigation.importSpreadsheet'),
                     right: null,
                 }
             case 'ImportParameters':
@@ -266,8 +270,8 @@ export const getHeader = (screen, params, navigation, dispatch, openMenu) => {
                     isPrimary: true,
                     left: 'back',
                     title: {
-                        title: `Property: "${params.property === 'potential' ? 'Potentials' : fieldProperties[params.property]?.label ?? null}"`,
-                        subtitle: 'Import from spreadsheet',
+                         title: `${translate('navigation.property')}: "${params.property === 'potential' ? translate('settings.potentials') : fieldProperties[params.property]?.label ?? null}"`,
+                         subtitle: translate('navigation.importSpreadsheet'),
                         icon: false,
                         pack: null,
                     },
@@ -310,7 +314,7 @@ export const getHeader = (screen, params, navigation, dispatch, openMenu) => {
                     display: true,
                     left: 'back',
                     isPrimary: true,
-                    title: 'Settings',
+                    title: translate('common.settings'),
                     right: null
                 }
             case 'CloudSurveyList':
@@ -340,7 +344,7 @@ export const getHeader = (screen, params, navigation, dispatch, openMenu) => {
                     display: true,
                     left: 'back',
                     isPrimary: true,
-                    title: 'Create survey',
+                    title: translate('navigation.createSurvey'),
                     right: null
                 }
             case 'SettingDetails':
@@ -356,7 +360,7 @@ export const getHeader = (screen, params, navigation, dispatch, openMenu) => {
                     display: true,
                     left: 'back',
                     isPrimary: true,
-                    title: 'Licences',
+                    title: translate('navigation.licenses'),
                     right: null
                 }
             case 'CycleSettings':
@@ -364,7 +368,7 @@ export const getHeader = (screen, params, navigation, dispatch, openMenu) => {
                     display: true,
                     left: 'back',
                     isPrimary: true,
-                    title: 'Multimeter settings',
+                    title: translate('navigation.multimeterSettings'),
                     right: null
                 }
             case 'Spreadsheet':
@@ -373,8 +377,8 @@ export const getHeader = (screen, params, navigation, dispatch, openMenu) => {
                     left: 'back',
                     isPrimary: true,
                     title: {
-                        title: params?.title ?? 'Error',
-                        subtitle: 'Spreadsheet file preview'
+                        title: params?.title ?? translateTopBar('error'),
+                        subtitle: translate('navigation.spreadsheetPreview')
                     },
                     right: null
                 }
@@ -384,8 +388,8 @@ export const getHeader = (screen, params, navigation, dispatch, openMenu) => {
                     left: 'back',
                     isPrimary: true,
                     title: {
-                        title: CalculatorTypeTitleLabels[params?.calculatorType] ?? 'Error',
-                        subtitle: 'Corrosion calculator',
+                        title: CalculatorTypeTitleLabels[params?.calculatorType] ?? translateTopBar('error'),
+                        subtitle: translate('settings.calculator'),
                         icon: CalculatorTypeIcons[params?.calculatorType],
                         pack: CalculatorTypeIconPacks[params?.calculatorType],
                     },
@@ -400,8 +404,8 @@ export const getHeader = (screen, params, navigation, dispatch, openMenu) => {
                     left: 'back',
                     isPrimary: true,
                     title: {
-                        title: CalculatorTypeTitleLabels[params?.calculatorType] ?? 'Error',
-                        subtitle: 'Procedure description',
+                        title: CalculatorTypeTitleLabels[params?.calculatorType] ?? translateTopBar('error'),
+                        subtitle: translate('navigation.procedureDescription'),
                         icon: CalculatorTypeIcons[params?.calculatorType],
                         pack: CalculatorTypeIconPacks[params?.calculatorType],
                     },
@@ -412,7 +416,7 @@ export const getHeader = (screen, params, navigation, dispatch, openMenu) => {
                     display: true,
                     left: 'back',
                     isPrimary: true,
-                    title: 'Corrosion calculator',
+                    title: translate('settings.calculator'),
                     right: null
                 }
             case 'Home':
@@ -424,8 +428,8 @@ export const getHeader = (screen, params, navigation, dispatch, openMenu) => {
                     display: true,
                     isPrimary: true,
                     title: {
-                        title: 'Item discovered',
-                        subtitle: 'Label',
+                         title: translate('navigation.itemDiscovered'),
+                         subtitle: translate('navigation.label'),
                         icon: 'pricetags',
                         pack: null,
                     },
@@ -436,7 +440,7 @@ export const getHeader = (screen, params, navigation, dispatch, openMenu) => {
                 return {
                     display: true,
                     isPrimary: true,
-                    title: 'Find in the survey',
+                    title: translate('navigation.findInSurvey'),
                     left: 'back',
                     right: null
                 }
@@ -444,7 +448,7 @@ export const getHeader = (screen, params, navigation, dispatch, openMenu) => {
                 return {
                     display: true,
                     isPrimary: true,
-                    title: 'Match pipelines',
+                    title: translate('navigation.matchPipelines'),
                     left: 'back',
                     right: null
                 }

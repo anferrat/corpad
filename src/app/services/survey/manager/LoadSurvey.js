@@ -49,7 +49,7 @@ export class LoadSurvey {
         catch (er) {
             //3. If fast import rejected, passing file down to advanced import (slower, but able to import only valid values, and discard invalid)
             //If survey was recovered during validation, ignoring conformation from user, since he already agreed
-            const confirm = isRecovered ? true : await this.warningHandler.execute('Survey file is corrupted. Opening this file may erase some of its content. If you encountered lost data after opening, use "Exit without saving" feature in Settings to avoid original file to be ovewritten. Contact support for help with recovering data.',
+            const confirm = isRecovered ? true : await this.warningHandler.execute({ key: 'warnings.messages.corruptedSurvey' },
                 'Proceed',
                 'Cancel')
             if (confirm) {

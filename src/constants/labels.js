@@ -1,6 +1,87 @@
 import { ItemTypes, SubitemTypes, PipeDiameters, WireColors, TestPointTypes, PermanentPotentialTypes, SortingOptions, ItemStatuses, PipeSchedules, WireGauges, CurrentUnits, AreaUnits, CurrentDensityUnits, FactorUnits, PotentialUnits, AnodeMaterials, ReferenceCellTypes, IsolationTypes, CouponTypes, PipelineMaterials, PipelineProducts, PowerSources, TapOptions, CoarseFineOptions, ExportItemProperties, ExportSubitemProperties, CalculatorTypes, PipelineCoating, IsolationShorted, MultimeterTypes, TimeUnits, MultimeterMeasurementTypes, MultimeterCycles, MultimeterSyncModes, ImageSources, MapLayerFeatures, StrokeColors, StrokeWidths, ExportFormatTypes, LengthUnits, ResistivityUnits, AnodeBedEnclosureTypes, AnodeBedMaterialTypes, AnodeBedTypes, SubscriptionStatuses, FileMimeTypes, ExternalLinkTypes, TestPointReadingOptions, RectifierReadingOptions, PipelineFilterItems, MeasurementPropertyTypes, TimeSyncSources, MultimeterModes, MultimeterVoltageRanges, MultimeterCurrentRanges } from "./global"
 
-export const DefaultNames = Object.freeze({
+let activeLabelCatalog = null
+
+export const setActiveLabelCatalog = (catalog) => {
+    activeLabelCatalog = catalog ?? null
+}
+
+const createLabelMap = (name, fallback) => new Proxy(fallback, {
+    get: (target, property) => activeLabelCatalog?.[name]?.[property] ?? target[property],
+    ownKeys: target => Object.keys(activeLabelCatalog?.[name] ?? target),
+    getOwnPropertyDescriptor: (target, property) => ({
+        enumerable: true,
+        configurable: true,
+        value: activeLabelCatalog?.[name]?.[property] ?? target[property]
+    })
+})
+
+export const labelMapNames = Object.freeze([
+    'DefaultNames',
+    'PipeDiameterLabels',
+    'WireColorLabels',
+    'ItemTypeLabels',
+    'ItemTypeLabelsPlural',
+    'TestPointTypeLabels',
+    'SubitemTypeLabels',
+    'PermanentPotentialTypeLabels',
+    'SortingOptionLabels',
+    'StatusLabels',
+    'PipeScheduleLabels',
+    'WireGaugeLabels',
+    'CurrentUnitLabels',
+    'AreaUnitLabels',
+    'CurrentDensityUnitLabels',
+    'FactorUnitLabels',
+    'PotentialUnitLabels',
+    'LengthUnitLabels',
+    'LengthUnitDescriptionLabels',
+    'ResistivityUnitLabels',
+    'ResistivityUnitDescriptionLabels',
+    'PotentialUnitDescriptionLabels',
+    'AnodeMaterialLabels',
+    'ReferenceCellTypeLabels',
+    'ReferenceCellCodeLabels',
+    'IsolationTypeLabels',
+    'CouponTypeLabels',
+    'PipelineMaterialLabels',
+    'PipelineCoatingLabels',
+    'IsolationShortedLabels',
+    'PipelineProductLabels',
+    'PowerSourceLabels',
+    'TapOptionLabels',
+    'CoarseFineOptionLabels',
+    'ExportItemPropertyLabels',
+    'ExportSubitemPropertyLabels',
+    'CalculatorTypeLabels',
+    'CalculatorTypeTitleLabels',
+    'CalculatorTypeDescriptionLabels',
+    'CalculatorTypeFileNameLabels',
+    'MultimeterTypeLabels',
+    'TimeUnitLabels',
+    'MeasurementTypeLabels',
+    'MultimeterCycleLabels',
+    'MultimeterSyncModeLabels',
+    'ImageSourceLabels',
+    'MapLayerFeatureLabels',
+    'StrokeColorLabels',
+    'StrokeWidthLabels',
+    'ExportFormatTypeLabeles',
+    'AnodeBedEnclosureTypeLabels',
+    'AnodeBedMateriaTypelLabels',
+    'AnodeBedTypeLabesl',
+    'SubscriptionStatusLabels',
+    'FileMimeTypeLabels',
+    'ExternalLinkTypeLabels',
+    'TestPointReadingOptionLabels',
+    'RectifierReadingOptionLabels',
+    'PipelineFilterItemLabels',
+    'MeasurementPropertyTypeLabels',
+    'TimeSyncSourceLabels',
+    'MultimeterModeLabels',
+    'MultimeterRangeLabels'
+])
+export const DefaultNames = createLabelMap('DefaultNames', {
     [ItemTypes.TEST_POINT]: 'TP',
     [ItemTypes.RECTIFIER]: 'RT',
     [ItemTypes.PIPELINE]: 'Pipeline',
@@ -19,7 +100,7 @@ export const DefaultNames = Object.freeze({
     [SubitemTypes.SOIL_RESISTIVITY]: 'Soil resistivity'
 })
 
-export const PipeDiameterLabels = Object.freeze({
+export const PipeDiameterLabels = createLabelMap('PipeDiameterLabels', {
     [PipeDiameters.NPS0_5]: 'NPS ½',
     [PipeDiameters.NPS3_4]: 'NPS ¾',
     [PipeDiameters.NPS1]: 'NPS 1',
@@ -65,7 +146,7 @@ export const PipeDiameterLabels = Object.freeze({
     [PipeDiameters.NPS88]: 'NPS 88'
 })
 
-export const WireColorLabels = Object.freeze({
+export const WireColorLabels = createLabelMap('WireColorLabels', {
     [WireColors.BLACK]: 'Black',
     [WireColors.BLACK_RED]: 'Black w/ red',
     [WireColors.DARK_BLUE]: 'Dark blue',
@@ -80,19 +161,19 @@ export const WireColorLabels = Object.freeze({
     [WireColors.YELLOW]: 'Yellow'
 })
 
-export const ItemTypeLabels = Object.freeze({
+export const ItemTypeLabels = createLabelMap('ItemTypeLabels', {
     [ItemTypes.TEST_POINT]: 'Test point',
     [ItemTypes.RECTIFIER]: 'Rectifier',
     [ItemTypes.PIPELINE]: 'Pipeline'
 })
 
-export const ItemTypeLabelsPlural = Object.freeze({
+export const ItemTypeLabelsPlural = createLabelMap('ItemTypeLabelsPlural', {
     [ItemTypes.TEST_POINT]: 'Test points',
     [ItemTypes.RECTIFIER]: 'Rectifiers',
     [ItemTypes.PIPELINE]: 'Pipelines'
 })
 
-export const TestPointTypeLabels = Object.freeze({
+export const TestPointTypeLabels = createLabelMap('TestPointTypeLabels', {
     [TestPointTypes.FIELD_NOTE]: 'Field note',
     [TestPointTypes.HEADER]: 'Piping',
     [TestPointTypes.JUNCTION_BOX]: 'Junction box',
@@ -100,7 +181,7 @@ export const TestPointTypeLabels = Object.freeze({
     [TestPointTypes.MEASURMENT]: 'Measurement'
 })
 
-export const SubitemTypeLabels = Object.freeze({
+export const SubitemTypeLabels = createLabelMap('SubitemTypeLabels', {
     [SubitemTypes.ANODE]: 'Anode test lead',
     [SubitemTypes.BOND]: 'Bond',
     [SubitemTypes.CIRCUIT]: 'Rectifier circuit',
@@ -116,7 +197,7 @@ export const SubitemTypeLabels = Object.freeze({
     [SubitemTypes.SOIL_RESISTIVITY]: 'Soil resistivity test'
 })
 
-export const PermanentPotentialTypeLabels = Object.freeze({
+export const PermanentPotentialTypeLabels = createLabelMap('PermanentPotentialTypeLabels', {
     [PermanentPotentialTypes.ON]: 'On',
     [PermanentPotentialTypes.OFF]: 'Off',
     [PermanentPotentialTypes.AC]: 'AC',
@@ -125,7 +206,7 @@ export const PermanentPotentialTypeLabels = Object.freeze({
     [PermanentPotentialTypes.DISCONNECTED]: 'Disconnected'
 })
 
-export const SortingOptionLabels = Object.freeze({
+export const SortingOptionLabels = createLabelMap('SortingOptionLabels', {
     [SortingOptions.ASCENDING_NAME]: 'Name: A - Z',
     [SortingOptions.DESCENDING_NAME]: 'Name: Z - A',
     [SortingOptions.NEW_TO_OLD]: 'Date modified: Newest first',
@@ -133,14 +214,14 @@ export const SortingOptionLabels = Object.freeze({
     [SortingOptions.NEAREST]: 'Location: Nearest first',
 })
 
-export const StatusLabels = Object.freeze({
+export const StatusLabels = createLabelMap('StatusLabels', {
     [ItemStatuses.GOOD]: 'Pass',
     [ItemStatuses.ATTENTION]: 'Alert',
     [ItemStatuses.BAD]: 'Problem',
     [ItemStatuses.UNKNOWN]: 'Unchecked'
 })
 
-export const PipeScheduleLabels = Object.freeze({
+export const PipeScheduleLabels = createLabelMap('PipeScheduleLabels', {
     [PipeSchedules.S10]: '10',
     [PipeSchedules.S20]: '20',
     [PipeSchedules.S30]: '30',
@@ -156,7 +237,7 @@ export const PipeScheduleLabels = Object.freeze({
     [PipeSchedules.XXS]: 'XXS'
 })
 
-export const WireGaugeLabels = Object.freeze({
+export const WireGaugeLabels = createLabelMap('WireGaugeLabels', {
     [WireGauges.AVG0_PLUS]: '> AWG 0',
     [WireGauges.AVG0]: 'AWG 0',
     [WireGauges.AVG1]: 'AWG 1',
@@ -179,78 +260,78 @@ export const WireGaugeLabels = Object.freeze({
     [WireGauges.AVG17_MINUS]: '< AWG 17'
 })
 
-export const CurrentUnitLabels = Object.freeze({
+export const CurrentUnitLabels = createLabelMap('CurrentUnitLabels', {
     [CurrentUnits.AMPS]: 'A',
     [CurrentUnits.MILI_AMPS]: 'mA',
     [CurrentUnits.MICRO_AMPS]: '\u00B5A',
 })
 
-export const AreaUnitLabels = Object.freeze({
+export const AreaUnitLabels = createLabelMap('AreaUnitLabels', {
     [AreaUnits.CENTIMETER_SQUARE]: 'cm2',
     [AreaUnits.METER_SQUARE]: 'm2'
 })
 
-export const CurrentDensityUnitLabels = Object.freeze({
+export const CurrentDensityUnitLabels = createLabelMap('CurrentDensityUnitLabels', {
     [CurrentDensityUnits.AMPS_OVER_CM_SQUARE]: 'A/cm2',
     [CurrentDensityUnits.AMPS_OVER_METER_SQUARE]: 'A/m2',
     [CurrentDensityUnits.MILI_AMPS_OVER_CM_SQUARE]: 'mA/cm2',
     [CurrentDensityUnits.MILI_AMPS_OVER_METER_SQUARE]: 'mA/m2'
 })
 
-export const FactorUnitLabels = Object.freeze({
+export const FactorUnitLabels = createLabelMap('FactorUnitLabels', {
     [FactorUnits.AMPS_OVER_MILIVOLTS]: 'A/mV',
     [FactorUnits.AMPS_OVER_VOLTS]: 'A/V',
     [FactorUnits.MILIVOLTS_OVER_AMPS]: 'mV/A',
     [FactorUnits.VOLTS_OVER_AMPS]: 'V/A'
 })
 
-export const PotentialUnitLabels = Object.freeze({
+export const PotentialUnitLabels = createLabelMap('PotentialUnitLabels', {
     [PotentialUnits.MILIVOLTS]: 'mV',
     [PotentialUnits.NEGATIVE_MILIVOLTS]: '-mV',
     [PotentialUnits.NEGATIVE_VOLTS]: '-V',
     [PotentialUnits.VOLTS]: 'V'
 })
 
-export const LengthUnitLabels = Object.freeze({
+export const LengthUnitLabels = createLabelMap('LengthUnitLabels', {
     [LengthUnits.CENTIMETERS]: 'cm',
     [LengthUnits.METERS]: 'm',
     [LengthUnits.FEET]: 'ft'
 })
 
-export const LengthUnitDescriptionLabels = Object.freeze({
+export const LengthUnitDescriptionLabels = createLabelMap('LengthUnitDescriptionLabels', {
     [LengthUnits.CENTIMETERS]: 'Centimeter',
     [LengthUnits.METERS]: 'Meter',
     [LengthUnits.FEET]: 'Foot'
 })
 
-export const ResistivityUnitLabels = Object.freeze({
+export const ResistivityUnitLabels = createLabelMap('ResistivityUnitLabels', {
     [ResistivityUnits.OHM_CENTIMITTERS]: '\u03A9-cm',
     [ResistivityUnits.OHM_FEET]: '\u03A9-ft',
     [ResistivityUnits.OHM_METERS]: '\u03A9-m'
 })
 
-export const ResistivityUnitDescriptionLabels = Object.freeze({
+export const ResistivityUnitDescriptionLabels = createLabelMap('ResistivityUnitDescriptionLabels', {
     [ResistivityUnits.OHM_CENTIMITTERS]: 'Ohm-centimeter',
     [ResistivityUnits.OHM_FEET]: 'Ohm-foot',
     [ResistivityUnits.OHM_METERS]: 'Ohm-meter'
 })
 
 
-export const PotentialUnitDescriptionLabels = Object.freeze({
+export const PotentialUnitDescriptionLabels = createLabelMap('PotentialUnitDescriptionLabels', {
     [PotentialUnits.MILIVOLTS]: 'Milivolts',
     [PotentialUnits.NEGATIVE_MILIVOLTS]: 'Neg. milivolts',
     [PotentialUnits.NEGATIVE_VOLTS]: 'Neg. volts',
     [PotentialUnits.VOLTS]: 'Volts'
 })
 
-export const AnodeMaterialLabels = Object.freeze({
+export const AnodeMaterialLabels = createLabelMap('AnodeMaterialLabels', {
     [AnodeMaterials.ALUMINUM]: 'Aluminum',
     [AnodeMaterials.MAGNEZIUM]: 'Magnesium',
     [AnodeMaterials.OTHER]: 'Other',
     [AnodeMaterials.ZINC]: 'Zinc'
 })
 
-export const ReferenceCellTypeLabels = Object.freeze({
+export const ReferenceCellTypeLabels = createLabelMap('ReferenceCellTypeLabels', {
     [ReferenceCellTypes.COPPER_SULFATE]: 'Copper-sulfate',
     [ReferenceCellTypes.NORMAL_HYDROGEN]: 'Normal hydrogen',
     [ReferenceCellTypes.SATURATED_CALOMEL]: 'Saturated calomel',
@@ -258,7 +339,7 @@ export const ReferenceCellTypeLabels = Object.freeze({
     [ReferenceCellTypes.ZINC]: 'Zinc'
 })
 
-export const ReferenceCellCodeLabels = Object.freeze({
+export const ReferenceCellCodeLabels = createLabelMap('ReferenceCellCodeLabels', {
     [ReferenceCellTypes.COPPER_SULFATE]: 'CSE',
     [ReferenceCellTypes.NORMAL_HYDROGEN]: 'NHE',
     [ReferenceCellTypes.SATURATED_CALOMEL]: 'SCE',
@@ -266,18 +347,18 @@ export const ReferenceCellCodeLabels = Object.freeze({
     [ReferenceCellTypes.ZINC]: 'ZRE'
 })
 
-export const IsolationTypeLabels = Object.freeze({
+export const IsolationTypeLabels = createLabelMap('IsolationTypeLabels', {
     [IsolationTypes.ISOLATION_JOINT]: 'Isolation joint',
     [IsolationTypes.ISOLATION_KIT]: 'Isolation kit',
     [IsolationTypes.OTHER]: 'Other'
 })
 
-export const CouponTypeLabels = Object.freeze({
+export const CouponTypeLabels = createLabelMap('CouponTypeLabels', {
     [CouponTypes.AC]: 'AC',
     [CouponTypes.DC]: 'DC'
 })
 
-export const PipelineMaterialLabels = Object.freeze({
+export const PipelineMaterialLabels = createLabelMap('PipelineMaterialLabels', {
     [PipelineMaterials.ALLOY_STEEL]: 'Alloy steel',
     [PipelineMaterials.CARBON_STEEL]: 'Carbon steel',
     [PipelineMaterials.CAST_IRON]: 'Cast iron',
@@ -288,37 +369,37 @@ export const PipelineMaterialLabels = Object.freeze({
     [PipelineMaterials.OTHER]: 'Other'
 })
 
-export const PipelineCoatingLabels = Object.freeze({
+export const PipelineCoatingLabels = createLabelMap('PipelineCoatingLabels', {
     [PipelineCoating.BARE]: 'Bare',
     [PipelineCoating.COATED]: 'Coated'
 })
 
-export const IsolationShortedLabels = Object.freeze({
+export const IsolationShortedLabels = createLabelMap('IsolationShortedLabels', {
     [IsolationShorted.SHORTED]: 'Shorted',
     [IsolationShorted.NOT_SHORTED]: 'Not shorted'
 })
 
-export const PipelineProductLabels = Object.freeze({
+export const PipelineProductLabels = createLabelMap('PipelineProductLabels', {
     [PipelineProducts.GAS]: 'Natural gas',
     [PipelineProducts.OIL]: 'Liquid hydrocarbons',
     [PipelineProducts.WATER]: 'Water',
     [PipelineProducts.OTHER]: 'Other'
 })
 
-export const PowerSourceLabels = Object.freeze({
+export const PowerSourceLabels = createLabelMap('PowerSourceLabels', {
     [PowerSources.AC_POWER]: 'AC grid',
     [PowerSources.SOLAR]: 'Solar panel',
     [PowerSources.TEG]: 'TEG',
     [PowerSources.WIND]: 'Wind turbine'
 })
 
-export const TapOptionLabels = Object.freeze({
+export const TapOptionLabels = createLabelMap('TapOptionLabels', {
     [TapOptions.AUTO]: 'Automatic',
     [TapOptions.COARSE_FINE]: 'Corase-Fine',
     [TapOptions.RESISTOR]: 'VA %'
 })
 
-export const CoarseFineOptionLabels = Object.freeze({
+export const CoarseFineOptionLabels = createLabelMap('CoarseFineOptionLabels', {
     [CoarseFineOptions.A]: 'A',
     [CoarseFineOptions.B]: 'B',
     [CoarseFineOptions.C]: 'C',
@@ -342,7 +423,7 @@ export const CoarseFineOptionLabels = Object.freeze({
     [CoarseFineOptions.D9]: '9',
 })
 
-export const ExportItemPropertyLabels = Object.freeze({
+export const ExportItemPropertyLabels = createLabelMap('ExportItemPropertyLabels', {
     [ExportItemProperties.NAME]: 'Name',
     [ExportItemProperties.TEST_POINT_TYPE]: 'Test point type',
     [ExportItemProperties.TIME_MODIFIED]: 'Last time modified',
@@ -362,7 +443,7 @@ export const ExportItemPropertyLabels = Object.freeze({
     [ExportItemProperties.MAX_CURRENT]: 'Max. current'
 })
 
-export const ExportSubitemPropertyLabels = Object.freeze({
+export const ExportSubitemPropertyLabels = createLabelMap('ExportSubitemPropertyLabels', {
     [ExportSubitemProperties.VOLTAGE_DROP]: 'Voltage drop',
     [ExportSubitemProperties.CURRENT]: 'Current',
     [ExportSubitemProperties.SHUNT_RATIO]: 'Ratio',
@@ -374,7 +455,7 @@ export const ExportSubitemPropertyLabels = Object.freeze({
     [ExportSubitemProperties.TARGET]: 'Target'
 })
 
-export const CalculatorTypeLabels = Object.freeze({
+export const CalculatorTypeLabels = createLabelMap('CalculatorTypeLabels', {
     [CalculatorTypes.COATING]: 'Coating quality',
     [CalculatorTypes.CURRENT_FOUR_WIRE]: 'Current span (4-wire)',
     [CalculatorTypes.CURRENT_TWO_WIRE]: 'Current span (2-wire)',
@@ -383,7 +464,7 @@ export const CalculatorTypeLabels = Object.freeze({
     [CalculatorTypes.WENNER]: 'Layer resistivity'
 })
 
-export const CalculatorTypeTitleLabels = Object.freeze({
+export const CalculatorTypeTitleLabels = createLabelMap('CalculatorTypeTitleLabels', {
     [CalculatorTypes.COATING]: 'Conductance',
     [CalculatorTypes.CURRENT_FOUR_WIRE]: 'Current span',
     [CalculatorTypes.CURRENT_TWO_WIRE]: 'Current span',
@@ -392,7 +473,7 @@ export const CalculatorTypeTitleLabels = Object.freeze({
     [CalculatorTypes.WENNER]: 'Resistivity'
 })
 
-export const CalculatorTypeDescriptionLabels = Object.freeze({
+export const CalculatorTypeDescriptionLabels = createLabelMap('CalculatorTypeDescriptionLabels', {
     [CalculatorTypes.COATING]: 'Calculate coating conductance of the pipeline section using ON/OFF potentials and current, and determine coating quality.',
     [CalculatorTypes.CURRENT_FOUR_WIRE]: 'Calculate in-line current using voltage drop between two points and calculated pipe resistance.',
     [CalculatorTypes.CURRENT_TWO_WIRE]: 'Calculate in-line current using pipe diameter and voltage drop between two points.',
@@ -401,7 +482,7 @@ export const CalculatorTypeDescriptionLabels = Object.freeze({
     [CalculatorTypes.WENNER]: 'Calculate resistivity of soil layers using Wenner method and Barnes analysis.'
 })
 
-export const CalculatorTypeFileNameLabels = Object.freeze({
+export const CalculatorTypeFileNameLabels = createLabelMap('CalculatorTypeFileNameLabels', {
     [CalculatorTypes.COATING]: 'Coating_conductance',
     [CalculatorTypes.CURRENT_FOUR_WIRE]: 'Current_span_four_wire',
     [CalculatorTypes.CURRENT_TWO_WIRE]: 'Current_span_two_wire',
@@ -410,19 +491,19 @@ export const CalculatorTypeFileNameLabels = Object.freeze({
     [CalculatorTypes.WENNER]: 'Wenner_test'
 })
 
-export const MultimeterTypeLabels = Object.freeze({
+export const MultimeterTypeLabels = createLabelMap('MultimeterTypeLabels', {
     [MultimeterTypes.POKIT]: 'Pokit Pro',
     [MultimeterTypes.DVM2130]: 'DVM 2130'
 })
 
-export const TimeUnitLabels = Object.freeze({
+export const TimeUnitLabels = createLabelMap('TimeUnitLabels', {
     [TimeUnits.SECONDS]: 's',
     [TimeUnits.MILISECONDS]: 'ms',
     [TimeUnits.MINUTES]: 'm',
     [TimeUnits.HOURS]: 'hr'
 })
 
-export const MeasurementTypeLabels = Object.freeze({
+export const MeasurementTypeLabels = createLabelMap('MeasurementTypeLabels', {
     [MultimeterMeasurementTypes.POTENTIALS]: 'DC Volts',
     [MultimeterMeasurementTypes.VOLTAGE]: 'DC Volts',
     [MultimeterMeasurementTypes.CURRENT]: 'DC Amps',
@@ -432,31 +513,31 @@ export const MeasurementTypeLabels = Object.freeze({
     [MultimeterMeasurementTypes.POTENTIALS_AC]: 'AC Volts'
 })
 
-export const MultimeterCycleLabels = Object.freeze({
+export const MultimeterCycleLabels = createLabelMap('MultimeterCycleLabels', {
     [MultimeterCycles.ON]: 'On',
     [MultimeterCycles.OFF]: 'Off'
 })
 
-export const MultimeterSyncModeLabels = Object.freeze({
+export const MultimeterSyncModeLabels = createLabelMap('MultimeterSyncModeLabels', {
     [MultimeterSyncModes.REAL_TIME]: 'No cycle',
     [MultimeterSyncModes.GPS]: 'Time sync',
     [MultimeterSyncModes.HIGH_LOW]: 'High/Low',
     [MultimeterSyncModes.CYCLED]: 'Shift'
 })
 
-export const ImageSourceLabels = Object.freeze({
+export const ImageSourceLabels = createLabelMap('ImageSourceLabels', {
     [ImageSources.CAMERA]: 'Camera',
     [ImageSources.LIBRARY]: 'Library',
     [ImageSources.STORAGE]: 'Storage'
 })
 
-export const MapLayerFeatureLabels = Object.freeze({
+export const MapLayerFeatureLabels = createLabelMap('MapLayerFeatureLabels', {
     [MapLayerFeatures.POINT]: 'Point',
     [MapLayerFeatures.LINE]: 'Line',
     [MapLayerFeatures.POLYGON]: 'Polygon'
 })
 
-export const StrokeColorLabels = Object.freeze({
+export const StrokeColorLabels = createLabelMap('StrokeColorLabels', {
     [StrokeColors.BLUE]: 'Blue',
     [StrokeColors.GREEN]: 'Green',
     [StrokeColors.ORANGE]: 'Orange',
@@ -465,7 +546,7 @@ export const StrokeColorLabels = Object.freeze({
     [StrokeColors.YELLOW]: 'Yellow'
 })
 
-export const StrokeWidthLabels = Object.freeze({
+export const StrokeWidthLabels = createLabelMap('StrokeWidthLabels', {
     [StrokeWidths._05PT]: '1 px',
     [StrokeWidths._1PT]: '2 px',
     [StrokeWidths._1_5PT]: '3 px',
@@ -473,18 +554,18 @@ export const StrokeWidthLabels = Object.freeze({
     [StrokeWidths._3PT]: '6 px'
 })
 
-export const ExportFormatTypeLabeles = Object.freeze({
+export const ExportFormatTypeLabeles = createLabelMap('ExportFormatTypeLabeles', {
     [ExportFormatTypes.CSV]: 'Comma Separated File (.csv)',
     [ExportFormatTypes.KML]: 'Keyhole Markup Language File (.kml)'
 })
 
-export const AnodeBedEnclosureTypeLabels = Object.freeze({
+export const AnodeBedEnclosureTypeLabels = createLabelMap('AnodeBedEnclosureTypeLabels', {
     [AnodeBedEnclosureTypes.BURIED]: 'Buired',
     [AnodeBedEnclosureTypes.JUNCTION_BOX]: 'Junction box',
     [AnodeBedEnclosureTypes.UNDEGROUND_BOX]: 'Undeground box'
 })
 
-export const AnodeBedMateriaTypelLabels = Object.freeze({
+export const AnodeBedMateriaTypelLabels = createLabelMap('AnodeBedMateriaTypelLabels', {
     [AnodeBedMaterialTypes.ALUMINUM]: 'Aluminum',
     [AnodeBedMaterialTypes.CONDUCTIVE_POLYMER]: 'Conductive polymer',
     [AnodeBedMaterialTypes.GRAPHITE]: 'Graphite',
@@ -494,13 +575,13 @@ export const AnodeBedMateriaTypelLabels = Object.freeze({
     [AnodeBedMaterialTypes.SCRAP_METAL]: 'Scrap metal'
 })
 
-export const AnodeBedTypeLabesl = Object.freeze({
+export const AnodeBedTypeLabesl = createLabelMap('AnodeBedTypeLabesl', {
     [AnodeBedTypes.DEEP_VERTICAL]: 'Deep vertical',
     [AnodeBedTypes.SHALLOW_HORIZONTAL]: 'Shallow horizontal',
     [AnodeBedTypes.SHALLOW_VERTICAL]: 'Shallow vertical'
 })
 
-export const SubscriptionStatusLabels = Object.freeze({
+export const SubscriptionStatusLabels = createLabelMap('SubscriptionStatusLabels', {
     [SubscriptionStatuses.GRANTED]: 'Active',
     [SubscriptionStatuses.NOT_GRANTED]: 'Not active',
     [SubscriptionStatuses.UNKNOWN_GRANTED]: 'Active',
@@ -508,7 +589,7 @@ export const SubscriptionStatusLabels = Object.freeze({
     [SubscriptionStatuses.PENDING]: 'Pending'
 })
 
-export const FileMimeTypeLabels = Object.freeze({
+export const FileMimeTypeLabels = createLabelMap('FileMimeTypeLabels', {
     [FileMimeTypes.BINARY]: 'Binary',
     [FileMimeTypes.CSV]: 'CSV',
     [FileMimeTypes.GPX]: 'GPX',
@@ -519,12 +600,12 @@ export const FileMimeTypeLabels = Object.freeze({
     [FileMimeTypes.ZIP]: 'ZIP'
 })
 
-export const ExternalLinkTypeLabels = Object.freeze({
+export const ExternalLinkTypeLabels = createLabelMap('ExternalLinkTypeLabels', {
     [ExternalLinkTypes.NFC]: 'NFC label',
     [ExternalLinkTypes.QR_CODE]: 'QR code'
 })
 
-export const TestPointReadingOptionLabels = Object.freeze({
+export const TestPointReadingOptionLabels = createLabelMap('TestPointReadingOptionLabels', {
     [TestPointReadingOptions.ON_OFF]: 'Potentials: ON/OFF',
     [TestPointReadingOptions.OFF_NATIVE]: 'Potentials: OFF/Native',
     [TestPointReadingOptions.SHUNT_CURRENT]: 'Current: Shunts and bonds',
@@ -532,16 +613,16 @@ export const TestPointReadingOptionLabels = Object.freeze({
     [TestPointReadingOptions.SHORTING_CURRENT]: 'Shorting current: Isolation'
 })
 
-export const RectifierReadingOptionLabels = Object.freeze({
+export const RectifierReadingOptionLabels = createLabelMap('RectifierReadingOptionLabels', {
     [RectifierReadingOptions.CURRENT_VOLTAGE]: 'Current and voltage',
     [RectifierReadingOptions.TARGET]: 'Current target'
 })
 
-export const PipelineFilterItemLabels = Object.freeze({
+export const PipelineFilterItemLabels = createLabelMap('PipelineFilterItemLabels', {
     [PipelineFilterItems.NOT_ASSIGNED]: 'Non-pipelines and unassigned'
 })
 
-export const MeasurementPropertyTypeLabels = Object.freeze({
+export const MeasurementPropertyTypeLabels = createLabelMap('MeasurementPropertyTypeLabels', {
     [MeasurementPropertyTypes.POTENTIAL]: 'Potentials (DC)',
     [MeasurementPropertyTypes.POTENTIAL_AC]: 'Potentials (AC)',
     [MeasurementPropertyTypes.VOLTAGE]: 'Voltage (DC)',
@@ -550,13 +631,13 @@ export const MeasurementPropertyTypeLabels = Object.freeze({
     [MeasurementPropertyTypes.VOLTAGE_DROP]: 'Voltage drop (DC)'
 })
 
-export const TimeSyncSourceLabels = Object.freeze({
+export const TimeSyncSourceLabels = createLabelMap('TimeSyncSourceLabels', {
     [TimeSyncSources.GPS]: 'GPS',
     [TimeSyncSources.NTP]: 'NTP',
     [TimeSyncSources.MIXED]: 'Mixed'
 })
 
-export const MultimeterModeLabels = Object.freeze({
+export const MultimeterModeLabels = createLabelMap('MultimeterModeLabels', {
     [MultimeterModes.POKIT.AC_AMPS]: 'Current AC',
     [MultimeterModes.POKIT.DC_AMPS]: 'Current DC',
     [MultimeterModes.POKIT.DC_VOLTS]: 'Voltage DC',
@@ -567,7 +648,7 @@ export const MultimeterModeLabels = Object.freeze({
     [MultimeterModes.DVM2130.IDLE]: 'Idle'
 })
 
-export const MultimeterRangeLabels = Object.freeze({
+export const MultimeterRangeLabels = createLabelMap('MultimeterRangeLabels', {
     [MultimeterVoltageRanges.POKIT.AUTO]: 'Auto',
     [MultimeterVoltageRanges.POKIT._250MV]: '250 mV',
     [MultimeterVoltageRanges.POKIT._2V]: '2 V',

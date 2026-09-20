@@ -1,5 +1,6 @@
 import React from 'react'
 import TextLine from '../../../../components/TextLine'
+import { translateView } from '../../../../localization'
 import Header from '../Header'
 import PotentialsView from '../PotentialsView'
 import Divider from '../Divider'
@@ -40,7 +41,7 @@ const PL = ({
                 unit={potentialUnit}
                 potentialHint={potentialHint}
                 potentials={potentials} />
-            <TextLine title='Pipeline' value={~pipelineIndex ? pipelineList[pipelineIndex].name : null} icon='PL' pack='cp' />
+            <TextLine title={translateView('pipeline')} value={~pipelineIndex ? pipelineList[pipelineIndex].name : null} icon='PL' pack='cp' />
         </>
     )
 }

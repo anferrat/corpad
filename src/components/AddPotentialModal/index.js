@@ -4,6 +4,7 @@ import { Button } from '@ui-kitten/components'
 import { addIcon } from '../Icons'
 import PotentialsTypeModal from './PotentialsTypeModal'
 import ReferenceCellModal from './ReferenceCellModal'
+import { translatePotentialSelection } from '../../localization'
 
 const initModalData = {
     visible: 0, //0 - hidden, 1 - potentialTypes, 2- referenceCells
@@ -57,7 +58,7 @@ export const AddPotentials = React.memo(({ referenceCellList, potentialTypes, se
                     onPress={showPotentialTypeSelector}
                     appearance='ghost'
                     accessoryLeft={addIcon}>
-                    Add potentials
+                    {translatePotentialSelection('addPotentials')}
                 </Button>
                 <Modal
                     animationType="slide"

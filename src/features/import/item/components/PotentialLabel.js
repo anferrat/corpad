@@ -4,6 +4,7 @@ import { Popover, Text, Icon } from '@ui-kitten/components'
 import { basic, basic300, control } from '../../../../styles/colors'
 import { androidRipple } from '../../../../styles/styles'
 import Pressable from '../../../../components/Pressable'
+import { translateImport } from '../../../../localization'
 
 
 const PotentialLabel = ({
@@ -14,7 +15,7 @@ const PotentialLabel = ({
 }) => {
     const [visible, setVisible] = useState(false)
 
-    const refCellName = referenceCellList ? (referenceCellList[referenceCellIndex]?.name ?? 'Error') : 'Error'
+    const refCellName = referenceCellList ? (referenceCellList[referenceCellIndex]?.name ?? translateImport('item.error')) : translateImport('item.error')
     const potentialTypeName = potentialTypes ? (potentialTypes[potentialTypeIndex]?.name ?? null) : 'null'
 
     const renderAnchor = React.useCallback(() => {

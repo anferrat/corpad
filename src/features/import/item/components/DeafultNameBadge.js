@@ -2,11 +2,12 @@ import React from 'react'
 import { View, StyleSheet, Platform } from 'react-native'
 import { Text } from '@ui-kitten/components'
 import { basic300, primary } from '../../../../styles/colors'
+import { translateImport } from '../../../../localization'
 
 
 const DefaultBadge = () => (
     <View style={badgeStyle}>
-        <Text category='label' status='control' numberOfLines={1} ellipsizeMode={'tail'}>Default name</Text>
+        <Text category='label' status='control' numberOfLines={1} ellipsizeMode={'tail'}>{translateImport('parameters.defaultName')}</Text>
     </View>
 )
 

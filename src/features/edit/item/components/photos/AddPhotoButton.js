@@ -5,6 +5,7 @@ import { androidRipple } from '../../../../../styles/styles'
 import { Icon, Text } from '@ui-kitten/components'
 import { primary } from '../../../../../styles/colors'
 import { dimensions } from './size'
+import { translateEdit } from '../../../../../localization'
 
 
 const AddPhotoButton = ({ onPress, limitReached }) => {
@@ -23,7 +24,7 @@ const AddPhotoButton = ({ onPress, limitReached }) => {
                 <Text
                     status='primary'
                     category='s2'>
-                    {'Add a photo'}
+                    {translateEdit('addPhoto')}
                 </Text>
             </Pressable>
         )

@@ -1,0 +1,32 @@
+import englishMapLayer from '../en/viewMapLayer'
+
+export default {
+    ...englishMapLayer,
+    calculatorOptions: 'Opciones de la calculadora',
+    displayCalculatorMarkers: 'Mostrar marcadores de la calculadora',
+    displayedMapLayers: 'Capas del mapa mostradas',
+    addMapLayer: 'Añadir una capa del mapa',
+    supportedFormats: 'Formatos compatibles: .kml, .kmz, .gpx, .geojson',
+    maxLimitReached: 'Límite máximo alcanzado',
+    upgradePremium: 'Actualizar a premium',
+    features: 'Elementos: {{count}}',
+    emptyDescription: 'Importe marcadores, polilíneas y polígonos al estudio desde un archivo geográfico.',
+    goTo: 'Ir a',
+    edit: 'Editar',
+    delete: 'Eliminar',
+    back: 'Atrás',
+    cancel: 'Cancelar',
+    applyingSettings: 'Aplicando la nueva configuración',
+    layerName: 'Nombre de la capa',
+    color: 'Color',
+    strokeWidth: 'Ancho del trazo',
+    comments: 'Comentarios',
+    typeComments: 'Escriba sus comentarios',
+    importingFile: 'Importando archivo',
+    selectFile: 'Seleccionar archivo',
+    fileSizeLimit: 'Límite de tamaño del archivo: 1 MB',
+    newLayer: 'Nueva capa',
+    saving: 'Guardando',
+    create: 'Crear',
+    save: 'Guardar'
+}

@@ -4,6 +4,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import ImageControlButton from '../../../../components/ImageControlButton'
 import GoToButton from './GoToButton'
 import { ItemTypeIconsFilled } from '../../../../constants/icons'
+import { translateSettings } from '../../../../localization'
 
 
 const ImageViewControlBar = ({ onShare, onSave, itemType, goToItem, itemName, timeCreated }) => {
@@ -24,15 +25,15 @@ const ImageViewControlBar = ({ onShare, onSave, itemType, goToItem, itemName, ti
                     icon={isAndroid ? 'share' : 'share-ios'}
                     pack={isAndroid ? null : 'cp'}
                     onPress={onShare}
-                    title={'Share'} />
+                     title={translateSettings('share')} />
                 {isAndroid ? <ImageControlButton
                     icon={'download'}
                     onPress={onSave}
-                    title={'Save'} /> : null}
+                     title={translateSettings('save')} /> : null}
                 <ImageControlButton
                     icon={'diagonal-arrow-right-up'}
                     onPress={goToItem}
-                    title={'Go to'} />
+                     title={translateSettings('goTo')} />
             </View>
         </View>
     )

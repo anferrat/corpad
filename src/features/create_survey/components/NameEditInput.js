@@ -1,5 +1,6 @@
 import React from 'react'
 import Input from '../../../components/Input'
+import { translateCreateSurvey } from '../../../localization'
 
 const NameInput = ({ name, nameValid, onChangeName, onEndEditingName }) => {
 
@@ -11,9 +12,9 @@ const NameInput = ({ name, nameValid, onChangeName, onEndEditingName }) => {
             property='name'
             valid={nameValid}
             onChangeText={onChangeName}
-            label='Survey name'
+            label={translateCreateSurvey('surveyName')}
             onEndEditing={onEndEditingName}
-            placeholder='New survey' />
+            placeholder={translateCreateSurvey('newSurvey')} />
     )
 }
 

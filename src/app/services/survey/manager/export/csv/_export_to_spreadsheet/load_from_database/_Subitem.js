@@ -1,4 +1,4 @@
-import { AreaUnitLabels, CurrentDensityUnitLabels, CurrentUnitLabels, FactorUnitLabels, IsolationShortedLabels, PotentialUnitLabels } from "../../../../../../../../constants/labels"
+import { AreaUnitLabels, CurrentDensityUnitLabels, CurrentUnitLabels, FactorUnitLabels, IsolationShortedLabels, PotentialUnitLabels } from "../../../../../../../../constants/exportLabels"
 import { AreaUnits, CurrentDensityUnits, CurrentUnits, ExportSubitemProperties, FactorUnits, PotentialUnits, SubitemTypes } from "../../../../../../../../constants/global"
 
 export class _Subitem {

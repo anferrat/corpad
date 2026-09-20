@@ -8,10 +8,11 @@ import { calculateProgress } from '../helpers/functions'
 import { ItemStatuses, ItemTypes } from '../../../../constants/global'
 import { StatusLabels } from '../../../../constants/labels'
 import { StatusIcons } from '../../../../constants/icons'
+import { translateSettings } from '../../../../localization'
 
 const buttons = [
-    { title: 'Test points' },
-    { title: 'Rectifiers' }
+    { title: translateSettings('testPoints') },
+    { title: translateSettings('rectifiers') }
 ]
 
 const ProgressDisplay = ({ status, count }) => {

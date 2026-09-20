@@ -4,9 +4,10 @@ import { View, StyleSheet } from 'react-native'
 import { basic } from '../../../../../styles/colors'
 import { SubitemTypeLabels } from '../../../../../constants/labels'
 import { SubitemTypeIcons } from '../../../../../constants/icons'
+import { translateSettings } from '../../../../../localization'
 
 const SubitemTitle = ({ subitemType }) => {
-    const name = SubitemTypeLabels[subitemType] ?? 'Unknown type'
+    const name = SubitemTypeLabels[subitemType] ?? translateSettings('unknownType')
     const icon = SubitemTypeIcons[subitemType]
     return (
         <View style={styles.container}>

@@ -5,13 +5,14 @@ import { basic, primary, success } from '../../../styles/colors'
 import { globalStyle, androidRipple } from '../../../styles/styles'
 import SingleIconButton from '../../../components/IconButton'
 import { warningHandler } from '../../../helpers/error_handler'
+import { translate } from '../../../localization'
 import Pressable from '../../../components/Pressable'
 
 const HistoryListItem = (props) => {
     const scale = useRef(new Animated.Value(1))
 
     const onDeleteHandler = React.useCallback(async () => {
-        const confirm = await warningHandler(46, 'Delete', 'Cancel')
+        const confirm = await warningHandler(46, translate('actions.delete'), translate('actions.cancel'))
         if (confirm) {
             Animated.timing(scale.current, {
                 toValue: 0,

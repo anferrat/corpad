@@ -3,6 +3,7 @@ import { View, StyleSheet } from 'react-native'
 import Pressable from '../../../../components/Pressable'
 import { Text } from '@ui-kitten/components'
 import { androidRipple } from '../../../../styles/styles'
+import { translateOverlay } from '../../../../localization'
 
 
 const TermsAndConditions = ({ onPress }) => {
@@ -16,7 +17,7 @@ const TermsAndConditions = ({ onPress }) => {
                 <Text
                     appearance='hint'
                     category='s2'
-                    style={styles.button}>Terms & Conditions</Text>
+                    style={styles.button}>{translateOverlay('paywall.terms')}</Text>
             </Pressable>
         </View>
     )

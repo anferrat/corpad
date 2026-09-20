@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { ImportData } from '../ImportDataProvider'
 import { getCardList, getSideSelectedIndexes } from '../helpers/selectors'
 import { setImportSubitemSetting } from '../../../../store/actions/importData'
+import { translateImport } from '../../../../localization'
 
 
 const SideSelector = ({ sideTypes, isSideA }) => {
@@ -19,8 +20,8 @@ const SideSelector = ({ sideTypes, isSideA }) => {
 
     return <MultiSelect
         style={styles.select}
-        label={isSideA ? 'Side A' : 'Side B'}
-        placeholder='Select items'
+        label={translateImport(isSideA ? 'item.sideA' : 'item.sideB')}
+        placeholder={translateImport('item.selectItems')}
         valid={true}
         selectedItems={selectedSideIndexes}
         itemList={side}

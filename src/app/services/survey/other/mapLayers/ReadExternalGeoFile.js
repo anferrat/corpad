@@ -48,7 +48,7 @@ export class ReadExternalGeoFile {
         data = this.geoJsonValidation.execute(data)
 
         if (data.features.length > this.MAX_FEATURE_NUMBER) {
-            const confirm = await this.warningHandler.execute(`Geo file has more than ${this.MAX_FEATURE_NUMBER} features. Only first ${this.MAX_FEATURE_NUMBER} items will be imported. Do you wish to continue?`, 'Continue', 'Cancel')
+            const confirm = await this.warningHandler.execute({ key: 'warnings.messages.geoFeatureLimit', params: { limit: this.MAX_FEATURE_NUMBER } }, 'Continue', 'Cancel')
             if (confirm) {
                 data = { ...data, features: data.features.filter((_, i) => i < this.MAX_FEATURE_NUMBER) }
             }

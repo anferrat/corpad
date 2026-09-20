@@ -1,6 +1,7 @@
 import React from 'react'
 import { BottomNavigation, BottomNavigationTab, Icon } from "@ui-kitten/components"
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
+import { translateNavigation } from '../../../localization'
 
 const getTabIndex = (index) => index < 2 ? index : index + 1
 
@@ -47,11 +48,11 @@ const SurveyBottomTabs = (props) => {
             style={{ paddingBottom: insets.bottom }}
             onSelect={onSelect}
             selectedIndex={selectedTab}>
-            <BottomNavigationTab title='Test points' icon={testPointIcon} />
-            <BottomNavigationTab title='Pipelines' icon={pipelineIcon} />
-            <BottomNavigationTab title='Add' icon={addIcon} />
-            <BottomNavigationTab title='Map' icon={mapIcon} />
-            <BottomNavigationTab title='Rectifiers' icon={rectifierIcon} />
+            <BottomNavigationTab title={translateNavigation('testPoints')} icon={testPointIcon} />
+            <BottomNavigationTab title={translateNavigation('pipelines')} icon={pipelineIcon} />
+            <BottomNavigationTab title={translateNavigation('add')} icon={addIcon} />
+            <BottomNavigationTab title={translateNavigation('map')} icon={mapIcon} />
+            <BottomNavigationTab title={translateNavigation('rectifiers')} icon={rectifierIcon} />
         </BottomNavigation>
     )
 }

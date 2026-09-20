@@ -2,6 +2,7 @@ import React from 'react'
 import { View, StyleSheet } from 'react-native'
 import { Text } from '@ui-kitten/components'
 import Input from '../../../../components/Input'
+import { translateEdit } from '../../../../localization'
 
 
 const CircuitShuntView = ({ ratioCurrent, ratioVoltage, voltageDrop, valid, update, validateShuntProperty }) => {
@@ -17,7 +18,7 @@ const CircuitShuntView = ({ ratioCurrent, ratioVoltage, voltageDrop, valid, upda
     return (
         <View style={styles.mainView}>
             <View style={styles.subView}>
-                <Text appearance='hint' category='label' style={styles.label}>Shunt ratio</Text>
+                <Text appearance='hint' category='label' style={styles.label}>{translateEdit('shuntRatio')}</Text>
                 <Input
                     onChangeText={onChangeRatioCurrent}
                     onEndEditing={onEndEditingRatioCurrent}
@@ -41,7 +42,7 @@ const CircuitShuntView = ({ ratioCurrent, ratioVoltage, voltageDrop, valid, upda
                     unit='mV' />
             </View>
             <View style={styles.subView}>
-                <Text appearance='hint' category='label' style={styles.label}>Voltage drop</Text>
+                <Text appearance='hint' category='label' style={styles.label}>{translateEdit('voltageDrop')}</Text>
                 <Input
                     onChangeText={onChangeVoltageDrop}
                     onEndEditing={onEndEditingVoltageDrop}

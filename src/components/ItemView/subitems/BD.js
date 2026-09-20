@@ -5,6 +5,7 @@ import SidesDisplay from '../components/SidesDisplay'
 import TextLine from '../../TextLine'
 import { CurrentUnitLabels } from '../../../constants/labels'
 import { CurrentUnits } from '../../../constants/global'
+import { translateItemView } from '../../../localization'
 
 
 const BD = ({ name, type, current, sideA, sideB, fromAtoB, subitemIdMap }) => {
@@ -22,7 +23,7 @@ const BD = ({ name, type, current, sideA, sideB, fromAtoB, subitemIdMap }) => {
                 value={value}
                 fromAtoB={fromAtoB}
             />
-            <TextLine title={'Current'} value={current} unit={CurrentUnitLabels[CurrentUnits.AMPS]} />
+            <TextLine title={translateItemView('current')} value={current} unit={CurrentUnitLabels[CurrentUnits.AMPS]} />
         </>
     )
 }

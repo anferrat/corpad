@@ -2,6 +2,7 @@ import React from 'react'
 import Hint from '../../../../components/Hint'
 import Parameter from '../Parameter'
 import Sides from './Sides'
+import { translateImport } from '../../../../localization'
 
 const ISOLATION_SIDE_TYPES = ['RS', 'FC']
 const IK = () => {
@@ -18,7 +19,7 @@ const IK = () => {
             <Parameter
                 property='current' />
             <Hint>
-                Shorting current value for an isolation reading will not be imported, if imported shorted property for this reading equals "No".
+                {translateImport('item.isolationCurrentHint')}
             </Hint>
         </>
     )

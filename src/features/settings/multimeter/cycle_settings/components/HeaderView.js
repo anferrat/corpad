@@ -4,6 +4,7 @@ import { Radio, RadioGroup, Text } from '@ui-kitten/components'
 import { MultimeterSettingContext } from '../context/MultimeterSettings'
 import { MultimeterCaptureRate } from '../../../../../constants/global'
 import CheckBoxText from './CheckBoxText'
+import { translateMultimeterSettings } from '../../../../../localization'
 
 const captureRateOptions = [MultimeterCaptureRate._60Hz, MultimeterCaptureRate._50Hz]
 
@@ -18,21 +19,21 @@ const HeaderView = () => {
             <Text
                 category='label'
                 appearance='hint'>
-                Capture rate
+                {translateMultimeterSettings('captureRate')}
             </Text>
             <RadioGroup
                 style={styles.radioView}
                 onChange={onCaptureRateChangedHandler}
                 selectedIndex={captureRateIndex}>
-                <Radio>60 Hz (US, Canada)</Radio>
-                <Radio>50 Hz (Other)</Radio>
+                <Radio>{translateMultimeterSettings('hzUs')}</Radio>
+                <Radio>{translateMultimeterSettings('hzOther')}</Radio>
             </RadioGroup>
             <CheckBoxText
                 checked={onOffCaptureActive}
                 onPress={onCycleCaptureActiveChanged}>
                 <Text
                     category='p2'>
-                    Detect ON/OFF cycle
+                    {translateMultimeterSettings('detectOnOff')}
                 </Text>
             </CheckBoxText>
 

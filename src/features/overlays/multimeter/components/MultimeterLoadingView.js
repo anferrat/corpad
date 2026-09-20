@@ -3,6 +3,7 @@ import { View, StyleSheet } from 'react-native'
 import { Button, Icon, Text } from '@ui-kitten/components'
 import LoadingView from '../../../../components/LoadingView'
 import { basic } from '../../../../styles/colors'
+import { translateMultimeterOverlay } from '../../../../localization'
 
 const historyIcon = (props) => <Icon {...props} name='book-open' />
 
@@ -15,7 +16,7 @@ const MultimeterLoadingView = ({ connected, connecting, loading, isAvailable, ch
             </LoadingView>
         )
     else {
-        const text = !paired ? 'No multimeter found' : (!connected ? 'Multimeter is not connected' : 'Screen is not available')
+        const text = !paired ? translateMultimeterOverlay('noMultimeterFound') : (!connected ? translateMultimeterOverlay('notConnected') : translateMultimeterOverlay('screenUnavailable'))
 
         return (
             <View
@@ -34,7 +35,7 @@ const MultimeterLoadingView = ({ connected, connecting, loading, isAvailable, ch
                     style={styles.button}
                     accessoryLeft={historyIcon}
                     appearance={'ghost'}>
-                    History readings
+                     {translateMultimeterOverlay('historyReadings')}
                 </Button>
             </View>)
     }

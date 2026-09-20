@@ -2,17 +2,18 @@ import React from 'react'
 import { View, StyleSheet } from 'react-native'
 import { Text } from '@ui-kitten/components'
 import { SubscriptionStatuses } from '../../../../constants/global'
+import { translateOverlay } from '../../../../localization'
 
 
 const renderTitle = (status) => {
     switch (status) {
         case SubscriptionStatuses.GRANTED:
         case SubscriptionStatuses.UNKNOWN_GRANTED:
-            return 'You are all set!'
+            return translateOverlay('paywall.allSet')
         case SubscriptionStatuses.UNKNOWN_NOT_GRANTED:
-            return 'Welcome back'
+            return translateOverlay('paywall.welcomeBack')
         default:
-            return 'Upgrade to premium'
+            return translateOverlay('paywall.upgrade')
     }
 }
 

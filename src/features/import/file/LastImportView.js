@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { globalStyle } from '../../../styles/styles'
 import { Button, Text, Icon } from '@ui-kitten/components'
 import { getFormattedDate } from '../../../helpers/functions'
+import { translateImport } from '../../../localization'
 import { basic } from '../../../styles/colors'
 import { getItemIcon, getItemName } from './helpers/functions'
 import { errorHandler, warningHandler } from '../../../helpers/error_handler'
@@ -18,9 +19,9 @@ const LastImportView = ({ navigateToList }) => {
     const dispatch = useDispatch()
 
     const onCancelImport = React.useCallback(async () => {
-        const confirm = await warningHandler(60, 'Undo', 'Cancel')
+        const confirm = await warningHandler(60, translateImport('item.undo'), translateImport('item.cancel'))
         if (confirm) {
-            dispatch(updateLoader(`Deleting ${getItemName(itemType, idList.length)}`))
+            dispatch(updateLoader(translateImport('item.deleting', { name: getItemName(itemType), count: idList.length })))
             const result = await Promise.all(idList.map((id) => deleteItem({ itemType, id })))
             const isSuccess = result.every(({ status }) => status === 200)
             if (isSuccess) {
@@ -35,21 +36,21 @@ const LastImportView = ({ navigateToList }) => {
             }
             dispatch(hideLoader())
         }
-    }, [dispatch, itemType, idList])
+    }, [dispatch, itemType, idList, navigateToList])
 
     if (itemType === null || idList.length === 0)
         return null
     else {
         return (
             <View style={globalStyle.card}>
-                <Text category='label' appearance='hint' style={styles.label}>Last import status</Text>
+                <Text category='label' appearance='hint' style={styles.label}>{translateImport('item.lastStatus')}</Text>
                 <View style={styles.iconRow}>
                     <Icon style={styles.icon} fill={basic} name={'clock-outline'} />
                     <Text category='s2' appearance='hint'>{getFormattedDate(importTime)}</Text>
                 </View>
                 <View style={styles.iconRow}>
                     <Icon style={styles.icon} fill={basic} name={getItemIcon(itemType)} pack='cp' />
-                    <Text category='s2' appearance='hint'>{idList.length} {getItemName(itemType, idList.length)} imported</Text>
+                    <Text category='s2' appearance='hint'>{translateImport('item.imported', { name: getItemName(itemType), count: idList.length })}</Text>
 
                 </View>
                 <Button
@@ -58,7 +59,7 @@ const LastImportView = ({ navigateToList }) => {
                     appearance='ghost'
                     status='danger'
                     style={styles.button}>
-                    Undo import
+                    {translateImport('item.undoImport')}
                 </Button>
             </View>
         )

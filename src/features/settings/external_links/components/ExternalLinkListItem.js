@@ -7,6 +7,7 @@ import Pressable from "../../../../components/Pressable"
 import { getFullDate } from "../../../../helpers/functions"
 import { ExternalLinkTypeIcons } from "../../../../constants/icons"
 import { ExternalLinkTypeLabels, ItemTypeLabels } from "../../../../constants/labels"
+import { translateSettings } from '../../../../localization'
 
 const ExternalLinkListItem = ({ name, timeRecorded, linkType, itemType, onPress, link }) => {
     const onPressHandler = () => onPress(link)
@@ -40,7 +41,7 @@ const ExternalLinkListItem = ({ name, timeRecorded, linkType, itemType, onPress,
                         appearance='hint'
                         ellipsizeMode={'head'}
                         numberOfLines={1}>
-                        Scanned on {getFullDate(timeRecorded)}
+                        {translateSettings('scannedOn', {date: getFullDate(timeRecorded)})}
                     </Text>
                 </View>
             </View>

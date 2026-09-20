@@ -5,6 +5,7 @@ import { setActiveMultimeter, setActiveMultimeterStatus, showPaywall } from '../
 import { errorHandler, warningHandler } from '../../../../../helpers/error_handler'
 import { hapticMedium } from '../../../../../native_libs/haptics'
 import { isProStatus } from '../../../../../helpers/functions'
+import { translateMultimeterSettings } from '../../../../../localization'
 
 
 const usePairedView = () => {
@@ -20,7 +21,7 @@ const usePairedView = () => {
     }, [])
 
     const unpairDevice = useCallback(async () => {
-        const confirm = await warningHandler(63, 'Unpair', 'Cancel')
+        const confirm = await warningHandler(63, translateMultimeterSettings('unpair'), translateMultimeterSettings('cancel'))
         if (connecting || !confirm)
             return
         await unpairMultimeter(connected, er => {

@@ -4,6 +4,7 @@ import Parameter from '../Parameter'
 import PipelineSubitemSelect from './PipelineSubitemSelect'
 import Potentials from './Potentials'
 import Hint from '../../../../components/Hint'
+import { translateImport } from '../../../../localization'
 
 const CN = () => {
     return (
@@ -20,7 +21,7 @@ const CN = () => {
                 property='current' />
             <View style={styles.hint}>
                 <Hint>
-                    Current density will be calculated after importing
+                    {translateImport('item.currentDensityHint')}
                 </Hint>
             </View>
             <View style={styles.parameterRow}>

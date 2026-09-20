@@ -6,6 +6,7 @@ import { Button, Modal } from '@ui-kitten/components'
 import IconButton from '../../../../components/IconButton'
 import { saveIcon } from '../../../../components/Icons'
 import { getModalTop } from '../../../../styles/dimensions'
+import { translateSettings } from '../../../../localization'
 
 
 const SurveyNameModal = ({ inputText, onChangeNameInput, inputRef, showModal, updateHandler, hideModal, visible }) => {
@@ -36,10 +37,10 @@ const SurveyNameModal = ({ inputText, onChangeNameInput, inputRef, showModal, up
                     style={styles.inputView}>
                     <Input
                         ref={inputRef}
-                        label='Survey name'
+                         label={translateSettings('surveyName')}
                         maxLength={25}
                         valid={true}
-                        placeholder='My survey'
+                         placeholder={translateSettings('newSurvey')}
                         style={styles.input}
                         value={inputText}
                         onChangeText={onChangeNameInput} />
@@ -47,7 +48,7 @@ const SurveyNameModal = ({ inputText, onChangeNameInput, inputRef, showModal, up
                         accessoryLeft={saveIcon}
                         style={styles.button}
                         onPress={updateHandler}>
-                        Save
+                         {translateSettings('save')}
                     </Button>
                 </ScrollView>
             </Modal>

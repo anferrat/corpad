@@ -6,6 +6,7 @@ import Pressable from '../../../../../components/Pressable'
 import { androidRipple } from '../../../../../styles/styles'
 import { openLink } from '../../../../../app/controllers/AppController'
 import { errorHandler } from '../../../../../helpers/error_handler'
+import { translateMultimeterSettings } from '../../../../../localization'
 
 
 const MultimeterPlaceholder = () => {
@@ -20,19 +21,19 @@ const MultimeterPlaceholder = () => {
                 fill={primary} />
             <Text category='h5'
                 style={styles.title}>
-                Multimeter
+                {translateMultimeterSettings('multimeter')}
             </Text>
             <Text
                 appearance='hint'
                 style={styles.description}>
-                Connect digital bluetooth multimeter in order to capture readings.
+                {translateMultimeterSettings('multimeterDescription')}
             </Text>
             <View style={styles.text}>
                 <Text
                     appearance='hint'
                     category='s2'
                     style={styles.description}>
-                    Find supported multimeters at
+                     {translateMultimeterSettings('findSupported')}
                 </Text>
                 <Pressable
                     androidRipple={androidRipple}

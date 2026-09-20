@@ -2,6 +2,7 @@ import React from 'react'
 import SubitemHeader from '../components/SubitemHeader'
 import PotentialView from '../components/PotentialView'
 import TextLine from '../../TextLine'
+import { translateItemView } from '../../../localization'
 
 
 const FC = ({ name, type, potentials, description, potentialUnit }) => {
@@ -13,7 +14,7 @@ const FC = ({ name, type, potentials, description, potentialUnit }) => {
             <PotentialView
                 potentials={potentials}
                 potentialUnit={potentialUnit} />
-            <TextLine title='Description' value={description} />
+            <TextLine title={translateItemView('description')} value={description} />
         </>
     )
 }

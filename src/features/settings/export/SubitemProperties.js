@@ -5,6 +5,7 @@ import BottomButton from '../../../components/BottomButton'
 import LoadingView from '../../../components/LoadingView'
 import useExportSubitems from './hooks/useExportSubitems'
 import SubitemPropertySelector from './components/subitem/SubitemPropertySelector'
+import { translateSettings } from '../../../localization'
 
 const SubitemProperties = ({ navigateToExportOverview }) => {
     const {
@@ -36,7 +37,7 @@ const SubitemProperties = ({ navigateToExportOverview }) => {
                 iconPosition={'right'}
                 icon={'arrow-circle-right'}
                 onPress={onNextPress}
-                title={'Next'} />
+                 title={translateSettings('next')} />
         </>
     )
 }

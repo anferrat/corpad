@@ -13,6 +13,7 @@ import LoadingView from '../../../components/LoadingView'
 import ViewContainer from './components/ViewContainer'
 import PipelineSelector from './components/potentials/PipelineSelector'
 import CheckBoxText from './components/potentials/CheckBoxText'
+import { translateSettings } from '../../../localization'
 
 
 const subitemTypes = ['PL', 'RS', 'AN', 'CN', 'OT', 'FC', 'RE']
@@ -45,7 +46,7 @@ const PotentialProperties = ({ navigateToExportSubitems }) => {
                     <CheckBox
                         checked={exportPotentials}
                         onChange={toggleExportPotentials}>
-                        <CheckBoxText>Export potentials</CheckBoxText>
+                        <CheckBoxText>{translateSettings('exportPotentials')}</CheckBoxText>
                     </CheckBox>
                     <ViewContainer hidden={!exportPotentials}>
                         <View style={styles.content}>
@@ -53,40 +54,40 @@ const PotentialProperties = ({ navigateToExportSubitems }) => {
                                 <ViewContainer
                                     hidden={referenceCells.length === 1}>
                                     <Title
-                                        name={'REFERENCE CELL'} />
+                                        name={translateSettings('referenceCellTitle')} />
                                     <ReferenceCellSelector
                                         referenceCellId={referenceCellId}
                                         referenceCells={referenceCells}
                                         selectReferenceCell={selectReferenceCell} />
                                 </ViewContainer>
                                 <Title
-                                    name={'POTENTIAL TYPES'} />
+                                     name={translateSettings('potentialTypesTitle')} />
                                 <PotentialTypeSelector
                                     potentialTypes={potentialTypes}
                                     potentialTypeIdList={potentialTypeIdList}
                                     togglePotentialType={togglePotentialType} />
 
                                 <Title
-                                    name={'READING TYPES'} />
+                                     name={translateSettings('readingTypesTitle')} />
                                 <SubitemTypeSelector
                                     subitemTypes={subitemTypes}
                                     selectedSubitemTypes={selectedSubitemTypes}
                                     toggleSubitemType={toggleSubitemType} />
                                 <Title
-                                    name={'POTENTIALS GROUPING'} />
+                                 name={translateSettings('potentialGroupingTitle')} />
                                 <RadioGroup
                                     style={styles.groupingContainer}
                                     onChange={onChangePipelineGrouping}
                                     selectedIndex={pipelineGrouping}>
-                                    <Radio>Group by reading type</Radio>
+                                    <Radio>{translateSettings('groupReadingType')}</Radio>
                                     <Radio
                                         disabled={!pipelineGroupingActive}
-                                    >Group by pipeline</Radio>
+                                    >{translateSettings('groupPipeline')}</Radio>
                                 </RadioGroup>
                                 <ViewContainer
                                     hidden={!pipelineGrouping}>
                                     <Title
-                                        name={'PIPELINES'} />
+                                         name={translateSettings('pipelines').toUpperCase()} />
                                     <PipelineSelector
                                         pipelines={pipelines}
                                         pipelineIdList={pipelineIdList}
@@ -101,7 +102,7 @@ const PotentialProperties = ({ navigateToExportSubitems }) => {
                 iconPosition={'right'}
                 icon={'arrow-circle-right'}
                 onPress={onNextPress}
-                title={'Next'} />
+                 title={translateSettings('next')} />
         </>
     )
 }

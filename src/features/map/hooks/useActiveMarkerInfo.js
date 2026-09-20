@@ -3,6 +3,7 @@ import { ItemTypes } from "../../../constants/global"
 import { CalculatorTypeLabels, ItemTypeLabels, TestPointTypeLabels } from "../../../constants/labels"
 import { useCallback } from "react"
 import { StatusColors, basic, MapLayerStrokeColors, primary } from "../../../styles/colors"
+import { translateMap } from '../../../localization'
 
 const useActiveMarkerInfo = ({ zoomToCoordinates, navigateToView, navigateToMapLayerPointView, shareActiveLocation, navigateToCalculatorView }) => {
     const activeMarker = useSelector(state => state.map.activeMarker)
@@ -43,7 +44,7 @@ const useActiveMarkerInfo = ({ zoomToCoordinates, navigateToView, navigateToMapL
             (activeMarker.itemType === ItemTypes.TEST_POINT ?
                 TestPointTypeLabels[activeMarker.testPointType] :
                 ItemTypeLabels[activeMarker.itemType]) :
-            'Loading'
+            translateMap('loading')
         return {
             visible: true,
             name: activeMarker.name,
@@ -75,7 +76,7 @@ const useActiveMarkerInfo = ({ zoomToCoordinates, navigateToView, navigateToMapL
         return {
             visible: true,
             name: calculatorMarker.name,
-            subtitle: `Calculator | ${CalculatorTypeLabels[calculatorMarker.calculatorType]}`,
+            subtitle: translateMap('calculator', { type: CalculatorTypeLabels[calculatorMarker.calculatorType] }),
             location: null,
             subtitleIcon: null,
             icon: `map-calculator`,

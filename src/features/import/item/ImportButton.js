@@ -2,6 +2,7 @@ import React, { useContext, useState } from 'react'
 import BottomButton from '../../../components/BottomButton'
 import ImportModal from './ImportModal'
 import { ImportData } from './ImportDataProvider'
+import { translateImport } from '../../../localization'
 
 const ImportButton = () => {
     const { subitemIndex, goBack } = useContext(ImportData)
@@ -15,7 +16,7 @@ const ImportButton = () => {
             <>
                 <BottomButton
                     icon='download-outline'
-                    title={'Import'}
+                    title={translateImport('item.import')}
                     onPress={showModal} />
                 <ImportModal
                     visible={visible}
@@ -25,7 +26,7 @@ const ImportButton = () => {
     else return (
         <BottomButton
             icon='undo'
-            title={'Back'}
+            title={translateImport('item.back')}
             onPress={goBack} />
     )
 }

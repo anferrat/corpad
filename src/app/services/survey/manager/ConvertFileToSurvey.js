@@ -21,7 +21,7 @@ export class ConvertFileToSurvey {
                         isRecovered: false
                     }
                 else {
-                    const confirm = await this.warningHandler.execute('Survey file is corrupted. Opening this file may erase some of its content. If you encountered lost data after opening, use "Exit without saving" feature in Settings to avoid original file to be ovewritten. Contact support for help with recovering data.',
+                    const confirm = await this.warningHandler.execute({ key: 'warnings.messages.corruptedSurvey' },
                         'Proceed',
                         'Cancel')
                     if (confirm) {

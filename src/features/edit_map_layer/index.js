@@ -7,6 +7,7 @@ import Input from '../../components/Input'
 import Select from '../../components/Select'
 import LoadingView from '../../components/LoadingView'
 import GeoFileImportView from './components/GeoFileImportView'
+import { translateMapLayer } from '../../localization'
 
 const EditMapLayer = ({ isNew, layerId }) => {
     const {
@@ -47,20 +48,20 @@ const EditMapLayer = ({ isNew, layerId }) => {
                         placeholder={defaultName}
                         valid={valid.name}
                         maxLength={40}
-                        label='Layer name'
+                         label={translateMapLayer('layerName')}
                         value={name}
                         onChangeText={onChangeName}
                         onEndEditing={onEndEditingName} />
                     <Select
                         accessoryList={colorAccessories}
                         style={styles.select}
-                        label={'Color'}
+                         label={translateMapLayer('color')}
                         itemList={colorList}
                         selectedIndex={colorIndex}
                         onSelect={onSelectColor} />
                     <Select
                         style={styles.select}
-                        label={'Stroke width'}
+                         label={translateMapLayer('strokeWidth')}
                         itemList={widthList}
                         selectedIndex={widthIndex}
                         onSelect={onSelectWidth} />
@@ -72,13 +73,13 @@ const EditMapLayer = ({ isNew, layerId }) => {
                         valid={valid.comment}
                         textAlignVertical={'top'}
                         numberOfLines={3}
-                        label='Comments'
+                         label={translateMapLayer('comments')}
                         value={comment}
-                        placeholder='Type your comments here' />
+                         placeholder={translateMapLayer('typeComments')} />
                 </View>
             </ScrollView >
             <BottomButton
-                title={isNew ? 'Create' : 'Save'}
+                 title={isNew ? translateMapLayer('create') : translateMapLayer('save')}
                 onPress={onSave}
                 icon={'save'}
             />

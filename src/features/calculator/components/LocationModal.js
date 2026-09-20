@@ -5,6 +5,7 @@ import { useLocation } from '../hooks/useLocation'
 import { basic400, control, primary } from '../../../styles/colors'
 import LoadingView from '../../../components/LoadingView'
 import { getModalTop } from '../../../styles/dimensions'
+import { translate } from '../../../localization'
 
 const LocationModal = ({ visible, hideModal, updateLatAndLon }) => {
     return (
@@ -41,24 +42,24 @@ const LocationModalContent = ({ hideModal, updateLatAndLon }) => {
         <>
             <View style={styles.titleRow}>
                 <Icon name={'navigation'} style={styles.titleIcon} fill={primary} />
-                <Text category='h6' style={styles.title}>Coordinate capture</Text>
+                <Text category='h6' style={styles.title}>{translate('calculator.coordinateCapture')}</Text>
             </View>
             <LoadingView loading={latitude === null && longitude === null}>
                 <View style={styles.coords}>
                     <View style={styles.valueTitles}>
-                        <Text appearance='hint' category='label' style={styles.text}>Latitude:</Text>
-                        <Text appearance='hint' category='label' style={styles.text}>Longitude:</Text>
+                        <Text appearance='hint' category='label' style={styles.text}>{translate('fields.latitude.label')}:</Text>
+                        <Text appearance='hint' category='label' style={styles.text}>{translate('fields.longitude.label')}:</Text>
                     </View>
                     <View style={styles.values}>
                         <Text category='p1' style={styles.textValue}>{latitude}</Text>
                         <Text category='p1' style={styles.textValue}>{longitude}</Text>
                     </View>
                 </View>
-                <Text style={styles.accuracy} category='label' appearance='hint'>Accuracy: <Text category='p1' style={styles.textValue}>{accuracy?.toFixed(0) ?? '??'} m</Text> </Text>
+                <Text style={styles.accuracy} category='label' appearance='hint'>{translate('calculator.accuracy')}: <Text category='p1' style={styles.textValue}>{accuracy?.toFixed(0) ?? '??'} m</Text> </Text>
             </LoadingView>
             <View style={styles.buttons}>
-                <Button style={styles.button} accessoryLeft={renderIcon} onPress={onCapture}>Capture</Button>
-                <Button style={styles.button} appearance='ghost' onPress={hideModal}>Cancel</Button>
+                <Button style={styles.button} accessoryLeft={renderIcon} onPress={onCapture}>{translate('calculator.capture')}</Button>
+                <Button style={styles.button} appearance='ghost' onPress={hideModal}>{translate('common.cancel')}</Button>
             </View>
         </>
     )

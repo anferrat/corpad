@@ -9,6 +9,7 @@ import { SurveyLoadingStatuses, UrlTypes } from "../../constants/global"
 import useTimeSync from "./useTimeSync"
 import { useNavigation } from '@react-navigation/native'
 import { useMultimeterStatus } from "./useMultimeterStatus"
+import { translateApp } from '../../localization'
 
 const useApp = () => {
 
@@ -57,11 +58,11 @@ const useApp = () => {
       (status, errorCode) => {
         if (status === SurveyLoadingStatuses.SAVING) {
           navigation.navigate('PipelineSurvey')
-          dispatch(updateLoader('Saving survey', null))
+          dispatch(updateLoader(translateApp('savingSurvey'), null))
         }
         else if (status === SurveyLoadingStatuses.LOADING) {
           dispatch(resetCurrentSurveySettings())
-          dispatch(updateLoader('Loading file', null))
+          dispatch(updateLoader(translateApp('loadingFile'), null))
         }
         else if (status === SurveyLoadingStatuses.ERROR)
           errorHandler(errorCode)

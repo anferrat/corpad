@@ -6,11 +6,11 @@ import NameInput from '../NameInput'
 import Select from '../../../../../components/Select'
 import { ReferenceCellTypes } from '../../../../../constants/global'
 import { ReferenceCellTypeLabels } from '../../../../../constants/labels'
-
-const referenceCellTypes = Object.values(ReferenceCellTypes).map(type => ({ item: ReferenceCellTypeLabels[type], index: type }))
+import { translateEdit } from '../../../../../localization'
 
 const RECard = ({ itemId, subitemId, data, update, validate }) => {
     const { name, defaultName, valid, rcType, wireColor, wireGauge } = data
+    const referenceCellTypes = React.useMemo(() => Object.values(ReferenceCellTypes).map(type => ({ item: ReferenceCellTypeLabels[type], index: type })), [])
 
     const onSelect = React.useCallback((index) => {
         update(index, 'rcType')
@@ -34,8 +34,8 @@ const RECard = ({ itemId, subitemId, data, update, validate }) => {
                 property='rcType'
                 itemList={referenceCellTypes}
                 selectedIndex={rcType}
-                placeholder="Select type"
-                label='Reference cell type' />
+                placeholder={translateEdit('type')}
+                label={translateEdit('referenceCellType')} />
             <WireView
                 update={update}
                 wireColor={wireColor}

@@ -1,11 +1,13 @@
 import React from 'react'
 import { Text } from '@ui-kitten/components'
 import InputField from '../../../components/Input'
+import { translateCalculator } from '../../../localization'
 
 const InputDataField = (props) => {
-    const setValue = React.useCallback((value) => props.setValue(props.point, props.property, props.status, value), [props.setValue, props.point, props.property, props.status])
-    const setValid = React.useCallback(() => props.setValid(props.point, props.property, props.status, props.value), [props.setValid, props.point, props.property, props.status, props.value])
-    const accessory = React.useCallback(() => <Text appearance='hint' category='c1'>{props.status === 'on' ? 'ON:' : 'OFF:'}</Text>, [props.status])
+    const {setValue: updateValue, point, property, status, setValid: validateValue, value} = props
+    const setValue = React.useCallback((nextValue) => updateValue(point, property, status, nextValue), [updateValue, point, property, status])
+    const setValid = React.useCallback(() => validateValue(point, property, status, value), [validateValue, point, property, status, value])
+    const accessory = React.useCallback(() => <Text appearance='hint' category='c1'>{`${status === 'on' ? translateCalculator('common.on') : translateCalculator('common.off')}:`}</Text>, [status])
     return <InputField
         style={props.style}
         disabled={props.disabled}

@@ -7,6 +7,7 @@ import { ItemTypeIcons } from '../../../../../constants/icons'
 import { FlashList } from '@shopify/flash-list'
 import { Divider } from '@ui-kitten/components'
 import LoadingView from '../../../../../components/LoadingView'
+import { translateBottomSheet } from '../../../../../localization'
 
 
 
@@ -29,7 +30,7 @@ const PipelineSegmentFilter = ({ onBackPress, closeSheet, visible }) => {
     return (
         <>
             <SheetHeader
-                title='Pipelines'
+                title={translateBottomSheet('pipelines')}
                 onBackPress={onBackPress}
                 onClosePress={closeSheet} />
             <LoadingView

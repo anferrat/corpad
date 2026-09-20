@@ -5,6 +5,7 @@ import { Icon, Text } from '@ui-kitten/components'
 import IconButton from '../../../../components/IconButton'
 import { basic } from '../../../../styles/colors'
 import { LengthUnitLabels } from '../../../../constants/labels'
+import { translateEdit } from '../../../../localization'
 
 
 const SoilResistivityLayer = ({ valid, spacing, resistance, deleteSoilResistivityLayer, index, spacingUnit, onUpdateLayer, onValidateLayer }) => {
@@ -34,7 +35,7 @@ const SoilResistivityLayer = ({ valid, spacing, resistance, deleteSoilResistivit
                     <Text
                         category='p1'
                         appearance='hint'>
-                        Layer #{index + 1}
+                        {translateEdit('layer', { number: index + 1 })}
                     </Text>
                 </View>
                 <IconButton
@@ -49,7 +50,6 @@ const SoilResistivityLayer = ({ valid, spacing, resistance, deleteSoilResistivit
                     style={styles.leftInput}
                     maxLength={8}
                     valid={valid.spacing}
-                    label='Spacing'
                     keyboardType={'numeric'}
                     value={spacing}
                     property='spacing'
@@ -61,7 +61,6 @@ const SoilResistivityLayer = ({ valid, spacing, resistance, deleteSoilResistivit
                     onEndEditing={onEndEditingResistance}
                     maxLength={8}
                     valid={valid.resistanceToZero}
-                    label='Resistance'
                     keyboardType={'numeric'}
                     value={resistance}
                     property='resistanceToZero'

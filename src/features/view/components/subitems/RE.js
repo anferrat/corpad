@@ -4,6 +4,7 @@ import Header from '../Header'
 import PotentialsView from '../PotentialsView'
 import Divider from '../Divider'
 import { ReferenceCellTypeLabels } from '../../../../constants/labels'
+import { translateView } from '../../../../localization'
 
 const RE = ({
   data,
@@ -41,7 +42,7 @@ const RE = ({
         potentialHint={potentialHint}
         potentials={potentials} />
       <TextLine
-        title="Material"
+        title={translateView('material')}
         value={ReferenceCellTypeLabels[rcType] ?? null} />
     </>
   )

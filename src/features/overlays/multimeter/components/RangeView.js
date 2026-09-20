@@ -1,11 +1,12 @@
 import React from 'react'
 import RangeToken from './RangeToken'
 import WrapperNoScroll from './WrapperNoScroll'
+import { translateMultimeterOverlay } from '../../../../localization'
 
 
 const RangeView = ({ ranges, onSelect, updatingRange, selectedRange, updating }) => {
     return (
-        <WrapperNoScroll title='Ranges'>
+        <WrapperNoScroll title={translateMultimeterOverlay('ranges')}>
             {ranges.map(range =>
                 <RangeToken
                     key={range}

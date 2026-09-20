@@ -12,6 +12,7 @@ import { ItemTypes, SortingOptions, ExportFormatTypes } from '../../../constants
 import { SortingOptionLabels } from '../../../constants/labels'
 import CheckBoxText from './components/item/CheckBoxText'
 import FormatRadio from './components/item/FormatRadio'
+import { translateSettings } from '../../../localization'
 
 //filter out sorting by location. N/A for here
 const sortingValues = Object.values(SortingOptions).filter(sorting => sorting !== SortingOptions.NEAREST)
@@ -44,7 +45,7 @@ const ItemProperties = ({ navigateToExportOverview, navigateToExportPotentials, 
                 contentContainerStyle={styles.scrollView}>
                 <View style={globalStyle.card}>
                     <Title
-                        name={'EXPORTED ITEMS'} />
+                         name={translateSettings('exportedItems')} />
                     <View
                         style={styles.itemSelector}>
                         {Object.values(ItemTypes).map(type =>
@@ -57,7 +58,7 @@ const ItemProperties = ({ navigateToExportOverview, navigateToExportPotentials, 
                     </View>
                     {formatOptionAvailable ? <>
                         <Title
-                            name={'FORMAT'} />
+                             name={translateSettings('format')} />
                         <View
                             style={styles.radioGroup}>
                             {Object.values(ExportFormatTypes).map((format) =>
@@ -71,26 +72,26 @@ const ItemProperties = ({ navigateToExportOverview, navigateToExportPotentials, 
                     </> : null}
                     {mapLayerOptionAvailable ? <>
                         <Title
-                            name={'MAP LAYERS'} />
+                             name={translateSettings('mapLayers')} />
                         <CheckBoxText
                             checked={includeMapLayers}
                             onPress={onCheckIncludeMapLayers}>
-                            Include map layers
+                                 {translateSettings('includeMapLayers')}
                         </CheckBoxText>
                     </> : null}
                     {assetOptionAvailable ? <>
                         <Title
-                            name={'IMAGES'} />
+                             name={translateSettings('images').toUpperCase()} />
                         <CheckBoxText
                             onPress={setIncludeAssets}
                             checked={includeAssets}>
-                            Export images
+                                 {translateSettings('includeImagesExport')}
                         </CheckBoxText>
                     </> : null}
                     {sortingOptionAvailable ?
                         <>
                             <Title
-                                name={'SORTING'} />
+                                 name={translateSettings('sorting').toUpperCase()} />
                             <RadioGroup
                                 onChange={onSelectSorting}
                                 selectedIndex={sorting}
@@ -105,7 +106,7 @@ const ItemProperties = ({ navigateToExportOverview, navigateToExportPotentials, 
                         </>
                         : null}
                     <Title
-                        name={'ITEM PROPERTIES'} />
+                         name={translateSettings('itemProperties')} />
                     <ItemPropertySelector
                         loading={loading}
                         itemProperties={itemProperties}
@@ -116,7 +117,7 @@ const ItemProperties = ({ navigateToExportOverview, navigateToExportPotentials, 
             <BottomButton
                 iconPosition={'right'}
                 icon={'arrow-circle-right'}
-                title={'Next'}
+                 title={translateSettings('next')}
                 onPress={onNextPress}
             />
         </>

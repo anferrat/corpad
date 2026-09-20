@@ -5,6 +5,7 @@ import { basic, basic300 } from '../../../../styles/colors'
 import { androidRipple } from '../../../../styles/styles'
 import { getSubitemName } from '../helpers/functions'
 import Pressable from '../../../../components/Pressable'
+import { translateImport } from '../../../../localization'
 
 const SubitemListItem = ({ onPress, index, type, typedIndex }) => {
     return (
@@ -17,7 +18,7 @@ const SubitemListItem = ({ onPress, index, type, typedIndex }) => {
                     <Icon name={type} pack={'cp'} style={styles.icon} fill={basic} />
                     <Layout style={styles.textView}>
                         <Text category='p1'>{getSubitemName(type, typedIndex)}</Text>
-                        <Text category='s2' appearance='hint'>{'Import settings'}</Text>
+                        <Text category='s2' appearance='hint'>{translateImport('item.importSettings')}</Text>
                     </Layout>
                 </Layout>
                 <Icon name='arrow-ios-forward-outline' style={styles.icon} fill={basic} />

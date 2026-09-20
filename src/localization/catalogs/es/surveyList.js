@@ -1,0 +1,32 @@
+import englishSurveyList from '../en/surveyList'
+
+export default {
+    ...englishSurveyList,
+    today: 'Hoy',
+    earlier: 'Anteriormente',
+    downloadingAssets: 'Descargando recursos',
+    uploadingAssets: 'Subiendo recursos',
+    loadingSurvey: 'Cargando estudio',
+    deletingSurvey: 'Eliminando estudio',
+    exportingSurvey: 'Exportando estudio',
+    copyingToDevice: 'Copiando estudio al dispositivo',
+    copyingToCloud: 'Copiando estudio a la nube',
+    savingToDownloads: 'Guardando estudio en Descargas',
+    savedToDownloads: 'Guardado en Descargas',
+    saveToDownloads: 'Guardar en Descargas',
+    copyToDevice: 'Copiar al dispositivo',
+    copyToCloud: 'Copiar a la nube',
+    shareFile: 'Compartir archivo',
+    delete: 'Eliminar',
+    cancel: 'Cancelar',
+    signedAs: 'Sesión iniciada como',
+    logOut: 'Cerrar sesión',
+    noSurveyFiles: 'No se encontraron archivos de estudio',
+    oops: 'Vaya',
+    noInternet: 'No hay conexión a Internet. Compruebe su conexión.',
+    createOrOpenSurvey: 'Toque la carpeta y seleccione un archivo de estudio del dispositivo o de la nube.',
+    newToCorpad: '¿Nuevo en Corpad? Consulte nuestra documentación en',
+    createNewSurvey: 'Crear estudio nuevo',
+    importSurvey: 'Importar estudio desde una hoja de cálculo',
+    or: 'o'
+}

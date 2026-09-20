@@ -1,12 +1,13 @@
-import React, { useContext } from 'react'
+import React, { useContext, useMemo } from 'react'
 import { View, StyleSheet } from 'react-native'
 import { Text } from '@ui-kitten/components'
 import { MultimeterSettingContext } from '../context/MultimeterSettings'
 import StandardCycleToken from './StandardCycleToken'
 import { TimeUnitLabels } from '../../../../../constants/labels'
-import { standardCycleTimes } from '../helpers/constants'
+import { getStandardCycleTimes } from '../helpers/constants'
 import Input from '../../../../../components/Input'
 import { TimeUnits } from '../../../../../constants/global'
+import { translateMultimeterSettings } from '../../../../../localization'
 
 
 const CycleSelectionView = () => {
@@ -19,13 +20,14 @@ const CycleSelectionView = () => {
         offTime,
         onOffCaptureActive } = useContext(MultimeterSettingContext)
     const disabled = !onOffCaptureActive
+    const standardCycleTimes = useMemo(() => getStandardCycleTimes(), [])
     return (
         <View
             style={styles.container}>
             <Text
                 category='label'
                 appearance='hint'>
-                Interruption cycle duration (ON | OFF)
+                {translateMultimeterSettings('interruptionCycle')}
             </Text>
             <View
                 style={styles.tokens}>
@@ -46,7 +48,7 @@ const CycleSelectionView = () => {
                     onChangeText={onOnCycleChanged}
                     onEndEditing={validateEntry}
                     style={styles.left}
-                    label='On'
+                    label={translateMultimeterSettings('on')}
                     property='cycleTime'
                     unit={TimeUnitLabels[TimeUnits.MILISECONDS]}
                     value={onTime.value}
@@ -56,7 +58,7 @@ const CycleSelectionView = () => {
                     onChangeText={onOffCycleChanged}
                     onEndEditing={validateEntry}
                     style={styles.right}
-                    label='Off'
+                    label={translateMultimeterSettings('off')}
                     property='cycleTime'
                     unit={TimeUnitLabels[TimeUnits.MILISECONDS]}
                     value={offTime.value}

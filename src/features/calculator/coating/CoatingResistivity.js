@@ -6,6 +6,7 @@ import SelectField from '../../../components/Select'
 import fieldValidation from '../../../helpers/validation'
 import { npsList } from '../../../constants/thicknessTable'
 import CoatingPoint from './CoatingPoint'
+import { translateCalculator } from '../../../localization'
 
 const CoatingResistivity = (props) => {
     const setValue = React.useCallback((point, property, status, value) => {
@@ -68,15 +69,15 @@ const CoatingResistivity = (props) => {
                     maxLength={15}
                     setValue={setValue}
                     setValid={setValid}
-                    label='Segment length'
+                    label={translateCalculator('inputs.segmentLength')}
                     value={props.data.spacing}
                     valid={props.valid.spacing}
                     unit={props.isMetric ? 'm' : 'ft'} />
                 <SelectField
                     disabled={props.disabled}
                     valid={props.valid.npsIndex}
-                    label={'Pipe diameter'}
-                    placeholder={'Select diameter'}
+                     label={translateCalculator('inputs.pipeDiameter')}
+                     placeholder={translateCalculator('inputs.selectDiameter')}
                     style={styles.inputRight}
                     selectedIndex={props.data.npsIndex}
                     itemList={npsList}
@@ -84,7 +85,7 @@ const CoatingResistivity = (props) => {
             </View>
             <CoatingPoint
                 disabled={props.disabled}
-                label='Test point 1 - Start'
+                label={translateCalculator('coating.testPointStart')}
                 point='start'
                 data={props.data.start}
                 valid={props.valid.start}
@@ -94,7 +95,7 @@ const CoatingResistivity = (props) => {
             <Divider style={styles.divider} />
             <CoatingPoint
                 disabled={props.disabled}
-                label='Test point 2 - End'
+                label={translateCalculator('coating.testPointEnd')}
                 point='end'
                 data={props.data.end}
                 valid={props.valid.end}

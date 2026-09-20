@@ -1,5 +1,5 @@
 import { ExportItemProperties } from "../../../../../../../../constants/global";
-import { ExportItemPropertyLabels } from "../../../../../../../../constants/labels";
+import { ExportItemPropertyLabels } from "../../../../../../../../constants/exportLabels";
 
 export class _ItemHeaderConverter {
     constructor() {

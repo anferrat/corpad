@@ -2,6 +2,7 @@ import React from 'react'
 import { Text, Icon } from '@ui-kitten/components'
 import { Pressable, StyleSheet, View } from 'react-native'
 import { basic } from '../../../../styles/colors'
+import { translateEdit } from '../../../../localization'
 
 const CurrentDirectionHint = ({ shorted, fromAtoB, update }) => {
 
@@ -14,14 +15,14 @@ const CurrentDirectionHint = ({ shorted, fromAtoB, update }) => {
                 fill={basic}
                 style={styles.icon} />
             <Text appearance='hint' category='label'>
-                Current travels {fromAtoB ? 'from side A to side B' : 'from side B to side A'}. </Text>
+                {translateEdit('currentTravels', { direction: translateEdit(fromAtoB ? 'fromSideAToSideB' : 'fromSideBToSideA') })} </Text>
             <Pressable
                 onPress={updateDirection}>
                 <Text
                     status='primary'
                     category='label'
                     style={styles.link}>
-                    Change
+                    {translateEdit('change')}
                 </Text>
             </Pressable>
         </View>

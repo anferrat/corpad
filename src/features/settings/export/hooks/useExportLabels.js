@@ -8,6 +8,7 @@ import { ExportFormatTypes, FileMimeTypes, ItemTypes } from "../../../../constan
 import { hideLoader, setExportModal, updateLoader } from "../../../../store/actions/settings"
 import { resetExport } from "../../../../store/actions/export"
 import { isProStatus } from "../../../../helpers/functions"
+import { translateSettings } from '../../../../localization'
 
 const useExportLabels = (navigateToExportItem) => {
     const [potentialData, setPotentialData] = useState({
@@ -45,7 +46,7 @@ const useExportLabels = (navigateToExportItem) => {
     const itemTypeLabel = ItemTypeLabelsPlural[itemType]
     const itemTypeIcon = ItemTypeIconsFilled[itemType]
     const sortingLabel = SortingOptionLabels[sorting]
-    const potentialsGroupingLabel = groupPotentialsByPipeline ? 'Pipeline' : 'Reading type'
+    const potentialsGroupingLabel = groupPotentialsByPipeline ? translateSettings('pipeline') : translateSettings('readingType')
     const showOther = subitemProperties.length > 0
     const assetOptionAvailable = (itemType === ItemTypes.TEST_POINT || itemType === ItemTypes.RECTIFIER) && exportType !== ExportFormatTypes.KML && isPro
     const sortingOptionAvailable = exportType !== ExportFormatTypes.KML
@@ -63,7 +64,7 @@ const useExportLabels = (navigateToExportItem) => {
                         loading: false,
                         referenceCellLabel: referenceCells.find(({ id }) => id === referenceCellId).name,
                         potentialTypeLabels: potentialTypes.filter(({ id }) => ~potentialTypeIdList.indexOf(id)).map(({ name }) => name),
-                        pipelineLabels: pipelines.concat({ id: null, name: 'Unassigned' }).filter(({ id }) => ~pipelineIdList.indexOf(id)).map(({ name }) => name)
+                        pipelineLabels: pipelines.concat({ id: null, name: translateSettings('unassigned') }).filter(({ id }) => ~pipelineIdList.indexOf(id)).map(({ name }) => name)
                     })
             }
             else {
@@ -82,7 +83,7 @@ const useExportLabels = (navigateToExportItem) => {
     }, [])
 
     const exportToSpreadsheet = useCallback(async () => {
-        dispatch(updateLoader('Exporting', `Creating new .${exportType} file`))
+        dispatch(updateLoader(translateSettings('exporting'), translateSettings('creatingFile', {type: exportType})))
         const { response, status, errorMessage } = await exportSurveyToSpreadsheet({ itemType, sorting, itemProperties, exportPotentials, referenceCellId, potentialTypeIdList, selectedSubitemTypes, pipelineIdList, groupPotentialsByPipeline, subitemProperties, includeAssets: includeAssets && assetOptionAvailable, includeMapLayers: mapLayerOptionAvailable && includeMapLayers, exportType })
         if (status === 200) {
             navigateToExportItem()

@@ -6,11 +6,11 @@ import WireView from '../WireView'
 import NameInput from '../NameInput'
 import { AnodeMaterials } from '../../../../../constants/global'
 import { AnodeMaterialLabels } from '../../../../../constants/labels'
-
-const anodeMaterialList = Object.values(AnodeMaterials).map(material => ({ item: AnodeMaterialLabels[material], index: material }))
+import { translateEdit } from '../../../../../localization'
 
 const ANCard = ({ data, itemId, subitemId, update, validate }) => {
     const { name, defaultName, valid, anodeMaterial, wireColor, wireGauge } = data
+    const anodeMaterialList = React.useMemo(() => Object.values(AnodeMaterials).map(material => ({ item: AnodeMaterialLabels[material], index: material })), [])
 
     const onSelect = React.useCallback((index) => {
         update(index, 'anodeMaterial')
@@ -32,10 +32,9 @@ const ANCard = ({ data, itemId, subitemId, update, validate }) => {
                 property='anodeMaterial'
                 itemList={anodeMaterialList}
                 selectedIndex={anodeMaterial}
-                placeholder="Select material"
                 placeholderOption={true}
                 onSelect={onSelect}
-                label='Anode material' />
+                label={translateEdit('anodeMaterial')} />
             <WireView
                 update={update}
                 wireColor={wireColor}

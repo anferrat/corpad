@@ -8,6 +8,7 @@ import Text from './modal/Text'
 import B from './modal/B'
 import ExampleImage from './modal/ExampleImage'
 import { SafeAreaProvider } from 'react-native-safe-area-context'
+import { translateImport } from '../../../../localization'
 
 const images = {
     yes: require('../assets/yes.png'),
@@ -19,18 +20,18 @@ const ModalContent = ({ hideModal }) => {
         <>
             <SafeAreaProvider>
                 <Header
-                    title={'How to prepare your files'}
+                    title={translateImport('file.preparationTitle')}
                     onBackPress={hideModal} />
                 <ScrollView
                     style={styles.container}>
                     <View
                         style={globalStyle.card}>
-                        <Title name='1. Preparing your spreadsheet for import' />
-                        <Text>Ensure the spreadsheet file size is less than <B>3MB</B>.</Text>
-                        <Text>Each row should represent a separate item.</Text>
-                        <Text>The first row must contain <B>headers</B> that describe the data in each column.</Text>
-                        <Text>Avoid using <B>merged cells, blank rows,</B> or <B>blank columns.</B></Text>
-                        <Text>If your file contains multiple worksheets, <B>only the first sheet</B> will be imported.</Text>
+                        <Title name={translateImport('file.preparation.spreadsheet')} />
+                        <Text>{translateImport('file.preparation.ensureSize')} <B>3MB</B>.</Text>
+                        <Text>{translateImport('file.preparation.eachRow')}</Text>
+                        <Text>{translateImport('file.preparation.firstRow')} <B>{translateImport('file.preparation.headers')}</B> {translateImport('file.preparation.describeColumns')}</Text>
+                        <Text>{translateImport('file.preparation.avoid')} <B>{translateImport('file.preparation.mergedCells')}</B> {translateImport('file.preparation.blankColumns')}</Text>
+                        <Text>{translateImport('file.preparation.onlyFirst')} <B>{translateImport('file.preparation.firstSheet')}</B> {translateImport('file.preparation.imported')}</Text>
                         <ExampleImage
                             isSuccess={true}
                             image={images.yes} />
@@ -40,15 +41,15 @@ const ModalContent = ({ hideModal }) => {
                     </View>
                     <View
                         style={globalStyle.card}>
-                        <Title name='2. Formatting data in cells' />
-                        <Text>Do not use <B>special characters</B> in columns intended for the <B>"Name" property</B>. These characters will be removed during import.</Text>
-                        <Text><B>Numerical values</B> should not include text in the same cell (e.g., "50mV" should be split into "50" in one column and "mV" in another, if applicable).</Text>
+                        <Title name={translateImport('file.preparation.formatting')} />
+                        <Text>{translateImport('file.preparation.specialCharacters')} <B>{translateImport('file.preparation.specialCharacterLabel')}</B> {translateImport('file.preparation.nameProperty')} <B>{translateImport('file.preparation.namePropertyLabel')}</B>. {translateImport('file.preparation.removed')}</Text>
+                        <Text><B>{translateImport('file.preparation.numerical')}</B> {translateImport('file.preparation.noText')} "50mV" {translateImport('file.preparation.splitValue')} "50" {translateImport('file.preparation.oneColumn')} "mV" {translateImport('file.preparation.anotherColumn')}</Text>
                     </View>
                     <View
                         style={globalStyle.card}>
-                        <Title name='3. Useful tips' />
-                        <Text>You can import values with <B>various units</B> (e.g., "mV" instead of "V").</Text>
-                        <Text>You can cancel recent imports immediately after they are performed. This option is available on the <B>Import</B> screen.</Text>
+                        <Title name={translateImport('file.preparation.tips')} />
+                        <Text>{translateImport('file.preparation.variousUnits')} <B>{translateImport('file.preparation.units')}</B> (e.g., "mV" instead of "V").</Text>
+                        <Text>{translateImport('file.preparation.cancelRecent')} <B>{translateImport('file.preparation.importScreen')}</B> {translateImport('file.preparation.screen')}</Text>
                     </View>
                 </ScrollView>
             </SafeAreaProvider>

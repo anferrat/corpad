@@ -5,6 +5,7 @@ import { AddPotentials } from '../../../../../components/AddPotentialModal'
 import LoadingView from '../../../../../components/LoadingView'
 import PotentialList from './PotentialList'
 import usePotentialsData from '../../hooks/usePotentialsData'
+import { translatePotentialSelection } from '../../../../../localization'
 
 const PotentialsView = ({ subitemId, itemId }) => {
     const { potentialsData, selected, createPotentialHandler, deletePotentialHandler, updatePotentialHandler } = usePotentialsData({ subitemId, itemId })
@@ -20,7 +21,7 @@ const PotentialsView = ({ subitemId, itemId }) => {
                     style={styles.label}
                     appearance='hint'
                     category='label'>
-                    Potentials
+                    {translatePotentialSelection('potentials')}
                 </Text>
                 <PotentialList
                     potentials={potentials}

@@ -4,6 +4,7 @@ import { Text, ListItem, Icon, Button } from '@ui-kitten/components'
 import { useTimeSync } from '../hooks/useTimeSync'
 import { primary, success, warning } from '../../../../../styles/colors'
 import { TimeSyncSourceLabels } from '../../../../../constants/labels'
+import { translateMultimeterSettings } from '../../../../../localization'
 
 const warningIcon = (props) => <Icon {...props} name='alert-triangle' fill={warning} />
 
@@ -31,8 +32,8 @@ const TimeSyncListItem = () => {
                 disabled={isLoading}
                 accessoryLeft={isLoading ? loadingIcon : (isTimeSynced ? successIcon : warningIcon)}
                 onPress={onSyncPress}
-                title='Time synchronization'
-                description={isLoading ? 'Syncing' : (isTimeSynced ? `Synced via ${TimeSyncSourceLabels[source]} | Delta ${delta} ms` : 'Not synced')}
+                 title={translateMultimeterSettings('timeSynchronization')}
+                 description={isLoading ? translateMultimeterSettings('syncing') : (isTimeSynced ? translateMultimeterSettings('synced', { source: TimeSyncSourceLabels[source], delta }) : translateMultimeterSettings('notSynced'))}
                 accessoryRight={renderSyncButton}
             />
         )

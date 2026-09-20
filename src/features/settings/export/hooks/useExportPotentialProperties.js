@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { getExportPotentialPropertiesData } from '../../../../app/controllers/survey/ExportController'
 import { errorHandler } from '../../../../helpers/error_handler'
 import { setExportPotentialDefaultValues, setExportPotentials, setExportReferenceCellId, toggleExportPipeline, toggleExportPotentialTypeId, toggleExportSubitemType, setExportPipelineGrouping } from '../../../../store/actions/export'
+import { translateSettings } from '../../../../localization'
 
 const useExportPotentialProperties = (navigateToExportSubitems) => {
     const referenceCellId = useSelector(state => state.export.referenceCellId)
@@ -38,7 +39,7 @@ const useExportPotentialProperties = (navigateToExportSubitems) => {
                     const pipelineIdList = pipelines.map(({ id }) => id).concat(null)
 
                     //Updating state
-                    setPipelines([{ id: null, name: 'Unassigned' }].concat(pipelines))
+                    setPipelines([{ id: null, name: translateSettings('unassigned') }].concat(pipelines))
                     setReferenceCells(referenceCells)
                     setPotentialTypes(potentialTypes)
                     dispatch(setExportPotentialDefaultValues(referenceCells[index]?.id, potentialTypeIdList, ['PL', 'RS'], pipelineIdList))

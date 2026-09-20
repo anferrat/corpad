@@ -9,6 +9,7 @@ import useMapLayers from './hooks/useMapLayers'
 import EmptyMapLayerListComponent from './components/EmptyMapLayerListComponent'
 import LoadingView from '../../components/LoadingView'
 import useCalculatorOptions from './hooks/useCalculatorOptions'
+import { translateMapLayer } from '../../localization'
 
 
 export const ViewMapLayer = ({ navigateToEditMapLayer, goBack }) => {
@@ -31,20 +32,20 @@ export const ViewMapLayer = ({ navigateToEditMapLayer, goBack }) => {
                     <View style={styles.headerRow}>
                         <Text
                             appearance='hint'
-                            category='label'>Calculator options</Text>
+                            category='label'>{translateMapLayer('calculatorOptions')}</Text>
                     </View>
                     <CheckBox
                         onChange={toggleCalculator}
                         style={styles.checkbox}
                         checked={isChecked}
-                    >Display calculator markers</CheckBox>
+                    >{translateMapLayer('displayCalculatorMarkers')}</CheckBox>
                 </View>
                 <View style={styles.card}>
                     <LoadingView loading={!visible}>
                         <View style={styles.headerRow}>
                             <Text
                                 appearance='hint'
-                                category='label'>Displayed map layers</Text>
+                                category='label'>{translateMapLayer('displayedMapLayers')}</Text>
                         </View>
                         {layers.length === 0 ?
                             <EmptyMapLayerListComponent /> :
@@ -76,7 +77,7 @@ export const ViewMapLayer = ({ navigateToEditMapLayer, goBack }) => {
             </ScrollView>
             <BottomButton
                 onPress={goBack}
-                title={'Back'}
+                title={translateMapLayer('back')}
                 icon={'undo'}
             />
         </>

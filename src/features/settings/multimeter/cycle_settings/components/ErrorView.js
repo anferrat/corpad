@@ -3,6 +3,7 @@ import { View, StyleSheet } from 'react-native'
 import { Text } from '@ui-kitten/components'
 import { MultimeterSettingContext } from '../context/MultimeterSettings'
 import { danger, danger100 } from '../../../../../styles/colors'
+import { translateMultimeterSettings } from '../../../../../localization'
 
 const ErrorView = ({ }) => {
     const { errorCodes } = useContext(MultimeterSettingContext)
@@ -10,15 +11,15 @@ const ErrorView = ({ }) => {
         return (
             <View
                 style={styles.container}>
-                <Text status='danger' style={styles.header}>Errors:</Text>
+                <Text status='danger' style={styles.header}>{translateMultimeterSettings('errors')}:</Text>
                 <View
                     style={styles.errors}>
                     {errorCodes.map(error => {
                         switch (error) {
                             case 'timeError':
-                                return <Text key={error} status='danger' category='s2'>- Cycle time must be less than 60 000 ms and more than 200 ms.</Text>
+                                return <Text key={error} status='danger' category='s2'>{translateMultimeterSettings('cycleTimeError')}</Text>
                             case 'delayError':
-                                return <Text key={error} status='danger' category='s2'>- Delay must be less than half of cycle time and more than 20 ms.</Text>
+                                return <Text key={error} status='danger' category='s2'>{translateMultimeterSettings('delayError')}</Text>
                             default:
                                 return null
                         }

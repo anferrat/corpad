@@ -5,6 +5,7 @@ import { MultimeterSettingContext } from '../context/MultimeterSettings'
 import Input from '../../../../../components/Input'
 import { MultimeterSyncModes, TimeSyncSources, TimeUnits } from '../../../../../constants/global'
 import { TimeUnitLabels } from '../../../../../constants/labels'
+import { translateMultimeterSettings } from '../../../../../localization'
 
 const timeSyncOptions = [TimeSyncSources.GPS, TimeSyncSources.NTP, TimeSyncSources.MIXED]
 
@@ -33,27 +34,27 @@ const TimeSyncCaptureView = () => {
                 <Text
                     category='label'
                     appearance='hint'>
-                    Time synchronization method
+                    {translateMultimeterSettings('timeSynchronizationMethod')}
                 </Text>
                 <RadioGroup
                     style={styles.radioView}
                     onChange={onTimeSyncChangeHandler}
                     selectedIndex={timeSyncModeIndex}>
-                    <Radio>GPS</Radio>
-                    <Radio>NTP (over Internet)</Radio>
-                    <Radio>Mixed</Radio>
+                    <Radio>{translateMultimeterSettings('gps')}</Radio>
+                    <Radio>{translateMultimeterSettings('ntp')}</Radio>
+                    <Radio>{translateMultimeterSettings('mixed')}</Radio>
                 </RadioGroup>
                 <Text
                     category='label'
                     appearance='hint'>
-                    First cycle
+                    {translateMultimeterSettings('firstCycle')}
                 </Text>
                 <RadioGroup
                     style={styles.onOffRadioView}
                     onChange={onFirstCycleChange}
                     selectedIndex={Number(firstCycle)}>
-                    <Radio>OFF</Radio>
-                    <Radio>ON</Radio>
+                    <Radio>{translateMultimeterSettings('off').toUpperCase()}</Radio>
+                    <Radio>{translateMultimeterSettings('on').toUpperCase()}</Radio>
                 </RadioGroup>
 
                 <View
@@ -63,7 +64,7 @@ const TimeSyncCaptureView = () => {
                         style={styles.left}
                         onChangeText={onOnSetupChanged}
                         onEndEditing={validateEntry}
-                        label='On delay'
+                        label={translateMultimeterSettings('onDelay')}
                         property='onSetup'
                         value={onSetup.value}
                         unit={TimeUnitLabels[TimeUnits.MILISECONDS]}
@@ -73,7 +74,7 @@ const TimeSyncCaptureView = () => {
                         style={styles.right}
                         onChangeText={onOffDelayChanged}
                         onEndEditing={validateEntry}
-                        label='Off delay'
+                        label={translateMultimeterSettings('offDelay')}
                         property='offDelay'
                         unit={TimeUnitLabels[TimeUnits.MILISECONDS]}
                         value={offDelay.value}

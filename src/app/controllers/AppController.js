@@ -18,6 +18,7 @@ import { UnblockUrlListener } from "../services/app/UnblockUrlListener"
 import { connectMultimeterService } from "./_instances/multimeter"
 import { PotentialTypeInitialization } from "../services/survey/other/PotentialTypeInitialization"
 import { surveyOperationLock } from "./_instances/survey_operation"
+import { LocalizationInitialization } from "../services/app/LocalizationInitialization"
 
 class AppController extends Controller {
     constructor(currentSurveyStatusService, googleDriveAuthorizationRepo, surveyRepo, bluetoothRepo, settingRepo, defaultNameRepo, loadExternalSurveyFileService, saveCurrentSurveyService, warningHandler, resetCurrentSurveyService, fileSystemRepo, appRepo, linkingService, networkRepo, externalFileContentResolver, purchaseRepo, geolocationRepo, permissions, urlFileAccess, connectMultimeterService, potentialTypeRepo, getDefaultPotentialTypes, surveyOperationLock) {
@@ -37,6 +38,8 @@ class AppController extends Controller {
 
         this.appSettingInitializationService = new SettingInitialization(settingRepo)
 
+        this.localizationInitializationService = new LocalizationInitialization(settingRepo)
+
         this.databaseInitializationService = new DatabaseInitialization(appRepo)
 
         this.multimeterInitializationService = new MultimeterInitialization(bluetoothRepo, connectMultimeterService)
@@ -47,7 +50,7 @@ class AppController extends Controller {
 
         this.urlResolver = new UrlResolver(urlFileAccess, externalFileContentResolver, this.openExternalSurveyService)
 
-        this.appInitializationService = new AppInitialization(currentSurveyStatusService, googleDriveAuthorizationRepo, surveyRepo, this.multimeterInitializationService, this.defaultNameInitializationService, settingRepo, this.appSettingInitializationService, this.databaseInitializationService, this.fileSystemInitializationService, linkingService, this.purchaseInitializationService, this.urlResolver, this.potentialTypeInitialization)
+        this.appInitializationService = new AppInitialization(currentSurveyStatusService, googleDriveAuthorizationRepo, surveyRepo, this.multimeterInitializationService, this.defaultNameInitializationService, settingRepo, this.appSettingInitializationService, this.databaseInitializationService, this.fileSystemInitializationService, linkingService, this.purchaseInitializationService, this.urlResolver, this.potentialTypeInitialization, this.localizationInitializationService)
 
         this.urlListenerService = new UrlListener(linkingService, this.urlResolver)
 

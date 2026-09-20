@@ -1,11 +1,13 @@
 import React from 'react'
 import { Text } from '@ui-kitten/components'
 import InputField from '../../../components/Input'
+import { translateCalculator } from '../../../localization'
 
 const InputDataField = (props) => {
-    const setValue = React.useCallback((value) => props.setValue(props.property, props.status, value), [props.setValue, props.property, props.status])
-    const setValid = React.useCallback(() => props.setValid(props.property, props.status, props.value), [props.setValid, props.property, props.value, props.status])
-    const accessory = React.useCallback(() => <Text appearance='hint' category='c1'>{props.status === 'on' ? 'ON:' : 'OFF:'}</Text>, [props.status])
+    const {setValue: updateValue, property, status, setValid: validateValue, value} = props
+    const setValue = React.useCallback((nextValue) => updateValue(property, status, nextValue), [updateValue, property, status])
+    const setValid = React.useCallback(() => validateValue(property, status, value), [validateValue, property, status, value])
+    const accessory = React.useCallback(() => <Text appearance='hint' category='c1'>{`${status === 'on' ? translateCalculator('common.on') : translateCalculator('common.off')}:`}</Text>, [status])
     return <InputField
         keyboardType={'numeric'}
         accessoryLeft={props.status !== null ? accessory : null}

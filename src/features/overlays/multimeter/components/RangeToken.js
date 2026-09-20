@@ -2,10 +2,11 @@ import React from 'react'
 import { StyleSheet, View } from 'react-native'
 import ToggleToken from '../../../../components/ToggleToken'
 import { MultimeterRangeLabels } from '../../../../constants/labels'
+import { translateMultimeterOverlay } from '../../../../localization'
 
 
 const RangeToken = ({ range, onSelect, selected, disabled, inProgress }) => {
-    const title = MultimeterRangeLabels[range] ?? 'Error'
+    const title = MultimeterRangeLabels[range] ?? translateMultimeterOverlay('error')
     const onPress = () => !selected ? onSelect(range) : null
     return (
         <View

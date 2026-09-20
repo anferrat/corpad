@@ -4,6 +4,7 @@ import fieldValidation from '../../../helpers/validation'
 import { thicknessTable, npsList, pipeSchedules } from '../../../constants/thicknessTable'
 import InputDataField from './InputDataField'
 import SelectDataField from './SelectDataField'
+import { translateCalculator } from '../../../localization'
 
 const CurrentTwoWire = (props) => {
     //Get data from thickness table where 
@@ -38,8 +39,8 @@ const CurrentTwoWire = (props) => {
                 <SelectDataField
                     disabled={props.disabled}
                     valid={props.valid.npsIndex}
-                    label={'Pipe diameter'}
-                    placeholder={'Select diameter'}
+                    label={translateCalculator('inputs.pipeDiameter')}
+                    placeholder={translateCalculator('inputs.selectDiameter')}
                     property={'npsIndex'}
                     style={styles.inputLeft}
                     selectedIndex={props.data.npsIndex}
@@ -47,8 +48,8 @@ const CurrentTwoWire = (props) => {
                     onSelect={selectAction} />
                 <SelectDataField
                     disabled={props.disabled || !props.valid.npsIndex || scheduleList.length === 0}
-                    label={'Pipe schedule'}
-                    placeholder={'Select schedule'}
+                    label={translateCalculator('inputs.pipeSchedule')}
+                    placeholder={translateCalculator('inputs.selectSchedule')}
                     property={'scheduleIndex'}
                     style={styles.inputRight}
                     selectedIndex={props.data.scheduleIndex}
@@ -63,7 +64,7 @@ const CurrentTwoWire = (props) => {
                     property={'voltageDrop'}
                     setValue={setValue}
                     setValid={setValid}
-                    label='Voltage drop'
+                    label={translateCalculator('inputs.voltageDrop')}
                     value={props.data.voltageDrop}
                     valid={props.valid.voltageDrop}
                     unit='mV' />
@@ -73,7 +74,7 @@ const CurrentTwoWire = (props) => {
                     setValue={setValue}
                     setValid={setValid}
                     property={'distance'}
-                    label='Segment length'
+                    label={translateCalculator('inputs.segmentLength')}
                     value={props.data.distance}
                     valid={props.valid.distance}
                     unit={props.isMetric ? 'm' : 'ft'} />

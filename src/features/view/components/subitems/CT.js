@@ -6,6 +6,7 @@ import InputWithTitle from '../InputWithTitle'
 import { MeasurementPropertyTypes } from '../../../../constants/global'
 import CurrentInputModeRadio from '../CurrentInputModeRadio'
 import { StyleSheet, View } from 'react-native'
+import { translateView } from '../../../../localization'
 
 const getRatio = (ratioCurrent, ratioVoltage) => {
     if (ratioCurrent && ratioVoltage)
@@ -19,10 +20,10 @@ const targetDisplayHandler = (min, max) => {
     }
     else
         if (min === null) {
-            return 'Max. ' + max
+            return translateView('maxValue', { value: max })
         }
         else if (max === null) {
-            return 'Min. ' + min
+            return translateView('minValue', { value: min })
         }
         else return min + ' - ' + max
 }
@@ -95,7 +96,7 @@ const CT = ({
                 keyboardType='numeric'
                 value={voltage}
                 valid={valid.voltage}
-                title='Voltage'
+                 title={translateView('voltage')}
                 property='voltage'
                 unit={'V'} />
             {isVoltageDropAvailable ?
@@ -114,7 +115,7 @@ const CT = ({
                     keyboardType='numeric'
                     value={voltageDrop}
                     valid={valid.voltageDrop}
-                    title='Voltage drop'
+                     title={translateView('voltageDrop')}
                     property='voltageDrop'
                     unit={'mV'} /> :
                 <InputWithTitle
@@ -123,13 +124,13 @@ const CT = ({
                     keyboardType='numeric'
                     value={current}
                     valid={valid.current}
-                    title='Current'
+                     title={translateView('current')}
                     property='current'
                     unit={'A'} />}
             <View style={styles.values}>
-                {isVoltageDropSelected ? <TextLine title='Current' value={current} unit='A' /> : null}
-                <TextLine title='Shunt ratio' value={shuntDisplay} />
-                <TextLine title='Target' value={targetDisplay} unit='A' />
+                {isVoltageDropSelected ? <TextLine title={translateView('current')} value={current} unit='A' /> : null}
+                <TextLine title={translateView('shuntRatio')} value={shuntDisplay} />
+                <TextLine title={translateView('target')} value={targetDisplay} unit='A' />
             </View>
         </>
     )

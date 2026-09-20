@@ -4,23 +4,22 @@ import Input from './Input'
 import Select from './Select'
 import { TapOptions, CoarseFineOptions } from '../../../../constants/global'
 import { CoarseFineOptionLabels, TapOptionLabels } from '../../../../constants/labels'
-
-const tapOptionList = Object.values(TapOptions).map(option => ({ item: TapOptionLabels[option], index: option }))
-
-const coarseFineOptionList = Object.values(CoarseFineOptions).map(option => ({ item: CoarseFineOptionLabels[option], index: option }))
+import { translateEdit } from '../../../../localization'
 
 const RectifierTapSetting = ({ update, validate, tapSetting, tapCoarse, tapFine, tapValue, tapValueValid, updateTap }) => {
+    const tapOptionList = React.useMemo(() => Object.values(TapOptions).map(option => ({ item: TapOptionLabels[option], index: option })), [])
+    const coarseFineOptionList = React.useMemo(() => Object.values(CoarseFineOptions).map(option => ({ item: CoarseFineOptionLabels[option], index: option })), [])
     return (
         <>
             <Select
                 style={styles.select}
                 placeholderOption={true}
                 update={updateTap}
-                label='Current control'
                 property='tapSetting'
+                label={translateEdit('currentControl')}
                 selectedIndex={tapSetting}
                 itemList={tapOptionList}
-                placeholder='Select control mode' />
+                placeholder={translateEdit('selectControlMode')} />
             {
                 tapSetting === 0 ? (
                     <View style={styles.row}>
@@ -28,7 +27,6 @@ const RectifierTapSetting = ({ update, validate, tapSetting, tapCoarse, tapFine,
                             placeholderOption={true}
                             update={update}
                             style={styles.leftItem}
-                            label='Coarse'
                             property='tapCoarse'
                             selectedIndex={tapCoarse}
                             itemList={coarseFineOptionList}
@@ -37,7 +35,6 @@ const RectifierTapSetting = ({ update, validate, tapSetting, tapCoarse, tapFine,
                             placeholderOption={true}
                             update={update}
                             style={styles.rightItem}
-                            label='Fine'
                             property='tapFine'
                             selectedIndex={tapFine}
                             itemList={coarseFineOptionList}
@@ -50,8 +47,6 @@ const RectifierTapSetting = ({ update, validate, tapSetting, tapCoarse, tapFine,
                             validate={validate}
                             property='tapValue'
                             maxLength={8}
-                            label='Percentage'
-                            placeholder='##'
                             keyboardType='numeric'
                             value={tapValue}
                             valid={tapValueValid}

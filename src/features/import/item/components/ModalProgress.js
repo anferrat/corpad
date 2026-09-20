@@ -4,6 +4,7 @@ import { View, StyleSheet } from 'react-native'
 import { basic, primary, basic300 } from '../../../../styles/colors'
 import ModalTitle from './ModalTitle'
 import { ItemTypeLabels } from '../../../../constants/labels'
+import { translateImport } from '../../../../localization'
 
 const ModalProgress = ({
     count,
@@ -13,7 +14,7 @@ const ModalProgress = ({
     return (
         <View style={styles.borderView}>
             <ModalTitle
-                title="Importing"
+                title={translateImport('item.importing')}
                 iconFill={primary}
                 icon='activity'
             />

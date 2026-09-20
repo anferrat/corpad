@@ -28,7 +28,7 @@ export class SaveCloudSurveyFile {
         const localAssetFiles = await this.fileSystemRepo.readDir(FileSystemLocations.CURRENT_ASSETS)
         const { localFilesToUpload, cloudFilesToDelete, missingAssets } = this.assetFileUploadControl.execute(assets, cloudAssetList, localAssetFiles)
         const { localFilesToCopy, localFilesToDelete } = await this.assetFileSaveControl.execute(assets, localAssetFiles, surveyAssetFiles)
-        const removeMissingAssets = missingAssets.length !== 0 && await this.warningHandler.execute(`There are ${missingAssets.length} missing images found in this survey. Would you like to remove records of them from the survey?`, 'Remove', 'Leave as is')
+        const removeMissingAssets = missingAssets.length !== 0 && await this.warningHandler.execute({ key: 'warnings.messages.missingImages', params: { count: missingAssets.length } }, 'Remove', 'Leave as is')
         return {
             localFilesToUpload,
             cloudFilesToDelete,

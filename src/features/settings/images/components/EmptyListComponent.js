@@ -1,6 +1,7 @@
 import React from 'react'
 import { View, StyleSheet } from 'react-native'
 import { Text } from '@ui-kitten/components'
+import { translateSettings } from '../../../../localization'
 
 
 const EmptyListComponent = () => {
@@ -9,7 +10,7 @@ const EmptyListComponent = () => {
             style={styles.container}>
             <Text
                 appearance='hint'>
-                No images found.
+                {translateSettings('noImages')}
             </Text>
         </View>
     )

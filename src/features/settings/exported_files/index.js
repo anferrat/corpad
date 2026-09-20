@@ -6,6 +6,7 @@ import EmptyExportedFilesList from './components/EmptyExportedFilesList'
 import LoadingView from '../../../components/LoadingView'
 import useExportedFiles from './hooks/useExportedFiles'
 import BottomButton from '../../../components/BottomButton'
+import { translateSettings } from '../../../localization'
 
 
 export const ExportedFilesList = ({ navigateToSpreadsheet }) => {
@@ -46,7 +47,7 @@ export const ExportedFilesList = ({ navigateToSpreadsheet }) => {
                     keyExtractor={keyExtractor} />
             </LoadingView>
             <BottomButton
-                title='Delete all'
+                 title={translateSettings('deleteAll')}
                 disabled={deleteButtonDisabled}
                 icon={'trash'}
                 onPress={deleteAll} />

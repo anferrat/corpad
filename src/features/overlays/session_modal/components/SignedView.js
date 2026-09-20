@@ -3,6 +3,7 @@ import { StyleSheet } from 'react-native'
 import { Button, Icon, Text, ListItem } from '@ui-kitten/components'
 import { success, primary } from '../../../../styles/colors'
 import { person } from '../../../../components/Icons'
+import { translateOverlay } from '../../../../localization'
 
 const accessory = (props) => <Icon
     {...props}
@@ -20,7 +21,7 @@ const SignedView = ({ userName, onSignOut, signing }) => {
             <Text
                 category={'h6'}
                 style={styles.title}>
-                Cloud storage
+                {translateOverlay('session.cloudStorage')}
             </Text>
             <ListItem
                 title={userName}
@@ -33,7 +34,7 @@ const SignedView = ({ userName, onSignOut, signing }) => {
                 onPress={onSignOut}
                 status={'danger'}
                 appearance='ghost'>
-                Log out
+                {translateOverlay('session.logOut')}
             </Button>
         </>
     )

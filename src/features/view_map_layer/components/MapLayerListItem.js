@@ -7,6 +7,7 @@ import { androidRipple } from '../../../styles/styles'
 import useModal from '../../../hooks/useModal'
 import IconButton from '../../../components/IconButton'
 import { MapLayerStrokeColors, basic, danger, primary } from '../../../styles/colors'
+import { translateMapLayer } from '../../../localization'
 
 const deleteButton = (props) => <Icon {...props} name='trash' fill={danger} />
 
@@ -38,7 +39,7 @@ const MapLayerListItem = ({ layerId, name, index, selected, color, comment, feat
                 iconName={'more-vertical-outline'}
                 onPress={showModal}
             />
-        </View>, [disabled])
+        </View>, [disabled, showModal])
     return (
         <Pressable
             disabled={disabled}
@@ -73,7 +74,7 @@ const MapLayerListItem = ({ layerId, name, index, selected, color, comment, feat
                         <Text
                             category={'s2'}
                             appearance='hint'
-                            style={styles.comment}>{featureCount} feature{featureCount !== 1 ? 's' : ''}</Text>
+                            style={styles.comment}>{translateMapLayer('features', { count: featureCount })}</Text>
                     </View>
                 </View>
             </View>
@@ -86,15 +87,15 @@ const MapLayerListItem = ({ layerId, name, index, selected, color, comment, feat
                     <MenuItem
                         onPress={onGoToHandler}
                         accessoryLeft={diagBack}
-                        title='Go to' />
+                        title={translateMapLayer('goTo')} />
                     <MenuItem
                         onPress={onEditHandler}
                         accessoryLeft={edit}
-                        title='Edit' />
+                        title={translateMapLayer('edit')} />
                     <MenuItem
                         onPress={onDeleteHandler}
                         accessoryLeft={deleteButton}
-                        title='Delete' />
+                        title={translateMapLayer('delete')} />
                 </OverflowMenu>
             </View>
 

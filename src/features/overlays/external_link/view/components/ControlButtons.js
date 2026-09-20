@@ -3,6 +3,7 @@ import { View, StyleSheet } from 'react-native'
 import { activity, plusCircle, search } from '../../../../../components/Icons'
 import { Button, Icon, ListItem, Text } from '@ui-kitten/components'
 import { primary } from '../../../../../styles/colors'
+import { translateOverlay } from '../../../../../localization'
 
 const ControlButtons = ({ loading, goToFindInSurvey, isSurveyLoaded, addToSurvey, isCreating }) => {
     if (!isSurveyLoaded && !loading)
@@ -12,7 +13,7 @@ const ControlButtons = ({ loading, goToFindInSurvey, isSurveyLoaded, addToSurvey
                     style={styles.hint}
                     category='s2'
                     appearance='hint'>
-                    To save the data from this label, please open an existing survey or create a new one.
+                    {translateOverlay('externalLink.noSurveyHint')}
                 </Text>
             </View>
         )
@@ -24,14 +25,14 @@ const ControlButtons = ({ loading, goToFindInSurvey, isSurveyLoaded, addToSurvey
                     <ListItem
                         style={styles.listItem}
                         onPress={addToSurvey}
-                        title='Add to the survey'
-                        description='Create new survey item with data from the label.'
+                        title={translateOverlay('externalLink.addToSurvey')}
+                        description={translateOverlay('externalLink.createItemDescription')}
                         disabled={loading || isCreating}
                         accessoryLeft={isCreating ? activity : (props) => <Icon {...props} fill={primary} name='plus-circle' />} />
                     <ListItem
                         style={styles.listItem}
-                        title='Find in the survey'
-                        description='Find item in the survey that matches data from the label.'
+                        title={translateOverlay('externalLink.findInSurvey')}
+                        description={translateOverlay('externalLink.findItemDescription')}
                         accessoryLeft={(props) => <Icon {...props} fill={primary} name='search' />}
                         disabled={loading || isCreating}
                         onPress={goToFindInSurvey}

@@ -1,4 +1,4 @@
-import { CoarseFineOptionLabels, TapOptionLabels, PipelineMaterialLabels, PipeDiameterLabels, PipelineProductLabels, StatusLabels, TestPointTypeLabels } from "../../../../../../../../constants/labels"
+import { CoarseFineOptionLabels, TapOptionLabels, PipelineMaterialLabels, PipeDiameterLabels, PipelineProductLabels, StatusLabels, TestPointTypeLabels } from "../../../../../../../../constants/exportLabels"
 import { ExportItemProperties, TapOptions } from "../../../../../../../../constants/global"
 
 export class _Item {

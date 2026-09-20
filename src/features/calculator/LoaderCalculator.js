@@ -14,6 +14,7 @@ import { CalculatorTypeFileNameLabels } from '../../constants/labels'
 import BottomButton from '../../components/BottomButton'
 import LoadingView from '../../components/LoadingView'
 import { EventRegister } from 'react-native-event-listeners'
+import { translateCalculator } from '../../localization'
 
 const LoaderCalculator = (props) => {
     const dispatch = useDispatch()
@@ -240,7 +241,7 @@ const LoaderCalculator = (props) => {
                 <BottomButton
                     icon='calculator'
                     pack='cp'
-                    title={'Calculate'}
+                    title={translateCalculator('common.calculate')}
                     onPress={calculateResult}
                 /> : null}
         </LoadingView>

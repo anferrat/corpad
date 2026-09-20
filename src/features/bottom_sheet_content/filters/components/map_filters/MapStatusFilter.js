@@ -2,6 +2,7 @@ import React from 'react'
 import SheetHeader from '../../../components/SheetHeader'
 import StatusFilter from '../StatusFilter'
 import { useMapStatusFilter } from '../../hooks/map_filters/useMapStatusFilter'
+import { translateBottomSheet } from '../../../../../localization'
 
 
 const MapStatusFilter = ({ onBackPress, closeSheet, visible }) => {
@@ -9,7 +10,7 @@ const MapStatusFilter = ({ onBackPress, closeSheet, visible }) => {
     return (
         <>
             <SheetHeader
-                title='Status'
+                title={translateBottomSheet('status')}
                 onBackPress={onBackPress}
                 onClosePress={closeSheet} />
             <StatusFilter

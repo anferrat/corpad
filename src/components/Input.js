@@ -3,34 +3,38 @@ import { Input, Text, Popover, Icon } from '@ui-kitten/components'
 import { basic200 } from '../styles/colors'
 import { primary, basic } from '../styles/colors'
 import { View, StyleSheet, Pressable, Platform } from 'react-native'
+import { translate } from '../localization'
+import { fieldProperties } from '../constants/fieldProperties'
 
 const InvalidPropertyCaptionLabels = Object.freeze({
-    name: 'Name must only contain following characters: A-z, 0-9, -._() and be less than 40 characters',
-    latitude: 'Must be between -90 and +90',
-    longitude: 'Must be between -180 and +180',
-    number: 'Must be a number',
-    positiveNumber: 'Must be a positive number',
-    tapValue: 'Must be a number between 0 and 100 %',
-    smallText: 'Must be less than 80 characters',
-    largeText: 'Must be less than 300 characters'
+    name: ['validation.name', 'Name must only contain following characters: A-z, 0-9, -._() and be less than 40 characters'],
+    latitude: ['validation.latitude', 'Must be between -90 and +90'],
+    longitude: ['validation.longitude', 'Must be between -180 and +180'],
+    number: ['validation.number', 'Must be a number'],
+    positiveNumber: ['validation.positiveNumber', 'Must be a positive number'],
+    tapValue: ['validation.percentage', 'Must be a number between 0 and 100 %'],
+    smallText: ['validation.smallText', 'Must be less than 80 characters'],
+    largeText: ['validation.largeText', 'Must be less than 300 characters']
 })
+
+const getCaption = type => translate(...InvalidPropertyCaptionLabels[type])
 
 const getPropertyCaption = (property) => {
     switch (property) {
         case 'name':
-            return InvalidPropertyCaptionLabels.name
+            return getCaption('name')
         case 'latitude':
-            return InvalidPropertyCaptionLabels.latitude
+            return getCaption('latitude')
         case 'longitude':
-            return InvalidPropertyCaptionLabels.longitude
+            return getCaption('longitude')
         case 'comment':
-            return InvalidPropertyCaptionLabels.largeText
+            return getCaption('largeText')
         case 'model':
         case 'licenseNumber':
         case 'serialNumber':
-            return InvalidPropertyCaptionLabels.smallText
+            return getCaption('smallText')
         case 'tapValue':
-            return InvalidPropertyCaptionLabels.tapValue
+            return getCaption('tapValue')
         case 'shunt':
         case 'current':
         case 'voltage':
@@ -39,9 +43,9 @@ const getPropertyCaption = (property) => {
         case 'voltageDrop':
         case 'maxVoltage':
         case 'maxCurrent':
-            return InvalidPropertyCaptionLabels.number
+            return getCaption('number')
         case 'potentialAc':
-            return InvalidPropertyCaptionLabels.positiveNumber
+            return getCaption('positiveNumber')
         default: return null
     }
 }
@@ -114,6 +118,9 @@ const InputField = React.forwardRef((props, ref) => {
 
     const styleObject = React.useMemo(() => ({ ...props.style, paddingBottom: 12, borderWidth: props.disabled ? 0 : 1 }), [props.style, props.disabled])
     const value = React.useMemo(() => toString(props.value), [props.value])
+    const fieldProperty = fieldProperties[props.property]
+    const label = fieldProperty?.label ?? props.label
+    const placeholder = fieldProperty?.placeholder ?? props.placeholder
     const accessory = React.useCallback(() => <>
         <Unit unit={unit} disabled={disabled} />
         <InfoHint displayHint={displayHint} icon={hintIcon} title={hintTitle} />
@@ -126,6 +133,8 @@ const InputField = React.forwardRef((props, ref) => {
             caption={renderCaption}
             accessoryRight={accessory}
             {...props}
+            label={label}
+            placeholder={placeholder}
             keyboardType={props.keyboardType !== 'numeric' ? props.keyboardType : Platform.select({
                 android: 'numeric',
                 ios: 'numbers-and-punctuation',

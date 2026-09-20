@@ -3,8 +3,9 @@ import { StyleSheet, View } from 'react-native'
 import { Text, Icon } from '@ui-kitten/components'
 import { primary } from '../../../../styles/colors'
 import { ReadingParameters } from '../../constants/constants'
+import { translateList } from '../../../../localization'
 
-const IconTitle = ({ title, icon, pack }) => {
+const IconTitle = ({ titleKey, icon, pack }) => {
     return <View
         style={styles.mainView}>
         <Icon
@@ -16,18 +17,18 @@ const IconTitle = ({ title, icon, pack }) => {
             category='s1'
             style={styles.title}
             status='primary'>
-            {title}
+            {translateList(titleKey)}
         </Text>
     </View>
 }
 
 const ReadingTitle = ({ reading, itemType }) => {
     return <>{
-        ReadingParameters[itemType][reading].filter(({ unit }) => unit !== '').map(({ title, icon, pack }) => <IconTitle
-            key={title}
+        ReadingParameters[itemType][reading].filter(({ unit }) => unit !== '').map(({ titleKey, icon, pack }) => <IconTitle
+            key={titleKey}
             pack={pack}
             icon={icon}
-            title={title}
+            titleKey={titleKey}
         />)}</>
 }
 

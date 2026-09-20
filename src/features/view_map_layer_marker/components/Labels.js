@@ -1,6 +1,7 @@
 import { Text } from '@ui-kitten/components'
 import React from 'react'
 import { View, StyleSheet } from 'react-native'
+import { translateMapLayerMarker } from '../../../localization'
 
 
 const Labels = () => {
@@ -11,14 +12,14 @@ const Labels = () => {
                 style={styles.container}>
                 <Text
                     category='label'
-                    appearance='hint'>Property</Text>
+                    appearance='hint'>{translateMapLayerMarker('property')}</Text>
             </View>
             <View
                 style={styles.container_value}>
                 <Text
                     category='label'
                     appearance='hint'
-                >Value</Text>
+                >{translateMapLayerMarker('value')}</Text>
             </View>
         </View>
     )

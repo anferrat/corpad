@@ -10,6 +10,7 @@ import { SafeAreaProvider } from 'react-native-safe-area-context'
 import { basic200, control, primary } from '../../../../styles/colors'
 import { shareIcon, trashIcon } from '../../../../components/Icons'
 import EmptyHistoryReadingListComponent from './EmptyHistoryReadingListComponent'
+import { translateMultimeterOverlay } from '../../../../localization'
 
 
 const HistoryModalContent = ({ hideModal }) => {
@@ -34,7 +35,7 @@ const HistoryModalContent = ({ hideModal }) => {
                 appearance='ghost'
                 style={styles.button}
                 onPress={onExportPress}>
-                Export
+                {translateMultimeterOverlay('export')}
             </Button>
             <Button
                 accessoryLeft={trashIcon}
@@ -42,7 +43,7 @@ const HistoryModalContent = ({ hideModal }) => {
                 appearance='ghost'
                 style={styles.button}
                 onPress={onDeleteAllPress}>
-                Delete all
+                {translateMultimeterOverlay('deleteAll')}
             </Button>
         </View>
     ), [onDeleteAllPress, onExportPress])
@@ -50,7 +51,7 @@ const HistoryModalContent = ({ hideModal }) => {
     return (
         <SafeAreaProvider>
             <Header
-                title={'History'}
+                title={translateMultimeterOverlay('history')}
                 onBackPress={hideModal} />
             <LoadingView
                 loading={loading}>

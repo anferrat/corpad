@@ -12,7 +12,6 @@ const NameInput = ({ update, validate, name, defaultName, valid }) => {
             value={name}
             valid={valid}
             property='name'
-            label='Name'
             placeholder={defaultName}
             onChangeText={onChangeText}
             onEndEditing={onEndEditing} />

@@ -6,6 +6,7 @@ import { getCardList, getSelectedConnectionIndex } from '../helpers/selectors'
 import { useDispatch } from 'react-redux'
 import { setImportSubitemSetting } from '../../../../store/actions/importData'
 import { ImportData } from '../ImportDataProvider'
+import { translateImport } from '../../../../localization'
 
 const COUPON_CONNECTION_TYPES = ['PL', 'RS']
 
@@ -21,8 +22,8 @@ const PipelineSubitemSelect = () => {
     return (
         <Select
             placeholderOption={true}
-            label={'Connected to'}
-            placeholder={'Disconnected'}
+            label={translateImport('item.connectedTo')}
+            placeholder={translateImport('item.disconnected')}
             style={styles.select}
             itemList={connections}
             selectedIndex={selectedIndex}

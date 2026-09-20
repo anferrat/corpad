@@ -2,6 +2,7 @@ import React from 'react'
 import { StyleSheet, View } from 'react-native'
 import { Radio, Text } from '@ui-kitten/components'
 import Input from '../../../../components/Input'
+import { translateEdit } from '../../../../localization'
 
 
 const ShuntView = ({ update, updateRatioHandler, validateRatioHandler, updateFactorHandler, validateFactorHandler, validateVoltageDropHandler, ratioVoltage, ratioCurrent, factor, voltageDrop, current, valid, factorSelected }) => {
@@ -26,7 +27,7 @@ const ShuntView = ({ update, updateRatioHandler, validateRatioHandler, updateFac
                 <Radio
                     checked={!factorSelected}
                     onChange={setRatioSelected}
-                    style={styles.radio}>Ratio</Radio>
+                    style={styles.radio}>{translateEdit('ratio')}</Radio>
                 <Input
                     onChangeText={onChangeRatioCurrent}
                     onEndEditing={validateRatioCurrent}
@@ -55,7 +56,7 @@ const ShuntView = ({ update, updateRatioHandler, validateRatioHandler, updateFac
                     checked={factorSelected}
                     style={styles.radio}
                     onChange={setFactorSelected}
-                >Factor</Radio>
+                >{translateEdit('factor')}</Radio>
                 <Input
                     style={styles.input}
                     value={factor}
@@ -78,16 +79,16 @@ const ShuntView = ({ update, updateRatioHandler, validateRatioHandler, updateFac
                     valid={valid.voltageDrop}
                     property='voltageDrop'
                     unit='mV'
-                    label='Voltage drop' />
+                    />
                 <Input
                     style={styles.right}
-                    placeholder='Unable to calculate'
+                    placeholder={translateEdit('noCalculation')}
                     disabled={true}
                     value={current}
                     valid={true}
                     property='current'
                     unit='A'
-                    label='Current' />
+                    />
             </View>
         </>
     )

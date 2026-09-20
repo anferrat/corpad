@@ -57,7 +57,7 @@ export class SaveCurrentSurvey {
         }
         catch (er) {
             //if fails, prompt to save survey locally
-            const saveAsLocal = await this.warningHandler.execute(`Unable to save survey to cloud drive. It may happen because you have don't have internet connection or are signed out of you account. You try again later, or save a copy of the survey to the device instead.`,
+            const saveAsLocal = await this.warningHandler.execute({ key: 'warnings.messages.cloudSaveFallback' },
                 'Save copy to the device', 'Try later')
             if (saveAsLocal) {
                 //if accepted, use local saveSurvey service to write

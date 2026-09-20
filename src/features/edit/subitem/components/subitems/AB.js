@@ -8,15 +8,13 @@ import { addIcon } from '../../../../../components/Icons'
 import { Button, Text } from '@ui-kitten/components'
 import AnodeBedAnodeView from '../AnodeBedAnodeView'
 import AnodeBedWireModal from '../AnodeBedWireModal'
-
-const anodeBedMaterialList = Object.values(AnodeBedMaterialTypes).map(material => ({ item: AnodeBedMateriaTypelLabels[material], index: material }))
-
-const anodeBedEnclosureList = Object.values(AnodeBedEnclosureTypes).map(enclosure => ({ item: AnodeBedEnclosureTypeLabels[enclosure], index: enclosure }))
-
-const anodeBedTypeList = Object.values(AnodeBedTypes).map(type => ({ item: AnodeBedTypeLabesl[type], index: type }))
+import { translateEdit } from '../../../../../localization'
 
 const ABCard = ({ data, update, validate, addAnodeBedAnodeHandler, deleteAnodeBedAnodeHandler, updateSubProperty, validateSubProperty, updateAnodeWireProperties }) => {
     const { name, defaultName, valid, bedType, materialType, enclosureType, anodes, } = data
+    const anodeBedMaterialList = React.useMemo(() => Object.values(AnodeBedMaterialTypes).map(material => ({ item: AnodeBedMateriaTypelLabels[material], index: material })), [])
+    const anodeBedEnclosureList = React.useMemo(() => Object.values(AnodeBedEnclosureTypes).map(enclosure => ({ item: AnodeBedEnclosureTypeLabels[enclosure], index: enclosure })), [])
+    const anodeBedTypeList = React.useMemo(() => Object.values(AnodeBedTypes).map(type => ({ item: AnodeBedTypeLabesl[type], index: type })), [])
 
     const [modalIndex, setModalIndex] = React.useState(null)
 
@@ -59,34 +57,31 @@ const ABCard = ({ data, update, validate, addAnodeBedAnodeHandler, deleteAnodeBe
                 property='materialType'
                 itemList={anodeBedMaterialList}
                 selectedIndex={materialType}
-                placeholder="Select material"
                 placeholderOption={true}
                 onSelect={onSelectMaterial}
-                label='Material' />
+                label={translateEdit('material')} />
             <Select
                 style={styles.select}
                 property='bedType'
                 itemList={anodeBedTypeList}
                 selectedIndex={bedType}
-                placeholder="Select type"
                 placeholderOption={true}
                 onSelect={onSelectType}
-                label='Groundbed type' />
+                label={translateEdit('groundbedType')} />
             <Select
                 style={styles.select}
                 property='enclosureType'
                 itemList={anodeBedEnclosureList}
                 selectedIndex={enclosureType}
-                placeholder="Select enclosure"
                 placeholderOption={true}
                 onSelect={onSelectEnclosure}
-                label='Enclosure' />
+                label={translateEdit('enclosure')} />
             {anodes.length > 0 ?
                 <Text
                     style={styles.label}
                     category='label'
                     appearance='hint'>
-                    Anode output current
+                    {translateEdit('outputCurrent')}
                 </Text> : null}
             {anodes.map(({ current, wireColor, wireGauge }, index) =>
                 <AnodeBedAnodeView
@@ -108,8 +103,8 @@ const ABCard = ({ data, update, validate, addAnodeBedAnodeHandler, deleteAnodeBe
                 onPress={addAnodeBedAnodeHandler}
                 style={styles.button}>
                 {maxNumberReached ?
-                    'Max number of anodes reached' :
-                    `Add anode (${anodes.length}/10)`}
+                    translateEdit('maxAnodes') :
+                    translateEdit('addAnode', { count: anodes.length })}
             </Button>
             <AnodeBedWireModal
                 updateAnodeWireProperties={updateAnodeWireProperties}

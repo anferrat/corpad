@@ -4,6 +4,7 @@ import { CartesianChart, Line } from 'victory-native'
 import { useMultimeterGraph } from '../hooks/useMultimeterGraph'
 import { primary } from '../../../../styles/colors'
 import InputField from '../../../../components/Input'
+import { translateMultimeterOverlay } from '../../../../localization'
 
 
 const MultimeterGraph = ({ history, xMax, yMax, onEndEditingYMax, onEndEditingXMax, xMaxValid, yMaxValid, graphYUnit }) => {
@@ -26,7 +27,7 @@ const MultimeterGraph = ({ history, xMax, yMax, onEndEditingYMax, onEndEditingXM
                 <InputField
                     style={styles.inputLeft}
                     keyboardType='numeric'
-                    label='Y-axis limit'
+                     label={translateMultimeterOverlay('yAxisLimit')}
                     onEndEditing={onEndEditingYMax}
                     unit={graphYUnit}
                     valid={yMaxValid}
@@ -35,7 +36,7 @@ const MultimeterGraph = ({ history, xMax, yMax, onEndEditingYMax, onEndEditingXM
                 <InputField
                     style={styles.inputRight}
                     keyboardType='numeric'
-                    label='X-axis limit'
+                     label={translateMultimeterOverlay('xAxisLimit')}
                     onEndEditing={onEndEditingXMax}
                     onChangeText={setXValue}
                     valid={xMaxValid}

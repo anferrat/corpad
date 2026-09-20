@@ -8,6 +8,7 @@ import StatusView from "./StatusView"
 import { activity } from "../../../../../components/Icons"
 import TimeSyncListItem from "./TimeSyncListItem"
 import usePairedView from "../hooks/usePairedView"
+import { translateMultimeterSettings } from '../../../../../localization'
 
 const trashIcon = (props) => <Icon {...props} name='trash' fill={danger} />
 
@@ -26,7 +27,7 @@ const PairedView = ({ navigateToCycleSettings, navigateToMultimeterModal }) => {
             <Text
                 category='label'
                 appearance='hint'>
-                {'Paired device'}
+                {translateMultimeterSettings('pairedDevice')}
             </Text>
             <View
                 style={styles.mainView}>
@@ -58,26 +59,26 @@ const PairedView = ({ navigateToCycleSettings, navigateToMultimeterModal }) => {
                         onPress={connect}
                         disabled={connecting}
                         accessoryLeft={connecting ? activity : connectIcon}
-                        title={connecting ? 'Connecting' : 'Connect'}
-                        description={connecting ? null : 'Make sure multimeter is ready to connect'} /> : null}
+                        title={connecting ? translateMultimeterSettings('connecting') : translateMultimeterSettings('connect')}
+                        description={connecting ? null : translateMultimeterSettings('connectDescription')} /> : null}
                 <TimeSyncListItem />
                 {!connecting ?
                     <ListItem
                         disabled={connecting}
                         style={styles.listItem}
-                        title={'Measurements'}
+                        title={translateMultimeterSettings('measurements')}
                         onPress={navigateToMultimeterModal}
                         accessoryLeft={modalIcon} /> : null}
                 <ListItem
                     style={styles.listItem}
                     accessoryLeft={optionIcon}
-                    title={'Settings'}
+                    title={translateMultimeterSettings('settings')}
                     onPress={navigateToCycleSettings}
-                    description='Adjust ON/OFF time cycles, capture rate and mode' />
+                    description={translateMultimeterSettings('settingsDescription')} />
                 <ListItem
                     disabled={connecting}
                     style={styles.listItem}
-                    title={'Unpair'}
+                    title={translateMultimeterSettings('unpair')}
                     onPress={unpair}
                     accessoryLeft={unpairing ? activity : (connecting ? trashIconDisabled : trashIcon)} />
             </View>

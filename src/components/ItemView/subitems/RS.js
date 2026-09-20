@@ -3,6 +3,7 @@ import SubitemHeader from '../components/SubitemHeader'
 import PotentialView from '../components/PotentialView'
 import TextLine from '../../TextLine'
 import { PipeDiameterLabels } from '../../../constants/labels'
+import { translateItemView } from '../../../localization'
 
 
 const PL = ({ name, type, potentials, nps, pipelineId, pipelines, potentialUnit }) => {
@@ -15,8 +16,8 @@ const PL = ({ name, type, potentials, nps, pipelineId, pipelines, potentialUnit 
             <PotentialView
                 potentials={potentials}
                 potentialUnit={potentialUnit} />
-            <TextLine title='Pipeline' value={~pipelineIndex ? pipelines[pipelineIndex].name : null} icon='PL' pack='cp' />
-            <TextLine title='Diameter' value={PipeDiameterLabels[nps]} />
+            <TextLine title={translateItemView('pipeline')} value={~pipelineIndex ? pipelines[pipelineIndex].name : null} icon='PL' pack='cp' />
+            <TextLine title={translateItemView('diameter')} value={PipeDiameterLabels[nps]} />
         </>
     )
 }

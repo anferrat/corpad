@@ -7,6 +7,7 @@ import { hideLoader, showPaywall, updateLoader } from "../../../store/actions/se
 import { resetActiveMapLayerMarker } from "../../../store/actions/map"
 import { EventRegister } from "react-native-event-listeners"
 import { isProStatus } from "../../../helpers/functions"
+import { translateMapLayer } from '../../../localization'
 
 const useMapLayers = ({ navigateToEditMapLayer, goBack }) => {
     const layers = useSelector(state => state.mapLayers.layers)
@@ -29,7 +30,7 @@ const useMapLayers = ({ navigateToEditMapLayer, goBack }) => {
     }, [])
 
     const onDelete = useCallback(async (index, layerId) => {
-        const confirm = await warningHandler(61, 'Delete', 'Cancel')
+        const confirm = await warningHandler(61, translateMapLayer('delete'), translateMapLayer('cancel'))
         if (confirm) {
             const { status } = await deleteMapLayerRequest({ id: layerId }, er => errorHandler(er))
             if (status === 200)
@@ -38,7 +39,7 @@ const useMapLayers = ({ navigateToEditMapLayer, goBack }) => {
     }, [])
 
     const onToggle = useCallback(async (layerId, name, color, comment, width, index, isVisible) => {
-        dispatch(updateLoader('Applying new settings'))
+        dispatch(updateLoader(translateMapLayer('applyingSettings')))
         const { status } = await updateMapLayer({ id: layerId, defaultName: name, name, width, color, comment, visible: isVisible })
         if (status === 200) {
             dispatch(toggleMapLayer(index, isVisible))

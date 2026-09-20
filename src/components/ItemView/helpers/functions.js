@@ -1,5 +1,6 @@
 import { TapOptions } from "../../../constants/global"
 import { TapOptionLabels, CoarseFineOptionLabels } from "../../../constants/labels"
+import { translateItemView } from '../../../localization'
 
 export const combineLatLon = (lat, lon) => {
     const placeholder = (value) => value === null ? '??.??????' : value
@@ -8,7 +9,7 @@ export const combineLatLon = (lat, lon) => {
 
 export const getCountTitle = (count) => {
     if (count !== undefined) {
-        return `${count} test point${count !== 1 ? 's' : ''}`
+        return translateItemView('testPoints', { count })
     }
     else return null
 }
@@ -82,10 +83,10 @@ export const displayCurrentTarget = (min, max) => {
     }
     else
         if (min === null) {
-            return 'Max. ' + max
+            return translateItemView('maxValue', { value: max })
         }
         else if (max === null) {
-            return 'Min. ' + min
+            return translateItemView('minValue', { value: min })
         }
         else return min + ' - ' + max
 }

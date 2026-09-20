@@ -4,6 +4,7 @@ import { StyleSheet } from 'react-native'
 import WennerLayer from './WennerLayer'
 import { plus } from '../../../components/Icons'
 import fieldValidation from '../../../helpers/validation'
+import { translateCalculator } from '../../../localization'
 
 const WennerCalculator = (props) => {
     const MAX_NUMBER_OF_LAYERS = 5
@@ -99,7 +100,7 @@ const WennerCalculator = (props) => {
                 valid={props.valid.layers}
                 removeLayerHandler={removeLayerHandler} />
             {!props.disabled ?
-                <Button appearance='ghost' style={styles.button} onPress={addLayerHandler} accessoryLeft={plus} disabled={(props.data.layers.length >= MAX_NUMBER_OF_LAYERS)}>Add layer ({props.data.layers.length}/{MAX_NUMBER_OF_LAYERS})</Button>
+                <Button appearance='ghost' style={styles.button} onPress={addLayerHandler} accessoryLeft={plus} disabled={(props.data.layers.length >= MAX_NUMBER_OF_LAYERS)}>{translateCalculator('info.addLayer', {count: props.data.layers.length, max: MAX_NUMBER_OF_LAYERS})}</Button>
                 : null}
         </>)
 }

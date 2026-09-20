@@ -5,6 +5,7 @@ import { ImportData } from '../ImportDataProvider'
 import { useDispatch, useSelector } from 'react-redux'
 import { getSubitemProperty } from '../helpers/functions'
 import { setImportSubitemSetting } from '../../../../store/actions/importData'
+import { translateImport } from '../../../../localization'
 
 const pipeIcon = {
     icon: 'PL',
@@ -24,8 +25,8 @@ const PipelineSelect = () => {
     return (
         <Select
             placeholderOption={true}
-            label={'Pipeline'}
-            placeholder='Select pipeline'
+            label={translateImport('item.pipeline')}
+            placeholder={translateImport('item.selectPipeline')}
             style={styles.select}
             itemList={pipelineList}
             selectedIndex={selectedIndex}

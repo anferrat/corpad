@@ -3,6 +3,7 @@ import { Text, Icon, Button } from '@ui-kitten/components'
 import { StyleSheet, View } from 'react-native'
 import { basic, basic200 } from '../../../styles/colors'
 import Pressable from '../../../components/Pressable'
+import { translateSurveyList } from '../../../localization'
 
 const EmptySurveyFileListComponent = ({ isCloud, onCreate, initialLoad, onPressLink }) => {
     if (initialLoad)
@@ -17,19 +18,19 @@ const EmptySurveyFileListComponent = ({ isCloud, onCreate, initialLoad, onPressL
                     category='h5'
                     appearance={'hint'}
                     style={styles.title}>
-                    No survey files found
+                    {translateSurveyList('noSurveyFiles')}
                 </Text>
                 <Text
                     category='p1'
                     appearance={'hint'}
                     style={styles.title}>
-                    Create or open a survey file by tapping <Icon name='folder' style={styles.folderIcon} fill={basic} /> and selecting from your device or cloud storage.
+                    {translateSurveyList('createOrOpenSurvey')}
                 </Text>
                 <View
                     style={styles.linkView}>
                     <Text
                         appearance='hint'>
-                        New to Corpad? Check our documentation at </Text>
+                        {translateSurveyList('newToCorpad')} </Text>
                     <Pressable
                         onPress={onPressLink}>
                         <Text
@@ -42,18 +43,18 @@ const EmptySurveyFileListComponent = ({ isCloud, onCreate, initialLoad, onPressL
                     appearance='ghost'
                     size='large'
                     onPress={onCreate.bind(this, false)}>
-                    Create new survey
+                    {translateSurveyList('createNewSurvey')}
                 </Button>
                 <Text
                     category='p2'
                     appearance={'hint'}>
-                    or
+                    {translateSurveyList('or')}
                 </Text>
                 <Button
                     appearance='ghost'
                     size='large'
                     onPress={onCreate.bind(this, true)}>
-                    Import survey from spreadsheet
+                    {translateSurveyList('importSurvey')}
                 </Button>
                 
             </View>

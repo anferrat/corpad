@@ -5,6 +5,8 @@ import { globalStyle } from '../../../styles/styles'
 import { danger, primary } from '../../../styles/colors'
 import { saveIcon, refresh, exportedFilesIcon, checkmark, delIcon } from '../../../components/Icons'
 import { warningHandler } from '../../../helpers/error_handler'
+import { translate } from '../../../localization'
+import { translateCalculator } from '../../../localization'
 
 const ResultViewWrapper = (props) => {
     const [saving, setSaving] = useState(false)
@@ -16,7 +18,7 @@ const ResultViewWrapper = (props) => {
     }, [setSaving, props.saveHandler])
 
     const deleteHandler = React.useCallback(async () => {
-        const confirm = await warningHandler(46, 'Delete', 'Cancel')
+        const confirm = await warningHandler(46, translate('actions.delete'), translate('actions.cancel'))
         if (confirm) {
             setSaving(true)
             const del = await props.onDeleteHandler()
@@ -38,10 +40,10 @@ const ResultViewWrapper = (props) => {
             <Divider />
             <View style={styles.buttonView}>
                 {!props.deleteOption ?
-                    <Button appearance='ghost' style={props.savedInHistory ? styles.buttonDisabled : styles.button} accessoryLeft={saving ? activityIndicator : (props.savedInHistory ? checkmark : saveIcon)} onPress={saving ? null : saveHandler} disabled={props.savedInHistory}>{props.savedInHistory ? 'Saved' : 'Save'}</Button> :
-                    <Button appearance='ghost' style={styles.button} accessoryLeft={saving ? activityIndicator.bind(this, false) : delIcon} status='danger' onPress={deleteHandler}>Delete</Button>}
-                <Button appearance='ghost' style={styles.button} accessoryLeft={refresh} status='success' onPress={props.resetHandler}>Reset</Button>
-                <Button appearance='ghost' style={styles.button} accessoryLeft={exporting ? activityIndicator : exportedFilesIcon} onPress={exporting ? () => { } : exportHandler}>Export</Button>
+                    <Button appearance='ghost' style={props.savedInHistory ? styles.buttonDisabled : styles.button} accessoryLeft={saving ? activityIndicator : (props.savedInHistory ? checkmark : saveIcon)} onPress={saving ? null : saveHandler} disabled={props.savedInHistory}>{props.savedInHistory ? translateCalculator('common.saved') : translate('common.save')}</Button> :
+                     <Button appearance='ghost' style={styles.button} accessoryLeft={saving ? activityIndicator.bind(this, false) : delIcon} status='danger' onPress={deleteHandler}>{translate('common.delete')}</Button>}
+                <Button appearance='ghost' style={styles.button} accessoryLeft={refresh} status='success' onPress={props.resetHandler}>{translateCalculator('common.reset')}</Button>
+                <Button appearance='ghost' style={styles.button} accessoryLeft={exporting ? activityIndicator : exportedFilesIcon} onPress={exporting ? () => { } : exportHandler}>{translate('export.export')}</Button>
             </View>
         </View>
     }

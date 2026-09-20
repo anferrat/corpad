@@ -1,7 +1,8 @@
 import React from 'react'
 import { View, StyleSheet } from 'react-native'
 import { Text } from '@ui-kitten/components'
-import { basic200, basic300, basic400, basic700, control, success100 } from '../styles/colors'
+import { basic200, basic400, control } from '../styles/colors'
+import { translate } from '../localization'
 
 type CycleViewProps = {
     onTime: number,
@@ -28,7 +29,7 @@ const CycleView = ({ onTime, offTime, firstCycleOn }: CycleViewProps): React.JSX
 
 
                 category='s2'
-            >{isOn ? 'On' : 'Off'}: <Text
+            >{isOn ? translate('settings.on') : translate('settings.off')}: <Text
 
                 category='s2'
             >{isOn ? onTime : offTime} ms</Text></Text>

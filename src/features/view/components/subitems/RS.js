@@ -4,6 +4,7 @@ import Header from '../../components/Header'
 import PotentialsView from '../PotentialsView'
 import Divider from '../Divider'
 import { PipeDiameterLabels } from '../../../../constants/labels'
+import { translateView } from '../../../../localization'
 
 const RS = ({
     data,
@@ -43,10 +44,10 @@ const RS = ({
                 potentialHint={potentialHint}
                 potentials={potentials} />
             <TextLine
-                title='Diameter'
+                 title={translateView('diameter')}
                 value={PipeDiameterLabels[nps] ?? null} />
             <TextLine
-                title='Pipeline'
+                 title={translateView('pipeline')}
                 value={~pipelineIndex ? pipelineList[pipelineIndex].name : null}
                 icon='PL'
                 pack='cp' />

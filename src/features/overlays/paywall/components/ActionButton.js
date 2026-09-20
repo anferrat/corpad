@@ -4,6 +4,7 @@ import { SubscriptionStatuses } from '../../../../constants/global'
 import { Button } from '@ui-kitten/components'
 import RestoreView from './RestoreView'
 import { activity } from '../../../../components/Icons'
+import { translateOverlay } from '../../../../localization'
 
 
 const ActionButton = ({ status, onPurchase, onRestore, onClose, onVerify, isUnavailable, price, processing }) => {
@@ -13,7 +14,7 @@ const ActionButton = ({ status, onPurchase, onRestore, onClose, onVerify, isUnav
       return <Button
         style={styles.button}
         onPress={onClose}>
-        Continue
+        {translateOverlay('paywall.continue')}
       </Button>
     case SubscriptionStatuses.UNKNOWN_NOT_GRANTED:
       return <Button
@@ -21,7 +22,7 @@ const ActionButton = ({ status, onPurchase, onRestore, onClose, onVerify, isUnav
         accessoryLeft={processing ? activity : null}
         style={styles.button}
         onPress={onVerify}>
-        Verify
+        {translateOverlay('paywall.verify')}
       </Button>
     case SubscriptionStatuses.NOT_GRANTED:
       return <>
@@ -30,7 +31,7 @@ const ActionButton = ({ status, onPurchase, onRestore, onClose, onVerify, isUnav
           disabled={isUnavailable || processing}
           style={styles.button}
           onPress={onPurchase}>
-          {isUnavailable ? 'Unavailable' : `7 days free, ${price}/month`}
+          {isUnavailable ? translateOverlay('paywall.unavailable') : translateOverlay('paywall.purchase', { price })}
         </Button>
         <RestoreView
           disabled={processing}

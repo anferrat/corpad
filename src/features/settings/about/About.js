@@ -8,6 +8,7 @@ import { ScrollView } from 'react-native-gesture-handler'
 import { errorHandler } from '../../../helpers/error_handler'
 import SubscriptionView from './components/SubscriptionView'
 import { openLink } from '../../../app/controllers/AppController'
+import { translateSettings } from '../../../localization'
 
 const About = (props) => {
     const linkedin = (props) => <Icon {...props} name='linkedin' />
@@ -24,20 +25,20 @@ const About = (props) => {
             <View style={{ ...globalStyle.card, ...styles.card }}>
                 <View style={styles.logoView}>
                     <Icon name='corpad-logo' pack='cp' style={styles.logo} fill={primary} />
-                    <Text category='s2' appearance='hint' style={styles.text}>Corpad for {Platform.select({ ios: 'iOS', android: 'Android', macos: 'macOS', windows: 'Windows', web: 'Web', default: 'unknown' })}. {`\n`}Version {version}</Text >
+                     <Text category='s2' appearance='hint' style={styles.text}>{translateSettings('appVersion', {platform: Platform.select({ ios: 'iOS', android: 'Android', macos: 'macOS', windows: 'Windows', web: 'Web', default: 'unknown' }), version})}</Text >
                 </View>
                 <SubscriptionView />
                 <Divider />
                 <View style={styles.listView}>
-                    <ListItem title={'Privacy policy'} onPress={linkHandler.bind(this, 'https://www.corpad.ca/legal/privacy-policy')} />
-                    <ListItem title={'Terms and conditions'} onPress={linkHandler.bind(this, 'https://www.corpad.ca/legal/terms-and-conditions')} />
-                    <ListItem title={'Licenses'} onPress={props.navigateToLicenses} />
-                    <ListItem title={'Documentation'} onPress={linkHandler.bind(this, 'https://docs.corpad.ca')} />
+                     <ListItem title={translateSettings('privacyPolicy')} onPress={linkHandler.bind(this, 'https://www.corpad.ca/legal/privacy-policy')} />
+                     <ListItem title={translateSettings('terms')} onPress={linkHandler.bind(this, 'https://www.corpad.ca/legal/terms-and-conditions')} />
+                     <ListItem title={translateSettings('licenses')} onPress={props.navigateToLicenses} />
+                     <ListItem title={translateSettings('documentation')} onPress={linkHandler.bind(this, 'https://docs.corpad.ca')} />
                 </View>
                 
-                <ListItem title={'Support'} description='andrei@corpad.ca' accessoryRight={email} onPress={linkHandler.bind(this, 'mailto:andrei@corpad.ca')} />
-                <ListItem title={'Created by'} description='Andrei Lomtev' accessoryRight={linkedin} onPress={linkHandler.bind(this, 'https://www.linkedin.com/in/andrei-lomtev/')} />
-                <ListItem title={'Follow on X'} description='@CorpadCorrosion' accessoryRight={twitter} onPress={linkHandler.bind(this, 'https://twitter.com/CorpadCorrosion')} />
+                 <ListItem title={translateSettings('support')} description='andrei@corpad.ca' accessoryRight={email} onPress={linkHandler.bind(this, 'mailto:andrei@corpad.ca')} />
+                 <ListItem title={translateSettings('createdBy')} description='Andrei Lomtev' accessoryRight={linkedin} onPress={linkHandler.bind(this, 'https://www.linkedin.com/in/andrei-lomtev/')} />
+                 <ListItem title={translateSettings('followOnX')} description='@CorpadCorrosion' accessoryRight={twitter} onPress={linkHandler.bind(this, 'https://twitter.com/CorpadCorrosion')} />
             </View>
         </ScrollView>
     )

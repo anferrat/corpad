@@ -8,21 +8,22 @@ import { success, basic300, danger } from '../../../../styles/colors'
 import ModalStatusRow from './ModalStatusRow'
 import ModalDetails from './ModalDetails'
 import ModalTitle from './ModalTitle'
+import { translateImport } from '../../../../localization'
 
 const ModalCompleted = ({ successCount, warningCount, failedCount, navigateToList, itemType, status, warnings }) => {
     const [visible, setVisible] = useState(false)
     const showModal = () => setVisible(true)
-    hideModal = () => setVisible(false)
+    const hideModal = () => setVisible(false)
     return (
         <>
             <ModalTitle
-                title={status === 200 ? 'Import completed' : 'Import failed'}
+                title={translateImport(status === 200 ? 'item.completed' : 'item.failed')}
                 icon={status === 200 ? 'checkmark-circle-outline' : 'alert-circle-outline'}
                 iconFill={status === 200 ? success : danger} />
             <View style={styles.info}>
-                <ModalStatusRow icon={'checkmark'}>{successCount} {getItemName(itemType, successCount)} {successCount === 1 ? 'was' : 'were'} created</ModalStatusRow>
-                <ModalStatusRow icon={'info-outline'}>{warningCount} warnings</ModalStatusRow>
-                <ModalStatusRow icon={'alert-triangle-outline'}>{failedCount} errors</ModalStatusRow>
+                <ModalStatusRow icon={'checkmark'}>{translateImport('item.created', { name: getItemName(itemType), count: successCount })}</ModalStatusRow>
+                <ModalStatusRow icon={'info-outline'}>{translateImport('item.warnings', { count: warningCount })}</ModalStatusRow>
+                <ModalStatusRow icon={'alert-triangle-outline'}>{translateImport('item.errors', { count: failedCount })}</ModalStatusRow>
             </View>
             <View style={styles.buttons}>
                 <Button
@@ -30,14 +31,14 @@ const ModalCompleted = ({ successCount, warningCount, failedCount, navigateToLis
                     style={styles.button}
                     appearance='ghost'
                     onPress={navigateToList.bind(this, itemType)}>
-                    Go to list
+                    {translateImport('item.goToList')}
                 </Button>
                 <Button
                     accessoryLeft={info}
                     style={styles.button}
                     appearance='ghost'
                     onPress={showModal}>
-                    Details
+                    {translateImport('item.details')}
                 </Button>
             </View>
             <Modal

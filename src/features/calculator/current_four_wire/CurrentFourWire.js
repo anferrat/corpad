@@ -3,6 +3,7 @@ import { View, StyleSheet } from 'react-native'
 import { Text } from '@ui-kitten/components'
 import fieldValidation from '../../../helpers/validation'
 import InputDataField from './InputDataField'
+import { translateCalculator } from '../../../localization'
 
 const CurrentFourWire = (props) => {
     //Get data from thickness table where 
@@ -26,13 +27,13 @@ const CurrentFourWire = (props) => {
                 disabled={props.disabled}
                 setValue={setValue}
                 setValid={setValid}
-                label='Test current'
+                label={translateCalculator('inputs.testCurrent')}
                 value={props.data.current}
                 valid={props.valid.current}
                 unit='A'
             />
             <View style={styles.inputRow}>
-                <Text appearance='hint' category='label' style={styles.label}>Volatage drop</Text>
+                <Text appearance='hint' category='label' style={styles.label}>{translateCalculator('inputs.voltageDrop')}</Text>
                 <View style={styles.inputs}>
                     <InputDataField
                         property='voltageDrop'

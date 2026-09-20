@@ -2,6 +2,7 @@ import { useState, useEffect, useRef, useCallback } from "react"
 import { deleteAllExternalLinkRecords, getExternalLinkRecords, readNfcTagIos } from "../../../../app/controllers/survey/other/ExternalLinkController"
 import { errorHandler, warningHandler } from "../../../../helpers/error_handler"
 import { Platform } from "react-native"
+import { translateSettings } from '../../../../localization'
 import { EventRegister } from 'react-native-event-listeners'
 
 const useExternalLinkSettings = ({ navigateToExternalLink }) => {
@@ -37,7 +38,7 @@ const useExternalLinkSettings = ({ navigateToExternalLink }) => {
 
     const onDeleteAll = async () => {
         if (!loading) {
-            const confirm = await warningHandler(62, 'Delete all', 'Cancel')
+            const confirm = await warningHandler(62, translateSettings('deleteAll'), translateSettings('cancel'))
             if (confirm) {
                 await deleteAllExternalLinkRecords()
                 if (componentMounted.current)

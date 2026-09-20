@@ -2,6 +2,7 @@ import React from 'react'
 import { View, StyleSheet } from 'react-native'
 import { Icon, Text } from '@ui-kitten/components'
 import { warning } from '../../../../styles/colors'
+import { translateOverlay } from '../../../../localization'
 
 
 const MultimeterLimitWarning = ({ value }) => {
@@ -12,7 +13,7 @@ const MultimeterLimitWarning = ({ value }) => {
                 name='alert-triangle'
                 fill={warning}
                 style={styles.icon} />
-                <Text category='label' status='warning'>Max. </Text>
+                <Text category='label' status='warning'>{translateOverlay('toast.max')} </Text>
                 <Text category='label' status='warning'>{value}</Text>
             
         </View>

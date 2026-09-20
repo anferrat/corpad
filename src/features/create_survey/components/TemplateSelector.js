@@ -3,6 +3,7 @@ import { View, StyleSheet, ActivityIndicator } from 'react-native'
 import { RadioGroup, Radio, Text, CheckBox } from '@ui-kitten/components'
 import Select from '../../../components/Select'
 import { primary } from '../../../styles/colors'
+import { translateCreateSurvey } from '../../../localization'
 
 
 const accessory = {
@@ -10,33 +11,33 @@ const accessory = {
 }
 
 const TemplateSelector = ({ surveyList, toggleTemplateSetting, isBlank, selectedSurveyindex, setSelectedSurveyIndex, surveyListLoading, includeAssets, setIncludeAssets, assetOptionAvailable }) => {
-    const placeholder = surveyList.length > 0 ? 'Select survey' : 'No local surveys found'
+    const placeholder = surveyList.length > 0 ? translateCreateSurvey('selectSurvey') : translateCreateSurvey('noLocalSurveys')
     return (
         <>
             <Text
                 category='h6'>
-                Choose template
+                {translateCreateSurvey('chooseTemplate')}
             </Text>
             <RadioGroup
                 onChange={toggleTemplateSetting}
                 selectedIndex={Number(!isBlank)}>
                 <Radio>
                     <View>
-                        <Text>Blank</Text>
+                        <Text>{translateCreateSurvey('blank')}</Text>
                         <Text
                             category={'s2'}
                             appearance='hint'>
-                            Create an empty survey with default items
+                            {translateCreateSurvey('blankDescription')}
                         </Text>
                     </View>
                 </Radio>
                 <Radio>
                     <View>
-                        <Text>Based on existing survey</Text>
+                        <Text>{translateCreateSurvey('existingSurvey')}</Text>
                         <Text
                             category={'s2'}
                             appearance='hint'>
-                            Create a copy of existing survey without readings
+                            {translateCreateSurvey('existingSurveyDescription')}
                         </Text>
                     </View>
                 </Radio>
@@ -46,13 +47,13 @@ const TemplateSelector = ({ surveyList, toggleTemplateSetting, isBlank, selected
                     {surveyListLoading ?
                         <View style={styles.selectLoadingView}>
                             <ActivityIndicator size='small' color={primary} />
-                            <Text style={styles.loadingText} appearance='hint'>Loading survey list... </Text>
+                            <Text style={styles.loadingText} appearance='hint'>{translateCreateSurvey('loadingSurveyList')} </Text>
                         </View>
                         :
                         <Select
                             placeholder={placeholder}
                             accessory={accessory}
-                            label='Base survey'
+                             label={translateCreateSurvey('baseSurvey')}
                             selectedIndex={selectedSurveyindex}
                             onSelect={setSelectedSurveyIndex}
                             itemList={surveyList} />
@@ -62,7 +63,7 @@ const TemplateSelector = ({ surveyList, toggleTemplateSetting, isBlank, selected
                         checked={includeAssets}
                         onChange={setIncludeAssets}
                         style={styles.checkbox}>
-                        Include images from existing survey
+                        {translateCreateSurvey('includeImages')}
                     </CheckBox>
                 </View> :
                 null}

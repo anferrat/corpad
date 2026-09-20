@@ -2,6 +2,7 @@ import React from 'react'
 import { ActivityIndicator, StyleSheet } from 'react-native'
 import { Button, Icon, Text } from '@ui-kitten/components'
 import { basic400, control } from '../../../../styles/colors'
+import { translateOverlay } from '../../../../localization'
 
 const NotSignedView = ({ signing, onSignIn }) => {
 
@@ -25,14 +26,14 @@ const NotSignedView = ({ signing, onSignIn }) => {
                 pack='cp' />
             <Text
                 style={styles.text} >
-                You are not signed in
+                {translateOverlay('session.notSignedIn')}
             </Text>
             <Button
                 onPress={onSignIn}
                 disabled={signing}
                 style={styles.signInButton}
                 accessoryLeft={accessory}>
-                Sign in with Google Drive
+                {translateOverlay('session.signInGoogleDrive')}
             </Button >
         </>
     )

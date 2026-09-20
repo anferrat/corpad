@@ -1,6 +1,7 @@
 import React from 'react'
 import { View, StyleSheet, Dimensions } from 'react-native'
 import { Text } from '@ui-kitten/components'
+import { translateMultimeterOverlay } from '../../../../localization'
 
 
 const EmptyHistoryReadingListComponent = () => {
@@ -9,7 +10,7 @@ const EmptyHistoryReadingListComponent = () => {
             style={styles.container}>
             <Text
                 appearance='hint'
-                category='p1'>No saved readings
+                category='p1'>{translateMultimeterOverlay('noSavedReadings')}
             </Text>
         </View>
     )

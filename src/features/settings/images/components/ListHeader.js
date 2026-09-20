@@ -4,6 +4,7 @@ import { globalStyle } from '../../../../styles/styles'
 import TextLine from '../../../../components/TextLine'
 import { ImageListHeaderContext } from '../contexts/ImageListHeaderContext'
 import { getFileSize } from '../../../../helpers/functions'
+import { translateSettings } from '../../../../localization'
 
 const ListHeader = ({ }) => {
     const { numberOfImages, totalSize, surveyName } = useContext(ImageListHeaderContext)
@@ -13,13 +14,13 @@ const ListHeader = ({ }) => {
             style={styles.container}>
             <TextLine
                 value={surveyName}
-                title={'Survey name'} />
+                 title={translateSettings('surveyName')} />
             <TextLine
                 value={numberOfImages}
-                title={'Number of images'} />
+                 title={translateSettings('numberOfImages')} />
             <TextLine
                 value={value}
-                title={'Size on disk'}
+                 title={translateSettings('sizeOnDisk')}
                 unit={unit} />
         </View>
     )

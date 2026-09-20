@@ -6,6 +6,7 @@ import { AreaUnitLabels, CouponTypeLabels, CurrentDensityUnitLabels, CurrentUnit
 import PotentialView from '../components/PotentialView'
 import { AreaUnits, CurrentDensityUnits, CurrentUnits } from '../../../constants/global'
 import { SubitemTypeIcons } from '../../../constants/icons'
+import { translateItemView } from '../../../localization'
 
 
 const CN = ({ name, type, subitemIdMap, couponType, wireColor, wireGauge, potentials, pipelineCardId, area, density, current, potentialUnit }) => {
@@ -20,11 +21,11 @@ const CN = ({ name, type, subitemIdMap, couponType, wireColor, wireGauge, potent
             <PotentialView
                 potentials={potentials}
                 potentialUnit={potentialUnit} />
-            <TextLine title={'Connected to'} value={pipelineSubitem ? pipelineSubitem.name : null} icon={pipelineSubitem ? SubitemTypeIcons[pipelineSubitem.type] : null} pack='cp' />
-            <TextLine title={'Type'} value={CouponTypeLabels[couponType]} />
-            <TextLine title='Area' value={area} unit={AreaUnitLabels[AreaUnits.CENTIMETER_SQUARE]} />
-            <TextLine title='Current' value={current} unit={CurrentUnitLabels[CurrentUnits.MICRO_AMPS]} />
-            <TextLine title='Current density' value={density} unit={CurrentDensityUnitLabels[CurrentDensityUnits.AMPS_OVER_METER_SQUARE]} />
+            <TextLine title={translateItemView('connectedTo')} value={pipelineSubitem ? pipelineSubitem.name : null} icon={pipelineSubitem ? SubitemTypeIcons[pipelineSubitem.type] : null} pack='cp' />
+            <TextLine title={translateItemView('type')} value={CouponTypeLabels[couponType]} />
+            <TextLine title={translateItemView('area')} value={area} unit={AreaUnitLabels[AreaUnits.CENTIMETER_SQUARE]} />
+            <TextLine title={translateItemView('current')} value={current} unit={CurrentUnitLabels[CurrentUnits.MICRO_AMPS]} />
+            <TextLine title={translateItemView('currentDensity')} value={density} unit={CurrentDensityUnitLabels[CurrentDensityUnits.AMPS_OVER_METER_SQUARE]} />
         </>
     )
 }

@@ -5,16 +5,16 @@ import Select from '../../../../../components/Select'
 import NameInput from '../NameInput'
 import { PipeDiameters } from '../../../../../constants/global'
 import { PipeDiameterLabels } from '../../../../../constants/labels'
+import { translateEdit } from '../../../../../localization'
 
 const pipeAccessory = {
     icon: 'PL',
     pack: 'cp'
 }
 
-const pipeDiamteres = Object.values(PipeDiameters).map(diameter => ({ item: PipeDiameterLabels[diameter], index: diameter }))
-
 const RSCard = ({ pipelineList, data, itemId, subitemId, update, validate }) => {
     const { pipelineId, name, valid, nps, defaultName } = data
+    const pipeDiamteres = useMemo(() => Object.values(PipeDiameters).map(diameter => ({ item: PipeDiameterLabels[diameter], index: diameter })), [])
 
     const onSelectSize = React.useCallback((index) => update(index, 'nps'), [update])
 
@@ -48,8 +48,8 @@ const RSCard = ({ pipelineList, data, itemId, subitemId, update, validate }) => 
                 property='pipelineId'
                 itemList={itemList}
                 selectedIndex={selectedIndex}
-                placeholder="Select pipeline"
-                label='Pipeline' />
+                placeholder={translateEdit('pipeline')}
+                label={translateEdit('pipeline')} />
             <Select
                 placeholderOption={true}
                 style={styles.size}
@@ -57,8 +57,7 @@ const RSCard = ({ pipelineList, data, itemId, subitemId, update, validate }) => 
                 property='nps'
                 itemList={pipeDiamteres}
                 selectedIndex={nps}
-                placeholder="Select NPS"
-                label='Diameter' />
+                />
         </>
     )
 }

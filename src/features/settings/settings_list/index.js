@@ -5,12 +5,14 @@ import { Text } from '@ui-kitten/components'
 import ListItem from './components/ListItem'
 import useSettings from './hooks/useSettings'
 import { Platform } from 'react-native'
+import { translateSettings } from '../../../localization'
 
 export const SettingsList = () => {
     const {
         onExit,
         navigateToExport,
         navigateToAbout,
+        navigateToLocalization,
         navigateToPotentials,
         navigateToDefaultNames,
         navigateToExportedFiles,
@@ -28,82 +30,87 @@ export const SettingsList = () => {
             <Text
                 style={styles.title}
                 appearance='hint'>
-                Survey
+                {translateSettings('survey')}
             </Text>
             <ListItem
                 icon={'home-outline'}
-                title={'Survey overview'}
-                subtitle={'See general stats of your survey, and status of completion'}
+                 title={translateSettings('surveyOverview')}
+                 subtitle={translateSettings('surveyOverviewDescription')}
                 onPress={navigateToInfo} />
             <ListItem
                 icon={'RE'}
                 pack='cp'
-                title={'Reference cells'}
-                subtitle={'Add and remove portable reference cells'}
+                 title={translateSettings('referenceCells')}
+                 subtitle={translateSettings('referenceCellsDescription')}
                 onPress={navigateToReferenceCells} />
             <ListItem
                 icon={'grid-outline'}
-                title={'Potentials'}
-                subtitle={'Control default units for potential readings, add and remove potential reading types'}
+                 title={translateSettings('potentials')}
+                 subtitle={translateSettings('potentialsDescription')}
                 onPress={navigateToPotentials} />
             <ListItem
                 icon={'image-outline'}
-                title={'Images'}
-                subtitle={'View all the images assigned to test points and rectifiers in this survey'}
+                 title={translateSettings('images')}
+                 subtitle={translateSettings('imagesDescription')}
                 onPress={navigateToImages} />
             <ListItem
                 icon={'download'}
-                title={'Export survey'}
-                subtitle={'Export data from survey to a spreadsheet file and save it to your device'}
+                 title={translateSettings('exportSurvey')}
+                 subtitle={translateSettings('exportSurveyDescription')}
                 onPress={navigateToExport} />
             <Text
                 style={styles.title}
                 appearance='hint'>
-                App
+                 {translateSettings('app')}
             </Text>
             <ListItem
                 icon={'info-outline'}
-                title={'About'}
-                subtitle={'Check app version, legal information and support contact'}
+                 title={translateSettings('about')}
+                 subtitle={translateSettings('aboutDescription')}
                 onPress={navigateToAbout} />
             <ListItem
+                icon={'globe-outline'}
+                 title={translateSettings('language')}
+                 subtitle={translateSettings('languageDescription')}
+                onPress={navigateToLocalization} />
+            <ListItem
                 icon={'radio'}
-                title={'Digital multimeter'}
-                subtitle={'Control bluetooth multimeter settings'}
+                 title={translateSettings('digitalMultimeter')}
+                 subtitle={translateSettings('multimeterDescription')}
                 onPress={navigateToMultimeter} />
             <ListItem
                 icon={'pricetags-outline'}
-                title={'QR code and NFC labels'}
+                 title={translateSettings('externalLinks')}
                 subtitle={Platform.select({
-                    android: 'View recently scanned labels',
-                    default: 'Launch NFC scanning and view recently scanned labels'
+                     android: translateSettings('externalLinksAndroidDescription'),
+                     default: translateSettings('externalLinksDescription')
                 })}
                 onPress={navigateToExternalLinks} />
             <ListItem
                 icon={'calculator'}
                 pack='cp'
-                title={'Corrosion calculator'}
-                subtitle={'Execute number of cathodic protection calculations and export results as files'}
+                 title={translateSettings('calculator')}
+                 subtitle={translateSettings('calculatorDescription')}
                 onPress={navigateToCalculator} />
             <ListItem
                 icon={'people-outline'}
-                title={'Default names'}
-                subtitle={'Manage default names for new test points, rectifiers, readings and etc.'}
+                 title={translateSettings('defaultNames')}
+                 subtitle={translateSettings('defaultNamesDescription')}
                 onPress={navigateToDefaultNames} />
             <ListItem
                 icon={'file-text-outline'}
-                title={'Exported files'}
-                subtitle={'View exported survey files, delete or share them with different apps'}
+                 title={translateSettings('exportedFiles')}
+                 subtitle={translateSettings('exportedFilesDescription')}
                 onPress={navigateToExportedFiles} />
             <Text
                 style={styles.title}
                 appearance='hint'>
-                Other
+                 {translateSettings('other')}
             </Text>
             <ListItem
                 icon='log-out'
-                title='Exit without saving'
-                subtitle={'Exit to the main screen. All changes made after last sync will not be saved in file. Use with caution.'}
+                 title={translateSettings('exitWithoutSaving')}
+                 subtitle={translateSettings('exitDescription')}
                 onPress={onExit} />
         </ScrollView>
     )

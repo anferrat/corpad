@@ -1,6 +1,7 @@
 import React from 'react'
 import { View, StyleSheet } from 'react-native'
 import { Text } from '@ui-kitten/components'
+import { translateSurveySearch } from '../../../localization'
 
 const EmptyResult = ({ loading, isKeywordEmpty }) => {
     if (!loading)
@@ -13,12 +14,12 @@ const EmptyResult = ({ loading, isKeywordEmpty }) => {
                     <Text
                         category='p1'
                         style={styles.mainText}>
-                        No results found in this survey
+                        {translateSurveySearch('noResults')}
                     </Text>
                     <Text
                         category='s2'
                         style={styles.text}>
-                        Try different search parameter. Items can be search by name only, not case-sensitive
+                        {translateSurveySearch('searchHint')}
                     </Text>
                 </View>
             )
@@ -29,7 +30,7 @@ const EmptyResult = ({ loading, isKeywordEmpty }) => {
                 category='s2'
                 appearance='hint'
                 style={styles.text}>
-                Searching...
+                {translateSurveySearch('searching')}
             </Text>
         </View>
 }

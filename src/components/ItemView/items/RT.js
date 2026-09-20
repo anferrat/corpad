@@ -7,6 +7,7 @@ import TextLine from '../../TextLine'
 import { PowerSourceLabels, TapOptionLabels } from '../../../constants/labels'
 import { TapOptions } from '../../../constants/global'
 import { getTapValue } from '../helpers/functions'
+import { translateItemView } from '../../../localization'
 
 
 const RT = ({ name, itemType, coord, date, location, comment, maxVoltage, maxCurrent, model, serialNumber, powerSource, tapValue, tapSetting, tapFine, tapCoarse }) => {
@@ -23,12 +24,12 @@ const RT = ({ name, itemType, coord, date, location, comment, maxVoltage, maxCur
                 <IconLine icon='message-square-outline' label={comment} />
             </View>
             <View style={styles.divider} />
-            <TextLine title='Max. voltage' value={maxVoltage} unit='V' />
-            <TextLine title='Max. current' value={maxCurrent} unit='A' />
-            <TextLine title='Model' value={model} />
-            <TextLine title='Serial number' value={serialNumber} />
-            <TextLine title='Power source' value={PowerSourceLabels[powerSource] ?? null} />
-            <TextLine title={tapSetting === TapOptions.AUTO ? 'Current control' : TapOptionLabels[tapSetting]} value={value} unit={unit} />
+            <TextLine title={translateItemView('maxVoltage')} value={maxVoltage} unit='V' />
+            <TextLine title={translateItemView('maxCurrent')} value={maxCurrent} unit='A' />
+            <TextLine title={translateItemView('model')} value={model} />
+            <TextLine title={translateItemView('serialNumber')} value={serialNumber} />
+            <TextLine title={translateItemView('powerSource')} value={PowerSourceLabels[powerSource] ?? null} />
+            <TextLine title={tapSetting === TapOptions.AUTO ? translateItemView('currentControl') : TapOptionLabels[tapSetting]} value={value} unit={unit} />
         </>
     )
 }

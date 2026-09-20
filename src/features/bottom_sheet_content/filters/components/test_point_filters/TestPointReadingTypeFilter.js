@@ -3,6 +3,7 @@ import SheetHeader from '../../../components/SheetHeader'
 import { useTestPointReadingTypeFilter } from '../../hooks/test_point_filters/useTestPointReadingTypeFilter'
 import ReadingTypeFilter from '../ReadingTypeFilter'
 import { ItemTypes } from '../../../../../constants/global'
+import { translateBottomSheet } from '../../../../../localization'
 
 
 
@@ -11,7 +12,7 @@ const TestPointReadingTypeFilter = ({ onBackPress, closeSheet, visible }) => {
     return (
         <>
             <SheetHeader
-                title='Readings'
+                title={translateBottomSheet('readings')}
                 onBackPress={onBackPress}
                 onClosePress={closeSheet} />
             <ReadingTypeFilter

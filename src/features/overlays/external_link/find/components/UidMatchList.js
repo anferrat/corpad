@@ -1,6 +1,7 @@
 import React from 'react'
 import Title from './Title'
 import ListItem from './ListItem'
+import { translateOverlay } from '../../../../../localization'
 
 const UidMatchList = ({ uidMatch, navigateToView }) => {
     if (uidMatch)
@@ -8,7 +9,7 @@ const UidMatchList = ({ uidMatch, navigateToView }) => {
             <>
                 <Title
                     hint={''}
-                    title={'Exact match (uid)'} />
+                    title={translateOverlay('externalLink.exactMatch')} />
                 <ListItem
                     checked={true}
                     itemType={uidMatch.itemType}

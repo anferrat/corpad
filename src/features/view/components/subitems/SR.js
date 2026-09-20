@@ -5,8 +5,9 @@ import Header from '../../components/Header'
 import Divider from '../Divider'
 import SelectTab from '../SelectTab'
 import ResistivityLayerView from '../LayerResistivityLayerView'
+import { translateView } from '../../../../localization'
 
-const tabs = ['Average', 'Layers']
+const tabs = [translateView('average'), translateView('layers')]
 
 const SR = ({ data, onEdit }) => {
     const [displayedTab, setDisplayedTab] = useState(0)
@@ -48,7 +49,7 @@ const SR = ({ data, onEdit }) => {
                                 resistivityUnit={resistivityUnit} />
                     })}</View>}
 
-            <TextLine title='Comment' value={comment} />
+            <TextLine title={translateView('comment')} value={comment} />
         </>
     )
 }

@@ -6,10 +6,11 @@ import { EventRegister } from 'react-native-event-listeners'
 import { ItemTypes } from "../../../../../constants/global"
 import { useDispatch } from 'react-redux'
 import { hideLoader, updateLoader } from "../../../../../store/actions/settings"
+import { translateOverlay } from '../../../../../localization'
 
-const newPipeItem = { item: 'Create new', id: -1 }
+const newPipeItem = { id: -1 }
 
-const unassignedPipeItem = { item: 'Unassigned', id: null }
+const unassignedPipeItem = { id: null }
 
 const usePipelineMatching = ({ link, goBack, navigateToItem, navigateToSurvey }) => {
     const [pipelineItemList, setPipelineItemList] = useState([])
@@ -33,7 +34,7 @@ const usePipelineMatching = ({ link, goBack, navigateToItem, navigateToSurvey })
                 ({ source, target, pipelineMap }) => {
                     if (componentMounted.current) {
                         setPipelineItemList(
-                            [newPipeItem, unassignedPipeItem].concat(target.map(({ id, name }) => ({
+                            [{ ...newPipeItem, item: translateOverlay('externalLink.createNew') }, { ...unassignedPipeItem, item: translateOverlay('externalLink.unassigned') }].concat(target.map(({ id, name }) => ({
                                 item: name,
                                 id: id
                             }))))
@@ -60,7 +61,7 @@ const usePipelineMatching = ({ link, goBack, navigateToItem, navigateToSurvey })
     const onSubmit = useCallback(async () => {
         setIsCreating(true)
         const pipelineMapData = getPipelineMap(sourcePipelines, pipelineItemList, assignedIndexes)
-        dispatch(updateLoader('Creating...'))
+        dispatch(updateLoader(translateOverlay('externalLink.creating')))
         await addLinkDataToSurvey({ link, pipelineMapData },
             (er) => er === 101 ? navigateToSurvey() : errorHandler(er, goBack),
             ({ isPipelineMapped, createdPipelineIdList, createdItemId, createdItemType }) => {

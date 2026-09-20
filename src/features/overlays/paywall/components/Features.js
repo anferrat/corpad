@@ -1,32 +1,33 @@
 import React from 'react'
 import { View, StyleSheet } from 'react-native'
 import FeatureListItem from './FeatureListItem'
+import { translateOverlay } from '../../../../localization'
 
 
 const Features = () => {
     return (
         <View style={styles.features}>
             <FeatureListItem
-                title='Photos'
+                title={translateOverlay('paywall.features.photos')}
                 icon='camera'
                 color='#97EC8F'
-                description='Take and assign photos to sites. Share survey files with photos.' />
+                description={translateOverlay('paywall.features.photosDescription')} />
             <FeatureListItem
-                title='Map layers'
+                title={translateOverlay('paywall.features.mapLayers')}
                 icon='globe-2'
                 color='#FFEA70'
-                description='Import polylines, polygons and markers from geodata files.' />
+                description={translateOverlay('paywall.features.mapLayersDescription')} />
             <FeatureListItem
-                title='Multimeter'
+                title={translateOverlay('paywall.features.multimeter')}
                 icon='bluetooth'
                 color='#FFAF95'
-                description='Connect multimeter over Bleutooth to capture voltage and current.' />
+                description={translateOverlay('paywall.features.multimeterDescription')} />
             <FeatureListItem
-                title='QR code and NFC labels'
+                title={translateOverlay('paywall.features.labels')}
                 icon='qr-code'
                 pack='cp'
                 color='#9AE2FE'
-                description='Create site labels, that can be accessed offline by any Corpad app user' />
+                description={translateOverlay('paywall.features.labelsDescription')} />
         </View>
     )
 }

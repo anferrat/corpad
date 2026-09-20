@@ -9,6 +9,7 @@ import UnitSelect from "./components/UnitSelect"
 import AutoCreateToggle from "./components/AutoCreateToggle"
 import { globalStyle } from "../../../styles/styles"
 import NewPotentialModal from "./components/NewPotentialModal"
+import { translateSettings } from '../../../localization'
 
 export const PotentialTypes = () => {
     const { unit, autoCreate, potentialTypes, visible, loading, name, nameValid, updateUnit, toggleAutoCreate, showModal, addPotential, dismissModal, deletePotential, onChangeName } = usePotentialData()
@@ -29,7 +30,7 @@ export const PotentialTypes = () => {
                         appearance='hint'
                         category='label'
                         style={styles.label}>
-                        Standard potential types
+                         {translateSettings('standardPotentialTypes')}
                     </Text>
                     {standard.map(({ id, name, uid }) =>
                         <PotentialListItem
@@ -43,7 +44,7 @@ export const PotentialTypes = () => {
                             appearance='hint'
                             category='label'
                             style={styles.label}>
-                            Custom potential types
+                             {translateSettings('customPotentialTypes')}
                         </Text>
                         {custom.map(({ id, name, uid }) =>
                             <PotentialListItem
@@ -56,7 +57,7 @@ export const PotentialTypes = () => {
                 </View>
             </ScrollView>
             <BottomButton
-                title='Add potential type'
+                 title={translateSettings('addPotentialType')}
                 icon={'plus-circle'}
                 onPress={showModal} />
             <NewPotentialModal

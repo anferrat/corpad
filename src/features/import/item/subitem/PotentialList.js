@@ -1,13 +1,14 @@
 import React from 'react'
 import { Text } from '@ui-kitten/components'
 import ParameterPotential from './ParameterPotential'
+import { translatePotentialSelection } from '../../../../localization'
 
 
 const PotentialList = ({ potentials, navigateToParameters, subitemIndex, fields, data, deletePotentialHandler }) => {
     return <>
         <Text
             category='label'
-            appearance='hint'>Potentials</Text>
+            appearance='hint'>{translatePotentialSelection('potentials')}</Text>
         {potentials.map((potential, i) => {
             return (
                 <ParameterPotential

@@ -5,13 +5,14 @@ import ListItem from './ListItem'
 import Title from './Title'
 import EmptyMatchView from './EmptyMatchView'
 import { activity, search } from '../../../../../components/Icons'
+import { translateOverlay } from '../../../../../localization'
 
 const DistanceList = ({ searchedByDistance, distanceMatches, searchByDistance, distanceSearchAvailable, navigateToView, distanceLoading }) => {
     if (distanceSearchAvailable)
         return (
             <>
                 <Title
-                    title={'Items in close proximity'} />
+                    title={translateOverlay('externalLink.closeProximity')} />
                 <View style={styles.container}>
                     {!searchedByDistance ?
                         <Button
@@ -19,7 +20,7 @@ const DistanceList = ({ searchedByDistance, distanceMatches, searchByDistance, d
                             onPress={searchByDistance}
                             accessoryLeft={distanceLoading ? activity : search}
                             appearance='ghost'>
-                            Search by location
+                            {translateOverlay('externalLink.searchByLocation')}
                         </Button> : (
                             distanceMatches.length === 0 ? <EmptyMatchView /> :
                                 distanceMatches.map(({ item, distance }) =>

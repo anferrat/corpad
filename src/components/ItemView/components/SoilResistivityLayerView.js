@@ -2,6 +2,7 @@ import React from 'react'
 import { View, StyleSheet } from 'react-native'
 import { Text, Icon } from '@ui-kitten/components'
 import { basic } from '../../../styles/colors'
+import { translateItemView } from '../../../localization'
 import Unit from '../../Unit'
 import { LengthUnitLabels, ResistivityUnitLabels } from '../../../constants/labels'
 import { displayResistance, displayResistivity, displaySpacing } from '../helpers/functions'
@@ -25,15 +26,15 @@ const SoilResistivityLayerView = ({ startSpacing, endSpacing, spacingUnit, resis
                     numberOfLines={1}
                     ellipsizeMode={'tail'}
                     style={styles.mainTitle}>
-                    Layer ({s1} - {s2} {LengthUnitLabels[spacingUnit]})
+                    {translateItemView('layerTitle', { start: s1, end: s2, unit: LengthUnitLabels[spacingUnit] })}
                 </Text>
             </View>
             <DataRow
-                label='Resistance'
+                    label={translateItemView('resistance')}
                 value={r1}
                 unit={'\u03A9'} />
             <DataRow
-                label='Resistivity'
+                    label={translateItemView('resistivity')}
                 value={r2}
                 unit={ResistivityUnitLabels[resistivityUnit]} />
         </View>
@@ -57,7 +58,7 @@ const DataRow = ({ label, value, unit }) => (
                 style={styles.value}
                 numberOfLines={1}
                 ellipsizeMode={'tail'}>
-                {value ?? 'Error'}
+                    {value ?? translateItemView('error')}
             </Text>
             <Unit
                 unit={unit} />

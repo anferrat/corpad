@@ -4,8 +4,9 @@ import SubitemHeader from '../components/SubitemHeader'
 import SelectTab from '../components/SelectTab'
 import SoilResistivityLayerView from '../components/SoilResistivityLayerView'
 import TextLine from '../../TextLine'
+import { translateItemView } from '../../../localization'
 
-const tabs = ['Average', 'Layers']
+const tabs = [translateItemView('average'), translateItemView('layers')]
 
 const SR = ({ name, type, spacingUnit, resistivityUnit, layers, comment }) => {
     const [displayedTab, setDisplayedTab] = useState(0)
@@ -44,7 +45,7 @@ const SR = ({ name, type, spacingUnit, resistivityUnit, layers, comment }) => {
                     })}
                 </View>}
 
-            <TextLine title='Comment' value={comment} />
+            <TextLine title={translateItemView('comment')} value={comment} />
         </>
     )
 }

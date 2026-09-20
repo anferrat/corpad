@@ -3,6 +3,7 @@ import Header from '../Header'
 import Divider from '../Divider'
 import InputWithTitle from '../InputWithTitle'
 import SidesDisplay from '../SidesDisplay'
+import { translateView } from '../../../../localization'
 
 
 const BD = ({ data, updatePropertyValue, validateCurrent, subitemIndex, idMap, onEdit }) => {
@@ -38,7 +39,7 @@ const BD = ({ data, updatePropertyValue, validateCurrent, subitemIndex, idMap, o
                 keyboardType='numeric'
                 value={current}
                 valid={valid.current}
-                title='Current'
+                 title={translateView('current')}
                 onEndEditing={onEndEditing}
                 onChangeText={onChangeCurrent}
                 property='current'

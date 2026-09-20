@@ -4,6 +4,7 @@ import { errorHandler, warningHandler } from "../../../../helpers/error_handler"
 import { useDispatch } from "react-redux"
 import { hideLoader, setExportModal, updateLoader } from "../../../../store/actions/settings"
 import { hapticDelete, hapticKeyboardPress } from "../../../../native_libs/haptics"
+import { translateMultimeterOverlay } from '../../../../localization'
 
 export const useHistoryModal = ({ hideModal }) => {
     const [loading, setLoading] = useState(true)
@@ -31,7 +32,7 @@ export const useHistoryModal = ({ hideModal }) => {
 
     const onExportPress = useCallback(async () => {
         hideModal()
-        dispatch(updateLoader('Exporting', null))
+        dispatch(updateLoader(translateMultimeterOverlay('exporting'), null))
         await exportHistoryReadings(
             er => errorHandler(er),
             ({ path, mimeType }) => dispatch(setExportModal(true, path, mimeType)))
@@ -40,7 +41,7 @@ export const useHistoryModal = ({ hideModal }) => {
 
     const onDeleteAllPress = useCallback(async () => {
         hapticDelete()
-        const confirm = await warningHandler(64, 'Delete', 'Cancel')
+        const confirm = await warningHandler(64, translateMultimeterOverlay('delete'), translateMultimeterOverlay('cancel'))
         if (confirm)
             await deleteAllHistoryReadings(
                 er => errorHandler(er),

@@ -3,6 +3,7 @@ import { View, StyleSheet, ActivityIndicator } from 'react-native'
 import { Text, Button, Icon } from '@ui-kitten/components'
 import { primary, danger } from '../../../styles/colors'
 import useGoogleDriveAuth from '../../../hooks/useGoogleDriveAuth'
+import { translateSurveyList } from '../../../localization'
 
 const SurveyFileListHeader = ({ isCloud }) => {
     const { signing, isSigned, userName, signOut } = useGoogleDriveAuth()
@@ -17,7 +18,7 @@ const SurveyFileListHeader = ({ isCloud }) => {
                     <Text
                         category='p2'
                         appearance='hint'>
-                        Signed as {userName}
+                        {translateSurveyList('signedAs')} {userName}
                     </Text>
                 </View>
                 <Button
@@ -33,7 +34,7 @@ const SurveyFileListHeader = ({ isCloud }) => {
                     status={'danger'}
                     size='small'>
                     {!signing ?
-                        'Log out' :
+                        translateSurveyList('logOut') :
                         null}
                 </Button>
             </View>

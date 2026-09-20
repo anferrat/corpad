@@ -1,5 +1,6 @@
 import { MultimeterModes, MultimeterToggleStatuses, MultimeterTypes, PotentialUnits, SubscriptionStatuses } from '../constants/global'
 import fieldValidation from './validation'
+import { translate } from '../localization'
 
 export const calculateCouponDensity = (current, area) => {
     if (fieldValidation(current, 'current').valid && fieldValidation(area, 'area').valid && area !== 0 && area !== null && area !== '' && current !== null && current !== '') {
@@ -51,7 +52,7 @@ export const getListStateByType = (dataType, state) => { //used in List (filters
     }
 }
 
-const monthList = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+const monthKeys = ['jan', 'feb', 'mar', 'apr', 'may', 'jun', 'jul', 'aug', 'sep', 'oct', 'nov', 'dec']
 
 export const getFormattedDate = (timestamp) => { //formats date. date stored across the app in a format of Date.now()
     const t = new Date(timestamp)
@@ -61,13 +62,13 @@ export const getFormattedDate = (timestamp) => { //formats date. date stored acr
         const withinYear = new Date(currentTimestamp).getFullYear() === t.getFullYear()
         const time = ("0" + t.getHours()).slice(-2) + ':' + ("0" + t.getMinutes()).slice(-2)
         if (recent)
-            return 'Today, ' + time
+            return `${translate('survey.today')}, ${time}`
         else if (withinYear)
-            return `${monthList[t.getMonth()]} ${t.getDate()}, ${time}`
+            return `${translate(`dates.months.${monthKeys[t.getMonth()]}`)}, ${t.getDate()}, ${time}`
         else
-            return `${monthList[t.getMonth()]} ${t.getDate()}, ${t.getFullYear()} ${time}`
+            return `${translate(`dates.months.${monthKeys[t.getMonth()]}`)}, ${t.getDate()}, ${t.getFullYear()} ${time}`
     }
-    else return 'Time error'
+        else return translate('common.timeError', {}, 'Time error')
 }
 
 export const getFullDate = (timestamp) => {
@@ -79,7 +80,7 @@ export const getFullDate = (timestamp) => {
             + ("0" + t.getHours()).slice(-2) + ':'
             + ("0" + t.getMinutes()).slice(-2)
     }
-    else return 'Time error'
+    else return translate('common.timeError', {}, 'Time error')
 }
 
 export const getFileSize = (bytes) => {

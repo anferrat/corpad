@@ -1,28 +1,29 @@
 import React from 'react'
 import { View, StyleSheet } from 'react-native'
 import { Text } from '@ui-kitten/components'
-import { NFC_LABELS, NFC_STATUS_CODES } from '../../helpers/constants'
+import { NFC_STATUS_CODES } from '../../helpers/constants'
 import Pressable from '../../../../components/Pressable'
+import { translateView } from '../../../../localization'
 
 
 const getLabel = (status) => {
     switch (status) {
         case null:
-            return NFC_LABELS.READY
+            return translateView('nfc.holdPhone')
         case NFC_STATUS_CODES.SUCCESS:
-            return NFC_LABELS.SUCCESS
+            return translateView('nfc.written')
         case NFC_STATUS_CODES.NOT_FORMATTED:
-            return NFC_LABELS.NOT_FORMATTED
+            return translateView('nfc.notFormatted')
         case NFC_STATUS_CODES.READ_ONLY:
-            return NFC_LABELS.READ_ONLY
+            return translateView('nfc.readOnly')
         case NFC_STATUS_CODES.NOT_ENOUGH_SPACE:
-            return NFC_LABELS.NOT_ENOUGH_SPACE
+            return translateView('nfc.notEnoughSpace')
         case NFC_STATUS_CODES.NFC_TURNED_OFF:
-            return NFC_LABELS.TURNED_OFF
+            return translateView('nfc.turnedOff')
         case NFC_STATUS_CODES.NFC_NOT_SUPPORTED:
-            return NFC_LABELS.NOT_SUPPORTED
+            return translateView('nfc.notSupported')
         case NFC_STATUS_CODES.LINK_TOO_LONG:
-            return NFC_LABELS.LINK_TOO_LONG
+            return translateView('nfc.linkTooLong')
         default:
             return null
     }

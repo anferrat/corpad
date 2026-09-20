@@ -10,6 +10,7 @@ import { hapticDelete } from "../../../native_libs/haptics"
 import fieldValidation from '../../../helpers/validation'
 import { ItemTypes } from "../../../constants/global"
 import { requestShowMarkerOnMap } from "../../../store/actions/map"
+import { translateView } from '../../../localization'
 
 const warningCodes = {
     TEST_POINT: 55,
@@ -107,7 +108,7 @@ const useItemData = ({ itemId, itemType, navigateToMap, navigateToEditSubitem })
 
     const deleteItem = useCallback(async () => {
         hapticDelete()
-        const confirm = await warningHandler(warningCodes[itemType], 'Delete', 'Cancel')
+        const confirm = await warningHandler(warningCodes[itemType], translateView('delete'), translateView('cancel'))
         if (confirm)
             await deleteItemRequest({ id: itemId, itemType }, er => errorHandler(er), () => {
                 EventRegister.emit('GLOBAL_ITEM_DELETED', { itemId, itemType })

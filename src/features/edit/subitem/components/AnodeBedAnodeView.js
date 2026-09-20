@@ -7,6 +7,7 @@ import Input from '../../../../components/Input'
 import WireView from './WireView'
 import { WireGaugeLabels } from '../../../../constants/labels'
 import { WireColorColors } from '../../../../styles/colors'
+import { translateEdit } from '../../../../localization'
 
 
 
@@ -47,7 +48,7 @@ const AnodeBedAnodeView = ({ current, wireColor, wireGauge, index, deleteAnodeBe
                         appearance='ghost'
                         size='small'
                         style={styles.label}>
-                        {wireGauge === null ? 'Anode ' : null}#{index + 1}{wireGauge !== null ? ` (${WireGaugeLabels[wireGauge]})` : null}
+                        {wireGauge === null ? `${translateEdit('anode')} ` : null}#{index + 1}{wireGauge !== null ? ` (${WireGaugeLabels[wireGauge]})` : null}
                     </Button>
                     <Input
                         style={styles.input}

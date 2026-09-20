@@ -5,11 +5,10 @@ import { WireColors, WireGauges } from '../../../../constants/global'
 import { WireColorLabels, WireGaugeLabels } from '../../../../constants/labels'
 import { WireColorColors } from '../../../../styles/colors'
 
-const wireColorList = Object.values(WireColors).map(color => ({ index: color, item: WireColorLabels[color] }))
-const colorAccessories = wireColorList.map(({ index }) => ({ icon: WireColorColors[index].length > 1 ? 'color-circle-double' : 'color-circle', fill: WireColorColors[index][0], fill2: WireColorColors[index][1], pack: 'cp' }))
-const wireGaugeList = Object.values(WireGauges).map(gauge => ({ index: gauge, item: WireGaugeLabels[gauge] }))
-
 const WireView = ({ update, wireColor, wireGauge }) => {
+    const wireColorList = React.useMemo(() => Object.values(WireColors).map(color => ({ index: color, item: WireColorLabels[color] })), [])
+    const colorAccessories = React.useMemo(() => wireColorList.map(({ index }) => ({ icon: WireColorColors[index].length > 1 ? 'color-circle-double' : 'color-circle', fill: WireColorColors[index][0], fill2: WireColorColors[index][1], pack: 'cp' })), [wireColorList])
+    const wireGaugeList = React.useMemo(() => Object.values(WireGauges).map(gauge => ({ index: gauge, item: WireGaugeLabels[gauge] })), [])
     const onSelectColor = React.useCallback((index) => {
         update(index, 'wireColor')
     }, [update])
@@ -27,8 +26,7 @@ const WireView = ({ update, wireColor, wireGauge }) => {
                     property='wireColor'
                     selectedIndex={wireColor}
                     itemList={wireColorList}
-                    placeholder="Color"
-                    label="Wire color" />
+                    />
             </View>
             <View style={styles.selectSize}>
                 <SelectField
@@ -37,8 +35,7 @@ const WireView = ({ update, wireColor, wireGauge }) => {
                     property='wireGauge'
                     selectedIndex={wireGauge}
                     itemList={wireGaugeList}
-                    placeholder='Gauge'
-                    label='Wire gauge' />
+                    />
             </View>
         </View>
     )

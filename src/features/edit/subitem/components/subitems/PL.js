@@ -4,6 +4,7 @@ import PotentialsView from '../potentials/PotentialsView'
 import Select from '../../../../../components/Select'
 import WireView from '../WireView'
 import NameInput from '../NameInput'
+import { translateEdit } from '../../../../../localization'
 
 const pipeAccessory = {
     icon: 'PL',
@@ -40,8 +41,8 @@ const PLCard = ({ pipelineList, data, itemId, subitemId, update, validate }) => 
             property='pipelineId'
             itemList={itemList}
             selectedIndex={selectedIndex}
-            placeholder="Select pipeline"
-            label='Pipeline' />
+            placeholder={translateEdit('pipeline')}
+            label={translateEdit('pipeline')} />
         <PotentialsView
             subitemId={subitemId}
             itemId={itemId} />

@@ -5,6 +5,7 @@ import { hapticMedium } from '../../../native_libs/haptics'
 import { EventRegister } from 'react-native-event-listeners'
 import { errorHandler } from '../../../helpers/error_handler'
 import { updateSubitemProperty } from '../../../store/actions/subitem'
+import { translateEdit } from '../../../localization'
 
 const SaveButton = () => {
     const saving = useSelector(state => state.subitem.saving)
@@ -34,7 +35,7 @@ const SaveButton = () => {
         <BottomButton
             disabled={saving}
             icon={saving ? 'loading' : 'save'}
-            title='Save'
+            title={translateEdit('save')}
             onPress={onPress} />
     )
 }

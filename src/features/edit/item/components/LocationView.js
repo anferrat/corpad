@@ -24,7 +24,7 @@ const LocationView = ({ update, validate, latitude, longitude, latitudeValid, lo
                 maxLength={13}
                 value={latitude}
                 valid={latitudeValid}
-                label='Latitude' />
+                />
             <View style={styles.inter} />
             <Input
                 update={update}
@@ -35,7 +35,7 @@ const LocationView = ({ update, validate, latitude, longitude, latitudeValid, lo
                 property='longitude'
                 value={longitude}
                 valid={longitudeValid}
-                label='Longitude' />
+                />
             <View style={styles.button}>
                 <IconButton
                     iconName='navigation'

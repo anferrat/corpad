@@ -2,6 +2,7 @@ import React from 'react'
 import { View, StyleSheet } from 'react-native'
 import MultimeterButton from './MultimeterButton'
 import GraphButton from './GraphButton'
+import { translateMultimeterOverlay } from '../../../../localization'
 
 
 const ButtonView = ({ onHold, toggleOnHold, saveReading, showModal, reading, displayMode }) => {
@@ -15,22 +16,22 @@ const ButtonView = ({ onHold, toggleOnHold, saveReading, showModal, reading, dis
                     onPress={toggleOnHold}
                     icon={onHold ? 'play-circle' : 'pause-circle'}
                     pack={null}
-                    title={onHold ? 'Resume' : 'Hold'} />
+                    title={onHold ? translateMultimeterOverlay('resume') : translateMultimeterOverlay('hold')} />
                 <MultimeterButton
                     onPress={onSave}
                     icon={'save'}
                     pack={null}
-                    title={'Save'} />
+                    title={translateMultimeterOverlay('save')} />
                 <MultimeterButton
                     onPress={showModal}
                     icon={'book-open'}
                     pack={null}
-                    title={'History'} />
+                    title={translateMultimeterOverlay('history')} />
             </> : <GraphButton
                 onPress={toggleOnHold}
                 icon={onHold ? 'play-circle' : 'pause-circle'}
                 pack={null}
-                title={onHold ? 'Resume' : 'Hold'} />
+                title={onHold ? translateMultimeterOverlay('resume') : translateMultimeterOverlay('hold')} />
 
             }
         </View>

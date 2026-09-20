@@ -10,6 +10,7 @@ import NamePreview from './components/NamePreview'
 import Hint from '../../../components/Hint'
 import BottomButton from '../../../components/BottomButton'
 import Select from '../../../components/Select'
+import { translateSettings } from '../../../localization'
 
 export const DefaultNames = () => {
     const { defaultNames, loading, selectedType, value, valid, pipelineNameAsDefault, pipelineNameSettingActive, itemList, selectedIndex, accessoryList, onChangeText, onEndEditing, onChangeType, updateNames, onChangePipelineNameSetting } = useDefaultNames()
@@ -19,7 +20,7 @@ export const DefaultNames = () => {
                 contentContainerStyle={styles.mainView}>
                 <View style={globalStyle.card}>
                     <Select
-                        label={'Category'}
+                        label={translateSettings('category')}
                         itemList={itemList}
                         accessoryList={accessoryList}
                         onSelect={onChangeType}
@@ -29,7 +30,7 @@ export const DefaultNames = () => {
                         style={styles.input}
                         value={value}
                         valid={valid}
-                        label={'Default name prefix'}
+                        label={translateSettings('defaultNamePrefix')}
                         onChangeText={onChangeText}
                         onEndEditing={onEndEditing}
                         unit={'<index>'}
@@ -44,14 +45,14 @@ export const DefaultNames = () => {
                         pipelineNameAsDefault={pipelineNameAsDefault}
                         pipelineNameSettingActive={pipelineNameSettingActive} />
                     <Hint>
-                        Default names are used when creating new survey item (e.g. test point, rectifier or pipeline) or new reading. You can manually declare names in edit screen, or you can customize default names here, and they will be used automatically.
+                         {translateSettings('defaultNamesHint')}
                     </Hint>
                 </View>
             </ScrollView>
             <BottomButton
                 icon={'save'}
                 onPress={updateNames}
-                title='Save' />
+                 title={translateSettings('save')} />
         </LoadingView>
     )
 }

@@ -10,11 +10,11 @@ import { globalStyle } from '../../../../../styles/styles'
 import { PowerSources } from '../../../../../constants/global'
 import { PowerSourceLabels } from '../../../../../constants/labels'
 import PhotoView from '../photos/PhotoView'
-
-const powerSourceList = Object.values(PowerSources).map(source => ({ item: PowerSourceLabels[source], index: source }))
+import { translateEdit } from '../../../../../localization'
 
 const RT = ({ data, createSubitem, itemType, update, validate, updateLatAndLon, updateTap, isPro }) => {
     const { id, name, status, defaultName, valid, latitude, longitude, location, maxCurrent, maxVoltage, model, serialNumber, powerSource, comment, tapSetting, tapValue, tapCoarse, tapFine, imageUris } = data
+    const powerSourceList = React.useMemo(() => Object.values(PowerSources).map(source => ({ item: PowerSourceLabels[source], index: source })), [])
     return (
         <>
             <StatusView
@@ -27,7 +27,6 @@ const RT = ({ data, createSubitem, itemType, update, validate, updateLatAndLon, 
                         validate={validate}
                         property='name'
                         maxLength={40}
-                        label='Name'
                         placeholder={defaultName}
                         value={name}
                         valid={valid.name} />
@@ -44,10 +43,9 @@ const RT = ({ data, createSubitem, itemType, update, validate, updateLatAndLon, 
                         validate={validate}
                         maxLength={80}
                         valid={valid.location}
-                        label='Location'
                         value={location}
                         property='location'
-                        placeholder='Location description' />
+                        />
                     <RectifierTapSetting
                         update={update}
                         validate={validate}
@@ -62,8 +60,6 @@ const RT = ({ data, createSubitem, itemType, update, validate, updateLatAndLon, 
                         validate={validate}
                         property='model'
                         maxLength={80}
-                        label='Model'
-                        placeholder='eg. HHYW23-U2'
                         value={model}
                         valid={valid.model} />
                     <Input
@@ -71,18 +67,15 @@ const RT = ({ data, createSubitem, itemType, update, validate, updateLatAndLon, 
                         validate={validate}
                         property='serialNumber'
                         maxLength={80}
-                        label='Serial number'
-                        placeholder='e.g. 24680-13'
                         value={serialNumber}
                         valid={valid.serialNumber} />
                     <Select
                         placeholderOption={true}
                         update={update}
-                        label='Power source'
                         property='powerSource'
                         selectedIndex={powerSource}
                         itemList={powerSourceList}
-                        placeholder='Select Source' />
+                        />
                     <View style={styles.row}>
                         <View style={styles.leftItem}>
                             <Input
@@ -90,7 +83,6 @@ const RT = ({ data, createSubitem, itemType, update, validate, updateLatAndLon, 
                                 validate={validate}
                                 property='maxCurrent'
                                 maxLength={20}
-                                label='DC Amps'
                                 keyboardType='numeric'
                                 value={maxCurrent}
                                 valid={valid.maxCurrent}
@@ -102,7 +94,6 @@ const RT = ({ data, createSubitem, itemType, update, validate, updateLatAndLon, 
                                 validate={validate}
                                 property='maxVoltage'
                                 maxLength={20}
-                                label='DC Volts'
                                 keyboardType='numeric'
                                 value={maxVoltage}
                                 valid={valid.maxVoltage}
@@ -119,7 +110,6 @@ const RT = ({ data, createSubitem, itemType, update, validate, updateLatAndLon, 
                         valid={valid.comment}
                         textAlignVertical={'top'}
                         numberOfLines={3}
-                        label='Comments'
                         property='comment'
                         value={comment} />
                 </View>
@@ -130,7 +120,7 @@ const RT = ({ data, createSubitem, itemType, update, validate, updateLatAndLon, 
                         imageUris={imageUris} /> : null}
                 <View style={styles.button}>
                     <CreateSubitemButton
-                        title={'Add reading'}
+                        title={translateEdit('addReading')}
                         onSelect={createSubitem}
                         itemType={itemType} />
                 </View>

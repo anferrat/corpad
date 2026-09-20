@@ -4,6 +4,7 @@ import { Icon, Text } from '@ui-kitten/components'
 import { basic300, control, primary } from '../../../../styles/colors'
 import { androidRipple } from '../../../../styles/styles'
 import Pressable from '../../../../components/Pressable'
+import { translateMap } from '../../../../localization'
 
 const OpenInButton = (props) => {
     const isAndroid = Platform.OS === 'android'
@@ -20,7 +21,7 @@ const OpenInButton = (props) => {
                 fill={primary} />
             <Text 
             category='s2'>
-                Open in <Text status='primary' category='s2'>Maps</Text></Text>
+                {translateMap('openIn')} <Text status='primary' category='s2'>{translateMap('maps')}</Text></Text>
         </Pressable>
     </View >
 }

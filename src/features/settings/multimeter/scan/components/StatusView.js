@@ -2,10 +2,11 @@ import React from 'react'
 import { View, StyleSheet } from 'react-native'
 import { basic, success } from '../../../../../styles/colors'
 import { Text } from '@ui-kitten/components'
+import { translateMultimeterSettings } from '../../../../../localization'
 
 
 const StatusView = ({ connected }) => {
-    const status = connected ? 'Connected' : 'Disconnected'
+    const status = translateMultimeterSettings(connected ? 'connected' : 'disconnected')
     return (
         <View style={styles.container}>
             <View style={connected ? styles.success : styles.basic}>

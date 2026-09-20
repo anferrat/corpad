@@ -2,6 +2,7 @@ import { useCallback, useEffect, useRef, useState } from 'react'
 import { errorHandler, warningHandler } from '../../../../helpers/error_handler'
 import { deleteAllExportedFiles, deleteExportedFile, getExportedFileList, openFileIn, saveExportedFileToDownloads, shareFile } from '../../../../app/controllers/survey/other/ExportedFileController'
 import Toast from 'react-native-toast-message'
+import { translateSettings } from '../../../../localization'
 
 const initFiles = []
 
@@ -36,20 +37,20 @@ const useExportedFiles = () => {
                 type: 'successToast',
                 visibilityTime: 1000,
                 autoHide: true,
-                props: { text: 'Saved' }
+                 props: { text: translateSettings('saved') }
             })
         })
     }, [])
 
     const deleteFile = useCallback(async (fileName, path) => {
-        const confirm = await warningHandler(44, 'Delete', 'Cancel')
+        const confirm = await warningHandler(44, translateSettings('delete'), translateSettings('cancel'))
         if (confirm) {
             const { status } = await deleteExportedFile({ path }, er => errorHandler(er), () => {
                 Toast.show({
                     type: 'successToast',
                     visibilityTime: 1000,
                     autoHide: true,
-                    props: { text: `${fileName} was deleted`, status: 'danger' }
+                     props: { text: translateSettings('deleted', {name: fileName}), status: 'danger' }
                 })
             })
 
@@ -64,7 +65,7 @@ const useExportedFiles = () => {
 
     const deleteAll = useCallback(async () => {
         if (!loading) {
-            const confirm = await warningHandler(45, 'Delete all')
+             const confirm = await warningHandler(45, translateSettings('deleteAll'))
             if (confirm) {
                 deleteAllExportedFiles(
                     (er) => errorHandler(er),
@@ -73,7 +74,7 @@ const useExportedFiles = () => {
                             type: 'successToast',
                             visibilityTime: 1000,
                             autoHide: true,
-                            props: { text: `All files were deleted`, status: 'danger' }
+                             props: { text: translateSettings('allFilesDeleted'), status: 'danger' }
                         })
                         setFiles(initFiles)
                     })

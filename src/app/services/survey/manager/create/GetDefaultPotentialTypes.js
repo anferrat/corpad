@@ -1,6 +1,6 @@
 import { PermanentPotentialTypes } from "../../../../../constants/global"
 import { guid } from "../../../../utils/guid"
-import { PermanentPotentialTypeLabels } from "../../../../../constants/labels"
+import { defaultPotentialTypeNames } from '../../../../entities/survey/other/DefaultPotentialTypeNames'
 import { PotentialType } from "../../../../entities/survey/other/PotentialType"
 
 export class GetDefaultPotentialTypes {
@@ -10,7 +10,7 @@ export class GetDefaultPotentialTypes {
     execute() {
         return Object.values(PermanentPotentialTypes)
             .map(type =>
-                new PotentialType(null, guid(), PermanentPotentialTypeLabels[type], type, type === PermanentPotentialTypes.AC))
+                new PotentialType(null, guid(), defaultPotentialTypeNames[type], type, type === PermanentPotentialTypes.AC))
     }
 
     getMissingDefaultTypes(potentialTypes) {

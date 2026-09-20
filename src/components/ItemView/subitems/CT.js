@@ -4,6 +4,7 @@ import TextLine from '../../TextLine'
 import { CurrentUnitLabels, PotentialUnitLabels } from '../../../constants/labels'
 import { CurrentUnits, PotentialUnits } from '../../../constants/global'
 import { displayCurrentTarget, displayShuntRatio } from '../helpers/functions'
+import { translateItemView } from '../../../localization'
 
 
 const CT = ({ name, type, voltage, current, targetMin, targetMax, ratioCurrent, ratioVoltage }) => {
@@ -12,10 +13,10 @@ const CT = ({ name, type, voltage, current, targetMin, targetMax, ratioCurrent, 
             <SubitemHeader
                 name={name}
                 subitemType={type} />
-            <TextLine title={'Current'} value={current} unit={CurrentUnitLabels[CurrentUnits.AMPS]} />
-            <TextLine title={'Voltage'} value={voltage} unit={PotentialUnitLabels[PotentialUnits.VOLTS]} />
-            <TextLine title='Target' value={displayCurrentTarget(targetMin, targetMax)} unit={CurrentUnitLabels[CurrentUnits.AMPS]} />
-            <TextLine title='Shunt ratio' value={displayShuntRatio(ratioCurrent, ratioVoltage)} />
+            <TextLine title={translateItemView('current')} value={current} unit={CurrentUnitLabels[CurrentUnits.AMPS]} />
+            <TextLine title={translateItemView('voltage')} value={voltage} unit={PotentialUnitLabels[PotentialUnits.VOLTS]} />
+            <TextLine title={translateItemView('target')} value={displayCurrentTarget(targetMin, targetMax)} unit={CurrentUnitLabels[CurrentUnits.AMPS]} />
+            <TextLine title={translateItemView('shuntRatio')} value={displayShuntRatio(ratioCurrent, ratioVoltage)} />
         </>
     )
 }

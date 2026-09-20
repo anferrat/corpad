@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { setImportItemType } from '../../../store/actions/importData'
 import { ItemTypes } from '../../../constants/global'
 import Title from './components/Title'
+import { translateImport } from '../../../localization'
 
 const SelectItem = () => {
     const selectedType = useSelector(state => state.importData.itemType)
@@ -17,7 +18,7 @@ const SelectItem = () => {
     return (
         <View style={styles.mainView}>
             <Title
-                name='SELECT IMPORTING SURVEY ITEM' />
+                name={translateImport('file.selectItem')} />
             <View
                 style={styles.itemSelection}>
                 {Object.values(ItemTypes).map((type) => (

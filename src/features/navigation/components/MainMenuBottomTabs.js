@@ -1,4 +1,5 @@
 import React from 'react'
+import { translateNavigation } from '../../../localization'
 import { BottomNavigation, BottomNavigationTab, Icon } from "@ui-kitten/components"
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 
@@ -39,9 +40,9 @@ const MainMenuBottomTabs = (props) => {
             style={{ paddingBottom: insets.bottom }}
             onSelect={onSelect}
             selectedIndex={state.index === 1 ? 0 : 1}>
-            <BottomNavigationTab title='Device' icon={deviceIcon} />
-            <BottomNavigationTab title='Cloud' icon={cloudIcon} />
-            <BottomNavigationTab title='More' icon={moreIcon} />
+            <BottomNavigationTab title={translateNavigation('device')} icon={deviceIcon} />
+            <BottomNavigationTab title={translateNavigation('cloud')} icon={cloudIcon} />
+            <BottomNavigationTab title={translateNavigation('more')} icon={moreIcon} />
         </BottomNavigation>
     )
 }

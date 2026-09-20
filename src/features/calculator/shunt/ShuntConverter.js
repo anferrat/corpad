@@ -5,6 +5,7 @@ import { primary } from '../../../styles/colors'
 import fieldValidation from '../../../helpers/validation'
 import InputDataField from './InputDataField'
 import ButtonDataSelector from './ButtonDataSelector'
+import { translateCalculator } from '../../../localization'
 
 const ShuntConverter = (props) => {
     const setValue = React.useCallback((property, value) => {
@@ -33,7 +34,7 @@ const ShuntConverter = (props) => {
                         valid={props.valid.factor}
                         setValue={setValue}
                         setValid={setValid}
-                        label='Factor'
+                        label={translateCalculator('inputs.factor')}
                         style={styles.ratioInput}
                         value={props.data.factor}
                         unit={'A/mV'}
@@ -43,7 +44,7 @@ const ShuntConverter = (props) => {
                         disabled={props.disabled}
                         setValue={setValue}
                         setValid={setValid}
-                        label='Current ratio'
+                        label={translateCalculator('inputs.currentRatio')}
                         property='ratioCurrent'
                         style={styles.ratioInput}
                         value={props.data.ratioCurrent}
@@ -55,7 +56,7 @@ const ShuntConverter = (props) => {
                         property='ratioVoltage'
                         setValue={setValue}
                         setValid={setValid}
-                        label='Voltage ratio'
+                        label={translateCalculator('inputs.voltageRatio')}
                         style={styles.ratioInput}
                         value={props.data.ratioVoltage}
                         valid={props.valid.ratioVoltage}
@@ -68,7 +69,7 @@ const ShuntConverter = (props) => {
                 property={'voltageDrop'}
                 setValue={setValue}
                 setValid={setValid}
-                label='Voltage drop'
+                label={translateCalculator('inputs.voltageDrop')}
                 value={props.data.voltageDrop}
                 valid={props.valid.voltageDrop}
                 unit='mV'

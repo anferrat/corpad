@@ -2,6 +2,7 @@ import React from 'react'
 import { StyleSheet, View } from 'react-native'
 import { Text, Icon } from '@ui-kitten/components'
 import { basic } from '../../../styles/colors'
+import { translateView } from '../../../localization'
 
 export default SingleSideDisplay = ({ subitems }) => {
 
@@ -28,7 +29,7 @@ export default SingleSideDisplay = ({ subitems }) => {
         return (
             <View style={styles.listItem}>
                 <Icon name='slash-outline' fill={basic} style={styles.listIcon} />
-                <Text style={styles.listText} appearance='hint'>No items</Text>
+                <Text style={styles.listText} appearance='hint'>{translateView('noItems')}</Text>
             </View>
         )
     else return (

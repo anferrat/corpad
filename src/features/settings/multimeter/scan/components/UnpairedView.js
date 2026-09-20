@@ -7,6 +7,7 @@ import { Button, Text } from '@ui-kitten/components'
 import MultimeterListItem from './MultimeterListItem'
 import ConnectMultimeterModal from './ConnectMultimeterModal'
 import useMultimeterScan from '../hooks/useMultimeterScan'
+import { translateMultimeterSettings } from '../../../../../localization'
 
 
 const UnpairedView = ({ initialBleState }) => {
@@ -34,7 +35,7 @@ const UnpairedView = ({ initialBleState }) => {
                     style={styles.scanButton}
                     accessoryLeft={(isBluetoothOn ? (!isPro ? star : (scanning || pairingId !== null ? activity : scanIcon)) : null)}
                     onPress={showModal}>
-                    {isBluetoothOn ? (!isPro ? 'Upgrade to premium' : (pairingId !== null ? 'Pairing' : (scanning ? 'Searching for multimeters' : 'Search for multimeters'))) : 'Bluetooth is off'}</Button>
+                     {isBluetoothOn ? (!isPro ? translateMultimeterSettings('upgradePremium') : (pairingId !== null ? translateMultimeterSettings('pairing') : (scanning ? translateMultimeterSettings('searching') : translateMultimeterSettings('search')))) : translateMultimeterSettings('bluetoothOff')}</Button>
                 {connectedDevices.length !== 0 ?
                     <View
                         style={styles.devices}>
@@ -42,7 +43,7 @@ const UnpairedView = ({ initialBleState }) => {
                             style={styles.text}
                             appearance='hint'
                             category='label'>
-                            Connected with another app (unavailable)
+                             {translateMultimeterSettings('connectedOtherApp')}
                         </Text>
                         {connectedDevices.map(({ id, name, type }, index) => (
                             <MultimeterListItem
@@ -63,7 +64,7 @@ const UnpairedView = ({ initialBleState }) => {
                             style={styles.text}
                             appearance='hint'
                             category='label'>
-                            Available devices
+                             {translateMultimeterSettings('availableDevices')}
                         </Text>
                         {scannedDevices.map(({ id, name, type }) => (
                             <MultimeterListItem

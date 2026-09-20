@@ -6,6 +6,7 @@ import { CurrentUnitLabels, IsolationTypeLabels } from '../../../constants/label
 import { CurrentUnits } from '../../../constants/global'
 import TextLine from '../../TextLine'
 import { danger, success } from '../../../styles/colors'
+import { translateItemView } from '../../../localization'
 
 
 const IK = ({ name, type, shorted, sideA, sideB, current, isolationType, subitemIdMap, fromAtoB }) => {
@@ -23,9 +24,9 @@ const IK = ({ name, type, shorted, sideA, sideB, current, isolationType, subitem
                 fromAtoB={fromAtoB}
                 shorted={shorted}
             />
-            <TextLine title='Status' value={shorted ? 'Shorted' : 'Isolated'} icon={shorted ? 'close' : 'checkmark-outline'} fill={shorted ? danger : success} />
-            {shorted ? <TextLine title='Shorting current' value={current} unit={CurrentUnitLabels[CurrentUnits.AMPS]} /> : null}
-            <TextLine title='Isolation type' value={IsolationTypeLabels[isolationType]} />
+            <TextLine title={translateItemView('status')} value={shorted ? translateItemView('shorted') : translateItemView('isolated')} icon={shorted ? 'close' : 'checkmark-outline'} fill={shorted ? danger : success} />
+            {shorted ? <TextLine title={translateItemView('shortingCurrent')} value={current} unit={CurrentUnitLabels[CurrentUnits.AMPS]} /> : null}
+            <TextLine title={translateItemView('isolationType')} value={IsolationTypeLabels[isolationType]} />
         </>
     )
 }

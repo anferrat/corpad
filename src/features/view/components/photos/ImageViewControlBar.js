@@ -2,6 +2,7 @@ import React from 'react'
 import { View, StyleSheet, Platform } from 'react-native'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import ImageControlButton from '../../../../components/ImageControlButton'
+import { translateView } from '../../../../localization'
 
 
 const ImageViewControlBar = ({ onDeletePhoto, onSharePhoto, onSavePhoto }) => {
@@ -13,15 +14,15 @@ const ImageViewControlBar = ({ onDeletePhoto, onSharePhoto, onSavePhoto }) => {
                 icon={isAndroid ? 'share' : 'share-ios'}
                 pack={isAndroid ? null : 'cp'}
                 onPress={onSharePhoto}
-                title={'Share'} />
+                title={translateView('share')} />
             {isAndroid ? <ImageControlButton
                 icon={'download'}
                 onPress={onSavePhoto}
-                title={'Save'} /> : null}
+                title={translateView('save')} /> : null}
             <ImageControlButton
                 icon={'trash'}
                 onPress={onDeletePhoto}
-                title={'Delete'} />
+                title={translateView('delete')} />
         </View>
     )
 }

@@ -5,6 +5,7 @@ import Header from '../Header'
 import PoitentialListItem from './components/PoitentialListItem'
 import { ReferenceCellTypeLabels, ReferenceCellCodeLabels } from '../../constants/labels'
 import { SafeAreaProvider } from 'react-native-safe-area-context'
+import { translatePotentialSelection } from '../../localization'
 
 const ReferenceCellModal = ({ referenceCellList, itemList, onSelect, dismiss, selectedTypeIndex }) => {
     const list = itemList.filter(rc => rc.potentialTypes.indexOf(selectedTypeIndex) !== -1)
@@ -13,7 +14,7 @@ const ReferenceCellModal = ({ referenceCellList, itemList, onSelect, dismiss, se
 
     const genReferenceCellList = React.useCallback((list) => {
         if (list.length === 0)
-            return <Text appearance='hint' style={styles.emptyValue}>No available options</Text>
+            return <Text appearance='hint' style={styles.emptyValue}>{translatePotentialSelection('noAvailableOptions')}</Text>
         else return list.map(rc => (
             <PoitentialListItem
                 key={`Reference cell-${referenceCellList[rc].id}`}
@@ -28,14 +29,14 @@ const ReferenceCellModal = ({ referenceCellList, itemList, onSelect, dismiss, se
     return (
         <SafeAreaProvider>
             <Header
-                title='Select reference cell'
+                title={translatePotentialSelection('selectReferenceCell')}
                 onBackPress={dismiss} />
             <ScrollView style={styles.mainView}>
                 <Text style={styles.title} appearance='hint'>
-                    Portable
+                    {translatePotentialSelection('portable')}
                 </Text>
                 {genReferenceCellList(portableList)}
-                <Text style={styles.title} appearance='hint'>Stationary
+                <Text style={styles.title} appearance='hint'>{translatePotentialSelection('stationary')}
                 </Text>
                 {genReferenceCellList(stationaryList)}
             </ScrollView>

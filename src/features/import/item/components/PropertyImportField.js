@@ -8,6 +8,7 @@ import { getAccessory, getDisplayValue } from '../helpers/functions'
 import ValuePreviewModal from './ValuePreviewModal'
 import Unit from '../../../../components/Unit'
 import Pressable from '../../../../components/Pressable'
+import { translateImport } from '../../../../localization'
 
 const PropertyImportField = ({
     subitemIndex,
@@ -76,7 +77,7 @@ const PropertyImportField = ({
 const FileAccessory = ({ display }) => {
     if (display)
         return (
-            <Text appearance='hint' category='c2' style={styles.fileAccessory}>field:</Text>
+            <Text appearance='hint' category='c2' style={styles.fileAccessory}>{translateImport('item.field')}</Text>
         )
     else return null
 }
@@ -120,9 +121,9 @@ const BadgeComponent = ({ importType, empty, data, fields, fieldIndex, fieldInde
             />
         )
     else if (importType === 0)
-        return <Badge title={'Fixed value'} />
+        return <Badge title={translateImport('item.fixedValueBadge')} />
     else if (importType === 2)
-        return <Badge title={'Default name'} />
+        return <Badge title={translateImport('item.defaultNameBadge')} />
     else return null
 }
 

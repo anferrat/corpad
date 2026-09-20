@@ -2,6 +2,7 @@ import React from 'react'
 import { View, StyleSheet } from 'react-native'
 import InputDataField from './InputDataField'
 import LayerTitle from './LayerTitle'
+import { translateCalculator } from '../../../localization'
 
 const WennerLayer = (props) => {
     const removeLayerHandler = React.useCallback(() => { props.removeLayerHandler(props.index) }, [props.removeLayerHandler, props.index])
@@ -24,7 +25,7 @@ const WennerLayer = (props) => {
                         style={styles.inputSpacing}
                         value={props.data[props.index]?.spacing}
                         unit={props.isMetric ? 'cm' : 'ft'}
-                        label='Spacing' />
+                        label={translateCalculator('inputs.spacing')} />
                     <InputDataField
                         disabled={props.disabled}
                         keyboardType={'numeric'}
@@ -35,7 +36,7 @@ const WennerLayer = (props) => {
                         style={styles.inputResist}
                         value={props.data[props.index]?.resistance}
                         valid={props.valid[props.index]?.resistance ?? true}
-                        label='Resistance'
+                        label={translateCalculator('inputs.resistance')}
                         unit={'\u03A9'}
                     />
                 </View>

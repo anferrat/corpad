@@ -1,6 +1,7 @@
 import React from 'react'
 import { View, StyleSheet } from 'react-native'
 import { Text } from '@ui-kitten/components'
+import { translateOverlay } from '../../../../../localization'
 
 
 const EmptyMatchView = () => {
@@ -9,7 +10,7 @@ const EmptyMatchView = () => {
             <Text
                 category='s2'
                 appearance='hint'>
-                No mathes found.
+                {translateOverlay('externalLink.noMatches')}
             </Text>
         </View>
     )

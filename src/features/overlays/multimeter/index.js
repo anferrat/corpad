@@ -13,6 +13,7 @@ import { control } from '../../../styles/colors'
 import MultimeterLimitWarning from './components/MultimeterLimitWarning'
 import DisplayModeButtons from './components/DisplayModeButtons'
 import MultimeterGraph from './components/MultimeterGraph'
+import { translateMultimeterOverlay } from '../../../localization'
 
 const MultimeterModal = ({ goBack }) => {
     const {
@@ -108,7 +109,7 @@ const MultimeterModal = ({ goBack }) => {
                 </MultimeterLoadingView>
                 <BottomButton
                     onPress={goBack}
-                    title='Back'
+                     title={translateMultimeterOverlay('back')}
                     icon='undo' />
                 <Modal
                     onRequestClose={hideModal}

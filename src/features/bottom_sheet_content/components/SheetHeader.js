@@ -2,6 +2,7 @@ import React from 'react'
 import { View, StyleSheet } from 'react-native'
 import { Button, Text } from '@ui-kitten/components'
 import IconButton from '../../../components/IconButton'
+import { translateBottomSheet } from '../../../localization'
 
 const SheetHeader = ({ onBackPress, onClosePress, title }) => (
     <View style={styles.titleRow}>
@@ -23,7 +24,7 @@ const SheetHeader = ({ onBackPress, onClosePress, title }) => (
             style={styles.button}
             appearance='ghost'
             onPress={onClosePress}>
-            Close
+            {translateBottomSheet('close')}
         </Button>
     </View>
 )

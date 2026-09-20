@@ -4,6 +4,7 @@ import SubitemHeader from '../components/SubitemHeader'
 import { AnodeMaterialLabels } from '../../../constants/labels'
 import PotentialView from '../components/PotentialView'
 import TextLine from '../../TextLine'
+import { translateItemView } from '../../../localization'
 
 
 const AN = ({ name, type, anodeMaterial, wireColor, wireGauge, potentials, potentialUnit }) => {
@@ -17,7 +18,7 @@ const AN = ({ name, type, anodeMaterial, wireColor, wireGauge, potentials, poten
             <PotentialView
                 potentialUnit={potentialUnit}
                 potentials={potentials} />
-            <TextLine title='Anode material' value={AnodeMaterialLabels[anodeMaterial]} icon='cube-outline' />
+            <TextLine title={translateItemView('anodeMaterial')} value={AnodeMaterialLabels[anodeMaterial]} icon='cube-outline' />
 
         </>
     )

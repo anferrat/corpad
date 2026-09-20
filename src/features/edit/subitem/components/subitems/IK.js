@@ -5,13 +5,13 @@ import SidesView from '../SidesView'
 import NameInput from '../NameInput'
 import { IsolationTypes } from '../../../../../constants/global'
 import { IsolationTypeLabels } from '../../../../../constants/labels'
+import { translateEdit } from '../../../../../localization'
 
 const selectedTypes = ['RS', 'FC'] // types that can be used as side for IK card
 
-const isolationTypes = Object.values(IsolationTypes).map(type => ({ item: IsolationTypeLabels[type], index: type }))
-
 const IKCard = ({ data, subitemList, update, validate, updateShortedHandler }) => {
     const { sideA, sideB, fromAtoB, name, defaultName, valid, current, isolationType, shorted } = data
+    const isolationTypes = React.useMemo(() => Object.values(IsolationTypes).map(type => ({ item: IsolationTypeLabels[type], index: type })), [])
 
     const onSelect = React.useCallback((index) => {
         update(index, 'isolationType')
@@ -39,8 +39,8 @@ const IKCard = ({ data, subitemList, update, validate, updateShortedHandler }) =
                 itemList={isolationTypes}
                 selectedIndex={isolationType}
                 placeholderOption={true}
-                placeholder="Select type"
-                label='Type' />
+                placeholder={translateEdit('type')}
+                label={translateEdit('type')} />
             <IsolationView
                 update={update}
                 validate={validate}

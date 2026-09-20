@@ -1,0 +1,13 @@
+import englishNavigation from '../en/navigation'
+
+export default {
+    ...englishNavigation,
+    device: 'Dispositivo',
+    cloud: 'Nube',
+    more: 'Más',
+    testPoints: 'Puntos de prueba',
+    pipelines: 'Tuberías',
+    add: 'Añadir',
+    map: 'Mapa',
+    rectifiers: 'Rectificadores'
+}

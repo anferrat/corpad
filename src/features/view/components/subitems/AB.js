@@ -4,6 +4,7 @@ import Header from '../../components/Header'
 import Divider from '../Divider'
 import { AnodeBedEnclosureTypeLabels, AnodeBedMateriaTypelLabels, AnodeBedTypeLabesl, AnodeMaterialLabels } from '../../../../constants/labels'
 import AnodeBedAnodeView from '../AnodeBedAnodeView'
+import { translateView } from '../../../../localization'
 
 const AB = ({ data, onEdit }) => {
     const { name, type, bedType, enclosureType, materialType, anodes } = data
@@ -16,10 +17,10 @@ const AB = ({ data, onEdit }) => {
                 icon={type}
                 onEdit={onEdit} />
             <Divider visible={dividerVisible} />
-            <TextLine title='Anode material' value={AnodeBedMateriaTypelLabels[materialType] ?? null} icon='cube-outline' />
-            <TextLine title='Bed type' value={AnodeBedTypeLabesl[bedType] ?? null} />
-            <TextLine title='Enclousre type' value={AnodeBedEnclosureTypeLabels[enclosureType] ?? null} />
-            <TextLine title='Anode ouput current' value={displayedAnodes ? ' ' : null} />
+            <TextLine title={translateView('anodeMaterial')} value={AnodeBedMateriaTypelLabels[materialType] ?? null} icon='cube-outline' />
+            <TextLine title={translateView('bedType')} value={AnodeBedTypeLabesl[bedType] ?? null} />
+            <TextLine title={translateView('enclosureType')} value={AnodeBedEnclosureTypeLabels[enclosureType] ?? null} />
+            <TextLine title={translateView('anodeOutputCurrent')} value={displayedAnodes ? ' ' : null} />
             {anodes.map(({ current, wireColor, wireGauge }, index) =>
                 <AnodeBedAnodeView
                     key={index}

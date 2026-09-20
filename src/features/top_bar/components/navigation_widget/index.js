@@ -11,6 +11,7 @@ import { getModalTop } from '../../../../styles/dimensions'
 import { compass } from '../../../../components/Icons'
 import NavigationArrow from './components/NavigationArrow'
 import NearbyLocationMarker from './components/NearbyLocationMarker'
+import { translateTopBar } from '../../../../localization'
 
 const NavigationWidget = () => {
     const {
@@ -38,7 +39,7 @@ const NavigationWidget = () => {
                 accessoryLeft={compass}
                 onPress={showModal}
                 appearance='ghost'>
-                Compass
+                {translateTopBar('compass')}
             </Button>
             <Modal
                 style={styles.modal}
@@ -56,7 +57,7 @@ const NavigationWidget = () => {
                             style={styles.title}
                             numberOfLines={1}
                             ellipsizeMode='tail'>
-                            Direction to: {name}
+                            {translateTopBar('directionTo', {name})}
                         </Text>
                     </View>
                     {nearby && <NearbyLocationMarker />}
@@ -69,10 +70,10 @@ const NavigationWidget = () => {
                         <View style={styles.values}>
                             {!nearby && <DirectionLabel value={`${direction} (${Math.round(bearing)}\u00b0)`} />}
                             <ListItem
-                                title='Distance: '
+                                title={translateTopBar('distance')}
                                 value={getDistance(distance)} />
                             <ListItem
-                                title='Accuracy: '
+                                title={translateTopBar('accuracy')}
                                 value={getDistance(accuracy)} />
                         </View>
                     </LoadingView>
@@ -80,7 +81,7 @@ const NavigationWidget = () => {
                         style={styles.closeButton}
                         onPress={hideModal}
                         appearance='ghost'>
-                        Close
+                        {translateTopBar('close')}
                     </Button>
                 </View>
             </Modal>

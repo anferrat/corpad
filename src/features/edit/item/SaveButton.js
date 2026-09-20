@@ -5,6 +5,7 @@ import { EventRegister } from 'react-native-event-listeners'
 import BottomButton from '../../../components/BottomButton'
 import { errorHandler } from '../../../helpers/error_handler'
 import { updateEditItemProperty } from '../../../store/actions/item'
+import { translateEdit } from '../../../localization'
 
 const SaveButton = () => {
     const item = useSelector(state => state.item.edit)
@@ -29,7 +30,7 @@ const SaveButton = () => {
         <BottomButton
             disabled={saving}
             icon={saving ? 'loading' : 'save'}
-            title='Save'
+            title={translateEdit('save')}
             onPress={onPress} />
     )
 }

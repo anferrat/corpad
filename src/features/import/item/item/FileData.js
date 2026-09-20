@@ -5,6 +5,7 @@ import { Text, ListItem } from '@ui-kitten/components'
 import { useSelector } from 'react-redux'
 import { file } from '../../../../components/Icons'
 import IconButton from '../../../../components/IconButton'
+import { translateImport } from '../../../../localization'
 
 
 const FileData = ({ navigateToSpreadsheet }) => {
@@ -20,13 +21,13 @@ const FileData = ({ navigateToSpreadsheet }) => {
 
     return (
         <View style={{ ...globalStyle.card, ...styles.mainView }} >
-            <Text category='label' appearance='hint' style={styles.label}>Data file</Text>
+            <Text category='label' appearance='hint' style={styles.label}>{translateImport('item.dataFile')}</Text>
             <ListItem
                 disabled={true}
                 accessoryLeft={file}
                 accessoryRight={renderIcon}
                 title={fileName}
-                description={`Rows: ${rows}, Colums: ${columns}`}
+                description={translateImport('item.rowsColumns', { rows, columns })}
                 style={styles.listItem} />
         </View>
     )

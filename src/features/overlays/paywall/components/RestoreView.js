@@ -3,13 +3,14 @@ import React from 'react'
 import { View, StyleSheet } from 'react-native'
 import Pressable from '../../../../components/Pressable'
 import { androidRipple } from '../../../../styles/styles'
+import { translateOverlay } from '../../../../localization'
 
 const RestoreView = ({ onRestore, disabled }) => {
     return (
         <View style={styles.container}>
             <Text
                 category='s2'
-                appearance='hint'>Already subscribed? Try to </Text>
+                appearance='hint'>{translateOverlay('paywall.alreadySubscribed')} </Text>
             <Pressable
                 disabled={disabled}
                 android_ripple={androidRipple}
@@ -18,7 +19,7 @@ const RestoreView = ({ onRestore, disabled }) => {
                     status='primary'
                     category='s2'
                     style={styles.button}>
-                    restore purchases.
+                    {translateOverlay('paywall.restorePurchases')}
                 </Text>
             </Pressable>
         </View>

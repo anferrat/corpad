@@ -3,6 +3,7 @@ import { Error, errors } from "../../utils/Error"
 import { AppSettings } from "../../entities/survey/other/Settings"
 import { Onboarding } from "../../entities/survey/other/Onboarding"
 import { MultimeterSettings } from "../../entities/survey/other/MultimeterSettings"
+import { LanguagePreferences, SupportedLanguages } from "../../../localization/languages"
 
 export class SettingRepository extends SQLiteRepository {
     constructor() {
@@ -28,6 +29,33 @@ export class SettingRepository extends SQLiteRepository {
             super.runQuery(tx, 'DELETE FROM config WHERE id="isCalculatorDisplayed"'),
             super.runQuery(tx, 'INSERT INTO config (id, value) VALUES ("isCalculatorDisplayed", ?)', [Number(isCalculatorDisplayed)])
         ])
+    }
+
+    async getLocale() {
+        try {
+            const config = await this._getConfig()
+            if (SupportedLanguages.includes(config.locale))
+                return config.locale
+
+            await this.updateLocale(LanguagePreferences.SYSTEM)
+            return LanguagePreferences.SYSTEM
+        }
+        catch (er) {
+            throw new Error(errors.DATABASE, 'Unable to get app language', er)
+        }
+    }
+
+    async updateLocale(locale) {
+        const value = SupportedLanguages.includes(locale) ? locale : LanguagePreferences.SYSTEM
+        try {
+            await super.runMultiQueryTransaction(tx => [
+                super.runQuery(tx, 'DELETE FROM config WHERE id="locale"'),
+                super.runQuery(tx, 'INSERT INTO config (id, value) VALUES ("locale", ?)', [value])
+            ])
+        }
+        catch (er) {
+            throw new Error(errors.DATABASE, 'Unable to update app language', er)
+        }
     }
 
     async get() {

@@ -18,7 +18,7 @@ export class ExportCloudSurveyFile {
         const cloudFileList = await this.cloudFileSystemRepo.readSurveyAssetFolder(uid)
         const localAssetFiles = await this.fileSystemRepo.readDir(FileSystemLocations.ASSETS, uid)
         const { missingAssets, cloudFilesToDownload } = this.assetFileDownloadControl.execute(assets, cloudFileList, localAssetFiles)
-        const confirm = missingAssets.length === 0 || await this.warningHandler.execute(`Survey has ${missingAssets.length} missing assets (e.g. photos). It is possible that some of the assets was not yet uploaded, or there was un error in the past when saving survey. If you continue, the missing assets will be removed from exported the survey.`, 'Continue', 'Cancel')
+        const confirm = missingAssets.length === 0 || await this.warningHandler.execute({ key: 'warnings.messages.missingAssets', params: { count: missingAssets.length } }, 'Continue', 'Cancel')
         if (confirm) {
             await this.fileSystemRepo.removeDir(FileSystemLocations.TEMP_ASSETS)
             const tempSurveyAssetFolder = await this.fileSystemRepo.getLocation(FileSystemLocations.TEMP_ASSETS)

@@ -5,6 +5,7 @@ import InputField from '../../../components/Input'
 import IconButton from '../../../components/IconButton'
 import LocationModal from './LocationModal'
 import { useSelector } from 'react-redux'
+import { translate } from '../../../localization'
 
 
 const LocationView = ({ setCalculatorData, setCoordValid, latitude, longitude, latitudeValid, longitudeValid, disabled, showCalculatorOnMap, isSaved }) => {
@@ -33,7 +34,7 @@ const LocationView = ({ setCalculatorData, setCoordValid, latitude, longitude, l
                 maxLength={13}
                 value={latitude}
                 valid={latitudeValid}
-                label='Latitude' />
+                label={translate('fields.latitude.label')} />
             <View style={styles.inter} />
             <InputField
                 disabled={disabled}
@@ -45,7 +46,7 @@ const LocationView = ({ setCalculatorData, setCoordValid, latitude, longitude, l
                 property='longitude'
                 value={longitude}
                 valid={longitudeValid}
-                label='Longitude' />
+                label={translate('fields.longitude.label')} />
             {!disabled || isSaved && isSurveyLoaded ?
                 <View style={styles.button}>
                     <IconButton

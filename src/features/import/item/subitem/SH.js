@@ -2,6 +2,7 @@ import React from 'react'
 import Parameter from '../Parameter'
 import Sides from './Sides'
 import Hint from '../../../../components/Hint'
+import { translateImport } from '../../../../localization'
 
 const SHUNT_SIDE_TYPES = ['PL', 'AN', 'OT']
 const SH = () => {
@@ -16,7 +17,7 @@ const SH = () => {
             <Parameter
                 property='voltageDrop' />
             <Hint>
-                Shunt current will be calculated after importing
+                {translateImport('item.shuntCurrentHint')}
             </Hint>
         </>
     )

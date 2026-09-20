@@ -9,6 +9,7 @@ import { control, primary } from '../../styles/colors'
 import useSurveySearch from './hooks/useSurveySearch'
 import EmptyResult from './components/EmptyResult'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
+import { translateSurveySearch } from '../../localization'
 
 
 export const SearchBar = ({ navigateToView }) => {
@@ -61,7 +62,7 @@ export const SearchBar = ({ navigateToView }) => {
                         value={keyword}
                         returnKeyType='search'
                         onChangeText={onChangeKeyword}
-                        placeholder='Search by name'
+                        placeholder={translateSurveySearch('searchByName')}
                         valid={true}
                         accessoryRight={renderIcon} />
                 </View>

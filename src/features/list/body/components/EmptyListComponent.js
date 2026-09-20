@@ -2,6 +2,7 @@ import React from 'react'
 import { View, StyleSheet } from 'react-native'
 import { Icon, Text } from '@ui-kitten/components'
 import { basic } from '../../../../styles/colors'
+import { translateList } from '../../../../localization'
 
 const EmptyListComponent = (props) => {
     if (props.visible)
@@ -9,7 +10,7 @@ const EmptyListComponent = (props) => {
             <View
                 style={styles.main}>
                 <Icon style={styles.icon} name='list-outline' fill={basic} />
-                <Text category='h3' appearance='hint' style={styles.mainText}>No Items</Text>
+                <Text category='h3' appearance='hint' style={styles.mainText}>{translateList('noItems')}</Text>
                 {props.filtered ? <FilteredItemsHint /> : <EmptyListHint />}
             </View>
         )
@@ -19,7 +20,7 @@ const EmptyListComponent = (props) => {
 const FilteredItemsHint = () => {
     return (
         <Text category='p1' appearance='hint' style={styles.text}>
-            Seems like you filtered all the results. Select <Icon name='funnel-outline' style={styles.iconText} fill={basic} /> and clear filters
+            {translateList('filteredHint')}
         </Text>
     )
 }
@@ -27,7 +28,7 @@ const FilteredItemsHint = () => {
 const EmptyListHint = () => {
     return (
         <Text category='p1' appearance='hint' style={styles.text}>
-            To add new item press <Icon name='plus-square' style={styles.iconText} fill={basic} /> and select type
+            {translateList('addItemHint')}
         </Text>
     )
 }

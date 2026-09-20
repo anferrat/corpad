@@ -1,17 +1,18 @@
 import React from 'react'
 import { Text } from '@ui-kitten/components'
+import { translateImport } from '../../../../localization'
 
 const MapperStatusHint = ({ fieldValuesEmpty, propertyListEmpty, fieldIndexNull }) => {
     if (fieldValuesEmpty || propertyListEmpty || fieldIndexNull) {
         const hint = fieldIndexNull ?
-            'Select a data column to start mapping'
+            translateImport('parameters.selectColumnToStart')
             :
             (fieldValuesEmpty && !propertyListEmpty ?
-                'All values from data column were mapped' :
+                translateImport('parameters.allColumnValuesMapped') :
                 (
                     !fieldValuesEmpty && propertyListEmpty ?
-                        'All property values were mapped' :
-                        'All values were mapped'
+                        translateImport('parameters.allPropertyValuesMapped') :
+                        translateImport('parameters.allValuesMapped')
                 )
             )
 

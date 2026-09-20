@@ -1,19 +1,21 @@
+import { translateTopBar } from '../../../../../localization'
+
 export const getCardinalDirection = (degree) => {
     if (degree >= 338 || degree < 23)
-        return 'North'
+        return translateTopBar('directions.north')
     else if (degree >= 23 && degree < 68)
-        return 'Northeast'
+        return translateTopBar('directions.northeast')
     else if (degree >= 68 && degree < 113)
-        return 'East'
+        return translateTopBar('directions.east')
     else if (degree >= 113 && degree < 158)
-        return 'Southeast'
+        return translateTopBar('directions.southeast')
     else if (degree >= 158 && degree < 203)
-        return 'South'
+        return translateTopBar('directions.south')
     else if (degree >= 203 && degree < 248)
-        return 'Southwest'
+        return translateTopBar('directions.southwest')
     else if (degree >= 248 && degree < 293)
-        return 'West'
-    else return 'Northwest'
+        return translateTopBar('directions.west')
+    else return translateTopBar('directions.northwest')
 }
 
 export const NEARBY_DISTANCE = 1

@@ -4,6 +4,7 @@ import PhotoListItem from './PhotoListItem'
 import ImageView from './ImageView'
 import IconLine from '../IconLine'
 import { imageLength, separatorWidth } from './constants/dimensions'
+import { translateView } from '../../../../localization'
 
 const getItemLayout = (data, index) => {
     return {
@@ -31,7 +32,7 @@ const PhotoListView = ({ onPhotoPress, photos, onImageViewClose, imageView, onDe
             <View
                 style={styles.mainView}>
                 {photos.length > 0 ? <IconLine
-                    value={`Images (${photos.length}/6)`}
+                    value={translateView('imagesCount', {count: photos.length})}
                     icon={'image-outline'} /> : null}
                 <FlatList
                     keyExtractor={keyExtractor}

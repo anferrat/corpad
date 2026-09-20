@@ -4,6 +4,7 @@ import { View, StyleSheet } from 'react-native'
 import MenuListItem from '../../components/MenuListItem'
 import useSurveyManager from './hooks/useSurveyManager'
 import { basic, control, danger, success, } from '../../../../styles/colors'
+import { translateBottomSheet } from '../../../../localization'
 
 
 const SurveyMenuSheet = React.memo(({ closeSheet, navigateToExport, navigateToSettings, navigateToMultimeter, navigateToCalculatorList, navigateToMultimeterModal }) => {
@@ -14,7 +15,7 @@ const SurveyMenuSheet = React.memo(({ closeSheet, navigateToExport, navigateToSe
         <View style={styles.mainView}>
             {isPro || isVerify ?
                 <MenuListItem
-                    title='Multimeter'
+                    title={translateBottomSheet('multimeter')}
                     subtitle={multimeterLablel}
                     icon={connecting ? 'activityIndicator' : 'radio'}
                     onPress={connected && !connecting ? navigateToMultimeterModal : navigateToMultimeter}
@@ -25,34 +26,34 @@ const SurveyMenuSheet = React.memo(({ closeSheet, navigateToExport, navigateToSe
                     onButtonIconPress={onMultimeterConnect}
                 /> :
                 <MenuListItem
-                    title='Upgrade to premium'
+                    title={translateBottomSheet('upgradePremium')}
                     textStatus='primary'
                     icon='star'
                     iconColor={success}
                     onPress={onPaywallShow} />}
             <MenuListItem
-                title='Corrosion calculator'
+                title={translateBottomSheet('corrosionCalculator')}
                 icon='calculator'
                 pack='cp'
                 onPress={navigateToCalculatorList} />
             <MenuListItem
-                title='Export survey'
+                title={translateBottomSheet('exportSurvey')}
                 icon='download-outline'
                 onPress={navigateToExport} />
             <MenuListItem
                 disabled={savingInProgress}
-                title='Save changes'
-                subtitle={savingInProgress ? 'Saving...' : syncTimeLabel}
+                title={translateBottomSheet('saveChanges')}
+                subtitle={savingInProgress ? translateBottomSheet('saving') : syncTimeLabel}
                 icon={savingInProgress ? 'activityIndicator' : 'save-outline'}
                 onPress={saveSurveyHandler} />
             <MenuListItem
                 disabled={savingInProgress}
-                title='Save changes and exit'
+                title={translateBottomSheet('saveChangesAndExit')}
                 onPress={saveAndResetSurveyHandler}
                 iconColor={danger}
                 icon='log-out' />
             <Divider />
-            <MenuListItem title='Settings' icon='settings-outline' onPress={navigateToSettings} />
+            <MenuListItem title={translateBottomSheet('settings')} icon='settings-outline' onPress={navigateToSettings} />
         </View>
     )
 })

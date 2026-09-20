@@ -7,6 +7,7 @@ import { ItemTypes } from '../../../../constants/global'
 import { ItemTypeSingleIconsFilled } from '../../../../constants/icons'
 import { ItemTypeLabels } from '../../../../constants/labels'
 import SheetHeader from '../../components/SheetHeader'
+import { translateBottomSheet } from '../../../../localization'
 
 
 const CreateItemSheet = React.memo(({ navigateToEdit, closeSheet, navigateToImport }) => {
@@ -15,7 +16,7 @@ const CreateItemSheet = React.memo(({ navigateToEdit, closeSheet, navigateToImpo
         <>
             <SheetHeader
                 onClosePress={closeSheet}
-                title='Create' />
+                title={translateBottomSheet('create')} />
             {Object.values(ItemTypes).map((itemType, i) =>
                 <View key={`CREATE_NEW_ITEM_${itemType}`}>
                     <ListItem
@@ -25,7 +26,7 @@ const CreateItemSheet = React.memo(({ navigateToEdit, closeSheet, navigateToImpo
                         icon={ItemTypeSingleIconsFilled[itemType]} />
                 </View>)}
             <Divider />
-            <ListItem title='Import from spreadsheet' icon='file-add' onPress={navigateToImport} />
+            <ListItem title={translateBottomSheet('importSpreadsheet')} icon='file-add' onPress={navigateToImport} />
         </>
     )
 })

@@ -3,13 +3,14 @@ import React from 'react'
 import { View, StyleSheet } from 'react-native'
 import { file, plusCircle } from '../../../components/Icons'
 import { getFileSize } from '../../../helpers/functions'
+import { translateMapLayer } from '../../../localization'
 
 const GeoFileImportView = ({ filename, size, onSelectFile }) => {
     if (filename) {
         const { value, unit } = getFileSize(size)
         return (
             <>
-                <Text category='label' appearance='hint'>Importing file</Text>
+                <Text category='label' appearance='hint'>{translateMapLayer('importingFile')}</Text>
                 <View style={styles.container}>
                     <ListItem
                         style={styles.listItem}
@@ -25,18 +26,18 @@ const GeoFileImportView = ({ filename, size, onSelectFile }) => {
     else
         return (
             <>
-                <Text category='label' appearance='hint'>Importing file</Text>
+                <Text category='label' appearance='hint'>{translateMapLayer('importingFile')}</Text>
                 <View style={styles.buttonView}>
                     <Button
                         onPress={onSelectFile}
                         style={styles.button}
                         accessoryLeft={plusCircle}>
-                        Select file
+                         {translateMapLayer('selectFile')}
                     </Button>
                     <Text
                         category='label'
                         appearance='hint'>
-                        File size limit: 1MB
+                         {translateMapLayer('fileSizeLimit')}
                     </Text>
                 </View>
             </>

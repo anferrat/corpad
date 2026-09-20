@@ -1,5 +1,6 @@
 import { ItemTypes } from "../../../constants/global"
 import useModal from "../../../hooks/useModal"
+import { translateView } from '../../../localization'
 
 const useControlBar = ({ deleteItem, itemType, displayOnMap, displayOnMapVisible, navigateToEdit, onAddPhoto, isPro, exportLabelDisabled, openExportLabel }) => {
     const { showModal, hideModal, visible } = useModal()
@@ -11,7 +12,7 @@ const useControlBar = ({ deleteItem, itemType, displayOnMap, displayOnMapVisible
             key: 'show_on_map',
             icon: 'map',
             pack: null,
-            label: 'Show on map',
+            label: translateView('showOnMap'),
             inactive: false,
             onPress: displayOnMap
         })
@@ -21,7 +22,7 @@ const useControlBar = ({ deleteItem, itemType, displayOnMap, displayOnMapVisible
             key: 'add_photo',
             icon: 'camera',
             pack: null,
-            label: 'Add a photo',
+            label: translateView('addPhoto'),
             inactive: !isPro,
             onPress: onAddPhoto
         })
@@ -29,7 +30,7 @@ const useControlBar = ({ deleteItem, itemType, displayOnMap, displayOnMapVisible
             key: 'add_reading',
             icon: 'plus-circle',
             pack: null,
-            label: 'Add reading',
+            label: translateView('addReading'),
             inactive: false,
             onPress: showModal
         })
@@ -39,7 +40,7 @@ const useControlBar = ({ deleteItem, itemType, displayOnMap, displayOnMapVisible
         key: 'edit',
         icon: 'edit',
         pack: null,
-        label: 'Edit',
+        label: translateView('edit'),
         inactive: false,
         onPress: navigateToEdit
     })
@@ -49,7 +50,7 @@ const useControlBar = ({ deleteItem, itemType, displayOnMap, displayOnMapVisible
             key: 'create_label',
             icon: 'pricetags',
             pack: null,
-            label: 'Create label',
+            label: translateView('createLabel'),
             inactive: false,
             disabled: exportLabelDisabled,
             onPress: openExportLabel
@@ -59,7 +60,7 @@ const useControlBar = ({ deleteItem, itemType, displayOnMap, displayOnMapVisible
         key: 'delete',
         icon: 'trash',
         pack: null,
-        label: 'Delete',
+        label: translateView('delete'),
         inactive: false,
         onPress: deleteItem,
         status: 'danger'

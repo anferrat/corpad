@@ -4,6 +4,7 @@ import { useTestPointReadings } from '../hooks/useTestPointReadings'
 import SheetHeader from '../../components/SheetHeader'
 import { TestPointReadingOptions } from '../../../../constants/global'
 import { TestPointReadingOptionLabels } from '../../../../constants/labels'
+import { translateBottomSheet } from '../../../../localization'
 
 
 const TestPointReadingList = ({ closeSheet }) => {
@@ -11,7 +12,7 @@ const TestPointReadingList = ({ closeSheet }) => {
     return (
         <>
             <SheetHeader
-                title='Readings'
+                title={translateBottomSheet('readings')}
                 onClosePress={closeSheet} />
             {Object.values(TestPointReadingOptions).map(reading =>
                 <RadioListItem

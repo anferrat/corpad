@@ -7,13 +7,11 @@ import { globalStyle } from '../../../../../styles/styles'
 import { PipelineMaterials, PipelineProducts, PipeDiameters } from '../../../../../constants/global'
 import { PipeDiameterLabels, PipelineMaterialLabels, PipelineProductLabels } from '../../../../../constants/labels'
 
-const pipeMaterials = Object.values(PipelineMaterials).map(material => ({ item: PipelineMaterialLabels[material], index: material }))
-const pipeProducts = Object.values(PipelineProducts).map(product => ({ item: PipelineProductLabels[product], index: product }))
-const pipeDiameters = Object.values(PipeDiameters).map(diameter => ({ item: PipeDiameterLabels[diameter], index: diameter }))
-
-
 const PL = ({ update, validate, data }) => {
     const { name, defaultName, valid, licenseNumber, coating, material, nps, product, comment } = data
+    const pipeMaterials = React.useMemo(() => Object.values(PipelineMaterials).map(material => ({ item: PipelineMaterialLabels[material], index: material })), [])
+    const pipeProducts = React.useMemo(() => Object.values(PipelineProducts).map(product => ({ item: PipelineProductLabels[product], index: product })), [])
+    const pipeDiameters = React.useMemo(() => Object.values(PipeDiameters).map(diameter => ({ item: PipeDiameterLabels[diameter], index: diameter })), [])
     return (
         <View style={globalStyle.card}>
             <Input
@@ -21,7 +19,6 @@ const PL = ({ update, validate, data }) => {
                 update={update}
                 property='name'
                 maxLength={40}
-                label='Name'
                 placeholder={defaultName}
                 value={name}
                 valid={valid.name} />
@@ -31,8 +28,6 @@ const PL = ({ update, validate, data }) => {
                 property='licenseNumber'
                 valid={valid.licenseNumber}
                 maxLength={40}
-                label='Licence #'
-                placeholder='e.g. 52622-12'
                 value={licenseNumber} />
             <PipelineCoating
                 update={update}
@@ -41,29 +36,26 @@ const PL = ({ update, validate, data }) => {
                 style={styles.select}
                 placeholderOption={true}
                 update={update}
-                label='Material'
                 property='material'
                 selectedIndex={material}
                 itemList={pipeMaterials}
-                placeholder='Select material' />
+                />
             <Select
                 style={styles.select}
                 placeholderOption={true}
                 update={update}
-                label='Pipe size'
                 property='nps'
                 selectedIndex={nps}
                 itemList={pipeDiameters}
-                placeholder='Select pipe diameter' />
+                />
             <Select
-                style={styles.select} F
+                style={styles.select}
                 placeholderOption={true}
                 update={update}
-                label='Product'
                 property='product'
                 selectedIndex={product}
                 itemList={pipeProducts}
-                placeholder='Select product' />
+                />
             <Input
                 validate={validate}
                 update={update}
@@ -72,10 +64,9 @@ const PL = ({ update, validate, data }) => {
                 valid={valid.comment}
                 textAlignVertical={'top'}
                 numberOfLines={3}
-                label='Comments'
                 value={comment}
                 property='comment'
-                placeholder='Type your comments here' />
+                />
         </View>
     )
 }

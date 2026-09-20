@@ -10,13 +10,12 @@ import { TestPointTypes } from '../../../../../constants/global'
 import { TestPointTypeLabels } from '../../../../../constants/labels'
 import { TestPointTypeIcons } from '../../../../../constants/icons'
 import PhotoView from '../photos/PhotoView'
-
-const testPointTypes = Object.values(TestPointTypes).map(type => ({ item: TestPointTypeLabels[type], index: type }))
-const testPointAccessoryList = testPointTypes.map(({ index }) => ({ icon: TestPointTypeIcons[index], pack: 'cp' }))
-
+import { translateEdit } from '../../../../../localization'
 
 const TestPointView = ({ data, createSubitem, itemType, update, validate, updateLatAndLon, isPro }) => {
     const { id, name, status, testPointType, latitude, longitude, location, comment, defaultName, valid, imageUris } = data
+    const testPointTypes = React.useMemo(() => Object.values(TestPointTypes).map(type => ({ item: TestPointTypeLabels[type], index: type })), [])
+    const testPointAccessoryList = React.useMemo(() => testPointTypes.map(({ index }) => ({ icon: TestPointTypeIcons[index], pack: 'cp' })), [testPointTypes])
     return (
         <>
             <StatusView
@@ -31,7 +30,6 @@ const TestPointView = ({ data, createSubitem, itemType, update, validate, update
                     value={name}
                     valid={valid.name}
                     property='name'
-                    label='Name'
                     placeholder={defaultName} />
                 <Select
                     style={styles.select}
@@ -40,7 +38,7 @@ const TestPointView = ({ data, createSubitem, itemType, update, validate, update
                     property='testPointType'
                     itemList={testPointTypes}
                     selectedIndex={testPointType}
-                    label='Test point type' />
+                    />
                 <LocationView
                     updateLatAndLon={updateLatAndLon}
                     update={update}
@@ -54,10 +52,9 @@ const TestPointView = ({ data, createSubitem, itemType, update, validate, update
                     validate={validate}
                     maxLength={80}
                     valid={valid.location}
-                    label='Location'
                     value={location}
                     property='location'
-                    placeholder='Location description' />
+                    />
                 <Input
                     update={update}
                     validate={validate}
@@ -66,10 +63,9 @@ const TestPointView = ({ data, createSubitem, itemType, update, validate, update
                     valid={valid.comment}
                     textAlignVertical={'top'}
                     numberOfLines={3}
-                    label='Comments'
                     value={comment}
                     property='comment'
-                    placeholder='Type your comments here' />
+                    />
                 {isPro ?
                     <PhotoView
                         itemId={id}
@@ -78,7 +74,7 @@ const TestPointView = ({ data, createSubitem, itemType, update, validate, update
                     : null}
                 <View style={styles.button}>
                     <CreateSubitemButton
-                        title={'Add reading'}
+                        title={translateEdit('addReading')}
                         onSelect={createSubitem}
                         itemType={itemType} />
                 </View>
@@ -99,4 +95,3 @@ const styles = StyleSheet.create({
         paddingBottom: 12
     }
 })
-

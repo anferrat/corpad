@@ -3,6 +3,7 @@ import { View, StyleSheet } from 'react-native'
 import { Button } from '@ui-kitten/components'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import useFilterApplyButton from '../hooks/useFilterApplyButton'
+import { translateBottomSheet } from '../../../../localization'
 
 
 const FilterButtons = ({ resetVisible, applyVisible, onResetPress, closeSheet }) => {
@@ -17,7 +18,7 @@ const FilterButtons = ({ resetVisible, applyVisible, onResetPress, closeSheet })
                 style={styles.button}
                 appearance='outline'
                 onPress={onResetPress}>
-                Clear filters
+                {translateBottomSheet('clearFilters')}
             </Button>
             : <View
                 style={styles.button} />
@@ -26,7 +27,7 @@ const FilterButtons = ({ resetVisible, applyVisible, onResetPress, closeSheet })
             <Button
                 style={styles.button}
                 onPress={onApplyPress}>
-                Apply
+                {translateBottomSheet('apply')}
             </Button>
             : null}
     </View>

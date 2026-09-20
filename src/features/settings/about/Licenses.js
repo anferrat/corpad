@@ -5,6 +5,7 @@ import { StyleSheet, View } from 'react-native'
 import { default as licenses } from '../../../licenses/android/licenses.json'
 import { licenseSplitter } from './helpers/functions'
 import { licenseText } from './helpers/licenseText'
+import { translateSettings } from '../../../localization'
 
 
 const Licenses = () => {
@@ -24,7 +25,7 @@ const Licenses = () => {
                 {title}
             </Text>
             <Text category='p1'>
-                The following components are licensed under the {title} licence reproduced below:
+                 {translateSettings('licenseDescription', {title})}
             </Text>
         </View>
     )
@@ -42,10 +43,10 @@ const Licenses = () => {
             <Text
                 category='h5'
                 style={styles.header}>
-                Third Party Notices
+                 {translateSettings('thirdPartyNotices')}
             </Text>
             <Text category='p1' style={styles.headerText}>
-                The following list third party software that may be contained in portion of this app:
+                 {translateSettings('licenseListDescription')}
             </Text>
         </View>
     )

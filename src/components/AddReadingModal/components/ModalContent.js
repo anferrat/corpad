@@ -5,6 +5,7 @@ import ListItem from './ListItem'
 import { SubitemTypes } from '../../../constants/global'
 import { SubitemTypeLabels } from '../../../constants/labels'
 import { SubitemTypeIconsFilled } from '../../../constants/icons'
+import { translateAddReading } from '../../../localization'
 
 const SubitemTypeOptions = [
     SubitemTypes.PIPELINE,
@@ -41,7 +42,7 @@ const ModalContent = ({ onSelect, hideModal, subitemTypes }) => {
     return (
         <>
             <Header
-                title='Select reading'
+                title={translateAddReading('selectReading')}
                 onBackPress={hideModal} />
             <ScrollView>
                 {renderItem(subitemTypes)}

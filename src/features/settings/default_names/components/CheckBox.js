@@ -1,6 +1,7 @@
 import React from 'react'
 import { CheckBox as DefaultCheckBox } from '@ui-kitten/components'
 import { StyleSheet } from 'react-native'
+import { translateSettings } from '../../../../localization'
 
 const CheckBox = ({ pipelineNameAsDefault, pipelineNameSettingActive, onChangePipelineNameSetting }) => {
     if (pipelineNameSettingActive)
@@ -9,7 +10,7 @@ const CheckBox = ({ pipelineNameAsDefault, pipelineNameSettingActive, onChangePi
                 style={styles.visible}
                 checked={pipelineNameAsDefault}
                 onChange={onChangePipelineNameSetting}>
-                Use pipeline name as default name for pipeline test leads and risers
+                {translateSettings('usePipelineName')}
             </DefaultCheckBox>
         )
     else return null

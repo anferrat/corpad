@@ -8,6 +8,7 @@ import Hint from "../../../components/Hint"
 import RefCellItem from "./components/RefCellItem"
 import NewRefCellModal from "./components/NewRefCellModal"
 import { globalStyle } from "../../../styles/styles"
+import { translateSettings } from '../../../localization'
 
 export const ReferenceCells = () => {
     const {
@@ -46,7 +47,7 @@ export const ReferenceCells = () => {
                         appearance='hint'
                         category='label'
                         style={styles.label}>
-                        Portable reference cells
+                         {translateSettings('portableReferenceCells')}
                     </Text>
                     {referenceCells.map(({ id, uid, name, rcType, isMainReference }) =>
                         <RefCellItem
@@ -60,13 +61,13 @@ export const ReferenceCells = () => {
                     <View
                         style={styles.hint}>
                         <Hint>
-                            You can have more than one portable reference cell in a survey. Potential readings assigned to the active reference cell will be displayed in the main list. Automatically created potentials are assigned to active reference cell.
+                             {translateSettings('referenceCellsHint')}
                         </Hint>
                     </View>
                 </View>
             </ScrollView>
             <BottomButton
-                title='Add reference cell'
+                 title={translateSettings('addReferenceCell')}
                 icon='plus-circle'
                 onPress={showModal} />
         </LoadingView>

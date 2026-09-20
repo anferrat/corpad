@@ -2,6 +2,7 @@ import fieldValidation from '../../helpers/validation'
 import { thicknessTable, outerDiameters, npsList } from '../../constants/thicknessTable'
 import { referenceCellValues, referenceCellCodes, referenceCellElectrodes } from './reference_cell/ReferenceConverter'
 import { getFullDate } from '../../helpers/functions'
+import { translateCalculator } from '../../localization'
 
 const numberWithSpaces = (x) => { //move to calculator
     if (!isNaN(x) && x !== null && x !== undefined) {
@@ -272,7 +273,7 @@ export const getResult = (data, calculatorType, isMetric) => {
                         [`Spacing ${unit}`, 'Resistance ohm', 'Average resistivity ohm-cm', 'Layer resistance ohm', 'Layer resistivity ohm-cm'],
                         ...layersCalculated.map(l => [l.spacing, l.resistance, l.resistivityAverage, l.layerResistance, l.layerResistivity])
                     ],
-                    label: `${layers.length} layer${layers.length === 1 ? '' : 's'}, 0 - ${layers[layers.length - 1].spacing} ${unit}`
+                    label: translateCalculator('results.resultLabel', {count: layers.length, spacing: layers[layers.length - 1].spacing, unit})
                 }
             }
         case 'shunt':
@@ -284,20 +285,20 @@ export const getResult = (data, calculatorType, isMetric) => {
                 const shuntCurrent = fixRealValue((ratioCurrent * data.voltageDrop / ratioVoltage))
                 return ({
                     result: {
-                        title: `Shunt (${ratioVoltage} mV - ${ratioCurrent} A)`,
+                        title: translateCalculator('results.shuntTitle', {ratioVoltage, ratioCurrent}),
                         values: [
                             {
-                                title: 'Shunt factor',
+                                title: translateCalculator('results.shuntFactor'),
                                 value: factor,
                                 unit: 'A/mV'
                             },
                             {
-                                title: 'Shunt resistance',
+                                title: translateCalculator('results.shuntResistance'),
                                 value: resistance,
                                 unit: '\u03A9'
                             },
                             {
-                                title: 'Current',
+                                title: translateCalculator('inputs.current'),
                                 value: shuntCurrent,
                                 unit: 'A'
                             }
@@ -307,7 +308,7 @@ export const getResult = (data, calculatorType, isMetric) => {
                         ['Shunt ratio', 'Shunt factor A/mV', 'Shunt resistance ohm', 'Voltage drop mV', 'Current A'],
                         [`${ratioVoltage} mV - ${ratioCurrent} A`, factor, resistance, data.voltageDrop, shuntCurrent]
                     ],
-                    label: `${ratioVoltage} mV - ${ratioCurrent} A`
+                    label: translateCalculator('results.resultLabelShunt', {ratioVoltage, ratioCurrent})
                 })
             }
         case 'current2Wire': {
@@ -322,25 +323,25 @@ export const getResult = (data, calculatorType, isMetric) => {
             const current = fixRealValue(data.voltageDrop / 1000 / resistance)
             return {
                 result: {
-                    title: `Two-wire line current (${data.distance} ${unit})`,
+                    title: translateCalculator('results.twoWireTitle', {distance: data.distance, unit}),
                     values: [
                         {
-                            title: 'Steel resistivity',
+                            title: translateCalculator('results.steelResistivity'),
                             value: 14.3,
                             unit: '\u03BC\u03A9-cm'
                         },
                         {
-                            title: 'Pipe weight',
+                            title: translateCalculator('results.pipeWeight'),
                             value: fixRealValue(weight),
                             unit: weightUnit
                         },
                         {
-                            title: 'Pipe segment resistance',
+                            title: translateCalculator('results.pipeSegmentResistance'),
                             value: fixRealValue(resistance * 1000),
                             unit: 'm\u03A9'
                         },
                         {
-                            title: 'Current',
+                            title: translateCalculator('inputs.current'),
                             value: current,
                             unit: 'A'
                         }
@@ -351,7 +352,7 @@ export const getResult = (data, calculatorType, isMetric) => {
                         [`Pipe segment length ${unit}`, 'Pipe diameter', 'Pipe OD in', 'Wall thickness in', `Pipe weight ${weightUnit}`, 'Steel resistivity microohm-cm', 'Pipe segment resistance ohm', 'Current A'],
                         [data.distance, npsList[data.npsIndex], od, pipeThickness, weight, '14.3', resistance, current]
                     ],
-                label: `${data.distance} ${unit},  ${current} A`
+                label: translateCalculator('results.resultLabelDistance', {distance: data.distance, unit, current})
             }
         }
         case 'current4Wire': {
@@ -360,20 +361,20 @@ export const getResult = (data, calculatorType, isMetric) => {
             const current = fixRealValue(calibrationFactor * data.voltageDrop.off)
             return {
                 result: {
-                    title: `Four-wire line current (${data.current} A test current)`,
+                    title: translateCalculator('results.fourWireTitle', {current: data.current}),
                     values: [
                         {
-                            title: 'Section resistance',
+                            title: translateCalculator('results.sectionResistance'),
                             value: fixRealValue(resistance),
                             unit: 'm\u03A9'
                         },
                         {
-                            title: 'Calibration factor',
+                            title: translateCalculator('results.calibrationFactor'),
                             value: fixRealValue(calibrationFactor),
                             unit: 'A/mV'
                         },
                         {
-                            title: 'Current',
+                            title: translateCalculator('inputs.current'),
                             value: current,
                             unit: 'A'
                         }
@@ -384,7 +385,7 @@ export const getResult = (data, calculatorType, isMetric) => {
                         ['Voltage drop (OFF) mV', 'Test current A', 'Voltage drop (ON) mV', 'Resistance mOhm', 'Calibration factor A/mV', 'Current A'],
                         [data.voltageDrop.off, data.current, data.voltageDrop.on, resistance, calibrationFactor, current]
                     ],
-                label: `${fixRealValue(resistance)} m\u03A9, ${current} A`
+                label: translateCalculator('results.resultLabelResistance', {resistance: fixRealValue(resistance), current})
             }
         }
         case 'coating':
@@ -409,16 +410,16 @@ export const getResult = (data, calculatorType, isMetric) => {
                 const quality = getCoatingQuality(normilizedConductance)
                 return {
                     result: {
-                        title: `Coating resistance (${npsValue}, ${data.spacing} ${unit})`,
+                        title: translateCalculator('results.coatingTitle', {npsValue, spacing: data.spacing, unit}),
                         coatingQuality: quality,
                         values: [
                             {
-                                title: 'Pipe-to-earth resistance',
+                                title: translateCalculator('results.pipeToEarthResistance'),
                                 value: fixRealValue(resistance),
                                 unit: '\u03A9'
                             },
                             {
-                                title: 'Specific resistance',
+                                title: translateCalculator('results.specificResistance'),
                                 value: numberWithSpaces(fixRealValue(specificResistance)),
                                 unit: {
                                     main: `\u03A9-${unit}`,
@@ -427,12 +428,12 @@ export const getResult = (data, calculatorType, isMetric) => {
                                 }
                             },
                             {
-                                title: 'Conductance',
+                                title: translateCalculator('results.conductance'),
                                 value: fixRealValue(conductance),
                                 unit: 'S'
                             },
                             {
-                                title: 'Specific conductance',
+                                title: translateCalculator('results.specificConductance'),
                                 value: fixRealValue(specificConductance),
                                 unit: {
                                     main: `\u00B5S/${unit}`,
@@ -441,7 +442,7 @@ export const getResult = (data, calculatorType, isMetric) => {
                                 }
                             },
                             {
-                                title: 'Conductance (1000 \u03A9-cm soil)',
+                                title: translateCalculator('results.normalizedConductance'),
                                 value: fixRealValue(normilizedConductance),
                                 unit: {
                                     main: `\u00B5S/${unit}`,
@@ -467,20 +468,20 @@ export const getResult = (data, calculatorType, isMetric) => {
             const resultPotential = data.potential - (coefficient * 1000)
             return {
                 result: {
-                    title: `Potentials converter`,
+                    title: translateCalculator('results.potentialsConverter'),
                     values: [
                         {
-                            title: 'Coefficient',
+                            title: translateCalculator('results.coefficient'),
                             value: fixRealValue(coefficient),
                             unit: 'V'
                         },
                         {
-                            title: 'Target reference',
+                            title: translateCalculator('results.targetReference'),
                             value: referenceCellElectrodes[data.targetType],
                             unit: ''
                         },
                         {
-                            title: 'Converted potential',
+                            title: translateCalculator('results.convertedPotential'),
                             value: fixRealValue(resultPotential),
                             unit: {
                                 main: `mV`,
@@ -493,7 +494,7 @@ export const getResult = (data, calculatorType, isMetric) => {
                     ['Initial reference cell', `Initial potential mV(${referenceCellCodes[data.initialType]})`, 'Target reference cell', 'Coefficient V', `Converted potential mV(${referenceCellCodes[data.targetType]})`],
                     [referenceCellElectrodes[data.initialType], data.potential, referenceCellElectrodes[data.targetType], coefficient, resultPotential]
                 ],
-                label: `${referenceCellCodes[data.initialType]} -> ${referenceCellCodes[data.targetType]}`,
+                label: translateCalculator('results.resultLabelReference', {initialCode: referenceCellCodes[data.initialType], targetCode: referenceCellCodes[data.targetType]}),
             }
         }
         default:

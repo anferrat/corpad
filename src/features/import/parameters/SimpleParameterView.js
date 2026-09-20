@@ -13,6 +13,7 @@ import { fieldProperties } from '../../../constants/fieldProperties'
 import Hint from '../../../components/Hint'
 import { parseIndex } from './helpers/functions'
 import BottomButton from '../../../components/BottomButton'
+import { translateImport } from '../../../localization'
 
 const fileIcon = {
     icon: 'file-text-outline',
@@ -93,7 +94,7 @@ const InputFieldParamaters = ({ value, property, subitemIndex, potentialIndex, g
                         style={styles.radio}
                         onChange={defaultValueImportType}
                         checked={importType === 0}>
-                        Use fixed value for each imported item
+                        {translateImport('parameters.fixedValue')}
                     </Radio>
                     {importType !== 0 ? null :
                         <InputField
@@ -110,7 +111,7 @@ const InputFieldParamaters = ({ value, property, subitemIndex, potentialIndex, g
                         style={styles.radio}
                         onChange={fieldIndexImportType}
                         checked={importType === 1}>
-                        Use values from a column in data file
+                        {translateImport('parameters.valuesFromColumn')}
                     </Radio>
                     {importType !== 1 ? null :
                         <>
@@ -118,7 +119,7 @@ const InputFieldParamaters = ({ value, property, subitemIndex, potentialIndex, g
                                 <SelectField
                                     style={styles.field}
                                     disabled={importType !== 1}
-                                    placeholder={'Select data column'}
+                                    placeholder={translateImport('parameters.selectDataColumn')}
                                     itemList={fields}
                                     selectedIndex={fieldIndex}
                                     onSelect={setFieldIndex}
@@ -127,12 +128,12 @@ const InputFieldParamaters = ({ value, property, subitemIndex, potentialIndex, g
                                     <SelectField
                                         style={styles.unitSelect}
                                         disabled={importType !== 1 || unitList.length === 1}
-                                        placeholder={'Unit'}
+                                        placeholder={translateImport('parameters.unit')}
                                         selectedIndex={unit}
                                         itemList={unitList}
                                         onSelect={setUnit} /> : null}
                             </View>
-                            <Hint hidden={unitList.length === 0 || importType !== 1} text='Unit must match the one used in spreadsheet' />
+                            <Hint hidden={unitList.length === 0 || importType !== 1} text={translateImport('parameters.unitHint')} />
                         </>
                     }
                     {property === 'name' ?
@@ -141,14 +142,14 @@ const InputFieldParamaters = ({ value, property, subitemIndex, potentialIndex, g
                                 style={styles.radio}
                                 onChange={defaultNameImportType}
                                 checked={importType === 2}>
-                                Use default name values
+                                {translateImport('parameters.defaultName')}
                             </Radio>
                             {importType !== 2 || subitemIndex !== null ? null :
                                 <InputField
                                     style={styles.field}
                                     placeholder={'1'}
                                     keyboardType='numeric'
-                                    label='Start with index'
+                                    label={translateImport('parameters.startIndex')}
                                     disabled={importType !== 2}
                                     value={defaultValue}
                                     onChangeText={setDefaultValue}
@@ -164,11 +165,11 @@ const InputFieldParamaters = ({ value, property, subitemIndex, potentialIndex, g
                                 style={styles.radio}
                                 onChange={fieldIndexMergedImportType}
                                 checked={importType === 3}>
-                                Merge values from two or more columns in data file
+                                {translateImport('parameters.mergeColumns')}
                             </Radio>
                             {importType === 3 ? <MultiSelect
                                 disabled={importType !== 3}
-                                placeholder={'Select data columns'}
+                                placeholder={translateImport('parameters.selectDataColumns')}
                                 style={styles.field}
                                 itemList={fields}
                                 selectedItems={fieldIndexList}
@@ -179,7 +180,7 @@ const InputFieldParamaters = ({ value, property, subitemIndex, potentialIndex, g
                 </View>
             </ScrollView>
             <BottomButton
-                title='Save'
+                title={translateImport('parameters.save')}
                 onPress={onSaveHandler}
                 icon='save' />
         </>
@@ -211,4 +212,3 @@ const styles = StyleSheet.create({
         paddingLeft: 12
     }
 })
-

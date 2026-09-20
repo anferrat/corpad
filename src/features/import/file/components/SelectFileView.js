@@ -4,12 +4,13 @@ import { Button, Icon, Text } from '@ui-kitten/components'
 import { basic400, primary } from '../../../../styles/colors'
 import ModalContent from './ModalContent'
 import useModal from '../../../../hooks/useModal'
+import { translateImport } from '../../../../localization'
 
 const SelectFileView = (props) => {
     const { showModal, hideModal, visible } = useModal(false)
     return (
         <>
-            <Text style={styles.title}>SELECT FILE</Text>
+            <Text style={styles.title}>{translateImport('file.selectFile').toUpperCase()}</Text>
             <View style={styles.mainView}>
                 <Icon
                     style={styles.icon}
@@ -19,11 +20,11 @@ const SelectFileView = (props) => {
                     appearance={'hint'}
                     style={styles.text}
                     category='s1'>
-                    Supported formats (.xlsx, .csv)
+                    {translateImport('file.supportedFormats')}
                     <Button
                         onPress={showModal}
                         appearance='ghost'>
-                        Learn about file formatting
+                        {translateImport('file.learnFormatting')}
                     </Button>
                 </Text>
 

@@ -5,6 +5,7 @@ import { deleteReferenceCell, getAllReferenceCells, updateMainReferenceCell, cre
 import { errorHandler, warningHandler } from '../../../../helpers/error_handler'
 import useModal from '../../../../hooks/useModal'
 import fieldValidation from '../../../../helpers/validation'
+import { translateSettings } from '../../../../localization'
 
 const initRefCell = {
     name: null,
@@ -54,7 +55,7 @@ const useRefCellData = () => {
     }, [])
 
     const deleteReference = useCallback(async (id) => {
-        const confirm = await warningHandler(22, 'Delete', 'Cancel')
+        const confirm = await warningHandler(22, translateSettings('delete'), translateSettings('cancel'))
         if (confirm) {
             const { status } = await deleteReferenceCell({ id }, er => errorHandler(er))
             if (status === 200)

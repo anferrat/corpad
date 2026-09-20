@@ -2,19 +2,20 @@ import React from 'react'
 import { View, StyleSheet, ActivityIndicator } from 'react-native'
 import { Icon, Text } from '@ui-kitten/components'
 import { basic, primary } from '../../../../styles/colors'
+import { translateMap } from '../../../../localization'
 
 const EmptyList = ({ searching }) => {
     if (!searching)
         return (
             <View
                 style={styles.main}>
-                <Text category='p1' style={styles.mainText}>No results found on map</Text>
-                <Text category='s2' style={styles.text}>Try different search parameter or reset filters. Items without coordinates will not be displayed here.</Text>
+                <Text category='p1' style={styles.mainText}>{translateMap('noResults')}</Text>
+                <Text category='s2' style={styles.text}>{translateMap('searchHint')}</Text>
             </View>
         )
     else
         return <View style={styles.searching}>
-            <Text category='s2' appearance='hint' style={styles.text}> Searching...</Text>
+            <Text category='s2' appearance='hint' style={styles.text}>{translateMap('searching')}</Text>
         </View>
 }
 

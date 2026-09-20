@@ -14,6 +14,7 @@ import { warningHandler } from '../../../helpers/error_handler'
 import { getFieldValues } from './helpers/functions'
 import MappingHint from './components/MappingHint'
 import BottomButton from '../../../components/BottomButton'
+import { translateImport } from '../../../localization'
 
 const fileIcon = {
     icon: 'file-text-outline',
@@ -85,7 +86,7 @@ const SelectFieldParamaters = (props) => {
                         style={styles.radio}
                         onChange={defaultValueImportType}
                         checked={importType === 0}>
-                        Use fixed value for each item
+                        {translateImport('parameters.fixedValueShort')}
                     </Radio>
                     {importType === 0 ?
                         <Select
@@ -100,13 +101,13 @@ const SelectFieldParamaters = (props) => {
                         style={styles.radio}
                         onChange={fieldIndexImportType}
                         checked={importType === 1}>
-                        Use values from a column in data file
+                        {translateImport('parameters.valuesFromColumn')}
                     </Radio>
                     {importType === 1 ? <>
                         <Select
                             style={styles.field}
                             disabled={importType !== 1}
-                            placeholder={'Select data column'}
+                            placeholder={translateImport('parameters.selectDataColumn')}
                             accessory={fileIcon}
                             itemList={props.fields}
                             selectedIndex={fieldIndex}
@@ -124,7 +125,7 @@ const SelectFieldParamaters = (props) => {
                             itemList={itemList}
                             fieldValues={fieldValues}
                             attributeMap={attributeMap} />
-                        <Text category='h6'>Mapped attributes</Text>
+                        <Text category='h6'>{translateImport('parameters.mappedAttributes')}</Text>
                         <AttributeMapper
                             property={props.property}
                             attributeMap={attributeMap}
@@ -134,7 +135,7 @@ const SelectFieldParamaters = (props) => {
                     </View>}
             </ScrollView >
             <BottomButton
-                title='Save'
+                title={translateImport('parameters.save')}
                 icon='save'
                 onPress={onSaveHandler} />
         </>
@@ -158,4 +159,3 @@ const styles = StyleSheet.create({
         paddingBottom: 72
     }
 })
-

@@ -5,6 +5,7 @@ import { getItemById } from "../../../../app/controllers/survey/items/ItemContro
 import { Platform, ToastAndroid } from "react-native"
 import { useIsFocused } from "@react-navigation/native"
 import { useSelector } from "react-redux"
+import { translateSettings } from '../../../../localization'
 
 const defaultItem = {
     id: null,
@@ -106,7 +107,7 @@ const useImageList = ({ goBack, navigateToItem }) => {
                 () => {
                     //use ToastAndroid here since image view will be covering other Toasts
                     if (Platform.OS === 'android')
-                        ToastAndroid.showWithGravity('Saved to Downloads', 1000, ToastAndroid.BOTTOM)
+                        ToastAndroid.showWithGravity(translateSettings('savedToDownloads'), 1000, ToastAndroid.BOTTOM)
                 }
             )
         }

@@ -57,7 +57,7 @@ export class AddLinkDataToSurvey {
         //Happens when user attempts to insert item with uid that already exists. UID must be unique for each individual item.
         const uidExists = await this._doesUidExist(item)
         if (uidExists) {
-            const confirm = await this.warningHandler.execute(`${ItemTypeLabels[item.itemType]} with exactly same UID already exists in the current survey. Use "Find in the survey" button to view it. If you proceed, new UID will be assigned to the newly created item.`, 'Proceed', 'Cancel')
+            const confirm = await this.warningHandler.execute({ key: 'warnings.messages.duplicateUid', params: { itemType: ItemTypeLabels[item.itemType] } }, 'Proceed', 'Cancel')
             if (confirm)
                 item.setUid(guid())
             else
@@ -71,7 +71,7 @@ export class AddLinkDataToSurvey {
         if (missingReferenceCellTypes.length === 0)
             return referenceCellMap
         else {
-            const confirm = await this.warningHandler.execute('Some of the reference cell types are missing in current survey. If you proceed, missing reference cells will be created automatically.', 'Proceed', 'Cancel')
+            const confirm = await this.warningHandler.execute({ key: 'warnings.messages.missingReferenceCells' }, 'Proceed', 'Cancel')
             if (confirm) {
                 await this._createReferenceCells(missingReferenceCellTypes)
                 const dbReferenceCells = await this.referenceCellRepo.getAll()

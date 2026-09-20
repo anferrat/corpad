@@ -1,6 +1,7 @@
 import React from 'react'
 import { View, StyleSheet } from 'react-native'
 import InputDataField from './InputDataField'
+import { translateCalculator } from '../../../localization'
 
 const DataLine = (props) => {
     return <View style={styles.mainView}>
@@ -13,7 +14,7 @@ const DataLine = (props) => {
             setValue={props.setValue}
             setValid={props.setValid}
             label={props.label}
-            placeholder='ON'
+            placeholder={translateCalculator('common.on')}
             value={props.data.on}
             valid={props.valid.on}
             unit={props.unit} />
@@ -25,7 +26,7 @@ const DataLine = (props) => {
             disabled={props.disabled}
             setValue={props.setValue}
             setValid={props.setValid}
-            placeholder='OFF'
+            placeholder={translateCalculator('common.off')}
             value={props.data.off}
             valid={props.valid.off}
             unit={props.unit} />

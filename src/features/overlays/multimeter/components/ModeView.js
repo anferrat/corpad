@@ -1,13 +1,14 @@
 import React from 'react'
 import ModeToken from './ModeToken'
 import Wrapper from './Wrapper'
+import { translateMultimeterOverlay } from '../../../../localization'
 
 
 const ModeView = ({ modes, onSelect, updatingMode, selectedMode, updating }) => {
 
     return (
         <Wrapper
-            title='Measurement modes'>
+            title={translateMultimeterOverlay('measurementModes')}>
             {modes.map(mode =>
                 <ModeToken
                     key={mode}

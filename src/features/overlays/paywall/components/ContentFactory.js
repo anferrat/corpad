@@ -4,6 +4,7 @@ import { SubscriptionStatuses } from '../../../../constants/global'
 import Message from './Message'
 import Features from './Features'
 import StatusMessage from './StatusMessage'
+import { translateOverlay } from '../../../../localization'
 
 
 const ContentFactory = ({ status, expirationTime }) => {
@@ -14,15 +15,15 @@ const ContentFactory = ({ status, expirationTime }) => {
                 <StatusMessage
                     expirationTime={expirationTime} />
                 <Message
-                    message='Thank you for subscribing! Your contribution directly fuels the development of new features and improvements to make this app even better.'
+                    message={translateOverlay('paywall.thankYou')}
                 />
             </>
         case SubscriptionStatuses.UNKNOWN_NOT_GRANTED:
             return <Message
-                message="You have been offline for a while. To confirm your subscription status and gain acces to premium features, simply press the button below while connected to the internet." />
+                message={translateOverlay('paywall.offline')} />
         case SubscriptionStatuses.PENDING:
             return <Message
-                message="We are currently obtaining your subcription status. It should take less than a minute." />
+                message={translateOverlay('paywall.pending')} />
         default:
             return <Features />
     }

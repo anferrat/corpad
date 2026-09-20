@@ -8,6 +8,7 @@ import { setImportSubitemSetting } from '../../../../store/actions/importData'
 import { getSideIcon } from '../helpers/functions'
 import Hint from '../../../../components/Hint'
 import { basic } from '../../../../styles/colors'
+import { translateImport } from '../../../../localization'
 
 
 const Sides = ({ sideTypes }) => {
@@ -28,10 +29,10 @@ const Sides = ({ sideTypes }) => {
             {fromAtoB !== null ?
                 <View style={styles.hintView}>
                     <Hint>
-                        Current travels from side {fromAtoB ? 'A to side B.' : 'B to side A.'}
+                        {translateImport('item.currentDirection', { direction: translateImport(fromAtoB ? 'item.sideDirection.aToB' : 'item.sideDirection.bToA') })}
                     </Hint>
                     <Pressable onPress={onChangeDirection}>
-                        <Text status='primary' style={styles.link} category='label'>Change</Text>
+                        <Text status='primary' style={styles.link} category='label'>{translateImport('item.change')}</Text>
                     </Pressable>
                 </View> : fromAtoB}
         </View>

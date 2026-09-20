@@ -10,10 +10,11 @@ import EmptyListComponent from '../../components/EmptyListComponent'
 import LoadingView from '../../components/LoadingView'
 import { getCalculatorListByType } from '../../app/controllers/CalculatorController'
 import { CalculatorTypeIconPacks, CalculatorTypeIcons } from '../../constants/icons'
-import { CalculatorTypeTitleLabels } from '../../constants/labels'
 import { SafeAreaProvider } from 'react-native-safe-area-context'
 import BottomButton from '../../components/BottomButton'
 import Header from '../../components/Header'
+import { translate } from '../../localization'
+import { calculatorTypeKey, translateCalculator } from '../../localization'
 
 
 const HistoryModal = (props) => {
@@ -54,7 +55,7 @@ const HistoryModal = (props) => {
                 onDeleteHandler={deleteHistoryItem.bind(this, item.id)}
                 icon={CalculatorTypeIcons[props.calculatorType]}
                 pack={CalculatorTypeIconPacks[props.calculatorType]}
-                title={`${CalculatorTypeTitleLabels[props.calculatorType]} (${item.name})`}
+                title={`${translateCalculator(`titles.${calculatorTypeKey(props.calculatorType)}`)} (${item.name})`}
                 subtitle={getFormattedDate(item.timeCreated)}
             />
         )
@@ -66,7 +67,7 @@ const HistoryModal = (props) => {
     }, [setHistoryList])
 
     const deleteAllHandler = React.useCallback(async () => {
-        const confirm = await warningHandler(47, 'Delete all', 'Cancel')
+        const confirm = await warningHandler(47, translate('actions.deleteAll'), translate('actions.cancel'))
         if (confirm) {
             setLoading(true)
             const deleteConfirm = await props.onDeleteAllHandler()
@@ -83,7 +84,7 @@ const HistoryModal = (props) => {
 
     return (
         <>
-            <Button appearance='ghost' onPress={displayModal} style={styles.button}>History...</Button>
+            <Button appearance='ghost' onPress={displayModal} style={styles.button}>{translate('calculator.history')}</Button>
             <Modal
                 animationType="slide"
                 visible={visible}
@@ -91,10 +92,10 @@ const HistoryModal = (props) => {
                 <SafeAreaProvider>
                     <Header
                         onBackPress={hideModal}
-                        title='Saved calculations' />
+                        title={translate('calculator.savedCalculations')} />
                     <LoadingView loading={loading}>
                         <FlatList
-                            ListEmptyComponent={<EmptyListComponent title={'No calculations found'} description={'After completing a calculation press save button to find it here.'} icon='list-outline' />}
+                            ListEmptyComponent={<EmptyListComponent title={translate('calculator.noCalculations')} description={translateCalculator('common.noCalculationsDescription')} icon='list-outline' />}
                             style={styles.flatList}
                             contentContainerStyle={styles.container}
                             data={historyList}
@@ -105,7 +106,7 @@ const HistoryModal = (props) => {
                     {historyList.length > 0 ?
                         <BottomButton
                             icon='trash'
-                            title='Delete all'
+                            title={translate('calculator.deleteAll')}
                             onPress={deleteAllHandler}
                             disabled={loading}
                         /> : null

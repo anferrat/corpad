@@ -2,6 +2,7 @@ import { useCallback, useEffect, useRef, useState } from "react"
 import { useDispatch } from 'react-redux'
 import { findItems, findItemsByCoordinate } from "../../../../../app/controllers/survey/other/ExternalLinkController"
 import { hideLoader, updateLoader } from "../../../../../store/actions/settings"
+import { translateOverlay } from '../../../../../localization'
 
 const useFindItemInSurvey = ({ uid, name, latitude, longitude, itemType, navigateToItem, goBack }) => {
     const dispatch = useDispatch()
@@ -42,7 +43,7 @@ const useFindItemInSurvey = ({ uid, name, latitude, longitude, itemType, navigat
     }, [])
 
     const searchByDistance = useCallback(async () => {
-        dispatch(updateLoader('Seraching...'))
+        dispatch(updateLoader(translateOverlay('externalLink.searching')))
         setMatches(state => ({
             ...state,
             distanceLoading: true

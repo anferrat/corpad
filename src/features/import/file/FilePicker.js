@@ -5,6 +5,7 @@ import { file, plusCircle } from '../../../components/Icons'
 import { control } from '../../../styles/colors'
 import IconButton from '../../../components/IconButton'
 import useImportFile from './hooks/useImportFile'
+import { translateImport } from '../../../localization'
 
 const FilePicker = ({ navigateToSpreadsheet }) => {
     const { selectFile, resetFile, fileName, path, rows, columns, loading } = useImportFile()
@@ -24,7 +25,7 @@ const FilePicker = ({ navigateToSpreadsheet }) => {
                         <ActivityIndicator color={control} /> :
                         plusCircle}
                     disabled={loading}>
-                    Select file
+                    {translateImport('file.selectFile')}
                 </Button>
             </>
         )
@@ -32,7 +33,7 @@ const FilePicker = ({ navigateToSpreadsheet }) => {
         <ListItem
             title={fileName}
             onPress={navigateToSpreadsheet.bind(this, path, fileName)}
-            description={`Rows: ${rows}, Columns: ${columns}`}
+            description={translateImport('file.rowsColumns', { rows, columns })}
             accessoryLeft={file}
             accessoryRight={ResetIcon} />
     )

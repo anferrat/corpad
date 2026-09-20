@@ -5,6 +5,7 @@ import Header from '../Header'
 import PoitentialListItem from './components/PoitentialListItem'
 import { basic } from '../../styles/colors'
 import { SafeAreaProvider } from 'react-native-safe-area-context'
+import { translatePotentialSelection } from '../../localization'
 
 const PotentialTypesModal = ({ potentialTypes, itemList, onSelect, dismiss }) => {
     const displayList = potentialTypes.map((pt, i) => ({ index: i, potentialType: pt }))
@@ -23,13 +24,13 @@ const PotentialTypesModal = ({ potentialTypes, itemList, onSelect, dismiss }) =>
     return (
         <SafeAreaProvider>
             <Header
-                title='Select potential type'
+                title={translatePotentialSelection('selectPotentialType')}
                 onBackPress={dismiss} />
             <ScrollView style={styles.mainView}>
                 {genTitleOptions()}
                 <View style={styles.hint}>
                     <Icon name='info-outline' fill={basic} style={styles.hintIcon} />
-                    <Text category='s2' appearance='hint'>Create custom potentials types in Settings {`->`} Potentials</Text>
+                    <Text category='s2' appearance='hint'>{translatePotentialSelection('customPotentialsHint')}</Text>
                 </View>
             </ScrollView>
         </SafeAreaProvider>

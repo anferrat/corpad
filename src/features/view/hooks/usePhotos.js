@@ -13,10 +13,11 @@ import { PHOTO_LIMIT } from "../../../constants/global"
 import { Platform, ToastAndroid } from "react-native"
 import { useSelector } from "react-redux"
 import { isProStatus } from "../../../helpers/functions"
+import { translateView } from '../../../localization'
 
 const usePhotos = ({ itemId, itemType }) => {
     const listRef = useRef()
-    const name = useSelector(state => state.item.view.name ?? 'Error')
+    const name = useSelector(state => state.item.view.name ?? translateView('error'))
     const subscriptionStatus = useSelector(state => state.settings.subscription.status)
     const isPro = isProStatus(subscriptionStatus)
     const componentMounted = useRef(true)
@@ -70,7 +71,7 @@ const usePhotos = ({ itemId, itemType }) => {
 
         const onPhotoAdd = EventRegister.addEventListener('PHOTO_ADDED', async (photo) => {
             if (photo.itemId === itemId && photo.itemType === itemType && isFocused) {
-                dispatch(updateLoader('Adding image', ImageSourceLabels[photo.imageSource]))
+                dispatch(updateLoader(translateView('addingImage'), ImageSourceLabels[photo.imageSource]))
                 const { status, response } = await addPhotoToAssets({ uri: photo.uri, name: photo.name, itemId, itemType })
                 if (status === 200) {
                     setPhotos(state => [response].concat(state))
@@ -106,16 +107,16 @@ const usePhotos = ({ itemId, itemType }) => {
         if (imageView.visible) {
             const { status } = await savePhotoToDownloads({ path: photos[imageView.index].source.uri, name }, er => errorHandler(er))
             if (Platform.OS === 'android' && status === 200)
-                ToastAndroid.showWithGravity('Saved to Downloads', 1000, ToastAndroid.BOTTOM)
+                ToastAndroid.showWithGravity(translateView('savedToDownloads'), 1000, ToastAndroid.BOTTOM)
         }
     }
 
     const onDeletePhoto = async () => {
         if (imageView.visible) {
-            const confirm = await warningHandler(48, 'Delete', 'Cancel')
+            const confirm = await warningHandler(48, translateView('delete'), translateView('cancel'))
             if (confirm) {
                 setImageView({ index: 0, visible: false })
-                dispatch(updateLoader('Deleting photo'))
+                dispatch(updateLoader(translateView('deletingPhoto')))
                 await deletePhotoFromAssets({ assetId: photos[imageView.index].id, fileName: photos[imageView.index].fileName, parentId: itemId, parentType: itemType },
                     er => errorHandler(er),
                     ({ currentTime }) => EventRegister.emit('ASSET_REMOVED', { assetId: photos[imageView.index].id, itemType, itemId, currentTime }))

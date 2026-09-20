@@ -5,6 +5,7 @@ import { basic } from '../../../styles/colors'
 import Unit from '../../../components/Unit'
 import { LengthUnitLabels, ResistivityUnitLabels } from '../../../constants/labels'
 import { displayResistance, displayResistivity, displaySpacing } from '../helpers/functions'
+import { translateView } from '../../../localization'
 
 
 const ResistivityLayerView = ({ startSpacing, endSpacing, spacingUnit, resistance, resistivity, resistivityUnit }) => {
@@ -25,15 +26,15 @@ const ResistivityLayerView = ({ startSpacing, endSpacing, spacingUnit, resistanc
                     numberOfLines={1}
                     ellipsizeMode={'tail'}
                     style={styles.mainTitle}>
-                    Layer ({s1} - {s2} {LengthUnitLabels[spacingUnit]})
+                    {translateView('layer', { start: s1, end: s2, unit: LengthUnitLabels[spacingUnit] })}
                 </Text>
             </View>
             <DataRow
-                label='Resistance'
+                label={translateView('resistance')}
                 value={r1}
                 unit={'\u03A9'} />
             <DataRow
-                label='Resistivity'
+                label={translateView('resistivity')}
                 value={r2}
                 unit={ResistivityUnitLabels[resistivityUnit]} />
         </View>
@@ -57,7 +58,7 @@ const DataRow = ({ label, value, unit }) => (
                 style={styles.value}
                 numberOfLines={1}
                 ellipsizeMode={'tail'}>
-                {value ?? 'Error'}
+                {value ?? translateView('error')}
             </Text>
             <Unit
                 unit={unit} />

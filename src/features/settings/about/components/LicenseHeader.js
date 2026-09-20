@@ -1,6 +1,7 @@
 import React from 'react'
 import { View, StyleSheet } from 'react-native'
 import { Text } from '@ui-kitten/components'
+import { translateSettings } from '../../../../localization'
 
 
 const ListHeader = () => {
@@ -10,7 +11,7 @@ const ListHeader = () => {
             <Text
                 category='h3'
                 style={styles.header}>
-                Third Party Notices
+                {translateSettings('thirdPartyNotices')}
             </Text>
         </View>
     )

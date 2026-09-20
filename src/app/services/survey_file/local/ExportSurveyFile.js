@@ -23,7 +23,7 @@ export class ExportSurveyFile {
     async _copyAssets(assets, uid) {
         const localAssetFiles = await this.fileSystemRepo.readDir(FileSystemLocations.ASSETS, uid)
         const { missingAssets } = await this.assetFileUploadControl.execute(assets, [], localAssetFiles)
-        const confirm = missingAssets.length === 0 || await this.warningHandler.execute(`There are missing ${missingAssets.length} assets (e.g. photos) for this survey. They will be removed from exported survey. Do you wish to continue?`, 'Continue', 'Cancel')
+        const confirm = missingAssets.length === 0 || await this.warningHandler.execute({ key: 'warnings.messages.missingAssets', params: { count: missingAssets.length } }, 'Continue', 'Cancel')
         if (confirm) {
             await this.fileSystemRepo.removeDir(FileSystemLocations.TEMP_ASSETS)
             const tempAssetsFolderPath = await this.fileSystemRepo.getLocation(FileSystemLocations.TEMP_ASSETS)

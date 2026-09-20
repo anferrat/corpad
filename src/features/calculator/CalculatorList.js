@@ -5,23 +5,23 @@ import { Text } from '@ui-kitten/components'
 import ListItem from './components/ListItemSettings'
 import { CalculatorTypes } from '../../constants/global'
 import { CalculatorTypeIconPacks, CalculatorTypeIcons } from '../../constants/icons'
-import { CalculatorTypeDescriptionLabels, CalculatorTypeLabels } from '../../constants/labels'
+import { calculatorTypeKey, translateCalculator } from '../../localization'
 
 export const calculatorParams = [
     {
-        title: 'Current',
+        title: 'current',
         calculators: [CalculatorTypes.SHUNT, CalculatorTypes.CURRENT_TWO_WIRE, CalculatorTypes.CURRENT_FOUR_WIRE]
     },
     {
-        title: 'Soil',
+        title: 'soil',
         calculators: [CalculatorTypes.WENNER]
     },
     {
-        title: 'Coating',
+        title: 'coating',
         calculators: [CalculatorTypes.COATING]
     },
     {
-        title: 'Other',
+        title: 'other',
         calculators: [CalculatorTypes.REFERENCE_CELL]
     },
 ]
@@ -37,15 +37,15 @@ const CalculatorList = (props) => {
                     <Text
                         style={styles.title}
                         appearance='hint'>
-                        {section.title}
+                        {translateCalculator(`categories.${section.title}`)}
                     </Text>
                     {section.calculators.map(calculator =>
                         <ListItem
                             pack={CalculatorTypeIconPacks[calculator]}
                             iconName={CalculatorTypeIcons[calculator]}
                             key={calculator}
-                            title={CalculatorTypeLabels[calculator]}
-                            subtitle={CalculatorTypeDescriptionLabels[calculator]}
+                            title={translateCalculator(`types.${calculatorTypeKey(calculator)}`)}
+                            subtitle={translateCalculator(`descriptions.${calculatorTypeKey(calculator)}`)}
                             onPress={props.navigateToCalculator.bind(this, calculator)} />)}
                 </React.Fragment>
             ))}

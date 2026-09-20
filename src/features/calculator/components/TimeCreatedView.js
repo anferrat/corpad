@@ -2,6 +2,7 @@ import React from 'react'
 import { View, StyleSheet } from 'react-native'
 import { Text } from '@ui-kitten/components'
 import { getFullDate } from '../../../helpers/functions'
+import { translate } from '../../../localization'
 
 
 const TimeCreatedView = ({ timeCreated, disabled }) => {
@@ -10,7 +11,7 @@ const TimeCreatedView = ({ timeCreated, disabled }) => {
     return (
         <View
             style={styles.container}>
-            <Text category='label' appearance='hint'>Calculated</Text>
+            <Text category='label' appearance='hint'>{translate('calculator.calculated')}</Text>
             <Text category='s2' appearance='hint'>{getFullDate(timeCreated)}</Text>
         </View>
     )

@@ -2,6 +2,7 @@ import React from 'react'
 import { StyleSheet } from 'react-native'
 import { Icon, Text, } from '@ui-kitten/components'
 import { basic400 } from '../../../../styles/colors'
+import { translateOverlay } from '../../../../localization'
 
 const NoInternetView = () => {
     return (
@@ -12,7 +13,7 @@ const NoInternetView = () => {
                 name='wifi-off' />
             <Text
                 style={styles.text}>
-                Oops! No interent...
+                {translateOverlay('session.noInternet')}
             </Text>
         </>
     )

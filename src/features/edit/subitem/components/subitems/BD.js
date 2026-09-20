@@ -39,7 +39,7 @@ const BDCard = ({ subitemList, data, update, validate }) => {
                 property='current'
                 onChangeText={onChangeText}
                 onEndEditing={onEndEditing}
-                label='Bond current' />
+                />
         </>
     )
 }

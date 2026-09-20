@@ -1,7 +1,8 @@
 import React from 'react'
 import { View, StyleSheet } from 'react-native'
 import { Button } from '@ui-kitten/components'
-import { NFC_BUTTON_LABELS, NFC_STATUS_CODES } from '../../helpers/constants'
+import { NFC_STATUS_CODES } from '../../helpers/constants'
+import { translateView } from '../../../../localization'
 
 const getButtonProperties = (status) => {
     switch (status) {
@@ -13,17 +14,17 @@ const getButtonProperties = (status) => {
         case NFC_STATUS_CODES.NFC_TURNED_OFF:
             return {
                 appearance: 'outline',
-                label: `${NFC_BUTTON_LABELS.READY}`,
+                 label: translateView('nfc.cancel'),
             }
         case NFC_STATUS_CODES.SUCCESS:
             return {
                 appearance: 'outline',
-                label: NFC_BUTTON_LABELS.SUCCESS,
+                 label: translateView('nfc.close'),
             }
         default:
             return {
                 appearance: 'outline',
-                label: NFC_BUTTON_LABELS.UKNOWN_ERROR,
+                 label: translateView('nfc.retry'),
             }
     }
 }

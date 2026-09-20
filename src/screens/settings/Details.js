@@ -12,6 +12,7 @@ import Multimeter from '../../features/settings/multimeter/scan'
 import MultimeterSettings from '../../features/settings/multimeter/cycle_settings'
 import ExternalLinkSettings from '../../features/settings/external_links'
 import ImageList from '../../features/settings/images'
+import { Localization } from '../../features/settings/localization'
 
 const Setting = (props) => {
     switch (props.setting) {
@@ -27,6 +28,8 @@ const Setting = (props) => {
             return <ExportedFilesList {...props} />
         case 'about':
             return <About {...props} />
+        case 'localization':
+            return <Localization {...props} />
         case 'multimeter':
             return <Multimeter {...props} />
         case 'multimeter_cycle':
@@ -41,7 +44,7 @@ const Setting = (props) => {
 }
 
 
-export default SettingDetails = ({ navigation, route }) => {
+const SettingDetails = ({ navigation, route }) => {
     const { setting } = route.params
     const goBack = () => navigation.goBack()
     const navigateToLicenses = () => navigation.navigate('Licenses')
@@ -66,3 +69,5 @@ export default SettingDetails = ({ navigation, route }) => {
         </SafeAreaView>
     )
 }
+
+export default SettingDetails

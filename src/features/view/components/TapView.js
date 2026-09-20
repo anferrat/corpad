@@ -7,10 +7,11 @@ import TextLine from '../../../components/TextLine'
 import { CoarseFineOptionLabels, TapOptionLabels } from '../../../constants/labels'
 import { TapOptions, CoarseFineOptions } from '../../../constants/global'
 import { primary } from '../../../styles/colors'
-
-const coarseFineOptions = Object.values(CoarseFineOptions).map(option => ({ item: CoarseFineOptionLabels[option], index: option }))
+import { translateView } from '../../../localization'
+import { fieldProperties } from '../../../constants/fieldProperties'
 
 const TapView = ({ tapValue, tapFine, tapCoarse, tapSetting, submit, update, valid }) => {
+    const coarseFineOptions = React.useMemo(() => Object.values(CoarseFineOptions).map(option => ({ item: CoarseFineOptionLabels[option], index: option })), [])
 
     const onChangeTapValue = React.useCallback((value) => { update(value, 'tapValue') }, [update])
 
@@ -50,11 +51,11 @@ const TapView = ({ tapValue, tapFine, tapCoarse, tapSetting, submit, update, val
                 onEndEditing={submitTapValue}
                 onChangeText={onChangeTapValue}
                 valid={valid.tapValue}
-                title={'VA'}
+                 title={fieldProperties.tapValue.label}
                 property='tapValue'
                 unit={'%'} />
         case TapOptions.AUTO:
-            return <TextLine title='Control mode' value={TapOptionLabels[tapSetting] ?? null} />
+             return <TextLine title={translateView('currentControl')} value={TapOptionLabels[tapSetting] ?? null} />
         default:
             return null
     }

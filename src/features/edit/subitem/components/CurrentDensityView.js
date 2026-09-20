@@ -1,6 +1,7 @@
 import React from 'react'
 import { View, StyleSheet } from 'react-native'
 import Input from '../../../../components/Input'
+import { translateEdit } from '../../../../localization'
 
 const areaUnit = {
     main: 'cm',
@@ -37,7 +38,6 @@ const CurrentDensityView = ({ current, area, currentValid, areaValid, density, u
                         keyboardType='numeric'
                         property='current'
                         maxLength={8}
-                        label='Coupon current'
                         value={current}
                         unit={'\u00B5A'}
                         valid={currentValid}
@@ -49,7 +49,6 @@ const CurrentDensityView = ({ current, area, currentValid, areaValid, density, u
                         property='area'
                         keyboardType='numeric'
                         maxLength={8}
-                        label='Coupon area'
                         value={area}
                         unit={areaUnit}
                         valid={areaValid}
@@ -58,11 +57,11 @@ const CurrentDensityView = ({ current, area, currentValid, areaValid, density, u
                 </View>
             </View>
             <Input
-                placeholder='Unable to calculate'
+                placeholder={translateEdit('noCalculation')}
                 property='density'
                 maxLength={8}
                 disabled={true}
-                label='Density'
+                label={translateEdit('density')}
                 value={density}
                 unit={densityUnit}
                 valid={true} />

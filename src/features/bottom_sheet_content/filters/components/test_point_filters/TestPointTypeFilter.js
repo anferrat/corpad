@@ -2,6 +2,7 @@ import React from 'react'
 import SheetHeader from '../../../components/SheetHeader'
 import { useTestPointTypeFilter } from '../../hooks/test_point_filters/useTestPointTypeFilter'
 import TestPointTypeFilter from '../TestPointTypeFilter'
+import { translateBottomSheet } from '../../../../../localization'
 
 
 
@@ -10,7 +11,7 @@ const TestPointTestPointTypeFilter = ({ onBackPress, closeSheet, visible }) => {
     return (
         <>
             <SheetHeader
-                title='Test point type'
+                title={translateBottomSheet('testPointType')}
                 onBackPress={onBackPress}
                 onClosePress={closeSheet} />
             <TestPointTypeFilter

@@ -8,6 +8,7 @@ import NameEditInput from './components/NameEditInput'
 import TemplateSelector from './components/TemplateSelector'
 import { control } from '../../styles/colors'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
+import { translateCreateSurvey } from '../../localization'
 
 export const CreateSurvey = ({ withImport, navigateToImport }) => {
     const {
@@ -51,16 +52,16 @@ export const CreateSurvey = ({ withImport, navigateToImport }) => {
                         isCloudValue={false}
                         onPress={setDeviceBased}
                         icon='smartphone'
-                        title='Device-based'
-                        subtitle={`Survey is stored on your device inside app folder. Doesn't require internet.`}
+                         title={translateCreateSurvey('deviceBased')}
+                         subtitle={translateCreateSurvey('deviceBasedDescription')}
                         selected={!isCloud} />
                     <OptionCard
-                        hint={!isSigned ? '(Sign in required)' : null}
+                         hint={!isSigned ? translateCreateSurvey('signInRequired') : null}
                         onPress={setCloudBased}
                         icon='cloud'
                         pack='cp'
-                        title='Cloud-based'
-                        subtitle='Survey is stored on your device, but also synced with your cloud storage. Requires internet and Google account.'
+                         title={translateCreateSurvey('cloudBased')}
+                         subtitle={translateCreateSurvey('cloudBasedDescription')}
                         selected={isCloud} />
                 </View>
                 {optionsAvailable ?
@@ -81,7 +82,7 @@ export const CreateSurvey = ({ withImport, navigateToImport }) => {
                     null}
             </ScrollView >
             <BottomButton
-                title={withImport ? 'Next' : 'Create'}
+                 title={withImport ? translateCreateSurvey('next') : translateCreateSurvey('create')}
                 icon={creating ? 'loading' : (withImport ? 'arrow-circle-right' : 'file-add-outline')}
                 iconPosition={withImport ? 'right' : 'left'}
                 disabled={creating}

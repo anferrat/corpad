@@ -2,6 +2,7 @@ import { Button, Text } from '@ui-kitten/components'
 import React from 'react'
 import { StyleSheet, View } from 'react-native'
 import { plus, star } from '../../../components/Icons'
+import { translateMapLayer } from '../../../localization'
 
 
 const AddLayerButton = ({ onPress, inactive, isPro }) => {
@@ -18,13 +19,13 @@ const AddLayerButton = ({ onPress, inactive, isPro }) => {
                         style={styles.mainText}
                         category='p1'
                         status='primary'>
-                        Add a map layer
+                        {translateMapLayer('addMapLayer')}
                     </Text>
                     <Text appearance='hint' category='s2'>
-                        Supported formats: .kml, .kmz, .gpx, .geojson
+                        {translateMapLayer('supportedFormats')}
                     </Text>
                 </View>
-                : 'Max. limit reached') : 'Upgrade to premium'}
+                : translateMapLayer('maxLimitReached')) : translateMapLayer('upgradePremium')}
         </Button>
     )
 }

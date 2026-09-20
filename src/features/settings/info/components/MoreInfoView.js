@@ -3,6 +3,7 @@ import InfoListItem from './InfoListItem'
 import { getFormattedDate } from '../../../../helpers/functions'
 import { getDistance } from '../helpers/functions'
 import { ReferenceCellCodeLabels } from '../../../../constants/labels'
+import { translateSettings } from '../../../../localization'
 
 
 const MoreInfoView = ({ extraInfo }) => {
@@ -11,31 +12,31 @@ const MoreInfoView = ({ extraInfo }) => {
         <>
             {mainReference ?
                 <InfoListItem
-                    title={'Main reference'}
-                    subtitle={ReferenceCellCodeLabels[mainReference.rcType] ?? 'Unknown type'}
+                     title={translateSettings('mainReference')}
+                     subtitle={ReferenceCellCodeLabels[mainReference.rcType] ?? translateSettings('unknownType')}
                     icon={'RE'}
                     pack={'cp'}
                     value={mainReference.name} /> : null}
             {lastUpdated ?
                 <InfoListItem
-                    title={'Last updated'}
+                     title={translateSettings('lastUpdated')}
                     subtitle={getFormattedDate(lastUpdated.timeModified)}
                     icon={lastUpdated.markerType ?? lastUpdated.itemType}
                     pack={'cp'}
                     value={lastUpdated.name} /> : null}
             <InfoListItem
-                title={'Survey area'}
-                subtitle={'Radius'}
+                 title={translateSettings('surveyArea')}
+                 subtitle={translateSettings('radius')}
                 icon={'map-outline'}
                 value={getDistance(surveyRadius)} />
             <InfoListItem
-                title={'Potentials'}
-                subtitle={'Total number of readings'}
+                 title={translateSettings('potentials')}
+                 subtitle={translateSettings('totalReadings')}
                 icon={'grid'}
                 value={potentials} />
             <InfoListItem
-                title={'Images'}
-                subtitle={'Number of image assets'}
+                 title={translateSettings('images')}
+                 subtitle={translateSettings('imageAssets')}
                 icon={'image'}
                 value={assetCount} />
         </>

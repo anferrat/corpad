@@ -1,10 +1,11 @@
 import React from 'react'
 import { StyleSheet, View } from 'react-native'
 import ButtonSelector from '../../../components/ButtonSelector'
+import { translateCalculator } from '../../../localization'
 
 const ButtonDataSelector = (props) => {
     const setValue = React.useCallback((value) => props.setValue('factorSelected', value), [])
-    const buttons = React.useMemo(() => [{ title: 'Ratio' }, { title: 'Factor' }], [])
+    const buttons = [{ title: translateCalculator('selectors.ratio') }, { title: translateCalculator('selectors.factor') }]
     if (props.disabled)
         return null
     else

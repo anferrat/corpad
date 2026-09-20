@@ -4,6 +4,7 @@ import SheetHeader from '../../components/SheetHeader'
 import { RectifierReadingOptions } from '../../../../constants/global'
 import { RectifierReadingOptionLabels } from '../../../../constants/labels'
 import { useRectifierReadings } from '../hooks/useRectifierReadings'
+import { translateBottomSheet } from '../../../../localization'
 
 
 const RectifierReadingList = ({ closeSheet }) => {
@@ -11,7 +12,7 @@ const RectifierReadingList = ({ closeSheet }) => {
     return (
         <>
             <SheetHeader
-                title='Readings'
+                title={translateBottomSheet('readings')}
                 onClosePress={closeSheet} />
             {Object.values(RectifierReadingOptions).map(reading =>
                 <RadioListItem

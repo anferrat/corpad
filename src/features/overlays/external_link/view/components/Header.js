@@ -5,6 +5,7 @@ import { primary } from '../../../../../styles/colors'
 import { ExternalLinkTypeLabels } from '../../../../../constants/labels'
 import IconLine from '../../../../../components/ItemView/components/IconLine'
 import { ExternalLinkTypeIcons } from '../../../../../constants/icons'
+import { translateOverlay } from '../../../../../localization'
 
 
 const Header = ({ linkType, tagId, technician }) => {
@@ -26,14 +27,14 @@ const Header = ({ linkType, tagId, technician }) => {
                     style={styles.text}
                     category='s2'
                     appearance='hint'>
-                    TAG ID: {tagId}
+                    {translateOverlay('externalLink.tagId', { tagId })}
                 </Text>
                 {technician ?
                     <Text
                         style={styles.text}
                         category='s2'
                         appearance='hint'>
-                        Created by: {technician}
+                        {translateOverlay('externalLink.createdBy', { technician })}
                     </Text> : null}
             </View>
         </View>

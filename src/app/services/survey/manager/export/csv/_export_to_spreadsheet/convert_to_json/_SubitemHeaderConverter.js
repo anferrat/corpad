@@ -1,4 +1,4 @@
-import { ExportSubitemPropertyLabels, SubitemTypeLabels } from "../../../../../../../../constants/labels";
+import { ExportSubitemPropertyLabels, SubitemTypeLabels } from "../../../../../../../../constants/exportLabels";
 
 export class _SubitemHeaderConverter {
     constructor() { }

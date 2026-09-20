@@ -4,6 +4,7 @@ import { Text, Icon } from '@ui-kitten/components'
 import { primary } from '../../../../styles/colors'
 import { androidRipple } from '../../../../styles/styles'
 import Pressable from '../../../../components/Pressable'
+import { translateList } from '../../../../localization'
 
 const SortingButton = ({ isIcon, value, arrowIcon, onPress }) => {
     return (
@@ -13,7 +14,7 @@ const SortingButton = ({ isIcon, value, arrowIcon, onPress }) => {
             android_ripple={androidRipple}>
             <Text style={styles.buttonText}
                 status='primary'
-                category='s1'>Sort:</Text>
+                category='s1'>{translateList('sort')}</Text>
             {!isIcon ?
                 <Text
                     style={styles.iconText}

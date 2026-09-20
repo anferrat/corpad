@@ -3,6 +3,7 @@ import { View, StyleSheet } from 'react-native'
 import { Text, Icon } from '@ui-kitten/components'
 import { basic } from '../../../styles/colors'
 import Unit from '../../../components/Unit'
+import { translate } from '../../../localization'
 
 
 const ResultRow = (props) => {
@@ -15,7 +16,7 @@ const ResultRow = (props) => {
             <View key={r.title} style={styles.result}>
                 <Text appearance='hint' category='s2' style={styles.title}>{r.title}</Text>
                 <View style={styles.valueView}>
-                    <Text style={styles.value} numberOfLines={1} ellipsizeMode={'tail'}>{r.value ?? 'Error'}</Text>
+                    <Text style={styles.value} numberOfLines={1} ellipsizeMode={'tail'}>{r.value ?? translate('common.error')}</Text>
                     <Unit unit={r.unit} />
                 </View>
             </View>

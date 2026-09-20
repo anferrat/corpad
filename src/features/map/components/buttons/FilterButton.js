@@ -1,6 +1,7 @@
 import React from 'react'
 import { useFilterButton } from '../../hooks/useFilterButton'
 import TopSideButton from './TopSideButton'
+import { translateMap } from '../../../../localization'
 
 const FilterButton = () => {
     const { counter, openSheet, isVisible } = useFilterButton()
@@ -8,7 +9,7 @@ const FilterButton = () => {
         disabled={!isVisible}
         icon={counter > 0 ? 'funnel' : 'funnel-outline'}
         onPress={openSheet}
-        title={`Filter${counter ? ` (${counter})` : ''}`} />
+        title={`${translateMap('filter')}${counter ? ` (${counter})` : ''}`} />
 }
 
 export default React.memo(FilterButton)

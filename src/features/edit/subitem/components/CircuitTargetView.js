@@ -2,6 +2,7 @@ import React from 'react'
 import { View, StyleSheet } from 'react-native'
 import { Text } from '@ui-kitten/components'
 import Input from '../../../../components/Input'
+import { translateEdit } from '../../../../localization'
 
 const TargetView = ({ update, validate, targetMin, targetMax, targetMinValid, targetMaxValid }) => {
 
@@ -15,7 +16,7 @@ const TargetView = ({ update, validate, targetMin, targetMax, targetMinValid, ta
 
     return (
         <View style={styles.mainView}>
-            <Text category='label' appearance={'hint'} style={styles.label}>Target</Text>
+            <Text category='label' appearance={'hint'} style={styles.label}>{translateEdit('target')}</Text>
             <Input
                 onChangeText={onChangeTargetMin}
                 onEndEditing={onEndEditingTargetMin}
@@ -23,7 +24,6 @@ const TargetView = ({ update, validate, targetMin, targetMax, targetMinValid, ta
                 keyboardType='numeric'
                 property='targetMin'
                 maxLength={10}
-                placeholder='Min'
                 value={targetMin}
                 valid={targetMinValid}
                 unit='A' />
@@ -35,7 +35,6 @@ const TargetView = ({ update, validate, targetMin, targetMax, targetMinValid, ta
                 keyboardType='numeric'
                 property='targetMax'
                 maxLength={10}
-                placeholder='Max'
                 value={targetMax}
                 valid={targetMaxValid}
                 unit='A' />

@@ -1,15 +1,16 @@
 import React from 'react'
 import { Button, Text } from '@ui-kitten/components'
 import { View, StyleSheet } from 'react-native'
+import { translateImport } from '../../../../localization'
 
 const ModalError = ({
     hideModal
 }) => {
     return (
         <View style={styles.view}>
-            <Text category='h6'>Error</Text>
-            <Text style={styles.text}>No items to import. Data file is empty</Text>
-            <Button appearance='ghost' onPress={hideModal}>Close</Button>
+            <Text category='h6'>{translateImport('item.error')}</Text>
+            <Text style={styles.text}>{translateImport('item.noItemsToImport')}</Text>
+            <Button appearance='ghost' onPress={hideModal}>{translateImport('item.close')}</Button>
         </View>
     )
 }

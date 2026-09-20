@@ -9,6 +9,7 @@ import TapView from '../TapView'
 import { combineLatLon } from '../../helpers/functions'
 import ItemTitleView from '../ItemTitleView'
 import { PowerSourceLabels } from '../../../../constants/labels'
+import { translateView } from '../../../../localization'
 
 
 const RT = ({ data, itemType, updateStatus, submit, update }) => {
@@ -33,11 +34,11 @@ const RT = ({ data, itemType, updateStatus, submit, update }) => {
             <IconLine icon='map-outline' value={location} />
             <IconLine icon='message-square-outline' value={comment} />
             <Divider visible={true} />
-            <TextLine title='Max. voltage' value={maxVoltage} unit='V' />
-            <TextLine title='Max. current' value={maxCurrent} unit='A' />
-            <TextLine title='Model' value={model} />
-            <TextLine title='Serial number' value={serialNumber} />
-            <TextLine title='Power source' value={PowerSourceLabels[powerSource] ?? null} />
+            <TextLine title={translateView('maxVoltage')} value={maxVoltage} unit='V' />
+            <TextLine title={translateView('maxCurrent')} value={maxCurrent} unit='A' />
+            <TextLine title={translateView('model')} value={model} />
+            <TextLine title={translateView('serialNumber')} value={serialNumber} />
+            <TextLine title={translateView('powerSource')} value={PowerSourceLabels[powerSource] ?? null} />
             <TapView
                 tapValue={tapValue}
                 valid={valid}

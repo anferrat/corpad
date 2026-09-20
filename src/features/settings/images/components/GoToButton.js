@@ -4,6 +4,7 @@ import { Text, Icon } from '@ui-kitten/components'
 import Pressable from '../../../../components/Pressable'
 import { basic700, control } from '../../../../styles/colors'
 import { getFormattedDate } from '../../../../helpers/functions'
+import { translateSettings } from '../../../../localization'
 
 
 const GoToButton = ({ onPress, name, icon, pack, timeCreated }) => {
@@ -34,7 +35,7 @@ const GoToButton = ({ onPress, name, icon, pack, timeCreated }) => {
                         status='control'
                         ellipsizeMode={'tail'}
                         numberOfLines={1}>
-                        {name === null ? 'Loading...' : `${name}`}
+                         {name === null ? translateSettings('loading') : `${name}`}
                     </Text>
 
                 </View>
@@ -43,7 +44,7 @@ const GoToButton = ({ onPress, name, icon, pack, timeCreated }) => {
                         <Text status='control'
                             ellipsizeMode={'tail'}
                             category='s2'>
-                            Added
+                             {translateSettings('added')}
                         </Text>
                         <Text
                             style={{ flex: 1 }}

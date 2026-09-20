@@ -8,6 +8,7 @@ import Input from '../../../../components/Input'
 import { basic400, primary } from '../../../../styles/colors'
 import SearchItem from './SearchItem'
 import EmptyList from './EmptyList'
+import { translateMap } from '../../../../localization'
 
 
 
@@ -66,7 +67,7 @@ const SearchModal = ({ hideModal, keyword, onChangeKeyword, markersFound, showOn
             <SafeAreaView style={styles.mainView}>
                 <Input
                     valid={true}
-                    placeholder='Search by name'
+                    placeholder={translateMap('searchByName')}
                     onSubmitEditing={onSubmitEditing}
                     onChangeText={onChangeKeyword}
                     accessoryLeft={acessoryLeft}
@@ -78,7 +79,7 @@ const SearchModal = ({ hideModal, keyword, onChangeKeyword, markersFound, showOn
                     <Text
                         style={styles.hintText}
                         appearance='hint'>
-                        Total: {markerCount}
+                        {translateMap('total', { count: markerCount })}
                     </Text> : null}
                 <FlashList
                     ListEmptyComponent={

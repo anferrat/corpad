@@ -2,6 +2,7 @@ import { Text } from '@ui-kitten/components'
 import React from 'react'
 import { View, StyleSheet } from 'react-native'
 import { getFormattedDate } from '../../../../helpers/functions'
+import { translateOverlay } from '../../../../localization'
 
 
 const StatusMessage = ({ expirationTime }) => {
@@ -11,7 +12,7 @@ const StatusMessage = ({ expirationTime }) => {
                 style={styles.text}
                 category='s2'
                 appearance='hint'>
-                Subcription is active.{`\n`} Next renewal: {getFormattedDate(expirationTime)}
+                {translateOverlay('paywall.subscriptionActive')}{`\n`} {translateOverlay('paywall.nextRenewal', { date: getFormattedDate(expirationTime) })}
             </Text>
         )
     else return null

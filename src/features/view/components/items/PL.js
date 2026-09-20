@@ -8,6 +8,7 @@ import { getFullDate } from '../../../../helpers/functions'
 import { danger, success } from '../../../../styles/colors'
 import { getCountTitle } from '../../helpers/functions'
 import { PipelineMaterialLabels, PipelineProductLabels, PipeDiameterLabels, PipelineCoatingLabels } from '../../../../constants/labels'
+import { translateView } from '../../../../localization'
 
 const PL = ({ data, itemType }) => {
     const { name, timeModified, licenseNumber, tpCount, comment, material, nps, coating, product } = data
@@ -29,18 +30,18 @@ const PL = ({ data, itemType }) => {
             <IconLine icon='message-square-outline' value={comment} />
             <Divider style={styles.divider} />
             <TextLine
-                title='Material'
+                title={translateView('material')}
                 value={PipelineMaterialLabels[material] ?? null}
                 icon='cube-outline' />
             <TextLine
-                title='Size'
+                title={translateView('size')}
                 value={PipeDiameterLabels[nps] ?? null} />
             <TextLine
-                title='Coating'
+                title={translateView('coating')}
                 value={PipelineCoatingLabels[Number(coating)]}
                 icon={coating ? 'checkmark-outline' : 'slash-outline'}
                 fill={coating ? success : danger} />
-            <TextLine title='Product' value={PipelineProductLabels[product] ?? null} />
+            <TextLine title={translateView('product')} value={PipelineProductLabels[product] ?? null} />
         </View>
     )
 }

@@ -8,6 +8,7 @@ import { getFormattedDate } from '../../../helpers/functions'
 import SurveyFileListItemMenu from './SurveyFileListItemMenu'
 import SurveyFileListItemMenuItem from './SurveyFileListItemMenuItem'
 import SurveyFileListItemIconBar from './SurveyFileListItemIconBar'
+import { translateSurveyList } from '../../../localization'
 
 const SurveyFileListItem = ({ name, uid, fileName, timeModified, tpCount, rectifierCount, pipelineCount, passedItems, cloudId, path, hash, isCloud, isSignedIn, surveyLoading, loadSurvey, deleteSurvey, removeSurveyFromList, shareSurveyFile, copyToAlternateFolder, copyToDownloads }) => {
     const scale = useRef(new Animated.Value(1))
@@ -118,23 +119,23 @@ const SurveyFileListItem = ({ name, uid, fileName, timeModified, tpCount, rectif
                         disabled={surveyLoading}>
                         {isAndroid ? <SurveyFileListItemMenuItem
                             onPress={handleCopyToDownloads}
-                            title='Save to Downloads'
+                            title={translateSurveyList('saveToDownloads')}
                             icon='download-outline' /> : null}
                         {isSignedIn ?
                             <SurveyFileListItemMenuItem
                                 onPress={handleCopyToAlternateFolder}
-                                title={`Copy to ${isCloud ? 'device' : 'cloud'}`}
+                                 title={isCloud ? translateSurveyList('copyToDevice') : translateSurveyList('copyToCloud')}
                                 icon={isCloud ? 'smartphone-outline' : 'cloud-download-outline'} /> : null}
                         <SurveyFileListItemMenuItem
                             onPress={handleShareSurveyFile}
-                            title={`Share file`}
+                            title={translateSurveyList('shareFile')}
                             icon={isAndroid ? 'share-outline' : 'share-ios'}
                             pack={isAndroid ? null : 'cp'}
                         />
                         <SurveyFileListItemMenuItem
                             status='danger'
                             onPress={handleDelete}
-                            title='Delete'
+                            title={translateSurveyList('delete')}
                             icon='trash-outline' />
                     </SurveyFileListItemMenu>
                 </View>

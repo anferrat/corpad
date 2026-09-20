@@ -1,22 +1,23 @@
 import React from 'react'
 import { View, StyleSheet } from 'react-native'
 import { Text } from '@ui-kitten/components'
-import { NFC_HEADERS, NFC_STATUS_CODES } from '../../helpers/constants'
+import { NFC_STATUS_CODES } from '../../helpers/constants'
+import { translateView } from '../../../../localization'
 
 const getNfcHeader = (status, loading, linkReady) => {
     switch (status) {
         case null:
             if (loading)
                 if (linkReady)
-                    return NFC_HEADERS.WRITING
+                    return translateView('nfc.writing')
                 else
-                    return NFC_HEADERS.PREPARING
+                    return translateView('nfc.preparing')
             else
-                return NFC_HEADERS.READY
+                return translateView('nfc.ready')
         case NFC_STATUS_CODES.SUCCESS:
-            return NFC_HEADERS.SUCCESS
+            return translateView('nfc.success')
         default:
-            return NFC_HEADERS.ERROR
+            return translateView('nfc.error')
     }
 }
 
@@ -32,7 +33,7 @@ const ModalHeader = ({ status, loading, linkReady, size }) => {
                 <Text
                     appearance='hint'
                     category='s1'>
-                    {size} bytes
+                     {size} {translateView('bytes')}
                 </Text>
                 : null}
         </View>

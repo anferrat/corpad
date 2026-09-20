@@ -1,6 +1,7 @@
 import React from 'react'
 import { useSelector } from 'react-redux'
 import BottomButton from '../../../components/BottomButton'
+import { translateImport } from '../../../localization'
 
 
 const NextButton = ({ onPress }) => {
@@ -8,7 +9,7 @@ const NextButton = ({ onPress }) => {
     const itemType = useSelector(state => state.importData.itemType)
     return <BottomButton
         disabled={!disabled}
-        title='Next'
+        title={translateImport('file.next')}
         icon='arrow-circle-right'
         iconPosition='right'
         onPress={onPress.bind(this, itemType)} />

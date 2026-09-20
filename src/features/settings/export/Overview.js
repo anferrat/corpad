@@ -10,6 +10,7 @@ import LoadingView from '../../../components/LoadingView'
 import BottomButton from '../../../components/BottomButton'
 import { ExportFormatTypeLabeles, ExportItemPropertyLabels, ExportSubitemPropertyLabels, SubitemTypeLabels } from '../../../constants/labels'
 import { SubitemTypeIconsFilled } from '../../../constants/icons'
+import { translateSettings } from '../../../localization'
 
 
 const Overview = ({ navigateToExportItem }) => {
@@ -44,10 +45,10 @@ const Overview = ({ navigateToExportItem }) => {
                     <Text
                         category='label'
                         style={styles.title}>
-                        ITEM PROPERTIES
+                         {translateSettings('itemProperties')}
                     </Text>
                     <Display
-                        property={'Exported items:'}>
+                         property={translateSettings('exportedItems') + ':'}>
                         <PropertyElement
                             icon={itemTypeIcon}
                             pack='cp'>
@@ -55,7 +56,7 @@ const Overview = ({ navigateToExportItem }) => {
                         </PropertyElement>
                     </Display>
                     <Display
-                        property={'Format:'}>
+                         property={translateSettings('format') + ':'}>
                         <PropertyElement>
                             {ExportFormatTypeLabeles[exportType]}
                         </PropertyElement>
@@ -63,29 +64,29 @@ const Overview = ({ navigateToExportItem }) => {
 
                     {assetOptionAvailable ?
                         <Display
-                            property={'Include images:'}>
+                             property={translateSettings('includeImages') + ':'}>
                             <PropertyElement
                                 icon={includeAssets ? 'checkmark' : 'close'}>
-                                {includeAssets ? 'Yes' : 'No'}
+                                 {includeAssets ? translateSettings('yes') : translateSettings('no')}
                             </PropertyElement>
                         </Display> : null}
                     {mapLayerOptionAvailable ?
                         <Display
-                            property={'Include map layers:'}>
+                             property={translateSettings('includeMapLayers') + ':'}>
                             <PropertyElement
                                 icon={includeMapLayers ? 'checkmark' : 'close'}>
-                                {includeMapLayers ? 'Yes' : 'No'}
+                                 {includeMapLayers ? translateSettings('yes') : translateSettings('no')}
                             </PropertyElement>
                         </Display> : null}
                     {sortingOptionAvailable ?
                         <Display
-                            property={'Sorting:'}>
+                             property={translateSettings('sorting') + ':'}>
                             <PropertyElement>
                                 {sortingLabel}
                             </PropertyElement>
                         </Display> : null}
                     <Display
-                        property={'Properties:'}>
+                         property={translateSettings('properties')}>
                         {itemProperties.map(property => (
                             <PropertyElement
                                 key={property}>
@@ -101,10 +102,10 @@ const Overview = ({ navigateToExportItem }) => {
                             <Text
                                 category='label'
                                 style={styles.title}>
-                                POTENTIALS
+                                 {translateSettings('potentialsTitle')}
                             </Text>
                             <Display
-                                property={'Reference cell:'}>
+                                 property={translateSettings('referenceCell')}>
                                 <PropertyElement
                                     icon={'RE-filled'}
                                     pack='cp'>
@@ -112,7 +113,7 @@ const Overview = ({ navigateToExportItem }) => {
                                 </PropertyElement>
                             </Display>
                             <Display
-                                property={'Potential types:'}>
+                                 property={translateSettings('potentialTypes')}>
                                 {potentialTypeLabels.map((label, index) => (
                                     <PropertyElement
                                         icon={'grid'}
@@ -122,7 +123,7 @@ const Overview = ({ navigateToExportItem }) => {
                                 ))}
                             </Display>
                             <Display
-                                property={'Reading types:'}>
+                                 property={translateSettings('readingTypes')}>
                                 {selectedSubitemTypes.map(type => (
                                     <PropertyElement
                                         key={type}
@@ -133,7 +134,7 @@ const Overview = ({ navigateToExportItem }) => {
                                 ))}
                             </Display>
                             <Display
-                                property={'Grouped by:'}>
+                                 property={translateSettings('groupedBy')}>
                                 <PropertyElement>
                                     {potentialsGroupingLabel}
                                 </PropertyElement>
@@ -141,7 +142,7 @@ const Overview = ({ navigateToExportItem }) => {
                             <ViewContainer
                                 hidden={!groupPotentialsByPipeline}>
                                 <Display
-                                    property={'Pipelines:'}>
+                                     property={translateSettings('pipelines')}>
                                     {pipelineLabels.map((name, index) => (
                                         <PropertyElement
                                             key={index}
@@ -159,10 +160,10 @@ const Overview = ({ navigateToExportItem }) => {
                         <Text
                             category='label'
                             style={styles.title}>
-                            OTHER
+                             {translateSettings('otherTitle')}
                         </Text>
                         <Display
-                            property={'Properties: '}>
+                            property={translateSettings('exportProperties')}>
                             {subitemProperties.map(([type, property]) => (
                                 <PropertyElement
                                     key={type + property}
@@ -177,7 +178,7 @@ const Overview = ({ navigateToExportItem }) => {
             </ScrollView>
             <BottomButton
                 onPress={exportToSpreadsheet}
-                title={'Export'}
+                 title={translateSettings('export')}
                 icon={'download'}
             />
         </>

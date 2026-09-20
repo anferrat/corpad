@@ -5,6 +5,7 @@ import { useDataFromFile } from './hooks/useDataFromFile'
 import { Text } from '@ui-kitten/components'
 import LoadingView from '../../components/LoadingView'
 import { basic200, basic300, control } from '../../styles/colors'
+import { translateSpreadsheetViewer } from '../../localization'
 
 export const SpreadsheetViewer = ({ uri }) => {
     const { loading, data, fields, limitReached } = useDataFromFile(uri)
@@ -35,7 +36,7 @@ export const SpreadsheetViewer = ({ uri }) => {
     const Footer = () => {
         if (limitReached.row || limitReached.field)
             return <View style={styles.hint}>
-                <Text category='s2' status='danger'>* This is a preview feature, unabled to process large csv files.{`\n`}Please use third party apps to view this file in full.</Text>
+                <Text category='s2' status='danger'>{translateSpreadsheetViewer('previewLimit')}</Text>
             </View>
         else return null
     }

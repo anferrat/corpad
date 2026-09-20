@@ -1,6 +1,7 @@
 import React from 'react'
 import { View, StyleSheet } from 'react-native'
 import { Text } from '@ui-kitten/components'
+import { translateOverlay } from '../../../../../localization'
 
 
 const Header = () => {
@@ -10,13 +11,13 @@ const Header = () => {
                 style={styles.text}
                 category='label'
                 appearance='hint'>
-                Pipelines in the link
+                {translateOverlay('externalLink.pipelinesInLink')}
             </Text>
             <Text
                 style={styles.select}
                 category='label'
                 appearance='hint'>
-                Pipelines in the survey
+                {translateOverlay('externalLink.pipelinesInSurvey')}
             </Text>
         </View>
     )

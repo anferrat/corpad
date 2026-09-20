@@ -7,6 +7,7 @@ import { Text } from '@ui-kitten/components'
 import MatchItem from './components/MatchItem'
 import LoadingView from '../../../../components/LoadingView'
 import Header from './components/Header'
+import { translateOverlay } from '../../../../localization'
 
 
 const PipelineMatching = ({ goBack, link, navigateToItem, navigateToSurvey }) => {
@@ -32,7 +33,7 @@ const PipelineMatching = ({ goBack, link, navigateToItem, navigateToSurvey }) =>
                             style={styles.hint}
                             category='s2'
                             appearance='hint'>
-                            Match pipelines from the link to pipelines in the current survey.</Text>
+                            {translateOverlay('externalLink.matchPipelines')}</Text>
                         <Header />
                         {sourcePipelines.map(({ name, uid }, index) =>
                             <MatchItem
@@ -49,7 +50,7 @@ const PipelineMatching = ({ goBack, link, navigateToItem, navigateToSurvey }) =>
             </ScrollView>
             <BottomButton
                 disabled={isCreating}
-                title={'Done'}
+                title={translateOverlay('externalLink.done')}
                 icon={'checkmark'}
                 onPress={onSubmit}
             />

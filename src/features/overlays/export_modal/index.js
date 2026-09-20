@@ -4,6 +4,7 @@ import { Button, Divider, Icon, Text } from '@ui-kitten/components'
 import { success } from '../../../styles/colors'
 import { file, openInIcon, shareIcon } from '../../../components/Icons'
 import useExportModal from './hooks/useExportModal'
+import { translateOverlay } from '../../../localization'
 
 export const ExportModal = ({ navigationRef }) => {
     const { hideModal, navigateToExportedFiles, openInHandler, shareHandler, fileName, visible, loading } = useExportModal({ navigationRef })
@@ -20,12 +21,12 @@ export const ExportModal = ({ navigationRef }) => {
                         fill={success} />
                     <Text
                         style={styles.bold}
-                        category={'h3'}>Success!</Text>
+                        category={'h3'}>{translateOverlay('exportModal.success')}</Text>
                     <Text
                         appearance='hint'
                         category='p2'
                         style={styles.text}>
-                        File {fileName} was created. Select an action below:
+                        {translateOverlay('exportModal.fileCreated', { fileName })}
                     </Text>
                     <Divider />
                     {isAndroid ? <>
@@ -35,11 +36,11 @@ export const ExportModal = ({ navigationRef }) => {
                                 style={styles.button}
                                 onPress={navigateToExportedFiles}
                                 appearance='ghost'>
-                                View exported files
+                                {translateOverlay('exportModal.viewExportedFiles')}
                             </Button>
 
                         </View>
-                        <Text>or</Text>
+                        <Text>{translateOverlay('exportModal.or')}</Text>
                     </> : null}
                     <View
                         style={styles.buttons}>
@@ -48,14 +49,14 @@ export const ExportModal = ({ navigationRef }) => {
                             onPress={isAndroid ? openInHandler : navigateToExportedFiles}
                             accessoryLeft={isAndroid ? openInIcon : file}
                             appearance='ghost'>
-                            {isAndroid ? 'Open in...' : 'View file'}
+                            {isAndroid ? translateOverlay('exportModal.openIn') : translateOverlay('exportModal.viewFile')}
                         </Button>
                         <Button
                             style={styles.button}
                             onPress={shareHandler}
                             accessoryLeft={shareIcon}
                             appearance='ghost'>
-                            Share
+                            {translateOverlay('exportModal.share')}
                         </Button>
                     </View>
                 </View>

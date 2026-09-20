@@ -2,6 +2,7 @@ import React from 'react'
 import { Text, Icon } from '@ui-kitten/components'
 import { StyleSheet, View } from 'react-native'
 import { basic, basic200 } from '../../../../styles/colors'
+import { translateSettings } from '../../../../localization'
 
 
 const EmptyExportedFilesList = () => {
@@ -16,13 +17,13 @@ const EmptyExportedFilesList = () => {
                 category='h4'
                 appearance={'hint'}
                 style={styles.title}>
-                No files found
+                 {translateSettings('noFiles')}
             </Text>
             <Text
                 category='p1'
                 appearance={'hint'}
                 style={styles.title}>
-                You can manage .csv, .kml and .zip files here, after exporting data from surveys.
+                 {translateSettings('noFilesDescription')}
             </Text>
         </View>
     )

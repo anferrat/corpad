@@ -6,9 +6,9 @@ import BottomButton from '../../../../components/BottomButton'
 import CycleSelectionView from './components/CycleSelectionView'
 import CaptureModeView from './components/CaptureModeView'
 import { MultimeterSettingContext, MultimeterSettingProvider } from './context/MultimeterSettings'
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import HeaderView from './components/HeaderView'
 import ErrorView from './components/ErrorView'
+import { translateMultimeterSettings } from '../../../../localization'
 
 
 const MultimeterSettings = ({ }) => {
@@ -50,7 +50,7 @@ const MultimeterSettingComponent = () => {
             </KeyboardAvoidingView>
             <BottomButton
                 onPress={onSaveHandler}
-                title={'Save'}
+                title={translateMultimeterSettings('save')}
                 icon={'save'}
             />
         </>

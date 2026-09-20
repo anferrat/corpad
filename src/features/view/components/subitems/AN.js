@@ -4,6 +4,7 @@ import Header from '../../components/Header'
 import PotentialsView from '../PotentialsView'
 import Divider from '../Divider'
 import { AnodeMaterialLabels } from '../../../../constants/labels'
+import { translateView } from '../../../../localization'
 
 const AN = ({
     data,
@@ -40,7 +41,7 @@ const AN = ({
                 unit={potentialUnit}
                 potentialHint={potentialHint}
                 potentials={potentials} />
-            <TextLine title='Material' value={AnodeMaterialLabels[anodeMaterial] ?? null} />
+            <TextLine title={translateView('material')} value={AnodeMaterialLabels[anodeMaterial] ?? null} />
         </>
     )
 }

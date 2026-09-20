@@ -7,7 +7,7 @@ import { _PotentialHeaderConverter } from "./_export_to_spreadsheet/_PotentialsH
 import { _LoadFromDatabase } from "./_export_to_spreadsheet/_LoadFromDatabase"
 import { _ConvertToJson } from "./_export_to_spreadsheet/_ConvertToJson"
 import { FileSystemLocations } from "../../../../../../constants/global"
-import { ItemTypeLabelsPlural } from "../../../../../../constants/labels"
+import { ItemTypeLabelsPlural } from "../../../../../../constants/exportLabels"
 import { _ExportAssets } from "./_export_to_spreadsheet/_ExportAssets"
 import { _GetFileContent } from "./_export_to_spreadsheet/_GetFileConetnt"
 import { _ParseGeoJsonToKml } from "./_export_to_spreadsheet/_ParseGeoJsonToKml"

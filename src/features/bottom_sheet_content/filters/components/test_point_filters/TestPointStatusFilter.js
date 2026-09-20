@@ -2,6 +2,7 @@ import React from 'react'
 import { useTestPointStatusFilter } from '../../hooks/test_point_filters/useTestPointStatusFilter'
 import SheetHeader from '../../../components/SheetHeader'
 import StatusFilter from '../StatusFilter'
+import { translateBottomSheet } from '../../../../../localization'
 
 
 
@@ -10,7 +11,7 @@ const TestPointStatusFilter = ({ onBackPress, closeSheet, visible }) => {
     return (
         <>
             <SheetHeader
-                title='Status'
+                title={translateBottomSheet('status')}
                 onBackPress={onBackPress}
                 onClosePress={closeSheet}
             />

@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useMemo } from 'react'
 import SheetHeader from '../../../components/SheetHeader'
 import { useMarkerTypeFilter } from '../../hooks/map_filters/useTestPointTypeFilter'
 import { useFilter } from '../../hooks/useFilter'
@@ -8,6 +8,7 @@ import { Divider } from '@ui-kitten/components'
 import { ItemTypeIcons, TestPointTypeIcons } from '../../../../../constants/icons'
 import { FlashList } from '@shopify/flash-list'
 import CheckBoxListItem from '../CheckBoxListItem'
+import { translateBottomSheet } from '../../../../../localization'
 
 const MapMarkerFilterItems = [
     TestPointTypes.TEST_STATION,
@@ -17,15 +18,6 @@ const MapMarkerFilterItems = [
     TestPointTypes.MEASURMENT,
     TestPointTypes.FIELD_NOTE
 ]
-const MapMarkerFilterItemLabels = [
-    TestPointTypeLabels[TestPointTypes.TEST_STATION],
-    ItemTypeLabels[ItemTypes.RECTIFIER],
-    TestPointTypeLabels[TestPointTypes.JUNCTION_BOX],
-    TestPointTypeLabels[TestPointTypes.HEADER],
-    TestPointTypeLabels[TestPointTypes.MEASURMENT],
-    TestPointTypeLabels[TestPointTypes.FIELD_NOTE]
-]
-
 const MapMarkerFilterItemIcons = [
     TestPointTypeIcons[TestPointTypes.TEST_STATION],
     ItemTypeIcons[ItemTypes.RECTIFIER],
@@ -40,6 +32,14 @@ const MapMarkerFilterItemIcons = [
 const MapMarkerTypeFilter = ({ onBackPress, closeSheet, visible }) => {
     const { filter, onApply } = useMarkerTypeFilter()
     const { notSelected, onChange } = useFilter({ excluded: filter, visible, onApply })
+    const mapMarkerFilterItemLabels = useMemo(() => [
+        TestPointTypeLabels[TestPointTypes.TEST_STATION],
+        ItemTypeLabels[ItemTypes.RECTIFIER],
+        TestPointTypeLabels[TestPointTypes.JUNCTION_BOX],
+        TestPointTypeLabels[TestPointTypes.HEADER],
+        TestPointTypeLabels[TestPointTypes.MEASURMENT],
+        TestPointTypeLabels[TestPointTypes.FIELD_NOTE]
+    ], [])
 
     const renderItem = ({ item, index }) => <CheckBoxListItem
         key={item}
@@ -49,13 +49,13 @@ const MapMarkerTypeFilter = ({ onBackPress, closeSheet, visible }) => {
         value={item}
         status={'primary'}
         pack={'cp'}
-        title={MapMarkerFilterItemLabels[index]}
+        title={mapMarkerFilterItemLabels[index]}
     />
 
     return (
         <>
             <SheetHeader
-                title='Marker type'
+                title={translateBottomSheet('markerType')}
                 onBackPress={onBackPress}
                 onClosePress={closeSheet} />
             <FlashList

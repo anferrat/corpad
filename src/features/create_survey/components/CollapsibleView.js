@@ -3,6 +3,7 @@ import { StyleSheet, View } from 'react-native'
 import { Icon, Text } from '@ui-kitten/components'
 import { primary } from '../../../styles/colors'
 import Pressable from '../../../components/Pressable'
+import { translateCreateSurvey } from '../../../localization'
 
 const CollapsibleView = ({ children, visible, toggleView }) => {
     return (
@@ -15,7 +16,7 @@ const CollapsibleView = ({ children, visible, toggleView }) => {
                     style={styles.icon}
                     fill={primary} />
                 <Text status='primary'>
-                    {!visible ? 'More' : 'Less'} options ...
+                    {translateCreateSurvey(visible ? 'lessOptions' : 'moreOptions')}
                 </Text>
             </Pressable>
             {visible ?

@@ -5,6 +5,7 @@ import { control } from "../../../../styles/colors"
 import Input from "../../../../components/Input"
 import { plusCircle } from "../../../../components/Icons"
 import { getModalTop } from "../../../../styles/dimensions"
+import { translateSettings } from '../../../../localization'
 
 const NewPotentialModal = ({ visible, addPotential, dismissModal, onChangeName, nameValid, name }) => {
     const inputRef = useRef()
@@ -29,10 +30,10 @@ const NewPotentialModal = ({ visible, addPotential, dismissModal, onChangeName, 
                 style={styles.inputView}>
                 <Input
                     ref={inputRef}
-                    label='New potential type'
+                    label={translateSettings('newPotentialType')}
                     maxLength={12}
                     valid={nameValid}
-                    placeholder='Potential type'
+                    placeholder={translateSettings('potentialType')}
                     style={styles.input}
                     value={name}
                     onChangeText={onChangeName} />
@@ -40,7 +41,7 @@ const NewPotentialModal = ({ visible, addPotential, dismissModal, onChangeName, 
                     accessoryLeft={plusCircle}
                     style={styles.button}
                     onPress={addPotential}>
-                    Create
+                    {translateSettings('create')}
                 </Button>
             </ScrollView>
         </Modal>

@@ -8,15 +8,14 @@ import { LengthUnitDescriptionLabels, LengthUnitLabels, ResistivityUnitDescripti
 import { Button } from '@ui-kitten/components'
 import { addIcon, plus, plusCircle } from '../../../../../components/Icons'
 import SoilResistivityLayer from '../SoilResistivityLayer'
+import { translateEdit } from '../../../../../localization'
 
 
-
-const resistivityUnitList = Object.values(ResistivityUnits).map(unit => ({ item: `${ResistivityUnitDescriptionLabels[unit]}` }))
-
-const spacingUnitList = Object.values(LengthUnits).map(unit => ({ item: `${LengthUnitDescriptionLabels[unit]} (${LengthUnitLabels[unit]})`, index: unit }))
 
 const SRCard = ({ data, update, validate, deleteSoilResistivityLayerHandler, addSoilResistivityLayerHandler, updateSpacingUnit, updateSubProperty, validateSubProperty }) => {
     const { name, defaultName, valid, spacingUnit, resistivityUnit, comment, layers } = data
+    const resistivityUnitList = React.useMemo(() => Object.values(ResistivityUnits).map(unit => ({ item: `${ResistivityUnitDescriptionLabels[unit]}` })), [])
+    const spacingUnitList = React.useMemo(() => Object.values(LengthUnits).map(unit => ({ item: `${LengthUnitDescriptionLabels[unit]} (${LengthUnitLabels[unit]})`, index: unit })), [])
 
     const maxNumberReached = layers.length >= 6
 
@@ -30,7 +29,7 @@ const SRCard = ({ data, update, validate, deleteSoilResistivityLayerHandler, add
 
     const onChangeText = React.useCallback((value) => update(value, 'comment'), [update])
 
-    const onEndEditing = React.useCallback(() => validate('comment'), [])
+    const onEndEditing = React.useCallback(() => validate('comment'), [validate])
 
     const onUpdateLayer = React.useCallback((value, property, index) => { updateSubProperty(value, property, index, 'layers') }, [updateSubProperty])
 
@@ -51,17 +50,17 @@ const SRCard = ({ data, update, validate, deleteSoilResistivityLayerHandler, add
                     property='spacingUnit'
                     itemList={spacingUnitList}
                     selectedIndex={spacingUnit}
-                    placeholder="Select material"
+                    placeholder={translateEdit('selectMaterial')}
                     onSelect={onSelectSpacingUnit}
-                    label='Spacing unit' />
+                    label={translateEdit('spacingUnit')} />
                 <Select
                     style={styles.selectRight}
                     property='resistivityUnit'
                     itemList={resistivityUnitList}
                     selectedIndex={resistivityUnit}
-                    placeholder="Select resistivity unit"
+                    placeholder={translateEdit('selectResistivityUnit')}
                     onSelect={onSelectResistivityUnit}
-                    label='Resistivity unit' />
+                    label={translateEdit('resistivityUnit')} />
             </View>
             <Input
                 onChangeText={onChangeText}
@@ -71,10 +70,9 @@ const SRCard = ({ data, update, validate, deleteSoilResistivityLayerHandler, add
                 valid={valid.comment}
                 textAlignVertical={'top'}
                 numberOfLines={3}
-                label='Comments'
                 value={comment}
                 property='comment'
-                placeholder='Type your comments here' />
+                />
 
             {layers.map(({ resistanceToZero, spacing }, index) =>
                 <SoilResistivityLayer
@@ -95,8 +93,8 @@ const SRCard = ({ data, update, validate, deleteSoilResistivityLayerHandler, add
                 onPress={addSoilResistivityLayerHandler}
                 style={styles.button}>
                 {maxNumberReached ?
-                    'Max number of layers reached' :
-                    `Add layer (${layers.length}/6)`}
+                    translateEdit('maxLayers') :
+                    translateEdit('addLayer', { count: layers.length })}
             </Button>
         </>
     )

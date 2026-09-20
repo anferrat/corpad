@@ -3,6 +3,7 @@ import { Animated, Easing, View, StyleSheet } from 'react-native'
 import { Icon, Text } from '@ui-kitten/components'
 import { primary, basic200, basic300, primary200, control } from '../../../styles/colors'
 import Pressable from '../../../components/Pressable'
+import { translateView } from '../../../localization'
 
 const ExpandedBar = (props) => {
     const [barDisplayed, setBarDisplayed] = useState(false)
@@ -49,7 +50,7 @@ const ExpandedBar = (props) => {
                 android_ripple={{ color: basic300 }}
                 onPress={toggleBar.bind(this, barDisplayed)}
                 style={styles.pressable}>
-                <Text status='primary'>{barDisplayed ? 'Hide' : 'Show'} controls</Text>
+                <Text status='primary'>{barDisplayed ? translateView('hide') : translateView('show')} {translateView('controls')}</Text>
                 <Animated.View style={{ transform: [{ rotate: rotate }], marginLeft: 12 }}>
                     <Icon name='arrow-ios-downward-outline' fill={primary} style={styles.icon} />
                 </Animated.View>

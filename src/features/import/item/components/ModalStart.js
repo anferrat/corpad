@@ -1,11 +1,12 @@
 import React from 'react'
-import { Button, Text } from '@ui-kitten/components'
+import { Button } from '@ui-kitten/components'
 import { View, StyleSheet } from 'react-native'
 import { getItemIcon, getItemName } from '../helpers/functions'
 import { importIcon } from '../../../../components/Icons'
 import ModalTitle from './ModalTitle'
 import { primary } from '../../../../styles/colors'
 import ModalStatusRow from './ModalStatusRow'
+import { translateImport } from '../../../../localization'
 
 const ModalStart = ({
     count,
@@ -17,7 +18,7 @@ const ModalStart = ({
     return (
         <>
             <ModalTitle
-                title={'Import from spreadsheet'}
+                title={translateImport('item.importFromSpreadsheet')}
                 iconFill={primary}
                 icon='download-outline'
                 hideModal={hideModal} />
@@ -27,7 +28,7 @@ const ModalStart = ({
                         {fileName}
                     </ModalStatusRow>
                     <ModalStatusRow icon={getItemIcon(itemType)} pack='cp'>
-                        {count} {getItemName(itemType, count)} will be created.
+                        {translateImport('item.toCreate', { name: getItemName(itemType), count })}
                     </ModalStatusRow>
                 </View>
                 <View style={styles.buttons}>
@@ -35,13 +36,13 @@ const ModalStart = ({
                         style={styles.button}
                         appearance='outline'
                         onPress={hideModal}>
-                        Cancel
+                        {translateImport('item.cancel')}
                     </Button>
                     <Button
                         style={styles.button}
                         onPress={onImportStart}
                         accessoryLeft={importIcon}>
-                        Start
+                        {translateImport('item.start')}
                     </Button>
                 </View>
             </View>

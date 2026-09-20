@@ -2,6 +2,7 @@
 import { ItemStatuses, TestPointTypes, WireColors, CoarseFineOptions } from "./global"
 import { TestPointTypeIcons } from "./icons"
 import { WireColorColors, StatusColors } from "../styles/colors"
+import { translate } from '../localization'
 
 const invalidCaptions = [
     'Name must only contain following characters: A-z, 0-9, -._()# and be less than 40 characters.',
@@ -13,13 +14,41 @@ const invalidCaptions = [
     'Select value from the list'
 ]
 
+const invalidCaptionKeys = [
+    'validation.name',
+    'validation.text',
+    'validation.latitude',
+    'validation.longitude',
+    'validation.number',
+    'validation.percentage',
+    'validation.select'
+]
+
 export class FieldProperty {
     constructor(label, placeholder, invalidCaption, keyboardType, accessoryList) {
-        this.label = label
-        this.placeholder = placeholder
-        this.invalidCaption = invalidCaptions[invalidCaption]
+        this._label = label
+        this._placeholder = placeholder
+        this._invalidCaption = invalidCaptions[invalidCaption]
+        this._invalidCaptionKey = invalidCaptionKeys[invalidCaption]
         this.keyboardType = keyboardType
         this.accessoryList = accessoryList
+    }
+
+    setKey(key) {
+        this.key = key
+        return this
+    }
+
+    get label() {
+        return this._label === null ? null : translate(`fields.${this.key}.label`, {}, this._label)
+    }
+
+    get placeholder() {
+        return this._placeholder === null ? null : translate(`fields.${this.key}.placeholder`, {}, this._placeholder)
+    }
+
+    get invalidCaption() {
+        return this._invalidCaptionKey ? translate(this._invalidCaptionKey, {}, this._invalidCaption) : this._invalidCaption
     }
 }
 
@@ -60,3 +89,5 @@ export const fieldProperties = {
     targetMin: new FieldProperty('Current target (Min)', 'Min', 4, 'numeric', []),
     targetMax: new FieldProperty('Current target (Max)', 'Max', 4, 'numeric', []),
 }
+
+Object.entries(fieldProperties).forEach(([key, fieldProperty]) => fieldProperty.setKey(key))

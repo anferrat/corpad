@@ -1,8 +1,9 @@
-import { SubitemTypeLabels, ItemTypeLabels, ItemTypeLabelsPlural, ReferenceCellCodeLabels } from "../../../../constants/labels"
+import { SubitemTypeLabels, ItemTypeLabels, ReferenceCellCodeLabels } from "../../../../constants/labels"
+import { translateImport } from '../../../../localization'
 
 export const emptyValueCheck = (value) => {
     if (!value || value === null || value === undefined)
-        return '<Empty>'
+        return translateImport('parameters.empty')
     else return value
 }
 
@@ -56,7 +57,7 @@ export const getData = (state, property, subitemIndex) => {
 
 export const getDisplayValue = (parameterType, importType, { itemList, defaultValue, fieldIndex, fieldIndexList, fields, defaultName, itemListLabels }) => {
     const emptyValue = {
-        value: '<Empty>',
+        value: translateImport('parameters.empty'),
         empty: true
     }
     const getValue = () => {
@@ -83,7 +84,7 @@ export const getDisplayValue = (parameterType, importType, { itemList, defaultVa
                 else
                     if (fieldIndexList.length === 1)
                         return fields[fieldIndexList[0]] ?? emptyValue
-                    else return `${fields[fieldIndexList[0]]} & ${fieldIndexList.length - 1} more` ?? emptyValue
+                    else return `${fields[fieldIndexList[0]]} ${translateImport('item.moreValues', { count: fieldIndexList.length - 1 })}` ?? emptyValue
             else return emptyValue
         }
         else if (parameterType === 1) {
@@ -132,14 +133,11 @@ export const getPreviewList = (data, fields, fieldIndex, fieldIndexList, importT
     else return []
 }
 
-export const showItemValue = (item) => (item === undefined || item === '' || item === null) ? '<Empty>' : item.trim()
+export const showItemValue = (item) => (item === undefined || item === '' || item === null) ? translateImport('parameters.empty') : item.trim()
 
 
 export const getItemName = (itemType, count = null) => {
-    const text = count === 1 ? ItemTypeLabels[itemType] : ItemTypeLabelsPlural[itemType]
-    if (!text)
-        return count === 1 ? 'item' : 'items'
-    else return text.toLowerCase()
+    return (ItemTypeLabels[itemType] ?? translateImport('item.item')).toLowerCase()
 }
 
 export const getPotentialsData = (autoCreate, potentialTypes, referenceCellTypes) => {
@@ -189,7 +187,7 @@ export const getTypedIndex = (subitems, subitemIndex) => {
 
 export const getSubitemName = (subitemType, typedIndex) => {
     const label = SubitemTypeLabels[subitemType]
-    return label ? `${label} ${typedIndex}` : 'Error'
+    return label ? `${label} ${typedIndex}` : translateImport('parameters.error')
 }
 
 export const getSideIcon = (fromAtoB) => {
@@ -221,21 +219,21 @@ export const getItemIcon = (itemType) => {
 export const getTextByWarningType = (warning) => {
     switch (warning?.warningCode) {
         case 'testPointTypeMismatch':
-            return 'Test point type was not defined. Default test point type is set.'
+            return translateImport('warnings.testPointType')
         case 'subitemConverter':
         case 'subitemValidator':
             const label = SubitemTypeLabels[warning?.type] ?? '??'
-            return `"${label}" cannot be created from provided data.`
+            return translateImport('warnings.cannotCreate', { label })
         case 'nameFormat':
-            return `Name property ${warning?.originalValue} was converted to ${warning?.convertedValue}`
+            return translateImport('warnings.nameConverted', { originalValue: warning?.originalValue, convertedValue: warning?.convertedValue })
         case 'statusMismatch':
-            return 'Status is not defined. Default status was set.'
+            return translateImport('warnings.status')
         case 'stringLengthMax40':
         case 'stringLengthMax80':
         case 'stringLengthMax300':
-            return `Value of property " ${warning?.property} " is too long and was cropped to a maximum allowed length.`
+            return translateImport('warnings.valueTooLong', { property: warning?.property })
         default:
-            return 'Some values may be invalid and were converted to null'
+            return translateImport('warnings.invalidValues')
     }
 }
 

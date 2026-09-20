@@ -3,6 +3,7 @@ import { View, StyleSheet } from 'react-native'
 import MultiSelectConnectionCardField from './MultiSelectConnectionCardField'
 import CurrentDirection from './CurrentDirection'
 import CurrentDirectionHint from './CurrentDirectionHint'
+import { translateEdit } from '../../../../localization'
 
 const SidesView = ({ sideA, sideB, fromAtoB, shorted, subitemList, selectedTypes, update }) => {
     return (
@@ -15,7 +16,7 @@ const SidesView = ({ sideA, sideB, fromAtoB, shorted, subitemList, selectedTypes
                         subitemList={subitemList}
                         property={'sideA'}
                         selectedIdList={sideA}
-                        label={'Side A'} />
+                        label={translateEdit('sideA')} />
                 </View>
                 <View style={styles.direction}>
                     <CurrentDirection
@@ -30,7 +31,7 @@ const SidesView = ({ sideA, sideB, fromAtoB, shorted, subitemList, selectedTypes
                         subitemList={subitemList}
                         property={'sideB'}
                         selectedIdList={sideB}
-                        label={'Side B'} />
+                        label={translateEdit('sideB')} />
                 </View>
             </View>
             <CurrentDirectionHint

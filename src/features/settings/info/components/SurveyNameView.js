@@ -2,6 +2,7 @@ import React, { useRef, useEffect, useCallback, useState } from 'react'
 import { View, StyleSheet } from 'react-native'
 import { Text, } from '@ui-kitten/components'
 import SurveyNameModal from './SurveyNameModal'
+import { translateSettings } from '../../../../localization'
 
 
 const SurveyNameView = ({ name, inputText, updateSurveyName, resetNameInput, onChangeNameInput }) => {
@@ -24,7 +25,7 @@ const SurveyNameView = ({ name, inputText, updateSurveyName, resetNameInput, onC
             <View style={styles.titleView}>
                 <Text
                     appearance='hint'
-                    category='label'>Survey name</Text>
+                    category='label'>{translateSettings('surveyName')}</Text>
                 <Text
                     category='h5'
                     ellipsizeMode='tail'

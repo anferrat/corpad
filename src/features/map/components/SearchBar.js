@@ -6,6 +6,7 @@ import IconButton from '../../../components/IconButton'
 import useMarkerSearch from '../hooks/useMarkerSearch'
 import SearchModal from './search/SearchModal'
 import AppLogo from './search/AppLogo'
+import { translateMap } from '../../../localization'
 
 const SearchBar = ({ satelliteMode }) => {
     const { search, markerCount, hideModal, showModal, openMenu, onChangeKeyword, showOnMap, resetKeyword } = useMarkerSearch()
@@ -30,7 +31,7 @@ const SearchBar = ({ satelliteMode }) => {
                     <Text
                         appearance={keyword ? 'default' : 'hint'}
                         style={styles.text}>
-                        {keyword ? keyword : `Search by name`}
+                        {keyword ? keyword : translateMap('searchByName')}
                     </Text>
                 </View>
                 <View

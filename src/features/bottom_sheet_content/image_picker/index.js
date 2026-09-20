@@ -2,6 +2,7 @@ import React from 'react'
 import { View, StyleSheet } from 'react-native'
 import MenuListItem from '../components/MenuListItem'
 import useImagePicker from './hooks/useImagePicker'
+import { translateBottomSheet } from '../../../localization'
 
 
 const ImagePickerView = ({ params, closeSheet }) => {
@@ -10,15 +11,15 @@ const ImagePickerView = ({ params, closeSheet }) => {
         <View style={styles.container}>
             <MenuListItem
                 onPress={addPhotoFromCamera}
-                title='Take a photo'
+                title={translateBottomSheet('takePhoto')}
                 icon='camera' />
             <MenuListItem
                 onPress={addPhotoFromLibrary}
-                title='Select from the gallery'
+                title={translateBottomSheet('selectGallery')}
                 icon='image' />
             <MenuListItem
                 onPress={addPhotoFromStorage}
-                title='Select from storage'
+                title={translateBottomSheet('selectStorage')}
                 icon='folder' />
         </View>
     )

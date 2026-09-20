@@ -5,6 +5,7 @@ import { ScrollRef } from '../../../App'
 import ItemView from './ItemView'
 import SubitemListView from './SubitemListView'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
+import { translateView } from '../../localization'
 
 const AnimatedKeyboardAwareScrollView = Animated.createAnimatedComponent(KeyboardAwareScrollView)
 
@@ -43,7 +44,7 @@ const ViewItem = ({ itemId, itemType, navigateToEdit, navigateToEditSubitem, nav
             </AnimatedKeyboardAwareScrollView>
             <BottomButton
                 icon='undo'
-                title='Back'
+                title={translateView('back')}
                 onPress={goBack} />
         </>
     )

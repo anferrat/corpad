@@ -3,6 +3,7 @@ import { View, StyleSheet } from "react-native"
 import { Text, Toggle } from "@ui-kitten/components"
 import { androidRipple } from '../../../../styles/styles'
 import Pressable from "../../../../components/Pressable"
+import { translateSettings } from '../../../../localization'
 
 const AutoCreateToggle = ({ toggleAutoCreate, autoCreate }) => {
 
@@ -15,13 +16,13 @@ const AutoCreateToggle = ({ toggleAutoCreate, autoCreate }) => {
             onPress={updateAutoCreate}>
             <View style={styles.titleView}>
                 <Text category='p1'>
-                    Auto-create potentials
+                    {translateSettings('autoCreatePotentials')}
                 </Text>
                 <Text
                     category='s2'
                     appearance='hint'
                     style={styles.subtitle}>
-                    New readings will have ON/OFF potential fields added upon creation
+                     {translateSettings('autoCreateDescription')}
                 </Text>
             </View>
             <Toggle

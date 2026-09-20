@@ -7,6 +7,7 @@ import { hapticMedium } from "../../../../../native_libs/haptics"
 import { getFormattedDate, isProStatus, isVerifyStatus } from "../../../../../helpers/functions"
 import { MultimeterTypeLabels } from "../../../../../constants/labels"
 import { connectMultimeter } from "../../../../../app/controllers/MultimeterController"
+import { translateBottomSheet } from '../../../../../localization'
 
 const useSurveyManager = ({ hideSheet }) => {
     const { fileName, savingInProgress, lastSyncTime } = useSelector(state => state.settings.currentSurvey)
@@ -17,11 +18,11 @@ const useSurveyManager = ({ hideSheet }) => {
     const dispatch = useDispatch()
     const savingRef = useRef(false)
 
-    const syncTimeLabel = (lastSyncTime === null ? 'Never saved' : `Last synced: ${getFormattedDate(lastSyncTime)}`)
+    const syncTimeLabel = (lastSyncTime === null ? translateBottomSheet('neverSaved') : `${translateBottomSheet('lastSynced')}: ${getFormattedDate(lastSyncTime)}`)
 
-    const multimeterLablel = paired ? (`${connected && !connecting ? 'Connected' : 'Disconnected'} | ${MultimeterTypeLabels[multimeterType]}`) : null
+    const multimeterLablel = paired ? (`${translateBottomSheet(connected && !connecting ? 'connected' : 'disconnected')} | ${MultimeterTypeLabels[multimeterType]}`) : null
 
-    const onUpload = useCallback((total, count) => dispatch(updateLoaderProgress(true, 'Uploading assets', total, count)), [dispatch])
+    const onUpload = useCallback((total, count) => dispatch(updateLoaderProgress(true, translateBottomSheet('uploadingAssets'), total, count)), [dispatch])
 
     const onPaywallShow = useCallback(() => {
         dispatch(showPaywall())
@@ -63,7 +64,7 @@ const useSurveyManager = ({ hideSheet }) => {
             hapticMedium()
             dispatch(setSurveySaving(true))
             hideSheet()
-            dispatch(updateLoader('Saving survey', fileName))
+            dispatch(updateLoader(translateBottomSheet('savingSurvey'), fileName))
             const { response, status } = await saveAndResetSurvey({ onUpload }, surveyManagerErrorHandler)
             if (status === 200) {
                 dispatch(resetCurrentSurveySettings(response.isCloud))

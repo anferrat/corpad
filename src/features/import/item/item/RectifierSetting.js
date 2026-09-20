@@ -4,6 +4,7 @@ import { View, StyleSheet } from 'react-native'
 import { useDispatch, useSelector } from 'react-redux'
 import { setImportItemSetting } from '../../../../store/actions/importData'
 import Parameter from '../Parameter'
+import { translateImport } from '../../../../localization'
 
 const RectifierSetting = () => {
     const setting = useSelector(state => state.importData.item.tapSetting)
@@ -15,16 +16,16 @@ const RectifierSetting = () => {
 
     return (
         <View>
-            <Text appearance='hint' category='label'>Current control mode</Text>
+            <Text appearance='hint' category='label'>{translateImport('item.currentControlMode')}</Text>
             <RadioGroup
                 style={styles.settingRow}
                 selectedIndex={setting}
                 onChange={setSetting}>
                 <Radio>
-                    Coarse - Fine
+                    {translateImport('item.coarseFine')}
                 </Radio>
                 <Radio>
-                    Value (VA %)
+                    {translateImport('item.valueVa')}
                 </Radio>
             </RadioGroup>
             {
