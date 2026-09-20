@@ -4,7 +4,7 @@ import { globalStyle } from '../../styles/styles'
 import CalculatorList from '../../features/calculator/CalculatorList'
 import LoadingView from '../../components/LoadingView'
 
-export default CalculatorListScreen = ({ navigation }) => {
+const CalculatorListScreen = ({ navigation }) => {
     const [loading, setLoading] = useState(true)
 
     useEffect(() => {
@@ -22,3 +22,5 @@ export default CalculatorListScreen = ({ navigation }) => {
         </View>
     )
 }
+
+export default CalculatorListScreen

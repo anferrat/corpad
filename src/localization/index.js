@@ -2,6 +2,7 @@ import en from './catalogs/en'
 import es from './catalogs/es'
 import { setActiveLabelCatalog } from '../constants/labels'
 import { LanguagePreferences } from './languages'
+import { CalculatorTypes } from '../constants/global'
 import enApp from './catalogs/en/app'
 import esApp from './catalogs/es/app'
 import enAddReading from './catalogs/en/addReading'
@@ -123,6 +124,15 @@ const actionKeys = {
     'Try later': 'actions.tryLater'
 }
 
+const calculatorTypeKeys = Object.freeze({
+    [CalculatorTypes.COATING]: 'coating',
+    [CalculatorTypes.CURRENT_FOUR_WIRE]: 'currentFourWire',
+    [CalculatorTypes.CURRENT_TWO_WIRE]: 'currentTwoWire',
+    [CalculatorTypes.REFERENCE_CELL]: 'referenceCell',
+    [CalculatorTypes.SHUNT]: 'shunt',
+    [CalculatorTypes.WENNER]: 'wenner'
+})
+
 export const initializeLocalization = (preference = LanguagePreferences.SYSTEM) => {
     activeLanguage = getCatalogLanguage(preference)
     activeCatalog = catalogs[activeLanguage]
@@ -141,6 +151,7 @@ export const translateFeature = (feature, key, params = {}, fallback = key) => {
 export const translateApp = (key, params = {}) => translateFeature('app', key, params)
 export const translateAddReading = (key, params = {}) => translateFeature('addReading', key, params)
 export const translateBottomSheet = (key, params = {}) => translateFeature('bottomSheet', key, params)
+export const calculatorTypeKey = calculatorType => calculatorTypeKeys[calculatorType] ?? calculatorType
 export const translateCalculator = (key, params = {}) => translateFeature('calculator', key, params, translate(`calculator.${key}`, params))
 export const translateCreateSurvey = (key, params = {}) => translateFeature('createSurvey', key, params)
 export const translateEdit = (key, params = {}) => translateFeature('edit', key, params)

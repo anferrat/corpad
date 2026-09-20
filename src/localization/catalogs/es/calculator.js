@@ -6,8 +6,8 @@ export default {
         calculate: 'Calcular',
         saved: 'Guardado',
         reset: 'Restablecer',
-        on: 'Activado',
-        off: 'Desactivado',
+        on: 'On',
+        off: 'Off',
         noCalculationsDescription: 'Después de completar un cálculo, pulse el botón Guardar para encontrarlo aquí.'
     },
     categories: {
@@ -33,7 +33,7 @@ export default {
         wenner: 'Resistividad'
     },
     descriptions: {
-        coating: 'Calcula la conductancia del revestimiento de una sección de tubería usando potenciales y corriente ACTIVADOS/DESACTIVADOS, y determina la calidad del revestimiento.',
+        coating: 'Calcula la conductancia del revestimiento de una sección de tubería usando potenciales y corriente ON/OFF, y determina la calidad del revestimiento.',
         currentFourWire: 'Calcula la corriente en línea usando la caída de tensión entre dos puntos y la resistencia calculada de la tubería.',
         currentTwoWire: 'Calcula la corriente en línea usando el diámetro de la tubería y la caída de tensión entre dos puntos.',
         referenceCell: 'Convierte valores de tensión con referencia a distintos tipos de celdas.',
@@ -42,8 +42,8 @@ export default {
     },
     inputs: {
         factor: 'Factor',
-        currentRatio: 'Relación de corriente',
-        voltageRatio: 'Relación de tensión',
+        currentRatio: 'Corriente',
+        voltageRatio: 'Voltaje',
         voltageDrop: 'Caída de tensión',
         pipeDiameter: 'Diámetro de tubería',
         selectDiameter: 'Seleccionar diámetro',
@@ -117,7 +117,7 @@ export default {
                 'Asigne una sección de tubería para la prueba de calidad del revestimiento. Debe tener dos puntos de acceso, como estaciones de prueba, donde sea posible medir los potenciales de la tubería y la corriente que circula.',
                 'Configure el programa de interrupción del rectificador de protección catódica existente o instale una fuente temporal con lecho de tierra.',
                 'Mida la distancia entre los dos puntos de acceso (m o pies) y determine el diámetro de la tubería.',
-                'En el primer punto de acceso (Inicio), mida los potenciales tubería-suelo ACTIVADO/DESACTIVADO y la corriente que circula en ambos estados.',
+                'En el primer punto de acceso (Inicio), mida los potenciales tubería-suelo ON/OFF y la corriente que circula en ambos estados.',
                 'Mida la resistividad media del suelo desde la superficie hasta la profundidad de la tubería en el primer punto de acceso (Inicio).',
                 'Repita los pasos 4 y 5 para el segundo punto de acceso (Fin), complete los campos y pulse “Calcular”.'
             ],
@@ -166,6 +166,7 @@ export default {
                 'La resistencia del segmento se calcula con la resistividad del acero al carbono (99 % Fe, 1 % C) de 14,3 μΩ-cm a 20 °C, pero puede variar de 10 a 70 μΩ-cm según distintas publicaciones.',
                 'Este método es impreciso y solo sirve para estimar aproximadamente la corriente de la tubería. El error aumenta con diámetros y longitudes mayores y con temperaturas más altas.'
             ],
+            shunt: [],
             referenceCell: [
                 'Este convertidor no tiene en cuenta el efecto de la temperatura en las lecturas de potencial. Se supone que los potenciales se tomaron a 25 °C.'
             ],

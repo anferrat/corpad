@@ -1,10 +1,9 @@
-import React, { useState, useEffect } from 'react'
+import React from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { globalStyle } from '../../styles/styles'
 import LoaderCalculator from '../../features/calculator/LoaderCalculator'
-import LoadingView from '../../components/LoadingView'
 
-export default CalculatorScreen = ({ navigation, route }) => {
+const CalculatorScreen = ({ navigation, route }) => {
     const { calculatorType, calculatorId } = route.params
     const navigateToMap = () => navigation.navigate('PipelineSurvey', { screen: 'Map' })
     return (
@@ -16,3 +15,5 @@ export default CalculatorScreen = ({ navigation, route }) => {
         </SafeAreaView>
     )
 }
+
+export default CalculatorScreen

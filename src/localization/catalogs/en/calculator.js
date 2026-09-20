@@ -162,6 +162,7 @@ export default {
                 'Pipe segment resistance is calculated based on carbon steel (99% Fe, 1% C) resistivity of 14.3 μΩ-cm at 20 deg. C, however it may vary from 10 to 70 μΩ-cm according to different publications.',
                 'This method is imprecise and suitable only for approximate estimation of current flowing within the pipe. Calculation error increases with larger pipe diameters, segment lengths and higher temperatures.'
             ],
+            shunt: [],
             referenceCell: [
                 'This converter does not take into account temperature effect on potential readings. Potential values are assumed to be taken at 25 deg. C'
             ],

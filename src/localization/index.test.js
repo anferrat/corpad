@@ -1,4 +1,4 @@
-import { initializeLocalization, translate, translateBottomSheet, translateEdit, translateList, translateOverlay, translateView } from './index'
+import { calculatorTypeKey, initializeLocalization, translate, translateBottomSheet, translateCalculator, translateEdit, translateList, translateOverlay, translateView } from './index'
 import { CalculatorTypeLabels, CouponTypeLabels, DefaultNames, ExportFormatTypeLabeles, ExportItemPropertyLabels, IsolationShortedLabels, IsolationTypeLabels, ItemTypeLabels, MapLayerFeatureLabels, MeasurementTypeLabels, PermanentPotentialTypeLabels, PotentialUnitDescriptionLabels, RectifierReadingOptionLabels, SortingOptionLabels, StatusLabels, SubitemTypeLabels, TestPointReadingOptionLabels, TestPointTypeLabels, WireColorLabels, WireGaugeLabels } from '../constants/labels'
 import { CalculatorTypes, CouponTypes, ExportFormatTypes, ExportItemProperties, IsolationShorted, IsolationTypes, ItemStatuses, ItemTypes, MapLayerFeatures, MultimeterMeasurementTypes, PermanentPotentialTypes, PotentialUnits, RectifierReadingOptions, SortingOptions, SubitemTypes, TestPointReadingOptions, TestPointTypes, WireColors, WireGauges } from '../constants/global'
 import { fieldProperties } from '../constants/fieldProperties'
@@ -29,6 +29,29 @@ describe('localization', () => {
         expect(IsolationTypeLabels[IsolationTypes.ISOLATION_JOINT]).toBe('Junta de aislamiento')
         expect(IsolationShortedLabels[IsolationShorted.SHORTED]).toBe('Cortocircuitado')
         expect(translate('dialogs.attention')).toBe('Atención')
+    })
+
+    it('maps calculator types to their translation keys', () => {
+        expect(Object.values(CalculatorTypes).map(calculatorTypeKey)).toEqual([
+            'wenner',
+            'shunt',
+            'coating',
+            'currentTwoWire',
+            'currentFourWire',
+            'referenceCell'
+        ])
+    })
+
+    it('provides calculator procedure and hint arrays for every type', () => {
+        ['en', 'es'].forEach(language => {
+            initializeLocalization(language)
+
+            Object.values(CalculatorTypes).forEach(calculatorType => {
+                const key = calculatorTypeKey(calculatorType)
+                expect(translateCalculator(`info.points.${key}`)).toEqual(expect.any(Array))
+                expect(translateCalculator(`info.hintItems.${key}`)).toEqual(expect.any(Array))
+            })
+        })
     })
 
     it('localizes constant labels while keeping logic-sensitive labels in English', () => {

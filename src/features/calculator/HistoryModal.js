@@ -106,6 +106,7 @@ const HistoryModal = (props) => {
                     {historyList.length > 0 ?
                         <BottomButton
                             icon='trash'
+                            status='danger'
                             title={translate('calculator.deleteAll')}
                             onPress={deleteAllHandler}
                             disabled={loading}

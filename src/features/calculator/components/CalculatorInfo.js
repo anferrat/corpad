@@ -4,7 +4,7 @@ import { Text } from '@ui-kitten/components'
 import { basic200, primary } from '../../../styles/colors'
 import { globalStyle } from '../../../styles/styles'
 import { CoatingDrawing, FourWireDrawing, ShuntDrawing, TwoWireDrawing, WennerDrawing } from '../../../../assets/drawings'
-import { translateCalculator } from '../../../localization'
+import { calculatorTypeKey, translateCalculator } from '../../../localization'
 
 const Drawing = (props) => {
     switch (props.calculatorType) {
@@ -24,13 +24,15 @@ const Drawing = (props) => {
 }
 
 const getPoints = (calculatorType) => {
-    const key = calculatorType === 'refCell' ? 'referenceCell' : calculatorType
-    return translateCalculator(`info.points.${key}`) ?? []
+    const key = calculatorTypeKey(calculatorType)
+    const points = translateCalculator(`info.points.${key}`)
+    return Array.isArray(points) ? points : []
 }
 
 const getHints = (calculatorType) => {
-    const key = calculatorType === 'refCell' ? 'referenceCell' : calculatorType
-    return translateCalculator(`info.hintItems.${key}`) ?? []
+    const key = calculatorTypeKey(calculatorType)
+    const hints = translateCalculator(`info.hintItems.${key}`)
+    return Array.isArray(hints) ? hints : []
 }
 
 const CalculatorInfo = (props) => {

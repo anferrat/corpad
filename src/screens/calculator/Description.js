@@ -4,7 +4,7 @@ import { globalStyle } from '../../styles/styles'
 import { CalculatorInfo } from '../../features/calculator'
 
 
-export default CalculatorScreen = ({ route }) => {
+const CalculatorDescriptionScreen = ({ route }) => {
     const { calculatorType } = route.params
 
     return (
@@ -13,3 +13,5 @@ export default CalculatorScreen = ({ route }) => {
         </SafeAreaView>
     )
 }
+
+export default CalculatorDescriptionScreen

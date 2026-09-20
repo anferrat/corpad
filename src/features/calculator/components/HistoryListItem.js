@@ -1,7 +1,7 @@
 import React, { useRef } from 'react'
 import { View, StyleSheet, Animated } from 'react-native'
 import { Icon, Text } from '@ui-kitten/components'
-import { basic, primary, success } from '../../../styles/colors'
+import { danger, primary, success } from '../../../styles/colors'
 import { globalStyle, androidRipple } from '../../../styles/styles'
 import SingleIconButton from '../../../components/IconButton'
 import { warningHandler } from '../../../helpers/error_handler'
@@ -24,17 +24,13 @@ const HistoryListItem = (props) => {
 
     return (
         <Animated.View style={{
-            height: scale.current.interpolate({
-                inputRange: [0, 1],
-                outputRange: [0, 72],
-            }),
             transform: [{ scale: scale.current }]
         }}>
             <Pressable style={{ ...globalStyle.card, ...styles.mainView }} android_ripple={androidRipple} onPress={props.onPress}>
                 <View style={styles.titleView}>
                     <Icon name={props.icon} style={styles.icon} pack={props.pack} fill={primary} />
                     <View style={styles.textView}>
-                        <Text category='s1' numberOfLines={1} ellipsizeMode={'tail'} style={styles.title}>{props.title}</Text>
+                        <Text category='s1' style={styles.title}>{props.title}</Text>
                         <Text category='c1' appearance='hint'>{props.subtitle}</Text>
                     </View>
                 </View>
@@ -42,7 +38,7 @@ const HistoryListItem = (props) => {
                     <Icon style={styles.activeIcon} fill={success} name='checkmark-outline' />
                     :
                     <SingleIconButton
-                        color={basic}
+                        color={danger}
                         iconName='trash'
                         size='small'
                         onPress={onDeleteHandler}
