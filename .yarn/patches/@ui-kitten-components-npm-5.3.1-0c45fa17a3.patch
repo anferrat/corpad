@@ -37,3 +37,54 @@ index d700afc6c391764a41fa63db38f8346b70bb5ef5..6cf109c821c9c4709b2492e7af7d990c
            </react_native_1.View>
          </react_native_1.View>
          <devsupport_1.FalsyText style={evaStyle.text} component={children}/>
+diff --git a/devsupport/components/measure/measure.component.js b/devsupport/components/measure/measure.component.js
+index 02180f9..c952313 100644
+--- a/devsupport/components/measure/measure.component.js
++++ b/devsupport/components/measure/measure.component.js
+@@ -36,7 +36,12 @@ const type_1 = require("./type");
+  * but `force` property may be used to measure any time it's needed.
+  * DON'T USE THIS FLAG IF THE COMPONENT RENDERS FIRST TIME OR YOU KNOW `onLayout` WILL BE CALLED.
+  */
+-const MeasureElement = (props) => {
++const MeasureElement = ({
++    force = false,
++    shouldUseTopInsets = false,
++    onMeasure,
++    children
++  }) => {
+     const ref = react_1.default.useRef();
+     const bindToWindow = (frame, window) => {
+         if (frame.origin.x < window.size.width) {
+@@ -50,21 +55,21 @@ const MeasureElement = (props) => {
+             measureSelf();
+         }
+         else {
+-            const originY = props.shouldUseTopInsets ? y + react_native_1.StatusBar.currentHeight || 0 : y;
+-            const frame = bindToWindow(new type_1.Frame(x, originY, w, h), type_1.Frame.window());
+-            props.onMeasure(frame);
++            const originY = shouldUseTopInsets ? y + react_native_1.StatusBar.currentHeight || 0 : y;
++            const frame = bindToWindow(new type_1.Frame(x, originY, Math.round(w), Math.round(h)), type_1.Frame.window());
++            onMeasure(frame);
+         }
+     };
+     const measureSelf = () => {
+         const node = (0, react_native_1.findNodeHandle)(ref.current);
+-        react_native_1.UIManager.measureInWindow(node, onUIManagerMeasure);
++        if (node) react_native_1.UIManager.measureInWindow(node, onUIManagerMeasure);
+     };
+-    if (props.force) {
+-        measureSelf();
+-    }
++    react_1.default.useEffect(() => {
++        if (force) {
++            measureSelf();
++        }
++    });
+-    return react_1.default.cloneElement(props.children, { ref, onLayout: measureSelf });
++    return react_1.default.cloneElement(children, { ref, onLayout: measureSelf });
+ };
+ exports.MeasureElement = MeasureElement;
+-exports.MeasureElement.defaultProps = {
+-    shouldUseTopInsets: false,
+-};
++
