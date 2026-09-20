@@ -37,11 +37,12 @@ import FindItem from '../screens/externalLink/FindItem'
 import PipelineMatching from '../screens/externalLink/PipelineMatching'
 import MultimeterScreen from '../screens/Multimeter'
 import { DEVELOPER_MODE_ON } from '../../App'
+import { BottomSheet } from '../bottom_sheet'
 
 
 const Stack = createNativeStackNavigator()
 
-export const AppNavigator = () => {
+export const AppNavigator = ({ bottomSheet }) => {
   const { loading, isCloud, isLoaded, isOnboardingVisible } = useApp()
   return (
     <>
@@ -109,6 +110,7 @@ export const AppNavigator = () => {
               <Stack.Screen name='CycleSettings' component={CycleSettings} />
             </Stack.Group>
           </Stack.Navigator >
+          <BottomSheet ref={bottomSheet} />
         </> : null}
       <SplashScreen
         loading={loading} />

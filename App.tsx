@@ -24,7 +24,6 @@ import map from './src/store/reducers/map';
 import settings from './src/store/reducers/settings';
 import exportSurvey from './src/store/reducers/export';
 import importData from './src/store/reducers/importData';
-import { BottomSheet } from './src/bottom_sheet';
 import FullScreenLoader from './src/features/overlays/loader/Loader';
 import { ExportModal } from './src/features/overlays/export_modal/';
 import { SessionModal } from './src/features/overlays/session_modal/';
@@ -77,8 +76,7 @@ scrolling ref - used to implement title scrolling animation inside View screen. 
                 <NavigationContainer
                   ref={navigationRef}>
 
-                  <AppNavigator />
-                  <BottomSheet ref={bottomSheet} />
+                  <AppNavigator bottomSheet={bottomSheet} />
                   <FullScreenLoader />
                   <ExportModal navigationRef={navigationRef} />
                   <SessionModal />
