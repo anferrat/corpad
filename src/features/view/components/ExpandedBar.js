@@ -1,57 +1,61 @@
-import React, { useState, useRef } from 'react'
-import { Animated, Easing, View, StyleSheet } from 'react-native'
+import React, { useState } from 'react'
+import { View, StyleSheet } from 'react-native'
+import Animated, {
+    Easing,
+    interpolate,
+    useAnimatedStyle,
+    useSharedValue,
+    withTiming
+} from 'react-native-reanimated'
 import { Icon, Text } from '@ui-kitten/components'
-import { primary, basic200, basic300, primary200, control } from '../../../styles/colors'
+import { primary, basic300, control } from '../../../styles/colors'
 import Pressable from '../../../components/Pressable'
 import { translateView } from '../../../localization'
 
-const ExpandedBar = (props) => {
+const BAR_HEIGHT = 110
+const BAR_OFFSET = 45
+const ANIMATION_DURATION = 200
+
+const ExpandedBar = ({ children }) => {
     const [barDisplayed, setBarDisplayed] = useState(false)
-    const height = useRef(new Animated.Value(0)).current
-    const move = height.interpolate({
-        inputRange: [0, 80],
-        outputRange: [-50, 0],
-    })
+    const progress = useSharedValue(0)
 
-    const rotate = height.interpolate({
-        inputRange: [0, 110],
-        outputRange: ['0deg', '180deg'],
-    })
-    const toggleBar = (bar) => {
-        if (bar)
-            closeBarAnimation()
-        else
-            openBarAnimation()
-        setBarDisplayed(!bar)
+    const barStyle = useAnimatedStyle(() => ({
+        height: interpolate(progress.value, [0, 1], [0, BAR_HEIGHT]),
+        transform: [{
+            translateY: interpolate(progress.value, [0, 1], [-BAR_OFFSET, 0])
+        }]
+    }))
+
+    const iconStyle = useAnimatedStyle(() => ({
+        transform: [{
+            rotate: `${interpolate(progress.value, [0, 1], [0, 180])}deg`
+        }]
+    }))
+
+    const toggleBar = () => {
+        const nextDisplayed = !barDisplayed
+        setBarDisplayed(nextDisplayed)
+        progress.value = withTiming(nextDisplayed ? 1 : 0, {
+            duration: ANIMATION_DURATION,
+            easing: Easing.out(Easing.cubic)
+        })
     }
-
-    const openBarAnimation = () => Animated.timing(height, {
-        toValue: 110,
-        duration: 200,
-        useNativeDriver: false,
-        easing: Easing.linear
-    }).start()
-
-
-    const closeBarAnimation = () => Animated.timing(height, {
-        toValue: 0,
-        duration: 200,
-        useNativeDriver: false,
-        easing: Easing.linear
-    }).start()
 
 
     return (
         <View style={styles.mainView}>
-            <Animated.View style={{ ...styles.bar, height: height, transform: [{ translateY: move }] }}>
-                {props.children}
+            <Animated.View style={[styles.bar, barStyle]}>
+                {children}
             </Animated.View>
             <Pressable
                 android_ripple={{ color: basic300 }}
-                onPress={toggleBar.bind(this, barDisplayed)}
+                onPress={toggleBar}
+                accessibilityRole='button'
+                accessibilityState={{ expanded: barDisplayed }}
                 style={styles.pressable}>
                 <Text status='primary'>{barDisplayed ? translateView('hide') : translateView('show')} {translateView('controls')}</Text>
-                <Animated.View style={{ transform: [{ rotate: rotate }], marginLeft: 12 }}>
+                <Animated.View style={[styles.iconWrapper, iconStyle]}>
                     <Icon name='arrow-ios-downward-outline' fill={primary} style={styles.icon} />
                 </Animated.View>
             </Pressable>
@@ -78,6 +82,9 @@ const styles = StyleSheet.create({
         backgroundColor: control,
         height: 50,
         marginTop: 12
+    },
+    iconWrapper: {
+        marginLeft: 12
     },
     icon: {
         width: 25,

@@ -1,6 +1,5 @@
 import React, { useCallback } from 'react'
-import { PulseIndicator } from 'react-native-indicators'
-import { View, StyleSheet } from 'react-native'
+import { ActivityIndicator, View, StyleSheet } from 'react-native'
 import { basic, basic200, basic300, primary, success, warning } from '../../../styles/colors'
 import IconButton from '../../../components/IconButton'
 import { hapticMedium } from '../../../native_libs/haptics'
@@ -16,9 +15,9 @@ const MultimeterButton = ({ isVisible, isSelected, isLoading, onPress }) => {
     return <View
         style={styles.button}>
         {isSelected && isLoading ?
-            <PulseIndicator
+            <ActivityIndicator
                 color={primary}
-                size={40} /> :
+                size='small' /> :
             (isSelected && !isLoading ?
                 <IconButton
                     iconName={'checkmark'}

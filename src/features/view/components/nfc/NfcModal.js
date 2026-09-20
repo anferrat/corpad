@@ -1,10 +1,9 @@
 import React from 'react'
-import { View, StyleSheet, Dimensions } from 'react-native'
+import { ActivityIndicator, View, StyleSheet, Dimensions } from 'react-native'
 import { Modal } from '@ui-kitten/components'
 import ModalHeader from './ModalHeader'
 import ModalIcon from './ModalIcon'
 import ModalLabel from './ModalLabel'
-import { PulseIndicator } from 'react-native-indicators'
 import { basic700, control, primary } from '../../../../styles/colors'
 import ModalButton from './ModalButton'
 import { getModalTop } from '../../../../styles/dimensions'
@@ -33,9 +32,9 @@ const NfcModal = ({ visible, loading, status, size, reset, retry, handleTagError
                 </> :
                     <View
                         style={styles.indicator}>
-                        <PulseIndicator
+                        <ActivityIndicator
                             color={primary}
-                            size={90} />
+                            size='large' />
                     </View>
                 }
                 <ModalButton
