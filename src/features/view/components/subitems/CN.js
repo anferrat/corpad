@@ -82,7 +82,7 @@ const CN = ({
                 icon={pipeSubitem.type ?? null}
                 pack='cp' />
             <TextLine
-                title={translateView('type')}
+                title={translateView('couponType')}
                 value={CouponTypeLabels[couponType] ?? null} />
             <TextLine
                 title={translateView('area')}

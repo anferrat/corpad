@@ -1,6 +1,6 @@
 import React from 'react'
 import { View, StyleSheet } from 'react-native'
-import { Text, Modal, Icon, Button } from '@ui-kitten/components'
+import { Text, Modal, Button } from '@ui-kitten/components'
 import useQrCodeModal from '../../hooks/useQrCodeModal'
 import { getModalTop } from '../../../../styles/dimensions'
 import { SvgXml } from 'react-native-svg'
@@ -8,6 +8,7 @@ import LoadingView from '../../../../components/LoadingView'
 import { basic700, control } from '../../../../styles/colors'
 import { ItemTypeLabels } from '../../../../constants/labels'
 import Avatar from './Avatar'
+import { translateView } from '../../../../localization'
 
 
 const QRCodeModal = ({ name }) => {
@@ -49,13 +50,13 @@ const QRCodeModal = ({ name }) => {
                         ellipsizeMode={'tail'}
                         numberOfLines={4}
                         appearance='hint'>
-                        If you share this with someone, they can scan it with their camera and read encoded data offline.
+                        {translateView('qrCodeHint')}
                     </Text>
                     <Button
                         style={styles.button}
                         appearance='ghost'
                         onPress={onExportPress}>
-                        Export QR code
+                        {translateView('exportQrCode')}
                     </Button>
                 </LoadingView>
             </View>

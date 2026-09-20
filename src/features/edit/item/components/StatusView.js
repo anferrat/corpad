@@ -4,11 +4,23 @@ import { Platform, StyleSheet, View } from 'react-native'
 import { ItemStatuses } from '../../../../constants/global'
 import { StatusIcons } from '../../../../constants/icons'
 import { StatusLabels } from '../../../../constants/labels'
-import { basic300 } from '../../../../styles/colors'
+import { basic300, control } from '../../../../styles/colors'
 
-const renderIcon = (icon) => (props) => <Icon {...props} name={icon} />
-
-const renderText = (text) => (props) => <Text {...props} numberOfLines={1} ellipsizeMode={'tail'}>{text}</Text>
+const renderContent = (text, icon) => (props) => (
+    <View style={styles.content}>
+        {icon ? <Icon
+            name={icon}
+            fill={control}
+            style={styles.icon} /> : null}
+        <Text
+            {...props}
+            style={[props.style, styles.text]}
+            numberOfLines={1}
+            ellipsizeMode='tail'>
+            {text}
+        </Text>
+    </View>
+)
 
 const statuses = Object.freeze({
     [ItemStatuses.GOOD]: 'success',
@@ -31,11 +43,10 @@ const StatusView = ({ update, status }) => {
                 const selected = s === status
                 return <Button
                     key={s}
-                    accessoryLeft={selected ? renderIcon(StatusIcons[s]) : null}
                     status={selected ? statuses[s] : 'basic'}
                     style={selected ? styles.button : buttonInactiveStyle}
                     onPress={onPress.bind(this, s)}>
-                    {renderText(StatusLabels[s])}
+                    {renderContent(StatusLabels[s], selected ? StatusIcons[s] : null)}
                 </Button>
             })}
         </View>
@@ -69,6 +80,22 @@ const styles = StyleSheet.create({
         height: 45,
         borderWidth: 0,
         borderRadius: 0,
+        paddingHorizontal: 6,
+    },
+    content: {
+        width: '100%',
+        minWidth: 0,
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+    icon: {
+        width: 15,
+        height: 15,
+        marginRight: 6,
+    },
+    text: {
+        flexShrink: 1,
     },
     inactive: {
         backgroundColor: '#FFF'
@@ -78,4 +105,3 @@ const styles = StyleSheet.create({
 const containerStyle = StyleSheet.compose(styles.view, styles.viewPlatformSpecific)
 
 const buttonInactiveStyle = StyleSheet.compose(styles.button, styles.inactive)
-

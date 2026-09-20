@@ -6,7 +6,7 @@ import Input from '../../../../../components/Input'
 import { LengthUnits, ResistivityUnits } from '../../../../../constants/global'
 import { LengthUnitDescriptionLabels, LengthUnitLabels, ResistivityUnitDescriptionLabels } from '../../../../../constants/labels'
 import { Button } from '@ui-kitten/components'
-import { addIcon, plus, plusCircle } from '../../../../../components/Icons'
+import { addIcon } from '../../../../../components/Icons'
 import SoilResistivityLayer from '../SoilResistivityLayer'
 import { translateEdit } from '../../../../../localization'
 
@@ -50,7 +50,7 @@ const SRCard = ({ data, update, validate, deleteSoilResistivityLayerHandler, add
                     property='spacingUnit'
                     itemList={spacingUnitList}
                     selectedIndex={spacingUnit}
-                    placeholder={translateEdit('selectMaterial')}
+                    placeholder={translateEdit('spacingUnit')}
                     onSelect={onSelectSpacingUnit}
                     label={translateEdit('spacingUnit')} />
                 <Select
@@ -119,6 +119,7 @@ const styles = StyleSheet.create({
     button: {
         marginHorizontal: -12,
         marginBottom: -12,
-        height: 60
+        minHeight: 72,
+        paddingVertical: 12
     }
 })

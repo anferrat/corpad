@@ -15,8 +15,19 @@ const SubitemListItem = (props) => {
                 <Layout style={styles.leftSide}>
                     <Icon name={props.iconName} pack='cp' style={styles.icon} fill={basic} />
                     <Layout style={styles.textView}>
-                        <Text category='p1'>{props.title}</Text>
-                        <Text category='s2' appearance='hint'>{props.subtitle}</Text>
+                        <Text
+                            category='p1'
+                            numberOfLines={1}
+                            ellipsizeMode='tail'>
+                            {props.title}
+                        </Text>
+                        <Text
+                            category='s2'
+                            appearance='hint'
+                            numberOfLines={1}
+                            ellipsizeMode='tail'>
+                            {props.subtitle}
+                        </Text>
                     </Layout>
                 </Layout>
                 <Icon name='arrow-ios-forward-outline' style={styles.icon} fill={basic} />
@@ -58,9 +69,13 @@ const styles = StyleSheet.create({
         backgroundColor: 'rgba(0,0,0,0)',
         flexDirection: 'row',
         alignItems: 'center',
+        flex: 1,
+        minWidth: 0,
     },
     textView: {
-        backgroundColor: 'rgba(0,0,0,0)'
+        backgroundColor: 'rgba(0,0,0,0)',
+        flex: 1,
+        minWidth: 0,
     }
 })
 

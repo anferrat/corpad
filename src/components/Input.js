@@ -97,6 +97,7 @@ export const Unit = (props) => {
 
 const InputField = React.forwardRef((props, ref) => {
     const { onChangeText: onChange, unit, disabled, displayHint, hintIcon, hintTitle } = props
+    const { hideLabel, ...inputProps } = props
 
     const renderCaption = React.useCallback(() => {
         if (!props.valid) {
@@ -119,7 +120,7 @@ const InputField = React.forwardRef((props, ref) => {
     const styleObject = React.useMemo(() => ({ ...props.style, paddingBottom: 12, borderWidth: props.disabled ? 0 : 1 }), [props.style, props.disabled])
     const value = React.useMemo(() => toString(props.value), [props.value])
     const fieldProperty = fieldProperties[props.property]
-    const label = fieldProperty?.label ?? props.label
+    const label = hideLabel ? undefined : fieldProperty?.label ?? props.label
     const placeholder = props.placeholder ?? fieldProperty?.placeholder
     const accessory = React.useCallback(() => <>
         <Unit unit={unit} disabled={disabled} />
@@ -132,7 +133,7 @@ const InputField = React.forwardRef((props, ref) => {
         <Input
             caption={renderCaption}
             accessoryRight={accessory}
-            {...props}
+            {...inputProps}
             label={label}
             placeholder={placeholder}
             keyboardType={props.keyboardType !== 'numeric' ? props.keyboardType : Platform.select({

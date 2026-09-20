@@ -26,6 +26,7 @@ const TargetView = ({ update, validate, targetMin, targetMax, targetMinValid, ta
                 maxLength={10}
                 value={targetMin}
                 valid={targetMinValid}
+                hideLabel={true}
                 unit='A' />
             <Text style={styles.dash}>-</Text>
             <Input
@@ -37,6 +38,7 @@ const TargetView = ({ update, validate, targetMin, targetMax, targetMinValid, ta
                 maxLength={10}
                 value={targetMax}
                 valid={targetMaxValid}
+                hideLabel={true}
                 unit='A' />
         </View>
     )

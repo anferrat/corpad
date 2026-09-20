@@ -27,7 +27,7 @@ const ShuntView = ({ update, updateRatioHandler, validateRatioHandler, updateFac
                 <Radio
                     checked={!factorSelected}
                     onChange={setRatioSelected}
-                    style={styles.radio}>{translateEdit('ratio')}</Radio>
+                    style={styles.radio}><Text numberOfLines={1} ellipsizeMode='tail'>{translateEdit('ratio')}</Text></Radio>
                 <Input
                     onChangeText={onChangeRatioCurrent}
                     onEndEditing={validateRatioCurrent}
@@ -56,7 +56,7 @@ const ShuntView = ({ update, updateRatioHandler, validateRatioHandler, updateFac
                     checked={factorSelected}
                     style={styles.radio}
                     onChange={setFactorSelected}
-                >{translateEdit('factor')}</Radio>
+                ><Text numberOfLines={1} ellipsizeMode='tail'>{translateEdit('factor')}</Text></Radio>
                 <Input
                     style={styles.input}
                     value={factor}
@@ -66,6 +66,7 @@ const ShuntView = ({ update, updateRatioHandler, validateRatioHandler, updateFac
                     onEndEditing={validateFactorHandler}
                     valid={valid.factor}
                     property='factor'
+                    hideLabel={true}
                     unit='A/mV' />
             </View>
             <View style={styles.line}>
@@ -109,6 +110,8 @@ const styles = StyleSheet.create({
     },
     radio: {
         flexBasis: 80,
+        marginRight: 6,
+        flexShrink: 1,
         justifyContent: 'flex-start',
     },
     input: {

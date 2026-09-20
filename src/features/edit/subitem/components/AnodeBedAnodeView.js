@@ -58,6 +58,7 @@ const AnodeBedAnodeView = ({ current, wireColor, wireGauge, index, deleteAnodeBe
                         keyboardType='numeric'
                         unit={'A'}
                         property='current'
+                        hideLabel={true}
                         onChangeText={onChangeText}
                         onEndEditing={onEndEditing} />
                 </View>

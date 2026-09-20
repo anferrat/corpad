@@ -47,7 +47,9 @@ const styles = StyleSheet.create({
     },
     listText: {
         fontSize: 13,
-        lineHeight: 25
+        lineHeight: 25,
+        textAlign: 'center',
+        textAlignVertical: 'center',
     },
     listIcon: {
         width: 15,

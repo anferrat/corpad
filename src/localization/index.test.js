@@ -1,6 +1,6 @@
-import { initializeLocalization, translate, translateBottomSheet, translateList, translateOverlay } from './index'
-import { CalculatorTypeLabels, DefaultNames, ExportFormatTypeLabeles, ExportItemPropertyLabels, IsolationShortedLabels, IsolationTypeLabels, ItemTypeLabels, MapLayerFeatureLabels, MeasurementTypeLabels, PermanentPotentialTypeLabels, PotentialUnitDescriptionLabels, RectifierReadingOptionLabels, SortingOptionLabels, SubitemTypeLabels, TestPointReadingOptionLabels, TestPointTypeLabels, WireColorLabels } from '../constants/labels'
-import { CalculatorTypes, ExportFormatTypes, ExportItemProperties, IsolationShorted, IsolationTypes, ItemTypes, MapLayerFeatures, MultimeterMeasurementTypes, PermanentPotentialTypes, PotentialUnits, RectifierReadingOptions, SortingOptions, SubitemTypes, TestPointReadingOptions, TestPointTypes, WireColors } from '../constants/global'
+import { initializeLocalization, translate, translateBottomSheet, translateEdit, translateList, translateOverlay, translateView } from './index'
+import { CalculatorTypeLabels, CouponTypeLabels, DefaultNames, ExportFormatTypeLabeles, ExportItemPropertyLabels, IsolationShortedLabels, IsolationTypeLabels, ItemTypeLabels, MapLayerFeatureLabels, MeasurementTypeLabels, PermanentPotentialTypeLabels, PotentialUnitDescriptionLabels, RectifierReadingOptionLabels, SortingOptionLabels, StatusLabels, SubitemTypeLabels, TestPointReadingOptionLabels, TestPointTypeLabels, WireColorLabels, WireGaugeLabels } from '../constants/labels'
+import { CalculatorTypes, CouponTypes, ExportFormatTypes, ExportItemProperties, IsolationShorted, IsolationTypes, ItemStatuses, ItemTypes, MapLayerFeatures, MultimeterMeasurementTypes, PermanentPotentialTypes, PotentialUnits, RectifierReadingOptions, SortingOptions, SubitemTypes, TestPointReadingOptions, TestPointTypes, WireColors, WireGauges } from '../constants/global'
 import { fieldProperties } from '../constants/fieldProperties'
 import { getFormattedDate } from '../helpers/functions'
 import en from './catalogs/en'
@@ -43,6 +43,13 @@ describe('localization', () => {
         expect(fieldProperties.tapCoarse.label).toBe('Ajuste grueso')
         expect(fieldProperties.maxVoltage.label).toBe('Voltios CC')
         expect(fieldProperties.maxCurrent.label).toBe('Amperios CC')
+        expect(StatusLabels[ItemStatuses.UNKNOWN]).toBe('Sin revisar')
+        expect(WireGaugeLabels[WireGauges.AVG12]).toBe('12 AWG')
+        expect(CouponTypeLabels[CouponTypes.AC]).toBe('CA')
+        expect(translateEdit('pipeline')).toBe('Línea')
+        expect(translateView('pipeline')).toBe('Línea')
+        expect(translateView('exportQrCode')).toBe('Exportar código QR')
+        expect(translateView('qrCodeHint')).toContain('sin conexión')
 
         expect(DefaultNames[ItemTypes.PIPELINE]).toBe('Pipeline')
         expect(ExportItemPropertyLabels[ExportItemProperties.NAME]).toBe('Name')

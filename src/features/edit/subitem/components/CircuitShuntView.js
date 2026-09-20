@@ -28,6 +28,7 @@ const CircuitShuntView = ({ ratioCurrent, ratioVoltage, voltageDrop, valid, upda
                     maxLength={5}
                     value={ratioCurrent}
                     valid={valid.ratioCurrent}
+                    hideLabel={true}
                     unit='A' />
                 <Text style={styles.dash}>-</Text>
                 <Input
@@ -39,6 +40,7 @@ const CircuitShuntView = ({ ratioCurrent, ratioVoltage, voltageDrop, valid, upda
                     maxLength={5}
                     value={ratioVoltage}
                     valid={valid.ratioVoltage}
+                    hideLabel={true}
                     unit='mV' />
             </View>
             <View style={styles.subView}>
@@ -52,6 +54,7 @@ const CircuitShuntView = ({ ratioCurrent, ratioVoltage, voltageDrop, valid, upda
                     maxLength={10}
                     value={voltageDrop}
                     valid={valid.voltageDrop}
+                    hideLabel={true}
                     unit='mV' />
             </View>
         </View>

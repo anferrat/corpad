@@ -133,14 +133,16 @@ const styles = StyleSheet.create({
         borderBottomColor: basic300,
         borderBottomWidth: 1,
     },
-    rightRow: {
-        flexDirection: 'row',
-    },
     leftRow: {
         flexDirection: 'row',
         flex: 1,
         flexGrow: 1,
+        minWidth: 0,
         alignItems: 'center'
+    },
+    rightRow: {
+        flexDirection: 'row',
+        flexShrink: 0,
     },
     title: {
         flex: 1,

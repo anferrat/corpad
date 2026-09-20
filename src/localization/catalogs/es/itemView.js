@@ -10,7 +10,7 @@ export default {
     serialNumber: 'Número de serie',
     powerSource: 'Fuente de alimentación',
     currentControl: 'Control de corriente',
-    pipeline: 'Tubería',
+    pipeline: 'Línea',
     diameter: 'Diámetro',
     connectedTo: 'Conectado a',
     type: 'Tipo',

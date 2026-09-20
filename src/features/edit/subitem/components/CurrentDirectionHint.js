@@ -14,9 +14,10 @@ const CurrentDirectionHint = ({ shorted, fromAtoB, update }) => {
                 name='alert-circle-outline'
                 fill={basic}
                 style={styles.icon} />
-            <Text appearance='hint' category='label'>
+            <Text style={styles.message} appearance='hint' category='label'>
                 {translateEdit('currentTravels', { direction: translateEdit(fromAtoB ? 'fromSideAToSideB' : 'fromSideBToSideA') })} </Text>
             <Pressable
+                style={styles.change}
                 onPress={updateDirection}>
                 <Text
                     status='primary'
@@ -33,14 +34,22 @@ export default React.memo(CurrentDirectionHint)
 const styles = StyleSheet.create({
     mainView: {
         flexDirection: 'row',
-        alignItems: 'center',
+        alignItems: 'flex-start',
         paddingBottom: 12,
         paddingTop: 6
     },
     icon: {
         width: 18,
         height: 18,
-        marginRight: 6
+        marginRight: 6,
+        marginTop: 2
+    },
+    message: {
+        flex: 1
+    },
+    change: {
+        flexShrink: 0,
+        marginLeft: 4
     },
     link: {
         textDecorationLine: 'underline'

@@ -8,10 +8,10 @@ import { getDistance } from './helpers/functions'
 import LoadingView from '../../../../components/LoadingView'
 import DirectionLabel from './components/DirectionLabel'
 import { getModalTop } from '../../../../styles/dimensions'
-import { compass } from '../../../../components/Icons'
 import NavigationArrow from './components/NavigationArrow'
 import NearbyLocationMarker from './components/NearbyLocationMarker'
 import { translateTopBar } from '../../../../localization'
+import NavigationButton from './components/NavigationButton'
 
 const NavigationWidget = () => {
     const {
@@ -35,12 +35,7 @@ const NavigationWidget = () => {
 
     return (
         <>
-            <Button
-                accessoryLeft={compass}
-                onPress={showModal}
-                appearance='ghost'>
-                {translateTopBar('compass')}
-            </Button>
+            <NavigationButton onPress={showModal} />
             <Modal
                 style={styles.modal}
                 visible={visible}

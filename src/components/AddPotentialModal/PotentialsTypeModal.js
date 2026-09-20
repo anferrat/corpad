@@ -26,11 +26,16 @@ const PotentialTypesModal = ({ potentialTypes, itemList, onSelect, dismiss }) =>
             <Header
                 title={translatePotentialSelection('selectPotentialType')}
                 onBackPress={dismiss} />
-            <ScrollView style={styles.mainView}>
+            <ScrollView contentContainerStyle={styles.mainView}>
                 {genTitleOptions()}
                 <View style={styles.hint}>
                     <Icon name='info-outline' fill={basic} style={styles.hintIcon} />
-                    <Text category='s2' appearance='hint'>{translatePotentialSelection('customPotentialsHint')}</Text>
+                    <Text
+                        style={styles.hintText}
+                        category='s2'
+                        appearance='hint'>
+                        {translatePotentialSelection('customPotentialsHint')}
+                    </Text>
                 </View>
             </ScrollView>
         </SafeAreaProvider>
@@ -42,16 +47,21 @@ export default React.memo(PotentialTypesModal)
 
 const styles = StyleSheet.create({
     mainView: {
-        padding: 12
+        padding: 12,
+        paddingBottom: 24
     },
     hint: {
         paddingTop: 6,
         flexDirection: 'row',
-        alignItems: 'center'
+        alignItems: 'flex-start'
     },
     hintIcon: {
         width: 20,
         height: 20,
-        marginRight: 12
+        marginRight: 12,
+        marginTop: 2
+    },
+    hintText: {
+        flex: 1
     }
 })

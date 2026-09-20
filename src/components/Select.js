@@ -48,7 +48,7 @@ const SelectField = (props) => {
             selectedIndex={getSelectIndex(props.selectedIndex, props.itemList, props.placeholderOption)}
             status={props.valid !== false ? 'basic' : 'danger'}
             onSelect={onSelect}>
-            {props.placeholderOption ? <SelectItem title={placeholderRender.bind(this, props.placeholder)} /> : null}
+            {props.placeholderOption ? <SelectItem title={placeholderRender.bind(this, placeholder)} /> : null}
             {props.itemList?.map((item, i) => <SelectItem
                 key={`${item?.item ?? item}-SelectItem`}
                 title={item?.item ?? item}

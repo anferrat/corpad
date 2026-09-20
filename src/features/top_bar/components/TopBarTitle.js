@@ -11,7 +11,7 @@ const TopBarTitle = ({ isPrimary, title, subtitle, icon, pack, status }) => {
             <View style={styles.titleView}>
                 {status !== undefined ?
                     <Icon icon='circle' pack='cp' style={styles.statusIcon} fill={statusColors[status] ?? basic} /> : null}
-                <Text category='h6' numberOfLines={1} ellipsizeMode='tail' status={isPrimary ? 'control' : 'basic'}>{title}</Text>
+                <Text style={styles.title} category='h6' numberOfLines={1} ellipsizeMode='tail' status={isPrimary ? 'control' : 'basic'}>{title}</Text>
             </View>
             <View style={styles.subtitleView}>
                 <Text category={'s1'} appearance='hint' status={isPrimary ? 'control' : 'basic'}>
@@ -52,6 +52,10 @@ const styles = StyleSheet.create({
     },
     titleView: {
         flexDirection: 'row',
-        alignItems: 'center'
+        alignItems: 'center',
+        minWidth: 0
+    },
+    title: {
+        flexShrink: 1
     }
 })

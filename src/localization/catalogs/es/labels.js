@@ -98,7 +98,12 @@ Object.assign(sections.common.StatusLabels, {
     0: 'Aprobado',
     1: 'Alerta',
     2: 'Problema',
-    3: 'Sin comprobar'
+    3: 'Sin revisar'
+})
+
+Object.assign(sections.items.CouponTypeLabels, {
+    0: 'CA',
+    1: 'CC'
 })
 
 Object.assign(sections.measurements.LengthUnitDescriptionLabels, {

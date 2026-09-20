@@ -38,7 +38,7 @@ export default {
     groundbedType: 'Tipo de lecho',
     enclosure: 'Carcasa',
     referenceCellType: 'Tipo de celda de referencia',
-    pipeline: 'Tubería',
+    pipeline: 'Línea',
     diameter: 'Diámetro',
     connectedTo: 'Conectado a',
     couponType: 'Tipo de cupón',

@@ -26,6 +26,7 @@ const InputWithTitle = (props) => {
                     isSelected={isCaptureSelected} />
                 <Input
                     {...props}
+                    hideLabel={true}
                     //disabled={!isCaptureLoading && isCaptureSelected}
                     style={props.displayHint ?
                         styles.inputViewLarge :

@@ -14,7 +14,12 @@ const ListItem = (props) => {
             <View style={styles.iconLayout}>
                 <Icon name={props.iconName} pack={props.pack} style={styles.icon} fill={control} />
             </View>
-            <Text style={styles.text}>{props.title}</Text>
+            <Text
+                style={styles.text}
+                numberOfLines={1}
+                ellipsizeMode='tail'>
+                {props.title}
+            </Text>
         </Pressable>
     )
 }
@@ -43,6 +48,8 @@ const styles = StyleSheet.create({
     },
     text: {
         fontSize: 15,
-        paddingLeft: 15
+        paddingLeft: 15,
+        flex: 1,
+        minWidth: 0,
     }
 })
