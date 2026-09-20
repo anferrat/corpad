@@ -31,7 +31,7 @@ Object.assign(sections.items.WireColorLabels, {
 
 Object.assign(sections.survey.TestPointTypeLabels, {
     0: 'Estación de prueba',
-    1: 'Tubería',
+    1: 'Línea',
     2: 'Caja de conexiones',
     3: 'Nota de campo',
     4: 'Medición'

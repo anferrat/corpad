@@ -17,7 +17,9 @@ const DisplayCardTitle = ({ dataList, icon, title, subtitle }) => {
             <Text
                 style={displayCard.subtitle}
                 category='p1'
-                appearance='hint'>{subtitle}</Text>
+                appearance='hint'
+                numberOfLines={1}
+                ellipsizeMode='tail'>{subtitle}</Text>
             {Object.keys(dataList).map(key =>
                 <DataRow
                     key={`Item data type ${key}`}

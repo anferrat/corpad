@@ -1,6 +1,7 @@
 export default {
     sort: 'Sort:',
     filter: 'Filter',
+    total: 'Total: {{count}}',
     noItems: 'No items',
     filteredHint: 'All results are filtered out. Clear the filters to view them.',
     addItemHint: 'To add a new item, press Add and select a type.',

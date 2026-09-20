@@ -2,6 +2,7 @@ import React from 'react'
 import { View, StyleSheet, ActivityIndicator } from 'react-native'
 import { Text } from '@ui-kitten/components'
 import { primary } from '../../../../styles/colors'
+import { translateList } from '../../../../localization'
 
 const FooterLoader = (props) => {
     if (props.count === 0)
@@ -9,7 +10,7 @@ const FooterLoader = (props) => {
     else
         return (
             <View style={styles.main}>
-                {props.loadingMore ? <ActivityIndicator color={primary} size='large' /> : (!props.refreshing ? <Text style={styles.textStyle} appearance='hint' category='s1'>Total: {props.count}</Text> : null)}
+                {props.loadingMore ? <ActivityIndicator color={primary} size='large' /> : (!props.refreshing ? <Text style={styles.textStyle} appearance='hint' category='s1'>{translateList('total', {count: props.count})}</Text> : null)}
             </View>
         )
 }

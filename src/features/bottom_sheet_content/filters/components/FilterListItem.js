@@ -24,7 +24,10 @@ const FilterListItem = ({ title, onPress, routeKey, disabled, counter }) => {
                         style={styles.iconLeft}
                         fill={primary} />
                     <Text
-                        category='p1'>
+                        category='p1'
+                        numberOfLines={1}
+                        ellipsizeMode='tail'
+                        style={styles.text}>
                         {title}{counter !== 0 ? ` (${counter})` : ''}
                     </Text>
                 </View>
@@ -41,7 +44,9 @@ export default React.memo(FilterListItem)
 
 const styles = StyleSheet.create({
     leftSide: {
-        flexDirection: 'row'
+        flexDirection: 'row',
+        flex: 1,
+        minWidth: 0,
     },
     icon: {
         width: 20,
@@ -51,6 +56,10 @@ const styles = StyleSheet.create({
         width: 20,
         height: 20,
         marginRight: 12
+    },
+    text: {
+        flex: 1,
+        minWidth: 0,
     },
     listItem: {
         flexDirection: 'row',

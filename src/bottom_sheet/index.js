@@ -3,7 +3,6 @@ import BottomSheetDefault, { BottomSheetBackdrop } from '@gorhom/bottom-sheet'
 import BottomSheetContent from './BottomSheetContent'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { EventRegister } from 'react-native-event-listeners'
-import { runOnJS } from 'react-native-reanimated'
 
 export const BottomSheet = React.forwardRef((_props, bsRef) => {
     const { bottom } = useSafeAreaInsets()
@@ -13,7 +12,7 @@ export const BottomSheet = React.forwardRef((_props, bsRef) => {
         disappearsOnIndex={-1} />
 
     const onClose = () => EventRegister.emit('BOTTOM_SHEET_CLOSING')
-    const closeFromGesture = () => bsRef.current?.close()
+
     const gestureEventsHandlersHook = () => ({
         handleOnStart: () => {
             'worklet'
@@ -23,8 +22,6 @@ export const BottomSheet = React.forwardRef((_props, bsRef) => {
         },
         handleOnEnd: (_source, { translationY }) => {
             'worklet'
-            if (translationY > 80)
-                runOnJS(closeFromGesture)()
         },
         handleOnFinalize: () => {
             'worklet'

@@ -9,5 +9,5 @@ export default {
     pipelines: 'Líneas',
     add: 'Añadir',
     map: 'Mapa',
-    rectifiers: 'Rectif.'
+    rectifiers: 'Rectificadores'
 }

@@ -125,6 +125,7 @@ export const displayCard = StyleSheet.create({
     TitleDisplay: {
         paddingRight: 20,
         flex: 1,
+        minWidth: 0,
     },
     StatusAndTitleView: {
         flex: 1,

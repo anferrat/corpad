@@ -17,7 +17,9 @@ const CheckBoxListItem = ({ status, onChange, checked, icon, pack, title, value 
                     () =>
                         <Text
                             style={styles.text}
-                            category={'s1'}>
+                            category={'s1'}
+                            numberOfLines={1}
+                            ellipsizeMode='tail'>
                             {title}
                         </Text>}
             </CheckBox>
@@ -40,7 +42,9 @@ const styles = StyleSheet.create({
     },
     checkbox: {
         height: 60,
-        paddingLeft: 24
+        paddingLeft: 24,
+        flex: 1,
+        minWidth: 0,
     },
     icon: {
         width: 25,
@@ -48,6 +52,8 @@ const styles = StyleSheet.create({
         marginRight: 24
     },
     text: {
-        paddingLeft: 12
+        paddingLeft: 12,
+        flex: 1,
+        minWidth: 0,
     }
 })

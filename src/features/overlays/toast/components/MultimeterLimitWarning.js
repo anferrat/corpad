@@ -13,9 +13,12 @@ const MultimeterLimitWarning = ({ value }) => {
                 name='alert-triangle'
                 fill={warning}
                 style={styles.icon} />
-                <Text category='label' status='warning'>{translateOverlay('toast.max')} </Text>
-                <Text category='label' status='warning'>{value}</Text>
-            
+            <Text
+                category='label'
+                status='warning'
+                numberOfLines={1}
+                ellipsizeMode='tail'
+                style={styles.text}>{translateOverlay('toast.max')} {value}</Text>
         </View>
     )
 }
@@ -29,7 +32,10 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'center',
         alignItems: 'center',
-        width: 120,
+        alignSelf: 'flex-start',
+        minWidth: 120,
+        maxWidth: '100%',
+        paddingHorizontal: 12,
         height: 30,
         borderWidth: 1,
         borderColor: warning,
@@ -38,6 +44,9 @@ const styles = StyleSheet.create({
     icon: {
         width: 20,
         height: 20,
-        marginRight: 12
+        marginRight: 8
+    },
+    text: {
+        flexShrink: 1
     }
 })

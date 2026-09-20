@@ -35,18 +35,19 @@ const styles = StyleSheet.create({
     titleView: {
         flexDirection: 'row',
         alignItems: 'center',
-        padding: 12,
+        paddingHorizontal: 12,
         height: 80,
         flex: 1,
     },
     titleText: {
         fontWeight: 'bold',
-        padding: 12,
+        paddingHorizontal: 12,
     },
     titleRow: {
         width: '100%',
         flexDirection: 'row',
-        justifyContent: 'space-between'
+        justifyContent: 'space-between',
+        alignItems: 'center',
     },
     button: {
         flexBasis: 90,

@@ -4,7 +4,7 @@ import { useFilter } from "../hooks/useFilter"
 import CheckBoxListItem from "./CheckBoxListItem"
 import { TestPointTypeIcons } from "../../../../constants/icons"
 import { TestPointTypeLabels } from "../../../../constants/labels"
-import { FlashList } from "@shopify/flash-list"
+import BottomSheetFlashList from '../../components/BottomSheetFlashList'
 import { Divider } from "@ui-kitten/components"
 
 function TestPointTypeFilter({ excluded, onApply, visible }) {
@@ -23,7 +23,8 @@ function TestPointTypeFilter({ excluded, onApply, visible }) {
 
 
     return (
-        <FlashList
+        <BottomSheetFlashList
+            isActive={visible}
             data={Object.values(TestPointTypes)}
             renderItem={renderItem}
             estimatedItemSize={60}

@@ -6,7 +6,7 @@ import { ItemTypes, TestPointTypes } from '../../../../../constants/global'
 import { ItemTypeLabels, TestPointTypeLabels } from '../../../../../constants/labels'
 import { Divider } from '@ui-kitten/components'
 import { ItemTypeIcons, TestPointTypeIcons } from '../../../../../constants/icons'
-import { FlashList } from '@shopify/flash-list'
+import BottomSheetFlashList from '../../../components/BottomSheetFlashList'
 import CheckBoxListItem from '../CheckBoxListItem'
 import { translateBottomSheet } from '../../../../../localization'
 
@@ -58,7 +58,8 @@ const MapMarkerTypeFilter = ({ onBackPress, closeSheet, visible }) => {
                 title={translateBottomSheet('markerType')}
                 onBackPress={onBackPress}
                 onClosePress={closeSheet} />
-            <FlashList
+            <BottomSheetFlashList
+                isActive={visible}
                 data={MapMarkerFilterItems}
                 renderItem={renderItem}
                 estimatedItemSize={60}

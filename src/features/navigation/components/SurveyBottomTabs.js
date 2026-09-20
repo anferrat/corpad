@@ -22,8 +22,10 @@ const TabTitle = ({ children, style, ...props }) => (
     <Text {...props} style={[style, styles.title]}>{children}</Text>
 )
 
-const renderTabTitle = (title) => (props) => (
-    <TabTitle {...props}>{title}</TabTitle>
+const renderTabTitle = (title, numberOfLines = undefined) => (props) => (
+    <TabTitle {...props} numberOfLines={numberOfLines}>
+        {title}
+    </TabTitle>
 )
 
 const SurveyBottomTabs = (props) => {
@@ -61,7 +63,7 @@ const SurveyBottomTabs = (props) => {
             <BottomNavigationTab title={renderTabTitle(translateNavigation('pipelines'))} icon={pipelineIcon} />
             <BottomNavigationTab title={renderTabTitle(translateNavigation('add'))} icon={addIcon} />
             <BottomNavigationTab title={renderTabTitle(translateNavigation('map'))} icon={mapIcon} />
-            <BottomNavigationTab title={renderTabTitle(translateNavigation('rectifiers'))} icon={rectifierIcon} />
+            <BottomNavigationTab title={renderTabTitle(translateNavigation('rectifiers'), 1)} icon={rectifierIcon} />
         </BottomNavigation>
     )
 }

@@ -43,22 +43,26 @@ const BottomSheetContent = () => {
             <Route
                 routeKey='TEST_POINT_SORTING'>
                 <TestPointSorting
-                    closeSheet={closeSheet} />
+                    closeSheet={closeSheet}
+                    visible={selectedRoute === 'TEST_POINT_SORTING'} />
             </Route>
             <Route
                 routeKey='RECTIFIER_SORTING'>
                 <RectifierSorting
-                    closeSheet={closeSheet} />
+                    closeSheet={closeSheet}
+                    visible={selectedRoute === 'RECTIFIER_SORTING'} />
             </Route>
             <Route
                 routeKey='TEST_POINT_READINGS'>
                 <TestPointReadingList
-                    closeSheet={closeSheet} />
+                    closeSheet={closeSheet}
+                    visible={selectedRoute === 'TEST_POINT_READINGS'} />
             </Route>
             <Route
                 routeKey='RECTIFIER_READINGS'>
                 <RectifierReadingList
-                    closeSheet={closeSheet} />
+                    closeSheet={closeSheet}
+                    visible={selectedRoute === 'RECTIFIER_READINGS'} />
             </Route>
             <Route
                 routeKey='BASIC_MENU'>

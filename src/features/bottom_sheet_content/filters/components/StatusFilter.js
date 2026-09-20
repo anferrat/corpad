@@ -5,7 +5,7 @@ import CheckBoxListItem from "./CheckBoxListItem"
 import { StatusIcons } from "../../../../constants/icons"
 import { StatusStatuses } from "../../../../styles/colors"
 import { StatusLabels } from "../../../../constants/labels"
-import { FlashList } from "@shopify/flash-list"
+import BottomSheetFlashList from '../../components/BottomSheetFlashList'
 import { Divider } from "@ui-kitten/components"
 
 const statusItems = Object.values(ItemStatuses).filter(status => status !== ItemStatuses.NO_STATUS)
@@ -25,7 +25,8 @@ function StatusFilter({ excluded, onApply, visible }) {
             title={StatusLabels[item]}/>
 
     return (
-        <FlashList
+        <BottomSheetFlashList
+            isActive={visible}
             data={statusItems}
             renderItem={renderItem}
             estimatedItemSize={60}

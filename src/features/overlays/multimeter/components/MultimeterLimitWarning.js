@@ -13,8 +13,12 @@ const MultimeterLimitWarning = ({ value }) => {
                 name='alert-triangle'
                 fill={control}
                 style={styles.icon} />
-            <Text category='label' status='control'>{translateMultimeterOverlay('max')} </Text>
-            <Text category='label' status='control'>{value}</Text>
+            <Text
+                category='label'
+                status='control'
+                numberOfLines={1}
+                ellipsizeMode='tail'
+                style={styles.text}>{translateMultimeterOverlay('max')} {value}</Text>
         </View>
     )
 }
@@ -27,7 +31,9 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'center',
         alignItems: 'center',
-        width: 150,
+        minWidth: 150,
+        maxWidth: '100%',
+        paddingHorizontal: 12,
         height: 40,
         borderWidth: 0,
         borderColor: warning,
@@ -39,6 +45,9 @@ const styles = StyleSheet.create({
     icon: {
         width: 20,
         height: 20,
-        marginRight: 12
+        marginRight: 8
+    },
+    text: {
+        flexShrink: 1
     }
 })

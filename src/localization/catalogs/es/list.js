@@ -4,6 +4,7 @@ export default {
     ...englishList,
     sort: 'Orden',
     filter: 'Filtros',
+    total: 'Total: {{count}}',
     noItems: 'No hay elementos',
     filteredHint: 'Todos los resultados están filtrados. Borre los filtros para verlos.',
     addItemHint: 'Para añadir un elemento nuevo, pulse Añadir y seleccione un tipo.',

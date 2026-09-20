@@ -4,7 +4,7 @@ import CheckBoxListItem from "./CheckBoxListItem"
 import { SubitemTypeAllocation } from "../../../../constants/global"
 import { SubitemTypeIcons } from "../../../../constants/icons"
 import { SubitemTypeLabels } from "../../../../constants/labels"
-import { FlashList } from "@shopify/flash-list"
+import BottomSheetFlashList from '../../components/BottomSheetFlashList'
 import { Divider } from "@ui-kitten/components"
 
 function ReadingTypeFilter({ excluded, onApply, visible, itemType }) {
@@ -22,7 +22,8 @@ function ReadingTypeFilter({ excluded, onApply, visible, itemType }) {
             title={SubitemTypeLabels[item]} />
 
     return (
-        <FlashList
+        <BottomSheetFlashList
+            isActive={visible}
             data={Object.values(SubitemTypeAllocation[itemType])}
             renderItem={renderItem}
             extraData={notSelected}

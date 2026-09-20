@@ -2,14 +2,15 @@ import React from 'react'
 import useRectifierSorting from '../hooks/useRectifierSorting'
 import SortingView from './SortingView'
 
-const RectifierSorting = ({ closeSheet }) => {
+const RectifierSorting = ({ closeSheet, visible }) => {
     const { selectedSorting, setSelectedSorting, refresh } = useRectifierSorting({ closeSheet })
 
     return <SortingView
         selectedSorting={selectedSorting}
         setSelectedSorting={setSelectedSorting}
         closeSheet={closeSheet}
-        refresh={refresh} />
+        refresh={refresh}
+        visible={visible} />
 }
 
 export default RectifierSorting

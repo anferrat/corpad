@@ -4,7 +4,7 @@ import { useTestPointPipelineFilter } from '../../hooks/test_point_filters/useTe
 import { useFilter } from '../../hooks/useFilter'
 import CheckBoxListItem from '../CheckBoxListItem'
 import { ItemTypeIcons } from '../../../../../constants/icons'
-import { FlashList } from '@shopify/flash-list'
+import BottomSheetFlashList from '../../../components/BottomSheetFlashList'
 import { Divider } from '@ui-kitten/components'
 import LoadingView from '../../../../../components/LoadingView'
 import { translateBottomSheet } from '../../../../../localization'
@@ -35,7 +35,8 @@ const PipelineSegmentFilter = ({ onBackPress, closeSheet, visible }) => {
                 onClosePress={closeSheet} />
             <LoadingView
                 loading={isLoading}>
-                <FlashList
+                <BottomSheetFlashList
+                    isActive={visible}
                     data={pipelines}
                     renderItem={renderItem}
                     estimatedItemSize={60}

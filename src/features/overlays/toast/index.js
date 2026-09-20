@@ -28,7 +28,10 @@ export const toastConfig = {
                                 category='h6'>{translateOverlay('toast.capturing')}</Text>
                             <Text
                                 status='control'
-                                category='s2' appearance='hint'>{MultimeterTypeLabels[multimeterType]} | {MeasurementPropertyTypeLabels[mType]}</Text>
+                                category='s2'
+                                appearance='hint'
+                                numberOfLines={1}
+                                ellipsizeMode='tail'>{MultimeterTypeLabels[multimeterType]} | {MeasurementPropertyTypeLabels[mType]}</Text>
                         </View>
                     </View>
                     <MultimeterLimitWarning value={limit} />
@@ -106,7 +109,8 @@ const styles = StyleSheet.create({
         height: 48
     },
     title: {
-
+        flex: 1,
+        minWidth: 0
     },
     indicator: {
         flex: -1

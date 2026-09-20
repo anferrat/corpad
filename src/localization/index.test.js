@@ -18,7 +18,10 @@ describe('localization', () => {
 
         expect(ItemTypeLabels[ItemTypes.TEST_POINT]).toBe('Punto de prueba')
         expect(TestPointTypeLabels[TestPointTypes.TEST_STATION]).toBe('Estación de prueba')
+        expect(TestPointTypeLabels[TestPointTypes.HEADER]).toBe('Línea')
         expect(TestPointTypeLabels[TestPointTypes.JUNCTION_BOX]).toBe('Caja de conexiones')
+        expect(translateBottomSheet('pipelines')).toBe('Líneas')
+        expect(translateList('total', {count: 4})).toBe('Total: 4')
         expect(SortingOptionLabels[SortingOptions.NEW_TO_OLD]).toBe('Fecha de modificación: Más reciente primero')
         expect(TestPointReadingOptionLabels[TestPointReadingOptions.CURRENT_DENSITY]).toBe('Densidad de corriente: Cupones')
         expect(RectifierReadingOptionLabels[RectifierReadingOptions.TARGET]).toBe('Objetivo de corriente')

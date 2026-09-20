@@ -20,6 +20,7 @@ const ToggleListItem = ({ title, onApply, isChecked, disabled }) => {
                 {title}
             </Text>
             <Toggle
+                style={styles.toggle}
                 disabled={disabled}
                 onChange={onToggle}
                 checked={toggledOn} />
@@ -40,6 +41,11 @@ const styles = StyleSheet.create({
         height: 60,
     },
     text: {
-        paddingRight: 12
+        paddingRight: 12,
+        flex: 1,
+        minWidth: 0,
+    },
+    toggle: {
+        marginLeft: 12,
     }
 })

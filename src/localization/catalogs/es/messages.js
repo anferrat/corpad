@@ -145,8 +145,8 @@ export default {
         potentialType: 'Tipo de potencial',
         example: 'Ejemplo',
         errors: 'Errores',
-        on: 'Activado',
-        off: 'Desactivado',
+        on: 'On',
+        off: 'Off',
         onDelay: 'Retardo de activación',
         offDelay: 'Retardo de desactivación'
     },

@@ -11,7 +11,7 @@ export default {
     status: 'Estado',
     testPointType: 'Tipo de punto de prueba',
     markerType: 'Tipo de marcador',
-    pipelines: 'Tuberías',
+    pipelines: 'Líneas',
     hideEmptyTestPoints: 'Ocultar puntos de prueba sin lecturas',
     clearFilters: 'Borrar filtros',
     apply: 'Aplicar',
