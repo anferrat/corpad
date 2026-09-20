@@ -1,5 +1,6 @@
 import React from 'react'
-import { BottomNavigation, BottomNavigationTab, Icon } from "@ui-kitten/components"
+import { BottomNavigation, BottomNavigationTab, Icon, Text } from '@ui-kitten/components'
+import { StyleSheet } from 'react-native'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { translateNavigation } from '../../../localization'
 
@@ -16,6 +17,14 @@ const pipelineIcon = (props) => <Icon {...props} name='PL-filled' pack='cp' />
 const mapIcon = (props) => <Icon {...props} name='globe-2' />
 
 const addIcon = (props) => <Icon {...props} name='plus-square' />
+
+const TabTitle = ({ children, style, ...props }) => (
+    <Text {...props} style={[style, styles.title]}>{children}</Text>
+)
+
+const renderTabTitle = (title) => (props) => (
+    <TabTitle {...props}>{title}</TabTitle>
+)
 
 const SurveyBottomTabs = (props) => {
     const { state, navigation, openCreateMenu } = props
@@ -48,13 +57,19 @@ const SurveyBottomTabs = (props) => {
             style={{ paddingBottom: insets.bottom }}
             onSelect={onSelect}
             selectedIndex={selectedTab}>
-            <BottomNavigationTab title={translateNavigation('testPoints')} icon={testPointIcon} />
-            <BottomNavigationTab title={translateNavigation('pipelines')} icon={pipelineIcon} />
-            <BottomNavigationTab title={translateNavigation('add')} icon={addIcon} />
-            <BottomNavigationTab title={translateNavigation('map')} icon={mapIcon} />
-            <BottomNavigationTab title={translateNavigation('rectifiers')} icon={rectifierIcon} />
+            <BottomNavigationTab title={renderTabTitle(translateNavigation('testPoints'))} icon={testPointIcon} />
+            <BottomNavigationTab title={renderTabTitle(translateNavigation('pipelines'))} icon={pipelineIcon} />
+            <BottomNavigationTab title={renderTabTitle(translateNavigation('add'))} icon={addIcon} />
+            <BottomNavigationTab title={renderTabTitle(translateNavigation('map'))} icon={mapIcon} />
+            <BottomNavigationTab title={renderTabTitle(translateNavigation('rectifiers'))} icon={rectifierIcon} />
         </BottomNavigation>
     )
 }
 
 export default React.memo(SurveyBottomTabs)
+
+const styles = StyleSheet.create({
+    title: {
+        textAlign: 'center'
+    }
+})

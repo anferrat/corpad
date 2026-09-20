@@ -22,6 +22,7 @@ const AddPhotoButton = ({ onPress, limitReached }) => {
                     name={'camera'}
                     fill={primary} />
                 <Text
+                    style={styles.label}
                     status='primary'
                     category='s2'>
                     {translateEdit('addPhoto')}
@@ -50,5 +51,8 @@ const styles = StyleSheet.create({
         width: 25,
         height: 25,
         marginBottom: 4
+    },
+    label: {
+       textAlign: 'center'
     }
 })

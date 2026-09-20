@@ -31,6 +31,7 @@ const MenuListItem = ({ iconColor, icon, pack, title, subtitle, onPress, disable
                 <View>
                     <Text
                         category='s1'
+                        numberOfLines={1}
                         appearance={inactive ? 'hint' : 'default'}
                         status={textStatus ?? 'basic'} >
                         {title}

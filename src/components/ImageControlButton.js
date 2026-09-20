@@ -34,7 +34,7 @@ export default ImageControlButton
 const styles = StyleSheet.create({
     wrapper: {
         borderRadius: 40,
-        width: 90,
+        width: 110,
         overflow: 'hidden',
         backgroundColor: 'rgba(0,0,0,0.7)'
     },

@@ -25,7 +25,7 @@ export default React.memo(SearchItem)
 
 const styles = StyleSheet.create({
     mainView: {
-        heigth: 50,
+        minHeight: 60,
         flex: 1
     }
 })

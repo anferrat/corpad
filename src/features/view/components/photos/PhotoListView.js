@@ -30,7 +30,7 @@ const PhotoListView = ({ onPhotoPress, photos, onImageViewClose, imageView, onDe
     if (isVisible)
         return (
             <View
-                style={styles.mainView}>
+                style={[styles.mainView, photos.length > 0 && styles.mainViewWithPhotos]}>
                 {photos.length > 0 ? <IconLine
                     value={translateView('imagesCount', {count: photos.length})}
                     icon={'image-outline'} /> : null}
@@ -62,6 +62,9 @@ export default PhotoListView
 const styles = StyleSheet.create({
     mainView: {
         paddingBottom: 0
+    },
+    mainViewWithPhotos: {
+        paddingBottom: 12
     },
     container: {
         flexGrow: 1,
