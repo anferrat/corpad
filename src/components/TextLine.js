@@ -16,6 +16,8 @@ const TextLine = ({ value, title, icon, pack, fill, unit }) => {
                 style={styles.mainView}>
                 <Text
                     category='s1'
+                    numberOfLines={1}
+                    ellipsizeMode='tail'
                     style={styles.title}>{title}</Text>
                 <View style={styles.valueView}>
                     {icon ?
@@ -46,7 +48,9 @@ const styles = StyleSheet.create({
     title: {
         textTransform: 'uppercase',
         color: primary,
-        paddingRight: 12
+        paddingRight: 12,
+        flexShrink: 1,
+        minWidth: 0
     },
 
     valueView: {
@@ -56,7 +60,9 @@ const styles = StyleSheet.create({
         flex: 1,
     },
     text: {
-        paddingRight: 3
+        paddingRight: 3,
+        flexShrink: 1,
+        textAlign: 'right'
     },
     icon: {
         width: 20,

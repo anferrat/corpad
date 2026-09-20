@@ -33,6 +33,7 @@ const TapView = ({ tapValue, tapFine, tapCoarse, tapSetting, submit, update, val
                         itemList={coarseFineOptions}
                         placeholder='#'
                         property='tapCoarse'
+                        hideLabel={true}
                         onSelect={submitTapCoarse} />
                     <Select
                         placeholderOption={true}
@@ -41,6 +42,7 @@ const TapView = ({ tapValue, tapFine, tapCoarse, tapSetting, submit, update, val
                         itemList={coarseFineOptions}
                         placeholder='#'
                         property='tapFine'
+                        hideLabel={true}
                         onSelect={submitTapFine} />
                 </View>
             </View>

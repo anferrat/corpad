@@ -10,13 +10,17 @@ const PipelineCoating = ({ coating, update }) => {
   return (
     <>
        <Text category='label' appearance='hint' style={styles.text}>{translateEdit('coating')}</Text>
-      <RadioGroup
-        style={styles.radio}
-        selectedIndex={Number(coating)}
-        onChange={updateCoating}>
-         <Radio>{translateEdit('bare')}</Radio>
-         <Radio>{translateEdit('coated')}</Radio>
-      </RadioGroup>
+       <RadioGroup
+         style={styles.radio}
+         selectedIndex={Number(coating)}
+         onChange={updateCoating}>
+         <Radio>
+           <Text numberOfLines={1} ellipsizeMode='tail'>{translateEdit('bare')}</Text>
+         </Radio>
+         <Radio>
+           <Text numberOfLines={1} ellipsizeMode='tail'>{translateEdit('coated')}</Text>
+         </Radio>
+       </RadioGroup>
     </>
   )
 }
@@ -28,7 +32,7 @@ const styles = StyleSheet.create({
     paddingBottom: 3,
   },
   radio: {
-    width: 90,
+    alignSelf: 'stretch',
     paddingBottom: 12
   }
 })

@@ -1,6 +1,7 @@
 import React from 'react'
 import { Select, SelectItem, IndexPath, Text, Icon } from '@ui-kitten/components'
 import { fieldProperties } from '../constants/fieldProperties'
+import { translate } from '../localization'
 
 const accessoryRender = (name, pack, fill, fill2 = undefined) => (props) => <Icon {...props} name={name} pack={name === undefined ? 'cp' : pack} fill={fill ?? props.style.tintColor} fill2={fill2} />
 
@@ -29,9 +30,10 @@ const getSelectIndex = (selectedIndex, itemList, placeholderOption) => checkSele
 const getSelectValue = (selectedIndex, itemList) => checkSelectedIndex(selectedIndex, itemList.length) ? ((itemList[selectedIndex]?.item ?? itemList[selectedIndex]) ?? '') : ''
 
 const SelectField = (props) => {
+    const { hideLabel, ...selectProps } = props
     const fieldProperty = fieldProperties[props.property]
-    const label = fieldProperty?.label ?? props.label
-    const placeholder = fieldProperty?.placeholder ?? props.placeholder
+    const label = hideLabel ? undefined : props.label ?? fieldProperty?.label
+    const placeholder = fieldProperty?.placeholder ?? props.placeholder ?? (hideLabel ? undefined : label) ?? translate('validation.select')
     const { placeholderOption, onSelect: onSelectProp } = props
     const onSelect = React.useCallback((index) => {
         const res = placeholderOption ? index.row - 1 : index.row
@@ -41,7 +43,7 @@ const SelectField = (props) => {
     return (
         <Select
             accessoryLeft={props.selectedIndex !== null ? displayAccessory(props.accessory, props.accessoryList, props.selectedIndex) : null}
-        {...props}
+        {...selectProps}
         label={label}
         placeholder={placeholder}
             value={getSelectValue(props.selectedIndex, props.itemList, props.placeholderOption)}

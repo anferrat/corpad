@@ -48,7 +48,7 @@ const styles = StyleSheet.create({
     },
     selectSize:
     {
-        flex: .7,
+        flex: .9,
         paddingLeft: 6
     },
     icon: {

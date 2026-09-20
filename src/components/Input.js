@@ -120,7 +120,7 @@ const InputField = React.forwardRef((props, ref) => {
     const styleObject = React.useMemo(() => ({ ...props.style, paddingBottom: 12, borderWidth: props.disabled ? 0 : 1 }), [props.style, props.disabled])
     const value = React.useMemo(() => toString(props.value), [props.value])
     const fieldProperty = fieldProperties[props.property]
-    const label = hideLabel ? undefined : fieldProperty?.label ?? props.label
+    const label = hideLabel ? undefined : props.label ?? fieldProperty?.label
     const placeholder = props.placeholder ?? fieldProperty?.placeholder
     const accessory = React.useCallback(() => <>
         <Unit unit={unit} disabled={disabled} />
