@@ -64,7 +64,7 @@ const styles = StyleSheet.create({
         backgroundColor: basic300,
         flexDirection: 'row',
         alignItems: 'center',
-        justifyContent: 'space-evenly',
+        justifyContent: 'space-between',
         paddingVertical: 6,
         borderRadius: 0,
 

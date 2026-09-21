@@ -1,6 +1,6 @@
 import React from 'react'
 import { View, StyleSheet } from 'react-native'
-import { Button } from '@ui-kitten/components'
+import { Button, Text } from '@ui-kitten/components'
 
 const ButtonSelector = (props) => {
     return (
@@ -12,7 +12,12 @@ const ButtonSelector = (props) => {
                     onPress={i !== props.selectedIndex ? props.setSelected?.bind(this, i) : null}
                     status={i === props.selectedIndex ? 'primary' : 'basic'}
                     key={'ButtonSelector-' + b.title}>
-                    {b.title}
+                    {props.singleLine ?
+                        evaProps => (
+                            <Text {...evaProps} numberOfLines={1} ellipsizeMode='tail'>
+                                {b.title}
+                            </Text>
+                        ) : b.title}
                 </Button>)
             }
         </View >

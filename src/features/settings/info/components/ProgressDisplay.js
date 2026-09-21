@@ -25,6 +25,7 @@ const ProgressDisplay = ({ status, count }) => {
                 <ButtonSelector
                     selectedIndex={activeItem}
                     setSelected={setActiveItem}
+                    singleLine
                     buttons={buttons} />
             </View>
             <View style={styles.progress}>

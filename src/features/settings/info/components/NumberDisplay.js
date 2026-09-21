@@ -12,7 +12,13 @@ const NumberDisplay = (props) => {
                     {props.number}
                 </Text>
             </View>
-            <Text category='p1' >{props.title}</Text>
+            <Text
+                category='p1'
+                style={styles.title}
+                numberOfLines={1}
+                ellipsizeMode='tail'>
+                {props.title}
+            </Text>
         </View>
     )
 }
@@ -21,8 +27,10 @@ export default NumberDisplay
 
 const styles = StyleSheet.create({
     mainView: {
+        flex: 1,
+        minWidth: 0,
         alignItems: 'center',
-        padding: 12,
+        padding: 6,
     },
     numberRow: {
         alignItems: 'center',
@@ -31,6 +39,10 @@ const styles = StyleSheet.create({
     },
     text: {
         marginLeft: 6
+    },
+    title: {
+        maxWidth: '100%',
+        flexShrink: 1,
     },
     icon: {
         width: 22,

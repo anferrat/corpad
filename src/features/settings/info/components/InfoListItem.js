@@ -12,7 +12,13 @@ const InfoListItem = (props) => {
                 <Icon name={props.icon} pack={props.pack} style={styles.icon} fill={basic} />
                 <View style={styles.titleView}>
                     <Text category='p1'>{props.title}</Text>
-                    <Text category='s2' appearance='hint'>{props.subtitle}</Text>
+                    <Text
+                        category='s2'
+                        appearance='hint'
+                        numberOfLines={1}
+                        ellipsizeMode='tail'>
+                        {props.subtitle}
+                    </Text>
                 </View>
             </View>
             <Text category='p1' style={styles.valueText} numberOfLines={1} ellipsizeMode='middle'>{props.value}</Text>
@@ -34,6 +40,8 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'flex-start',
         alignItems: 'center',
+        flex: 1,
+        minWidth: 0,
     },
     rightSide: {
         flexDirection: 'row',
@@ -43,13 +51,17 @@ const styles = StyleSheet.create({
         backgroundColor: 'red'
     },
     titleView: {
-        justifyContent: 'center'
+        justifyContent: 'center',
+        flex: 1,
+        minWidth: 0,
+        flexShrink: 1,
     },
     valueText: {
         fontWeight: 'bold',
         textAlign: 'right',
         textAlignVertical: 'center',
-        flex: 1,
+        minWidth: 0,
+        flexShrink: 1,
         marginLeft: 18
     },
     icon: {
