@@ -47,7 +47,7 @@ export default {
         cloud: 'Nube',
         more: 'Más',
         testPoints: 'Puntos de prueba',
-        pipelines: 'Tuberías',
+        pipelines: 'Líneas',
         rectifiers: 'Rectificadores',
         map: 'Mapa',
         add: 'Añadir',
@@ -56,7 +56,7 @@ export default {
         itemDiscovered: 'Elemento encontrado',
         label: 'Etiqueta',
         findInSurvey: 'Buscar en el estudio',
-        matchPipelines: 'Relacionar tuberías',
+        matchPipelines: 'Relacionar líneas',
         exportSurvey: 'Exportar estudio',
         itemProperties: 'Propiedades del elemento',
         moreProperties: 'Más propiedades',
@@ -136,7 +136,7 @@ export default {
         deleteAll: 'Eliminar todo',
         exportPotentials: 'Exportar potenciales',
         groupReadingType: 'Agrupar por tipo de lectura',
-        groupPipeline: 'Agrupar por tubería',
+        groupPipeline: 'Agrupar por línea',
         manage: 'Administrar',
         timeSynchronization: 'Sincronización de hora',
         addPotentialType: 'Añadir tipo de potencial',
@@ -176,7 +176,7 @@ export default {
         export: 'Exportar',
         exportPotentials: 'Exportar potenciales',
         groupByReadingType: 'Agrupar por tipo de lectura',
-        groupByPipeline: 'Agrupar por tubería'
+        groupByPipeline: 'Agrupar por línea'
     },
     map: {
         noResults: 'No se encontraron resultados en el mapa',

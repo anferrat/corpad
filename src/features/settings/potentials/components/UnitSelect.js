@@ -3,14 +3,14 @@ import { StyleSheet } from "react-native"
 import Select from "../../../../components/Select"
 import { PotentialUnits } from "../../../../constants/global"
 import { PotentialUnitLabels, PotentialUnitDescriptionLabels } from "../../../../constants/labels"
-import { translateSettings } from '../../../../localization'
+import { translate } from '../../../../localization'
 
 const UnitSelect = ({ unit, updateUnit }) => {
     const itemList = React.useMemo(() => Object.values(PotentialUnits).map(unit => ({ index: unit, item: `${PotentialUnitDescriptionLabels[unit]} (${PotentialUnitLabels[unit]})` })), [])
     return (
         <Select
             style={styles.select}
-            label={translateSettings('potentialUnit')}
+            label={translate('measurements.potentialUnit')}
             selectedIndex={unit}
             onSelect={updateUnit}
             itemList={itemList}>

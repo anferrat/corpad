@@ -302,7 +302,7 @@ Object.assign(sections.common.ExternalLinkTypeLabels, {
 })
 
 Object.assign(sections.survey.PipelineFilterItemLabels, {
-    NOT_ASSIGNED: 'Elementos no asignados y ajenos a tuberías'
+    NOT_ASSIGNED: 'Elementos no asignados y ajenos a líneas'
 })
 
 Object.assign(sections.multimeter.MeasurementPropertyTypeLabels, {

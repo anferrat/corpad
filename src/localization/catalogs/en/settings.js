@@ -113,6 +113,7 @@ export default {
     unassigned: 'Unassigned',
     preview: 'Preview',
     share: 'Share',
+    goTo: 'Go to',
     openIn: 'Open in...',
     saveToDownloads: 'Save to Downloads',
     delete: 'Delete',

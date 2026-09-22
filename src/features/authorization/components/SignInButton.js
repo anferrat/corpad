@@ -3,6 +3,7 @@ import { ActivityIndicator, StyleSheet } from 'react-native'
 import { Button } from '@ui-kitten/components'
 import { google } from '../../../components/Icons'
 import { primary } from '../../../styles/colors'
+import { translateOverlay } from '../../../localization'
 
 
 const SignInButton = ({ onPress, signing }) => {
@@ -15,7 +16,7 @@ const SignInButton = ({ onPress, signing }) => {
             accessoryLeft={google}
             onPress={onPress}
             style={styles.button}>
-            Sign in with Google Drive
+            {translateOverlay('session.signInGoogleDrive')}
         </Button>)
 }
 

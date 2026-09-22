@@ -2,6 +2,7 @@ import React from 'react'
 import { View, StyleSheet } from 'react-native'
 import { Icon, Text } from '@ui-kitten/components'
 import { primary } from '../../../styles/colors'
+import { translateOverlay } from '../../../localization'
 
 const AuthScreenMessage = () => {
     return (
@@ -16,7 +17,7 @@ const AuthScreenMessage = () => {
                 category={'p1'}
                 appearance='hint'
                 style={styles.text}>
-                Signing in with cloud storage allows you to store your survey files securely and to make them available on different devices.
+                {translateOverlay('session.cloudStorageDescription')}
             </Text>
         </View>
     )

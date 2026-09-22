@@ -112,6 +112,7 @@ export default {
         notSignedIn: 'You are not signed in',
         signInGoogleDrive: 'Sign in with Google Drive',
         cloudStorage: 'Cloud storage',
+        cloudStorageDescription: 'Signing in with cloud storage allows you to store your survey files securely and to make them available on different devices.',
         logOut: 'Log out'
     }
 }

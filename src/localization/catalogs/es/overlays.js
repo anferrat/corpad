@@ -81,9 +81,9 @@ export default {
         similarName: 'Elementos con nombre similar',
         similarNameHint: 'Elementos del estudio abierto que tienen un nombre similar al del enlace abierto.',
         noMatches: 'No se encontraron coincidencias.',
-        pipelinesInLink: 'Tuberías del enlace',
-        pipelinesInSurvey: 'Tuberías del estudio',
-        matchPipelines: 'Relacione las tuberías del enlace con las tuberías del estudio actual.',
+        pipelinesInLink: 'Líneas del enlace',
+        pipelinesInSurvey: 'Líneas del estudio',
+        matchPipelines: 'Relacione las líneas del enlace con las líneas del estudio actual.',
         done: 'Listo',
         loading: 'Cargando...',
         back: 'Atrás',
@@ -122,6 +122,7 @@ export default {
         notSignedIn: 'No ha iniciado sesión',
         signInGoogleDrive: 'Iniciar sesión con Google Drive',
         cloudStorage: 'Almacenamiento en la nube',
+        cloudStorageDescription: 'Iniciar sesión en el almacenamiento en la nube le permite guardar sus archivos de estudios de forma segura y tenerlos disponibles en diferentes dispositivos.',
         logOut: 'Cerrar sesión'
     }
 }

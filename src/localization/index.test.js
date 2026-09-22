@@ -1,4 +1,4 @@
-import { calculatorTypeKey, initializeLocalization, translate, translateBottomSheet, translateCalculator, translateEdit, translateList, translateOverlay, translateView } from './index'
+import { calculatorTypeKey, initializeLocalization, translate, translateBottomSheet, translateCalculator, translateEdit, translateList, translateOverlay, translateSettings, translateView } from './index'
 import { CalculatorTypeLabels, CouponTypeLabels, DefaultNames, ExportFormatTypeLabeles, ExportItemPropertyLabels, IsolationShortedLabels, IsolationTypeLabels, ItemTypeLabels, MapLayerFeatureLabels, MeasurementTypeLabels, PermanentPotentialTypeLabels, PotentialUnitDescriptionLabels, RectifierReadingOptionLabels, SortingOptionLabels, StatusLabels, SubitemTypeLabels, TestPointReadingOptionLabels, TestPointTypeLabels, WireColorLabels, WireGaugeLabels } from '../constants/labels'
 import { CalculatorTypes, CouponTypes, ExportFormatTypes, ExportItemProperties, IsolationShorted, IsolationTypes, ItemStatuses, ItemTypes, MapLayerFeatures, MultimeterMeasurementTypes, PermanentPotentialTypes, PotentialUnits, RectifierReadingOptions, SortingOptions, SubitemTypes, TestPointReadingOptions, TestPointTypes, WireColors, WireGauges } from '../constants/global'
 import { fieldProperties } from '../constants/fieldProperties'
@@ -79,6 +79,32 @@ describe('localization', () => {
 
         expect(DefaultNames[ItemTypes.PIPELINE]).toBe('Pipeline')
         expect(ExportItemPropertyLabels[ExportItemProperties.NAME]).toBe('Name')
+    })
+
+    it('localizes the potential unit setting label', () => {
+        initializeLocalization('en')
+        expect(translate('measurements.potentialUnit')).toBe('Potential unit')
+
+        initializeLocalization('es')
+        expect(translate('measurements.potentialUnit')).toBe('Unidad de potencial')
+    })
+
+    it('localizes the image viewer go-to control', () => {
+        initializeLocalization('en')
+        expect(translateSettings('goTo')).toBe('Go to')
+
+        initializeLocalization('es')
+        expect(translateSettings('goTo')).toBe('Ir a')
+    })
+
+    it('localizes the cloud authorization screen', () => {
+        initializeLocalization('en')
+        expect(translateOverlay('session.signInGoogleDrive')).toBe('Sign in with Google Drive')
+        expect(translateOverlay('session.cloudStorageDescription')).toBe('Signing in with cloud storage allows you to store your survey files securely and to make them available on different devices.')
+
+        initializeLocalization('es')
+        expect(translateOverlay('session.signInGoogleDrive')).toBe('Iniciar sesión con Google Drive')
+        expect(translateOverlay('session.cloudStorageDescription')).toBe('Iniciar sesión en el almacenamiento en la nube le permite guardar sus archivos de estudios de forma segura y tenerlos disponibles en diferentes dispositivos.')
     })
 
     it('localizes list dates and reading labels', () => {
