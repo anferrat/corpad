@@ -1,5 +1,5 @@
 import React, { useContext } from 'react'
-import { StyleSheet } from 'react-native'
+import { StyleSheet, useWindowDimensions } from 'react-native'
 import { Modal } from '@ui-kitten/components'
 import { useDispatch, useSelector } from 'react-redux'
 import { control } from '../../../styles/colors'
@@ -8,18 +8,21 @@ import ImportModalContent from './components/ImportModalContent'
 import { importData } from '../../../app/controllers/survey/ImportController'
 import { setRefresh } from '../../../store/actions/list'
 import { resetMap } from '../../../store/actions/map'
-import { getModalTop } from '../../../styles/dimensions'
+
+const MODAL_HEIGHT = 190
 
 const ImportModal = ({ visible, hideModal }) => {
     const { itemType, data, fields, defaultNames, item, subitems, extraData, fileName } = useSelector(state => state.importData)
     const { navigateToList } = useContext(ImportData)
     const dispatch = useDispatch()
+    const { height } = useWindowDimensions()
 
     const navigateHandler = React.useCallback(() => {
+        hideModal()
         navigateToList(itemType)
         dispatch(setRefresh(itemType))
         dispatch(resetMap())
-    }, [])
+    }, [dispatch, hideModal, itemType, navigateToList])
 
     const importHandler = React.useCallback((callback) => {
         return importData({
@@ -40,7 +43,7 @@ const ImportModal = ({ visible, hideModal }) => {
         <Modal
             backdropStyle={styles.backdrop}
             onBackdropPress={null}
-            style={styles.modal}
+            style={[styles.modal, { top: Math.max(12, (height - MODAL_HEIGHT) / 2) }]}
             visible={visible}>
             <ImportModalContent
                 fileName={fileName}
@@ -60,11 +63,12 @@ const styles = StyleSheet.create({
     modal: {
         borderRadius: 10,
         padding: 12,
-        height: 190,
+        height: MODAL_HEIGHT,
         justifyContent: 'flex-start',
-        width: '80 %',
+        width: '90%',
+        maxWidth: 420,
         position: 'absolute',
-        top: getModalTop(190),
+        alignSelf: 'center',
         backgroundColor: control
     },
     backdrop: {

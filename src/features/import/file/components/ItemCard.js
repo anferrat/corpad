@@ -23,8 +23,8 @@ const ItemCard = ({ onPress, selected, itemType }) => {
                 fill={selected ? control : basic} />
             <Text
                 style={styles.text}
-                category='p1'
-                numberOfLines={1}
+                category='s2'
+                numberOfLines={2}
                 ellipsizeMode={'tail'}
                 status={selected ? 'control' : 'basic'}>
                 {title}

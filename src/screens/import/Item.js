@@ -5,7 +5,7 @@ import { globalStyle } from '../../styles/styles'
 
 const ImportItemScreen = ({ navigation }) => {
     const navigateToList = (itemType) =>
-        navigation.navigate('PipelineSurvey',
+        navigation.popTo('PipelineSurvey',
             { screen: itemType === 'TEST_POINT' ? 'TestPoints' : (itemType === 'RECTIFIER' ? 'Rectifiers' : 'Pipelines') })
 
     const navigateToSpreadsheet = (uri, title) =>

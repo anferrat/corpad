@@ -31,7 +31,6 @@ import CycleSettings from '../screens/settings/CycleSettings'
 import EditMapLayer from '../screens/map_layer/Edit'
 import ViewMapLayer from '../screens/map_layer/View'
 import ViewMarkerInfo from '../screens/map_layer/ViewMarkerInfo'
-import Paywall from '../features/overlays/paywall'
 import ExternalLink from '../screens/externalLink/ExternalLink'
 import FindItem from '../screens/externalLink/FindItem'
 import PipelineMatching from '../screens/externalLink/PipelineMatching'
@@ -42,6 +41,14 @@ import { BottomSheet } from '../bottom_sheet'
 
 const Stack = createNativeStackNavigator()
 
+const renderTopBar = ({ route, navigation, options }) => (
+  <TopBar
+    screen={route.name}
+    params={route.params}
+    navigation={navigation}
+    topInset={options.headerStatusBarHeight} />
+)
+
 export const AppNavigator = ({ bottomSheet }) => {
   const { loading, isCloud, isLoaded, isOnboardingVisible } = useApp()
   return (
@@ -49,11 +56,12 @@ export const AppNavigator = ({ bottomSheet }) => {
       {!loading ?
         <>
           <Stack.Navigator
+            UNSTABLE_routeNamesChangeBehavior='lastUnhandled'
             screenOptions={{
               headerShown: true,
               animation: 'fade',
               //insets has to be passed to header from the top, to avoid glitching when swicthing between screens
-              header: ({ route, navigation, options }) => <TopBar screen={route.name} params={route.params} navigation={navigation} topInset={options.headerStatusBarHeight} />,
+              header: renderTopBar,
             }}>
             {isOnboardingVisible ? <Stack.Screen name='Onboarding' component={OnboardingScreen} /> : null}
             {

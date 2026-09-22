@@ -19,19 +19,28 @@ const SelectFileView = (props) => {
                 <Text
                     appearance={'hint'}
                     style={styles.text}
+                    numberOfLines={1}
+                    ellipsizeMode='middle'
                     category='s1'>
                     {translateImport('file.supportedFormats')}
-                    <Button
-                        onPress={showModal}
-                        appearance='ghost'>
-                        {translateImport('file.learnFormatting')}
-                    </Button>
                 </Text>
-
+                <Button
+                    onPress={showModal}
+                    appearance='ghost'
+                    style={styles.learnFormattingButton}>
+                    {evaProps => (
+                        <Text
+                            {...evaProps}
+                            style={[evaProps.style, styles.learnFormattingText]}>
+                            {translateImport('file.learnFormatting')}
+                        </Text>
+                    )}
+                </Button>
                 {props.children}
             </View>
             <Modal
                 animationType='slide'
+                onRequestClose={hideModal}
                 onDismiss={hideModal}
                 visible={visible}>
                 <ModalContent
@@ -63,6 +72,12 @@ const styles = StyleSheet.create({
     },
     text: {
         margin: 12,
+        textAlign: 'center'
+    },
+    learnFormattingButton: {
+        alignSelf: 'stretch'
+    },
+    learnFormattingText: {
         textAlign: 'center'
     },
     icon: {

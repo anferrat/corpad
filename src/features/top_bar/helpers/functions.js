@@ -9,15 +9,15 @@ import { CalculatorTypeTitleLabels, ItemTypeLabels, SubitemTypeLabels } from '..
 import { CalculatorTypeIconPacks, CalculatorTypeIcons } from '../../../constants/icons'
 import { translate } from '../../../localization'
 import { deleteMapLayer } from '../handlers/deleteMapLayer'
-import { translateTopBar } from '../../../localization'
+import { translateSettings, translateTopBar } from '../../../localization'
 
 
 export const getEditTitle = (globalState, type) => {
-    const state = ~Object.values(ItemTypes).indexOf(type) ? globalState.item.edit : globalState.subitem
+    const state = Object.values(ItemTypes).includes(type) ? globalState.item.edit : globalState.subitem
     return (state?.name === null || state?.name === '') ? state?.defaultName : state?.name ?? translateTopBar('loading')
 }
 
-export const getEditSubtype = (state, type) => ~Object.values(ItemTypes).indexOf(type) ? state.item.edit?.testPointType : state.subitem.type
+export const getEditSubtype = (state, type) => Object.values(ItemTypes).includes(type) ? state.item.edit?.testPointType : state.subitem.type
 
 const getTitleBySettingType = (setting) => {
     switch (setting) {
@@ -32,7 +32,7 @@ const getTitleBySettingType = (setting) => {
         case 'exportedFiles':
             return translate('settings.exportedFiles')
         case 'info':
-            return translate('settings.surveyOverview')
+            return translateSettings('surveyOverview')
         case 'about':
             return translate('settings.about')
         case 'localization':
@@ -260,7 +260,10 @@ export const getHeader = (screen, params, navigation, dispatch, openMenu) => {
                 return {
                     display: true,
                     isPrimary: true,
-                    left: 'back',
+                    left: {
+                        icon: 'arrow-back-outline',
+                        onPress: () => navigation.canGoBack() ? navigation.goBack() : navigation.replace('PipelineSurvey')
+                    },
                     title: translate('navigation.importSpreadsheet'),
                     right: null,
                 }

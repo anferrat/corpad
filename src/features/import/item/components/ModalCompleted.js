@@ -89,6 +89,7 @@ const styles = StyleSheet.create({
         marginBottom: -12
     },
     button: {
-        flex: 1
+        flex: 1,
+        minWidth: 0
     }
 })

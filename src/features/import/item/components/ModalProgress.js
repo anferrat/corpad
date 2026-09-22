@@ -52,6 +52,7 @@ const styles = StyleSheet.create({
         margin: 12,
         flexDirection: 'row',
         flex: 1,
+        minWidth: 0,
         alignItems: 'center',
         justifyContent: 'center'
     },
@@ -65,6 +66,7 @@ const styles = StyleSheet.create({
         paddingBottom: 6
     },
     progressBar: {
-        width: '80%'
+        flex: 1,
+        minWidth: 0
     }
 })

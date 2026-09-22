@@ -9,7 +9,13 @@ const ModalTitle = ({ hideModal, title, icon, iconFill }) => {
         <View style={styles.header}>
             <View style={styles.title}>
                 <Icon name={icon} style={styles.icon} fill={iconFill} />
-                <Text category='h6'>{title}</Text>
+                <Text
+                    category='h6'
+                    numberOfLines={2}
+                    ellipsizeMode='tail'
+                    style={styles.titleText}>
+                    {title}
+                </Text>
             </View>
             {!hideModal ? null :
                 <IconButton
@@ -34,7 +40,13 @@ const styles = StyleSheet.create({
     },
     title: {
         flexDirection: 'row',
-        alignItems: 'center'
+        alignItems: 'center',
+        flex: 1,
+        minWidth: 0
+    },
+    titleText: {
+        flex: 1,
+        minWidth: 0
     }
 })
 

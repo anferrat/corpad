@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { BackHandler } from 'react-native'
+import { useIsFocused } from '@react-navigation/native'
 import ModalCompleted from './ModalCompleted'
 import ModalProgress from './ModalProgress'
 import ModalError from './ModalError'
@@ -31,6 +32,7 @@ const ImportModalContent = ({
 }) => {
     const [importedStatus, setImportedStatus] = useState(initialState)
     const dispatch = useDispatch()
+    const isFocused = useIsFocused()
 
     const onImportHandler = React.useCallback(({ id, warnings, success, index }) => {
         setImportedStatus(old => ({
@@ -65,7 +67,7 @@ const ImportModalContent = ({
         }
         if (importedStatus.importing)
             importing()
-    }, [importedStatus.importing])
+    }, [importHandler, importedStatus.importing, onImportHandler])
 
     useEffect(() => {
         if (importedStatus.completed)
@@ -74,15 +76,18 @@ const ImportModalContent = ({
                 itemType: itemType,
                 importTime: importedStatus.importTime
             }))
-    }, [importedStatus.completed])
+    }, [dispatch, importedStatus.completed, importedStatus.idList, importedStatus.importTime, itemType])
 
     useEffect(() => {
+        if (!visible || !isFocused)
+            return
+
         const backHandler = BackHandler.addEventListener('hardwareBackPress', () => {
-            if (visible && !importedStatus.importing && !importedStatus.completed) {
+            if (!importedStatus.importing && !importedStatus.completed) {
                 hideModal()
                 return true
             }
-            else if (visible && (importedStatus.completed || importedStatus.importing)) {
+            else if (importedStatus.completed || importedStatus.importing) {
                 return true
             }
             else return false
@@ -90,7 +95,7 @@ const ImportModalContent = ({
         return () => {
             backHandler.remove()
         }
-    }, [importedStatus.importing, importedStatus.completed, hideModal, visible])
+    }, [importedStatus.importing, importedStatus.completed, hideModal, isFocused, visible])
 
     if (count === 0)
         return <ModalError

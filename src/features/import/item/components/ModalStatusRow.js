@@ -9,7 +9,14 @@ const ModalStatusRow = ({ children, icon, pack }) => {
     return (
         <View style={styles.statusRow}>
             <Icon name={icon} pack={pack} style={styles.icon} fill={basic} />
-            <Text appearance='hint' category='s2' numberOfLines={1}>{children}</Text>
+            <Text
+                appearance='hint'
+                category='s2'
+                numberOfLines={2}
+                ellipsizeMode='tail'
+                style={styles.text}>
+                {children}
+            </Text>
         </View>
     )
 }
@@ -26,5 +33,9 @@ const styles = StyleSheet.create({
         width: 15,
         height: 15,
         marginRight: 6
+    },
+    text: {
+        flex: 1,
+        minWidth: 0
     }
 })
