@@ -49,6 +49,7 @@ export const ExportedFilesList = ({ navigateToSpreadsheet }) => {
             <BottomButton
                  title={translateSettings('deleteAll')}
                 disabled={deleteButtonDisabled}
+                status='danger'
                 icon={'trash'}
                 onPress={deleteAll} />
         </>

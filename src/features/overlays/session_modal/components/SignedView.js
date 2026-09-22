@@ -34,7 +34,14 @@ const SignedView = ({ userName, onSignOut, signing }) => {
                 onPress={onSignOut}
                 status={'danger'}
                 appearance='ghost'>
-                {translateOverlay('session.logOut')}
+                {evaProps => (
+                    <Text
+                        {...evaProps}
+                        numberOfLines={1}
+                        style={[evaProps.style, styles.buttonText]}>
+                        {translateOverlay('session.logOut')}
+                    </Text>
+                )}
             </Button>
         </>
     )
@@ -53,6 +60,10 @@ const styles = StyleSheet.create({
     signOutButton: {
         width: '100%',
         height: 60
+    },
+    buttonText: {
+        textAlign: 'center',
+        paddingHorizontal: 12
     },
     title: {
         marginBottom: 12

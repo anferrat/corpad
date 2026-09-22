@@ -33,7 +33,14 @@ const NotSignedView = ({ signing, onSignIn }) => {
                 disabled={signing}
                 style={styles.signInButton}
                 accessoryLeft={accessory}>
-                {translateOverlay('session.signInGoogleDrive')}
+                {evaProps => (
+                    <Text
+                        {...evaProps}
+                        numberOfLines={1}
+                        style={[evaProps.style, styles.buttonText]}>
+                        {translateOverlay('session.signInGoogleDrive')}
+                    </Text>
+                )}
             </Button >
         </>
     )
@@ -54,7 +61,10 @@ const styles = StyleSheet.create({
         textAlign: 'center'
     },
     signInButton: {
-        margin: 12,
-        marginBottom: 24,
+        width: '80%',
+        marginBottom: 24
+    },
+    buttonText: {
+        textAlign: 'center',
     }
 })

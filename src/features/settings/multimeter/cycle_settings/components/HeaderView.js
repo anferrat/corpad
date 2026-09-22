@@ -46,12 +46,12 @@ export default HeaderView
 
 const styles = StyleSheet.create({
     container: {
-
     },
     radioView: {
         paddingTop: 6,
         flexDirection: 'row',
         justifyContent: 'space-evenly',
-        paddingBottom: 12
+        paddingBottom: 12,
+        flexWrap: 'wrap'
     },
 })

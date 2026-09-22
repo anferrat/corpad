@@ -32,7 +32,9 @@ const GeoFileImportView = ({ filename, size, onSelectFile }) => {
                         onPress={onSelectFile}
                         style={styles.button}
                         accessoryLeft={plusCircle}>
-                         {translateMapLayer('selectFile')}
+                         <Text numberOfLines={1} ellipsizeMode='tail'>
+                            {translateMapLayer('selectFile')}
+                         </Text>
                     </Button>
                     <Text
                         category='label'

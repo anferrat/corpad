@@ -128,11 +128,10 @@ export default ItemProperties
 
 const styles = StyleSheet.create({
     itemSelector: {
-        alignItems: 'flex-start',
+        alignItems: 'center',
         flexDirection: 'row',
-        flexWrap: 'wrap',
         justifyContent: 'space-evenly',
-        marginBottom: 12
+        marginBottom: 12,
     },
     tokens: {
         flexDirection: 'row',

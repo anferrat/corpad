@@ -1,11 +1,13 @@
 import React from 'react'
-import { View, StyleSheet } from 'react-native'
+import { StyleSheet } from 'react-native'
 import { Radio as RadioDefault, Text } from '@ui-kitten/components'
 
 const RadioText = React.memo(({ children }) => {
     return <Text
         category='p1'
-        style={styles.text}>{children}</Text>
+        style={styles.text} numberOfLines={2} ellipsizeMode='tail'>
+        {children}
+    </Text>
 })
 
 const Radio = (props) => {
@@ -24,7 +26,8 @@ export default React.memo(Radio)
 const styles = StyleSheet.create({
     text: {
         paddingLeft: 12,
-        textAlignVertical: 'center'
+        textAlignVertical: 'center',
+        paddingRight: 12
     },
     radio: {
         alignItems: 'center',

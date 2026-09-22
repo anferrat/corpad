@@ -35,7 +35,11 @@ const HistoryModalContent = ({ hideModal }) => {
                 appearance='ghost'
                 style={styles.button}
                 onPress={onExportPress}>
-                {translateMultimeterOverlay('export')}
+                <Text
+                    numberOfLines={1}
+                    ellipsizeMode='tail'>
+                    {translateMultimeterOverlay('export')}
+                </Text>
             </Button>
             <Button
                 accessoryLeft={trashIcon}
@@ -43,7 +47,11 @@ const HistoryModalContent = ({ hideModal }) => {
                 appearance='ghost'
                 style={styles.button}
                 onPress={onDeleteAllPress}>
-                {translateMultimeterOverlay('deleteAll')}
+                <Text
+                    numberOfLines={1}
+                    ellipsizeMode='tail'>
+                    {translateMultimeterOverlay('deleteAll')}
+                </Text>
             </Button>
         </View>
     ), [onDeleteAllPress, onExportPress])

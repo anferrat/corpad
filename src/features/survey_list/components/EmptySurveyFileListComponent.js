@@ -42,8 +42,15 @@ const EmptySurveyFileListComponent = ({ isCloud, onCreate, initialLoad, onPressL
                 <Button
                     appearance='ghost'
                     size='large'
+                    style={styles.button}
                     onPress={onCreate.bind(this, false)}>
-                    {translateSurveyList('createNewSurvey')}
+                    {evaProps => (
+                        <Text
+                            {...evaProps}
+                            style={[evaProps.style, styles.buttonText]}>
+                            {translateSurveyList('createNewSurvey')}
+                        </Text>
+                    )}
                 </Button>
                 <Text
                     category='p2'
@@ -53,10 +60,17 @@ const EmptySurveyFileListComponent = ({ isCloud, onCreate, initialLoad, onPressL
                 <Button
                     appearance='ghost'
                     size='large'
+                    style={styles.button}
                     onPress={onCreate.bind(this, true)}>
-                    {translateSurveyList('importSurvey')}
+                    {evaProps => (
+                        <Text
+                            {...evaProps}
+                            style={[evaProps.style, styles.buttonText]}>
+                            {translateSurveyList('importSurvey')}
+                        </Text>
+                    )}
                 </Button>
-                
+
             </View>
         )
     else return null
@@ -95,5 +109,14 @@ const styles = StyleSheet.create({
         flexWrap: 'wrap',
         justifyContent: 'center',
         marginBottom: 24
+    },
+    button: {
+        width: '100%',
+        justifyContent: 'center',
+    },
+    buttonText: {
+        width: '100%',
+        textAlign: 'center',
+        textAlignVertical: 'center',
     }
 })

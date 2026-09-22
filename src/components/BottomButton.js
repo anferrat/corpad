@@ -38,6 +38,7 @@ const BottomButton = (props) => {
         <Button
             {...props}
             onPress={onPress}
+            hitSlop={12}
             disabled={disabled || props.disabled}
             accessoryRight={iconPosition === 'right' ? accessory : null}
             accessoryLeft={iconPosition === 'right' ? null : accessory}
@@ -54,9 +55,10 @@ const styles = StyleSheet.create({
     {
         position: 'absolute',
         left: '2.5%',
+        right: '2.5%',
         height: 50,
-        width: '95%',
         paddingHorizontal: 15,
+        zIndex: 10,
         shadowColor: '#000',
         shadowOffset: { width: 0, height: 1 },
         shadowOpacity: 0.8,
@@ -67,9 +69,10 @@ const styles = StyleSheet.create({
         position: 'absolute',
         bottom: 10,
         left: '2.5%',
+        right: '2.5%',
         height: 50,
-        width: '95%',
         paddingHorizontal: 15,
+        zIndex: 10,
         backgroundColor: basic300,
     }
 })

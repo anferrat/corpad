@@ -24,8 +24,8 @@ const ItemSelectorCard = ({ onPress, selectedItemType, itemType }) => {
                 fill={selected ? control : basic} />
             <Text
                 style={styles.text}
-                category='p1'
-                numberOfLines={1}
+                category='s2'
+                numberOfLines={2}
                 ellipsizeMode={'tail'}
                 status={selected ? 'control' : 'basic'}>
                 {title}
@@ -48,7 +48,7 @@ const containerStyles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         borderWidth: 1,
-        borderColor: basic300
+        borderColor: basic300,
     }
 })
 
@@ -71,6 +71,7 @@ const styles = StyleSheet.create({
     },
     text: {
         marginTop: 6,
+        marginHorizontal: 6,
         textAlign: 'center'
     }
 })

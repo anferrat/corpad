@@ -19,7 +19,9 @@ const ListItem = ({ onPress, title, icon, pack }) => {
                     fill={control} />
             </View>
             <Text
-                style={styles.text}>
+                style={styles.text}
+                numberOfLines={1}
+                ellipsizeMode='tail'>
                 {title}
             </Text>
         </Pressable>
@@ -50,6 +52,8 @@ const styles = StyleSheet.create({
     },
     text: {
         fontSize: 15,
-        paddingLeft: 15
+        paddingLeft: 15,
+        flexShrink: 1,
+        minWidth: 0,
     }
 })

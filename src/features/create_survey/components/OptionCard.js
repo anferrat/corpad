@@ -29,12 +29,14 @@ const OptionCard = ({ onPress, disabled, icon, pack, selected, hint, subtitle, t
                 style={styles.icon}
                 fill={selected ? primary : basic} />
             <Text
+                style={styles.header}
                 category={'h6'}
                 appearance={disabled ? 'hint' : 'default'}>
                 {title}
             </Text>
             {hint ?
                 <Text
+                    style={styles.hint}
                     appearance={'hint'}
                     category='s2'>
                     {hint}
@@ -93,6 +95,12 @@ const styles = StyleSheet.create({
     subtitle: {
         marginTop: 12,
         textAlign: 'center'
+    },
+    header: {
+        textAlign: 'center',
+    },
+    hint: {
+        textAlign: 'center',
     }
 })
 

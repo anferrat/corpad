@@ -45,6 +45,7 @@ export const ViewMapLayer = ({ navigateToEditMapLayer, goBack }) => {
                         <View style={styles.headerRow}>
                             <Text
                                 appearance='hint'
+                                numberOfLines={1}
                                 category='label'>{translateMapLayer('displayedMapLayers')}</Text>
                         </View>
                         {layers.length === 0 ?

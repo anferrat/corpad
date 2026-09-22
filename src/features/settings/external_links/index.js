@@ -67,6 +67,7 @@ const ExternalLinkSettings = ({ navigateToExternalLink }) => {
                 onPress={onDeleteAll}
                 title={translateSettings('deleteAll')}
                 icon='trash'
+                status='danger'
                 disabled={loading || (records.length === 0)}
             />
         </>
