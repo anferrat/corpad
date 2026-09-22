@@ -14,7 +14,7 @@ export class GeoJsonPointExtractor {
         const { features } = geoJson
         const newFeatures = []
         const points = []
-        for (i = 0; i < features.length; i++) {
+        for (let i = 0; i < features.length; i++) {
             const { geometry, properties } = features[i]
             //Extracts points in order to create tapable markers
             if (geometry.type === 'Point') {

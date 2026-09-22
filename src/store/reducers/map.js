@@ -4,6 +4,7 @@ const initialState = {
     //FYI markers with lat === null or lon === null will still exist in this list. make sure, to filter them out when accessing markers
     markers: [],  //contains markers of items in current survey, access by id and itemType. uid as key
     loading: true, //indicates that map is loading markers (markers load once when survey loads for the first time)
+    fitMarkersAfterLoad: false,
     mapReady: false, //onMapReady status from rn-maps
     pendingMarker: null, //marker requested before the map is ready
     satelliteMode: false, // is satellite view on/off
@@ -116,6 +117,7 @@ const map = (state = initialState, action) => {
                 {
                     ...state,
                     markers: action.list,
+                    fitMarkersAfterLoad: false,
                     isFirstLoad: false,
                     loading: false
                 }
@@ -124,6 +126,7 @@ const map = (state = initialState, action) => {
             return ({
                 ...state,
                 loading: true,
+                fitMarkersAfterLoad: true,
                 markers: initialState.markers,
                 filters: {
                     ...state.filters,
@@ -138,6 +141,7 @@ const map = (state = initialState, action) => {
             return ({
                 ...state,
                 loading: true,
+                fitMarkersAfterLoad: true,
                 filters: initialState.filters,
                 activeMarker: initialState.activeMarker,
                 activeMapLayerMarker: initialState.activeMapLayerMarker,
@@ -214,6 +218,7 @@ const map = (state = initialState, action) => {
                 ...state,
                 markers: [],
                 loading: true,
+                fitMarkersAfterLoad: true,
                 activeMarker: initialState.activeMarker,
                 newItemMarker: initialState.newItemMarker,
                 activeMapLayerMarker: initialState.activeMapLayerMarker,

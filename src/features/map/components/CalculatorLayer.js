@@ -4,6 +4,7 @@ import CalculatorMarker from './markers/CalculatorMarker'
 import { useDispatch, useSelector } from 'react-redux'
 import { setActiveCalculatorMarker } from '../../../store/actions/map'
 import ActiveCalculatorMarker from './markers/ActiveCalculatorMarker'
+import { hapticLight } from '../../../native_libs/haptics'
 
 
 const CalculatorLayer = ({ animateToCoordinates }) => {
@@ -11,6 +12,7 @@ const CalculatorLayer = ({ animateToCoordinates }) => {
     const { calculatorId, latitude, longitude } = useSelector(state => state.map.activeCalculatorMarker)
     const dispatch = useDispatch()
     const onPress = useCallback((calculatorId, calculatorType, latitude, longitude, name) => {
+        hapticLight()
         dispatch(setActiveCalculatorMarker(calculatorId, calculatorType, latitude, longitude, name))
     }, [])
 

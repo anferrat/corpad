@@ -16,21 +16,23 @@ export class GetInitialMapRegion {
         try {
             const bbox = this.geolocationCalculator.calculateMarkersBbox(markers)
             const [minLon, minLat, maxLon, maxLat] = bbox
-            const valid = maxLat || maxLat === 0 && minLat || minLat === 0 && maxLon || maxLon === 0 && minLon || minLon === 0
-            if (valid)
-                return this.getMapRegionFromBbox.execute(bbox)
-            else {
-                await this.permissions.location()
-                const { latitude, longitude } = await this.geolocationRepo.getCurrent()
-                if (latitude || latitude === 0 && longitude || longitude === null)
-                    return {
-                        latitudeDelta: 0.25,
-                        longitude: longitude,
-                        longitudeDelta: 0.25,
-                        latitude: latitude
-                    }
-                else return this.DEFAULT_REGION
+            const valid = [minLon, minLat, maxLon, maxLat].every(Number.isFinite)
+            if (valid) {
+                const mapRegion = this.getMapRegionFromBbox.execute(bbox)
+                if (mapRegion.valid)
+                    return mapRegion
             }
+
+            await this.permissions.location()
+            const { latitude, longitude } = await this.geolocationRepo.getCurrent()
+            if (Number.isFinite(latitude) && Number.isFinite(longitude))
+                return {
+                    latitudeDelta: 0.25,
+                    longitude: longitude,
+                    longitudeDelta: 0.25,
+                    latitude: latitude
+                }
+            return this.DEFAULT_REGION
         }
         catch (er) {
             return this.DEFAULT_REGION

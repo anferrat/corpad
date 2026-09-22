@@ -1,24 +1,30 @@
+import bbox from '@turf/bbox'
+
 export class GeolocationCalculator {
     constructor() {
         this.PiOver180 = Math.PI / 180
         this.R = 6371e3
     }
 
-    _getMax(a, b) {
-        return a !== null && b !== null ? Math.max(a, b) : (a === null ? b : a)
-    }
-
-    _getMin(a, b) {
-        return a !== null && b !== null ? Math.min(a, b) : (a === null ? b : a)
-    }
-
     calculateMarkersBbox(markers) {
-        return ([
-            markers.reduce((min, { longitude }) => this._getMin(longitude, min), markers[0]?.longitude ?? null), //minLon
-            markers.reduce((min, { latitude }) => this._getMin(latitude, min), markers[0]?.latitude ?? null), //minLat
-            markers.reduce((max, { longitude }) => this._getMax(longitude, max), markers[0]?.longitude ?? null), //maxLon
-            markers.reduce((max, { latitude }) => this._getMax(latitude, max), markers[0]?.latitude ?? null), //maxLat
-        ])
+        const features = markers
+            .filter(({ latitude, longitude }) => Number.isFinite(latitude) && Number.isFinite(longitude))
+            .map(({ latitude, longitude }) => ({
+                type: 'Feature',
+                properties: {},
+                geometry: {
+                    type: 'Point',
+                    coordinates: [longitude, latitude]
+                }
+            }))
+
+        if (features.length === 0)
+            return [null, null, null, null]
+
+        return bbox({
+            type: 'FeatureCollection',
+            features
+        })
     }
 
     haversine(lat1, lon1, lat2, lon2) {

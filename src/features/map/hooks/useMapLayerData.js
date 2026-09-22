@@ -6,6 +6,7 @@ import { errorHandler } from "../../../helpers/error_handler"
 import { loadMapLayers, resetMapLayers } from "../../../store/actions/mapLayers"
 import { setActiveMapLayerMarker } from "../../../store/actions/map"
 import { isProStatus } from "../../../helpers/functions"
+import { hapticMapPress } from '../../../native_libs/haptics'
 
 
 const useMapLayerData = () => {
@@ -23,6 +24,7 @@ const useMapLayerData = () => {
 
 
     const onMapLayerMarkerPress = useCallback(({ layerId, layerName, index, color, latitude, longitude, name }) => {
+        hapticMapPress()
         dispatch(setActiveMapLayerMarker(layerId, layerName, index, color, latitude, longitude, name))
     }, [])
 

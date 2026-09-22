@@ -25,9 +25,11 @@ const useMapLayers = ({ navigateToEditMapLayer, goBack }) => {
     const onEdit = useCallback((layerId) => navigateToEditMapLayer(false, layerId), [])
 
     const onGoTo = useCallback((mapRegion) => {
+        if (mapRegion?.valid !== true)
+            return
         goBack()
         EventRegister.emit('animateToRegion', mapRegion)
-    }, [])
+    }, [goBack])
 
     const onDelete = useCallback(async (index, layerId) => {
         const confirm = await warningHandler(61, translateMapLayer('delete'), translateMapLayer('cancel'))

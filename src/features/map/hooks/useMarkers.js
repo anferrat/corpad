@@ -6,16 +6,18 @@ import { getInitialMapRegion, shareLocationWithExtarnalApp } from '../../../app/
 import { errorHandler } from '../../../helpers/error_handler'
 import { activateMarker, clearPendingMapMarker, deleteMarker, loadMarkers, resetMap, resetActiveMarkers, setMapReady, setNewItemMarker, toggleSatellite, updateMarker } from '../../../store/actions/map'
 import { updateMarkerCoordinates } from '../../../app/controllers/survey/items/MarkerController'
-import { hapticMedium, hapticMap } from '../../../native_libs/haptics'
+import { hapticMapPress, hapticMedium, hapticMap } from '../../../native_libs/haptics'
 import { useIsFocused } from '@react-navigation/native'
 import { createItem } from '../../../app/controllers/survey/items/ItemController'
 import { roundCoord } from '../helpers/functions'
+import { alertHandler } from '../../../app/controllers/_instances/general_services'
+import { translateMap } from '../../../localization'
 
 const useMarkers = ({ navigateToEdit, ref }) => {
     const map = useSelector(state => state.map)
     const isFocused = useIsFocused()
     const dispatch = useDispatch()
-    const { loading, activeMarker, markers, newItemMarker, satelliteMode, activeMapLayerMarker, isFirstLoad, filters, activeCalculatorMarker, mapReady, pendingMarker } = map
+    const { loading, activeMarker, markers, newItemMarker, satelliteMode, activeMapLayerMarker, isFirstLoad, filters, activeCalculatorMarker, mapReady, pendingMarker, fitMarkersAfterLoad } = map
     const [initialCameraState, setInitialCameraState] = useState('idle')
 
     const currentRegion = useRef({
@@ -30,36 +32,12 @@ const useMarkers = ({ navigateToEdit, ref }) => {
     })
     const pendingCameraTimeoutRef = useRef(null)
     const pendingCameraRef = useRef(false)
+    const initialCameraMarkersRef = useRef(null)
     const mountedRef = useRef(true)
     const activeMarkerRef = useRef({
         itemType: null,
         itemId: null
     })
-
-    const loadData = useCallback(async () => {
-        const { status, response } = await getMarkerList({ filters }, er => errorHandler(er))
-        if (status === 200) {
-            dispatch(loadMarkers(response))
-            if (isFirstLoad) {
-                //onLoad animate to initial region. if active marker exist on load, it will animate to active marker instead
-                if (pendingMarker)
-                    return
-
-                if (activeMarkerRef.current.itemType === null) {
-                    setInitialCameraState('preparing')
-                    const regionData = await getInitialMapRegion({ markers: response })
-                    if (ref.current?.animateToRegion) {
-                        setInitialCameraState('animating')
-                        ref.current.animateToRegion(regionData.response)
-                    }
-                    else
-                        setInitialCameraState('idle')
-                }
-                else
-                    activateMarkerFromSource(activeMarkerRef.current)
-            }
-        }
-    }, [dispatch, filters, isFirstLoad, pendingMarker])
 
     const activateMarkerFromSource = useCallback(async ({ itemId, itemType }) => {
         const { status, response } = await getMarker({ itemType, itemId })
@@ -71,6 +49,37 @@ const useMarkers = ({ navigateToEdit, ref }) => {
             }
         return null
     }, [dispatch])
+
+    const loadData = useCallback(async () => {
+        const shouldFitMarkers = fitMarkersAfterLoad
+        const { status, response } = await getMarkerList({ filters }, er => errorHandler(er))
+        if (status === 200) {
+            dispatch(loadMarkers(response))
+            if (shouldFitMarkers && !pendingMarker) {
+                initialCameraMarkersRef.current = response
+                setInitialCameraState('waiting')
+            }
+            else if (isFirstLoad) {
+                //The initial camera waits for both marker loading and map readiness.
+                if (pendingMarker)
+                    return
+
+                if (activeMarkerRef.current.itemType === null) {
+                    initialCameraMarkersRef.current = response
+                    setInitialCameraState('waiting')
+                }
+                else
+                    activateMarkerFromSource(activeMarkerRef.current)
+            }
+        }
+        else {
+            dispatch(loadMarkers([]))
+            if (isFirstLoad && !pendingMarker && activeMarkerRef.current.itemType === null) {
+                initialCameraMarkersRef.current = []
+                setInitialCameraState('waiting')
+            }
+        }
+    }, [activateMarkerFromSource, dispatch, filters, fitMarkersAfterLoad, isFirstLoad, pendingMarker])
 
     useEffect(() => {
         if (loading && isFocused)
@@ -96,7 +105,7 @@ const useMarkers = ({ navigateToEdit, ref }) => {
         })
 
         const onAnimateToRegion = EventRegister.addEventListener('animateToRegion', (mapRegion) => {
-            if (ref.current.animateToRegion)
+            if (mapRegion?.valid === true && ref.current?.animateToRegion)
                 ref.current.animateToRegion(mapRegion, 1000)
         })
 
@@ -105,7 +114,7 @@ const useMarkers = ({ navigateToEdit, ref }) => {
             EventRegister.removeEventListener(onDeleteHandler)
             EventRegister.removeEventListener(onAnimateToRegion)
         }
-    }, [loading, activeMarkerRef, dispatch])
+    }, [loading, activeMarkerRef, dispatch, ref])
 
     useEffect(() => {
         if (!loading && isFocused && !pendingCameraRef.current && activeMarkerRef.current.itemId !== null && activeMarkerRef.current.itemType !== null) {
@@ -113,7 +122,7 @@ const useMarkers = ({ navigateToEdit, ref }) => {
             activeMarkerRef.current.itemType = null
             activeMarkerRef.current.itemId = null
         }
-    }, [isFocused, loading, activeMarkerRef])
+    }, [activateMarkerFromSource, isFocused, loading, activeMarkerRef])
 
     useEffect(() => {
         if (mapReady && isFocused && initialCameraState === 'idle' && !pendingCameraRef.current && activeMarker.latitude !== null && activeMarker.longitude !== null)
@@ -140,6 +149,47 @@ const useMarkers = ({ navigateToEdit, ref }) => {
             longitudeDelta: currentRegion.current.longitudeDelta,
         }, 300)
     }, [currentRegion, ref])
+
+    useEffect(() => {
+        if (initialCameraState !== 'waiting' || loading || !isFocused || !mapReady)
+            return
+
+        if (pendingMarker) {
+            initialCameraMarkersRef.current = null
+            setInitialCameraState('idle')
+            return
+        }
+
+        const markersForRegion = initialCameraMarkersRef.current
+        if (!markersForRegion)
+            return
+
+        const noMarkersLoaded = !markersForRegion.some(({latitude, longitude}) => Number.isFinite(latitude) && Number.isFinite(longitude))
+        initialCameraMarkersRef.current = null
+        setInitialCameraState('preparing')
+        let cancelled = false
+
+        const animateInitialRegion = async () => {
+            const regionData = await getInitialMapRegion({ markers: markersForRegion })
+            if (cancelled || !mountedRef.current)
+                return
+
+            if (regionData.status === 200 && ref.current?.animateToRegion) {
+                if (noMarkersLoaded)
+                    alertHandler.execute(translateMap('noMarkersLoaded'))
+                setInitialCameraState('animating')
+                ref.current.animateToRegion(regionData.response)
+            }
+            else
+                setInitialCameraState('idle')
+        }
+
+        animateInitialRegion()
+
+        return () => {
+            cancelled = true
+        }
+    }, [initialCameraState, isFocused, loading, mapReady, pendingMarker, ref])
 
     useEffect(() => {
         if (!pendingMarker || loading || !isFocused || !mapReady || initialCameraState !== 'idle')
@@ -173,7 +223,7 @@ const useMarkers = ({ navigateToEdit, ref }) => {
         if (pendingCameraTimeoutRef.current !== null)
             clearTimeout(pendingCameraTimeoutRef.current)
         dispatch(resetMap())
-    }, [])
+    }, [dispatch])
 
 
     const onRegionChange = useCallback(({ latitude, longitude, latitudeDelta, longitudeDelta }) => {
@@ -186,7 +236,7 @@ const useMarkers = ({ navigateToEdit, ref }) => {
     }, [currentRegion, initialCameraState])
 
     const onUserLocationChange = useCallback(({ nativeEvent }) => {
-        if (nativeEvent && nativeEvent.coordinate && nativeEvent.coordinate.latitude && nativeEvent.coordinate.longitude) {
+        if (nativeEvent && nativeEvent.coordinate && Number.isFinite(nativeEvent.coordinate.latitude) && Number.isFinite(nativeEvent.coordinate.longitude)) {
             userLocation.current.latitude = nativeEvent.coordinate.latitude
             userLocation.current.longitude = nativeEvent.coordinate.longitude
         }
@@ -229,13 +279,16 @@ const useMarkers = ({ navigateToEdit, ref }) => {
     }, [dispatch])
 
     const zoomToUserLocation = useCallback(() => {
-        if (userLocation.current.latitude || userLocation.current.longitude) {
+        if (Number.isFinite(userLocation.current.latitude) && Number.isFinite(userLocation.current.longitude)) {
             zoomToCoordinates(userLocation.current.latitude, userLocation.current.longitude)
         }
         else errorHandler(112)
     }, [userLocation, zoomToCoordinates])
 
-    const onMarkerPress = useCallback((marker) => dispatch(activateMarker(marker)), [dispatch])
+    const onMarkerPress = useCallback((marker) => {
+        hapticMapPress()
+        dispatch(activateMarker(marker))
+    }, [dispatch])
 
     const createItemHandler = useCallback(async (itemType) => {
         const { latitude, longitude } = newItemMarker
@@ -249,7 +302,7 @@ const useMarkers = ({ navigateToEdit, ref }) => {
     }, [navigateToEdit, newItemMarker.latitude, newItemMarker.longitude])
 
     const shareActiveLocation = useCallback((latitude, longitude, name) => {
-        if (latitude && longitude)
+        if (Number.isFinite(latitude) && Number.isFinite(longitude))
             shareLocationWithExtarnalApp({
                 latitude,
                 longitude,
@@ -260,7 +313,7 @@ const useMarkers = ({ navigateToEdit, ref }) => {
     }, [])
 
     const shareNewItemLocation = useCallback(() => {
-        if (newItemMarker.latitude && newItemMarker.longitude)
+        if (Number.isFinite(newItemMarker.latitude) && Number.isFinite(newItemMarker.longitude))
             shareLocationWithExtarnalApp({
                 latitude: newItemMarker.latitude,
                 longitude: newItemMarker.longitude,
