@@ -1,5 +1,13 @@
 import { AreaUnits, CurrentUnits, FactorUnits, LengthUnits, PotentialUnits, ResistivityUnits } from "../../../constants/global"
 
+const toFiniteNumber = (value) => {
+    if (value === null || value === undefined || value === '')
+        return null
+
+    const number = typeof value === 'number' ? value : Number(value)
+    return Number.isFinite(number) ? number : null
+}
+
 export class UnitConverter {
     constructor() {
     }
@@ -9,11 +17,14 @@ export class UnitConverter {
     }
 
     convertVolts(value, inputUnit, outputUnit, digits = undefined) {
-        if (inputUnit === outputUnit || value === null) {
-            return digits !== undefined ? parseFloat(value.toFixed(digits)) : value
-        }
+        const numericValue = toFiniteNumber(value)
+        if (numericValue === null)
+            return null
 
-        let result = value
+        if (inputUnit === outputUnit)
+            return digits !== undefined ? parseFloat(numericValue.toFixed(digits)) : numericValue
+
+        let result = numericValue
         switch (inputUnit) {
             case PotentialUnits.MILIVOLTS:
                 result *= 0.001
@@ -46,10 +57,14 @@ export class UnitConverter {
     }
 
     convertAmps(value, inputUnit, outputUnit, digits = undefined) {
-        if (inputUnit === outputUnit || value === null) {
-            return digits !== undefined ? parseFloat(value.toFixed(digits)) : value
-        }
-        let result = value
+        const numericValue = toFiniteNumber(value)
+        if (numericValue === null)
+            return null
+
+        if (inputUnit === outputUnit)
+            return digits !== undefined ? parseFloat(numericValue.toFixed(digits)) : numericValue
+
+        let result = numericValue
         switch (inputUnit) {
             case CurrentUnits.MICRO_AMPS:
                 result *= 0.000001

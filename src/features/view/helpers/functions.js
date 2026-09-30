@@ -51,7 +51,7 @@ export const displayResistivity = (r) => numberWithSpaces(fixRealValue(r))
 export const displaySpacing = (r) => fixRealValue(r)
 
 const findPotentialIndexById = (subitem, potentialId) => {
-    return subitem.potentials.findIndex(pot => pot.id === potentialId)
+    return subitem?.potentials?.findIndex(pot => pot.id === potentialId) ?? -1
 }
 
 export const getActiveFields = (selectedField, onPotentialId, offPotentialId, subitems) => {
@@ -92,5 +92,5 @@ export const getUnit = (property, potentialUnit) => {
 }
 
 export const getValue = (reading) => {
-    return reading.flag !== null ? reading.flag : reading.value
+    return reading?.flag != null ? reading.flag : reading?.value
 }

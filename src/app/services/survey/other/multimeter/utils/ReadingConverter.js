@@ -1,4 +1,4 @@
-import { MeasurementPropertyTypes, MultimeterMeasurementTypes, MultimeterReadingTypes, PotentialUnits } from "../../../../../../constants/global"
+import { MeasurementPropertyTypes, MultimeterReadingTypes, PotentialUnits } from "../../../../../../constants/global"
 import { Reading } from "../../../../../entities/survey/multimeter/Reading"
 
 export class ReadingConverter {
@@ -58,7 +58,10 @@ export class ReadingConverter {
     execute(reading, outputUnit, measurementType) {
         if (reading instanceof Reading) {
             const { id, value, deviceTimestamp, type, unit, flag, isAc, deviceType } = reading
-            const newValue = this._convertValue(value, type, unit, outputUnit, measurementType)
+            // Device flags such as OL/OR are display values, not numeric measurements.
+            const newValue = flag != null || value == null
+                ? value
+                : this._convertValue(value, type, unit, outputUnit, measurementType)
             return new Reading(id, newValue, deviceTimestamp, type, unit, flag, isAc, deviceType)
         }
         else
