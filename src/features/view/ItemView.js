@@ -73,7 +73,9 @@ const ItemView = ({ itemId, itemType, navigateToMap, navigateToEditSubitem, navi
                 reset={reset}
                 handleTagErrorLink={handleTagErrorLink} />
             <QRCodeModal
-                name={item.name} />
+                name={item.name}
+                itemId={itemId}
+                itemType={itemType} />
         </View>
     )
 }

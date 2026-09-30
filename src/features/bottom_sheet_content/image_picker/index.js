@@ -6,18 +6,21 @@ import { translateBottomSheet } from '../../../localization'
 
 
 const ImagePickerView = ({ params, closeSheet }) => {
-    const { addPhotoFromLibrary, addPhotoFromCamera, addPhotoFromStorage } = useImagePicker(params, closeSheet)
+    const { isBusy, addPhotoFromLibrary, addPhotoFromCamera, addPhotoFromStorage } = useImagePicker(params, closeSheet)
     return (
         <View style={styles.container}>
             <MenuListItem
+                disabled={isBusy}
                 onPress={addPhotoFromCamera}
                 title={translateBottomSheet('takePhoto')}
                 icon='camera' />
             <MenuListItem
+                disabled={isBusy}
                 onPress={addPhotoFromLibrary}
                 title={translateBottomSheet('selectGallery')}
                 icon='image' />
             <MenuListItem
+                disabled={isBusy}
                 onPress={addPhotoFromStorage}
                 title={translateBottomSheet('selectStorage')}
                 icon='folder' />

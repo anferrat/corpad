@@ -8,7 +8,7 @@ import { translateBottomSheet } from '../../../localization'
 
 const LabelPicker = ({ closeSheet, params }) => {
     const { itemType, itemId } = params
-    const { onPressNFC, onPressQrCode, isPro } = useLabelPicker({ itemId, itemType, closeSheet })
+    const { onPressNFC, onPressQrCode, isProcessing, isPro } = useLabelPicker({ itemId, itemType, closeSheet })
     return (
         <View
             style={styles.container}>
@@ -20,12 +20,14 @@ const LabelPicker = ({ closeSheet, params }) => {
             </Text>
             <MenuListItem
                 inactive={!isPro}
+                disabled={isProcessing}
                 onPress={onPressQrCode}
                 title={translateBottomSheet('generateQr')}
                 icon='qr-code'
                 pack='cp' />
             <MenuListItem
                 inactive={!isPro}
+                disabled={isProcessing}
                 onPress={onPressNFC}
                 title={translateBottomSheet('writeNfc')}
                 icon='nfc-filled'

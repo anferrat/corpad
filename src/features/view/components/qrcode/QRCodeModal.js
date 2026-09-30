@@ -11,8 +11,8 @@ import Avatar from './Avatar'
 import { translateView } from '../../../../localization'
 
 
-const QRCodeModal = ({ name }) => {
-    const { loading, visible, svg, itemType, onExportPress, onClosePress } = useQrCodeModal()
+const QRCodeModal = ({ name, itemId, itemType: currentItemType }) => {
+    const { loading, visible, svg, itemType, onExportPress, onClosePress } = useQrCodeModal({ itemId, itemType: currentItemType })
     return (
         <Modal
             visible={visible}

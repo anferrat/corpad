@@ -14,6 +14,7 @@ import { Platform, ToastAndroid } from "react-native"
 import { useSelector } from "react-redux"
 import { isProStatus } from "../../../helpers/functions"
 import { translateView } from '../../../localization'
+import useSingleFlight from '../../../hooks/useSingleFlight'
 
 const usePhotos = ({ itemId, itemType }) => {
     const listRef = useRef()
@@ -23,6 +24,7 @@ const usePhotos = ({ itemId, itemType }) => {
     const componentMounted = useRef(true)
     const isFocused = useIsFocused()
     const dispatch = useDispatch()
+    const { run: runPhotoAdd } = useSingleFlight()
     const [photos, setPhotos] = useState([])
     const [imageView, setImageView] = useState({
         index: 0,
@@ -31,7 +33,7 @@ const usePhotos = ({ itemId, itemType }) => {
 
     const onShowPaywall = useCallback(() => {
         dispatch(showPaywall())
-    }, [])
+    }, [dispatch])
 
     const scrollToStart = useCallback(() => {
         if (listRef.current?.scrollToIndex)
@@ -70,16 +72,24 @@ const usePhotos = ({ itemId, itemType }) => {
             loadData()
 
         const onPhotoAdd = EventRegister.addEventListener('PHOTO_ADDED', async (photo) => {
-            if (photo.itemId === itemId && photo.itemType === itemType && isFocused) {
+            if (photo.itemId !== itemId || photo.itemType !== itemType || !isFocused)
+                return
+
+            await runPhotoAdd(async () => {
                 dispatch(updateLoader(translateView('addingImage'), ImageSourceLabels[photo.imageSource]))
-                const { status, response } = await addPhotoToAssets({ uri: photo.uri, name: photo.name, itemId, itemType })
-                if (status === 200) {
-                    setPhotos(state => [response].concat(state))
-                    EventRegister.emit('ASSET_ADDED', response)
+                try {
+                    const { status, response } = await addPhotoToAssets({ uri: photo.uri, name: photo.name, itemId, itemType })
+                    if (status === 200) {
+                        if (componentMounted.current)
+                            setPhotos(state => [response].concat(state))
+                        EventRegister.emit('ASSET_ADDED', response)
+                    }
+                    else errorHandler(status)
                 }
-                else errorHandler(status)
-                dispatch(hideLoader())
-            }
+                finally {
+                    dispatch(hideLoader())
+                }
+            })
         })
 
         const onPhotoRemoved = EventRegister.addEventListener('ASSET_REMOVED', (item) => {
@@ -91,7 +101,7 @@ const usePhotos = ({ itemId, itemType }) => {
             EventRegister.removeEventListener(onPhotoAdd)
             EventRegister.removeEventListener(onPhotoRemoved)
         }
-    }, [isFocused])
+    }, [dispatch, isFocused, itemId, itemType, runPhotoAdd])
 
 
 
@@ -130,12 +140,12 @@ const usePhotos = ({ itemId, itemType }) => {
             visible: true,
             index: index
         })
-    }, [onShowPaywall])
+    }, [])
 
     const onImageViewClose = useCallback(() => setImageView({
         visible: false,
         index: 0
-    }))
+    }), [])
 
     return {
         photos,

@@ -2,17 +2,19 @@ import { EventRegister } from "react-native-event-listeners"
 import { getNewPhoto } from "../../../../app/controllers/survey/other/MediaController"
 import { errorHandler } from "../../../../helpers/error_handler"
 import { ImageSources } from "../../../../constants/global"
+import useSingleFlight from "../../../../hooks/useSingleFlight"
 
 const useImagePicker = ({ itemId, itemType }, closeSheet) => {
-    const addPhoto = (imageSource) => {
+    const { isBusy, run } = useSingleFlight()
+    const addPhoto = (imageSource) => run(() => {
         closeSheet()
-        getNewPhoto({ imageSource },
+        return getNewPhoto({ imageSource },
             (er) => {
                 if (er !== 101)
                     errorHandler(er)
             },
             ({ uri, name }) => EventRegister.emit('PHOTO_ADDED', { uri, name, itemId, itemType, imageSource }))
-    }
+    })
 
     const addPhotoFromLibrary = () => addPhoto(ImageSources.LIBRARY)
 
@@ -21,6 +23,7 @@ const useImagePicker = ({ itemId, itemType }, closeSheet) => {
     const addPhotoFromStorage = () => addPhoto(ImageSources.STORAGE)
 
     return {
+        isBusy,
         addPhotoFromLibrary,
         addPhotoFromCamera,
         addPhotoFromStorage
