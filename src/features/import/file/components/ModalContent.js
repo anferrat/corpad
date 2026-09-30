@@ -48,7 +48,7 @@ const ModalContent = ({ hideModal }) => {
                     <View
                         style={globalStyle.card}>
                         <Title name={translateImport('file.preparation.tips')} />
-                        <Text>{translateImport('file.preparation.variousUnits')} <B>{translateImport('file.preparation.units')}</B> (e.g., "mV" instead of "V").</Text>
+                        <Text>{translateImport('file.preparation.variousUnits')} <B>{translateImport('file.preparation.units')}</B> {translateImport('file.preparation.unitExample')}</Text>
                         <Text>{translateImport('file.preparation.cancelRecent')} <B>{translateImport('file.preparation.importScreen')}</B> {translateImport('file.preparation.screen')}</Text>
                     </View>
                 </ScrollView>

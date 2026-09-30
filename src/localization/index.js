@@ -31,6 +31,8 @@ import enNavigation from './catalogs/en/navigation'
 import esNavigation from './catalogs/es/navigation'
 import enOverlays from './catalogs/en/overlays'
 import esOverlays from './catalogs/es/overlays'
+import enOnboardingScreen from './catalogs/en/onboardingScreen'
+import esOnboardingScreen from './catalogs/es/onboardingScreen'
 import enPotentialSelection from './catalogs/en/potentialSelection'
 import esPotentialSelection from './catalogs/es/potentialSelection'
 import enSettings from './catalogs/en/settings'
@@ -66,6 +68,7 @@ const featureCatalogs = {
     multimeterSettings: {en: enMultimeterSettings, es: esMultimeterSettings},
     navigation: {en: enNavigation, es: esNavigation},
     overlays: {en: enOverlays, es: esOverlays},
+    onboardingScreen: {en: enOnboardingScreen, es: esOnboardingScreen},
     potentialSelection: {en: enPotentialSelection, es: esPotentialSelection},
     settings: {en: enSettings, es: esSettings},
     spreadsheetViewer: {en: enSpreadsheetViewer, es: esSpreadsheetViewer},
@@ -163,6 +166,7 @@ export const translateMultimeterOverlay = (key, params = {}) => translateFeature
 export const translateMultimeterSettings = (key, params = {}) => translateFeature('multimeterSettings', key, params)
 export const translateNavigation = (key, params = {}) => translateFeature('navigation', key, params)
 export const translateOverlay = (key, params = {}) => translateFeature('overlays', key, params)
+export const translateOnboardingScreen = (key, params = {}) => translateFeature('onboardingScreen', key, params)
 export const translatePotentialSelection = (key, params = {}) => translateFeature('potentialSelection', key, params)
 export const translateSettings = (key, params = {}) => translateFeature('settings', key, params)
 export const translateSpreadsheetViewer = (key, params = {}) => translateFeature('spreadsheetViewer', key, params)

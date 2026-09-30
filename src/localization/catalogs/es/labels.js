@@ -260,6 +260,38 @@ Object.assign(sections.importExport.ExportFormatTypeLabeles, {
     kml: 'Archivo de lenguaje de marcado Keyhole (.kml)'
 })
 
+Object.assign(sections.importExport.ExportItemPropertyLabels, {
+    name: 'Nombre',
+    testPointType: 'Tipo de punto de prueba',
+    timeModified: 'Última modificación',
+    status: 'Estado',
+    latitude: 'Latitud',
+    longitude: 'Longitud',
+    location: 'Ubicación',
+    comment: 'Comentario',
+    material: 'Material',
+    nps: 'NPS',
+    licenseNumber: 'Número de licencia',
+    product: 'Producto',
+    model: 'Modelo',
+    serialNumber: 'Número de serie',
+    rectifierOutput: 'Salida del rectificador',
+    maxVoltage: 'Tensión máx.',
+    maxCurrent: 'Corriente máx.'
+})
+
+Object.assign(sections.importExport.ExportSubitemPropertyLabels, {
+    voltageDrop: 'Caída de tensión',
+    current: 'Corriente',
+    ratio: 'Relación',
+    area: 'Área',
+    density: 'Densidad',
+    factor: 'Factor',
+    shorted: 'Estado del cortocircuito',
+    voltage: 'Tensión',
+    target: 'Objetivo'
+})
+
 Object.assign(sections.items.AnodeBedEnclosureTypeLabels, {
     0: 'Caja de conexiones',
     1: 'Caja subterránea',

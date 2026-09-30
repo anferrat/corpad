@@ -36,6 +36,7 @@ export default {
             anotherColumn: 'in another, if applicable).',
             variousUnits: 'You can import values with',
             units: 'various units',
+            unitExample: '(e.g., "mV" instead of "V").',
             cancelRecent: 'You can cancel recent imports immediately after they are performed. This option is available on the',
             importScreen: 'Import',
             screen: 'screen.'

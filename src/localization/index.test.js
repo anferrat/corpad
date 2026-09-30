@@ -1,11 +1,14 @@
-import { calculatorTypeKey, initializeLocalization, translate, translateBottomSheet, translateCalculator, translateEdit, translateList, translateOverlay, translateSettings, translateView } from './index'
-import { CalculatorTypeLabels, CouponTypeLabels, DefaultNames, ExportFormatTypeLabeles, ExportItemPropertyLabels, IsolationShortedLabels, IsolationTypeLabels, ItemTypeLabels, MapLayerFeatureLabels, MeasurementTypeLabels, PermanentPotentialTypeLabels, PotentialUnitDescriptionLabels, RectifierReadingOptionLabels, SortingOptionLabels, StatusLabels, SubitemTypeLabels, TestPointReadingOptionLabels, TestPointTypeLabels, WireColorLabels, WireGaugeLabels } from '../constants/labels'
-import { CalculatorTypes, CouponTypes, ExportFormatTypes, ExportItemProperties, IsolationShorted, IsolationTypes, ItemStatuses, ItemTypes, MapLayerFeatures, MultimeterMeasurementTypes, PermanentPotentialTypes, PotentialUnits, RectifierReadingOptions, SortingOptions, SubitemTypes, TestPointReadingOptions, TestPointTypes, WireColors, WireGauges } from '../constants/global'
+import { calculatorTypeKey, initializeLocalization, translate, translateBottomSheet, translateCalculator, translateEdit, translateImport, translateList, translateOnboardingScreen, translateOverlay, translateSettings, translateView } from './index'
+import { CalculatorTypeLabels, CouponTypeLabels, DefaultNames, ExportFormatTypeLabeles, ExportItemPropertyLabels, ExportSubitemPropertyLabels, IsolationShortedLabels, IsolationTypeLabels, ItemTypeLabels, MapLayerFeatureLabels, MeasurementTypeLabels, PermanentPotentialTypeLabels, PotentialUnitDescriptionLabels, RectifierReadingOptionLabels, SortingOptionLabels, StatusLabels, SubitemTypeLabels, TestPointReadingOptionLabels, TestPointTypeLabels, WireColorLabels, WireGaugeLabels } from '../constants/labels'
+import { ExportItemPropertyLabels as EnglishExportItemPropertyLabels } from '../constants/exportLabels'
+import { CalculatorTypes, CouponTypes, ExportFormatTypes, ExportItemProperties, ExportSubitemProperties, IsolationShorted, IsolationTypes, ItemStatuses, ItemTypes, MapLayerFeatures, MultimeterMeasurementTypes, PermanentPotentialTypes, PotentialUnits, RectifierReadingOptions, SortingOptions, SubitemTypes, TestPointReadingOptions, TestPointTypes, WireColors, WireGauges } from '../constants/global'
 import { fieldProperties } from '../constants/fieldProperties'
 import { getFormattedDate } from '../helpers/functions'
 import en from './catalogs/en'
 import es from './catalogs/es'
+import enOnboardingScreen from './catalogs/en/onboardingScreen'
 import enOverlays from './catalogs/en/overlays'
+import esOnboardingScreen from './catalogs/es/onboardingScreen'
 import esOverlays from './catalogs/es/overlays'
 
 describe('localization', () => {
@@ -78,7 +81,14 @@ describe('localization', () => {
         expect(translateView('qrCodeHint')).toContain('sin conexión')
 
         expect(DefaultNames[ItemTypes.PIPELINE]).toBe('Pipeline')
-        expect(ExportItemPropertyLabels[ExportItemProperties.NAME]).toBe('Name')
+    })
+
+    it('localizes export property labels for UI while keeping export output labels in English', () => {
+        initializeLocalization('es')
+
+        expect(ExportItemPropertyLabels[ExportItemProperties.NAME]).toBe('Nombre')
+        expect(ExportSubitemPropertyLabels[ExportSubitemProperties.VOLTAGE_DROP]).toBe('Caída de tensión')
+        expect(EnglishExportItemPropertyLabels[ExportItemProperties.NAME]).toBe('Name')
     })
 
     it('localizes the potential unit setting label', () => {
@@ -105,6 +115,26 @@ describe('localization', () => {
         initializeLocalization('es')
         expect(translateOverlay('session.signInGoogleDrive')).toBe('Iniciar sesión con Google Drive')
         expect(translateOverlay('session.cloudStorageDescription')).toBe('Iniciar sesión en el almacenamiento en la nube le permite guardar sus archivos de estudios de forma segura y tenerlos disponibles en diferentes dispositivos.')
+    })
+
+    it('localizes onboarding screen pages', () => {
+        initializeLocalization('en')
+        expect(translateOnboardingScreen('main.screen1.title')).toBe(enOnboardingScreen.main.screen1.title)
+        expect(translateOnboardingScreen('lastVersion.screen1.title', {version: '1.7'})).toBe('Updated to version 1.7')
+        expect(translateOnboardingScreen('lastVersion.screen2.subtitle')).toBe('Spanish language support has been added for app labels.')
+
+        initializeLocalization('es')
+        expect(translateOnboardingScreen('main.screen1.title')).toBe(esOnboardingScreen.main.screen1.title)
+        expect(translateOnboardingScreen('lastVersion.screen1.title', {version: '1.7'})).toBe('Actualizado a la versión 1.7')
+        expect(translateOnboardingScreen('lastVersion.screen2.subtitle')).toBe('Se ha añadido compatibilidad con el español para las etiquetas de la aplicación.')
+    })
+
+    it('localizes import preparation examples', () => {
+        initializeLocalization('en')
+        expect(translateImport('file.preparation.unitExample')).toBe('(e.g., "mV" instead of "V").')
+
+        initializeLocalization('es')
+        expect(translateImport('file.preparation.unitExample')).toBe('(p. ej., "mV" en lugar de "V").')
     })
 
     it('localizes list dates and reading labels', () => {

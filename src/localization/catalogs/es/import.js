@@ -41,6 +41,7 @@ export default {
             anotherColumn: 'en otra, si corresponde).',
             variousUnits: 'Puede importar valores con',
             units: 'distintas unidades',
+            unitExample: '(p. ej., "mV" en lugar de "V").',
             cancelRecent: 'Puede cancelar las importaciones recientes inmediatamente después de realizarlas. Esta opción está disponible en la pantalla de',
             importScreen: 'importación',
             screen: '.'
@@ -122,7 +123,7 @@ export default {
         disconnected: 'Desconectado',
         currentControlMode: 'Modo de control de corriente',
         coarseFine: 'Grueso - fino',
-        valueVa: 'Valor (VA %)',
+        valueVa: 'VA %',
         currentDensityHint: 'La densidad de corriente se calculará después de importar',
         shuntCurrentHint: 'La corriente de derivación se calculará después de importar',
         isolationCurrentHint: 'El valor de corriente de cortocircuito de una lectura de aislamiento no se importará si la propiedad de cortocircuito importada para esta lectura equivale a "No".',

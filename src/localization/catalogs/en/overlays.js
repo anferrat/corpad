@@ -27,24 +27,6 @@ export default {
         }
     },
     onboarding: {
-        welcomeTitle: 'Welcome to Corpad',
-        welcomeSubtitle: 'Welcome to the new era of cathodic protection data collection',
-        dataCaptureTitle: 'Data capture',
-        dataCaptureSubtitle: 'Take photos, assign GPS coordinates, and plot data on the map with our user-friendly interface',
-        calculatorTitle: 'Corrosion calculator',
-        calculatorSubtitle: 'Quickly calculate cathodic protection values on the go for accurate data analysis',
-        multimeterTitle: 'Connect multimeter',
-        multimeterSubtitle: 'Seamlessly connect a Bluetooth multimeter to capture real-time data in the field',
-        dataHandlingTitle: 'Efficient data handling',
-        dataHandlingSubtitle: 'Easily import and export data with CSV and KML files and back up surveys to the cloud',
-        updatedTitle: 'Updated to version {{version}}',
-        updatedSubtitle: "A new version of the app was installed. We've enhanced your cathodic protection data capture experience.",
-        freeTitle: 'Free for all',
-        freeSubtitle: 'Enjoy all premium features for free. This includes assigning images to the test point, adding external .kml or .gpx data on the map, creating NFC and QR-code labels, and connecting a Bluetooth multimeter to collect readings.',
-        improvementsTitle: 'Calculator improvements',
-        improvementsSubtitle: 'Latitude and longitude can now be assigned to corrosion calculations, and their markers will be displayed on the map.',
-        dontMissTitle: "Don't miss out",
-        dontMissSubtitle: "We're committed to delivering ongoing improvements and updates. Check docs.corpad.ca for more info about new features.",
         editTestPoint: [
             'Each test point can have multiple readings (e.g., test leads, coupons, etc.).',
             'Each reading has its own properties, including potentials, current, wire color, etc.'
