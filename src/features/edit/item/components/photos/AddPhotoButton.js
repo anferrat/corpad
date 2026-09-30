@@ -1,5 +1,5 @@
 import React from 'react'
-import { StyleSheet } from 'react-native'
+import { StyleSheet, View } from 'react-native'
 import Pressable from '../../../../../components/Pressable'
 import { androidRipple } from '../../../../../styles/styles'
 import { Icon, Text } from '@ui-kitten/components'
@@ -11,23 +11,25 @@ import { translateEdit } from '../../../../../localization'
 const AddPhotoButton = ({ onPress, limitReached }) => {
     if (!limitReached)
         return (
-            <Pressable
-                disabled={limitReached}
-                style={styles.container}
-                onPress={onPress}
-                android_ripple={androidRipple}
-                isPrimary={false}>
-                <Icon
-                    style={styles.icon}
-                    name={'camera'}
-                    fill={primary} />
-                <Text
-                    style={styles.label}
-                    status='primary'
-                    category='s2'>
-                    {translateEdit('addPhoto')}
-                </Text>
-            </Pressable>
+            <View style={styles.container}>
+                <Pressable
+                    disabled={limitReached}
+                    style={styles.pressable}
+                    onPress={onPress}
+                    android_ripple={androidRipple}
+                    isPrimary={false}>
+                    <Icon
+                        style={styles.icon}
+                        name={'camera'}
+                        fill={primary} />
+                    <Text
+                        style={styles.label}
+                        status='primary'
+                        category='s2'>
+                        {translateEdit('addPhoto')}
+                    </Text>
+                </Pressable>
+            </View>
         )
     else
         return null
@@ -39,13 +41,17 @@ const styles = StyleSheet.create({
     container: {
         width: dimensions.length,
         height: dimensions.length,
-        alignItems: 'center',
-        justifyContent: 'center',
         borderWidth: 1,
         borderColor: primary,
         borderStyle: 'dashed',
         borderRadius: 15,
+        overflow: 'hidden',
         marginTop: 12
+    },
+    pressable: {
+        flex: 1,
+        alignItems: 'center',
+        justifyContent: 'center'
     },
     icon: {
         width: 25,

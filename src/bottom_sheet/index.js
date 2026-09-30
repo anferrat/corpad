@@ -8,8 +8,9 @@ export const BottomSheet = React.forwardRef((_props, bsRef) => {
     const { bottom } = useSafeAreaInsets()
     const renderBackdrop = (backdropProps) => <BottomSheetBackdrop
         {...backdropProps}
-        appearsOnIndex={0}
-        disappearsOnIndex={-1} />
+        appearsOnIndex={1}
+        disappearsOnIndex={-0.5}
+        enableTouchThrough />
 
     const onClose = () => EventRegister.emit('BOTTOM_SHEET_CLOSING')
 

@@ -5,7 +5,7 @@ import { SettingsList } from '../../features/settings/settings_list'
 
 export default SettingsScreen = () => {
   return (
-    <SafeAreaView style={globalStyle.screen} edges={['left', 'right', 'bottom']}>
+    <SafeAreaView style={globalStyle.screen} edges={['left', 'right']}>
       <SettingsList />
     </SafeAreaView>
   )
