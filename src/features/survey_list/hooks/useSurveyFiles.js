@@ -136,10 +136,14 @@ const useSurveyFiles = ({ isCloud, navigateToSurveyFileList }) => {
 
     const shareSurveyFile = useCallback(async ({ path, cloudId, name }) => {
         dispatch(updateLoader(translateSurveyList('exportingSurvey'), name))
-        const { status } = await shareFile({ path, cloudId, isCloud, onDownload })
-        dispatch(hideLoader())
-        if (status !== 200)
-            fileListErrorHandler(status)
+        try {
+            const { status } = await shareFile({ path, cloudId, isCloud, onDownload })
+            if (status !== 200)
+                fileListErrorHandler(status)
+        }
+        finally {
+            dispatch(hideLoader())
+        }
 
     }, [dispatch, fileListErrorHandler, isCloud, onDownload])
 

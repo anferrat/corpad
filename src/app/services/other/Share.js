@@ -7,7 +7,7 @@ export class Share {
         this.fileSystemRepo = fileSystemRepo
     }
 
-    async shareFile(url, mimeType) {
+    async shareFile(url, mimeType, showAppsToView = true) {
         try {
             let sharePath = url
             if (Platform.OS === 'android') {
@@ -23,7 +23,7 @@ export class Share {
                 url: 'file://' + sharePath,
                 type: mimeType,
                 useInternalStorage: true,
-                showAppsToView: true,
+                showAppsToView,
                 isNewTask: true,
             })
         }
