@@ -5,7 +5,7 @@
   "scripts": {
     "android": "npx react-native run-android",
     "build": "npx react-native run-android --mode=release --extra-params \"-PversionName=1.7.0 -PversionCode=10\"",
-    "bundle-android": "npx react-native build-android --mode=release --extra-params \"-PversionName=1.7.0 -PversionCode=14\"",
+    "bundle-android": "npx react-native build-android --mode=release --extra-params \"-PversionName=1.7.0 -PversionCode=15\"",
     "bootstrap": "node node_modules/@ui-kitten/metro-config/bin/ui-kitten bootstrap @eva-design/eva ./src/styles/mapping.json",
     "ios": "npx react-native run-ios",
     "start": "react-native start",
@@ -101,6 +101,7 @@
   "resolutions": {
     "react-native-indicators@^0.17.0": "patch:react-native-indicators@npm%3A0.17.0#./.yarn/patches/react-native-indicators-npm-0.17.0-f53ffd7772.patch",
     "@ui-kitten/components@^5.3.0": "patch:@ui-kitten/components@npm%3A5.3.1#./.yarn/patches/@ui-kitten-components-npm-5.3.1-0c45fa17a3.patch",
-    "@react-native-community/geolocation@^3.4.0": "patch:@react-native-community/geolocation@npm%3A3.4.0#./.yarn/patches/@react-native-community-geolocation-npm-3.4.0-4692b5dc27.patch"
+    "@react-native-community/geolocation@^3.4.0": "patch:@react-native-community/geolocation@npm%3A3.4.0#./.yarn/patches/@react-native-community-geolocation-npm-3.4.0-4692b5dc27.patch",
+    "react-native-maps@1.29.0": "patch:react-native-maps@npm%3A1.29.0#./.yarn/patches/react-native-maps-npm-1.29.0-5ae0d8045d.patch"
   }
 }

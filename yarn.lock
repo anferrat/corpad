@@ -8396,6 +8396,22 @@ __metadata:
   languageName: node
   linkType: hard
 
+"react-native-maps@patch:react-native-maps@npm%3A1.29.0#./.yarn/patches/react-native-maps-npm-1.29.0-5ae0d8045d.patch::locator=corpad%40workspace%3A.":
+  version: 1.29.0
+  resolution: "react-native-maps@patch:react-native-maps@npm%3A1.29.0#./.yarn/patches/react-native-maps-npm-1.29.0-5ae0d8045d.patch::version=1.29.0&hash=1cff2c&locator=corpad%40workspace%3A."
+  dependencies:
+    "@types/geojson": ^7946.0.13
+  peerDependencies:
+    react: ">= 18.3.1"
+    react-native: ">= 0.76.0"
+    react-native-web: ">= 0.11"
+  peerDependenciesMeta:
+    react-native-web:
+      optional: true
+  checksum: ee46eeeec5d4b26bd7b8dcad495ef99ba3c34b36508a379186c2dc4ef03c73b0d6edbfb598a8aa26d5f599950c9d00246a90e34f726aec66c15d284f486e56b0
+  languageName: node
+  linkType: hard
+
 "react-native-nfc-manager@npm:4.0.0-beta.7":
   version: 4.0.0-beta.7
   resolution: "react-native-nfc-manager@npm:4.0.0-beta.7"

@@ -1,0 +1,330 @@
+diff --git a/ios/AirGoogleMaps/AIRGoogleMapMarker.m b/ios/AirGoogleMaps/AIRGoogleMapMarker.m
+index d729954c8cc16efd2dfef52e1c34f24833bfd6e7..1199fa384a1b9d4eb4f5f84326fedeba95ee1278 100644
+--- a/ios/AirGoogleMaps/AIRGoogleMapMarker.m
++++ b/ios/AirGoogleMaps/AIRGoogleMapMarker.m
+@@ -9,9 +9,6 @@
+ 
+ #import "AIRGoogleMapMarker.h"
+ #import <GoogleMaps/GoogleMaps.h>
+-#import <React/RCTBridge.h>
+-#import <React/RCTBridge+Private.h>
+-#import <React/RCTImageLoaderProtocol.h>
+ #import <React/RCTUtils.h>
+ #import "AIRGMSMarker.h"
+ #import "AIRGoogleMapCallout.h"
+@@ -25,11 +22,21 @@ CGRect unionRect(CGRect a, CGRect b) {
+                       MAX(a.size.height, b.size.height));
+ }
+ 
++static UIImage *AIRGoogleMapMarkerLoadImage(NSString *source)
++{
++    NSURL *url = [NSURL URLWithString:source];
++    if (url.scheme == nil) {
++        return [UIImage imageNamed:source];
++    }
++
++    NSData *data = [NSData dataWithContentsOfURL:url];
++    return data ? [UIImage imageWithData:data scale:RCTScreenScale()] : nil;
++}
++
+ @interface AIRGoogleMapMarker ()
+ @end
+ 
+ @implementation AIRGoogleMapMarker {
+-    RCTImageLoaderCancellationBlock _reloadImageCancellationBlock;
+     RCTBubblingEventBlock _onPress;
+     RCTDirectEventBlock _onSelect;
+     RCTDirectEventBlock _onDeselect;
+@@ -348,11 +355,6 @@ CGRect unionRect(CGRect a, CGRect b) {
+ {
+     _imageSrc = imageSrc;
+ 
+-    if (_reloadImageCancellationBlock) {
+-        _reloadImageCancellationBlock();
+-        _reloadImageCancellationBlock = nil;
+-    }
+-
+     if (!_imageSrc) {
+         if (_iconImageView) [_iconImageView removeFromSuperview];
+         return;
+@@ -364,25 +366,18 @@ CGRect unionRect(CGRect a, CGRect b) {
+         _iconImageView = empyImageView;
+         [self iconViewInsertSubview:_iconImageView atIndex:0];
+     }
+-    __weak AIRGoogleMapMarker* weakSelf = self;
+-
+-    _reloadImageCancellationBlock = [[[RCTBridge currentBridge] moduleForName:@"ImageLoader"] loadImageWithURLRequest:[RCTConvert NSURLRequest:_imageSrc]
+-                                                                                               size:self.bounds.size
+-                                                                                              scale:RCTScreenScale()
+-                                                                                            clipped:YES
+-                                                                                         resizeMode:RCTResizeModeCenter
+-                                                                                      progressBlock:nil
+-                                                                                   partialLoadBlock:nil
+-                                                                                    completionBlock:^(NSError *error, UIImage *image) {
+-        if (error) {
+-            // TODO(lmr): do something with the error?
+-            NSLog(@"%@", error);
+-        }
+-
++    NSString *source = [imageSrc copy];
++    __weak AIRGoogleMapMarker *weakSelf = self;
++    dispatch_async(dispatch_get_global_queue(QOS_CLASS_USER_INITIATED, 0), ^{
++        UIImage *image = AIRGoogleMapMarkerLoadImage(source);
+         dispatch_async(dispatch_get_main_queue(), ^{
+-            __strong AIRGoogleMapMarker* strongSelf  = weakSelf;
++            AIRGoogleMapMarker *strongSelf = weakSelf;
++            if (!strongSelf || ![strongSelf->_imageSrc isEqualToString:source]) return;
++            if (!image) {
++                NSLog(@"AIRGoogleMapMarker: failed to load image from %@", source);
++                return;
++            }
+ 
+-            // TODO(gil): This way allows different image sizes
+             if (strongSelf->_iconImageView) [strongSelf->_iconImageView removeFromSuperview];
+ 
+             // ... but this way is more efficient?
+@@ -414,17 +409,14 @@ CGRect unionRect(CGRect a, CGRect b) {
+             [strongSelf layoutSubviews];
+             [strongSelf.realMarker setIconView:strongSelf.iconView];
+         });
+-    }];
++    });
+ }
+ 
+ - (void)setIconSrc:(NSString *)iconSrc
+ {
+     _iconSrc = iconSrc;
+ 
+-    if (_reloadImageCancellationBlock) {
+-        _reloadImageCancellationBlock();
+-        _reloadImageCancellationBlock = nil;
+-    }
++    if (!iconSrc) return;
+ 
+     if (!_realMarker.icon) {
+         // prevent glitch with marker (cf. https://github.com/react-native-maps/react-native-maps/issues/3657)
+@@ -432,23 +424,18 @@ CGRect unionRect(CGRect a, CGRect b) {
+         _realMarker.icon = emptyImage;
+     }
+ 
+-    _reloadImageCancellationBlock =
+-    [[[RCTBridge currentBridge] moduleForName:@"ImageLoader"] loadImageWithURLRequest:[RCTConvert NSURLRequest:_iconSrc]
+-                                                               size:self.bounds.size
+-                                                              scale:RCTScreenScale()
+-                                                            clipped:YES
+-                                                         resizeMode:RCTResizeModeCenter
+-                                                      progressBlock:nil
+-                                                   partialLoadBlock:nil
+-                                                    completionBlock:^(NSError *error, UIImage *image) {
+-        if (error) {
+-            // TODO(lmr): do something with the error?
+-            NSLog(@"%@", error);
+-        }
++    NSString *source = [iconSrc copy];
++    dispatch_async(dispatch_get_global_queue(QOS_CLASS_USER_INITIATED, 0), ^{
++        UIImage *image = AIRGoogleMapMarkerLoadImage(source);
+         dispatch_async(dispatch_get_main_queue(), ^{
+-            self->_realMarker.icon = image;
++            if (![self->_iconSrc isEqualToString:source]) return;
++            if (image) {
++                self->_realMarker.icon = image;
++            } else {
++                NSLog(@"AIRGoogleMapMarker: failed to load icon from %@", source);
++            }
+         });
+-    }];
++    });
+ }
+ 
+ - (void)setTitle:(NSString *)title {
+diff --git a/ios/AirGoogleMaps/RNMapsGoogleMarkerView.mm b/ios/AirGoogleMaps/RNMapsGoogleMarkerView.mm
+index 8c1b7b975829e5942d3b32edb04bd723528e9af1..b63e99c151d9bc213a63ceee8f8b722096b77f52 100644
+--- a/ios/AirGoogleMaps/RNMapsGoogleMarkerView.mm
++++ b/ios/AirGoogleMaps/RNMapsGoogleMarkerView.mm
+@@ -103,10 +103,6 @@ using namespace facebook::react;
+     _props = defaultProps;
+     _legacyMarkerManager = [[AIRGoogleMapMarkerManager alloc] init];
+     _view = (AIRGoogleMapMarker *)[_legacyMarkerManager view];
+-    // Image/icon loading no longer depends on the instance `bridge`: AIRGoogleMapMarker
+-    // now loads via the global `[RCTBridge currentBridge]` (bridgeless-safe), matching
+-    // AIRMapMarker. So there is nothing bridge-related to wire up here.
+-
+     _view.onPress = [self](NSDictionary *dictionary) {
+         if (!_eventEmitter) return;
+         NSDictionary *coordinateDict = dictionary[@"coordinate"];
+diff --git a/ios/AirMaps/AIRMapMarker.h b/ios/AirMaps/AIRMapMarker.h
+index bc1338a1d6a5523a36e77de2ad3de8d4a25561a4..c53632757646963a340d86c4e9c973d5bc224baf 100644
+--- a/ios/AirMaps/AIRMapMarker.h
++++ b/ios/AirMaps/AIRMapMarker.h
+@@ -18,13 +18,10 @@
+ #import "SMCalloutView.h"
+ #import "RCTConvert+AirMap.h"
+ 
+-@class RCTBridge;
+-
+ @interface AIRMapMarker : MKAnnotationView <MKAnnotation>
+ 
+ @property (nonatomic, strong) AIRMapCallout *calloutView;
+ @property (nonatomic, weak) AIRMap *map;
+-@property (nonatomic, weak) RCTBridge *bridge;
+ 
+ @property (nonatomic, strong) NSString *identifier;
+ @property (nonatomic, copy) NSString *imageSrc;
+diff --git a/ios/AirMaps/AIRMapMarker.m b/ios/AirMaps/AIRMapMarker.m
+index 89dfd9aa2dc68d3d2f8e41346c75c3b78a0932da..73d552a43183510fd7bb60108c778432fbadaa44 100644
+--- a/ios/AirMaps/AIRMapMarker.m
++++ b/ios/AirMaps/AIRMapMarker.m
+@@ -9,22 +9,91 @@
+ 
+ #import "AIRMapMarker.h"
+ 
+-#import <React/RCTBridge.h>
+-#import <React/RCTEventDispatcher.h>
+-#import <React/RCTImageLoaderProtocol.h>
+ #import <React/RCTUtils.h>
+ #import <React/UIView+React.h>
+-#import <React/RCTImageLoader.h>
+-#import <React/RCTBridge+Private.h>
+ 
+ NSInteger const AIR_CALLOUT_OPEN_ZINDEX_BASELINE = 999;
+ 
++static NSCache<NSString *, UIImage *> *AIRImageCache;
++static NSMutableDictionary<NSString *, NSMutableArray<void (^)(UIImage *)> *> *AIRPendingHandlers;
++
++static BOOL AIRIsPackagerAssetURL(NSURL *url)
++{
++    if (RCTIsLocalAssetURL(url)) {
++        return YES;
++    }
++    NSString *query = url.query;
++    return url.path != nil && [url.path containsString:@"/assets/"]
++        && query != nil && [query containsString:@"hash="];
++}
++
++static CGFloat AIRScaleFromAssetURL(NSString *urlString)
++{
++    NSURL *url = [NSURL URLWithString:urlString];
++    if (!AIRIsPackagerAssetURL(url)) {
++        return RCTScreenScale();
++    }
++
++    CGFloat scale = 1;
++    NSString *filename = url.path.lastPathComponent;
++    NSRange at = [filename rangeOfString:@"@" options:NSBackwardsSearch];
++    if (at.location != NSNotFound) {
++        NSString *suffix = [filename substringFromIndex:at.location + 1];
++        NSRange x = [suffix rangeOfString:@"x"];
++        if (x.location != NSNotFound) {
++            CGFloat parsed = [[suffix substringToIndex:x.location] doubleValue];
++            if (parsed > 0) {
++                scale = parsed;
++            }
++        }
++    }
++    return scale;
++}
++
++static dispatch_block_t AIRLoadImage(NSString *urlString, CGFloat scale, void (^completion)(UIImage *))
++{
++    if (!AIRImageCache) AIRImageCache = [NSCache new];
++    if (!AIRPendingHandlers) AIRPendingHandlers = [NSMutableDictionary new];
++
++    UIImage *cached = [AIRImageCache objectForKey:urlString];
++    if (cached) {
++        dispatch_async(dispatch_get_main_queue(), ^{ completion(cached); });
++        return ^{};
++    }
++
++    __block BOOL cancelled = NO;
++    void (^handler)(UIImage *) = ^(UIImage *image) {
++        if (!cancelled) completion(image);
++    };
++
++    NSMutableArray *handlers = AIRPendingHandlers[urlString];
++    if (handlers) {
++        [handlers addObject:handler];
++        return ^{ cancelled = YES; };
++    }
++
++    AIRPendingHandlers[urlString] = [NSMutableArray arrayWithObject:handler];
++    NSURL *url = [NSURL URLWithString:urlString];
++    [[[NSURLSession sharedSession] dataTaskWithURL:url completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
++        UIImage *image = (!error && data) ? [UIImage imageWithData:data scale:scale] : nil;
++        if (!image) NSLog(@"AIRMapMarker failed to load image: %@", error);
++        dispatch_async(dispatch_get_main_queue(), ^{
++            if (image) [AIRImageCache setObject:image forKey:urlString];
++            NSArray *pending = AIRPendingHandlers[urlString];
++            [AIRPendingHandlers removeObjectForKey:urlString];
++            for (void (^handler)(UIImage *) in pending) handler(image);
++        });
++    }] resume];
++
++    return ^{ cancelled = YES; };
++}
++
+ @implementation AIREmptyCalloutBackgroundView
+ @end
+ 
+ @implementation AIRMapMarker {
+     BOOL _hasSetCalloutOffset;
+-    RCTImageLoaderCancellationBlock _reloadImageCancellationBlock;
++    dispatch_block_t _imageLoadCancel;
+     MKMarkerAnnotationView *_markerView;
+     MKPinAnnotationView *_pinView;
+     BOOL _calloutIsOpen;
+@@ -362,29 +431,22 @@ NSInteger const AIR_CALLOUT_OPEN_ZINDEX_BASELINE = 999;
+ {
+     _imageSrc = imageSrc;
+ 
+-    if (_reloadImageCancellationBlock) {
+-        _reloadImageCancellationBlock();
+-        _reloadImageCancellationBlock = nil;
++    if (_imageLoadCancel) {
++        _imageLoadCancel();
++        _imageLoadCancel = nil;
+     }
+-    __weak __typeof(self) weakSelf = self;
++    if (!imageSrc) return;
+ 
+-    _reloadImageCancellationBlock = [[[RCTBridge currentBridge] moduleForName:@"ImageLoader"] loadImageWithURLRequest:[RCTConvert NSURLRequest:_imageSrc]
+-                                                                                                                 size:self.bounds.size
+-                                                                                                                scale:RCTScreenScale()
+-                                                                                                              clipped:YES
+-                                                                                                           resizeMode:RCTResizeModeCenter
+-                                                                                                        progressBlock:nil
+-                                                                                                     partialLoadBlock:nil
+-                                                                                                      completionBlock:^(NSError *error, UIImage *image) {
+-        if (error) {
+-            // TODO(lmr): do something with the error?
+-            NSLog(@"failed to load image: %@", error);
+-        }
+-        dispatch_async(dispatch_get_main_queue(), ^{
+-            __strong __typeof(weakSelf) strongSelf = weakSelf;
+-            strongSelf.image = image;
+-        });
+-    }];
++    // Bare names refer to images in the Xcode asset catalog.
++    if ([NSURL URLWithString:imageSrc].scheme == nil) {
++        self.image = [UIImage imageNamed:imageSrc];
++        return;
++    }
++
++    __weak __typeof(self) weakSelf = self;
++    _imageLoadCancel = AIRLoadImage(imageSrc, AIRScaleFromAssetURL(imageSrc), ^(UIImage *image) {
++        weakSelf.image = image;
++    });
+ }
+ 
+ - (void)setPinColor:(UIColor *)pinColor
+diff --git a/ios/AirMaps/AIRMapMarkerManager.m b/ios/AirMaps/AIRMapMarkerManager.m
+index 593c6bdcd1ea6fe632e99beaffdcf94c6652511e..3124dc822599c7647896489241f55e0e18d64297 100644
+--- a/ios/AirMaps/AIRMapMarkerManager.m
++++ b/ios/AirMaps/AIRMapMarkerManager.m
+@@ -26,7 +26,6 @@ RCT_EXPORT_MODULE()
+ {
+     AIRMapMarker *marker = [AIRMapMarker new];
+     [marker addTapGestureRecognizer];
+-    marker.bridge = self.bridge;
+     marker.isAccessibilityElement = YES;
+     marker.accessibilityElementsHidden = NO;
+     return marker;
