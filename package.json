@@ -1,11 +1,11 @@
 {
   "name": "corpad",
-  "version": "1.6.4",
+  "version": "1.7.0",
   "private": true,
   "scripts": {
     "android": "npx react-native run-android",
-    "build": "npx react-native run-android --mode=release --extra-params \"-PversionName=1.6.4 -PversionCode=9\"",
-    "bundle-android": "npx react-native build-android --mode=release --extra-params \"-PversionName=1.6.4 -PversionCode=9\"",
+    "build": "npx react-native run-android --mode=release --extra-params \"-PversionName=1.7.0 -PversionCode=10\"",
+    "bundle-android": "npx react-native build-android --mode=release --extra-params \"-PversionName=1.7.0 -PversionCode=13\"",
     "bootstrap": "node node_modules/@ui-kitten/metro-config/bin/ui-kitten bootstrap @eva-design/eva ./src/styles/mapping.json",
     "ios": "npx react-native run-ios",
     "start": "react-native start",

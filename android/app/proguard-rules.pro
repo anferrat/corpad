@@ -9,4 +9,4 @@
 
 # Add any project specific keep options here:
 
--keep public class com.horcrux.svg.** {*;}
+#-keep public class com.horcrux.svg.** {*;}
