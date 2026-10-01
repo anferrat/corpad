@@ -73,8 +73,8 @@
           <data android:scheme="com.corpad" />
         </intent-filter>
       </activity>
-      <meta-data
+       <meta-data
      android:name="com.google.android.geo.API_KEY"
-     android:value="REMOVED_GOOGLE_MAPS_API_KEY"/>
-    </application>
+     android:value="${GOOGLE_MAPS_API_KEY}"/>
+     </application>
 </manifest>
