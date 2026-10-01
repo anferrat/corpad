@@ -37,6 +37,7 @@ import PipelineMatching from '../screens/externalLink/PipelineMatching'
 import MultimeterScreen from '../screens/Multimeter'
 import { DEVELOPER_MODE_ON } from '../../App'
 import { BottomSheet } from '../bottom_sheet'
+import { basic200 } from '../styles/colors'
 
 
 const Stack = createNativeStackNavigator()
@@ -60,6 +61,7 @@ export const AppNavigator = ({ bottomSheet }) => {
             screenOptions={{
               headerShown: true,
               animation: 'fade',
+              contentStyle: { backgroundColor: basic200 },
               //insets has to be passed to header from the top, to avoid glitching when swicthing between screens
               header: renderTopBar,
             }}>
