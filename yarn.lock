@@ -8513,10 +8513,10 @@ __metadata:
 
 "react-native-sqlite-storage@patch:react-native-sqlite-storage@npm%3A6.0.1#./.yarn/patches/react-native-sqlite-storage-npm-6.0.1-8369d747bd.patch::locator=corpad%40workspace%3A.":
   version: 6.0.1
-  resolution: "react-native-sqlite-storage@patch:react-native-sqlite-storage@npm%3A6.0.1#./.yarn/patches/react-native-sqlite-storage-npm-6.0.1-8369d747bd.patch::version=6.0.1&hash=4cf7ea&locator=corpad%40workspace%3A."
+  resolution: "react-native-sqlite-storage@patch:react-native-sqlite-storage@npm%3A6.0.1#./.yarn/patches/react-native-sqlite-storage-npm-6.0.1-8369d747bd.patch::version=6.0.1&hash=78c44c&locator=corpad%40workspace%3A."
   peerDependencies:
     react-native: ">=0.14.0"
-  checksum: e1d467eef15efb7e3034f29dfbea80bf65533e13edfc45f562e8e40a243cdf99c2778990da6a7ac08bc85d9db7e9d574de0b61f565f94582ace9d4c561a51dd2
+  checksum: 786bd019afdffc4825be13ab6e2d994b46a9b621981a2e585a0112d8589ca11843c73e9ec858c0f9fb0988a8369bac20812d0d181df0b1e5ceddf82d1b891a0c
   languageName: node
   linkType: hard
 

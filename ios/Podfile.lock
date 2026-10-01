@@ -13,6 +13,7 @@ PODS:
     - RecaptchaInterop (~> 101.0)
   - boost (1.84.0):
     - ReactNativeDependencies
+  - CocoaAsyncSocket (7.6.5)
   - DoubleConversion (1.1.6):
     - ReactNativeDependencies
   - fast_float (8.0.0):
@@ -1531,6 +1532,9 @@ PODS:
     - Yoga
   - react-native-sqlite-storage (6.0.1):
     - React-Core
+  - react-native-udp (4.1.7):
+    - CocoaAsyncSocket
+    - React-Core
   - React-NativeModulesApple (0.87.1):
     - hermes-engine
     - React-bridging
@@ -2401,6 +2405,7 @@ DEPENDENCIES:
   - react-native-safe-area-context (from `../node_modules/react-native-safe-area-context`)
   - "react-native-skia (from `../node_modules/@shopify/react-native-skia`)"
   - react-native-sqlite-storage (from `../node_modules/react-native-sqlite-storage`)
+  - react-native-udp (from `../node_modules/react-native-udp`)
   - React-NativeModulesApple (from `../node_modules/react-native/ReactCommon/react/nativemodule/core/platform/ios`)
   - React-networking (from `../node_modules/react-native/ReactCommon/react/networking`)
   - React-oscompat (from `../node_modules/react-native/ReactCommon/oscompat`)
@@ -2457,6 +2462,7 @@ SPEC REPOS:
   trunk:
     - AppAuth
     - AppCheckCore
+    - CocoaAsyncSocket
     - GoogleSignIn
     - GoogleUtilities
     - GTMAppAuth
@@ -2581,6 +2587,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/@shopify/react-native-skia"
   react-native-sqlite-storage:
     :path: "../node_modules/react-native-sqlite-storage"
+  react-native-udp:
+    :path: "../node_modules/react-native-udp"
   React-NativeModulesApple:
     :path: "../node_modules/react-native/ReactCommon/react/nativemodule/core/platform/ios"
   React-networking:
@@ -2688,6 +2696,7 @@ SPEC CHECKSUMS:
   AppAuth: ef4da5a3fc2e10b90c09a0a94a9baeaedc0341d5
   AppCheckCore: e215d35177a9cf469927863e69c13e220df32a8b
   boost: 2a9d6e1d9873337543f08d9dbc007b288f4e113b
+  CocoaAsyncSocket: 065fd1e645c7abab64f7a6a2007a48038fdc6a99
   DoubleConversion: e85e4faac763226bfd1cc4c6a98d8355149b27a5
   fast_float: 908e5ee35999f3d91af4b962ac951acac591866c
   FBLazyVector: 1f950f55bf9d0f1130874f80ff0932945b97e2a8
@@ -2749,6 +2758,7 @@ SPEC CHECKSUMS:
   react-native-safe-area-context: 352ca3a1d913db1068dcd86669bf60d59608d6eb
   react-native-skia: adc530ff3d0cf7214d4fbf079a850cfa996a1e22
   react-native-sqlite-storage: f6d515e1c446d1e6d026aa5352908a25d4de3261
+  react-native-udp: df79c3cb72c4e71240cd3ce4687bfb8a137140d5
   React-NativeModulesApple: 885f4cd7626a1ffe20e0dcd23ef8528f415795d3
   React-networking: 31c21d3a8ea93c859706f876d27578782b05d250
   React-oscompat: 3175a287dd7175d1a20fdce5048a4b9e11f4b915

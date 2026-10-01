@@ -34,3 +34,17 @@ index 0bdb302ec1657aa3ba7b38d54a92133ee775a5ee..9a40236b94715132bb1e1fab5816fbcd
 -<manifest xmlns:android="http://schemas.android.com/apk/res/android" package="org.pgsqlite" >
 +<manifest xmlns:android="http://schemas.android.com/apk/res/android">
  </manifest>
+diff --git a/react-native.config.js b/react-native.config.js
+index 6cb179e4f7f74f6a9a2f663aa3ac8fb26cdba1d6..b1a2dff3ce66c3dc8eaf1ed9079d88327d507a57 100644
+--- a/react-native.config.js
++++ b/react-native.config.js
+@@ -1,9 +1,6 @@
+ module.exports = {
+	dependency: {
+		platforms: {
+-			ios: {
+-				project: './platforms/ios/SQLite.xcodeproj'
+-			},
+			android: {
+				sourceDir: './platforms/android'
+			},
