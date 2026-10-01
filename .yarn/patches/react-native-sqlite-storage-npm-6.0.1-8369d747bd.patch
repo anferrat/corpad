@@ -40,11 +40,11 @@ index 6cb179e4f7f74f6a9a2f663aa3ac8fb26cdba1d6..b1a2dff3ce66c3dc8eaf1ed9079d8832
 +++ b/react-native.config.js
 @@ -1,9 +1,6 @@
  module.exports = {
-	dependency: {
-		platforms: {
+ 	dependency: {
+ 		platforms: {
 -			ios: {
 -				project: './platforms/ios/SQLite.xcodeproj'
 -			},
-			android: {
-				sourceDir: './platforms/android'
-			},
+ 			android: {
+ 				sourceDir: './platforms/android'
+ 			},
