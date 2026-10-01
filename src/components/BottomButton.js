@@ -1,45 +1,31 @@
-import React, { useState, useEffect } from 'react'
+import React from 'react'
 import { StyleSheet, ActivityIndicator } from 'react-native'
 import { Button, Icon } from '@ui-kitten/components'
-import { Keyboard } from 'react-native'
 import { basic, basic300, control } from '../styles/colors'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 
 
 const BottomButton = (props) => {
     const { onPress, title, icon, pack, iconPosition } = props
-    const [disabled, setDisabled] = useState(false)
     const { bottom } = useSafeAreaInsets()
-    const style = disabled || props.disabled ? styles.disabled : styles.active
-    // Button at the bottom of the screen can be accidentally pressed when numeric keybord is shown, because there is a gap between buttons and the bottom of the screen (Pixel 4)
-    useEffect(() => {
-        const removeShow = Keyboard.addListener("keyboardDidShow", disableButton)
-        const removeHide = Keyboard.addListener("keyboardDidHide", enableButton)
-        return () => {
-            removeShow.remove()
-            removeHide.remove()
-        }
-    }, [])
+    const style = props.disabled ? styles.disabled : styles.active
 
-    const disableButton = React.useCallback(() => setDisabled(true), [])
-    const enableButton = React.useCallback(() => setDisabled(false), [])
-
-    const accessory = React.useCallback((props) => {
+    const accessory = React.useCallback((accessoryProps) => {
         if (icon)
             if (icon === 'loading')
-                return <ActivityIndicator size='small' color={!disabled ? basic : control} {...props} />
+                return <ActivityIndicator size='small' color={!props.disabled ? basic : control} {...accessoryProps} />
             else return (
-                <Icon {...props} pack={pack} name={icon} />
+                <Icon {...accessoryProps} pack={pack} name={icon} />
             )
         else return null
-    }, [disabled, icon])
+    }, [icon, pack, props.disabled])
 
     return (
         <Button
             {...props}
             onPress={onPress}
             hitSlop={12}
-            disabled={disabled || props.disabled}
+            disabled={props.disabled}
             accessoryRight={iconPosition === 'right' ? accessory : null}
             accessoryLeft={iconPosition === 'right' ? null : accessory}
             style={{ ...style, bottom: bottom + 10 }}>
