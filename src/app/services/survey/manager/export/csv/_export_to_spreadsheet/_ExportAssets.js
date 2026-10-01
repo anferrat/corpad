@@ -27,6 +27,44 @@ export class _ExportAssets {
         return `${name}_image${count ? `-${count + 1}` : ""}.${ext}`
     }
 
+    _getUniqueAssetFileName(fileName, asset, usedFileNames) {
+        const normalizedFileName = fileName.toLowerCase()
+        if (!usedFileNames.has(normalizedFileName))
+            return fileName
+
+        const extension = this.fileNameGenerator.getExtension(fileName)
+        const extensionSuffix = extension ? `.${extension}` : ""
+        const baseName = extension ? fileName.slice(0, -(extension.length + 1)) : fileName
+        const uniqueId = asset.uid || asset.id || "asset"
+        let uniqueFileName = `${baseName}-${uniqueId}${extensionSuffix}`
+        let duplicateIndex = 2
+
+        while (usedFileNames.has(uniqueFileName.toLowerCase())) {
+            uniqueFileName = `${baseName}-${uniqueId}-${duplicateIndex}${extensionSuffix}`
+            duplicateIndex++
+        }
+
+        return uniqueFileName
+    }
+
+    _getAssetFileNames(assets, items) {
+        const itemNames = new Map(items.map(({ id, name }) => [id, name]))
+        const itemAssetCount = new Map(items.map(({ id }) => [id, 0]))
+        const usedFileNames = new Set()
+
+        return assets.map(asset => {
+            const { parentId, fileName } = asset
+            const itemName = itemNames.get(parentId)
+            const count = itemAssetCount.get(parentId) ?? 0
+            itemAssetCount.set(parentId, count + 1)
+
+            const fileNameWithItemName = this._getAssetFileName(count, itemName, fileName)
+            const uniqueFileName = this._getUniqueAssetFileName(fileNameWithItemName, asset, usedFileNames)
+            usedFileNames.add(uniqueFileName.toLowerCase())
+            return uniqueFileName
+        })
+    }
+
     async execute(itemType, exportFileName) {
         const items = await this._getItems(itemType)
         if (items.length > 0) {
@@ -35,20 +73,22 @@ export class _ExportAssets {
             const tempAssetFolder = await this.fileSystemRepo.getLocation(FileSystemLocations.TEMP_ASSETS)
             const exportedFilesFolder = await this.fileSystemRepo.getLocation(FileSystemLocations.EXPORTS)
             const assets = (await this.assetRepo.getAll()).filter(({ parentType }) => parentType === itemType)
-            const itemNames = new Map(items.map(({ id, name }) => [id, name]))
-            const itemAssetCount = new Map(items.map(({ id }) => [id, 0]))
-            const assetNames = assets.map(({ parentId, fileName }) => {
-                const itemName = itemNames.get(parentId)
-                const count = itemAssetCount.get(parentId)
-                itemAssetCount.set(parentId, count + 1)
-                return this._getAssetFileName(count, itemName, fileName)
-            })
-            await Promise.all(assets.map(async ({ parentId, fileName }, index) => {
-                await this.fileSystemRepo.copyFile(`${assetFolder}/${fileName}`, `${tempAssetFolder}/${assetNames[index]}`)
-            }))
-            const archiveName = `${exportFileName}_images.zip`
-            await this.fileSystemRepo.zip(tempAssetFolder, `${exportedFilesFolder}/${archiveName}`)
-            await this.fileSystemRepo.removeDir(FileSystemLocations.TEMP_ASSETS)
+            const assetNames = this._getAssetFileNames(assets, items)
+
+            try {
+                const copyResults = await Promise.allSettled(assets.map(async ({ fileName }, index) => {
+                    await this.fileSystemRepo.copyFile(`${assetFolder}/${fileName}`, `${tempAssetFolder}/${assetNames[index]}`)
+                }))
+                const failedCopy = copyResults.find(({ status }) => status === 'rejected')
+                if (failedCopy)
+                    throw failedCopy.reason
+
+                const archiveName = `${exportFileName}_images.zip`
+                await this.fileSystemRepo.zip(tempAssetFolder, `${exportedFilesFolder}/${archiveName}`)
+            }
+            finally {
+                await this.fileSystemRepo.removeDir(FileSystemLocations.TEMP_ASSETS)
+            }
         }
     }
 }
