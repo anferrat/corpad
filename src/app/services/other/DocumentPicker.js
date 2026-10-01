@@ -41,7 +41,7 @@ export class DocumentPicker {
 
     async pickSurveyFile() {
         return await this.execute(Platform.select({
-            android: [FileMimeTypes.JSON, FileMimeTypes.ZIP, FileMimeTypes.BINARY],
+            android: types.allFiles,
             ios: [FileTypeIdentifiers.SURVEY_FILE_WITH_ASSETS, FileTypeIdentifiers.JSON],
             macos: [FileTypeIdentifiers.SURVEY_FILE_WITH_ASSETS, FileTypeIdentifiers.JSON],
             default: `*/*`
